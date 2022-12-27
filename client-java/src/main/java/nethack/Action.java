@@ -1,0 +1,33 @@
+package nethack;
+
+public enum Action {
+	MORE,
+
+//	Move actions
+	MOVE_N,
+	MOVE_E,
+	MOVE_S,
+	MOVE_W,
+	MOVE_NE,
+	MOVE_SE,
+	MOVE_SW,
+	MOVE_NW,
+
+	MOVE_LONG_N,
+	MOVE_LONG_E,
+	MOVE_LONG_S,
+	MOVE_LONG_W,
+	MOVE_LONG_NE,
+	MOVE_LONG_SE,
+	MOVE_LONG_SW,
+	MOVE_LONG_NW,
+
+//	Other type of actions
+	MISC_UP,
+	MISC_DOWN,
+	MISC_WAIT,
+
+	COMMAND_KICK,
+	COMMAND_EAT,
+	COMMAND_SEARCH,
+}
