@@ -33,19 +33,19 @@ def write_obs(sock, env, obs):
 
     jsonable = util.to_jsonable(env.observation_space, obs)
     sparse_observation = {
-        'blstats': jsonable['blstats'],
-        'glyphs': jsonable['glyphs'],
+        'blstats': jsonable['blstats'][0],
+        'glyphs': jsonable['glyphs'][0],
     }
-    write_field_str(sock, json.dumps(sparse_observation, separators=(',', ':')))
+    json_dump = json.dumps(sparse_observation, separators=(',', ':'))
+    write_field_str(sock, json_dump)
 
 
 def write_step(sock, done, info, actions):
-    actions_str = [str(action) for action in actions]
-
+    # actions_str = [str(action) for action in actions]
     step_json = {
         'done': done,
         'info': info,
-        'actions': actions_str,
+        'actions': actions,
     }
     json_msg = json.dumps(step_json, separators=(',', ':'))
     write_field_str(sock, json_msg)

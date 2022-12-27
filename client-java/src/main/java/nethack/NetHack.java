@@ -9,20 +9,15 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
-import eu.iv4xr.japyre.connection.SendCommandClient;
-import eu.iv4xr.japyre.connection.SendCommandClient.A;
-import eu.iv4xr.japyre.connection.SendCommandClient.SomeClass;
+import connection.SendCommandClient;
 import eu.iv4xr.framework.spatial.IntVec2D;
 import nl.uu.cs.aplib.exampleUsages.miniDungeon.Entity.*;
 import nl.uu.cs.aplib.utils.Pair;
 
-public class NetHack {
-//	public long randomSeed = 34793;
-
-	public enum GameStatus { ABORTED, RUNNING, DEATH }
-	public GameStatus status = GameStatus.RUNNING ;
-	public Player player;
-
+public class NetHack {	
+	public Blstats stats;
+	public List<Action> actions;
+	public List<Glyphs> 
 	public List<Maze> mazes = new LinkedList<>();
 	public List<String> recentlyRemoved = new LinkedList<>() ;
 	Random rnd;

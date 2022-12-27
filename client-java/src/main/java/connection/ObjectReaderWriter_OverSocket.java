@@ -11,6 +11,11 @@ import java.nio.charset.StandardCharsets;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import nethack.Action;
+import nethack.Blstats;
+import nethack.utils.ActionTypeAdapter;
+import nethack.utils.BlstatsTypeAdapter;
+
 /**
  * Provide a convenient reader/writer to read and write objects over a socket.
  * This allows an object to be send over the socket (to a recipient on the other
@@ -34,7 +39,10 @@ public class ObjectReaderWriter_OverSocket {
 	// Configuring the json serializer/deserializer. Register custom serializers
 	// here.
 	// Transient modifiers should be excluded, otherwise they will be send with json
-	private static Gson gson = new GsonBuilder().serializeNulls().excludeFieldsWithModifiers(Modifier.TRANSIENT)
+	private static Gson gson = new GsonBuilder()
+			.registerTypeAdapter(Action.class, new ActionTypeAdapter())
+			.registerTypeAdapter(Blstats.class, new BlstatsTypeAdapter())
+			.serializeNulls().excludeFieldsWithModifiers(Modifier.TRANSIENT)
 			.create();
 
 	public ObjectReaderWriter_OverSocket(Socket socket) throws IOException {
@@ -72,6 +80,7 @@ public class ObjectReaderWriter_OverSocket {
 		if (debug) {
 			System.out.println("** RECEIVING: " + response);
 		}
+		
 		return gson.fromJson(response, expectedClassOfResultObj);
 	}
 

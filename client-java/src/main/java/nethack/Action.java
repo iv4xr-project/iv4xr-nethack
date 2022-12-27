@@ -1,33 +1,149 @@
 package nethack;
 
+import java.util.HashMap;
+import java.util.Map;
+
+// Source: https://www.baeldung.com/java-enum-values
+// Actions listed at: /python-server/lib/nle/nle/nethack/actions.py
 public enum Action {
-	MORE,
+//  Misc
+	MISC_MORE(13),
+	MISC_WAIT(46),
+	MISC_UP(60),
+	MISC_DOWN(62),
+	
+//	Direction	
+	DIRECTION_W(104),
+	DIRECTION_S(106),
+	DIRECTION_N(107),
+	DIRECTION_E(108),
+	DIRECTION_SW(98),
+	DIRECTION_SE(110),
+	DIRECTION_NE(117),
+	DIRECTION_NW(121),
 
-//	Move actions
-	MOVE_N,
-	MOVE_E,
-	MOVE_S,
-	MOVE_W,
-	MOVE_NE,
-	MOVE_SE,
-	MOVE_SW,
-	MOVE_NW,
+	DIRECTION_LONG_W(72),
+	DIRECTION_LONG_S(74),
+	DIRECTION_LONG_N(75),
+	DIRECTION_LONG_E(76),
+	DIRECTION_LONG_SW(66),
+	DIRECTION_LONG_SE(78),
+	DIRECTION_LONG_NE(85),
+	DIRECTION_LONG_NW(89),
 
-	MOVE_LONG_N,
-	MOVE_LONG_E,
-	MOVE_LONG_S,
-	MOVE_LONG_W,
-	MOVE_LONG_NE,
-	MOVE_LONG_SE,
-	MOVE_LONG_SW,
-	MOVE_LONG_NW,
+//  Commands
+	COMMAND_EXTCMD(35),
+    COMMAND_EXTLIST(191),
+    COMMAND_ADJUST(225),
+    COMMAND_ANNOTATE(193),
+    COMMAND_APPLY(97),
+    COMMAND_ATTRIBUTES(24),
+    COMMAND_AUTOPICKUP(64),
+    COMMAND_CALL(67),
+    COMMAND_CAST(90),
+    COMMAND_CHAT(227),
+    COMMAND_CLOSE(99),
+    COMMAND_CONDUCT(195),
+    COMMAND_DIP(228),
+    COMMAND_DROP(100),
+    COMMAND_DROPTYPE(68),
+    COMMAND_EAT(101),
+    COMMAND_ENGRAVE(69),
+    COMMAND_ENHANCE(229),
+    COMMAND_ESC(27),
+    COMMAND_FIGHT(70),
+    COMMAND_FIRE(102),
+    COMMAND_FORCE(230),
+    COMMAND_GLANCE(59),
+    COMMAND_HISTORY(86),
+    COMMAND_INVENTORY(105),
+    COMMAND_INVENTTYPE(73),
+    COMMAND_INVOKE(233),
+    COMMAND_JUMP(234),
+    COMMAND_KICK(4),
+    COMMAND_KNOWN(92),
+    COMMAND_KNOWNCLASS(96),
+    COMMAND_LOOK(58),
+    COMMAND_LOOT(236),
+    COMMAND_MONSTER(237),
+    COMMAND_MOVE(109),
+    COMMAND_MOVEFAR(77),
+    COMMAND_OFFER(239),
+    COMMAND_OPEN(111),
+    COMMAND_OPTIONS(79),
+    COMMAND_OVERVIEW(15),
+    COMMAND_PAY(112),
+    COMMAND_PICKUP(44),
+    COMMAND_PRAY(240),
+    COMMAND_PUTON(80),
+    COMMAND_QUAFF(113),
+    COMMAND_QUIT(241),
+    COMMAND_QUIVER(81),
+    COMMAND_READ(114),
+    COMMAND_REDRAW(18),
+    COMMAND_REMOVE(82),
+    COMMAND_RIDE(210),
+    COMMAND_RUB(242),
+    COMMAND_RUSH(103),
+    COMMAND_RUSH2(71),
+    COMMAND_SAVE(83),
+    COMMAND_SEARCH(115),
+    COMMAND_SEEALL(42),
+    COMMAND_SEEAMULET(34),
+    COMMAND_SEEARMOR(91),
+    COMMAND_SEEGOLD(36),
+    COMMAND_SEERINGS(61),
+    COMMAND_SEESPELLS(43),
+    COMMAND_SEETOOLS(40),
+    COMMAND_SEETRAP(94),
+    COMMAND_SEEWEAPON(41),
+    COMMAND_SHELL(33),
+    COMMAND_SIT(243),
+    COMMAND_SWAP(120),
+    COMMAND_TAKEOFF(84),
+    COMMAND_TAKEOFFALL(65),
+    COMMAND_TELEPORT(20),
+    COMMAND_THROW(116),
+    COMMAND_TIP(212),
+    COMMAND_TRAVEL(95),
+    COMMAND_TURN(244),
+    COMMAND_TWOWEAPON(88),
+    COMMAND_UNTRAP(245),
+    COMMAND_VERSION(246),
+    COMMAND_VERSIONSHORT(118),
+    COMMAND_WEAR(87),
+    COMMAND_WHATDOES(38),
+    COMMAND_WHATIS(47),
+    COMMAND_WIELD(119),
+    COMMAND_WIPE(247),
+    COMMAND_ZAP(122),
+	
+//  Unknown command
+	UNKNOWN(-1);
+	
+	public int value;
+	private static final Map<Integer, Action> BY_VALUE = new HashMap<>();
+	
+	static {
+        for (Action e: values()) {
+            BY_VALUE.put(e.value, e);
+        }
+    }
+	
+	Action(int value) {
+		this.value = value;
+	}
+	
+	public static Action fromValue(int value) {
+		if (BY_VALUE.containsKey(value) ) {
+			return BY_VALUE.get(value);
+		}
+		System.out.println("fromValue: Unknown value: " + value);
+		return Action.UNKNOWN;
+    }
 
-//	Other type of actions
-	MISC_UP,
-	MISC_DOWN,
-	MISC_WAIT,
-
-	COMMAND_KICK,
-	COMMAND_EAT,
-	COMMAND_SEARCH,
+//	@Override
+//	public String toString() {
+//		return "BLAH"; // value.toString();
+//	}
 }

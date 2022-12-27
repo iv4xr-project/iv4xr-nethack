@@ -95,7 +95,7 @@ def loop(sock, uni, env: Env):
             case 'close':
                 return
             case 'step':
-                handle_step(sock, env, json_msg['arg'])
+                handle_step(sock, env, int(json_msg['arg']))
             case 'get_space':
                 handle_get_space(sock, env)
             case 'sample_action':
@@ -116,11 +116,10 @@ def handle_reset(sock, env):
     sock.flush()
 
 
-def handle_step(sock, env, args):
+def handle_step(sock, env, action):
     """
     Step the environment and send the result.
     """
-    action = int(args['Action'])
     obs, rew, done, info = env.step(action)
     write.write_obs(sock, env, obs)
     write.write_step(sock, done, info, env.actions)

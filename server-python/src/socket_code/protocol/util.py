@@ -25,8 +25,8 @@ def to_jsonable(space, obj):
     Encode a space element as JSON.
     """
     if isinstance(space, spaces.Tuple):
-        return [to_jsonable(space, obj[i]) for i, space in enumerate(space.spaces)]
-    return space.to_jsonable([obj])  # [0]
+        return to_jsonable(space, obj[0])
+    return space.to_jsonable([obj])  #[0]
 
 
 def space_json(space):

@@ -77,7 +77,7 @@ public class SendCommandClient {
     /**
      * @return true if the socket and readers are not null
      */
-    public boolean socketReady(){
+    public boolean socketReady() {
         return socket != null && readerwriter != null ;
     }
 
@@ -85,7 +85,7 @@ public class SendCommandClient {
      * @param startTimeNano the start time in long
      * @return the elapsed time from the start time converted to milliseconds
      */
-    private float millisElapsed(long startTimeNano){
+    private float millisElapsed(long startTimeNano) {
         return (System.nanoTime() - startTimeNano) / 1000000f;
     }
 
@@ -99,8 +99,8 @@ public class SendCommandClient {
 	 * in the 3rd parameter of this method.
 	 */
     public <T> T sendCommand(String cmd, Object arg, Class<T> expectedClassOfResultObj) throws IOException {
-    	readerwriter.write(new Cmd(cmd,arg)) ;
-    	return readerwriter.read(expectedClassOfResultObj) ;
+    	readerwriter.write(new Cmd(cmd,arg));
+    	return readerwriter.read(expectedClassOfResultObj);
     }
 
     public void writeCommand(String cmd, Object arg) throws IOException {
@@ -113,6 +113,6 @@ public class SendCommandClient {
 
     public void close() throws IOException {
     	readerwriter.close();
-    	socket.close() ;
+    	socket.close();
     }
 }

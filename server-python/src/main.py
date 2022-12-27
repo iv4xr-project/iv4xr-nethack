@@ -22,22 +22,3 @@ def main():
 if __name__ == '__main__':
     logger.initialize()
     main()
-
-
-# env = gym.make("NetHackScore-v0")
-# env.reset()
-# # env.render()
-# obs, reward, done, info = env.step(0)
-# obs, reward, done, info = env.step(2)
-# obs, reward, done, info = env.step(1)
-# obs, reward, done, info = env.step(5)
-# obs, reward, done, info = env.step(4)
-# obs, reward, done, info = env.step(3)
-# obs, reward, done, info = env.step(1)
-# obs, reward, done, info = env.step(2)
-# obs, reward, done, info = env.step(4)
-# obs, reward, done, info = env.step(3)
-# obs, reward, done, info = env.step(1)
-# obs, reward, done, info = env.step(2)
-#
-# env.render()
