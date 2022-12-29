@@ -12,61 +12,65 @@ public class App
 {
 	public static void main( String[] args ) throws IOException
     {
-//		for (Color e: Color.values()) {
-//            System.out.println("\033[" + e.colorCode + "m " + e.name());
-//        }
-//		
-    	loop();
+		SendCommandClient commander = init_connection();
+		if (commander == null) {
+			System.out.println("Unsuccesful socket connection");
+			return;
+		}
+		
+    	loop(commander);
+    	close_connection(commander);
     }
 	
-    public static void loop() throws IOException
-    {
+	public static SendCommandClient init_connection() throws IOException
+	{
     	SendCommandClient commander = new SendCommandClient("127.0.0.1", 5001);
-    	commander.turnDebugMode(true);
+    	commander.turnDebugMode(false);
 		if (!commander.socketReady()) {
-			System.out.println("Unsuccesful");
-			return;
-		} else {
-			System.out.println("Succesful");
+			return null;
 		}
 
 		commander.readerwriter.read(Object.class);
 		commander.sendCommand("Reset", "", GameState.class);
-		int action_index = 0;
 		
-		Random dice = new Random();
-		int step = 0;
-		while (true) {
-			GameState gameState = commander.sendCommand("Step", action_index, GameState.class);
-			ActionState actionState = commander.readerwriter.read(ActionState.class);
-			commander.writeCommand("Render", "");
-			int n = dice.nextInt(actionState.actions.length);
-			String s = String.format("%d: %s", n, actionState.actions[n]);
-			
-			action_index = n;
-			RenderUtils.render(gameState.chars, gameState.colors);
-			if (actionState.done) {
-				break;
-			}
-			step++;
-			System.out.println("Step " + step);
-//			break;
-		}
-
+		return commander;
+	}
+	
+	public static void close_connection(SendCommandClient commander) throws IOException
+	{
+		System.out.println("Closing connection");
 		commander.writeCommand("Close", "");
     	commander.close();
+	}
+	
+    public static void loop(SendCommandClient commander) throws IOException
+    {		
+		Random dice = new Random();
+		int step = 0;
+		boolean done = false;
+		
+		while (!done) {
+			System.out.println("Step: " + step++);
+			int random_action = dice.nextInt(Action.values().length);
+			GameState gameState = commander.sendCommand("Step", random_action, GameState.class);
+			GameInfo actionState = commander.readerwriter.read(GameInfo.class);
+			
+			commander.writeCommand("Render", "");
+			RenderUtils.render(gameState.entities);
+			done = actionState.done;
+			System.in.read();
+		}
     }
     
-    public static class ActionState
+    public static class GameInfo
     {
     	public boolean done;
-    	public Action[] actions;
+    	public Object info;
     }
 
     public static class GameState
     {
     	public Blstats blstats;
-    	public Entity[][] chars;
-    	public Color[][] colors;
+    	public Entity[][] entities;
     }
 }

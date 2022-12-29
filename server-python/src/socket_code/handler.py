@@ -59,7 +59,7 @@ def handshake(sock):
     Perform the initial handshake and return the resulting
     Gym environment.
     """
-    env_name = "NetHackScore-v0"
+    env_name = "NetHackChallenge-v0"
 
     # Special no-environment mode.
     if env_name == '':

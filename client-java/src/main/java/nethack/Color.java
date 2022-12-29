@@ -47,4 +47,11 @@ public enum Color {
 		}
 		throw new IllegalArgumentException("Color value not known: " + value);
     }
+	
+	public static void colorpalette()
+	{
+		for (Color e: Color.values()) {
+		    System.out.println("\033[" + e.colorCode + "m " + e.name());
+		}
+	}
 }

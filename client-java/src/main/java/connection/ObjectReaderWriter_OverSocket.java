@@ -11,11 +11,9 @@ import java.nio.charset.StandardCharsets;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import nethack.Action;
 import nethack.Blstats;
 import nethack.Color;
 import nethack.Entity;
-import nethack.parser.ActionTypeAdapter;
 import nethack.parser.BlstatsTypeAdapter;
 import nethack.parser.ColorTypeAdapter;
 import nethack.parser.EntityTypeAdapter;
@@ -44,7 +42,6 @@ public class ObjectReaderWriter_OverSocket {
 	// here.
 	// Transient modifiers should be excluded, otherwise they will be send with json
 	private static Gson gson = new GsonBuilder()
-			.registerTypeAdapter(Action.class, new ActionTypeAdapter())
 			.registerTypeAdapter(Blstats.class, new BlstatsTypeAdapter())
 			.registerTypeAdapter(Color.class, new ColorTypeAdapter())
 			.registerTypeAdapter(Entity.class, new EntityTypeAdapter())

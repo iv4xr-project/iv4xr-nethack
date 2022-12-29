@@ -4,6 +4,8 @@ import eu.iv4xr.framework.mainConcepts.Iv4xrEnvironment;
 import eu.iv4xr.framework.mainConcepts.*;
 import eu.iv4xr.framework.spatial.IntVec2D;
 import eu.iv4xr.framework.spatial.Vec3;
+import nethack.Entity;
+import nethack.EntityType;
 //import nl.uu.cs.aplib.utils.Pair;
 import nethack.NetHack;
 
@@ -98,49 +100,32 @@ public class AgentEnv extends Iv4xrEnvironment{
 	}
 
 
-	WorldEntity toWorldEntity(Entity e) {
+	WorldEntity toWorldEntity(Entity e, int x, int y) {
+		Vec3 position = new Vec3(x, 0, y);
+		WorldEntity we = new WorldEntity("id", e.type.toString(), false);
+		we.position = position;
+		
 		switch(e.type) {
+			case VOID:
+			case FLOOR:
+				return null;
 			case WALL:
-			case SCROLL:
-			case HEALPOT:
-			case RAGEPOT:
-				WorldEntity we = new WorldEntity(e.id,"" + e.type,false) ;
-				we.position = new Vec3(e.x,0,e.y) ;
-				we.properties.put("maze",e.mazeId) ;
-				return we ;
-			case SHRINE:
-				we = new WorldEntity(e.id,"" + e.type,true) ;
-				var shrine = (Shrine) e ;
-				we.position = new Vec3(e.x,0,e.y) ;
-				we.properties.put("maze",e.mazeId) ;
-				we.properties.put("shrinetype",shrine.shrineType) ;
-				we.properties.put("cleansed",shrine.cleansed) ;
-				return we ;
-			case FRODO:
-			case SMEAGOL:
-				we = new WorldEntity(e.id,"" + e.type,true) ;
-				we.position = new Vec3(e.x,0,e.y) ;
-				we.properties.put("maze",e.mazeId) ;
-				Player player = (Player) e ;
-				we.properties.put("hp",player.hp) ;
-				we.properties.put("hpmax",player.hpMax) ;
-				we.properties.put("ar",player.attackRating) ;
-				we.properties.put("bagUsed",player.bag.size()) ;
-				we.properties.put("maxBagSize",player.maxBagSize) ;
-				we.properties.put("scrollsInBag",player.itemsInBag(Category.SCROLL).size()) ;
-				we.properties.put("healpotsInBag",player.itemsInBag(Category.HEALPOT).size()) ;
-				we.properties.put("ragepotsInBag",player.itemsInBag(Category.RAGEPOT).size()) ;
-				we.properties.put("rageTimer",player.rageTimer) ;
-				return we ;
+			case DOOR:
+				we.dynamic = false;
+				we.properties.put("maze",e.mazeId);
+				return we;
+			case PLAYER:
+				we.dynamic = true;
+				we.properties.put("maze", app.stats.dungeonNumber);
+				we.properties.put("hp", app.stats.hp);
+				we.properties.put("hpmax", app.stats.hpMax);
+				return we;
 			case MONSTER:
-				we = new WorldEntity(e.id,"" + e.type,true) ;
-				we.position = new Vec3(e.x,0,e.y) ;
+				we.dynamic = true;
 				we.properties.put("maze",e.mazeId) ;
-				Monster m = (Monster) e ;
-				we.properties.put("hp",m.hp) ;
-				we.properties.put("ar",m.attackRating) ;
-				we.properties.put("aggravated",m.aggravated) ;
-				return we ;
+				return we;
+			default:
+				break;
 		}
 		return null ;
 	}

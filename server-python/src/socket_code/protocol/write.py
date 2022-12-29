@@ -32,12 +32,17 @@ def write_obs(sock, env, obs):
             return
 
     jsonable = util.to_jsonable(env.observation_space, obs)
+    zipped_map = zip(jsonable['chars'][0], jsonable['colors'][0])
+    entities = np.array([[ai, bi] for ai, bi in zipped_map])
+    entities = np.swapaxes(entities, 1, 2)
+
     sparse_observation = {
         'blstats': jsonable['blstats'][0],
-        'chars': jsonable['chars'][0],
-        'colors': jsonable['colors'][0],
-        # 'glyphs': jsonable['glyphs'][0],
+        # 'chars': jsonable['chars'][0],
+        # 'colors': jsonable['colors'][0],
+        'entities': entities.tolist(),
     }
+
     json_dump = json.dumps(sparse_observation, separators=(',', ':'))
     write_field_str(sock, json_dump)
 
@@ -47,7 +52,6 @@ def write_step(sock, done, info, actions):
     step_json = {
         'done': done,
         'info': info,
-        'actions': actions,
     }
     json_msg = json.dumps(step_json, separators=(',', ':'))
     write_field_str(sock, json_msg)

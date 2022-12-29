@@ -1,7 +1,7 @@
 package nethack;
 
 public class Blstats {
-//	From nleobs.c
+//	Source: server-python/lib/nle/include/nleobs.h
 	public int x;
 	public int y;
 	public int strength;
@@ -11,6 +11,8 @@ public class Blstats {
 	public int wisdom;
 	public int charisma;
 	public int score;
+	public int hp;
+	public int hpMax;
 	public int depth;
 	public int gold;
 	public int energy;
@@ -41,6 +43,8 @@ public class Blstats {
 		wisdom = blstats[7];
 		charisma = blstats[8];
 		score = blstats[9];
+		hp = blstats[10];
+		hpMax = blstats[11];
 		depth = blstats[12];
 		gold = blstats[13];
 		energy = blstats[14];
