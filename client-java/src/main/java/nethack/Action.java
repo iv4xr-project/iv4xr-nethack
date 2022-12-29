@@ -121,7 +121,7 @@ public enum Action {
 //  Unknown command
 	UNKNOWN(-1);
 	
-	public int value;
+	private int value;
 	private static final Map<Integer, Action> BY_VALUE = new HashMap<>();
 	
 	static {
@@ -138,12 +138,7 @@ public enum Action {
 		if (BY_VALUE.containsKey(value) ) {
 			return BY_VALUE.get(value);
 		}
-		System.out.println("fromValue: Unknown value: " + value);
+		System.out.println("Action fromValue: Unknown value: " + value);
 		return Action.UNKNOWN;
     }
-
-//	@Override
-//	public String toString() {
-//		return "BLAH"; // value.toString();
-//	}
 }

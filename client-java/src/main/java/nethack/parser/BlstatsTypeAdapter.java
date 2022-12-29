@@ -1,4 +1,4 @@
-package nethack.utils;
+package nethack.parser;
 
 import nethack.Blstats;
 
@@ -21,7 +21,6 @@ public class BlstatsTypeAdapter extends TypeAdapter<Blstats> {
 			int i = 0;
 			while (!reader.peek().equals(JsonToken.END_ARRAY)) {
 				values[i++] = reader.nextInt();
-				
 			}
 			reader.endArray();
 		}
@@ -29,7 +28,5 @@ public class BlstatsTypeAdapter extends TypeAdapter<Blstats> {
 	}
 	
 	@Override
-	public void write(JsonWriter out, Blstats action) throws IOException {
-
-	}
+	public void write(JsonWriter out, Blstats action) throws IOException { }
 }

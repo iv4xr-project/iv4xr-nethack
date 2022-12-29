@@ -1,4 +1,4 @@
-package nethack.utils;
+package nethack.parser;
 
 import nethack.Action;
 
@@ -16,7 +16,5 @@ public class ActionTypeAdapter extends TypeAdapter<Action> {
 	}
 	
 	@Override
-	public void write(JsonWriter out, Action action) throws IOException {
-		out.value(action.value);
-	}
+	public void write(JsonWriter out, Action action) throws IOException { }
 }

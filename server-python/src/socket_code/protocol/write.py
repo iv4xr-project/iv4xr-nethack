@@ -34,7 +34,9 @@ def write_obs(sock, env, obs):
     jsonable = util.to_jsonable(env.observation_space, obs)
     sparse_observation = {
         'blstats': jsonable['blstats'][0],
-        'glyphs': jsonable['glyphs'][0],
+        'chars': jsonable['chars'][0],
+        'colors': jsonable['colors'][0],
+        # 'glyphs': jsonable['glyphs'][0],
     }
     json_dump = json.dumps(sparse_observation, separators=(',', ':'))
     write_field_str(sock, json_dump)

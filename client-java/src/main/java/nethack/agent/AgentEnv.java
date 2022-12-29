@@ -127,9 +127,9 @@ public class AgentEnv extends Iv4xrEnvironment{
 				we.properties.put("ar",player.attackRating) ;
 				we.properties.put("bagUsed",player.bag.size()) ;
 				we.properties.put("maxBagSize",player.maxBagSize) ;
-				we.properties.put("scrollsInBag",player.itemsInBag(EntityType.SCROLL).size()) ;
-				we.properties.put("healpotsInBag",player.itemsInBag(EntityType.HEALPOT).size()) ;
-				we.properties.put("ragepotsInBag",player.itemsInBag(EntityType.RAGEPOT).size()) ;
+				we.properties.put("scrollsInBag",player.itemsInBag(Category.SCROLL).size()) ;
+				we.properties.put("healpotsInBag",player.itemsInBag(Category.HEALPOT).size()) ;
+				we.properties.put("ragepotsInBag",player.itemsInBag(Category.RAGEPOT).size()) ;
 				we.properties.put("rageTimer",player.rageTimer) ;
 				return we ;
 			case MONSTER:

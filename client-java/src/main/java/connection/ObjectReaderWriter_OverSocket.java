@@ -13,8 +13,12 @@ import com.google.gson.GsonBuilder;
 
 import nethack.Action;
 import nethack.Blstats;
-import nethack.utils.ActionTypeAdapter;
-import nethack.utils.BlstatsTypeAdapter;
+import nethack.Color;
+import nethack.Entity;
+import nethack.parser.ActionTypeAdapter;
+import nethack.parser.BlstatsTypeAdapter;
+import nethack.parser.ColorTypeAdapter;
+import nethack.parser.EntityTypeAdapter;
 
 /**
  * Provide a convenient reader/writer to read and write objects over a socket.
@@ -42,6 +46,8 @@ public class ObjectReaderWriter_OverSocket {
 	private static Gson gson = new GsonBuilder()
 			.registerTypeAdapter(Action.class, new ActionTypeAdapter())
 			.registerTypeAdapter(Blstats.class, new BlstatsTypeAdapter())
+			.registerTypeAdapter(Color.class, new ColorTypeAdapter())
+			.registerTypeAdapter(Entity.class, new EntityTypeAdapter())
 			.serializeNulls().excludeFieldsWithModifiers(Modifier.TRANSIENT)
 			.create();
 
