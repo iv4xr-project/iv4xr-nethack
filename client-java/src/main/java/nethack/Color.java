@@ -50,8 +50,8 @@ public enum Color {
 	
 	public static void colorpalette()
 	{
-		for (Color e: Color.values()) {
-		    System.out.println("\033[" + e.colorCode + "m " + e.name());
+		for (Color color: Color.values()) {
+		    System.out.println("\033[" + color.colorCode + "m " + color.name());
 		}
 	}
 }

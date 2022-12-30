@@ -78,17 +78,6 @@ public class AgentEnv extends Iv4xrEnvironment{
 			    case USERAGE   :  c = 'r' ; break ;
 			}
 		}
-		else if (agentId.equals(Smeagol.class.getSimpleName()) && thegame().config.enableSmeagol) {
-			player = thegame().smeagol() ;
-			switch(cmd) {
-		    case MOVEUP    :  c = 'i' ; break ;
-		    case MOVEDOWN  :  c = 'k' ; break ;
-		    case MOVELEFT  :  c = 'j' ; break ;
-		    case MOVERIGHT :  c = 'l' ; break ;
-		    case USEHEAL   :  c = 'o' ; break ;
-		    case USERAGE   :  c = 'p' ; break ;
-			}
-		}
 		else {
 			throw new IllegalArgumentException("Player " + agentId + " does not exist.") ;
 		}
@@ -101,33 +90,34 @@ public class AgentEnv extends Iv4xrEnvironment{
 
 
 	WorldEntity toWorldEntity(Entity e, int x, int y) {
-		Vec3 position = new Vec3(x, 0, y);
-		WorldEntity we = new WorldEntity("id", e.type.toString(), false);
-		we.position = position;
+		if (e.type == EntityType.VOID || e.type == EntityType.FLOOR) {
+			return null;
+		}
 		
+		WorldEntity we;
 		switch(e.type) {
-			case VOID:
-			case FLOOR:
-				return null;
 			case WALL:
 			case DOOR:
-				we.dynamic = false;
-				we.properties.put("maze",e.mazeId);
-				return we;
+				we = new WorldEntity("id", e.type.toString(), false);
+				we.properties.put("maze", app.stats.dungeonNumber);
+				break;
 			case PLAYER:
-				we.dynamic = true;
+				we = new WorldEntity("id", e.type.toString(), true);
 				we.properties.put("maze", app.stats.dungeonNumber);
 				we.properties.put("hp", app.stats.hp);
 				we.properties.put("hpmax", app.stats.hpMax);
-				return we;
-			case MONSTER:
-				we.dynamic = true;
-				we.properties.put("maze",e.mazeId) ;
-				return we;
-			default:
 				break;
+			case MONSTER:
+				we = new WorldEntity("id", e.type.toString(), true);
+				we.properties.put("maze", app.stats.dungeonNumber);
+				break;
+			default:
+				return null;
 		}
-		return null ;
+		
+		Vec3 position = new Vec3(x, 0, y);
+		we.position = position;
+		return we;
 	}
 
 	WorldEntity mkGameAuxState() {

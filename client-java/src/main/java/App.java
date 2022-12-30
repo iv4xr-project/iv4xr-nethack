@@ -4,9 +4,10 @@ import java.util.Random;
 import connection.SendCommandClient;
 import nethack.Action;
 import nethack.Blstats;
-import nethack.Color;
 import nethack.Entity;
+import nethack.NetHack;
 import nethack.utils.RenderUtils;
+import java.util.Scanner;
 
 public class App
 {
@@ -18,8 +19,11 @@ public class App
 			return;
 		}
 		
-    	loop(commander);
-    	close_connection(commander);
+		NetHack app = new NetHack(commander);
+		app.init();
+		app.loop();
+		
+		close_connection(commander);
     }
 	
 	public static SendCommandClient init_connection() throws IOException
@@ -29,9 +33,6 @@ public class App
 		if (!commander.socketReady()) {
 			return null;
 		}
-
-		commander.readerwriter.read(Object.class);
-		commander.sendCommand("Reset", "", GameState.class);
 		
 		return commander;
 	}
@@ -42,35 +43,4 @@ public class App
 		commander.writeCommand("Close", "");
     	commander.close();
 	}
-	
-    public static void loop(SendCommandClient commander) throws IOException
-    {		
-		Random dice = new Random();
-		int step = 0;
-		boolean done = false;
-		
-		while (!done) {
-			System.out.println("Step: " + step++);
-			int random_action = dice.nextInt(Action.values().length);
-			GameState gameState = commander.sendCommand("Step", random_action, GameState.class);
-			GameInfo actionState = commander.readerwriter.read(GameInfo.class);
-			
-			commander.writeCommand("Render", "");
-			RenderUtils.render(gameState.entities);
-			done = actionState.done;
-			System.in.read();
-		}
-    }
-    
-    public static class GameInfo
-    {
-    	public boolean done;
-    	public Object info;
-    }
-
-    public static class GameState
-    {
-    	public Blstats blstats;
-    	public Entity[][] entities;
-    }
 }

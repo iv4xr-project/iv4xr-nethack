@@ -17,6 +17,7 @@ import eu.iv4xr.framework.extensions.pathfinding.Sparse2DTiledSurface_NavGraph.W
 import eu.iv4xr.framework.mainConcepts.Iv4xrAgentState;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.spatial.IntVec2D;
+import eu.iv4xr.framework.spatial.Vec3;
 import nl.uu.cs.aplib.exampleUsages.miniDungeon.DungeonApp;
 import nl.uu.cs.aplib.exampleUsages.miniDungeon.Entity;
 import nl.uu.cs.aplib.exampleUsages.miniDungeon.MiniDungeon;
@@ -40,7 +41,7 @@ import nl.uu.cs.aplib.utils.Pair;
  */
 public class AgentState extends Iv4xrAgentState<Void> {
 
-	public LayeredAreasNavigation<Tile,Sparse2DTiledSurface_NavGraph>  multiLayerNav ;
+	public LayeredAreasNavigation<Tile,Sparse2DTiledSurface_NavGraph> multiLayerNav;
 
 	@Override
 	public AgentEnv env() {
@@ -68,12 +69,12 @@ public class AgentState extends Iv4xrAgentState<Void> {
 		// creating an instance of navigation graph; setting its
 		// configuration etc.
 		// The graph is empty when created.
-		Sparse2DTiledSurface_NavGraph navg = new Sparse2DTiledSurface_NavGraph() ;
-		multiLayerNav = new LayeredAreasNavigation<>() ;
+		Sparse2DTiledSurface_NavGraph navg = new Sparse2DTiledSurface_NavGraph();
+		multiLayerNav = new LayeredAreasNavigation<>();
 		navg.sizeX = env().app.entities.length;
 		navg.sizeY = env().app.entities[0].length;
 		multiLayerNav.addNextArea(navg, null, null, false);
-		return this ;
+		return this;
 	}
 
 	public WorldEntity auxState() {
@@ -161,7 +162,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
 	 */
 	public GameStatus gameStatus() {
 		var aux = worldmodel.elements.get("aux") ;
-		var status = (GameStatus) aux.properties.get("status") ;
+		var status = (GameStatus)aux.properties.get("status") ;
 		return status ;
 	}
 
@@ -185,14 +186,13 @@ public class AgentState extends Iv4xrAgentState<Void> {
 	 * Return a list of monsters which are currently adjacent to the agent that
 	 * owns this state.
 =	 */
-	public List<WorldEntity> adajcentMonsters() {
-		var player = worldmodel.elements.get(worldmodel.agentId) ;
-		Tile p = Utils.toTile(player.position) ;
+	public List<WorldEntity> adjecentMonsters() {
+		Tile p = Utils.toTile(this.env().app.stats.x, this.env().app.stats.y);
 		List<WorldEntity> ms = worldmodel.elements.values().stream()
 				.filter(e -> e.type.equals(EntityType.MONSTER.toString())
 						     && Utils.mazeId(player) == Utils.mazeId(e)
 						 	 && Utils.adjacent(p,Utils.toTile(e.position)))
 				.collect(Collectors.toList()) ;
-		return ms ;
+		return ms;
 	}
 }

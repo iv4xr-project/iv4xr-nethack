@@ -103,6 +103,7 @@ public class SendCommandClient {
     	return readerwriter.read(expectedClassOfResultObj);
     }
 
+    // Send a command without a return type
     public void writeCommand(String cmd, Object arg) throws IOException {
     	readerwriter.write(new Cmd(cmd,arg));
     }
