@@ -15,4 +15,16 @@ public class Level {
 		this.nr = levelNr;
 		this.map = entities;
 	}
+	
+	public void invisibleTiles() {
+		System.out.print("Invisible tiles:");
+		for (int x = 0; x < WIDTH; x++) {
+			for (int y = 0; y < HEIGHT; y++) {
+				if (map[y][x].color == Color.TRANSPARENT) {
+					System.out.print("(" + x + "," + y + ")");
+				}
+			}
+		}
+		System.out.println();
+	}
 }

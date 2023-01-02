@@ -34,9 +34,15 @@ public class NetHack {
 		
 		while (!gameState.done) {
 			Action action = waitCommand();
-			logger.info("Step: " + step++ + " Action: " + action);
-			step(action);
-			render();
+			if (action == Action.COMMAND_EXTLIST) {
+				Action.prettyPrintActions();
+			} else if (action == Action.COMMAND_REDRAW) {
+				render();
+			} else {
+				logger.info("Step: " + step++ + " Action: " + action);
+				step(action);
+				render();
+			}
 		}
 	}
 	
@@ -57,25 +63,25 @@ public class NetHack {
 	public Action waitCommand() {
 		Scanner scanner = new Scanner(System.in);
 		System.out.print("Input a command: ");
-		Action action = null;
 		
-		while (action == null) {
+		while (true) {
 			String input = scanner.nextLine();
-			action = Action.fromValue(input);
+			Action action = Action.fromValue(input);
+			if (action != null) {
+				return action;
+			}
 			System.out.print("Input \"" + input + "\" not found, enter again: ");
 		}
-		
-		return action;
 	}
 	
 	public void step(Action action) throws IOException {		
 		StepState stepState = commander.sendCommand("Step", action.index, StepState.class);
 		
 		// Add to world
-		while (stepState.stats.levelNumber >= gameState.world.size()) {
+		while (stepState.stats.levelNumber > gameState.world.size()) {
 			gameState.world.add(null);
 		}
-		gameState.world.set(stepState.stats.levelNumber, stepState.level);
+		gameState.world.set(stepState.stats.levelNumber - 1, stepState.level);
 		
 		// Set all members to the correct values
 		this.gameState.message = stepState.message;

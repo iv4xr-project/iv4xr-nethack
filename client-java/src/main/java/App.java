@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import connection.SendCommandClient;
 import nethack.NetHack;
+import nethack.object.Action;
 
 public class App
 {

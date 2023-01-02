@@ -99,8 +99,8 @@ public class AgentState extends Iv4xrAgentState<Void> {
 			if (mazeId >= multiLayerNav.areas.size()) {
 				// detecting a new maze, need to allocate a nav-graph for this maze:
 				Sparse2DTiledSurface_NavGraph newNav = new Sparse2DTiledSurface_NavGraph();
-				newNav.sizeX = env().app.dungeon.config.worldSize ;
-				newNav.sizeY = newNav.sizeX ;
+				newNav.sizeX = Level.WIDTH;
+				newNav.sizeY = Level.HEIGHT;
 				int N = env().app.dungeon.config.worldSize;
 				Tile lowPortal = new Tile(N - 2, 1);
 				Tile highPortal = new Tile(1, 1);
@@ -189,7 +189,10 @@ public class AgentState extends Iv4xrAgentState<Void> {
 	 * owns this state.
 =	 */
 	public List<WorldEntity> adjecentMonsters() {
-		Tile p = Utils.toTile(this.env().app.stats.x, this.env().app.stats.y);
+		Tile p = Utils.toTile(
+			(int)this.env().app.gameState.player.position.x,
+			(int)this.env().app.gameState.player.position.y
+		);
 		List<WorldEntity> ms = worldmodel.elements.values().stream()
 				.filter(e -> e.type.equals(EntityType.MONSTER.toString())
 						     && Utils.mazeId(player) == Utils.mazeId(e)
