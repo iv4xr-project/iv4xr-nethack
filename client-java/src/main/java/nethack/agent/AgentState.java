@@ -1,5 +1,7 @@
 package nethack.agent;
 
+import nethack.object.Level;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -71,8 +73,8 @@ public class AgentState extends Iv4xrAgentState<Void> {
 		// The graph is empty when created.
 		Sparse2DTiledSurface_NavGraph navg = new Sparse2DTiledSurface_NavGraph();
 		multiLayerNav = new LayeredAreasNavigation<>();
-		navg.sizeX = env().app.entities.length;
-		navg.sizeY = env().app.entities[0].length;
+		navg.sizeX = Level.WIDTH;
+		navg.sizeY = Level.HEIGHT;
 		multiLayerNav.addNextArea(navg, null, null, false);
 		return this;
 	}

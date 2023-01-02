@@ -1,4 +1,4 @@
-package nethack;
+package nethack.object;
 
 import java.util.HashMap;
 import java.util.Map;

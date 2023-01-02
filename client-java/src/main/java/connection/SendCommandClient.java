@@ -1,13 +1,7 @@
 package connection;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Scanner;
 
 /**
  * A class that supports sending a pair (cmd,arg) to a server and receives the
@@ -36,7 +30,7 @@ public class SendCommandClient {
 	String host ;
 	int port ;
 	Socket socket ;
-	public ObjectReaderWriter_OverSocket readerwriter ;
+	ObjectReaderWriter_OverSocket readerwriter ;
 
     /**
      * Constructor. Will setup the needed socket to communicate with the given server
@@ -107,10 +101,10 @@ public class SendCommandClient {
     public void writeCommand(String cmd, Object arg) throws IOException {
     	readerwriter.write(new Cmd(cmd,arg));
     }
-
-	public void turnDebugMode(boolean on) {
-		ObjectReaderWriter_OverSocket.debug = on;
-	}
+    
+    public <T> T read(Class<T> expectedClassOfResultObj) throws IOException {
+    	return readerwriter.read(expectedClassOfResultObj);
+    }
 
     public void close() throws IOException {
     	readerwriter.close();

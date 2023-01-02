@@ -6,7 +6,6 @@ This treats stdin/stdout as a connection to a client.
 
 from argparse import ArgumentParser
 import io
-import json
 import sys
 import logging
 
@@ -15,7 +14,7 @@ import src.socket_code.protocol.read as read
 import src.socket_code.protocol.util as util
 import gym
 import nle
-from gym import wrappers, Env
+from gym import Env
 import universe_plugin
 
 
@@ -84,7 +83,6 @@ def loop(sock, uni, env: Env):
     """
     while True:
         json_msg = read.read_json(sock)
-        print('Received msg:', json_msg)
 
         # Handle msg type
         match str(json_msg['cmd']).lower():
@@ -96,14 +94,6 @@ def loop(sock, uni, env: Env):
                 return
             case 'step':
                 handle_step(sock, env, int(json_msg['arg']))
-            case 'get_space':
-                handle_get_space(sock, env)
-            case 'sample_action':
-                handle_sample_action(sock, env)
-            case 'universe_configure':
-                env = handle_universe_configure(sock, uni, env)
-            case 'universe_wrap':
-                env = handle_universe_wrap(sock, uni, env)
             case unknown:
                 logging.warning(f'Action "{unknown}" not known')
 
@@ -122,28 +112,7 @@ def handle_step(sock, env, action):
     """
     obs, rew, done, info = env.step(action)
     write.write_obs(sock, env, obs)
-    write.write_step(sock, done, info, env.actions)
-    sock.flush()
-
-
-def handle_get_space(sock, env):
-    """
-    Get information about the action or observation space.
-    """
-    space_id = read.read_space_id(sock)
-    if space_id == 'action':
-        write.write_space(sock, env.action_space)
-    elif space_id == 'observation':
-        write.write_space(sock, env.observation_space)
-    sock.flush()
-
-
-def handle_sample_action(sock, env):
-    """
-    Generate and send a random action.
-    """
-    action = env.action_space.sample()
-    write.write_action(sock, env, action)
+    write.write_step(sock, done, info)
     sock.flush()
 
 
@@ -152,35 +121,6 @@ def handle_render(env):
     Render the environment.
     """
     env.render()
-
-
-def handle_universe_configure(sock, uni, env):
-    """
-    Configure a Universe environment.
-    """
-    config_json = read.read_field_str(sock)
-    try:
-        env = uni.configure(env, json.loads(config_json))
-        write.write_field_str(sock, '')
-    except universe_plugin.UniverseException as exc:
-        write.write_field_str(sock, str(exc))
-    sock.flush()
-    return env
-
-
-def handle_universe_wrap(sock, uni, env):
-    """
-    Wrap a Universe environment.
-    """
-    wrapper_name = read.read_field_str(sock)
-    config_json = read.read_field_str(sock)
-    try:
-        env = uni.wrap(env, wrapper_name, json.loads(config_json))
-        write.write_field_str(sock, '')
-    except universe_plugin.UniverseException as exc:
-        write.write_field_str(sock, str(exc))
-    sock.flush()
-    return env
 
 
 def log(msg):

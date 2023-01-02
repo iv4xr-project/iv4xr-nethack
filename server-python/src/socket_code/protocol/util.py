@@ -26,7 +26,7 @@ def to_jsonable(space, obj):
     """
     if isinstance(space, spaces.Tuple):
         return to_jsonable(space, obj[0])
-    return space.to_jsonable([obj])  #[0]
+    return space.to_jsonable([obj])
 
 
 def space_json(space):

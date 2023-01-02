@@ -1,6 +1,6 @@
-package nethack.parser;
+package connection.messageparser;
 
-import nethack.Color;
+import nethack.object.Color;
 
 import java.io.IOException;
 

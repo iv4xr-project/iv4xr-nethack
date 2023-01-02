@@ -11,12 +11,12 @@ import java.nio.charset.StandardCharsets;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import nethack.Blstats;
-import nethack.Color;
-import nethack.Entity;
-import nethack.parser.BlstatsTypeAdapter;
-import nethack.parser.ColorTypeAdapter;
-import nethack.parser.EntityTypeAdapter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import connection.messageparser.ObservationMessageTypeAdapter;
+import nethack.object.Level;
+import nethack.StepState;
 
 /**
  * Provide a convenient reader/writer to read and write objects over a socket.
@@ -31,9 +31,7 @@ import nethack.parser.EntityTypeAdapter;
  * <p>Note: this class was taken over from iv4xrDemo.
  */
 public class ObjectReaderWriter_OverSocket {
-
-	public static boolean debug = false;
-
+	static final Logger logger = LogManager.getLogger(ObjectReaderWriter_OverSocket.class);
 	Socket socket;
 	BufferedReader reader;
 	PrintWriter writer;
@@ -42,9 +40,7 @@ public class ObjectReaderWriter_OverSocket {
 	// here.
 	// Transient modifiers should be excluded, otherwise they will be send with json
 	private static Gson gson = new GsonBuilder()
-			.registerTypeAdapter(Blstats.class, new BlstatsTypeAdapter())
-			.registerTypeAdapter(Color.class, new ColorTypeAdapter())
-			.registerTypeAdapter(Entity.class, new EntityTypeAdapter())
+			.registerTypeAdapter(ObservationMessage.class, new ObservationMessageTypeAdapter())
 			.serializeNulls().excludeFieldsWithModifiers(Modifier.TRANSIENT)
 			.create();
 
@@ -62,29 +58,61 @@ public class ObjectReaderWriter_OverSocket {
 	 */
 	public void write(Object packageToSend) throws IOException {
 		String json = gson.toJson(packageToSend);
-		if (debug) {
-			System.out.println("** SENDING: " + json);
-		}
+		logger.debug("** SENDING: " + json);
 		writer.println(json);
 	}
 
+	public StepState readStepState() throws IOException {
+		logger.debug("** waiting for answer....");
+		
+		reader.ready();
+		String response = reader.readLine();
+		ObservationMessage obsMessage = gson.fromJson(response, ObservationMessage.class);
+		
+		reader.ready();
+		response = reader.readLine();
+		StepMessage stepMessage = gson.fromJson(response, StepMessage.class);
+		
+		StepState stepState = new StepState();
+		stepState.player = obsMessage.player;
+		stepState.stats = obsMessage.stats;
+		stepState.done = stepMessage.done;
+		stepState.info = stepMessage.info;
+		stepState.level = new Level(obsMessage.stats.levelNumber, obsMessage.entities);
+		stepState.message = obsMessage.message;
+		return stepState;
+	}
+	
 	/**
 	 * Read an object that was sent by the host. The object will be received as a
 	 * json string, which is then converted into an instance of the given class. It
 	 * is assumed that the json deserializer knows how to do this. The resulting
 	 * object is then returned.
+	 * @throws  
 	 */
 	public <T> T read(Class<T> expectedClassOfResultObj) throws IOException {
-		System.out.println("** waiting for answer....") ;
-		reader.ready();
-
-		String response = reader.readLine();
-		// we do not have to cast to T, since req.responseType is of type Class<T>
-		if (debug) {
-			System.out.println("** RECEIVING: " + response);
+		if (expectedClassOfResultObj == StepState.class) {
+			return (T)readStepState();
 		}
 		
+		logger.debug("** waiting for answer....") ;
+		reader.ready();
+		String response = reader.readLine();
+		//		String response = readResponse();
+		// we do not have to cast to T, since req.responseType is of type Class<T>
+		logger.debug("** RECEIVING: " + response);	
 		return gson.fromJson(response, expectedClassOfResultObj);
+	}
+	
+	private String readResponse() throws IOException {
+		reader.ready();
+		String response = reader.readLine();
+		while (response != null) {
+			reader.ready();
+			response = reader.readLine();
+		}
+		System.out.println("Response: " + response);
+		return response;
 	}
 
 	/**

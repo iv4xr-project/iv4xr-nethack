@@ -26,11 +26,6 @@ def write_obs(sock, env, obs):
     """
     Encode and send an observation.
     """
-    if isinstance(obs, np.ndarray):
-        if obs.dtype == 'uint8':
-            write_obs_byte_list(sock, obs)
-            return
-
     jsonable = util.to_jsonable(env.observation_space, obs)
     zipped_map = zip(jsonable['chars'][0], jsonable['colors'][0])
     entities = np.array([[ai, bi] for ai, bi in zipped_map])
@@ -38,64 +33,23 @@ def write_obs(sock, env, obs):
 
     sparse_observation = {
         'blstats': jsonable['blstats'][0],
-        # 'chars': jsonable['chars'][0],
-        # 'colors': jsonable['colors'][0],
         'entities': entities.tolist(),
+        'message': jsonable['message'][0],
     }
 
     json_dump = json.dumps(sparse_observation, separators=(',', ':'))
+    print("WRITE Observation")
     write_field_str(sock, json_dump)
 
 
-def write_step(sock, done, info, actions):
-    # actions_str = [str(action) for action in actions]
+def write_step(sock, done, info,):
     step_json = {
         'done': done,
         'info': info,
     }
-    json_msg = json.dumps(step_json, separators=(',', ':'))
-    write_field_str(sock, json_msg)
-
-
-def write_obs_byte_list(sock, arr):
-    """
-    Write a byte list observation from a numpy array.
-    """
-    sock.write(struct.pack('<B', 1))
-    dims = list(arr.shape)
-    header = struct.pack('<I', len(dims))
-    for dim in dims:
-        header += struct.pack('<I', dim)
-    payload = arr.tobytes()
-    sock.write(struct.pack('<I', len(header)+len(payload)))
-    sock.write(header)
-    sock.write(payload)
-
-
-def write_reward(sock, rew):
-    """
-    Write a reward value.
-    """
-    sock.write(rew)
-
-
-def write_bool(sock, flag):
-    """
-    Write a boolean.
-    """
-    num = 0
-    if flag:
-        num = 1
-    sock.write(struct.pack('<B', num))
-
-
-def write_action(sock, env, action):
-    """
-    Write an action object.
-    """
-    jsonable = util.to_jsonable(env.action_space, action)
-    sock.write(struct.pack('<B', 0))
-    write_field_str(sock, json.dumps(jsonable))
+    json_dump = json.dumps(step_json, separators=(',', ':'))
+    print("WRITE Step")
+    write_field_str(sock, json_dump)
 
 
 def write_space(sock, space):

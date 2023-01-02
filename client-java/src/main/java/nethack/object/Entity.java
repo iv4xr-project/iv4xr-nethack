@@ -1,4 +1,4 @@
-package nethack;
+package nethack.object;
 
 // Source: https://www.baeldung.com/java-enum-values
 // Actions listed at: /python-server/lib/nle/nle/nethack/actions.py

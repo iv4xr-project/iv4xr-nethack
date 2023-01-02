@@ -1,4 +1,4 @@
-package nethack;
+package nethack.object;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +9,7 @@ public enum Action {
 	DIRECTION_N(0, "k"),
 	DIRECTION_E(1, "l"),
 	DIRECTION_S(2, "j"),
-	DIRECTION_W(3, "n"),
+	DIRECTION_W(3, "h"),
 	DIRECTION_NE(4, "u"),
 	DIRECTION_SE(5, "n"),
 	DIRECTION_SW(6, "b"),
