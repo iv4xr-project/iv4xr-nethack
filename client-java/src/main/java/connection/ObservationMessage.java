@@ -9,6 +9,7 @@ public class ObservationMessage {
 	public Player player;
 	public Entity[][] entities;
 	public String message;
-	
-	public ObservationMessage() {}
+
+	public ObservationMessage() {
+	}
 }

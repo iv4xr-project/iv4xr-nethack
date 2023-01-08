@@ -14,7 +14,7 @@ import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
 // Source: https://studytrails.com/2016/09/12/java-google-json-type-adapter/
-public class StatsTypeAdapter extends TypeAdapter<Pair<Stats, Player>> {	
+public class StatsTypeAdapter extends TypeAdapter<Pair<Stats, Player>> {
 	@Override
 	public Pair<Stats, Player> read(JsonReader reader) throws IOException {
 		// the first token is the start array
@@ -28,14 +28,14 @@ public class StatsTypeAdapter extends TypeAdapter<Pair<Stats, Player>> {
 			}
 			reader.endArray();
 		}
-		
+
 		return toPair(values);
 	}
-	
+
 	private Pair<Stats, Player> toPair(int[] values) {
 		Player player = new Player();
 		Stats stats = new Stats();
-		
+
 		player.position = new Vec3(values[0], values[1], 0);
 		player.strength = values[2];
 		player.dexterity = values[4];
@@ -59,25 +59,26 @@ public class StatsTypeAdapter extends TypeAdapter<Pair<Stats, Player>> {
 //		gameState.dungeonNumber = values[23];
 		stats.levelNumber = values[24];
 		player.condition = values[25];
-				
-		switch(values[26]) { 
-			case -1:
-				player.alignment = Alignment.CHAOTIC;
-				break;
-			case 0:
-				player.alignment = Alignment.NEUTRAL;
-				break;
-			case 1:
-				player.alignment = Alignment.LAWFUL;
-				break;
-			default:
-				System.out.println("Alignment value " + values[26] + " not valid");
-				return null;
+
+		switch (values[26]) {
+		case -1:
+			player.alignment = Alignment.CHAOTIC;
+			break;
+		case 0:
+			player.alignment = Alignment.NEUTRAL;
+			break;
+		case 1:
+			player.alignment = Alignment.LAWFUL;
+			break;
+		default:
+			System.out.println("Alignment value " + values[26] + " not valid");
+			return null;
 		}
-		
+
 		return new Pair<Stats, Player>(stats, player);
 	}
-	
+
 	@Override
-	public void write(JsonWriter out, Pair<Stats, Player> stats) throws IOException { }
+	public void write(JsonWriter out, Pair<Stats, Player> stats) throws IOException {
+	}
 }

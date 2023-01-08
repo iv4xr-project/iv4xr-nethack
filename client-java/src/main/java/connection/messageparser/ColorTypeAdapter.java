@@ -16,5 +16,6 @@ public class ColorTypeAdapter extends TypeAdapter<Color> {
 	}
 
 	@Override
-	public void write(JsonWriter out, Color action) throws IOException { }
+	public void write(JsonWriter out, Color action) throws IOException {
+	}
 }

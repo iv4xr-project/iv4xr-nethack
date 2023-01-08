@@ -21,7 +21,7 @@ import java.util.List;
  *
  * @author wish
  */
-public class AgentEnv extends Iv4xrEnvironment{
+public class AgentEnv extends Iv4xrEnvironment {
 	public NetHack app;
 
 	public AgentEnv(NetHack app) {
@@ -34,7 +34,7 @@ public class AgentEnv extends Iv4xrEnvironment{
 	@Override
 	public WorldModel observe(String agentId) {
 		WorldModel wom = new WorldModel();
-		
+
 		wom.agentId = agentId;
 		wom.position = app.gameState.player.position;
 		wom.timestamp = app.gameState.stats.time;
@@ -45,17 +45,17 @@ public class AgentEnv extends Iv4xrEnvironment{
 
 		// adding visible objects:
 		var visibleTiles = thegame().visibleTiles();
-		for(var sq : visibleTiles) {
+		for (var sq : visibleTiles) {
 			int mazeId = sq.fst;
 			var world = app.gameState.world.get(mazeId).map;
- 			Entity e = world[sq.snd.x][sq.snd.y];
+			Entity e = world[sq.snd.x][sq.snd.y];
 			if (e.type != EntityType.VOID) {
-				wom.elements.put(e.id, toWorldEntity(e)) ;
+				wom.elements.put(e.id, toWorldEntity(e));
 			}
 		}
 		// time-stamp the elements:
-		for(var e : wom.elements.values()) {
-			e.timestamp = wom.timestamp ;
+		for (var e : wom.elements.values()) {
+			e.timestamp = wom.timestamp;
 		}
 		return wom;
 	}
@@ -65,7 +65,6 @@ public class AgentEnv extends Iv4xrEnvironment{
 		return observe("player");
 	}
 
-	
 	WorldEntity toWorldEntity(Player p) {
 		WorldEntity we = new WorldEntity("id", p.id, true);
 		we.properties.put("level", app.gameState.stats.levelNumber);
@@ -79,50 +78,50 @@ public class AgentEnv extends Iv4xrEnvironment{
 		if (e.type == EntityType.VOID) {
 			return null;
 		}
-		
+
 		WorldEntity we;
 		int level = app.gameState.stats.levelNumber;
 		e.assignId(x, y);
-		switch(e.type) {
-			case WALL:
-			case DOOR:
-			case FLOOR:
-				we = new WorldEntity("id", e.id, false);
-				we.properties.put("level", level);
-				break;
-			case MONSTER:
-				we = new WorldEntity("id",  e.id, true);
-				we.properties.put("level", level);
-				break;
-			default:
-				return null;
+		switch (e.type) {
+		case WALL:
+		case DOOR:
+		case FLOOR:
+			we = new WorldEntity("id", e.id, false);
+			we.properties.put("level", level);
+			break;
+		case MONSTER:
+			we = new WorldEntity("id", e.id, true);
+			we.properties.put("level", level);
+			break;
+		default:
+			return null;
 		}
-		
+
 		Vec3 position = new Vec3(x, y, 0);
 		we.position = position;
 		return we;
 	}
 
 	WorldEntity mkGameAuxState() {
-		WorldEntity aux = new WorldEntity("aux","aux",true);
+		WorldEntity aux = new WorldEntity("aux", "aux", true);
 		aux.properties.put("time", app.gameState.stats.time);
 		aux.properties.put("status", app.gameState.done);
 
 		// recently removed objects:
 		String[] removed = new String[app.recentlyRemoved.size()];
-		int k = 0 ;
-		for(var id : thegame().recentlyRemoved) {
+		int k = 0;
+		for (var id : thegame().recentlyRemoved) {
 			removed[k] = id;
 			k++;
 		}
-		aux.properties.put("recentlyRemoved",removed);
+		aux.properties.put("recentlyRemoved", removed);
 
 		// currently visible tiles:
 		var visibleTiles_ = thegame().visibleTiles();
 		Serializable[] visibleTiles = new Serializable[visibleTiles_.size()];
 		k = 0;
-		//var world = app.dungeon.currentMaze(app.dungeon.frodo()).world ;
-		for(var tile : visibleTiles_) {
+		// var world = app.dungeon.currentMaze(app.dungeon.frodo()).world ;
+		for (var tile : visibleTiles_) {
 			String etype = "";
 			int levelId = tile.fst;
 			Entity[][] map = app.gameState.world.get(levelId).map;
@@ -134,7 +133,7 @@ public class AgentEnv extends Iv4xrEnvironment{
 			visibleTiles[k] = entry;
 			k++;
 		}
-		aux.properties.put("visibleTiles",visibleTiles);
+		aux.properties.put("visibleTiles", visibleTiles);
 
 		return aux;
 	}

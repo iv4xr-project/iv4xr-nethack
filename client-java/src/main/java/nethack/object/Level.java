@@ -9,19 +9,19 @@ public class Level {
 	public Entity[][] map;
 	public List<Entity> knownEntities;
 	private int nr;
-	
+
 	public static final int HEIGHT = 21;
 	public static final int WIDTH = 79;
-	
+
 	public String id() {
 		return "level" + nr;
 	}
-	
+
 	public Level(int levelNr, Entity[][] entities) {
 		this.nr = levelNr;
 		this.map = entities;
 	}
-	
+
 	public void invisibleTiles() {
 		System.out.print("Invisible tiles:");
 		for (int x = 0; x < WIDTH; x++) {
@@ -33,7 +33,7 @@ public class Level {
 		}
 		System.out.println();
 	}
-	
+
 	private List<IntVec2D> FindChanges(Level other) {
 		List<IntVec2D> points = new ArrayList<IntVec2D>();
 		for (int x = 0; x < WIDTH; x++) {
@@ -48,7 +48,7 @@ public class Level {
 		System.out.println();
 		return points;
 	}
-	
+
 //	public List<IntVec2D> UpdateMap(Level newObservation) {
 //		List<IntVec2D> changes = FindChanges(newObservation);
 //		for (IntVec2D vec: changes) {
@@ -63,19 +63,19 @@ public class Level {
 //		}
 //		return changes;
 //	}
-	
+
 	public Entity getEntity(IntVec2D p) {
 		return map[p.y][p.x];
 	}
-	
+
 	public Entity getEntity(int x, int y) {
 		return map[y][x];
 	}
-	
+
 	public void setEntity(IntVec2D p, Entity entity) {
 		map[p.y][p.x] = entity;
 	}
-	
+
 	public void setEntity(int x, int y, Entity entity) {
 		map[y][x] = entity;
 	}

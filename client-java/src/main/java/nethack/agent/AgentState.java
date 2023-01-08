@@ -25,34 +25,38 @@ import nl.uu.cs.aplib.mainConcepts.Environment;
 import nl.uu.cs.aplib.utils.Pair;
 
 /**
- * Provides an implementation of agent state {@link nl.uu.cs.aplib.mainConcepts.SimpleState}.
- * The state defined here inherits from {@link Iv4xrAgentState}, so it also keeps a
- * historical WorldModel.
+ * Provides an implementation of agent state
+ * {@link nl.uu.cs.aplib.mainConcepts.SimpleState}. The state defined here
+ * inherits from {@link Iv4xrAgentState}, so it also keeps a historical
+ * WorldModel.
  *
  * @author wish
  *
  */
 public class AgentState extends Iv4xrAgentState<Void> {
-	public LayeredAreasNavigation<Tile,Sparse2DTiledSurface_NavGraph> multiLayerNav;
+	public LayeredAreasNavigation<Tile, Sparse2DTiledSurface_NavGraph> multiLayerNav;
 
 	@Override
 	public AgentEnv env() {
-		return (AgentEnv) super.env() ;
+		return (AgentEnv) super.env();
 	}
 
 	/**
-	 * We are not going to keep an Nav-graph, but will instead keep a layered-nav-graphs.
+	 * We are not going to keep an Nav-graph, but will instead keep a
+	 * layered-nav-graphs.
 	 */
 	@Override
 	public Navigatable<Void> worldNavigation() {
-		throw new UnsupportedOperationException() ;
+		throw new UnsupportedOperationException();
 	}
+
 	/**
-	 * We are not going to keep an Nav-graph, but will instead keep a layered-nav-graphs.
+	 * We are not going to keep an Nav-graph, but will instead keep a
+	 * layered-nav-graphs.
 	 */
 	@Override
 	public AgentState setWorldNavigation(Navigatable<Void> nav) {
-		throw new UnsupportedOperationException() ;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -85,7 +89,8 @@ public class AgentState extends Iv4xrAgentState<Void> {
 			int levelNumber = (int) entry[0];
 			IntVec2D pos = (IntVec2D) entry[1];
 			EntityType type = (EntityType) entry[2];
-			//System.out.println(">>> registering maze " + mazeId + ", tile " + tile + ": " + type) ;
+			// System.out.println(">>> registering maze " + mazeId + ", tile " + tile + ": "
+			// + type) ;
 			if (levelNumber >= multiLayerNav.areas.size()) {
 				// detecting a new maze, need to allocate a nav-graph for this maze:
 				Sparse2DTiledSurface_NavGraph newNav = new Sparse2DTiledSurface_NavGraph();
@@ -99,25 +104,25 @@ public class AgentState extends Iv4xrAgentState<Void> {
 
 			multiLayerNav.markAsSeen(new Pair<>(levelNumber, new Tile(pos.x, pos.y)));
 			switch (type) {
-				case WALL:
-					multiLayerNav.addObstacle(new Pair<>(levelNumber, new Wall(pos.x, pos.y)));
-					break;
-				case FLOOR:
-					multiLayerNav.removeObstacle(new Pair<>(levelNumber, new Tile(pos.x, pos.y)));
-					break;
-				case DOOR:
-					multiLayerNav.addObstacle(new Pair<>(levelNumber, new Door(pos.x, pos.y)));
-					break;
-				case MONSTER:
-					// not going to represent monsters as non-navigable
-					// nav.addNonNavigable(new Door(tile.x,tile.y,true));
-					break;
-				default:
-					// representing potions, scrolls and shrines as doors that we can
-					// open or close to enable navigation onto them or not:
-					// Made this tile for now
-					multiLayerNav.addObstacle(new Pair<>(levelNumber, new Tile(pos.x, pos.y)));
-					break;
+			case WALL:
+				multiLayerNav.addObstacle(new Pair<>(levelNumber, new Wall(pos.x, pos.y)));
+				break;
+			case FLOOR:
+				multiLayerNav.removeObstacle(new Pair<>(levelNumber, new Tile(pos.x, pos.y)));
+				break;
+			case DOOR:
+				multiLayerNav.addObstacle(new Pair<>(levelNumber, new Door(pos.x, pos.y)));
+				break;
+			case MONSTER:
+				// not going to represent monsters as non-navigable
+				// nav.addNonNavigable(new Door(tile.x,tile.y,true));
+				break;
+			default:
+				// representing potions, scrolls and shrines as doors that we can
+				// open or close to enable navigation onto them or not:
+				// Made this tile for now
+				multiLayerNav.addObstacle(new Pair<>(levelNumber, new Tile(pos.x, pos.y)));
+				break;
 			}
 		}
 		// removing entities that are no longer in the game-board, except players:
@@ -136,42 +141,38 @@ public class AgentState extends Iv4xrAgentState<Void> {
 	 */
 	public boolean gameStatus() {
 		var aux = worldmodel.elements.get("aux");
-		boolean status = (boolean)aux.properties.get("status");
-		int time = (int)aux.properties.get("time");
+		boolean status = (boolean) aux.properties.get("status");
+		int time = (int) aux.properties.get("time");
 
 		return status;
 	}
 
 	/**
-	 * Check if the agent that owns this state is alive in the game
-	 * (its hp>0).
+	 * Check if the agent that owns this state is alive in the game (its hp>0).
 	 */
 	public boolean agentIsAlive() {
-		var a = worldmodel.elements.get(worldmodel.agentId) ;
-		if (a==null) {
-			throw new IllegalArgumentException() ;
+		var a = worldmodel.elements.get(worldmodel.agentId);
+		if (a == null) {
+			throw new IllegalArgumentException();
 		}
-		var hp = (Integer) a.properties.get("hp") ;
-		if (hp==null) {
-			throw new IllegalArgumentException() ;
+		var hp = (Integer) a.properties.get("hp");
+		if (hp == null) {
+			throw new IllegalArgumentException();
 		}
-		return hp>0 ;
+		return hp > 0;
 	}
 
 	/**
-	 * Return a list of monsters which are currently adjacent to the agent that
-	 * owns this state.
-=	 */
+	 * Return a list of monsters which are currently adjacent to the agent that owns
+	 * this state. =
+	 */
 	public List<WorldEntity> adjecentMonsters() {
 		var player = worldmodel.elements.get("player");
-		Tile p = Utils.toTile(
-			(int)this.env().app.gameState.player.position.x,
-			(int)this.env().app.gameState.player.position.y
-		);
-		List<WorldEntity> ms = worldmodel.elements.values().stream()
-				.filter(e -> e.type == EntityType.MONSTER.toString()
-						     && Utils.levelId(player) == Utils.levelId(e)
-						 	 && Utils.adjacent(p,Utils.toTile(e.position)))
+		Tile p = Utils.toTile((int) this.env().app.gameState.player.position.x,
+				(int) this.env().app.gameState.player.position.y);
+		List<WorldEntity> ms = worldmodel.elements
+				.values().stream().filter(e -> e.type == EntityType.MONSTER.toString()
+						&& Utils.levelId(player) == Utils.levelId(e) && Utils.adjacent(p, Utils.toTile(e.position)))
 				.collect(Collectors.toList());
 		return ms;
 	}

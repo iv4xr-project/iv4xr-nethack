@@ -18,7 +18,7 @@ public class EntityTypeAdapter extends TypeAdapter<Entity> {
 		JsonToken token = reader.peek();
 		if (token.equals(JsonToken.BEGIN_ARRAY)) {
 			reader.beginArray();
-			char symbol = (char)reader.nextInt();
+			char symbol = (char) reader.nextInt();
 			Color color = new ColorTypeAdapter().read(reader);
 			reader.endArray();
 			return Entity.fromValues(symbol, color);
@@ -28,5 +28,6 @@ public class EntityTypeAdapter extends TypeAdapter<Entity> {
 	}
 
 	@Override
-	public void write(JsonWriter out, Entity action) throws IOException { }
+	public void write(JsonWriter out, Entity action) throws IOException {
+	}
 }

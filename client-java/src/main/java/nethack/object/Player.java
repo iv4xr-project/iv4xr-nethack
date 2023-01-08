@@ -4,7 +4,9 @@ import eu.iv4xr.framework.spatial.Vec3;
 
 public class Player {
 	public static enum Alignment {
-		LAWFUL, NEUTRAL, CHAOTIC
+		LAWFUL,
+		NEUTRAL,
+		CHAOTIC
 	}
 
 	public Vec3 position;
@@ -27,6 +29,7 @@ public class Player {
 	public int condition;
 	public Alignment alignment;
 	public final String id = "player";
-	
-	public Player() {}
+
+	public Player() {
+	}
 }

@@ -13,41 +13,41 @@ public class Entity {
 		this.symbol = symbol;
 		this.type = type;
 	}
-	
+
 	public void assignId(int x, int y) {
 		id = String.format("%s_%d_%d", type.name(), x, y);
 	}
-	
+
 	public static Entity fromValues(char symbol, Color color) {
 		EntityType type = EntityType.fromSymbol(symbol, color);
 		return new Entity(symbol, type, color);
 	}
-	
+
 	public boolean becameTransparent(Entity newState) {
 		if (!newState.color.equals(Color.TRANSPARENT) || color.equals(Color.TRANSPARENT)) {
 			return false;
 		}
 		return newState.symbol == symbol && newState.type == type;
 	}
-	
+
 	public boolean becameVisible(Entity newState) {
 		if (!color.equals(Color.TRANSPARENT) || newState.color.equals(Color.TRANSPARENT)) {
 			return false;
 		}
 		return newState.symbol == symbol && newState.type == type;
 	}
-	
+
 	@Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
 
-        if (!Entity.class.isAssignableFrom(obj.getClass())) {
-            return false;
-        }
+		if (!Entity.class.isAssignableFrom(obj.getClass())) {
+			return false;
+		}
 
-        Entity other = (Entity)obj;
-        return other.color.equals(color) && other.symbol == symbol && other.type == type;
-    }
+		Entity other = (Entity) obj;
+		return other.color.equals(color) && other.symbol == symbol && other.type == type;
+	}
 }

@@ -26,9 +26,11 @@ import nethack.StepState;
  * class over the socket. Note that this implies that the object sent like this
  * must be serializable to Json.
  *
- * <p>This class can be used by both a server or a client.
+ * <p>
+ * This class can be used by both a server or a client.
  *
- * <p>Note: this class was taken over from iv4xrDemo.
+ * <p>
+ * Note: this class was taken over from iv4xrDemo.
  */
 public class ObjectReaderWriter_OverSocket {
 	static final Logger logger = LogManager.getLogger(ObjectReaderWriter_OverSocket.class);
@@ -40,9 +42,8 @@ public class ObjectReaderWriter_OverSocket {
 	// here.
 	// Transient modifiers should be excluded, otherwise they will be send with json
 	private static Gson gson = new GsonBuilder()
-			.registerTypeAdapter(ObservationMessage.class, new ObservationMessageTypeAdapter())
-			.serializeNulls().excludeFieldsWithModifiers(Modifier.TRANSIENT)
-			.create();
+			.registerTypeAdapter(ObservationMessage.class, new ObservationMessageTypeAdapter()).serializeNulls()
+			.excludeFieldsWithModifiers(Modifier.TRANSIENT).create();
 
 	public ObjectReaderWriter_OverSocket(Socket socket) throws IOException {
 		this.socket = socket;
@@ -54,6 +55,7 @@ public class ObjectReaderWriter_OverSocket {
 	 * Send an object to the host. The object will first be serialized to a json
 	 * string, so it is assumed that the json serializer knows how to handle the
 	 * object.
+	 * 
 	 * @throws IOException
 	 */
 	public void write(Object packageToSend) throws IOException {
@@ -64,15 +66,15 @@ public class ObjectReaderWriter_OverSocket {
 
 	public StepState readStepState() throws IOException {
 		logger.debug("** waiting for answer....");
-		
+
 		reader.ready();
 		String response = reader.readLine();
 		ObservationMessage obsMessage = gson.fromJson(response, ObservationMessage.class);
-		
+
 		reader.ready();
 		response = reader.readLine();
 		StepMessage stepMessage = gson.fromJson(response, StepMessage.class);
-		
+
 		StepState stepState = new StepState();
 		stepState.player = obsMessage.player;
 		stepState.stats = obsMessage.stats;
@@ -82,28 +84,29 @@ public class ObjectReaderWriter_OverSocket {
 		stepState.message = obsMessage.message;
 		return stepState;
 	}
-	
+
 	/**
 	 * Read an object that was sent by the host. The object will be received as a
 	 * json string, which is then converted into an instance of the given class. It
 	 * is assumed that the json deserializer knows how to do this. The resulting
 	 * object is then returned.
-	 * @throws  
+	 * 
+	 * @throws
 	 */
 	public <T> T read(Class<T> expectedClassOfResultObj) throws IOException {
 		if (expectedClassOfResultObj == StepState.class) {
-			return (T)readStepState();
+			return (T) readStepState();
 		}
-		
-		logger.debug("** waiting for answer....") ;
+
+		logger.debug("** waiting for answer....");
 		reader.ready();
 		String response = reader.readLine();
-		//		String response = readResponse();
+		// String response = readResponse();
 		// we do not have to cast to T, since req.responseType is of type Class<T>
-		logger.debug("** RECEIVING: " + response);	
+		logger.debug("** RECEIVING: " + response);
 		return gson.fromJson(response, expectedClassOfResultObj);
 	}
-	
+
 	private String readResponse() throws IOException {
 		reader.ready();
 		String response = reader.readLine();

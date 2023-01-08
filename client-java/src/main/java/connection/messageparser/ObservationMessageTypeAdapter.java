@@ -26,20 +26,20 @@ public class ObservationMessageTypeAdapter extends TypeAdapter<ObservationMessag
 			while (reader.hasNext()) {
 				String objectEntry = reader.nextName();
 				switch (objectEntry) {
-					case "blstats":
-						Pair<Stats, Player> blstats = new StatsTypeAdapter().read(reader);
-						observationMessage.stats = blstats.fst;
-						observationMessage.player = blstats.snd;
-						break;
-					case "entities":
-						observationMessage.entities = readMap(reader);
-						break;
-					case "message":
-						observationMessage.message = readString(reader);
-						break;
-					default:
-						System.out.println(objectEntry + " has not been recognize when parsing observationMessage.");
-						break;
+				case "blstats":
+					Pair<Stats, Player> blstats = new StatsTypeAdapter().read(reader);
+					observationMessage.stats = blstats.fst;
+					observationMessage.player = blstats.snd;
+					break;
+				case "entities":
+					observationMessage.entities = readMap(reader);
+					break;
+				case "message":
+					observationMessage.message = readString(reader);
+					break;
+				default:
+					System.out.println(objectEntry + " has not been recognize when parsing observationMessage.");
+					break;
 				}
 			}
 			reader.endObject();
@@ -49,14 +49,14 @@ public class ObservationMessageTypeAdapter extends TypeAdapter<ObservationMessag
 			return null;
 		}
 	}
-	
+
 	public String readString(JsonReader reader) throws IOException {
 		String message = "";
 		JsonToken token = reader.peek();
 		if (token.equals(JsonToken.BEGIN_ARRAY)) {
 			reader.beginArray();
 			while (!reader.peek().equals(JsonToken.END_ARRAY)) {
-				message += (char)reader.nextInt();
+				message += (char) reader.nextInt();
 			}
 			reader.endArray();
 			return message;
@@ -64,7 +64,7 @@ public class ObservationMessageTypeAdapter extends TypeAdapter<ObservationMessag
 			return null;
 		}
 	}
-	
+
 	public Entity[][] readMap(JsonReader reader) throws IOException {
 		Entity[][] row = new Entity[Level.HEIGHT][Level.WIDTH];
 		JsonToken token = reader.peek();
@@ -78,7 +78,7 @@ public class ObservationMessageTypeAdapter extends TypeAdapter<ObservationMessag
 		}
 		return row;
 	}
-	
+
 	public Entity[] readMapRow(JsonReader reader) throws IOException {
 		EntityTypeAdapter entityTypeAdapter = new EntityTypeAdapter();
 		Entity[] row = new Entity[Level.WIDTH];
@@ -95,5 +95,6 @@ public class ObservationMessageTypeAdapter extends TypeAdapter<ObservationMessag
 	}
 
 	@Override
-	public void write(JsonWriter out, ObservationMessage message) throws IOException { }
+	public void write(JsonWriter out, ObservationMessage message) throws IOException {
+	}
 }

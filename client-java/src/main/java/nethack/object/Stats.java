@@ -8,5 +8,6 @@ public class Stats {
 //	public int dungeonNumber;
 	public int levelNumber;
 
-	public Stats() { }
+	public Stats() {
+	}
 }

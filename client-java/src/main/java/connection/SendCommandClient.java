@@ -9,8 +9,8 @@ import org.apache.logging.log4j.Logger;
 /**
  * A class that supports sending a pair (cmd,arg) to a server and receives the
  * response the server sends. A socket is used to facilitate the connection to
- * the server. From the perspective of a client-server relation, this class
- * acts as a client.
+ * the server. From the perspective of a client-server relation, this class acts
+ * as a client.
  *
  * <p>
  * The pair (cmd,arg) represents some command and its argument. When sent to the
@@ -30,61 +30,62 @@ import org.apache.logging.log4j.Logger;
  */
 public class SendCommandClient {
 	static final Logger logger = LogManager.getLogger(SendCommandClient.class);
-	String host ;
-	int port ;
-	Socket socket ;
-	ObjectReaderWriter_OverSocket readerwriter ;
+	String host;
+	int port;
+	Socket socket;
+	ObjectReaderWriter_OverSocket readerwriter;
 
-    /**
-     * Constructor. Will setup the needed socket to communicate with the given server
-     * hosted at the given host-id, at the given port.
-     */
+	/**
+	 * Constructor. Will setup the needed socket to communicate with the given
+	 * server hosted at the given host-id, at the given port.
+	 */
 	public SendCommandClient(String host, int port) {
-		this.host = host ;
-    	this.port = port ;
-        int maxWaitTime = 20000;
-        logger.info(String.format("> Trying to connect with a host on %s:%s (will time-out after %s seconds)", host, port, maxWaitTime/1000));
+		this.host = host;
+		this.port = port;
+		int maxWaitTime = 20000;
+		logger.info(String.format("> Trying to connect with a host on %s:%s (will time-out after %s seconds)", host,
+				port, maxWaitTime / 1000));
 
-        long startTime = System.nanoTime();
+		long startTime = System.nanoTime();
 
-        while (!socketReady() && millisElapsed(startTime) < maxWaitTime){
-            try {
-                socket = new Socket(host, port);
-                readerwriter = new ObjectReaderWriter_OverSocket(socket) ;
-            }
-            catch (IOException ignored) { }
-        }
-        if(socketReady()){
-            logger.info(String.format("> CONNECTED with %s:%s", host, port));
-        }
-        else{
-        	logger.warn(String.format("> Could NOT establish a connection with the host %s:%s.", host,port));
-        }
+		while (!socketReady() && millisElapsed(startTime) < maxWaitTime) {
+			try {
+				socket = new Socket(host, port);
+				readerwriter = new ObjectReaderWriter_OverSocket(socket);
+			} catch (IOException ignored) {
+			}
+		}
+		if (socketReady()) {
+			logger.info(String.format("> CONNECTED with %s:%s", host, port));
+		} else {
+			logger.warn(String.format("> Could NOT establish a connection with the host %s:%s.", host, port));
+		}
 	}
 
-    static class Cmd {
-    	String cmd ;
-    	Object arg ;
-    	Cmd(String cmd, Object arg) {
-    		this.cmd = cmd ;
-    		this.arg = arg ;
-    	}
-    }
+	static class Cmd {
+		String cmd;
+		Object arg;
 
-    /**
-     * @return true if the socket and readers are not null
-     */
-    public boolean socketReady() {
-        return socket != null && readerwriter != null ;
-    }
+		Cmd(String cmd, Object arg) {
+			this.cmd = cmd;
+			this.arg = arg;
+		}
+	}
 
-    /**
-     * @param startTimeNano the start time in long
-     * @return the elapsed time from the start time converted to milliseconds
-     */
-    private float millisElapsed(long startTimeNano) {
-        return (System.nanoTime() - startTimeNano) / 1000000f;
-    }
+	/**
+	 * @return true if the socket and readers are not null
+	 */
+	public boolean socketReady() {
+		return socket != null && readerwriter != null;
+	}
+
+	/**
+	 * @param startTimeNano the start time in long
+	 * @return the elapsed time from the start time converted to milliseconds
+	 */
+	private float millisElapsed(long startTimeNano) {
+		return (System.nanoTime() - startTimeNano) / 1000000f;
+	}
 
 	/**
 	 * Send a command and an argument to the server. The pair will first be wrapped
@@ -95,22 +96,22 @@ public class SendCommandClient {
 	 * The Json-string will be converted to an object of some class T, as specified
 	 * in the 3rd parameter of this method.
 	 */
-    public <T> T sendCommand(String cmd, Object arg, Class<T> expectedClassOfResultObj) throws IOException {
-    	readerwriter.write(new Cmd(cmd,arg));
-    	return readerwriter.read(expectedClassOfResultObj);
-    }
+	public <T> T sendCommand(String cmd, Object arg, Class<T> expectedClassOfResultObj) throws IOException {
+		readerwriter.write(new Cmd(cmd, arg));
+		return readerwriter.read(expectedClassOfResultObj);
+	}
 
-    // Send a command without a return type
-    public void writeCommand(String cmd, Object arg) throws IOException {
-    	readerwriter.write(new Cmd(cmd,arg));
-    }
-    
-    public <T> T read(Class<T> expectedClassOfResultObj) throws IOException {
-    	return readerwriter.read(expectedClassOfResultObj);
-    }
+	// Send a command without a return type
+	public void writeCommand(String cmd, Object arg) throws IOException {
+		readerwriter.write(new Cmd(cmd, arg));
+	}
 
-    public void close() throws IOException {
-    	readerwriter.close();
-    	socket.close();
-    }
+	public <T> T read(Class<T> expectedClassOfResultObj) throws IOException {
+		return readerwriter.read(expectedClassOfResultObj);
+	}
+
+	public void close() throws IOException {
+		readerwriter.close();
+		socket.close();
+	}
 }
