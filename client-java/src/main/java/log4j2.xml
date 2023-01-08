@@ -12,15 +12,16 @@
         </File>
     </Appenders>
     <Loggers>
-<!--
-	    <Logger name="com.mkyong" level="debug" additivity="false">
+	    <Logger name="connection.ObjectReaderWriter_OverSocket" level="debug" additivity="false">
             <AppenderRef ref="LogToFile"/>
+        </Logger>
+        <Logger name="connection.ObjectReaderWriter_OverSocket" level="info" additivity="false">
             <AppenderRef ref="LogToConsole"/>
         </Logger>
-        <Logger name="org.springframework.boot" level="error" additivity="false">
+        <Logger name="nethack.NetHack" level="debug" additivity="false">
             <AppenderRef ref="LogToConsole"/>
+            <AppenderRef ref="LogToFile"/>
         </Logger>
--->
         <Root level="debug">
             <AppenderRef ref="LogToFile"/>
             <AppenderRef ref="LogToConsole"/>

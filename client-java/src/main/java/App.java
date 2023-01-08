@@ -5,13 +5,12 @@ import org.apache.logging.log4j.Logger;
 
 import connection.SendCommandClient;
 import nethack.NetHack;
-import nethack.object.Action;
 
 public class App
 {
 	static final Logger logger = LogManager.getLogger(App.class);
 	
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException {		
 		// Initialize socket connection
 		SendCommandClient commander = new SendCommandClient("127.0.0.1", 5001);
 		if (!commander.socketReady()) {

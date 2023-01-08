@@ -3,6 +3,9 @@ package connection;
 import java.io.IOException;
 import java.net.Socket;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * A class that supports sending a pair (cmd,arg) to a server and receives the
  * response the server sends. A socket is used to facilitate the connection to
@@ -26,7 +29,7 @@ import java.net.Socket;
  *
  */
 public class SendCommandClient {
-
+	static final Logger logger = LogManager.getLogger(SendCommandClient.class);
 	String host ;
 	int port ;
 	Socket socket ;
@@ -40,7 +43,7 @@ public class SendCommandClient {
 		this.host = host ;
     	this.port = port ;
         int maxWaitTime = 20000;
-        System.out.println(String.format("> Trying to connect with a host on %s:%s (will time-out after %s seconds)", host, port, maxWaitTime/1000));
+        logger.info(String.format("> Trying to connect with a host on %s:%s (will time-out after %s seconds)", host, port, maxWaitTime/1000));
 
         long startTime = System.nanoTime();
 
@@ -52,10 +55,10 @@ public class SendCommandClient {
             catch (IOException ignored) { }
         }
         if(socketReady()){
-            System.out.println(String.format("> CONNECTED with %s:%s", host, port));
+            logger.info(String.format("> CONNECTED with %s:%s", host, port));
         }
         else{
-            System.out.println(String.format("> Could NOT establish a connection with the host %s:%s.", host,port));
+        	logger.warn(String.format("> Could NOT establish a connection with the host %s:%s.", host,port));
         }
 	}
 

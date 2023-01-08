@@ -118,11 +118,11 @@ public enum Action {
     COMMAND_ZAP(104, "z", "Use wand"),
 	
 //  Characters    
-    TEXTCHARACTER_PLUS(105, "%+", "Show spells"),
+//    TEXTCHARACTER_PLUS(105, "%+", "Show spells"),
     TEXTCHARACTER_MINUS(106, "%-", ""),
     TEXTCHARACTER_SPACE(107, "% ", ""),
     TEXTCHARACTER_APOS(108, "%\'", ""),
-    TEXTCHARACTER_QUOTE(109, "%\"", ""),
+//    TEXTCHARACTER_QUOTE(109, "%\"", ""),
     TEXTCHARACTER_NUM_0(110, "%0", ""),
     TEXTCHARACTER_NUM_1(111, "%1", ""),
     TEXTCHARACTER_NUM_2(112, "%2", ""),
@@ -133,7 +133,8 @@ public enum Action {
     TEXTCHARACTER_NUM_7(117, "%7", ""),
     TEXTCHARACTER_NUM_8(118, "%8", ""),
     TEXTCHARACTER_NUM_9(119, "%9", ""),
-    TEXTCHARACTER_DOLLAR(120, "%$", "");
+//    TEXTCHARACTER_DOLLAR(120, "%$", "")
+    ;
     
 	public int index;
 	

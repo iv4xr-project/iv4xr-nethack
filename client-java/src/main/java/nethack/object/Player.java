@@ -26,6 +26,7 @@ public class Player {
 	public int carryingCapacity;
 	public int condition;
 	public Alignment alignment;
+	public final String id = "player";
 	
 	public Player() {}
 }

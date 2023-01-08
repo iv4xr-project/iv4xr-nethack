@@ -77,6 +77,11 @@ public class NetHack {
 	public void step(Action action) throws IOException {		
 		StepState stepState = commander.sendCommand("Step", action.index, StepState.class);
 		
+		if (gameState.world.size() != 0) {
+			System.out.print("DifferentTiles=");
+			gameState.level().UpdateMap(stepState.level);
+		}
+		
 		// Add to world
 		while (stepState.stats.levelNumber > gameState.world.size()) {
 			gameState.world.add(null);
@@ -84,10 +89,10 @@ public class NetHack {
 		gameState.world.set(stepState.stats.levelNumber - 1, stepState.level);
 		
 		// Set all members to the correct values
-		this.gameState.message = stepState.message;
-		this.gameState.player = stepState.player;
-		this.gameState.stats = stepState.stats;
-		this.gameState.done = stepState.done;
-		this.gameState.info = stepState.info;
+		gameState.message = stepState.message;
+		gameState.player = stepState.player;
+		gameState.stats = stepState.stats;
+		gameState.done = stepState.done;
+		gameState.info = stepState.info;
 	}
 }

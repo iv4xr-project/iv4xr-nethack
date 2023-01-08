@@ -1,5 +1,6 @@
 package nethack.agent;
 
+import nethack.object.EntityType;
 import nethack.object.Level;
 
 import java.io.Serializable;
@@ -20,16 +21,6 @@ import eu.iv4xr.framework.mainConcepts.Iv4xrAgentState;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.spatial.IntVec2D;
 import eu.iv4xr.framework.spatial.Vec3;
-import nl.uu.cs.aplib.exampleUsages.miniDungeon.DungeonApp;
-import nl.uu.cs.aplib.exampleUsages.miniDungeon.Entity;
-import nl.uu.cs.aplib.exampleUsages.miniDungeon.MiniDungeon;
-import nl.uu.cs.aplib.exampleUsages.miniDungeon.Entity.EntityType;
-import nl.uu.cs.aplib.exampleUsages.miniDungeon.Entity.Frodo;
-import nl.uu.cs.aplib.exampleUsages.miniDungeon.Entity.ShrineType;
-import nl.uu.cs.aplib.exampleUsages.miniDungeon.Entity.Smeagol;
-import nl.uu.cs.aplib.exampleUsages.miniDungeon.MiniDungeon.Command;
-import nl.uu.cs.aplib.exampleUsages.miniDungeon.MiniDungeon.GameStatus;
-import nl.uu.cs.aplib.exampleUsages.miniDungeon.MiniDungeon.MiniDungeonConfig;
 import nl.uu.cs.aplib.mainConcepts.Environment;
 import nl.uu.cs.aplib.utils.Pair;
 
@@ -42,7 +33,6 @@ import nl.uu.cs.aplib.utils.Pair;
  *
  */
 public class AgentState extends Iv4xrAgentState<Void> {
-
 	public LayeredAreasNavigation<Tile,Sparse2DTiledSurface_NavGraph> multiLayerNav;
 
 	@Override
@@ -67,7 +57,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
 
 	@Override
 	public AgentState setEnvironment(Environment env) {
-		super.setEnvironment(env) ;
+		super.setEnvironment(env);
 		// creating an instance of navigation graph; setting its
 		// configuration etc.
 		// The graph is empty when created.
@@ -80,7 +70,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
 	}
 
 	public WorldEntity auxState() {
-		return worldmodel().elements.get("aux") ;
+		return worldmodel().elements.get("aux");
 	}
 
 	@Override
@@ -92,80 +82,64 @@ public class AgentState extends Iv4xrAgentState<Void> {
 		var seenTiles = (Serializable[]) aux.properties.get("visibleTiles");
 		for (var entry_ : seenTiles) {
 			var entry = (Serializable[]) entry_;
-			int mazeId = (int) entry[0];
-			var tile = (IntVec2D) entry[1];
-			var type = (String) entry[2];
+			int levelNumber = (int) entry[0];
+			IntVec2D pos = (IntVec2D) entry[1];
+			EntityType type = (EntityType) entry[2];
 			//System.out.println(">>> registering maze " + mazeId + ", tile " + tile + ": " + type) ;
-			if (mazeId >= multiLayerNav.areas.size()) {
+			if (levelNumber >= multiLayerNav.areas.size()) {
 				// detecting a new maze, need to allocate a nav-graph for this maze:
 				Sparse2DTiledSurface_NavGraph newNav = new Sparse2DTiledSurface_NavGraph();
 				newNav.sizeX = Level.WIDTH;
 				newNav.sizeY = Level.HEIGHT;
-				int N = env().app.dungeon.config.worldSize;
-				Tile lowPortal = new Tile(N - 2, 1);
-				Tile highPortal = new Tile(1, 1);
-				multiLayerNav.addNextArea(newNav, lowPortal, highPortal, true);
+//				int N = env().app.dungeon.config.worldSize;
+//				Tile lowPortal = new Tile(N - 2, 1);
+//				Tile highPortal = new Tile(1, 1);
+//				multiLayerNav.addNextArea(newNav, lowPortal, highPortal, true);
 			}
 
-			multiLayerNav.markAsSeen(new Pair<>(mazeId, new Tile(tile.x, tile.y)));
+			multiLayerNav.markAsSeen(new Pair<>(levelNumber, new Tile(pos.x, pos.y)));
 			switch (type) {
-			case "WALL":
-				multiLayerNav.addObstacle(new Pair<>(mazeId, new Wall(tile.x, tile.y)));
-				break;
-			case "":
-				multiLayerNav.removeObstacle(new Pair<>(mazeId, new Tile(tile.x, tile.y)));
-				break;
-			case "MONSTER":
-				// not going to represent monsters as non-navigable
-				// nav.addNonNavigable(new Door(tile.x,tile.y,true));
-				break;
-			default:
-				// representing potions, scrolls and shrines as doors that we can
-				// open or close to enable navigation onto them or not:
-				multiLayerNav.addObstacle(new Pair<>(mazeId, new Door(tile.x, tile.y)));
-				break;
+				case WALL:
+					multiLayerNav.addObstacle(new Pair<>(levelNumber, new Wall(pos.x, pos.y)));
+					break;
+				case FLOOR:
+					multiLayerNav.removeObstacle(new Pair<>(levelNumber, new Tile(pos.x, pos.y)));
+					break;
+				case DOOR:
+					multiLayerNav.addObstacle(new Pair<>(levelNumber, new Door(pos.x, pos.y)));
+					break;
+				case MONSTER:
+					// not going to represent monsters as non-navigable
+					// nav.addNonNavigable(new Door(tile.x,tile.y,true));
+					break;
+				default:
+					// representing potions, scrolls and shrines as doors that we can
+					// open or close to enable navigation onto them or not:
+					// Made this tile for now
+					multiLayerNav.addObstacle(new Pair<>(levelNumber, new Tile(pos.x, pos.y)));
+					break;
 			}
 		}
 		// removing entities that are no longer in the game-board, except players:
 		var removedEntities = (Serializable[]) aux.properties.get("recentlyRemoved");
 		for (var entry_ : removedEntities) {
 			var id = (String) entry_;
-			if (id.equals("Frodo") || id.equals("Smeagol")) {
+			if (id.equals("player")) {
 				continue;
 			}
 			this.worldmodel.elements.remove(id);
 		}
-
-		// set the obstacle-state of cleansed shrine to "open" (and its nav-teleport too):
-		for (var e : worldmodel.elements.values()) {
-			if (e.type.equals(EntityType.SHRINE.toString()) && (boolean) e.properties.get("cleansed")) {
-				int e_i = (int) e.properties.get("maze");
-				Tile et = new Tile(e.position.x, e.position.z);
-				var blocker = new Pair<>(e_i, et) ;
-				// just unblock it again :)
-				//System.out.println("=== unblocking " + e.id + " in maze " + e_i);
-				multiLayerNav.toggleBlockingOff(blocker);
-				var shrineType = (ShrineType) e.properties.get("shrinetype") ;
-				if (shrineType == ShrineType.MoonShrine && multiLayerNav.areas.size() > e_i+1) {
-					// open the portal (again) :
-					multiLayerNav.setPortal(e_i, e_i + 1 , true) ;
-				}
-				else if(shrineType == ShrineType.SunShrine) {
-					multiLayerNav.setPortal(e_i, e_i - 1 , true) ;
-				}
-
-			}
-		}
-
 	}
 
 	/**
 	 * Return the game status (as registered in this state).
 	 */
-	public GameStatus gameStatus() {
-		var aux = worldmodel.elements.get("aux") ;
-		var status = (GameStatus)aux.properties.get("status") ;
-		return status ;
+	public boolean gameStatus() {
+		var aux = worldmodel.elements.get("aux");
+		boolean status = (boolean)aux.properties.get("status");
+		int time = (int)aux.properties.get("time");
+
+		return status;
 	}
 
 	/**
@@ -189,15 +163,16 @@ public class AgentState extends Iv4xrAgentState<Void> {
 	 * owns this state.
 =	 */
 	public List<WorldEntity> adjecentMonsters() {
+		var player = worldmodel.elements.get("player");
 		Tile p = Utils.toTile(
 			(int)this.env().app.gameState.player.position.x,
 			(int)this.env().app.gameState.player.position.y
 		);
 		List<WorldEntity> ms = worldmodel.elements.values().stream()
-				.filter(e -> e.type.equals(EntityType.MONSTER.toString())
-						     && Utils.mazeId(player) == Utils.mazeId(e)
+				.filter(e -> e.type == EntityType.MONSTER.toString()
+						     && Utils.levelId(player) == Utils.levelId(e)
 						 	 && Utils.adjacent(p,Utils.toTile(e.position)))
-				.collect(Collectors.toList()) ;
+				.collect(Collectors.toList());
 		return ms;
 	}
 }
