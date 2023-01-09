@@ -3,6 +3,7 @@ package connection.messageparser;
 import nethack.object.Player;
 import nethack.object.Player.Alignment;
 import nl.uu.cs.aplib.utils.Pair;
+import eu.iv4xr.framework.spatial.IntVec2D;
 import eu.iv4xr.framework.spatial.Vec3;
 import nethack.object.Stats;
 
@@ -37,6 +38,7 @@ public class StatsTypeAdapter extends TypeAdapter<Pair<Stats, Player>> {
 		Stats stats = new Stats();
 
 		player.position = new Vec3(values[0], values[1], 0);
+		player.position2D = new IntVec2D(values[0], values[1]);
 		player.strength = values[2];
 		player.dexterity = values[4];
 		player.constitution = values[5];
@@ -57,7 +59,8 @@ public class StatsTypeAdapter extends TypeAdapter<Pair<Stats, Player>> {
 		player.hungerState = values[21];
 		player.carryingCapacity = values[22];
 //		gameState.dungeonNumber = values[23];
-		stats.levelNumber = values[24];
+		stats.oneIndexLevelNumber = values[24];
+		stats.zeroIndexLevelNumber = values[24] - 1;
 		player.condition = values[25];
 
 		switch (values[26]) {

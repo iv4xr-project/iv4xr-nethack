@@ -17,6 +17,7 @@ public enum EntityType implements Serializable {
 	FLOOR('.'),
 	FOUNTAIN('{'),
 	GEM('▉'),
+	GRAVE('▉'),
 	GOLD('$'),
 	HUMAN('▉'),
 	ITEM('('),
@@ -62,16 +63,28 @@ public enum EntityType implements Serializable {
 
 		switch (symbol) {
 		case '|':
+			if (color == Color.BROWN)
+				return EntityType.DOOR;
+			if (color == Color.WHITE)
+				return EntityType.GRAVE;
+			return EntityType.WALL;
 		case '-':
-			return color == Color.BROWN ? EntityType.DOOR : EntityType.WALL;
+			if (color == Color.BROWN)
+				return EntityType.DOOR;
+			return EntityType.WALL;
 		case '+':
 			return color == Color.BROWN ? EntityType.DOOR : EntityType.SPELLBOOK;
 		case 'd':
 		case 'f':
-		case 'u':
 			return color == Color.WHITE ? EntityType.PET : EntityType.MONSTER;
+		case 'u':
+			return color == Color.BROWN ? EntityType.PET : EntityType.MONSTER;
 		case '@':
 			return color == Color.WHITE ? EntityType.PLAYER : EntityType.HUMAN;
+		}
+
+		if (Character.isAlphabetic(symbol)) {
+			return EntityType.MONSTER;
 		}
 
 		return EntityType.UNKNOWN;

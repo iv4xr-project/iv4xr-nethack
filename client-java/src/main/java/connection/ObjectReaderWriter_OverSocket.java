@@ -80,7 +80,7 @@ public class ObjectReaderWriter_OverSocket {
 		stepState.stats = obsMessage.stats;
 		stepState.done = stepMessage.done;
 		stepState.info = stepMessage.info;
-		stepState.level = new Level(obsMessage.stats.levelNumber, obsMessage.entities);
+		stepState.level = new Level(obsMessage.stats.zeroIndexLevelNumber, obsMessage.entities);
 		stepState.message = obsMessage.message;
 		return stepState;
 	}

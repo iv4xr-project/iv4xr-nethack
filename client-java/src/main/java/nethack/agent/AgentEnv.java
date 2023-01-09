@@ -44,10 +44,11 @@ public class AgentEnv extends Iv4xrEnvironment {
 		wom.elements.put(app.gameState.player.id, toWorldEntity(app.gameState.player));
 
 		// adding visible objects:
-		List<IntVec2D> visibleTiles = app.level().visibleTiles();
+		List<IntVec2D> visibleTiles = app.level().visibleTiles(app.gameState.player.position2D);
 		for (IntVec2D pos : visibleTiles) {
 			Entity e = app.level().getEntity(pos);
 			if (e.type != EntityType.VOID) {
+				e.assignId(pos.x, pos.y);
 				wom.elements.put(e.id, toWorldEntity(e, pos.x, pos.y));
 			}
 		}
@@ -58,14 +59,14 @@ public class AgentEnv extends Iv4xrEnvironment {
 		return wom;
 	}
 
-	public WorldModel action(Command action) throws IOException {
+	public WorldModel action(Command action) {
 		app.step(action);
 		return observe("player");
 	}
 
 	WorldEntity toWorldEntity(Player p) {
 		WorldEntity we = new WorldEntity("id", p.id, true);
-		we.properties.put("level", app.gameState.stats.levelNumber);
+		we.properties.put("level", app.gameState.stats.zeroIndexLevelNumber);
 		we.properties.put("hp", app.gameState.player.hp);
 		we.properties.put("hpmax", app.gameState.player.hpMax);
 		we.position = p.position;
@@ -78,25 +79,29 @@ public class AgentEnv extends Iv4xrEnvironment {
 		}
 
 		WorldEntity we;
-		int level = app.gameState.stats.levelNumber;
-		e.assignId(x, y);
+		int level = app.gameState.stats.zeroIndexLevelNumber;
+		String id = String.format("%s_%d_%d", e.type.name(), x, y);
+		String type = e.type.name();
+
 		switch (e.type) {
 		case WALL:
 		case DOOR:
 		case FLOOR:
 		case CORRIDOR:
-			we = new WorldEntity("id", e.id, false);
+			we = new WorldEntity(id, type, false);
 			we.properties.put("level", level);
 			break;
 		case MONSTER:
-			we = new WorldEntity("id", e.id, true);
+			we = new WorldEntity(id, type, true);
 			we.properties.put("level", level);
 			break;
 		default:
-			return null;
+			we = new WorldEntity(id, type, true);
+			we.properties.put("level", level);
+			break;
 		}
 
-		Vec3 position = new Vec3(x, y, 0);
+		Vec3 position = new Vec3(x, y, level);
 		we.position = position;
 		return we;
 	}
@@ -116,12 +121,11 @@ public class AgentEnv extends Iv4xrEnvironment {
 //		aux.properties.put("recentlyRemoved", removed);
 
 		// currently visible tiles:
-		List<IntVec2D> visibleTiles_ = app.level().visibleTiles();
+		List<IntVec2D> visibleTiles_ = app.level().visibleTiles(app.gameState.player.position2D);
 		Serializable[] visibleTiles = new Serializable[visibleTiles_.size()];
 		int k = 0;
-		// var world = app.dungeon.currentMaze(app.dungeon.frodo()).world ;
 		for (IntVec2D pos : visibleTiles_) {
-			int levelId = app.gameState.stats.levelNumber;
+			int levelId = app.gameState.stats.zeroIndexLevelNumber;
 			Entity e = app.level().getEntity(pos);
 			EntityType etype = e.type;
 			Serializable[] entry = { levelId, pos, etype };

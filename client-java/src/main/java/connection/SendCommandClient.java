@@ -96,18 +96,35 @@ public class SendCommandClient {
 	 * The Json-string will be converted to an object of some class T, as specified
 	 * in the 3rd parameter of this method.
 	 */
-	public <T> T sendCommand(String cmd, Object arg, Class<T> expectedClassOfResultObj) throws IOException {
-		readerwriter.write(new Cmd(cmd, arg));
-		return readerwriter.read(expectedClassOfResultObj);
+	public <T> T sendCommand(String cmd, Object arg, Class<T> expectedClassOfResultObj) {
+		try {
+			readerwriter.write(new Cmd(cmd, arg));
+			return readerwriter.read(expectedClassOfResultObj);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	// Send a command without a return type
-	public void writeCommand(String cmd, Object arg) throws IOException {
-		readerwriter.write(new Cmd(cmd, arg));
+	public void writeCommand(String cmd, Object arg) {
+		try {
+			readerwriter.write(new Cmd(cmd, arg));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
-	public <T> T read(Class<T> expectedClassOfResultObj) throws IOException {
-		return readerwriter.read(expectedClassOfResultObj);
+	public <T> T read(Class<T> expectedClassOfResultObj) {
+		try {
+			return readerwriter.read(expectedClassOfResultObj);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	public void close() throws IOException {

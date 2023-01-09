@@ -16,6 +16,6 @@ public class GameState {
 	public List<Level> world = new ArrayList<Level>();
 
 	public Level level() {
-		return world.get(stats.levelNumber - 1);
+		return world.get(stats.zeroIndexLevelNumber);
 	}
 }

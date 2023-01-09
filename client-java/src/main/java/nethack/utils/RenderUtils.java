@@ -35,7 +35,7 @@ public class RenderUtils {
 				player.constitution, player.intelligence, player.wisdom, player.charisma, player.alignment.name(),
 				gameStats.score);
 		String secondStatsLine = String.format("Dlvl:%d $:%d HP:%d(%d) Pw:%d(%d) AC:%d Xp:%d/%d T:%d",
-				gameStats.levelNumber, player.gold, player.hp, player.hpMax, player.energy, player.energyMax,
+				gameStats.oneIndexLevelNumber, player.gold, player.hp, player.hpMax, player.energy, player.energyMax,
 				player.armorClass, player.experienceLevel, player.experiencePoints, gameStats.time);
 		System.out.println(firstStatsLine);
 		System.out.println(secondStatsLine);

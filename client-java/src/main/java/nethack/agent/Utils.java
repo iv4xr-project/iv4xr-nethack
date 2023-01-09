@@ -23,8 +23,7 @@ public class Utils {
 	 * Check if two tiles are adjacent.
 	 */
 	public static boolean adjacent(Tile tile1, Tile tile2) {
-		return (tile1.x == tile2.x && Math.abs(tile1.y - tile2.y) == 1)
-				|| (tile1.y == tile2.y && Math.abs(tile1.x - tile2.x) == 1);
+		return Math.abs(tile1.x - tile2.x) <= 1 && Math.abs(tile1.y - tile2.y) <= 1 && !tile1.equals(tile2);
 	}
 
 	public static int manhattanDist(Tile t1, Tile t2) {

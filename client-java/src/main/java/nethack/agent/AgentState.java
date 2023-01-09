@@ -69,12 +69,24 @@ public class AgentState extends Iv4xrAgentState<Void> {
 		multiLayerNav = new LayeredAreasNavigation<>();
 		navg.sizeX = Level.WIDTH;
 		navg.sizeY = Level.HEIGHT;
+		navg.diagonalMovementPossible = true;
 		multiLayerNav.addNextArea(navg, null, null, false);
 		return this;
 	}
 
 	public WorldEntity auxState() {
 		return worldmodel().elements.get("aux");
+	}
+
+	private void addNewNavGraph() {
+		Sparse2DTiledSurface_NavGraph newNav = new Sparse2DTiledSurface_NavGraph();
+		newNav.sizeX = Level.WIDTH;
+		newNav.sizeY = Level.HEIGHT;
+		newNav.diagonalMovementPossible = true;
+		Vec3 playerPosition = env().app.gameState.player.position;
+		Tile lowPortal = new Tile(playerPosition.x, playerPosition.y);
+		Tile highPortal = new Tile(playerPosition.x, playerPosition.y);
+		multiLayerNav.addNextArea(newNav, lowPortal, highPortal, true);
 	}
 
 	@Override
@@ -89,22 +101,18 @@ public class AgentState extends Iv4xrAgentState<Void> {
 			int levelNumber = (int) entry[0];
 			IntVec2D pos = (IntVec2D) entry[1];
 			EntityType type = (EntityType) entry[2];
-			// System.out.println(">>> registering maze " + mazeId + ", tile " + tile + ": "
-			// + type) ;
+
+			// If detecting a new maze, need to allocate a nav-graph for this maze:
 			if (levelNumber >= multiLayerNav.areas.size()) {
-				// detecting a new maze, need to allocate a nav-graph for this maze:
-				Sparse2DTiledSurface_NavGraph newNav = new Sparse2DTiledSurface_NavGraph();
-				newNav.sizeX = Level.WIDTH;
-				newNav.sizeY = Level.HEIGHT;
-//				int N = env().app.dungeon.config.worldSize;
-//				Tile lowPortal = new Tile(N - 2, 1);
-//				Tile highPortal = new Tile(1, 1);
-//				multiLayerNav.addNextArea(newNav, lowPortal, highPortal, true);
+				System.out.println("Adding a new level: " + levelNumber);
+				addNewNavGraph();
 			}
 
 			multiLayerNav.markAsSeen(new Pair<>(levelNumber, new Tile(pos.x, pos.y)));
 			switch (type) {
+			case VOID:
 			case WALL:
+			case BOULDER:
 				multiLayerNav.addObstacle(new Pair<>(levelNumber, new Wall(pos.x, pos.y)));
 				break;
 			case CORRIDOR:
@@ -112,29 +120,27 @@ public class AgentState extends Iv4xrAgentState<Void> {
 				multiLayerNav.removeObstacle(new Pair<>(levelNumber, new Tile(pos.x, pos.y)));
 				break;
 			case DOOR:
-				multiLayerNav.addObstacle(new Pair<>(levelNumber, new Door(pos.x, pos.y)));
-				break;
-			case MONSTER:
-				// not going to represent monsters as non-navigable
-				// nav.addNonNavigable(new Door(tile.x,tile.y,true));
+				boolean isOpen = env().app.gameState.level().getEntity(pos).symbol != '+';
+				multiLayerNav.addObstacle(new Pair<>(levelNumber, new Door(pos.x, pos.y, isOpen)));
 				break;
 			default:
 				// representing potions, scrolls and shrines as doors that we can
 				// open or close to enable navigation onto them or not:
 				// Made this tile for now
-				multiLayerNav.addObstacle(new Pair<>(levelNumber, new Tile(pos.x, pos.y)));
+//				multiLayerNav.addObstacle(new Pair<>(levelNumber, new Door(pos.x, pos.y)));
+				multiLayerNav.removeObstacle(new Pair<>(levelNumber, new Tile(pos.x, pos.y)));
 				break;
 			}
 		}
 		// removing entities that are no longer in the game-board, except players:
-		var removedEntities = (Serializable[]) aux.properties.get("recentlyRemoved");
-		for (var entry_ : removedEntities) {
-			var id = (String) entry_;
-			if (id.equals("player")) {
-				continue;
-			}
-			this.worldmodel.elements.remove(id);
-		}
+//		var removedEntities = (Serializable[]) aux.properties.get("recentlyRemoved");
+//		for (var entry_ : removedEntities) {
+//			var id = (String) entry_;
+//			if (id.equals("player")) {
+//				continue;
+//			}
+//			this.worldmodel.elements.remove(id);
+//		}
 	}
 
 	/**
@@ -167,14 +173,35 @@ public class AgentState extends Iv4xrAgentState<Void> {
 	 * Return a list of monsters which are currently adjacent to the agent that owns
 	 * this state. =
 	 */
-	public List<WorldEntity> adjecentMonsters() {
+	public List<WorldEntity> adjacentMonsters() {
 		var player = worldmodel.elements.get("player");
 		Tile p = Utils.toTile((int) this.env().app.gameState.player.position.x,
 				(int) this.env().app.gameState.player.position.y);
 		List<WorldEntity> ms = worldmodel.elements
-				.values().stream().filter(e -> e.type == EntityType.MONSTER.toString()
+				.values().stream().filter(e -> e.type == EntityType.MONSTER.name()
 						&& Utils.levelId(player) == Utils.levelId(e) && Utils.adjacent(p, Utils.toTile(e.position)))
 				.collect(Collectors.toList());
+
+		if (ms.size() > 0) {
+			System.out.println("FOUND A MONSTER CLOSEBY!!");
+			WorldEntity monster = ms.get(0);
+			System.out.println(String.format("PLAYER at %s", this.env().app.gameState.player.position.toString()));
+			System.out.println(String.format("MONSTER at %s", monster.position.toString()));
+		}
+
 		return ms;
 	}
+
+	/**
+	 * Return a list of doors that are in the current . =
+	 */
+//	public List<WorldEntity> closedDoors() {
+//		var player = worldmodel.elements.get(worldmodel.agentId) ;
+//		Tile p = Utils.toTile(player.position) ;
+//		List<WorldEntity> ms = worldmodel.elements.values().stream()
+//				.filter(e -> e.type.equals(EntityType.DOOR.toString())
+//						     && Utils.levelId(player) == Utils.levelId(e))
+//				.collect(Collectors.toList()) ;
+//		return ms;
+//	}
 }

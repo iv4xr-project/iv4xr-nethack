@@ -20,7 +20,7 @@ public class NetHack {
 		this.commander = commander;
 	}
 
-	public void init() throws IOException {
+	public void init() {
 		logger.info("Initialize game");
 		commander.read(Object.class);
 		commander.sendCommand("Reset", "", Object.class);
@@ -29,7 +29,7 @@ public class NetHack {
 		render();
 	}
 
-	public void loop() throws IOException {
+	public void loop() {
 		int step = 0;
 
 		while (!gameState.done) {
@@ -39,14 +39,13 @@ public class NetHack {
 			} else if (command == Command.COMMAND_REDRAW) {
 				render();
 			} else {
-				logger.info("Step: " + step++ + " Action: " + command);
 				step(command);
 				render();
 			}
 		}
 	}
 
-	public void close() throws IOException {
+	public void close() {
 		logger.info("Close game");
 		commander.writeCommand("Close", "");
 	}
@@ -55,7 +54,7 @@ public class NetHack {
 		return gameState.level();
 	}
 
-	public void render() throws IOException {
+	public void render() {
 		commander.writeCommand("Render", "");
 		RenderUtils.render(gameState);
 	}
@@ -74,21 +73,15 @@ public class NetHack {
 		}
 	}
 
-	public void step(Command command) throws IOException {
+	public void step(Command command) {
+		logger.info("Command: " + command);
 		StepState stepState = commander.sendCommand("Step", command.index, StepState.class);
 
-		if (gameState.world.size() != 0) {
-//			System.out.print("VisibleTiles=");
-//			gameState.level().visibleTiles();
-//			System.out.print("DifferentTiles=");
-//			gameState.level().UpdateMap(stepState.level);
-		}
-
 		// Add to world
-		while (stepState.stats.levelNumber > gameState.world.size()) {
+		while (stepState.stats.zeroIndexLevelNumber == gameState.world.size()) {
 			gameState.world.add(null);
 		}
-		gameState.world.set(stepState.stats.levelNumber - 1, stepState.level);
+		gameState.world.set(stepState.stats.zeroIndexLevelNumber, stepState.level);
 
 		// Set all members to the correct values
 		gameState.message = stepState.message;
@@ -96,7 +89,6 @@ public class NetHack {
 		gameState.stats = stepState.stats;
 		gameState.done = stepState.done;
 		gameState.info = stepState.info;
-		
-		
+
 	}
 }

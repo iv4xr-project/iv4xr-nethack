@@ -22,12 +22,16 @@ public class Level {
 		this.map = entities;
 	}
 
-	public List<IntVec2D> visibleTiles() {
+	public List<IntVec2D> visibleTiles(IntVec2D playerPos) {
 		List<IntVec2D> points = new ArrayList<IntVec2D>();
 		for (int x = 0; x < WIDTH; x++) {
 			for (int y = 0; y < HEIGHT; y++) {
 				Entity e = getEntity(x, y);
 				if (e.type == EntityType.VOID) {
+					if (Math.abs(playerPos.x - x) <= 1 && Math.abs(playerPos.y - y) <= 1
+							&& (playerPos.x != x || playerPos.y != y)) {
+						points.add(new IntVec2D(x, y));
+					}
 					continue;
 				} else if (e.color == Color.TRANSPARENT) {
 					continue;
@@ -37,18 +41,6 @@ public class Level {
 			}
 		}
 		return points;
-	}
-	
-	public void getInvisibleTiles() {
-		System.out.print("Invisible tiles:");
-		for (int x = 0; x < WIDTH; x++) {
-			for (int y = 0; y < HEIGHT; y++) {
-				if (map[y][x].color == Color.TRANSPARENT) {
-					System.out.print("(" + x + "," + y + ")");
-				}
-			}
-		}
-		System.out.println();
 	}
 
 	private List<IntVec2D> FindChanges(Level other) {
