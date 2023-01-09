@@ -22,7 +22,24 @@ public class Level {
 		this.map = entities;
 	}
 
-	public void invisibleTiles() {
+	public List<IntVec2D> visibleTiles() {
+		List<IntVec2D> points = new ArrayList<IntVec2D>();
+		for (int x = 0; x < WIDTH; x++) {
+			for (int y = 0; y < HEIGHT; y++) {
+				Entity e = getEntity(x, y);
+				if (e.type == EntityType.VOID) {
+					continue;
+				} else if (e.color == Color.TRANSPARENT) {
+					continue;
+				} else {
+					points.add(new IntVec2D(x, y));
+				}
+			}
+		}
+		return points;
+	}
+	
+	public void getInvisibleTiles() {
 		System.out.print("Invisible tiles:");
 		for (int x = 0; x < WIDTH; x++) {
 			for (int y = 0; y < HEIGHT; y++) {

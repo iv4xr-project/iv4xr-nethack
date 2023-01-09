@@ -1,9 +1,10 @@
 package nethack.object;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum EntityType {
+public enum EntityType implements Serializable {
 	ALTAR('_'),
 	AMULET('"'),
 	ARMOR('['),
@@ -41,6 +42,7 @@ public enum EntityType {
 
 	private char symbol;
 	private static final Map<Character, EntityType> BY_SYMBOL = new HashMap<>();
+	private static final long serialVersionUID = 1L;
 
 	static {
 		for (EntityType e : values()) {

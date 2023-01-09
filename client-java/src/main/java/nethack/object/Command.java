@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 // Actions listed at: /python-server/lib/nle/nle/nethack/actions.py
-public enum Action {
+public enum Command {
 //	Direction	
 	DIRECTION_N(0, "k", "Move N"),
 	DIRECTION_E(1, "l", "Move E"),
@@ -140,21 +140,21 @@ public enum Action {
 
 	private String stroke;
 	private String description;
-	private static final Map<String, Action> BY_STROKE = new HashMap<>();
+	private static final Map<String, Command> BY_STROKE = new HashMap<>();
 
-	Action(int index, String stroke, String description) {
+	Command(int index, String stroke, String description) {
 		this.index = index;
 		this.stroke = stroke;
 		this.description = description;
 	}
 
 	static {
-		for (Action a : values()) {
+		for (Command a : values()) {
 			BY_STROKE.put(a.stroke, a);
 		}
 	}
 
-	public static Action fromValue(String stroke) {
+	public static Command fromValue(String stroke) {
 		if (BY_STROKE.containsKey(stroke)) {
 			return BY_STROKE.get(stroke);
 		}
@@ -163,15 +163,15 @@ public enum Action {
 	}
 
 	public static void prettyPrintActions() {
-		int n = Action.values().length;
+		int n = Command.values().length;
 		int rowLength = 21;
 
 		String[] ActionStrs = new String[n];
 		int[] nrValues = new int[(n / rowLength) + 1];
 
-		// Convert array of actions to array of
+		// Convert array of commands to array of strings
 		for (int i = 0; i < n; i++) {
-			Action action = Action.values()[i];
+			Command action = Command.values()[i];
 			ActionStrs[i] = String.format("%3d %-2s %s", action.index, action.stroke, action.description);
 			nrValues[i / rowLength] = Math.max(ActionStrs[i].length(), nrValues[i / rowLength]);
 		}

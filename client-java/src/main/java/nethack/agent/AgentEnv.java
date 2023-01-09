@@ -4,7 +4,7 @@ import eu.iv4xr.framework.mainConcepts.Iv4xrEnvironment;
 import eu.iv4xr.framework.mainConcepts.*;
 import eu.iv4xr.framework.spatial.IntVec2D;
 import eu.iv4xr.framework.spatial.Vec3;
-import nethack.object.Action;
+import nethack.object.Command;
 import nethack.object.Entity;
 import nethack.object.EntityType;
 import nethack.object.Player;
@@ -44,13 +44,11 @@ public class AgentEnv extends Iv4xrEnvironment {
 		wom.elements.put(app.gameState.player.id, toWorldEntity(app.gameState.player));
 
 		// adding visible objects:
-		var visibleTiles = thegame().visibleTiles();
-		for (var sq : visibleTiles) {
-			int mazeId = sq.fst;
-			var world = app.gameState.world.get(mazeId).map;
-			Entity e = world[sq.snd.x][sq.snd.y];
+		List<IntVec2D> visibleTiles = app.level().visibleTiles();
+		for (IntVec2D pos : visibleTiles) {
+			Entity e = app.level().getEntity(pos);
 			if (e.type != EntityType.VOID) {
-				wom.elements.put(e.id, toWorldEntity(e));
+				wom.elements.put(e.id, toWorldEntity(e, pos.x, pos.y));
 			}
 		}
 		// time-stamp the elements:
@@ -60,7 +58,7 @@ public class AgentEnv extends Iv4xrEnvironment {
 		return wom;
 	}
 
-	public WorldModel action(Action action) throws IOException {
+	public WorldModel action(Command action) throws IOException {
 		app.step(action);
 		return observe("player");
 	}
@@ -86,6 +84,7 @@ public class AgentEnv extends Iv4xrEnvironment {
 		case WALL:
 		case DOOR:
 		case FLOOR:
+		case CORRIDOR:
 			we = new WorldEntity("id", e.id, false);
 			we.properties.put("level", level);
 			break;
@@ -107,29 +106,25 @@ public class AgentEnv extends Iv4xrEnvironment {
 		aux.properties.put("time", app.gameState.stats.time);
 		aux.properties.put("status", app.gameState.done);
 
-		// recently removed objects:
-		String[] removed = new String[app.recentlyRemoved.size()];
-		int k = 0;
-		for (var id : thegame().recentlyRemoved) {
-			removed[k] = id;
-			k++;
-		}
-		aux.properties.put("recentlyRemoved", removed);
+//		// recently removed objects:
+//		String[] removed = new String[app.recentlyRemoved.size()];
+//		int k = 0;
+//		for (var id : thegame().recentlyRemoved) {
+//			removed[k] = id;
+//			k++;
+//		}
+//		aux.properties.put("recentlyRemoved", removed);
 
 		// currently visible tiles:
-		var visibleTiles_ = thegame().visibleTiles();
+		List<IntVec2D> visibleTiles_ = app.level().visibleTiles();
 		Serializable[] visibleTiles = new Serializable[visibleTiles_.size()];
-		k = 0;
+		int k = 0;
 		// var world = app.dungeon.currentMaze(app.dungeon.frodo()).world ;
-		for (var tile : visibleTiles_) {
-			String etype = "";
-			int levelId = tile.fst;
-			Entity[][] map = app.gameState.world.get(levelId).map;
-			Entity e = map[tile.snd.x][tile.snd.y];
-			if (e != null) {
-				etype = e.type.toString();
-			}
-			Serializable[] entry = { levelId, tile.snd, etype };
+		for (IntVec2D pos : visibleTiles_) {
+			int levelId = app.gameState.stats.levelNumber;
+			Entity e = app.level().getEntity(pos);
+			EntityType etype = e.type;
+			Serializable[] entry = { levelId, pos, etype };
 			visibleTiles[k] = entry;
 			k++;
 		}

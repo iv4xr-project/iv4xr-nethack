@@ -2,7 +2,7 @@ package nethack;
 
 import connection.SendCommandClient;
 import nethack.utils.RenderUtils;
-import nethack.object.Action;
+import nethack.object.Command;
 import nethack.object.Level;
 
 import java.io.IOException;
@@ -25,7 +25,7 @@ public class NetHack {
 		commander.read(Object.class);
 		commander.sendCommand("Reset", "", Object.class);
 
-		step(Action.MISC_MORE);
+		step(Command.MISC_MORE);
 		render();
 	}
 
@@ -33,14 +33,14 @@ public class NetHack {
 		int step = 0;
 
 		while (!gameState.done) {
-			Action action = waitCommand();
-			if (action == Action.COMMAND_EXTLIST) {
-				Action.prettyPrintActions();
-			} else if (action == Action.COMMAND_REDRAW) {
+			Command command = waitCommand();
+			if (command == Command.COMMAND_EXTLIST) {
+				Command.prettyPrintActions();
+			} else if (command == Command.COMMAND_REDRAW) {
 				render();
 			} else {
-				logger.info("Step: " + step++ + " Action: " + action);
-				step(action);
+				logger.info("Step: " + step++ + " Action: " + command);
+				step(command);
 				render();
 			}
 		}
@@ -60,26 +60,28 @@ public class NetHack {
 		RenderUtils.render(gameState);
 	}
 
-	public Action waitCommand() {
+	public Command waitCommand() {
 		Scanner scanner = new Scanner(System.in);
 		System.out.print("Input a command: ");
 
 		while (true) {
 			String input = scanner.nextLine();
-			Action action = Action.fromValue(input);
-			if (action != null) {
-				return action;
+			Command command = Command.fromValue(input);
+			if (command != null) {
+				return command;
 			}
 			System.out.print("Input \"" + input + "\" not found, enter again: ");
 		}
 	}
 
-	public void step(Action action) throws IOException {
-		StepState stepState = commander.sendCommand("Step", action.index, StepState.class);
+	public void step(Command command) throws IOException {
+		StepState stepState = commander.sendCommand("Step", command.index, StepState.class);
 
 		if (gameState.world.size() != 0) {
-			System.out.print("DifferentTiles=");
-			gameState.level().UpdateMap(stepState.level);
+//			System.out.print("VisibleTiles=");
+//			gameState.level().visibleTiles();
+//			System.out.print("DifferentTiles=");
+//			gameState.level().UpdateMap(stepState.level);
 		}
 
 		// Add to world
@@ -94,5 +96,7 @@ public class NetHack {
 		gameState.stats = stepState.stats;
 		gameState.done = stepState.done;
 		gameState.info = stepState.info;
+		
+		
 	}
 }

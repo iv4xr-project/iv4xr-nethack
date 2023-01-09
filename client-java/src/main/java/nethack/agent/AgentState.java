@@ -107,6 +107,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
 			case WALL:
 				multiLayerNav.addObstacle(new Pair<>(levelNumber, new Wall(pos.x, pos.y)));
 				break;
+			case CORRIDOR:
 			case FLOOR:
 				multiLayerNav.removeObstacle(new Pair<>(levelNumber, new Tile(pos.x, pos.y)));
 				break;
