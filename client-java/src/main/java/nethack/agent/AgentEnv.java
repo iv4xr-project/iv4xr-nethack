@@ -11,7 +11,10 @@ import nethack.object.Player;
 import nethack.NetHack;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Provides an implementation of {@link nl.uu.cs.aplib.mainConcepts.Environment}
@@ -21,6 +24,10 @@ import java.util.List;
  */
 public class AgentEnv extends Iv4xrEnvironment {
 	public NetHack app;
+	
+	Set<EntityType> unimportantTypes = new HashSet<>(
+		Arrays.asList(EntityType.WALL, EntityType.CORRIDOR, EntityType.FLOOR, EntityType.VOID, EntityType.PLAYER)
+	);
 
 	public AgentEnv(NetHack app) {
 		this.app = app;
@@ -45,12 +52,13 @@ public class AgentEnv extends Iv4xrEnvironment {
 		List<IntVec2D> visibleTiles = app.level().visibleTiles(app.gameState.player.position2D);
 		for (IntVec2D pos : visibleTiles) {
 			Entity e = app.level().getEntity(pos);
-			if (e.type != EntityType.VOID && e.type != EntityType.CORRIDOR
-				&& e.type != EntityType.FLOOR && e.type != EntityType.WALL) {
-				e.assignId(pos.x, pos.y);
-				wom.elements.put(e.id, toWorldEntity(e, pos.x, pos.y));
+			if (unimportantTypes.contains(e.type)) {
+				continue;
 			}
+			e.assignId(pos.x, pos.y);
+			wom.elements.put(e.id, toWorldEntity(e, pos.x, pos.y));
 		}
+
 		// time-stamp the elements:
 		for (var e : wom.elements.values()) {
 			e.timestamp = wom.timestamp;
@@ -79,27 +87,26 @@ public class AgentEnv extends Iv4xrEnvironment {
 
 		WorldEntity we;
 		int level = app.gameState.stats.zeroIndexLevelNumber;
-		String id = String.format("%s_%d_%d", e.type.name(), x, y);
 		String type = e.type.name();
 
 		switch (e.type) {
 		case WALL:
 		case FLOOR:
 		case CORRIDOR:
-			we = new WorldEntity(id, type, false);
+			we = new WorldEntity(e.id, type, false);
 			we.properties.put("level", level);
 			break;
 		case DOOR:
-			we = new WorldEntity(id, type, false);
+			we = new WorldEntity(e.id, type, false);
 			we.properties.put("level", level);
 			we.properties.put("closed", e.closedDoor());
 			break;
 		case MONSTER:
-			we = new WorldEntity(id, type, true);
+			we = new WorldEntity(e.id, type, true);
 			we.properties.put("level", level);
 			break;
 		default:
-			we = new WorldEntity(id, type, true);
+			we = new WorldEntity(e.id, type, true);
 			we.properties.put("level", level);
 			break;
 		}
@@ -114,19 +121,19 @@ public class AgentEnv extends Iv4xrEnvironment {
 		aux.properties.put("time", app.gameState.stats.time);
 		aux.properties.put("status", app.gameState.done);
 
-//		// recently removed objects:
-//		String[] removed = new String[app.recentlyRemoved.size()];
-//		int k = 0;
-//		for (var id : thegame().recentlyRemoved) {
-//			removed[k] = id;
-//			k++;
-//		}
-//		aux.properties.put("recentlyRemoved", removed);
+		// recently removed objects:
+		String[] removed = new String[app.gameState.level().removedEntities.size()];
+		int k = 0;
+		for (Entity e : app.gameState.level().removedEntities) {
+			removed[k] = e.id;
+			k++;
+		}
+		aux.properties.put("recentlyRemoved", removed);
 
 		// currently visible tiles:
 		List<IntVec2D> visibleTiles_ = app.level().visibleTiles(app.gameState.player.position2D);
 		Serializable[] visibleTiles = new Serializable[visibleTiles_.size()];
-		int k = 0;
+		k = 0;
 		for (IntVec2D pos : visibleTiles_) {
 			int levelId = app.gameState.stats.zeroIndexLevelNumber;
 			Entity e = app.level().getEntity(pos);

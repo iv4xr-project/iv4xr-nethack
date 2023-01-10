@@ -9,7 +9,11 @@ import nethack.utils.NethackSurface_NavGraph.Wall;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import eu.iv4xr.framework.extensions.pathfinding.LayeredAreasNavigation;
 import eu.iv4xr.framework.extensions.pathfinding.Navigatable;
@@ -30,6 +34,7 @@ import nl.uu.cs.aplib.utils.Pair;
  *
  */
 public class AgentState extends Iv4xrAgentState<Void> {
+	static final Logger logger = LogManager.getLogger(AgentState.class);
 	public LayeredAreasNavigation<Tile, NethackSurface_NavGraph> multiLayerNav;
 
 	@Override
@@ -96,7 +101,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
 
 			// If detecting a new maze, need to allocate a nav-graph for this maze:
 			if (levelNumber >= multiLayerNav.areas.size()) {
-				System.out.println("Adding a new level: " + levelNumber);
+				logger.info("Adding a new level: " + levelNumber);
 				addNewNavGraph(true);
 			}
 
@@ -112,26 +117,29 @@ public class AgentState extends Iv4xrAgentState<Void> {
 				multiLayerNav.removeObstacle(new Pair<>(levelNumber, new Tile(pos.x, pos.y)));
 				break;
 			case DOOR:
-				boolean isOpen = env().app.gameState.level().getEntity(pos).symbol != '+';
+				boolean isOpen = !env().app.gameState.level().getEntity(pos).closedDoor();
 				multiLayerNav.addObstacle(new Pair<>(levelNumber, new Door(pos.x, pos.y, isOpen)));
 				break;
-			case PLAYER:
-			case PET:
-			case MONSTER:
 			default:
-				// Current logic does not treat random objects as obstacle
+				// Current logic does not treat other objects as obstacles (Player/Pet/Monster)
+				multiLayerNav.setBlockingState(new Pair<>(levelNumber, new Tile(pos.x, pos.y)), false);
 				break;
 			}
 		}
+		
 		// removing entities that are no longer in the game-board, except players:
-//		var removedEntities = (Serializable[]) aux.properties.get("recentlyRemoved");
-//		for (var entry_ : removedEntities) {
-//			var id = (String) entry_;
-//			if (id.equals("player")) {
-//				continue;
-//			}
-//			this.worldmodel.elements.remove(id);
-//		}
+		var removedEntities = (Serializable[]) aux.properties.get("recentlyRemoved");
+		for (var entry_ : removedEntities) {
+			var id = (String) entry_;
+			if (id == null) {
+				continue;
+			}
+			
+			if (id.equals("player")) {
+				continue;
+			}
+			this.worldmodel.elements.remove(id);
+		}
 	}
 
 	/**
@@ -174,7 +182,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
 				.collect(Collectors.toList());
 
 		if (ms.size() > 0) {
-			System.out.println(String.format("Found %d %s nearby (diagonal=%b)", ms.size(), type.name(), allowDiagonally));
+			logger.debug(String.format("Found %d %s nearby (diagonal=%b)", ms.size(), type.name(), allowDiagonally));
 		}
 
 		return ms;

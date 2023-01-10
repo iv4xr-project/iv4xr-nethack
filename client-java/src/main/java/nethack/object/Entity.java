@@ -23,7 +23,11 @@ public class Entity {
 	}
 
 	public void assignId(int x, int y) {
-		id = String.format("%s_%d_%d", type.name(), x, y);
+		if (type == EntityType.PLAYER || type == EntityType.PET) {
+			id = type.name();
+		} else {
+			id = String.format("%s_%d_%d", type.name(), x, y);
+		}
 	}
 
 	public static Entity fromValues(char symbol, Color color) {

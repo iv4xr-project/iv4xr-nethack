@@ -1,12 +1,9 @@
 package nethack.utils;
 
 import nethack.object.Level;
-import nethack.object.Player;
-import nethack.object.Stats;
 import nethack.utils.NethackSurface_NavGraph.Tile;
 import eu.iv4xr.framework.extensions.pathfinding.LayeredAreasNavigation;
 import nethack.GameState;
-import nethack.object.Color;
 
 public class RenderUtils {
 	private GameState gameState;

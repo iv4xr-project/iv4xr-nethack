@@ -114,6 +114,11 @@ public class TacticLib implements IInteractiveWorldTacticLib<Pair<Integer, Tile>
 		} else {
 			command = Command.DIRECTION_W;
 		}
+		
+		// We expect the door to be opened after the kick
+		WorldEntity we = wom.elements.get(String.format("DOOR_%d_%d", targetTile.x, targetTile.y));
+		we.properties.put("closed", false);
+		
 		wom = state.env().action(command);
 		return wom;
 	}
@@ -233,6 +238,13 @@ public class TacticLib implements IInteractiveWorldTacticLib<Pair<Integer, Tile>
 	public Predicate<AgentState> inCombat_and_hpNotCritical = S -> {
 		var player = S.worldmodel.elements.get(S.worldmodel.agentId);
 		int hp = (int) player.properties.get("hp");
+		
+		System.out.print("Type: ");
+		for (WorldEntity we: S.worldmodel.elements.values()) {
+			System.out.print(we.type + " ");
+		}
+		System.out.println();
+		
 		return hp > 5 && S.adjacentEntities(EntityType.MONSTER, true).size() > 0;
 	};
 	

@@ -78,12 +78,16 @@ public class NetHack {
 	public void step(Command command) {
 		logger.info("Command: " + command);
 		StepState stepState = commander.sendCommand("Step", command.index, StepState.class);
-
+		stepState.level.setRemovedEntities(gameState.level());
+		
 		// Add to world
-		while (stepState.stats.zeroIndexLevelNumber == gameState.world.size()) {
+		if (stepState.stats.zeroIndexLevelNumber == gameState.world.size()) {
 			gameState.world.add(null);
 		}
-		gameState.world.set(stepState.stats.zeroIndexLevelNumber, stepState.level);
+
+		if (stepState.stats.zeroIndexLevelNumber >= 0) {
+			gameState.world.set(stepState.stats.zeroIndexLevelNumber, stepState.level);
+		}
 
 		// Set all members to the correct values
 		gameState.message = stepState.message;

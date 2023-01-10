@@ -55,7 +55,7 @@ class Handler(socketserver.BaseRequestHandler):
 
         # Greatly reduces latency on Linux.
         if sys.platform in ['linux', 'linux2', 'darwin']:
-            self.request.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR, 1)
+            self.request.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
         try:
             print('Connection from ' + str(self.client_address))

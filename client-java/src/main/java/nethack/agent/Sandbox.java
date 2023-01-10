@@ -20,14 +20,6 @@ import nl.uu.cs.aplib.mainConcepts.Goal;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
 import nl.uu.cs.aplib.utils.Pair;
 
-/**
- * A simple demo of controlling MiniDungeon using Goals. We set a simple goal
- * for the agent to find and pick a specific scroll, and then to find the shrine
- * to use the scroll on it. The used goals includes a tactic when the agent is
- * attacked by monsters while it is on its way.
- * 
- * @author wish
- */
 public class Sandbox {
 	static final Logger logger = LogManager.getLogger(Sandbox.class);
 	static RenderUtils renderUtils;
@@ -50,7 +42,6 @@ public class Sandbox {
 		var agent = new TestAgent("player", "player").attachState(state).attachEnvironment(env).setGoal(G);
 		renderUtils = new RenderUtils(nethack.gameState, state.multiLayerNav);
 		
-		
 		// Now we run the agent:
 		logger.info(">> Start agent loop...");
 		int k = 0;
@@ -66,9 +57,12 @@ public class Sandbox {
 				state.updateState("player");
 			} else {
 				agent.update();
+				state.updateState("player");
 				logger.debug("** [" + k + "] agent @" + Utils.toTile(state.worldmodel.position));
 			}
+			
 			renderUtils.render();
+			commander.writeCommand("Render", "");
 		}
 
 		nethack.close();

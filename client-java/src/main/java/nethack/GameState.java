@@ -16,6 +16,12 @@ public class GameState {
 	public List<Level> world = new ArrayList<Level>();
 
 	public Level level() {
+		if (stats == null) {
+			return null;
+		}
+		if (stats.zeroIndexLevelNumber < 0) {
+			return null;
+		}
 		return world.get(stats.zeroIndexLevelNumber);
 	}
 	
