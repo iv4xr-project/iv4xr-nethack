@@ -1,7 +1,6 @@
 package nethack;
 
 import connection.SendCommandClient;
-import nethack.utils.RenderUtils;
 import nethack.object.Command;
 import nethack.object.Level;
 
@@ -12,16 +11,17 @@ import org.apache.logging.log4j.Logger;
 
 public class NetHack {
 	public static final Logger logger = LogManager.getLogger(NetHack.class);
-	private SendCommandClient commander;
 	public GameState gameState = new GameState();
+	private SendCommandClient commander;
 
 	public NetHack(SendCommandClient commander) {
 		this.commander = commander;
-	}
-
-	public void init() {
 		logger.info("Initialize game");
 		commander.read(Object.class);
+		reset();
+	}
+	
+	public void reset() {
 		commander.sendCommand("Reset", "", Object.class);
 
 		step(Command.MISC_MORE);
@@ -53,10 +53,11 @@ public class NetHack {
 
 	public void render() {
 		commander.writeCommand("Render", "");
-		RenderUtils.render(gameState);
+		System.out.println(gameState);
 	}
 
 	public Command waitCommand() {
+		// Do not close scanner, otherwise it cannot read the next command
 		Scanner scanner = new Scanner(System.in);
 		System.out.print("Input a command: ");
 
@@ -64,7 +65,6 @@ public class NetHack {
 			String input = scanner.nextLine();
 			Command command = Command.fromValue(input);
 			if (command != null) {
-				scanner.close();
 				return command;
 			}
 			System.out.print("Input \"" + input + "\" not found, enter again: ");

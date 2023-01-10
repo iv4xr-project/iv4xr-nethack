@@ -88,4 +88,25 @@ public class Level {
 	public void setEntity(int x, int y, Entity entity) {
 		map[y][x] = entity;
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		for (int y = 0; y < HEIGHT; y++) {
+			Color currentColor = null;
+			for (int x = 0; x < WIDTH; x++) {
+				// Color changed so add it to the line
+				if (currentColor != map[y][x].color) {
+					currentColor = map[y][x].color;
+					sb.append("\033[" + map[y][x].color.colorCode + "m");
+				}
+				sb.append(map[y][x].symbol);
+			}
+			sb.append("\033[m");
+			if (y != map.length - 1) {
+				sb.append(System.lineSeparator());
+			}
+		}
+		return sb.toString();
+	}
 }

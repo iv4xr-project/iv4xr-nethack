@@ -456,10 +456,10 @@ public class NethackSurface_NavGraph
 				}
 				z.append(c);
 			}
-			if (y > 0)
+			if (y != sizeY - 1) {
 				z.append("\n");
+			}
 		}
 		return z.toString();
 	}
-
 }

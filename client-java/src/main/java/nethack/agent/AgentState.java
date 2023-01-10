@@ -117,15 +117,17 @@ public class AgentState extends Iv4xrAgentState<Void> {
 				break;
 			case PLAYER:
 			case PET:
+			case MONSTER:
+			default:
 				// The players position does not change anything about the navigation
 				break;
-			default:
-				// representing potions, scrolls and shrines as doors that we can
-				// open or close to enable navigation onto them or not:
-				// Made this tile for now
-//				multiLayerNav.addObstacle(new Pair<>(levelNumber, new Door(pos.x, pos.y)));
-				multiLayerNav.removeObstacle(new Pair<>(levelNumber, new Tile(pos.x, pos.y)));
-				break;
+//			default:
+//				// representing potions, scrolls and shrines as doors that we can
+//				// open or close to enable navigation onto them or not:
+//				// Made this tile for now
+////				multiLayerNav.addObstacle(new Pair<>(levelNumber, new Door(pos.x, pos.y)));
+//				multiLayerNav.removeObstacle(new Pair<>(levelNumber, new Tile(pos.x, pos.y)));
+//				break;
 			}
 		}
 		// removing entities that are no longer in the game-board, except players:

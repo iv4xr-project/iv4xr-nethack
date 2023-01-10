@@ -19,7 +19,6 @@ public class App {
 
 		// Main game loop
 		NetHack nethack = new NetHack(commander);
-		nethack.init();
 		nethack.loop();
 		nethack.close();
 

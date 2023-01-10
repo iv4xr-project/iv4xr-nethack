@@ -10,11 +10,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import connection.SendCommandClient;
-import eu.iv4xr.framework.extensions.pathfinding.Sparse2DTiledSurface_NavGraph.Tile;
 import eu.iv4xr.framework.mainConcepts.TestAgent;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import nethack.NetHack;
+import nethack.utils.RenderUtils;
 import nl.uu.cs.aplib.mainConcepts.Goal;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
 import nl.uu.cs.aplib.utils.Pair;
@@ -29,6 +29,7 @@ import nl.uu.cs.aplib.utils.Pair;
  */
 public class Sandbox {
 	static final Logger logger = LogManager.getLogger(Sandbox.class);
+	static RenderUtils renderUtils;
 	public static TacticLib tacticLib = new TacticLib();
 
 	public static void main(String[] args) throws Exception {
@@ -41,24 +42,22 @@ public class Sandbox {
 
 		// Main game loop
 		NetHack nethack = new NetHack(commander);
-		nethack.init();
-
 		AgentEnv env = new AgentEnv(nethack);
 		AgentState state = new AgentState();
-
 		GoalStructure G = explore();
+		
 		var agent = new TestAgent("player", "player").attachState(state).attachEnvironment(env).setGoal(G);
-
+		renderUtils = new RenderUtils(nethack.gameState, state.multiLayerNav);
+		
+		
 		// Now we run the agent:
-		System.out.println(">> Start agent loop...");
+		logger.info(">> Start agent loop...");
 		int k = 0;
 		while (G.getStatus().inProgress() && k++ < 150) {
 			System.in.read();
 			agent.update();
-			System.out.println("** [" + k + "] agent @" + Utils.toTile(state.worldmodel.position));
-			// delay to slow it a bit for displaying:
-			System.out.println(state.multiLayerNav.toString());
-			nethack.render();
+			logger.debug("** [" + k + "] agent @" + Utils.toTile(state.worldmodel.position));
+			renderUtils.render();
 		}
 
 		nethack.close();
@@ -85,18 +84,9 @@ public class Sandbox {
 		}).withTactic(FIRSTof(
 				tacticLib.attackMonsterAction()
 					.on_(tacticLib.inCombat_and_hpNotCritical).lift(),
-				tacticLib.attackMonsterAction()
-					.on_(tacticLib.inCombat_and_hpNotCritical).lift(),
+//				tacticLib.attackMonsterAction()
+//					.on_(tacticLib.inCombat_and_hpNotCritical).lift(),
 				tacticLib.explore(null), ABORT()));
-
-//				Later have monster attacks
-//				tacticLib.attackMonsterAction().lift(), 
-
-//				   FIRSTof(tacticLib.explore(null),
-//						   //Abort().on_(S -> { System.out.println("### about to abort") ; return false;}).lift(), 
-//				   		   ABORT()) 
-//				  )
-//				;
 
 		return REPEAT(G.lift());
 	}

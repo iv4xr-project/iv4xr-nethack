@@ -18,4 +18,23 @@ public class GameState {
 	public Level level() {
 		return world.get(stats.zeroIndexLevelNumber);
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(message + System.lineSeparator());
+		sb.append(level() + System.lineSeparator());
+		
+		String firstStatsLine = String.format("Pos:(%d, %d) St:%d Dx:%d Co:%d In:%d Wi:%d Ch:%d %s S:%d",
+				(int) player.position.x, (int) player.position.y, player.strength, player.dexterity,
+				player.constitution, player.intelligence, player.wisdom, player.charisma, player.alignment.name(),
+				stats.score);
+		String secondStatsLine = String.format("Dlvl:%d $:%d HP:%d(%d) Pw:%d(%d) AC:%d Xp:%d/%d T:%d",
+				stats.oneIndexLevelNumber, player.gold, player.hp, player.hpMax, player.energy, player.energyMax,
+				player.armorClass, player.experienceLevel, player.experiencePoints, stats.time);
+		sb.append(firstStatsLine + System.lineSeparator());
+		sb.append(secondStatsLine + System.lineSeparator());
+		
+		return sb.toString();
+	}
 }
