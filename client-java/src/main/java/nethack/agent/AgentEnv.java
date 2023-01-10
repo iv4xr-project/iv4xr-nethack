@@ -84,11 +84,15 @@ public class AgentEnv extends Iv4xrEnvironment {
 
 		switch (e.type) {
 		case WALL:
-		case DOOR:
 		case FLOOR:
 		case CORRIDOR:
 			we = new WorldEntity(id, type, false);
 			we.properties.put("level", level);
+			break;
+		case DOOR:
+			we = new WorldEntity(id, type, false);
+			we.properties.put("level", level);
+			we.properties.put("closed", e.closedDoor());
 			break;
 		case MONSTER:
 			we = new WorldEntity(id, type, true);

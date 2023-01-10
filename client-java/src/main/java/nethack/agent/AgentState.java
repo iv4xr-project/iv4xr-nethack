@@ -119,15 +119,8 @@ public class AgentState extends Iv4xrAgentState<Void> {
 			case PET:
 			case MONSTER:
 			default:
-				// The players position does not change anything about the navigation
+				// Current logic does not treat random objects as obstacle
 				break;
-//			default:
-//				// representing potions, scrolls and shrines as doors that we can
-//				// open or close to enable navigation onto them or not:
-//				// Made this tile for now
-////				multiLayerNav.addObstacle(new Pair<>(levelNumber, new Door(pos.x, pos.y)));
-//				multiLayerNav.removeObstacle(new Pair<>(levelNumber, new Tile(pos.x, pos.y)));
-//				break;
 			}
 		}
 		// removing entities that are no longer in the game-board, except players:
@@ -147,7 +140,6 @@ public class AgentState extends Iv4xrAgentState<Void> {
 	public boolean gameStatus() {
 		var aux = worldmodel.elements.get("aux");
 		boolean status = (boolean) aux.properties.get("status");
-		int time = (int) aux.properties.get("time");
 
 		return status;
 	}
@@ -168,38 +160,23 @@ public class AgentState extends Iv4xrAgentState<Void> {
 	}
 
 	/**
-	 * Return a list of monsters which are currently adjacent to the agent that owns
-	 * this state. =
+	 * Return a list of entities with a certain type which are currently adjacent to the agent that owns
+	 * this state.
 	 */
-	public List<WorldEntity> adjacentMonsters() {
+	public List<WorldEntity> adjacentEntities(EntityType type, boolean allowDiagonally) {
 		var player = worldmodel.elements.get("player");
 		Tile p = Utils.toTile((int) this.env().app.gameState.player.position.x,
 				(int) this.env().app.gameState.player.position.y);
+		
 		List<WorldEntity> ms = worldmodel.elements
-				.values().stream().filter(e -> e.type == EntityType.MONSTER.name()
-						&& Utils.levelId(player) == Utils.levelId(e) && Utils.adjacent(p, Utils.toTile(e.position)))
+				.values().stream().filter(e -> e.type == type.name()
+						&& Utils.levelId(player) == Utils.levelId(e) && Utils.adjacent(p, Utils.toTile(e.position), allowDiagonally))
 				.collect(Collectors.toList());
 
 		if (ms.size() > 0) {
-			System.out.println("FOUND A MONSTER CLOSEBY!!");
-			WorldEntity monster = ms.get(0);
-			System.out.println(String.format("PLAYER at %s", this.env().app.gameState.player.position.toString()));
-			System.out.println(String.format("MONSTER at %s", monster.position.toString()));
+			System.out.println(String.format("Found %d %s nearby (diagonal=%b)", ms.size(), type.name(), allowDiagonally));
 		}
 
 		return ms;
 	}
-
-	/**
-	 * Return a list of doors that are in the current . =
-	 */
-//	public List<WorldEntity> closedDoors() {
-//		var player = worldmodel.elements.get(worldmodel.agentId) ;
-//		Tile p = Utils.toTile(player.position) ;
-//		List<WorldEntity> ms = worldmodel.elements.values().stream()
-//				.filter(e -> e.type.equals(EntityType.DOOR.toString())
-//						     && Utils.levelId(player) == Utils.levelId(e))
-//				.collect(Collectors.toList()) ;
-//		return ms;
-//	}
 }

@@ -4,6 +4,7 @@ import eu.iv4xr.framework.goalsAndTactics.IInteractiveWorldTacticLib;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import nethack.object.Command;
+import nethack.object.EntityType;
 import nethack.utils.NethackSurface_NavGraph.Tile;
 import nl.uu.cs.aplib.Logging;
 import nl.uu.cs.aplib.mainConcepts.Action;
@@ -16,6 +17,7 @@ import static nl.uu.cs.aplib.AplibEDSL.*;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * Provide several basic actions and tactics.
@@ -68,7 +70,7 @@ public class TacticLib implements IInteractiveWorldTacticLib<Pair<Integer, Tile>
 
 	WorldModel moveTo(AgentState state, Tile targetTile) {
 		Tile t0 = Utils.toTile(state.worldmodel.position);
-		if (!Utils.adjacent(t0, targetTile))
+		if (!Utils.adjacent(t0, targetTile, true))
 			throw new IllegalArgumentException("");
 		Command command = null;
 		if (targetTile.y > t0.y) {
@@ -98,10 +100,21 @@ public class TacticLib implements IInteractiveWorldTacticLib<Pair<Integer, Tile>
 
 	WorldModel kickDoor(AgentState state, Tile targetTile) {
 		Tile t0 = Utils.toTile(state.worldmodel.position);
-		if (!Utils.adjacent(t0, targetTile))
+		if (!Utils.adjacent(t0, targetTile, false))
 			throw new IllegalArgumentException("");
 		Command command = Command.COMMAND_KICK;
 		var wom = state.env().action(command);
+		
+		if (targetTile.y > t0.y) {
+			command = Command.DIRECTION_S;
+		} else if (targetTile.y < t0.y) {
+			command = Command.DIRECTION_N;
+		} else if (targetTile.x > t0.x) {
+			command = Command.DIRECTION_E;
+		} else {
+			command = Command.DIRECTION_W;
+		}
+		wom = state.env().action(command);
 		return wom;
 	}
 
@@ -152,7 +165,7 @@ public class TacticLib implements IInteractiveWorldTacticLib<Pair<Integer, Tile>
 				return null;
 			}
 			Tile target = Utils.toTile(e.position);
-			if (Utils.levelId(a) == Utils.levelId(e) && Utils.adjacent(agentPos, target)) {
+			if (Utils.levelId(a) == Utils.levelId(e) && Utils.adjacent(agentPos, target, false)) {
 				Tile[] nextTile = {};
 				return nextTile;
 			}
@@ -209,7 +222,7 @@ public class TacticLib implements IInteractiveWorldTacticLib<Pair<Integer, Tile>
 				return null;
 			}
 			Tile target = Utils.toTile(e.position);
-			if (Utils.adjacent(agentPos, target)) {
+			if (Utils.adjacent(agentPos, target, true)) {
 				return target;
 			}
 			return null;
@@ -220,7 +233,14 @@ public class TacticLib implements IInteractiveWorldTacticLib<Pair<Integer, Tile>
 	public Predicate<AgentState> inCombat_and_hpNotCritical = S -> {
 		var player = S.worldmodel.elements.get(S.worldmodel.agentId);
 		int hp = (int) player.properties.get("hp");
-		return hp > 5 && S.adjacentMonsters().size() > 0;
+		return hp > 5 && S.adjacentEntities(EntityType.MONSTER, true).size() > 0;
+	};
+	
+	public Predicate<AgentState> near_closedDoor = S -> {
+		var player = S.worldmodel.elements.get(S.worldmodel.agentId);
+		List<WorldEntity> doors = S.adjacentEntities(EntityType.DOOR, false);
+		doors = doors.stream().filter(d -> (boolean)d.properties.get("closed")).collect(Collectors.toList());
+		return doors.size() > 0;
 	};
 
 	@Override
@@ -276,7 +296,7 @@ public class TacticLib implements IInteractiveWorldTacticLib<Pair<Integer, Tile>
 	 */
 	Action attackMonsterAction() {
 		return action("attack").do1((AgentState S) -> {
-			var ms = S.adjacentMonsters();
+			var ms = S.adjacentEntities(EntityType.MONSTER, true);
 			// just choose the first one:
 			Tile m = Utils.toTile(ms.get(0).position);
 			logger.info(">>> " + S.worldmodel.agentId + " attacks " + m);
@@ -285,18 +305,18 @@ public class TacticLib implements IInteractiveWorldTacticLib<Pair<Integer, Tile>
 		});
 	}
 	
-//	/**
-//	 * Construct an action that would attack an adjacent monster. The action is
-//	 * unguarded.
-//	 */
-//	Action attackMonsterAction() {
-//		return action("attack").do1((AgentState S) -> {
-//			var ms = S.adjacentMonsters();
-//			// just choose the first one:
-//			Tile m = Utils.toTile(ms.get(0).position);
-//			logger.info(">>> " + S.worldmodel.agentId + " attacks " + m);
-//			WorldModel newwom = moveTo(S, m);
-//			return new Pair<>(S, newwom);
-//		});
-//	}
+	/**
+	 * Construct an action that would attack an adjacent monster. The action is
+	 * unguarded.
+	 */
+	Action kickDoorAction() {
+		return action("kick door").do1((AgentState S) -> {
+			var ms = S.adjacentEntities(EntityType.DOOR, false);
+			// just choose the first one:
+			Tile m = Utils.toTile(ms.get(0).position);
+			logger.info(">>> " + S.worldmodel.agentId + " kicks door " + m);
+			WorldModel newwom = kickDoor(S, m);
+			return new Pair<>(S, newwom);
+		});
+	}
 }

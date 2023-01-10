@@ -14,6 +14,7 @@ import eu.iv4xr.framework.mainConcepts.TestAgent;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import nethack.NetHack;
+import nethack.object.Command;
 import nethack.utils.RenderUtils;
 import nl.uu.cs.aplib.mainConcepts.Goal;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
@@ -54,9 +55,19 @@ public class Sandbox {
 		logger.info(">> Start agent loop...");
 		int k = 0;
 		while (G.getStatus().inProgress() && k++ < 150) {
-			System.in.read();
-			agent.update();
-			logger.debug("** [" + k + "] agent @" + Utils.toTile(state.worldmodel.position));
+			Command command = nethack.waitCommand(true); 
+			if (command != null) {
+				if (command == Command.COMMAND_EXTLIST) {
+					Command.prettyPrintActions();
+					continue;
+				}
+				
+				nethack.step(command);
+				state.updateState("player");
+			} else {
+				agent.update();
+				logger.debug("** [" + k + "] agent @" + Utils.toTile(state.worldmodel.position));
+			}
 			renderUtils.render();
 		}
 
@@ -78,14 +89,14 @@ public class Sandbox {
 			}
 			var a = S.worldmodel.elements.get(S.worldmodel().agentId);
 			var solved = Utils.levelId(a) == Utils.levelId(e)
-					&& Utils.adjacent(Utils.toTile(newObs.position), Utils.toTile(e.position));
+					&& Utils.adjacent(Utils.toTile(newObs.position), Utils.toTile(e.position), true);
 			// System.out.println(">>> checking goal") ;
 			return solved;
 		}).withTactic(FIRSTof(
 				tacticLib.attackMonsterAction()
 					.on_(tacticLib.inCombat_and_hpNotCritical).lift(),
-//				tacticLib.attackMonsterAction()
-//					.on_(tacticLib.inCombat_and_hpNotCritical).lift(),
+				tacticLib.kickDoorAction()
+					.on_(tacticLib.near_closedDoor).lift(),
 				tacticLib.explore(null), ABORT()));
 
 		return REPEAT(G.lift());

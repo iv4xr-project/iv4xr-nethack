@@ -93,6 +93,7 @@ public class ObjectReaderWriter_OverSocket {
 	 * 
 	 * @throws
 	 */
+	@SuppressWarnings("unchecked")
 	public <T> T read(Class<T> expectedClassOfResultObj) throws IOException {
 		if (expectedClassOfResultObj == StepState.class) {
 			return (T) readStepState();
@@ -105,17 +106,6 @@ public class ObjectReaderWriter_OverSocket {
 		// we do not have to cast to T, since req.responseType is of type Class<T>
 		logger.debug("** RECEIVING: " + response);
 		return gson.fromJson(response, expectedClassOfResultObj);
-	}
-
-	private String readResponse() throws IOException {
-		reader.ready();
-		String response = reader.readLine();
-		while (response != null) {
-			reader.ready();
-			response = reader.readLine();
-		}
-		System.out.println("Response: " + response);
-		return response;
 	}
 
 	/**

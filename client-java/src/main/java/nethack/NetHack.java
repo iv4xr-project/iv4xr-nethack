@@ -30,7 +30,7 @@ public class NetHack {
 
 	public void loop() {
 		while (!gameState.done) {
-			Command command = waitCommand();
+			Command command = waitCommand(false);
 			if (command == Command.COMMAND_EXTLIST) {
 				Command.prettyPrintActions();
 			} else if (command == Command.COMMAND_REDRAW) {
@@ -56,15 +56,19 @@ public class NetHack {
 		System.out.println(gameState);
 	}
 
-	public Command waitCommand() {
+	public Command waitCommand(boolean acceptNoCommand) {
 		// Do not close scanner, otherwise it cannot read the next command
+		@SuppressWarnings("resource")
 		Scanner scanner = new Scanner(System.in);
+		if (acceptNoCommand) {
+			System.out.print("(Optional) ");
+		}
 		System.out.print("Input a command: ");
 
 		while (true) {
 			String input = scanner.nextLine();
 			Command command = Command.fromValue(input);
-			if (command != null) {
+			if (command != null || acceptNoCommand) {
 				return command;
 			}
 			System.out.print("Input \"" + input + "\" not found, enter again: ");

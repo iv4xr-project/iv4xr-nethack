@@ -13,6 +13,14 @@ public class Entity {
 		this.symbol = symbol;
 		this.type = type;
 	}
+	
+	public boolean closedDoor() {
+		if (type != EntityType.DOOR) {
+			System.out.println("NOT A DOOR?!");
+		}
+		
+		return symbol == '+';
+	}
 
 	public void assignId(int x, int y) {
 		id = String.format("%s_%d_%d", type.name(), x, y);

@@ -1,6 +1,5 @@
 package nethack.agent;
 
-import nl.uu.cs.aplib.exampleUsages.miniDungeon.Entity.EntityType;
 import nl.uu.cs.aplib.mainConcepts.*;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure.PrimitiveGoal;
 import static nl.uu.cs.aplib.AplibEDSL.*;
@@ -52,7 +51,7 @@ public class GoalLib implements IInteractiveWorldGoalLib<Pair<Integer, Tile>> {
 			}
 			WorldEntity a = S.worldmodel.elements.get(S.worldmodel().agentId);
 			var solved = Utils.levelId(a) == Utils.levelId(e)
-					&& Utils.adjacent(Utils.toTile(newObs.position), Utils.toTile(e.position));
+					&& Utils.adjacent(Utils.toTile(newObs.position), Utils.toTile(e.position), true);
 			// System.out.println(">>> checking goal") ;
 			return solved;
 		}).withTactic(FIRSTof(tacticLib.attackMonsterAction().on_(tacticLib.inCombat_and_hpNotCritical).lift(),
@@ -73,7 +72,7 @@ public class GoalLib implements IInteractiveWorldGoalLib<Pair<Integer, Tile>> {
 			}
 			WorldEntity a = S.worldmodel.elements.get(S.worldmodel().agentId);
 			return Utils.levelId(a) == Utils.levelId(e)
-					&& Utils.adjacent(Utils.toTile(S.worldmodel.position), Utils.toTile(e.position));
+					&& Utils.adjacent(Utils.toTile(S.worldmodel.position), Utils.toTile(e.position), true);
 		});
 	}
 
