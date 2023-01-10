@@ -5,7 +5,6 @@ import nethack.utils.RenderUtils;
 import nethack.object.Command;
 import nethack.object.Level;
 
-import java.io.IOException;
 import java.util.Scanner;
 
 import org.apache.logging.log4j.LogManager;
@@ -30,8 +29,6 @@ public class NetHack {
 	}
 
 	public void loop() {
-		int step = 0;
-
 		while (!gameState.done) {
 			Command command = waitCommand();
 			if (command == Command.COMMAND_EXTLIST) {
@@ -67,6 +64,7 @@ public class NetHack {
 			String input = scanner.nextLine();
 			Command command = Command.fromValue(input);
 			if (command != null) {
+				scanner.close();
 				return command;
 			}
 			System.out.print("Input \"" + input + "\" not found, enter again: ");

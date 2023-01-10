@@ -1,11 +1,10 @@
 package nethack.agent;
 
-import eu.iv4xr.framework.extensions.pathfinding.Sparse2DTiledSurface_NavGraph.Tile;
 import eu.iv4xr.framework.goalsAndTactics.IInteractiveWorldTacticLib;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import nethack.object.Command;
-import nethack.object.EntityType;
+import nethack.utils.NethackSurface_NavGraph.Tile;
 import nl.uu.cs.aplib.Logging;
 import nl.uu.cs.aplib.mainConcepts.Action;
 import nl.uu.cs.aplib.mainConcepts.SimpleState;
@@ -14,11 +13,9 @@ import nl.uu.cs.aplib.utils.Pair;
 
 import static nl.uu.cs.aplib.AplibEDSL.*;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 /**
  * Provide several basic actions and tactics.
@@ -262,6 +259,7 @@ public class TacticLib implements IInteractiveWorldTacticLib<Pair<Integer, Tile>
 				System.out.println(">>> agent @" + agentPos + ", path: " + path);
 				throw e;
 			}
+			
 			// return path.get(1).snd ;
 		});
 		return alpha;
@@ -286,4 +284,19 @@ public class TacticLib implements IInteractiveWorldTacticLib<Pair<Integer, Tile>
 			return new Pair<>(S, newwom);
 		});
 	}
+	
+//	/**
+//	 * Construct an action that would attack an adjacent monster. The action is
+//	 * unguarded.
+//	 */
+//	Action attackMonsterAction() {
+//		return action("attack").do1((AgentState S) -> {
+//			var ms = S.adjacentMonsters();
+//			// just choose the first one:
+//			Tile m = Utils.toTile(ms.get(0).position);
+//			logger.info(">>> " + S.worldmodel.agentId + " attacks " + m);
+//			WorldModel newwom = moveTo(S, m);
+//			return new Pair<>(S, newwom);
+//		});
+//	}
 }

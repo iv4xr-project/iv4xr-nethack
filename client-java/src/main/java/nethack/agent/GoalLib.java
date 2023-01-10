@@ -7,8 +7,8 @@ import static nl.uu.cs.aplib.AplibEDSL.*;
 import eu.iv4xr.framework.goalsAndTactics.IInteractiveWorldGoalLib;
 import eu.iv4xr.framework.mainConcepts.*;
 import nl.uu.cs.aplib.utils.Pair;
-import eu.iv4xr.framework.extensions.pathfinding.Sparse2DTiledSurface_NavGraph.Tile;
 import nethack.agent.Utils.*;
+import nethack.utils.NethackSurface_NavGraph.Tile;
 import nethack.agent.Utils;
 
 import java.util.function.Predicate;

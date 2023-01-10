@@ -10,9 +10,7 @@ import nethack.object.EntityType;
 import nethack.object.Player;
 import nethack.NetHack;
 
-import java.io.IOException;
 import java.io.Serializable;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -47,7 +45,8 @@ public class AgentEnv extends Iv4xrEnvironment {
 		List<IntVec2D> visibleTiles = app.level().visibleTiles(app.gameState.player.position2D);
 		for (IntVec2D pos : visibleTiles) {
 			Entity e = app.level().getEntity(pos);
-			if (e.type != EntityType.VOID) {
+			if (e.type != EntityType.VOID && e.type != EntityType.CORRIDOR
+				&& e.type != EntityType.FLOOR && e.type != EntityType.WALL) {
 				e.assignId(pos.x, pos.y);
 				wom.elements.put(e.id, toWorldEntity(e, pos.x, pos.y));
 			}

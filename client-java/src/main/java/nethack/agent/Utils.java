@@ -1,6 +1,6 @@
 package nethack.agent;
 
-import eu.iv4xr.framework.extensions.pathfinding.Sparse2DTiledSurface_NavGraph.Tile;
+import nethack.utils.NethackSurface_NavGraph.Tile;
 import eu.iv4xr.framework.spatial.Vec3;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 

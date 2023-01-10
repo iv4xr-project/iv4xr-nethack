@@ -2,21 +2,17 @@ package nethack.agent;
 
 import nethack.object.EntityType;
 import nethack.object.Level;
+import nethack.utils.NethackSurface_NavGraph;
+import nethack.utils.NethackSurface_NavGraph.Door;
+import nethack.utils.NethackSurface_NavGraph.Tile;
+import nethack.utils.NethackSurface_NavGraph.Wall;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import eu.iv4xr.framework.extensions.pathfinding.AStar;
-import eu.iv4xr.framework.extensions.pathfinding.CanDealWithDynamicObstacle;
 import eu.iv4xr.framework.extensions.pathfinding.LayeredAreasNavigation;
 import eu.iv4xr.framework.extensions.pathfinding.Navigatable;
-import eu.iv4xr.framework.extensions.pathfinding.Pathfinder;
-import eu.iv4xr.framework.extensions.pathfinding.Sparse2DTiledSurface_NavGraph;
-import eu.iv4xr.framework.extensions.pathfinding.XPathfinder;
-import eu.iv4xr.framework.extensions.pathfinding.Sparse2DTiledSurface_NavGraph.Door;
-import eu.iv4xr.framework.extensions.pathfinding.Sparse2DTiledSurface_NavGraph.Tile;
-import eu.iv4xr.framework.extensions.pathfinding.Sparse2DTiledSurface_NavGraph.Wall;
 import eu.iv4xr.framework.mainConcepts.Iv4xrAgentState;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.spatial.IntVec2D;
@@ -34,7 +30,7 @@ import nl.uu.cs.aplib.utils.Pair;
  *
  */
 public class AgentState extends Iv4xrAgentState<Void> {
-	public LayeredAreasNavigation<Tile, Sparse2DTiledSurface_NavGraph> multiLayerNav;
+	public LayeredAreasNavigation<Tile, NethackSurface_NavGraph> multiLayerNav;
 
 	@Override
 	public AgentEnv env() {
@@ -62,15 +58,8 @@ public class AgentState extends Iv4xrAgentState<Void> {
 	@Override
 	public AgentState setEnvironment(Environment env) {
 		super.setEnvironment(env);
-		// creating an instance of navigation graph; setting its
-		// configuration etc.
-		// The graph is empty when created.
-		Sparse2DTiledSurface_NavGraph navg = new Sparse2DTiledSurface_NavGraph();
 		multiLayerNav = new LayeredAreasNavigation<>();
-		navg.sizeX = Level.WIDTH;
-		navg.sizeY = Level.HEIGHT;
-		navg.diagonalMovementPossible = true;
-		multiLayerNav.addNextArea(navg, null, null, false);
+		addNewNavGraph(false);
 		return this;
 	}
 
@@ -78,22 +67,25 @@ public class AgentState extends Iv4xrAgentState<Void> {
 		return worldmodel().elements.get("aux");
 	}
 
-	private void addNewNavGraph() {
-		Sparse2DTiledSurface_NavGraph newNav = new Sparse2DTiledSurface_NavGraph();
+	private void addNewNavGraph(boolean withPortal) {
+		NethackSurface_NavGraph newNav = new NethackSurface_NavGraph();
 		newNav.sizeX = Level.WIDTH;
 		newNav.sizeY = Level.HEIGHT;
 		newNav.diagonalMovementPossible = true;
-		Vec3 playerPosition = env().app.gameState.player.position;
-		Tile lowPortal = new Tile(playerPosition.x, playerPosition.y);
-		Tile highPortal = new Tile(playerPosition.x, playerPosition.y);
-		multiLayerNav.addNextArea(newNav, lowPortal, highPortal, true);
+		
+		if (withPortal) {
+			Vec3 playerPosition = env().app.gameState.player.position;
+			Tile lowPortal = new Tile(playerPosition.x, playerPosition.y);
+			Tile highPortal = new Tile(playerPosition.x, playerPosition.y);
+			multiLayerNav.addNextArea(newNav, lowPortal, highPortal, true);			
+		} else {
+			multiLayerNav.addNextArea(newNav, null, null, false);
+		}
 	}
 
 	@Override
 	public void updateState(String agentId) {
 		super.updateState(agentId);
-		// Updating the navigation graph:
-		// System.out.println(">>> updateState") ;
 		WorldEntity aux = auxState();
 		var seenTiles = (Serializable[]) aux.properties.get("visibleTiles");
 		for (var entry_ : seenTiles) {
@@ -105,7 +97,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
 			// If detecting a new maze, need to allocate a nav-graph for this maze:
 			if (levelNumber >= multiLayerNav.areas.size()) {
 				System.out.println("Adding a new level: " + levelNumber);
-				addNewNavGraph();
+				addNewNavGraph(true);
 			}
 
 			multiLayerNav.markAsSeen(new Pair<>(levelNumber, new Tile(pos.x, pos.y)));
@@ -122,6 +114,10 @@ public class AgentState extends Iv4xrAgentState<Void> {
 			case DOOR:
 				boolean isOpen = env().app.gameState.level().getEntity(pos).symbol != '+';
 				multiLayerNav.addObstacle(new Pair<>(levelNumber, new Door(pos.x, pos.y, isOpen)));
+				break;
+			case PLAYER:
+			case PET:
+				// The players position does not change anything about the navigation
 				break;
 			default:
 				// representing potions, scrolls and shrines as doors that we can

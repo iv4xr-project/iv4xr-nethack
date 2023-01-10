@@ -57,8 +57,8 @@ public class Sandbox {
 			agent.update();
 			System.out.println("** [" + k + "] agent @" + Utils.toTile(state.worldmodel.position));
 			// delay to slow it a bit for displaying:
+			System.out.println(state.multiLayerNav.toString());
 			nethack.render();
-//			System.out.println(state.multiLayerNav.toString());
 		}
 
 		nethack.close();
@@ -82,7 +82,11 @@ public class Sandbox {
 					&& Utils.adjacent(Utils.toTile(newObs.position), Utils.toTile(e.position));
 			// System.out.println(">>> checking goal") ;
 			return solved;
-		}).withTactic(FIRSTof(tacticLib.attackMonsterAction().on_(tacticLib.inCombat_and_hpNotCritical).lift(),
+		}).withTactic(FIRSTof(
+				tacticLib.attackMonsterAction()
+					.on_(tacticLib.inCombat_and_hpNotCritical).lift(),
+				tacticLib.attackMonsterAction()
+					.on_(tacticLib.inCombat_and_hpNotCritical).lift(),
 				tacticLib.explore(null), ABORT()));
 
 //				Later have monster attacks
