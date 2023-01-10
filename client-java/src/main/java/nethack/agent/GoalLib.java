@@ -6,11 +6,7 @@ import static nl.uu.cs.aplib.AplibEDSL.*;
 import eu.iv4xr.framework.goalsAndTactics.IInteractiveWorldGoalLib;
 import eu.iv4xr.framework.mainConcepts.*;
 import nl.uu.cs.aplib.utils.Pair;
-import nethack.agent.Utils.*;
 import nethack.utils.NethackSurface_NavGraph.Tile;
-import nethack.agent.Utils;
-
-import java.util.function.Predicate;
 
 /**
  * Provide several basic goal-structures.
@@ -51,10 +47,10 @@ public class GoalLib implements IInteractiveWorldGoalLib<Pair<Integer, Tile>> {
 			}
 			WorldEntity a = S.worldmodel.elements.get(S.worldmodel().agentId);
 			var solved = Utils.levelId(a) == Utils.levelId(e)
-					&& Utils.adjacent(Utils.toTile(newObs.position), Utils.toTile(e.position), true);
+					&& Utils.adjacent(Utils.toTile(newObs.position), Utils.toTile(e.position), false);
 			// System.out.println(">>> checking goal") ;
 			return solved;
-		}).withTactic(FIRSTof(tacticLib.attackMonsterAction().on_(tacticLib.inCombat_and_hpNotCritical).lift(),
+		}).withTactic(FIRSTof(Actions.attackMonster().on_(tacticLib.inCombat_and_hpNotCritical).lift(),
 				tacticLib.navigateToTac(targetId), tacticLib.explore(null),
 				// Abort().on_(S -> { System.out.println("### about to abort") ; return
 				// false;}).lift(),
@@ -72,7 +68,7 @@ public class GoalLib implements IInteractiveWorldGoalLib<Pair<Integer, Tile>> {
 			}
 			WorldEntity a = S.worldmodel.elements.get(S.worldmodel().agentId);
 			return Utils.levelId(a) == Utils.levelId(e)
-					&& Utils.adjacent(Utils.toTile(S.worldmodel.position), Utils.toTile(e.position), true);
+					&& Utils.adjacent(Utils.toTile(S.worldmodel.position), Utils.toTile(e.position), false);
 		});
 	}
 
@@ -80,7 +76,7 @@ public class GoalLib implements IInteractiveWorldGoalLib<Pair<Integer, Tile>> {
 	public GoalStructure exploring(Pair<Integer, Tile> heuristicLocation, int budget) {
 		GoalStructure explr = goal("exploring (persistent-goal: aborted when it is terminated)")
 				.toSolve(belief -> false)
-				.withTactic(FIRSTof(tacticLib.attackMonsterAction().on_(tacticLib.inCombat_and_hpNotCritical).lift(),
+				.withTactic(FIRSTof(Actions.attackMonster().on_(tacticLib.inCombat_and_hpNotCritical).lift(),
 						tacticLib.explore(heuristicLocation), ABORT()))
 				.lift().maxbudget(budget);
 
@@ -115,5 +111,4 @@ public class GoalLib implements IInteractiveWorldGoalLib<Pair<Integer, Tile>> {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }

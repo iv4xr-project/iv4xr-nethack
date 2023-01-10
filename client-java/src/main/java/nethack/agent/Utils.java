@@ -2,11 +2,46 @@ package nethack.agent;
 
 import nethack.utils.NethackSurface_NavGraph.Tile;
 import eu.iv4xr.framework.spatial.Vec3;
+
+import java.util.List;
+
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 
 import nl.uu.cs.aplib.utils.Pair;
 
 public class Utils {
+	/**
+	 * Distance in terms of path-length from the agent that owns S to the entity e.
+	 * It uses adjustedFindPath to calculate the path.
+	 */
+	static int distTo(AgentState S, WorldEntity e) {
+		var player = S.worldmodel.elements.get(S.worldmodel.agentId);
+		Tile p = Utils.toTile(player.position);
+		Tile target = Utils.toTile(e.position);
+		var path = adjustedFindPath(S, Utils.levelId(player), p.x, p.y, Utils.levelId(e), target.x, target.y);
+		if (path == null)
+			return Integer.MAX_VALUE;
+		return path.size() - 1;
+	}
+
+	/**
+	 * Calculate a path from (x0,y0) in maze-0 to (x1,y1) in maze-1. The method will
+	 * pretend that the source (x0,y0) and destination (x1,y1) are non-blocking
+	 * (even if they are, e.g. if one of them is an occupied tile).
+	 */
+	public static List<Pair<Integer, Tile>> adjustedFindPath(AgentState state, int level0, int x0, int y0, int level1,
+			int x1, int y1) {
+		var nav = state.multiLayerNav;
+		boolean srcOriginalBlockingState = nav.isBlocking(Utils.loc3(level0, x0, y0));
+		boolean destOriginalBlockingState = nav.isBlocking(Utils.loc3(level1, x1, y1));
+		nav.toggleBlockingOff(Utils.loc3(level0, x0, y0));
+		nav.toggleBlockingOff(Utils.loc3(level1, x1, y1));
+		var path = nav.findPath(Utils.loc3(level0, x0, y0), Utils.loc3(level1, x1, y1));
+		nav.setBlockingState(Utils.loc3(level0, x0, y0), srcOriginalBlockingState);
+		nav.setBlockingState(Utils.loc3(level1, x1, y1), destOriginalBlockingState);
+		return path;
+	}
+	
 	public static Tile toTile(Vec3 p) {
 		return new Tile((int) p.x, (int) p.y);
 	}
@@ -15,8 +50,8 @@ public class Utils {
 		return new Tile(x, y);
 	}
 
-	static Pair<Integer, Tile> loc3(int mazeId, int x, int y) {
-		return new Pair<>(mazeId, new Tile(x, y));
+	static Pair<Integer, Tile> loc3(int levelId, int x, int y) {
+		return new Pair<>(levelId, new Tile(x, y));
 	}
 
 	/**

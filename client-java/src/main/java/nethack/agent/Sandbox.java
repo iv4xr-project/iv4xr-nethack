@@ -3,6 +3,7 @@ package nethack.agent;
 import static nl.uu.cs.aplib.AplibEDSL.SUCCESS;
 import static nl.uu.cs.aplib.AplibEDSL.goal;
 import static nl.uu.cs.aplib.AplibEDSL.ABORT;
+import static nl.uu.cs.aplib.AplibEDSL.SEQ;
 import static nl.uu.cs.aplib.AplibEDSL.FIRSTof;
 import static nl.uu.cs.aplib.AplibEDSL.REPEAT;
 
@@ -73,7 +74,7 @@ public class Sandbox {
 	}
 
 	private static GoalStructure explore() {
-		Goal G = goal("Explore").toSolve((Pair<AgentState, WorldModel> proposal) -> {
+		Goal G = goal("Main [Explore]").toSolve((Pair<AgentState, WorldModel> proposal) -> {
 			var S = proposal.fst;
 			WorldModel previouswom = S.worldmodel;
 			WorldModel newObs = proposal.snd;
@@ -87,11 +88,13 @@ public class Sandbox {
 			// System.out.println(">>> checking goal") ;
 			return solved;
 		}).withTactic(FIRSTof(
-				tacticLib.attackMonsterAction()
+				Actions.attackMonster()
 					.on_(tacticLib.inCombat_and_hpNotCritical).lift(),
-				tacticLib.kickDoorAction()
+				Actions.walkToClosedDoor()
+					.on_(tacticLib.exists_closedDoor).lift(),
+				Actions.kickDoor()
 					.on_(tacticLib.near_closedDoor).lift(),
-				tacticLib.explore(null), ABORT()));
+				tacticLib.explore(null)));
 
 		return REPEAT(G.lift());
 	}

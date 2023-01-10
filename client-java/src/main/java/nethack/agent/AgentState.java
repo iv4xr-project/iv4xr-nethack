@@ -9,7 +9,6 @@ import nethack.utils.NethackSurface_NavGraph.Wall;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
