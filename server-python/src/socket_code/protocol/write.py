@@ -57,3 +57,15 @@ def write_space(sock, space):
     Encode and write a gym.Space.
     """
     write_field_str(sock, json.dumps(util.space_json(space)))
+
+
+def write_seed(sock, seed):
+    seed_json = {
+        'core': seed[0],
+        'disp': seed[1],
+        'reseed': seed[2],
+    }
+    json_dump = json.dumps(seed_json, separators=(',', ':'))
+    print("WRITE Seed")
+    write_field_str(sock, json_dump)
+

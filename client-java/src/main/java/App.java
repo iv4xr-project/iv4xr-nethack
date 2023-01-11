@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import connection.SendCommandClient;
 import nethack.NetHack;
+import nethack.object.Seed;
 
 public class App {
 	static final Logger logger = LogManager.getLogger(App.class);
@@ -19,6 +20,11 @@ public class App {
 
 		// Main game loop
 		NetHack nethack = new NetHack(commander);
+		
+		nethack.setSeed(Seed.simple());
+		Seed currentSeed = nethack.getSeed();
+		System.out.println(currentSeed);
+		
 		nethack.loop();
 		nethack.close();
 

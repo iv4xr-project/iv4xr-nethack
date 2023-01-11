@@ -50,7 +50,7 @@ public class Sandbox {
 			Command command = nethack.waitCommand(true); 
 			if (command != null) {
 				if (command == Command.COMMAND_EXTLIST) {
-					Command.prettyPrintActions();
+					Command.prettyPrintActions(nethack.gameMode);
 					continue;
 				}
 				

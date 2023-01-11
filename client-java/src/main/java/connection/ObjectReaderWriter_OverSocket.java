@@ -15,7 +15,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import connection.messageparser.ObservationMessageTypeAdapter;
+import connection.messageparser.SeedTypeAdapter;
 import nethack.object.Level;
+import nethack.object.Seed;
 import nethack.StepState;
 
 /**
@@ -43,6 +45,7 @@ public class ObjectReaderWriter_OverSocket {
 	// Transient modifiers should be excluded, otherwise they will be send with json
 	private static Gson gson = new GsonBuilder()
 			.registerTypeAdapter(ObservationMessage.class, new ObservationMessageTypeAdapter()).serializeNulls()
+			.registerTypeAdapter(Seed.class, new SeedTypeAdapter()).serializeNulls()
 			.excludeFieldsWithModifiers(Modifier.TRANSIENT).create();
 
 	public ObjectReaderWriter_OverSocket(Socket socket) throws IOException {

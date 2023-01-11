@@ -2,8 +2,9 @@ package nethack;
 
 import connection.SendCommandClient;
 import nethack.object.Command;
+import nethack.object.GameMode;
 import nethack.object.Level;
-
+import nethack.object.Seed;
 import java.util.Scanner;
 
 import org.apache.logging.log4j.LogManager;
@@ -12,17 +13,39 @@ import org.apache.logging.log4j.Logger;
 public class NetHack {
 	public static final Logger logger = LogManager.getLogger(NetHack.class);
 	public GameState gameState = new GameState();
-	private SendCommandClient commander;
+	public GameMode gameMode;
+	public Seed seed;
+	
+	SendCommandClient commander;
 
 	public NetHack(SendCommandClient commander) {
+		init(commander, GameMode.NethackChallenge);
+	}
+	
+	public NetHack(SendCommandClient commander, GameMode gameMode) {
+		init(commander, gameMode);
+	}
+	
+	private void init(SendCommandClient commander, GameMode gameMode) {
 		this.commander = commander;
+		this.gameMode = gameMode;
 		logger.info("Initialize game");
 		commander.read(Object.class);
 		reset();
 	}
 	
+	public void setSeed(Seed seed) {
+		gameMode = GameMode.Nethack;
+		commander.writeCommand("Set_seed", seed);
+		reset();
+	}
+	
+	public Seed getSeed() {
+		return commander.sendCommand("Get_seed", null, Seed.class);
+	}
+	
 	public void reset() {
-		commander.sendCommand("Reset", "", Object.class);
+		commander.sendCommand("Reset", gameMode.toString(), Object.class);
 
 		step(Command.MISC_MORE);
 		render();
@@ -32,14 +55,14 @@ public class NetHack {
 		while (!gameState.done) {
 			Command command = waitCommand(false);
 			if (command == Command.COMMAND_EXTLIST) {
-				Command.prettyPrintActions();
+				Command.prettyPrintActions(gameMode);
 			} else if (command == Command.COMMAND_REDRAW) {
 				render();
-			} else {
-				step(command);
+			} else if (step(command)) {
 				render();
 			}
 		}
+		logger.info("Gamestate indicates it is done, loop stopped");
 	}
 
 	public void close() {
@@ -75,9 +98,15 @@ public class NetHack {
 		}
 	}
 
-	public void step(Command command) {
+	public boolean step(Command command) {
+		int index = command.getIndex(gameMode);
+		if (index < 0) {
+			logger.warn(String.format("Command: %s not available in GameMode: %s", command, gameMode));
+			return false;
+		}
+		
 		logger.info("Command: " + command);
-		StepState stepState = commander.sendCommand("Step", command.index, StepState.class);
+		StepState stepState = commander.sendCommand("Step", index, StepState.class);
 		stepState.level.setRemovedEntities(gameState.level());
 		
 		// Add to world
@@ -95,6 +124,6 @@ public class NetHack {
 		gameState.stats = stepState.stats;
 		gameState.done = stepState.done;
 		gameState.info = stepState.info;
-
+		return true;
 	}
 }

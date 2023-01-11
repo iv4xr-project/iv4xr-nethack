@@ -37,6 +37,9 @@ def main():
     handle(io.BufferedRWPair(in_file, out_file), options)
 
 
+CURRENT_ENV = "NetHackChallenge-v0"
+
+
 def handle(sock_file, info):
     """
     Handle a connection from a client.
@@ -58,18 +61,9 @@ def handshake(sock):
     Perform the initial handshake and return the resulting
     Gym environment.
     """
-    env_name = "NetHackChallenge-v0"
-
-    # Special no-environment mode.
-    if env_name == '':
-        write.write_field_str(sock, '')
-        sock.flush()
-        return None
-
     try:
-        env = gym.make(env_name)
-        handle_reset(sock, env)
-        return env
+        env = gym.make(CURRENT_ENV)
+        return handle_reset(sock, env, CURRENT_ENV)
     except gym.error.Error as gym_exc:
         write.write_field_str(sock, str(gym_exc))
         sock.flush()
@@ -83,26 +77,67 @@ def loop(sock, uni, env: Env):
     """
     while True:
         json_msg = read.read_json(sock)
+        arg = json_msg['arg']
 
         # Handle msg type
         match str(json_msg['cmd']).lower():
             case 'reset':
-                handle_reset(sock, env)
+                env = handle_reset(sock, env, arg)
+            case 'set_seed':
+                env = handle_set_seed(arg)
+            case 'get_seed':
+                handle_get_seed(sock, env)
             case 'render':
                 handle_render(env)
             case 'close':
                 return
             case 'step':
-                handle_step(sock, env, int(json_msg['arg']))
+                handle_step(sock, env, int(arg))
             case unknown:
                 logging.warning(f'Action "{unknown}" not known')
 
 
-def handle_reset(sock, env):
+def handle_reset(sock, env, arg):
     """
     Reset the environment and send the result.
     """
+    global CURRENT_ENV
+
+    if arg != CURRENT_ENV:
+        env = gym.make(arg)
+        CURRENT_ENV = arg
+
     write.write_obs(sock, env, env.reset())
+    sock.flush()
+    return env
+
+
+def handle_set_seed(seed):
+    """
+    Set the seed of the next run
+    """
+    global CURRENT_ENV
+    if CURRENT_ENV != "NetHack-v0":
+        CURRENT_ENV = "NetHack-v0"
+        env = gym.make(CURRENT_ENV)
+
+    env.seed(seed['core'], seed['disp'], seed['reseed'])
+    return env
+
+
+def handle_get_seed(sock, env):
+    seed = None
+
+    try:
+        seed = env.get_seeds()
+    except RuntimeError:
+        print('Getting seed failed, not a valid env for this action')
+
+    if seed:
+        write.write_seed(sock, seed)
+    else:
+        write.write_field_str(sock, "")
+
     sock.flush()
 
 
