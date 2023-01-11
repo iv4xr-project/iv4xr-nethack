@@ -22,6 +22,18 @@
             <AppenderRef ref="LogToConsole"/>
             <AppenderRef ref="LogToFile"/>
         </Logger>
+        <Logger name="nethack.agent.Sandbox" level="debug" additivity="false">
+            <AppenderRef ref="LogToFile"/>
+        </Logger>
+        <Logger name="nethack.agent.Sandbox" level="info" additivity="false">
+            <AppenderRef ref="LogToConsole"/>
+        </Logger>
+        <Logger name="nethack.agent.AgentState" level="debug" additivity="false">
+            <AppenderRef ref="LogToFile"/>
+        </Logger>
+        <Logger name="nethack.agent.AgentState" level="info" additivity="false">
+            <AppenderRef ref="LogToConsole"/>
+        </Logger>
         <Root level="debug">
             <AppenderRef ref="LogToFile"/>
             <AppenderRef ref="LogToConsole"/>

@@ -33,7 +33,8 @@ public class Sandbox {
 		}
 
 		// Main game loop
-		NetHack nethack = new NetHack(commander, Seed.randomSeed());
+//		NetHack nethack = new NetHack(commander, Seed.randomSeed());
+		NetHack nethack = new NetHack(commander, Seed.presets[0]);
 		AgentEnv env = new AgentEnv(nethack);
 		AgentState state = new AgentState();
 		GoalStructure G = explore();
@@ -44,9 +45,7 @@ public class Sandbox {
 		// Now we run the agent:
 		logger.info(">> Start agent loop...");
 		int k = 0;
-		while (G.getStatus().inProgress() && k++ < 150) {
-			System.out.println(G.toString());
-			
+		while (G.getStatus().inProgress() && k++ < 250) {			
 			Command command = nethack.waitCommand(true); 
 			if (command != null) {
 				StepType stepType = nethack.step(command);
@@ -89,11 +88,13 @@ public class Sandbox {
 		}).withTactic(FIRSTof(
 				Actions.attackMonster()
 					.on_(tacticLib.inCombat_and_hpNotCritical).lift(),
-				Actions.walkToClosedDoor()
-					.on_(tacticLib.exists_closedDoor).lift(),
 				Actions.kickDoor()
 					.on_(tacticLib.near_closedDoor).lift(),
-				tacticLib.explore(null)));
+				Actions.walkToClosedDoor()
+					.on_(tacticLib.exists_closedDoor).lift(),
+				tacticLib.explore(null),
+				ABORT()
+				));
 
 		return REPEAT(G.lift());
 	}

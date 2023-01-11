@@ -50,10 +50,12 @@ public class GoalLib implements IInteractiveWorldGoalLib<Pair<Integer, Tile>> {
 					&& Utils.adjacent(Utils.toTile(newObs.position), Utils.toTile(e.position), false);
 			// System.out.println(">>> checking goal") ;
 			return solved;
-		}).withTactic(FIRSTof(Actions.attackMonster().on_(tacticLib.inCombat_and_hpNotCritical).lift(),
-				tacticLib.navigateToTac(targetId), tacticLib.explore(null),
-				// Abort().on_(S -> { System.out.println("### about to abort") ; return
-				// false;}).lift(),
+		}).withTactic(FIRSTof(
+				Actions.attackMonster()
+					.on_(tacticLib.inCombat_and_hpNotCritical).lift(),
+				tacticLib.navigateToTac(targetId),
+				tacticLib.explore(null),
+				Abort().on_(S -> { System.out.println("### about to abort") ; return false;}).lift(),
 				ABORT()));
 
 		return G.lift();

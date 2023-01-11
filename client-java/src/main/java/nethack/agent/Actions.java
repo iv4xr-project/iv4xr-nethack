@@ -4,25 +4,27 @@ import static nl.uu.cs.aplib.AplibEDSL.*;
 import static nethack.agent.Utils.*;
 
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import nethack.object.EntityType;
 import nethack.utils.NethackSurface_NavGraph.Tile;
-import nl.uu.cs.aplib.Logging;
 import nl.uu.cs.aplib.mainConcepts.Action;
 import nl.uu.cs.aplib.utils.Pair;
 
 public class Actions {
-	static Logger logger = Logging.getAPLIBlogger();
+	static final Logger logger = LogManager.getLogger(Actions.class);
 	/**
 	 * Construct an action that would guide the agent to the given location.
 	 */
 	static Action navigateTo(int levelId, int x, int y) {
 		return action("move-to").do2((AgentState S) -> (Tile nextTile) -> {
 			WorldModel newwom = WorldModels.moveTo(S, nextTile);
+			logger.info(String.format(">>> navigateTo %s", nextTile));
 			return new Pair<>(S, newwom);
 		}).on((AgentState S) -> {
 			if (!S.agentIsAlive())
@@ -48,6 +50,7 @@ public class Actions {
 				return new Pair<>(S, S.env().observe(S.worldmodel().agentId));
 			}
 			WorldModel newwom = WorldModels.moveTo(S, nextTile[0]);
+			logger.info(String.format(">>> navigateTo %s", nextTile[0]));
 			return new Pair<>(S, newwom);
 		}).on((AgentState S) -> {
 			// return three possible values:
@@ -55,25 +58,31 @@ public class Actions {
 			// (2) empty array of tiles --> the agent is already next to the target
 			// (3) a singleton array of tile --> the next tile to move to
 			//
-			if (!S.agentIsAlive())
+			if (!S.agentIsAlive()) {
+				System.out.print("Cannot navigate since agent is dead");
 				return null;
+			}
 			var a = S.worldmodel.elements.get(S.worldmodel().agentId);
 			Tile agentPos = toTile(S.worldmodel.position);
 			WorldEntity e = S.worldmodel.elements.get(targetId);
 			if (e == null) {
+				System.out.print("Cannot navigate since it is nextdoor");
 				return null;
 			}
 			Tile target = toTile(e.position);
 			if (levelId(a) == levelId(e) && adjacent(agentPos, target, false)) {
 				Tile[] nextTile = {};
+				System.out.print("Found path");
 				return nextTile;
 			}
 			var path = Utils.adjustedFindPath(S, levelId(a), agentPos.x, agentPos.y, levelId(e), target.x,
 					target.y);
 			if (path == null) {
+				System.out.print("No path aparently");
 				return null;
 			}
 			Tile[] nextTile = { path.get(1).snd };
+			System.out.print("Found path");
 			return nextTile;
 		});
 	}
@@ -87,6 +96,7 @@ public class Actions {
 	static Action interact(String targetId) {
 		return action("interact").do2((AgentState S) -> (Tile nextTile) -> {
 			WorldModel newwom = WorldModels.moveTo(S, nextTile);
+			logger.info(String.format(">>> interact %s", nextTile));
 			return new Pair<>(S, newwom);
 		});
 	}
@@ -99,6 +109,7 @@ public class Actions {
 	static Action explore(Pair<Integer, Tile> heuristicLocation) {
 		Action alpha = action("explore").do2((AgentState S) -> (Tile nextTile) -> {
 			WorldModel newwom = WorldModels.moveTo(S, nextTile);
+			logger.info(String.format(">>> explore %s", nextTile));
 			return new Pair<>(S, newwom);
 		}).on((AgentState S) -> {
 			if (!S.agentIsAlive())
@@ -120,7 +131,7 @@ public class Actions {
 			try {
 				return path.get(1).snd;
 			} catch (Exception e) {
-				System.out.println(">>> agent @" + agentPos + ", path: " + path);
+				logger.debug(String.format("agent @%s nothing left to explore", agentPos));
 				throw e;
 			}
 			
@@ -138,7 +149,7 @@ public class Actions {
 			var ms = S.adjacentEntities(EntityType.MONSTER, true);
 			// just choose the first one:
 			Tile m = toTile(ms.get(0).position);
-			logger.info(">>> " + S.worldmodel.agentId + " attacks " + m);
+			logger.info(String.format(">>> attackMonster %s", m));
 			WorldModel newwom = WorldModels.moveTo(S, m);
 			return new Pair<>(S, newwom);
 		});
@@ -150,22 +161,26 @@ public class Actions {
 	static Action kickDoor() {
 		return action("kick door").do1((AgentState S) -> {
 			var ms = S.adjacentEntities(EntityType.DOOR, false);
-			// just choose the first one:
 			Tile m = toTile(ms.get(0).position);
-			logger.info(">>> " + S.worldmodel.agentId + " kicks door " + m);
+			logger.info(String.format(">>> kickDoor @%s", m));
 			WorldModel newwom = WorldModels.kickDoor(S, m);
 			return new Pair<>(S, newwom);
 		});
 	}
 	
 	static Action walkToClosedDoor() {
-		return addBefore((AgentState S) -> { 
+		// Works using Addbefore with Abort call in main goal.
+		return addBefore((AgentState S) -> {
 			var doors = S.worldmodel.elements.values().stream().filter(x -> x.type == EntityType.DOOR.toString()).collect(Collectors.toList());
 			doors = doors.stream().filter(d -> (boolean)d.properties.get("closed")).collect(Collectors.toList());
 			doors = doors.stream().filter(d -> !TacticLib.added_closedDoors.contains(d.id)).collect(Collectors.toList());
 			Tile m = toTile(doors.get(0).position);
+			logger.info(String.format(">>> walkToClosedDoor @%s", m));
 			TacticLib.added_closedDoors.add(doors.get(0).id);
-			return SEQ(new GoalLib().entityInCloseRange(doors.get(0).id));
-		}).on((AgentState S) -> { return "s"; });
+			return goal("walk").toSolve((Pair<AgentState, WorldModel> proposal) -> {
+				// Should return true if door is opened
+				return false;
+			}).withTactic(navigateTo(doors.get(0).id).lift()).lift();
+		});
 	}
 }
