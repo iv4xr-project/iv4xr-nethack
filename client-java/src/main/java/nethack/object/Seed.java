@@ -1,6 +1,7 @@
 package nethack.object;
 
-import java.util.OptionalInt;
+import java.util.OptionalLong;
+import java.util.Random;
 
 // From Python documentation:
 // Sets the state of the NetHack RNGs after the next reset.
@@ -13,25 +14,41 @@ import java.util.OptionalInt;
 // flag enables or disables this behavior. If set to True, trajectories
 // won't be reproducible.
 
-public class Seed {
-	public OptionalInt core;
-	public OptionalInt disp;
+public class Seed {	
+	public OptionalLong core;
+	public OptionalLong disp;
 	public boolean reseed;
 	
-	public Seed(OptionalInt core, OptionalInt disp, boolean reseed) {
-		this.core = core;
-		this.disp = disp;
+	public String dispSeed;
+	public String coreSeed;
+
+	public static final Seed[] presets = new Seed[] {
+		new Seed("15175518238868522894", "13159468426723296085", false), // Enclosed room
+		new Seed("0", "0", false), // Portal left of player
+	};
+	
+	public Seed(String core, String disp, boolean reseed) {
+		this.core = OptionalLong.of(Long.parseUnsignedLong(core));
+		this.disp = OptionalLong.of(Long.parseUnsignedLong(disp));
 		this.reseed = reseed;
+		
+		this.dispSeed = disp;
+		this.coreSeed = core;
 	}
 	
-	public static Seed simple() {
-		return new Seed(OptionalInt.of(0), OptionalInt.of(0), false);
+	// Generate a random seed
+	public static Seed randomSeed() {
+		Random random = new Random();
+		String coreSeed = Long.toUnsignedString(random.nextLong());
+		String dspSeed = Long.toUnsignedString(random.nextLong());
+		
+		return new Seed(coreSeed, dspSeed, false);
 	}
 	
 	@Override
-	public String toString() {
-		String coreStr = core.isPresent() ? "core:" + core.getAsInt() : "None";
-		String dispStr = disp.isPresent() ? "disp:" + disp.getAsInt() : "None";
-		return String.format("%s %s reseed:%b", coreStr, dispStr, reseed);
+	public String toString() {	
+		String coreStr = core.isPresent() ? coreSeed : "";
+		String dispStr = disp.isPresent() ? dispSeed : "";
+		return String.format("%s %s %b [return new Seed(\"%s\", \"%s\", %b);]", coreSeed, dispSeed, reseed, coreStr, dispStr, reseed);
 	}
 }

@@ -1,11 +1,6 @@
 package nethack.agent;
 
-import static nl.uu.cs.aplib.AplibEDSL.SUCCESS;
-import static nl.uu.cs.aplib.AplibEDSL.goal;
-import static nl.uu.cs.aplib.AplibEDSL.ABORT;
-import static nl.uu.cs.aplib.AplibEDSL.SEQ;
-import static nl.uu.cs.aplib.AplibEDSL.FIRSTof;
-import static nl.uu.cs.aplib.AplibEDSL.REPEAT;
+import static nl.uu.cs.aplib.AplibEDSL.*;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,7 +10,10 @@ import eu.iv4xr.framework.mainConcepts.TestAgent;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import nethack.NetHack;
+import nethack.NetHack.StepType;
 import nethack.object.Command;
+import nethack.object.GameMode;
+import nethack.object.Seed;
 import nethack.utils.RenderUtils;
 import nl.uu.cs.aplib.mainConcepts.Goal;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
@@ -35,7 +33,7 @@ public class Sandbox {
 		}
 
 		// Main game loop
-		NetHack nethack = new NetHack(commander);
+		NetHack nethack = new NetHack(commander, Seed.randomSeed());
 		AgentEnv env = new AgentEnv(nethack);
 		AgentState state = new AgentState();
 		GoalStructure G = explore();
@@ -47,14 +45,14 @@ public class Sandbox {
 		logger.info(">> Start agent loop...");
 		int k = 0;
 		while (G.getStatus().inProgress() && k++ < 150) {
+			System.out.println(G.toString());
+			
 			Command command = nethack.waitCommand(true); 
 			if (command != null) {
-				if (command == Command.COMMAND_EXTLIST) {
-					Command.prettyPrintActions(nethack.gameMode);
+				StepType stepType = nethack.step(command);
+				if (stepType != StepType.Valid) {
 					continue;
 				}
-				
-				nethack.step(command);
 				state.updateState("player");
 			} else {
 				agent.update();
@@ -66,6 +64,7 @@ public class Sandbox {
 			commander.writeCommand("Render", "");
 		}
 
+		logger.info(String.format("Closing nethack since the loop in agent has surpassed %d steps", k));
 		nethack.close();
 
 		// Close socket connection

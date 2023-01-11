@@ -1,8 +1,8 @@
 package nethack.object;
 
 public enum GameMode {
-	NethackChallenge("NetHackChallenge-v0"), // Does not allow seeding
-	Nethack("NetHack-v0"), // Allows for seeding
+	NetHackChallenge("NetHackChallenge-v0"), // Does not allow seeding
+	NetHack("NetHack-v0"), // Allows for seeding
 	;
 	
 	private String environmentName;

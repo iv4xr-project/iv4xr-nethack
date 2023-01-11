@@ -25,11 +25,18 @@ public class NetHack {
 	SendCommandClient commander;
 
 	public NetHack(SendCommandClient commander) {
-		init(commander, GameMode.NethackChallenge);
+		init(commander, GameMode.NetHackChallenge);
+		reset();
 	}
 	
-	public NetHack(SendCommandClient commander, GameMode gameMode) {
-		init(commander, gameMode);
+	public NetHack(SendCommandClient commander, Seed seed) {
+		if (seed == null) {
+			init(commander, GameMode.NetHackChallenge);
+			reset();
+		} else {
+			init(commander, GameMode.NetHack);
+			setSeed(seed);
+		}
 	}
 	
 	private void init(SendCommandClient commander, GameMode gameMode) {
@@ -37,11 +44,10 @@ public class NetHack {
 		this.gameMode = gameMode;
 		logger.info("Initialize game");
 		commander.read(Object.class);
-		reset();
 	}
 	
 	public void setSeed(Seed seed) {
-		gameMode = GameMode.Nethack;
+		gameMode = GameMode.NetHack;
 		commander.writeCommand("Set_seed", seed);
 		reset();
 	}
@@ -94,8 +100,10 @@ public class NetHack {
 		while (true) {
 			String input = scanner.nextLine();
 			Command command = Command.fromValue(input);
-			if (command != null || acceptNoCommand) {
+			if (command != null) {
 				return command;
+			} else if (input == "" && acceptNoCommand) {
+				return null;
 			}
 			System.out.print("Input \"" + input + "\" not found, enter again: ");
 		}
@@ -112,8 +120,10 @@ public class NetHack {
 		case ADDITIONAL_SHOW_SEED:
 			System.out.println("Seed: " + getSeed());
 			return StepType.Special;
-		case ADDITIONAL_SET_SEED_0:
-			setSeed(Seed.simple());
+		case ADDITIONAL_SET_SEED:
+			int index = Integer.parseInt(command.stroke.substring(1));
+			System.out.println("New seed is:" + index);
+			setSeed(Seed.presets[index]);
 			return StepType.Special;
 		default:
 			break;

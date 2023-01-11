@@ -1,7 +1,7 @@
 package connection.messageparser;
 
 import java.io.IOException;
-import java.util.OptionalInt;
+import java.util.OptionalLong;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
@@ -13,8 +13,8 @@ import nethack.object.Seed;
 public class SeedTypeAdapter extends TypeAdapter<Seed> {
 	@Override
 	public Seed read(JsonReader reader) throws IOException {
-		OptionalInt core = OptionalInt.empty();
-		OptionalInt disp = OptionalInt.empty();
+		String core = "";
+		String disp = "";
 		Boolean reseed = false;
 
 		JsonToken token = reader.peek();
@@ -24,10 +24,10 @@ public class SeedTypeAdapter extends TypeAdapter<Seed> {
 				String objectEntry = reader.nextName();
 				switch (objectEntry) {
 				case "core":
-					core = OptionalInt.of(reader.nextInt());
+					core = reader.nextString();
 					break;
 				case "disp":
-					disp = OptionalInt.of(reader.nextInt());
+					disp = reader.nextString();
 					break;
 				case "reseed":
 					reseed = reader.nextBoolean();
@@ -51,11 +51,11 @@ public class SeedTypeAdapter extends TypeAdapter<Seed> {
 		
 		if (seed.core.isPresent()) {
 			out.name("core");
-			out.value(seed.core.getAsInt());
+			out.value(seed.coreSeed);
 		}
 		if (seed.disp.isPresent()) {
 			out.name("disp");
-			out.value(seed.disp.getAsInt());
+			out.value(seed.dispSeed);
 		}
 		out.name("reseed");
 		out.value(seed.reseed);

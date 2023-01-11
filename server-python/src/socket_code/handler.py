@@ -121,7 +121,7 @@ def handle_set_seed(env, seed):
         CURRENT_ENV = "NetHack-v0"
         env = gym.make(CURRENT_ENV)
 
-    env.seed(seed['core'], seed['disp'], seed['reseed'])
+    env.seed(int(seed['core']), int(seed['disp']), seed['reseed'])
     return env
 
 

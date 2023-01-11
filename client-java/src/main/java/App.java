@@ -21,7 +21,7 @@ public class App {
 		// Main game loop
 		NetHack nethack = new NetHack(commander);
 		
-		nethack.setSeed(Seed.simple());
+		nethack.setSeed(Seed.presets[0]);
 		Seed currentSeed = nethack.getSeed();
 		System.out.println(currentSeed);
 		
