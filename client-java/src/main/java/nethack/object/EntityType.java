@@ -33,6 +33,7 @@ public enum EntityType implements Serializable {
 	STAIRS_DOWN('>'),
 	STAIRS_UP('<'),
 	SPIDER_WEB('▉'),
+	STATUE('▉'),
 	THRONE('\\'),
 	TRAP('^'),
 	UNKNOWN('▉'),
@@ -83,7 +84,10 @@ public enum EntityType implements Serializable {
 			return color == Color.WHITE ? EntityType.PLAYER : EntityType.HUMAN;
 		}
 
-		if (Character.isAlphabetic(symbol)) {
+		if (Character.isAlphabetic(symbol) || symbol == ':') {
+			if (color == Color.WHITE) {
+				return EntityType.STATUE;
+			}
 			return EntityType.MONSTER;
 		}
 
