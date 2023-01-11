@@ -30,6 +30,8 @@ public class Seed {
 	
 	@Override
 	public String toString() {
-		return String.format("core:%s disp:%s reseed:%b", core, disp, reseed);
+		String coreStr = core.isPresent() ? "core:" + core.getAsInt() : "None";
+		String dispStr = disp.isPresent() ? "disp:" + disp.getAsInt() : "None";
+		return String.format("%s %s reseed:%b", coreStr, dispStr, reseed);
 	}
 }

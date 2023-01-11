@@ -84,7 +84,7 @@ def loop(sock, uni, env: Env):
             case 'reset':
                 env = handle_reset(sock, env, arg)
             case 'set_seed':
-                env = handle_set_seed(arg)
+                env = handle_set_seed(env, arg)
             case 'get_seed':
                 handle_get_seed(sock, env)
             case 'render':
@@ -112,7 +112,7 @@ def handle_reset(sock, env, arg):
     return env
 
 
-def handle_set_seed(seed):
+def handle_set_seed(env, seed):
     """
     Set the seed of the next run
     """

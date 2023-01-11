@@ -16,6 +16,12 @@ public class NetHack {
 	public GameMode gameMode;
 	public Seed seed;
 	
+	public enum StepType {
+		Invalid,
+		Valid,
+		Special;
+	}
+	
 	SendCommandClient commander;
 
 	public NetHack(SendCommandClient commander) {
@@ -54,11 +60,8 @@ public class NetHack {
 	public void loop() {
 		while (!gameState.done) {
 			Command command = waitCommand(false);
-			if (command == Command.COMMAND_EXTLIST) {
-				Command.prettyPrintActions(gameMode);
-			} else if (command == Command.COMMAND_REDRAW) {
-				render();
-			} else if (step(command)) {
+			StepType stepType = step(command);
+			if (stepType == StepType.Valid) {
 				render();
 			}
 		}
@@ -98,13 +101,34 @@ public class NetHack {
 		}
 	}
 
-	public boolean step(Command command) {
+	public StepType step(Command command) {
+		switch (command) {
+		case COMMAND_EXTLIST:
+			Command.prettyPrintActions(gameMode);
+			return StepType.Special;
+		case COMMAND_REDRAW:
+			System.out.println(gameState);
+			return StepType.Special;
+		case ADDITIONAL_SHOW_SEED:
+			System.out.println("Seed: " + getSeed());
+			return StepType.Special;
+		case ADDITIONAL_SET_SEED_0:
+			setSeed(Seed.simple());
+			return StepType.Special;
+		default:
+			break;
+		}
+		
 		int index = command.getIndex(gameMode);
 		if (index < 0) {
 			logger.warn(String.format("Command: %s not available in GameMode: %s", command, gameMode));
-			return false;
+			return StepType.Invalid;
 		}
-		
+
+		return step(command, index);
+	}
+	
+	private StepType step(Command command, int index) {
 		logger.info("Command: " + command);
 		StepState stepState = commander.sendCommand("Step", index, StepState.class);
 		stepState.level.setRemovedEntities(gameState.level());
@@ -124,6 +148,6 @@ public class NetHack {
 		gameState.stats = stepState.stats;
 		gameState.done = stepState.done;
 		gameState.info = stepState.info;
-		return true;
+		return StepType.Valid;
 	}
 }

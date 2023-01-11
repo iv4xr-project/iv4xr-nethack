@@ -15,7 +15,7 @@
 	    <Logger name="connection.ObjectReaderWriter_OverSocket" level="debug" additivity="false">
             <AppenderRef ref="LogToFile"/>
         </Logger>
-        <Logger name="connection.ObjectReaderWriter_OverSocket" level="debug" additivity="false">
+        <Logger name="connection.ObjectReaderWriter_OverSocket" level="info" additivity="false">
             <AppenderRef ref="LogToConsole"/>
         </Logger>
         <Logger name="nethack.NetHack" level="debug" additivity="false">
