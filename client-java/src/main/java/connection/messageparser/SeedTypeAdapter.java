@@ -1,7 +1,6 @@
 package connection.messageparser;
 
 import java.io.IOException;
-import java.util.OptionalLong;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;

@@ -22,13 +22,14 @@ public class NavTactic {
 		return NavAction.navigateTo(location.fst, location.snd.x, location.snd.y).on_((AgentState S) -> {
 			var player = S.worldmodel.elements.get(S.worldmodel.agentId);
 			Tile p = NavUtils.toTile(player.position);
-			return NavUtils.adjacent(p, location.snd, allowDiagonally);
+			return !NavUtils.adjacent(p, location.snd, allowDiagonally);
 		}).lift();
 	}
 
 	// Construct a tactic that would guide the agent to a tile adjacent to the target entity.
 	public static Tactic navigateNextTo(String targetId, boolean allowDiagonally) {
-		return NavAction.navigateTo(targetId).on_((AgentState S) -> S.nextToEntity(targetId, allowDiagonally)).lift();
+		return NavAction.navigateNextTo(targetId, allowDiagonally).lift();
+		//return NavAction.navigateTo(targetId).on_((AgentState S) -> !S.nextToEntity(targetId, allowDiagonally)).lift();
 	}
 
 	public static boolean exploringDone(SimpleState S) {

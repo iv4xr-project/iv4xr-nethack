@@ -188,7 +188,7 @@ public enum Command {
 		if (stroke.startsWith("@")) {
 			String indexStr = stroke.substring(1);
 			try {
-				int index = Integer.parseInt(indexStr);
+				Integer.parseInt(indexStr);
 			} catch (NumberFormatException ex) {
 				return null;
 			}

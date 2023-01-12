@@ -21,8 +21,8 @@ public class NavAction {
 	 */
 	public static Action navigateTo(int levelId, int x, int y) {
 		return action("move-to").do2((AgentState S) -> (Tile nextTile) -> {
-			WorldModel newwom = NavUtils.moveTo(S, nextTile);
 			logger.info(String.format(">>> navigateTo %s", nextTile));
+			WorldModel newwom = NavUtils.moveTo(S, nextTile);
 			return new Pair<>(S, newwom);
 		}).on((AgentState S) -> {
 			if (!S.agentIsAlive())
@@ -41,8 +41,8 @@ public class NavAction {
 	// Construct an action that would guide the agent to to the target entity.
 	public static Action navigateTo(String targetId) {
 		return action("move-to").do2((AgentState S) -> (Tile nextTile) -> {
-			WorldModel newwom = NavUtils.moveTo(S, nextTile);
 			logger.info(String.format(">>> navigateTo %s", nextTile));
+			WorldModel newwom = NavUtils.moveTo(S, nextTile);
 			return new Pair<>(S, newwom);
 		}).on((AgentState S) -> {
 			// return three possible values:
@@ -74,6 +74,50 @@ public class NavAction {
 				return null;
 			}
 			System.out.print("Found path");
+			return path.get(1).snd;
+		});
+	}
+	
+	// Construct an action that would guide the agent to to the target entity.
+	public static Action navigateNextTo(String targetId, boolean allowDiagonally) {
+		return action("move-to").do2((AgentState S) -> (Tile nextTile) -> {
+			logger.info(String.format(">>> navigateNextTo %s", nextTile));
+			WorldModel newwom = NavUtils.moveTo(S, nextTile);
+			return new Pair<>(S, newwom);
+		}).on((AgentState S) -> {
+			// return three possible values:
+			// (1) null --> the action is not enabled
+			// (2 disabled) empty array of tiles --> the agent is already next to the target
+			// (3) a singleton array of tile --> the next tile to move to
+			//
+			if (!S.agentIsAlive()) {
+				System.out.print("Cannot navigate since agent is dead");
+				return null;
+			}
+			var a = S.worldmodel.elements.get(S.worldmodel().agentId);
+			Tile agentPos = NavUtils.toTile(S.worldmodel.position);
+			WorldEntity e = S.worldmodel.elements.get(targetId);
+			if (e == null) {
+				System.out.println("Cannot navigate since it is nextdoor");
+				return null;
+			}
+			Tile target = NavUtils.toTile(e.position);
+			if (S.nextToEntity(targetId, allowDiagonally)) {
+				System.out.println(String.format("Next to item id:%s", targetId));
+				return null;
+			}
+//			if (NavUtils.levelId(a) == NavUtils.levelId(e) && NavUtils.adjacent(agentPos, target, false)) {
+//				Tile[] nextTile = {};
+//				System.out.print("Found path");
+//				return nextTile;
+//			}
+			var path = NavUtils.adjustedFindPath(S, NavUtils.levelId(a), agentPos.x, agentPos.y, NavUtils.levelId(e), target.x,
+					target.y);
+			if (path == null) {
+				System.out.println("No path aparently");
+				return null;
+			}
+			System.out.println("Found path");
 			return path.get(1).snd;
 		});
 	}

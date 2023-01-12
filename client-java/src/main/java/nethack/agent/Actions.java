@@ -2,7 +2,6 @@ package nethack.agent;
 
 import static nl.uu.cs.aplib.AplibEDSL.*;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
@@ -11,7 +10,6 @@ import org.apache.logging.log4j.Logger;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import eu.iv4xr.framework.spatial.Vec3;
-import nethack.agent.navigation.NavAction;
 import nethack.agent.navigation.NavTactic;
 import nethack.agent.navigation.NavUtils;
 import nethack.object.EntityType;
@@ -34,10 +32,7 @@ public class Actions {
 		});
 	}
 
-	/**
-	 * Construct an action that would attack an adjacent monster. The action is
-	 * unguarded.
-	 */
+	// Construct an action that would attack an adjacent monster.
 	static Action attackMonster() {
 		return action("attack").do1((AgentState S) -> {
 			var ms = S.adjacentEntities(EntityType.MONSTER, true);
@@ -49,9 +44,7 @@ public class Actions {
 		});
 	}
 	
-	/**
-	 * Construct an action that would kick the door. The action is unguarded.
-	 */
+	// Construct an action that would kick the door.
 	static Action kickDoor() {
 		return action("kick door").do1((AgentState S) -> {
 			var ms = S.adjacentEntities(EntityType.DOOR, false);
@@ -66,42 +59,31 @@ public class Actions {
 		return action("Add door to list").do1((AgentState S) -> {
 			var doors = S.worldmodel.elements.values().stream().filter(x -> x.type == EntityType.DOOR.toString()).collect(Collectors.toList());
 			doors = doors.stream().filter(d -> (boolean)d.properties.get("closed")).collect(Collectors.toList());
-			doors = doors.stream().filter(d -> !TacticLib.added_closedDoors.contains(d)).collect(Collectors.toList());
 			WorldEntity we = doors.get(0);
+			Predicates.closed_door = doors.get(0);
 			logger.info(String.format(">>> addClosedDoor @%s", we.position));
-			TacticLib.added_closedDoors.add(we);
 			return new Pair<>(S, WorldModels.doNothing(S));
 		});
 	}
 	
-	static Action walkToClosedDoor() {
-		// Works using Addbefore with Abort call in main goal.
-		return NavAction.navigateTo(TacticLib.added_closedDoors.get(0).id);
-	}
-	
-	static Action exploreFloor() {
+	static Action openClosedDoor() {
 		// Works using Addbefore with Abort call in main goal.
 		return addBefore((AgentState S) -> {
-			var doors = S.worldmodel.elements.values().stream().filter(x -> x.type == EntityType.DOOR.toString()).collect(Collectors.toList());
-			doors = doors.stream().filter(d -> (boolean)d.properties.get("closed")).collect(Collectors.toList());
-			doors = doors.stream().filter(d -> !TacticLib.explored_added_closedDoors.contains(d)).collect(Collectors.toList());
-			WorldEntity we = doors.get(0);
-			TacticLib.explored_added_closedDoors.add(we);
+			WorldEntity we = Predicates.closed_door;
 			Tile m = NavUtils.toTile(we.position);
-			logger.info(String.format(">>> walkToClosedDoor @%s", m));
-			return goal("walk to closedDoor").toSolve((Pair<AgentState, WorldModel> proposal) -> {
+			logger.info(String.format(">>> openClosedDoor @%s", m));
+			return goal("open closed door").toSolve((Pair<AgentState, WorldModel> proposal) -> {
 				// Should return true if door is opened
 				return false;
 			}).withTactic(FIRSTof(
 				Actions.attackMonster()
-					.on_(new TacticLib().inCombat_and_hpNotCritical).lift(),
-				NavAction.navigateTo(we.id).lift(),
-				Actions.kickDoor()
-					.on_(new TacticLib().near_closedDoor).lift(),
+					.on_(Predicates.inCombat_and_hpNotCritical).lift(),
+				NavTactic.navigateNextTo(we.id, false),
+				SEQ(Actions.kickDoor()
+					.on_(Predicates.near_closedDoor).lift(), ABORT()),
 				NavTactic.explore(),
 				ABORT()
-					)).lift();
-					
+				)).lift();
 		});
 	}
 }

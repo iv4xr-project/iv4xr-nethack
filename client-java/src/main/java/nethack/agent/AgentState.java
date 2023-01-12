@@ -11,7 +11,6 @@ import nethack.utils.NethackSurface_NavGraph.Wall;
 import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -148,9 +147,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
 	 */
 	public boolean gameStatus() {
 		var aux = worldmodel.elements.get("aux");
-		boolean status = (boolean) aux.properties.get("status");
-
-		return status;
+		return (boolean) aux.properties.get("status");
 	}
 
 	/**
@@ -194,7 +191,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
 	
 	public boolean nextToEntity(String entityId, boolean allowDiagonally) {
 		Tile p = NavUtils.toTile(env().app.gameState.player.position);
-		Stream<WorldEntity> ms = worldmodel.elements.values().stream().filter(e -> NavUtils.adjacent(p, NavUtils.toTile(e.position), allowDiagonally));
-		return ms.count() > 0;
+		List<WorldEntity> ms = worldmodel.elements.values().stream().filter(e -> e.position != null && e.id == entityId && NavUtils.adjacent(p, NavUtils.toTile(e.position), allowDiagonally)).collect(Collectors.toList());
+		return ms.size() > 0;
 	}
 }

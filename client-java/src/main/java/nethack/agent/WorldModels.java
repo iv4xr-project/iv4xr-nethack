@@ -18,8 +18,7 @@ public class WorldModels {
 			throw new IllegalArgumentException("");			
 		}
 		state.env().action(Command.COMMAND_KICK);
-		var wom = NavUtils.moveTo(state, state.worldmodel.position);
-
+		var wom = NavUtils.moveTo(state, targetTile);
 		// We expect the door to be opened after the kick
 		WorldEntity we = wom.elements.get(String.format("DOOR_%d_%d", targetTile.x, targetTile.y));
 		we.properties.put("closed", false);

@@ -7,14 +7,12 @@ import org.apache.logging.log4j.Logger;
 
 import connection.SendCommandClient;
 import eu.iv4xr.framework.mainConcepts.TestAgent;
-import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import nethack.NetHack;
 import nethack.NetHack.StepType;
 import nethack.agent.navigation.NavTactic;
 import nethack.agent.navigation.NavUtils;
 import nethack.object.Command;
-import nethack.object.GameMode;
 import nethack.object.Seed;
 import nethack.utils.RenderUtils;
 import nl.uu.cs.aplib.mainConcepts.Goal;
@@ -77,14 +75,14 @@ public class Sandbox {
 //			return tacticLib.explorationExhausted(proposal.fst);
 		}).withTactic(FIRSTof(
 				Actions.attackMonster()
-					.on_(tacticLib.inCombat_and_hpNotCritical).lift(),
-				Actions.addClosedDoor()
-					.on_(tacticLib.exists_closedDoor).lift(),
-				Actions.exploreFloor()
-					.on_(tacticLib.closed_doors_listed).lift(),
+					.on_(Predicates.inCombat_and_hpNotCritical).lift(),
 				Actions.kickDoor()
-					.on_(tacticLib.near_closedDoor).lift(),
+					.on_(Predicates.near_closedDoor).lift(),
 				NavTactic.explore(),
+				Actions.addClosedDoor()
+					.on_(Predicates.closed_door_set.negate().and(Predicates.closed_door_exists)).lift(),
+				SEQ(Actions.openClosedDoor()
+					.on_(Predicates.closed_door_set).lift(), ABORT()),
 				ABORT()
 				));
 
