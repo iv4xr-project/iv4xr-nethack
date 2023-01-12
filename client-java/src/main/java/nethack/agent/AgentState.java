@@ -1,5 +1,6 @@
 package nethack.agent;
 
+import nethack.agent.navigation.NavUtils;
 import nethack.object.EntityType;
 import nethack.object.Level;
 import nethack.utils.NethackSurface_NavGraph;
@@ -10,6 +11,7 @@ import nethack.utils.NethackSurface_NavGraph.Wall;
 import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -172,12 +174,11 @@ public class AgentState extends Iv4xrAgentState<Void> {
 	 */
 	public List<WorldEntity> adjacentEntities(EntityType type, boolean allowDiagonally) {
 		var player = worldmodel.elements.get("player");
-		Tile p = Utils.toTile((int) this.env().app.gameState.player.position.x,
-				(int) this.env().app.gameState.player.position.y);
+		Tile p = NavUtils.toTile(env().app.gameState.player.position);
 		
 		List<WorldEntity> ms = worldmodel.elements
 				.values().stream().filter(e -> e.type == type.name()
-						&& Utils.levelId(player) == Utils.levelId(e) && Utils.adjacent(p, Utils.toTile(e.position), allowDiagonally))
+						&& NavUtils.levelId(player) == NavUtils.levelId(e) && NavUtils.adjacent(p, NavUtils.toTile(e.position), allowDiagonally))
 				.collect(Collectors.toList());
 
 		if (ms.size() > 0) {
@@ -185,5 +186,15 @@ public class AgentState extends Iv4xrAgentState<Void> {
 		}
 
 		return ms;
+	}
+	
+	public boolean nextToEntity(EntityType entityType, boolean allowDiagonally) {
+		return adjacentEntities(entityType, allowDiagonally).size() > 0;
+	}
+	
+	public boolean nextToEntity(String entityId, boolean allowDiagonally) {
+		Tile p = NavUtils.toTile(env().app.gameState.player.position);
+		Stream<WorldEntity> ms = worldmodel.elements.values().stream().filter(e -> NavUtils.adjacent(p, NavUtils.toTile(e.position), allowDiagonally));
+		return ms.count() > 0;
 	}
 }

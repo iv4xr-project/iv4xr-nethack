@@ -11,6 +11,8 @@ import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import nethack.NetHack;
 import nethack.NetHack.StepType;
+import nethack.agent.navigation.NavTactic;
+import nethack.agent.navigation.NavUtils;
 import nethack.object.Command;
 import nethack.object.GameMode;
 import nethack.object.Seed;
@@ -54,7 +56,7 @@ public class Sandbox {
 				}
 			} else {
 				agent.update();
-				logger.debug("** [" + k + "] agent @" + Utils.toTile(state.worldmodel.position));
+				logger.debug("** [" + k + "] agent @" + NavUtils.toTile(state.worldmodel.position));
 			}
 			state.updateState("player");
 			renderUtils.render();
@@ -82,7 +84,7 @@ public class Sandbox {
 					.on_(tacticLib.closed_doors_listed).lift(),
 				Actions.kickDoor()
 					.on_(tacticLib.near_closedDoor).lift(),
-				tacticLib.explore(null),
+				NavTactic.explore(),
 				ABORT()
 				));
 
