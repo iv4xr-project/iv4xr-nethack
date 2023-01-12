@@ -97,13 +97,23 @@ public class TacticLib implements IInteractiveWorldTacticLib<Pair<Integer, Tile>
 		return doors.size() > 0;
 	};
 	
-	static List<String> added_closedDoors = new ArrayList<String>();
+	public static List<WorldEntity> added_closedDoors = new ArrayList<WorldEntity>();
+	public static List<WorldEntity> explored_added_closedDoors = new ArrayList<WorldEntity>();
 	public Predicate<AgentState> exists_closedDoor = S -> {
-		var doors = S.worldmodel.elements.values().stream().filter(x -> x.type == EntityType.DOOR.toString()).collect(Collectors.toList());
+		var doors = findOfType(S, EntityType.DOOR);
 		doors = doors.stream().filter(d -> (boolean)d.properties.get("closed")).collect(Collectors.toList());
-		doors = doors.stream().filter(d -> !added_closedDoors.contains(d.id)).collect(Collectors.toList());
+		doors = doors.stream().filter(d -> !added_closedDoors.contains(d)).collect(Collectors.toList());
+		doors = doors.stream().filter(d -> !explored_added_closedDoors.contains(d)).collect(Collectors.toList());
 		return doors.size() > 0;
 	};
+	
+	public Predicate<AgentState> closed_doors_listed = S -> {
+		return added_closedDoors.size() - explored_added_closedDoors.size() > 0;
+	};
+	
+	public List<WorldEntity> findOfType(AgentState S, EntityType type) {
+		return S.worldmodel.elements.values().stream().filter(x -> x.type == type.name()).collect(Collectors.toList());
+	}
 	
 	@Override
 	public boolean explorationExhausted(SimpleState S) {

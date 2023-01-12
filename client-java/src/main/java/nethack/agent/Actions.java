@@ -47,6 +47,7 @@ public class Actions {
 	static Action navigateTo(String targetId) {
 		return action("move-to").do2((AgentState S) -> (Tile[] nextTile) -> {
 			if (nextTile.length == 0) {
+				logger.info("NavigateTo has no path");
 				return new Pair<>(S, S.env().observe(S.worldmodel().agentId));
 			}
 			WorldModel newwom = WorldModels.moveTo(S, nextTile[0]);
@@ -168,19 +169,46 @@ public class Actions {
 		});
 	}
 	
+	static Action addClosedDoor() {
+		return action("Add door to list").do1((AgentState S) -> {
+			var doors = S.worldmodel.elements.values().stream().filter(x -> x.type == EntityType.DOOR.toString()).collect(Collectors.toList());
+			doors = doors.stream().filter(d -> (boolean)d.properties.get("closed")).collect(Collectors.toList());
+			doors = doors.stream().filter(d -> !TacticLib.added_closedDoors.contains(d)).collect(Collectors.toList());
+			WorldEntity we = doors.get(0);
+			logger.info(String.format(">>> addClosedDoor @%s", we.position));
+			TacticLib.added_closedDoors.add(we);
+			return new Pair<>(S, WorldModels.doNothing(S));
+		});
+	}
+	
 	static Action walkToClosedDoor() {
+		// Works using Addbefore with Abort call in main goal.
+		return navigateTo(TacticLib.added_closedDoors.get(0).id);
+	}
+	
+	static Action exploreFloor() {
 		// Works using Addbefore with Abort call in main goal.
 		return addBefore((AgentState S) -> {
 			var doors = S.worldmodel.elements.values().stream().filter(x -> x.type == EntityType.DOOR.toString()).collect(Collectors.toList());
 			doors = doors.stream().filter(d -> (boolean)d.properties.get("closed")).collect(Collectors.toList());
-			doors = doors.stream().filter(d -> !TacticLib.added_closedDoors.contains(d.id)).collect(Collectors.toList());
-			Tile m = toTile(doors.get(0).position);
+			doors = doors.stream().filter(d -> !TacticLib.explored_added_closedDoors.contains(d)).collect(Collectors.toList());
+			WorldEntity we = doors.get(0);
+			TacticLib.explored_added_closedDoors.add(we);
+			Tile m = toTile(we.position);
 			logger.info(String.format(">>> walkToClosedDoor @%s", m));
-			TacticLib.added_closedDoors.add(doors.get(0).id);
-			return goal("walk").toSolve((Pair<AgentState, WorldModel> proposal) -> {
+			return goal("walk to closedDoor").toSolve((Pair<AgentState, WorldModel> proposal) -> {
 				// Should return true if door is opened
 				return false;
-			}).withTactic(navigateTo(doors.get(0).id).lift()).lift();
+			}).withTactic(FIRSTof(
+				Actions.attackMonster()
+					.on_(new TacticLib().inCombat_and_hpNotCritical).lift(),
+				navigateTo(we.id).lift(),
+				Actions.kickDoor()
+					.on_(new TacticLib().near_closedDoor).lift(),
+				new TacticLib().explore(null),
+				ABORT()
+					)).lift();
+					
 		});
 	}
 }

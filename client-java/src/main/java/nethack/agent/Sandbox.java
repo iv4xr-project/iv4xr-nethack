@@ -52,13 +52,11 @@ public class Sandbox {
 				if (stepType != StepType.Valid) {
 					continue;
 				}
-				state.updateState("player");
 			} else {
 				agent.update();
-				state.updateState("player");
 				logger.debug("** [" + k + "] agent @" + Utils.toTile(state.worldmodel.position));
 			}
-			
+			state.updateState("player");
 			renderUtils.render();
 			commander.writeCommand("Render", "");
 		}
@@ -72,26 +70,18 @@ public class Sandbox {
 	}
 
 	private static GoalStructure explore() {
-		Goal G = goal("Main [Explore]").toSolve((Pair<AgentState, WorldModel> proposal) -> {
-			var S = proposal.fst;
-			WorldModel previouswom = S.worldmodel;
-			WorldModel newObs = proposal.snd;
-			WorldEntity e = previouswom.getElement("Blah");
-			if (e == null) {
-				return false;
-			}
-			var a = S.worldmodel.elements.get(S.worldmodel().agentId);
-			var solved = Utils.levelId(a) == Utils.levelId(e)
-					&& Utils.adjacent(Utils.toTile(newObs.position), Utils.toTile(e.position), true);
-			// System.out.println(">>> checking goal") ;
-			return solved;
+		Goal G = goal("Main [Explore floor no doors]").toSolve((Pair<AgentState, WorldModel> proposal) -> {
+			return false;
+//			return tacticLib.explorationExhausted(proposal.fst);
 		}).withTactic(FIRSTof(
 				Actions.attackMonster()
 					.on_(tacticLib.inCombat_and_hpNotCritical).lift(),
+				Actions.addClosedDoor()
+					.on_(tacticLib.exists_closedDoor).lift(),
+				Actions.exploreFloor()
+					.on_(tacticLib.closed_doors_listed).lift(),
 				Actions.kickDoor()
 					.on_(tacticLib.near_closedDoor).lift(),
-				Actions.walkToClosedDoor()
-					.on_(tacticLib.exists_closedDoor).lift(),
 				tacticLib.explore(null),
 				ABORT()
 				));

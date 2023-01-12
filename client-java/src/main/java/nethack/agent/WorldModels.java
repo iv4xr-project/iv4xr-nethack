@@ -60,4 +60,8 @@ public class WorldModels {
 		wom = state.env().action(command);
 		return wom;
 	}
+	
+	static WorldModel doNothing(AgentState state) {
+		return state.env().action(Command.MISC_MORE);
+	}
 }
