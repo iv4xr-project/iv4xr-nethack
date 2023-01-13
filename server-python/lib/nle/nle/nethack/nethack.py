@@ -72,15 +72,15 @@ TTYREC_VERSION = 3
 
 
 def _new_dl_linux(vardir):
-    if hasattr(os, "memfd_create"):
-        target = os.memfd_create("nle.so")
-        path = "/proc/self/fd/%i" % target
-        try:
-            shutil.copyfile(DLPATH, path)  # Should use sendfile.
-        except IOError:
-            os.close(target)
-            raise
-        return os.fdopen(target), path
+    # if hasattr(os, "memfd_create"):
+    #     target = os.memfd_create("nle.so")
+    #     path = "/proc/self/fd/%i" % target
+    #     try:
+    #         shutil.copyfile(DLPATH, path)  # Should use sendfile.
+    #     except IOError:
+    #         os.close(target)
+    #         raise
+    #     return os.fdopen(target), path
 
     # Otherwise, no memfd_create. Try with O_TMPFILE via the tempfile module.
     dl = tempfile.TemporaryFile(suffix="libnethack.so", dir=vardir)
