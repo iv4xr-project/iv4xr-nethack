@@ -78,9 +78,9 @@ public class NavAction {
 		});
 	}
 	
-	public static Action navigateToSomething() {
+	public static Action navigateTo() {
 		return action("move-to").do2((AgentState S) -> (Tile nextTile) -> {
-			logger.info(String.format(">>> navigateNextTo %s", nextTile));
+			logger.info(String.format(">>> navigateTo %s", nextTile));
 			WorldModel newwom = NavUtils.moveTo(S, nextTile);
 			return new Pair<>(S, newwom);
 		});

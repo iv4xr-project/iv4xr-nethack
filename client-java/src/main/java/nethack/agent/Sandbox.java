@@ -52,7 +52,7 @@ public class Sandbox {
 		// Now we run the agent:
 		logger.info(">> Start agent loop...");
 		int k = 0;
-		while (G.getStatus().inProgress() && k++ < 250) {			
+		while (G.getStatus().inProgress() && k++ < 400) {			
 			Command command = nethack.waitCommand(true); 
 			if (command != null) {
 				StepType stepType = nethack.step(command);
@@ -77,7 +77,7 @@ public class Sandbox {
 	}
 
 	private static GoalStructure explore() {
-		Goal G = goal("Main [Explore floor no doors]").toSolve((Pair<AgentState, WorldModel> proposal) -> {
+		Goal G = goal("Main [Explore floor]").toSolve((Pair<AgentState, WorldModel> proposal) -> {
 			return false;
 //			return tacticLib.explorationExhausted(proposal.fst);
 		}).withTactic(FIRSTof(
@@ -85,49 +85,11 @@ public class Sandbox {
 					.on_(Predicates.inCombat_and_hpNotCritical).lift(),
 				Actions.kickDoor()
 					.on_(Predicates.near_closedDoor).lift(),
-				NavAction.navigateToSomething()
-					.on((AgentState S) -> {
-						// return three possible values:
-						// (1) null --> the action is not enabled
-						// (2 disabled) empty array of tiles --> the agent is already next to the target
-						// (3) a singleton array of tile --> the next tile to move to
-						//
-						if (!S.agentIsAlive()) {
-							System.out.print("Cannot navigate since agent is dead");
-							return null;
-						}
-						var a = S.worldmodel.elements.get(S.worldmodel().agentId);
-						Tile agentPos = NavUtils.toTile(S.worldmodel.position);
-						
-						List<WorldEntity> doors = S.worldmodel.elements
-								.values().stream().filter(e -> e.type == EntityType.DOOR.name()).collect(Collectors.toList());
-
-						doors = doors.stream().filter(d -> (boolean)d.properties.get("closed")).collect(Collectors.toList());
-						if (doors.size() == 0) {
-							return null;
-						}
-						
-						WorldEntity e = doors.get(0);
-						Tile target = NavUtils.toTile(e.position);
-//						if (NavUtils.levelId(a) == NavUtils.levelId(e) && NavUtils.adjacent(agentPos, target, false)) {
-//							Tile[] nextTile = {};
-//							System.out.print("Found path");
-//							return nextTile;
-//						}
-						var path = NavUtils.adjustedFindPath(S, NavUtils.levelId(a), agentPos.x, agentPos.y, NavUtils.levelId(e), target.x,
-								target.y);
-						if (path == null) {
-							System.out.print("No path aparently");
-							return null;
-						}
-						System.out.print("Found path");
-						return path.get(1).snd;
-					}).lift(),
+				// Navigate to closed door
+				NavTactic.navigateToWorldEntity((var we) -> { return EntitySelector.selectFirst(EntitySelector.closedDoor(EntitySelector.entityTypeSelector(we, EntityType.DOOR)));}),
 				NavTactic.explore(),
-//				Actions.addClosedDoor()
-//					.on_(Predicates.closed_door_set.negate().and(Predicates.closed_door_exists)).lift(),
-//				SEQ(Actions.openClosedDoor()
-//					.on_(Predicates.closed_door_set).lift(), ABORT()),
+				// Navigate to stairs
+				NavTactic.navigateToWorldEntity((var we) -> { return EntitySelector.selectFirst(EntitySelector.entityTypeSelector(we, EntityType.STAIRS_DOWN));}),
 				ABORT()
 				));
 

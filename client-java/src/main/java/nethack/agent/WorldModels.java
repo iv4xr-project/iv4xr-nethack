@@ -1,6 +1,5 @@
 package nethack.agent;
 
-import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import eu.iv4xr.framework.spatial.Vec3;
 import nethack.agent.navigation.NavUtils;
@@ -18,11 +17,7 @@ public class WorldModels {
 			throw new IllegalArgumentException("");			
 		}
 		state.env().action(Command.COMMAND_KICK);
-		var wom = NavUtils.moveTo(state, targetTile);
-		// We expect the door to be opened after the kick
-		WorldEntity we = wom.elements.get(String.format("DOOR_%d_%d", targetTile.x, targetTile.y));
-		we.properties.put("closed", false);
-		return wom;
+		return NavUtils.moveTo(state, targetTile);
 	}
 	
 	static WorldModel doNothing(AgentState state) {

@@ -1,7 +1,15 @@
 package nethack.agent.navigation;
 
+import static nl.uu.cs.aplib.AplibEDSL.action;
+
+import java.util.List;
+import java.util.function.Function;
+
+import eu.iv4xr.framework.mainConcepts.WorldEntity;
+import eu.iv4xr.framework.mainConcepts.WorldModel;
 import nethack.agent.AgentState;
 import nethack.utils.NethackSurface_NavGraph.Tile;
+import nl.uu.cs.aplib.mainConcepts.Action;
 import nl.uu.cs.aplib.mainConcepts.SimpleState;
 import nl.uu.cs.aplib.mainConcepts.Tactic;
 import nl.uu.cs.aplib.utils.Pair;
@@ -15,6 +23,31 @@ public class NavTactic {
 	// Construct a tactic that would guide the agent to a tile to the target entity.
 	public static Tactic navigateTo(String targetId) {
 		return NavAction.navigateTo(targetId).lift();
+	}
+	
+	public static Tactic navigateToWorldEntity(Function<List<WorldEntity>, WorldEntity> entitySelector) {
+		return NavAction.navigateTo()
+			.on((AgentState S) -> {
+				if (!S.agentIsAlive()) {
+					System.out.print("Cannot navigate since agent is dead");
+					return null;
+				}
+				var a = S.worldmodel.elements.get(S.worldmodel().agentId);
+				Tile agentPos = NavUtils.toTile(S.worldmodel.position);
+				WorldEntity e = entitySelector.apply(S.worldmodel.elements.values().stream().toList());
+				if (e == null) {
+					return null;
+				}
+				Tile target = NavUtils.toTile(e.position);
+				var path = NavUtils.adjustedFindPath(S, NavUtils.levelId(a), agentPos.x, agentPos.y, NavUtils.levelId(e), target.x,
+						target.y);
+				if (path == null) {
+					System.out.print("No path aparently");
+					return null;
+				}
+				System.out.print("Found path to stairs down");
+				return path.get(1).snd;
+			}).lift();
 	}
 	
 	// Construct a tactic that would guide the agent to a tile adjacent to the location.
