@@ -2,6 +2,8 @@
 # Python
 #
 
+nethack-server-env/
+
 sandbox/
 .idea/
 data/*.png

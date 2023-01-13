@@ -26,6 +26,9 @@ from distutils import sysconfig
 import setuptools
 from setuptools.command import build_ext
 
+# import site
+
+# site.ENABLE_USER_SITE = "--user" in sys.argv[1:]
 
 class CMakeBuild(build_ext.build_ext):
     def run(self):  # Necessary for pip install -e.

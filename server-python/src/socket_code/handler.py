@@ -5,9 +5,13 @@ This treats stdin/stdout as a connection to a client.
 """
 
 from argparse import ArgumentParser
+import os
 import io
 import sys
 import logging
+
+# Add path to run from commandline
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
 import src.socket_code.protocol.write as write
 import src.socket_code.protocol.read as read

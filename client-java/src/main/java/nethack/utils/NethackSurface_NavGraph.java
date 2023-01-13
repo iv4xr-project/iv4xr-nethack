@@ -457,7 +457,7 @@ public class NethackSurface_NavGraph
 				z.append(c);
 			}
 			if (y != sizeY - 1) {
-				z.append("\n");
+				z.append(System.lineSeparator());
 			}
 		}
 		return z.toString();

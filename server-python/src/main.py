@@ -1,8 +1,12 @@
 import logger
 import nle
 import gym
+import sys
+import os
 from argparse import ArgumentParser
 
+# Add path to run from commandline
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 import src.socket_code.server as server
 
 
