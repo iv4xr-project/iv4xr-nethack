@@ -2,19 +2,26 @@ package nethack.agent;
 
 import static nl.uu.cs.aplib.AplibEDSL.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import connection.SendCommandClient;
 import eu.iv4xr.framework.mainConcepts.TestAgent;
+import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import nethack.NetHack;
 import nethack.NetHack.StepType;
+import nethack.agent.navigation.NavAction;
 import nethack.agent.navigation.NavTactic;
 import nethack.agent.navigation.NavUtils;
 import nethack.object.Command;
+import nethack.object.EntityType;
 import nethack.object.Seed;
 import nethack.utils.RenderUtils;
+import nethack.utils.NethackSurface_NavGraph.Tile;
 import nl.uu.cs.aplib.mainConcepts.Goal;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
 import nl.uu.cs.aplib.utils.Pair;
@@ -78,11 +85,49 @@ public class Sandbox {
 					.on_(Predicates.inCombat_and_hpNotCritical).lift(),
 				Actions.kickDoor()
 					.on_(Predicates.near_closedDoor).lift(),
+				NavAction.navigateToSomething()
+					.on((AgentState S) -> {
+						// return three possible values:
+						// (1) null --> the action is not enabled
+						// (2 disabled) empty array of tiles --> the agent is already next to the target
+						// (3) a singleton array of tile --> the next tile to move to
+						//
+						if (!S.agentIsAlive()) {
+							System.out.print("Cannot navigate since agent is dead");
+							return null;
+						}
+						var a = S.worldmodel.elements.get(S.worldmodel().agentId);
+						Tile agentPos = NavUtils.toTile(S.worldmodel.position);
+						
+						List<WorldEntity> doors = S.worldmodel.elements
+								.values().stream().filter(e -> e.type == EntityType.DOOR.name()).collect(Collectors.toList());
+
+						doors = doors.stream().filter(d -> (boolean)d.properties.get("closed")).collect(Collectors.toList());
+						if (doors.size() == 0) {
+							return null;
+						}
+						
+						WorldEntity e = doors.get(0);
+						Tile target = NavUtils.toTile(e.position);
+//						if (NavUtils.levelId(a) == NavUtils.levelId(e) && NavUtils.adjacent(agentPos, target, false)) {
+//							Tile[] nextTile = {};
+//							System.out.print("Found path");
+//							return nextTile;
+//						}
+						var path = NavUtils.adjustedFindPath(S, NavUtils.levelId(a), agentPos.x, agentPos.y, NavUtils.levelId(e), target.x,
+								target.y);
+						if (path == null) {
+							System.out.print("No path aparently");
+							return null;
+						}
+						System.out.print("Found path");
+						return path.get(1).snd;
+					}).lift(),
 				NavTactic.explore(),
-				Actions.addClosedDoor()
-					.on_(Predicates.closed_door_set.negate().and(Predicates.closed_door_exists)).lift(),
-				SEQ(Actions.openClosedDoor()
-					.on_(Predicates.closed_door_set).lift(), ABORT()),
+//				Actions.addClosedDoor()
+//					.on_(Predicates.closed_door_set.negate().and(Predicates.closed_door_exists)).lift(),
+//				SEQ(Actions.openClosedDoor()
+//					.on_(Predicates.closed_door_set).lift(), ABORT()),
 				ABORT()
 				));
 

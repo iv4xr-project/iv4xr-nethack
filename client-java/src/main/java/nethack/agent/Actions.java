@@ -66,6 +66,17 @@ public class Actions {
 		});
 	}
 	
+	static Action walkToClosedDoor() {
+		return action("Add door to list").do1((AgentState S) -> {
+			var doors = S.worldmodel.elements.values().stream().filter(x -> x.type == EntityType.DOOR.toString()).collect(Collectors.toList());
+			doors = doors.stream().filter(d -> (boolean)d.properties.get("closed")).collect(Collectors.toList());
+			WorldEntity we = doors.get(0);
+			Predicates.closed_door = doors.get(0);
+			logger.info(String.format(">>> addClosedDoor @%s", we.position));
+			return new Pair<>(S, WorldModels.doNothing(S));
+		});
+	}
+	
 	static Action openClosedDoor() {
 		// Works using Addbefore with Abort call in main goal.
 		return addBefore((AgentState S) -> {

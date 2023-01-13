@@ -78,6 +78,14 @@ public class NavAction {
 		});
 	}
 	
+	public static Action navigateToSomething() {
+		return action("move-to").do2((AgentState S) -> (Tile nextTile) -> {
+			logger.info(String.format(">>> navigateNextTo %s", nextTile));
+			WorldModel newwom = NavUtils.moveTo(S, nextTile);
+			return new Pair<>(S, newwom);
+		});
+	}
+	
 	// Construct an action that would guide the agent to to the target entity.
 	public static Action navigateNextTo(String targetId, boolean allowDiagonally) {
 		return action("move-to").do2((AgentState S) -> (Tile nextTile) -> {
@@ -137,16 +145,12 @@ public class NavAction {
 				return null;
 			var a = S.worldmodel.elements.get(S.worldmodel().agentId);
 			Tile agentPos = NavUtils.toTile(S.worldmodel.position);
-			// System.out.println(">>> agent is " + S.worldmodel().agentId) ;
-			// System.out.println(">>> explore is invoked") ;
 			List<Pair<Integer, Tile>> path;
 			if (heuristicLocation == null) {
-				// System.out.println(">>> @maze " + Utils.mazeId(a) + ", tile: " + agentPos) ;
 				path = S.multiLayerNav.explore(NavUtils.loc3(NavUtils.levelId(a), agentPos.x, agentPos.y));
 			} else
 				path = S.multiLayerNav.explore(NavUtils.loc3(NavUtils.levelId(a), agentPos.x, agentPos.y), heuristicLocation);
 			if (path == null) {
-				// System.out.println(">>>> can't find an explore path!") ;
 				return null;
 			}
 			try {
@@ -155,8 +159,6 @@ public class NavAction {
 				logger.debug(String.format("agent @%s nothing left to explore", agentPos));
 				throw e;
 			}
-			
-			// return path.get(1).snd ;
 		});
 	}
 }
