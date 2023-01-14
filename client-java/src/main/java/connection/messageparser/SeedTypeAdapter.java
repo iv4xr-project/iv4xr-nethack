@@ -32,8 +32,7 @@ public class SeedTypeAdapter extends TypeAdapter<Seed> {
 					reseed = reader.nextBoolean();
 					break;
 				default:
-					System.out.println(objectEntry + " has not been recognize when parsing observationMessage.");
-					break;
+					throw new IllegalArgumentException(String.format("Seed field \"%s\" unknown", objectEntry));
 				}
 			}
 			reader.endObject();

@@ -1,8 +1,5 @@
 package connection.messageparser;
 
-import nethack.object.Color;
-import nethack.object.Entity;
-
 import java.io.IOException;
 
 import com.google.gson.TypeAdapter;
@@ -10,24 +7,32 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
-// Source: https://studytrails.com/2016/09/12/java-google-json-type-adapter/
-public class EntityTypeAdapter extends TypeAdapter<Entity> {
+import nethack.object.Item;
+import nethack.object.ItemType;
+
+
+public class ItemTypeAdapter extends TypeAdapter<Item> {
 	@Override
-	public Entity read(JsonReader reader) throws IOException {
+	public Item read(JsonReader reader) throws IOException {
 		// the first token is the start array
 		JsonToken token = reader.peek();
 		if (token.equals(JsonToken.BEGIN_ARRAY)) {
 			reader.beginArray();
 			char symbol = (char) reader.nextInt();
-			Color color = new ColorTypeAdapter().read(reader);
+			ItemType type = ItemType.values()[reader.nextInt()];
+			String description = Utils.readString(reader).trim();
+			
 			reader.endArray();
-			return Entity.fromValues(symbol, color);
+			if (type == ItemType.NONE) {
+				return null;
+			}
+			return new Item(symbol, type, description);
 		} else {
 			return null;
 		}
 	}
 
 	@Override
-	public void write(JsonWriter out, Entity entity) throws IOException {
+	public void write(JsonWriter out, Item item) throws IOException {
 	}
 }

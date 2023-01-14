@@ -5,6 +5,8 @@ import nethack.object.Player;
 import nethack.object.Stats;
 import nl.uu.cs.aplib.utils.Pair;
 import nethack.object.Entity;
+import nethack.object.Inventory;
+import nethack.object.Item;
 import connection.ObservationMessage;
 
 import java.io.IOException;
@@ -35,32 +37,19 @@ public class ObservationMessageTypeAdapter extends TypeAdapter<ObservationMessag
 					observationMessage.entities = readMap(reader);
 					break;
 				case "message":
-					observationMessage.message = readString(reader);
+					observationMessage.message = Utils.readString(reader);
+					break;
+				case "inventory":
+					observationMessage.items = readItems(reader);
 					break;
 				default:
-					System.out.println(objectEntry + " has not been recognize when parsing observationMessage.");
-					break;
+					throw new IllegalArgumentException(String.format("Unknown observationMessage key: %s", objectEntry));
 				}
 			}
 			reader.endObject();
 			return observationMessage;
 		} else {
 			System.out.println("Not an object");
-			return null;
-		}
-	}
-
-	public String readString(JsonReader reader) throws IOException {
-		String message = "";
-		JsonToken token = reader.peek();
-		if (token.equals(JsonToken.BEGIN_ARRAY)) {
-			reader.beginArray();
-			while (!reader.peek().equals(JsonToken.END_ARRAY)) {
-				message += (char) reader.nextInt();
-			}
-			reader.endArray();
-			return message;
-		} else {
 			return null;
 		}
 	}
@@ -88,6 +77,21 @@ public class ObservationMessageTypeAdapter extends TypeAdapter<ObservationMessag
 			int i = 0;
 			while (!reader.peek().equals(JsonToken.END_ARRAY)) {
 				row[i++] = entityTypeAdapter.read(reader);
+			}
+			reader.endArray();
+		}
+		return row;
+	}
+	
+	public Item[] readItems(JsonReader reader) throws IOException {
+		ItemTypeAdapter itemTypeAdapter = new ItemTypeAdapter();
+		Item[] row = new Item[Inventory.SIZE];
+		JsonToken token = reader.peek();
+		if (token.equals(JsonToken.BEGIN_ARRAY)) {
+			reader.beginArray();
+			int i = 0;
+			while (!reader.peek().equals(JsonToken.END_ARRAY)) {
+				row[i++] = itemTypeAdapter.read(reader);
 			}
 			reader.endArray();
 		}

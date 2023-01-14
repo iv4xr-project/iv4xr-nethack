@@ -28,14 +28,20 @@ def write_obs(sock, env, obs):
     """
     jsonable = util.to_jsonable(env.observation_space, obs)
     zipped_map = zip(jsonable['chars'][0], jsonable['colors'][0])
-    entities = np.array([[ai, bi] for ai, bi in zipped_map])
+    entities = np.array([[char, color] for char, color in zipped_map])
     entities = np.swapaxes(entities, 1, 2)
+
+    inv_items = zip(jsonable['inv_letters'][0], jsonable['inv_oclasses'][0], jsonable['inv_strs'][0])
+    inv_items = [[item[0], item[1], item[2]] for item in inv_items]
 
     sparse_observation = {
         'blstats': jsonable['blstats'][0],
         'entities': entities.tolist(),
         'message': jsonable['message'][0],
+        'inventory': inv_items,
     }
+
+    # print(jsonable.keys())
 
     json_dump = json.dumps(sparse_observation, separators=(',', ':'))
     print("WRITE Observation")

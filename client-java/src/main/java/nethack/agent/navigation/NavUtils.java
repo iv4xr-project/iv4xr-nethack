@@ -124,7 +124,7 @@ public class NavUtils {
 	public static Command stepToCommand(AgentState state, Tile targetTile) {
 		Tile t0 = toTile(state.worldmodel.position);
 		if (!adjacent(t0, targetTile, true)) {
-			throw new IllegalArgumentException("");			
+			throw new IllegalArgumentException("");
 		}
 
 		if (targetTile.y > t0.y) {

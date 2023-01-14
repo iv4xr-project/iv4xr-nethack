@@ -16,6 +16,7 @@ import org.apache.logging.log4j.Logger;
 
 import connection.messageparser.ObservationMessageTypeAdapter;
 import connection.messageparser.SeedTypeAdapter;
+import nethack.object.Inventory;
 import nethack.object.Level;
 import nethack.object.Seed;
 import nethack.StepState;
@@ -80,6 +81,7 @@ public class ObjectReaderWriter_OverSocket {
 
 		StepState stepState = new StepState();
 		stepState.player = obsMessage.player;
+		stepState.player.inventory = new Inventory(obsMessage.items);
 		stepState.stats = obsMessage.stats;
 		stepState.done = stepMessage.done;
 		stepState.info = stepMessage.info;

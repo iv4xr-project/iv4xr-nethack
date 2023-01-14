@@ -9,7 +9,9 @@ public class Player {
 		NEUTRAL,
 		CHAOTIC
 	}
-
+	
+	public Inventory inventory;
+	
 	public Vec3 position;
 	public IntVec2D position2D;
 	public int strength;

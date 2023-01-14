@@ -16,13 +16,13 @@ public class NetHack {
 	public GameMode gameMode;
 	public Seed seed;
 	
+	SendCommandClient commander;
+	
 	public enum StepType {
 		Invalid,
 		Valid,
 		Special;
 	}
-	
-	SendCommandClient commander;
 
 	public NetHack(SendCommandClient commander) {
 		init(commander, GameMode.NetHackChallenge);
@@ -124,6 +124,13 @@ public class NetHack {
 			int index = Integer.parseInt(command.stroke.substring(1));
 			System.out.println("New seed is:" + index);
 			setSeed(Seed.presets[index]);
+			return StepType.Special;
+		case COMMAND_INVENTORY:
+			System.out.println(gameState.player.inventory);
+			return StepType.Special;
+		case COMMAND_INVENTTYPE:
+			// Does something different actually
+			System.out.println(gameState.player.inventory);
 			return StepType.Special;
 		default:
 			break;
