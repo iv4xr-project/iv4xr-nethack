@@ -20,6 +20,8 @@ if [ "$RESULT" ]; then
 fi
 
 python3 -m venv nethack-server-env
+source nethack-server-env/bin/activate
+pip install -e ./lib/nle
 
 # Remove trap
 trap - EXIT

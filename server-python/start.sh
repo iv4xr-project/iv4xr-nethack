@@ -11,6 +11,7 @@ BASEDIR=$(dirname "$0")
 cd "$BASEDIR"
 
 find . -type f -name "*.gcda" -delete
+source nethack-server-env/bin/activate
 python3 src/main.py
 
 # Remove trap
