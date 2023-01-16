@@ -14,41 +14,39 @@ import java.util.Random;
 // flag enables or disables this behavior. If set to True, trajectories
 // won't be reproducible.
 
-public class Seed {	
-	public OptionalLong core;
-	public OptionalLong disp;
-	public boolean reseed;
-	
-	public String dispSeed;
-	public String coreSeed;
+public class Seed {
+    public static final Seed[] presets = new Seed[]{
+            new Seed("15175518238868522894", "13159468426723296085", false), // Enclosed room
+            new Seed("0", "0", false), // Portal left of player
+    };
+    public OptionalLong core;
+    public OptionalLong disp;
+    public boolean reseed;
+    public String dispSeed;
+    public String coreSeed;
 
-	public static final Seed[] presets = new Seed[] {
-		new Seed("15175518238868522894", "13159468426723296085", false), // Enclosed room
-		new Seed("0", "0", false), // Portal left of player
-	};
-	
-	public Seed(String core, String disp, boolean reseed) {
-		this.core = OptionalLong.of(Long.parseUnsignedLong(core));
-		this.disp = OptionalLong.of(Long.parseUnsignedLong(disp));
-		this.reseed = reseed;
-		
-		this.dispSeed = disp;
-		this.coreSeed = core;
-	}
-	
-	// Generate a random seed
-	public static Seed randomSeed() {
-		Random random = new Random();
-		String coreSeed = Long.toUnsignedString(random.nextLong());
-		String dspSeed = Long.toUnsignedString(random.nextLong());
-		
-		return new Seed(coreSeed, dspSeed, false);
-	}
-	
-	@Override
-	public String toString() {	
-		String coreStr = core.isPresent() ? coreSeed : "";
-		String dispStr = disp.isPresent() ? dispSeed : "";
-		return String.format("%s %s %b [return new Seed(\"%s\", \"%s\", %b);]", coreSeed, dispSeed, reseed, coreStr, dispStr, reseed);
-	}
+    public Seed(String core, String disp, boolean reseed) {
+        this.core = OptionalLong.of(Long.parseUnsignedLong(core));
+        this.disp = OptionalLong.of(Long.parseUnsignedLong(disp));
+        this.reseed = reseed;
+
+        this.dispSeed = disp;
+        this.coreSeed = core;
+    }
+
+    // Generate a random seed
+    public static Seed randomSeed() {
+        Random random = new Random();
+        String coreSeed = Long.toUnsignedString(random.nextLong());
+        String dspSeed = Long.toUnsignedString(random.nextLong());
+
+        return new Seed(coreSeed, dspSeed, false);
+    }
+
+    @Override
+    public String toString() {
+        String coreStr = core.isPresent() ? coreSeed : "";
+        String dispStr = disp.isPresent() ? dispSeed : "";
+        return String.format("%s %s %b [return new Seed(\"%s\", \"%s\", %b);]", coreSeed, dispSeed, reseed, coreStr, dispStr, reseed);
+    }
 }
