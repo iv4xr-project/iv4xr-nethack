@@ -1,9 +1,14 @@
 package nethack.utils;
 
 import eu.iv4xr.framework.extensions.pathfinding.*;
+import eu.iv4xr.framework.spatial.IntVec2D;
+import nethack.agent.navigation.NavUtils;
+import nethack.object.Color;
+import nethack.object.Level;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Representing a navigation graph over a 2D tiled-world. The world is assumed
@@ -28,16 +33,13 @@ public class NethackSurface_NavGraph
         XPathfinder<NethackSurface_NavGraph.Tile>,
         CanDealWithDynamicObstacle<NethackSurface_NavGraph.Tile> {
 
-    /**
-     * The x coordinates of the this tiled-surface starts from 0 until sizeX-1
-     */
-    public int sizeX;
-    /**
-     * The y coordinates of the this tiled-surface starts from 0 until sizeY-1
-     */
-    public int sizeY;
-    public boolean diagonalMovementPossible = false;
+    // The x coordinates of this tiled-surface starts from 0 until sizeX-1
+    public final int sizeX = Level.WIDTH;
+    // The y coordinates of this tiled-surface starts from 0 until sizeY-1
+    public final int sizeY = Level.HEIGHT;
+    public final boolean diagonalMovementPossible = true;
     public Map<Integer, Map<Integer, NonNavigableTile>> obstacles = new HashMap<>();
+    public Map<Integer, Map<Integer, Tile>> floors = new HashMap<>();
     public Map<Integer, Set<Integer>> seen = new HashMap<>();
     public Pathfinder<Tile> pathfinder = new AStar<>();
     /**
@@ -56,31 +58,32 @@ public class NethackSurface_NavGraph
         if (!(o instanceof NonNavigableTile))
             throw new IllegalArgumentException();
 
-        Map<Integer, NonNavigableTile> xMap = obstacles.get(o.x);
-        if (xMap == null) {
-            xMap = new HashMap<>();
-            obstacles.put(o.x, xMap);
+        Map<Integer, NonNavigableTile> xMap = obstacles.computeIfAbsent(o.pos.x, k -> new HashMap<>());
+        xMap.put(o.pos.y, (NonNavigableTile) o);
+
+        // Remove floor
+        Map<Integer, Tile> fMap = floors.get(o.pos.x);
+        if (fMap != null) {
+            fMap.remove(o.pos.y);
         }
-        xMap.put(o.y, (NonNavigableTile) o);
     }
 
     /**
      * Remove a non-navigable tile (obstacle).
      */
     public void removeObstacle(Tile o) {
-        Map<Integer, NonNavigableTile> xMap = obstacles.get(o.x);
+        Map<Integer, NonNavigableTile> xMap = obstacles.get(o.pos.x);
         if (xMap != null) {
-            xMap.remove(o.y);
+            xMap.remove(o.pos.y);
         }
+
+        Map<Integer, Tile> fMap = floors.computeIfAbsent(o.pos.x, k -> new HashMap<>());
+        fMap.put(o.pos.y, o);
     }
 
     public void markAsSeen(Tile p) {
-        Set<Integer> ys = seen.get(p.x);
-        if (ys == null) {
-            ys = new HashSet<>();
-            seen.put(p.x, ys);
-        }
-        ys.add(p.y);
+        Set<Integer> ys = seen.computeIfAbsent(p.pos.x, k -> new HashSet<>());
+        ys.add(p.pos.y);
         frontierCandidates.add(p);
     }
 
@@ -96,18 +99,22 @@ public class NethackSurface_NavGraph
     }
 
     public boolean hasbeenSeen(Tile tile) {
-        return hasbeenSeen(tile.x, tile.y);
+        return hasbeenSeen(tile.pos.x, tile.pos.y);
     }
 
     /**
      * The tile is blocking (true) if it is a wall or a closed door. Else it is
      * non-blocking (false).
      */
+    private boolean isBlocking(IntVec2D pos) {
+        return isBlocking(new Tile(pos));
+    }
+
     public boolean isBlocking(Tile tile) {
-        if (isWall(tile.x, tile.y))
+        if (isWall(tile.pos))
             return true;
-        if (isDoor(tile.x, tile.y)) {
-            NonNavigableTile o = obstacles.get(tile.x).get(tile.y);
+        if (isDoor(tile.pos)) {
+            NonNavigableTile o = getObstacle(tile.pos);
             Door door = (Door) o;
             return !door.isOpen;
         }
@@ -115,10 +122,10 @@ public class NethackSurface_NavGraph
     }
 
     public boolean isDiagonalDoorMove(Tile tile, int x, int y) {
-        if (tile.x == x || tile.y == y) {
+        if (tile.pos.x == x || tile.pos.y == y) {
             return false;
         }
-        return isDoor(tile.x, tile.y) || isDoor(x, y);
+        return isDoor(tile.pos) || isDoor(new IntVec2D(x, y));
     }
 
     @Override
@@ -129,33 +136,46 @@ public class NethackSurface_NavGraph
      * If the tile is not a Door, this method has no effect.
      */
     public void setBlockingState(Tile tile, boolean isBlocking) {
-        int x = tile.x;
-        int y = tile.y;
-        if (isDoor(x, y)) {
-            NonNavigableTile o = obstacles.get(x).get(y);
+        if (isDoor(tile.pos)) {
+            NonNavigableTile o = getObstacle(tile.pos);
             Door door = (Door) o;
             door.isOpen = !isBlocking;
         }
     }
 
-    public boolean isDoor(int x, int y) {
-        Map<Integer, NonNavigableTile> xmap = obstacles.get(x);
-        if (xmap == null)
-            return false;
-        NonNavigableTile o = xmap.get(y);
+    public boolean isDoor(IntVec2D pos) {
+        NonNavigableTile o = getObstacle(pos);
         if (o == null)
             return false;
         return o instanceof Door;
     }
 
-    public boolean isWall(int x, int y) {
-        Map<Integer, NonNavigableTile> xmap = obstacles.get(x);
-        if (xmap == null)
+    public boolean isFloor(IntVec2D pos) {
+        Tile o = getFloor(pos);
+        if (o == null)
             return false;
-        NonNavigableTile o = xmap.get(y);
+        return o instanceof Floor;
+    }
+
+    public boolean isDoorway(IntVec2D pos) {
+        Tile o = getFloor(pos);
+        if (o == null)
+            return false;
+        return o instanceof Doorway;
+    }
+
+    public boolean isWall(IntVec2D pos) {
+        NonNavigableTile o = getObstacle(pos);
         if (o == null)
             return false;
         return o instanceof Wall;
+    }
+
+    public boolean isCorridor(IntVec2D pos) {
+        Tile o = getFloor(pos);
+        if (o == null)
+            return false;
+        return o instanceof Corridor;
     }
 
     /**
@@ -182,42 +202,48 @@ public class NethackSurface_NavGraph
         frontierCandidates.clear();
     }
 
+    public List<IntVec2D> physicalNeighbourCoordinates(IntVec2D pos) {
+        int left = pos.x - 1;
+        int right = pos.x + 1;
+        int below = pos.y - 1;
+        int above = pos.y + 1;
+
+        List<IntVec2D> candidates = new ArrayList<>();
+        if (left >= 0)
+            candidates.add(new IntVec2D(left, pos.y));
+        if (right < sizeX)
+            candidates.add(new IntVec2D(right, pos.y));
+        if (below >= 0)
+            candidates.add(new IntVec2D(pos.x, below));
+        if (above < sizeY)
+            candidates.add(new IntVec2D(pos.x, above));
+        if (diagonalMovementPossible) {
+            if (left >= 0 && below >= 0)
+                candidates.add(new IntVec2D(left, below));
+            if (left >= 0 && above < sizeY)
+                candidates.add(new IntVec2D(left, above));
+            if (right < sizeX && above < sizeY)
+                candidates.add(new IntVec2D(right, above));
+            if (right < sizeX && below >= 0)
+                candidates.add(new IntVec2D(right, below));
+        }
+
+        return candidates;
+    }
+
     /**
      * Return the neighbors of a tile. A tile u is a neighbor of a tile t if u is
      * adjacent to t. This method does not consider whether u has been seen or not,
      * nor whether u is navigable.
      */
-    public List<Tile> physicalNeighbours(int x, int y) {
+    public List<Tile> physicalNeighbours(IntVec2D pos) {
+        List<IntVec2D> neighbourCoordinates = physicalNeighbourCoordinates(pos);
+        List<Tile> candidates = neighbourCoordinates.stream().map(Tile::new).collect(Collectors.toList());
 
-        int left = x - 1;
-        int right = x + 1;
-        int below = y - 1;
-        int above = y + 1;
-
-        List<Tile> candidates = new LinkedList<>();
-        if (left >= 0)
-            candidates.add(new Tile(left, y));
-        if (right < sizeX)
-            candidates.add(new Tile(right, y));
-        if (below >= 0)
-            candidates.add(new Tile(x, below));
-        if (above < sizeY)
-            candidates.add(new Tile(x, above));
-        if (diagonalMovementPossible) {
-            if (left >= 0 && below >= 0)
-                candidates.add(new Tile(left, below));
-            if (left >= 0 && above < sizeY)
-                candidates.add(new Tile(left, above));
-            if (right < sizeX && above < sizeY)
-                candidates.add(new Tile(right, above));
-            if (right < sizeX && below >= 0)
-                candidates.add(new Tile(right, below));
-        }
-
-        candidates = candidates.stream()
-                // .filter(c -> ! isBlocked(c.x,c.y))
-                .collect(Collectors.toList());
-        // System.out.println("&&&& " + candidates.size()) ;
+//        candidates = candidates.stream()
+//            // .filter(c -> ! isBlocked(c.x,c.y))
+//            .collect(Collectors.toList());
+//        System.out.println("&&&& " + candidates.size());
 
         return candidates;
     }
@@ -232,16 +258,14 @@ public class NethackSurface_NavGraph
      * Only neighbors that have been seen before will be included.
      */
     public List<Tile> neighbours_(int x, int y) {
-        List<Tile> candidates = physicalNeighbours(x, y);
+        List<Tile> candidates = physicalNeighbours(new IntVec2D(x, y));
         // System.out.println("=== (" + x + "," + y + ") -> " + candidates.size()) ;
 
-        candidates = candidates.stream().filter(c -> !isBlocking(c)).collect(Collectors.toList());
-
-        // In Nethack you can't move diagonally in or out doorways
-        candidates = candidates.stream().filter(c -> !isDiagonalDoorMove(c, x, y)).collect(Collectors.toList());
+        // Cant navigate to block and cannot diagonally move in/out a door
+        candidates = candidates.stream().filter(c -> !isBlocking(c) && !isDiagonalDoorMove(c, x, y)).collect(Collectors.toList());
 
         if (!perfect_memory_pathfinding) {
-            candidates = candidates.stream().filter(c -> hasbeenSeen(c.x, c.y)).collect(Collectors.toList());
+            candidates = candidates.stream().filter(c -> hasbeenSeen(c.pos.x, c.pos.y)).collect(Collectors.toList());
         }
         // System.out.println("=== " + candidates.size() + ":" + candidates) ;
         return candidates;
@@ -258,26 +282,27 @@ public class NethackSurface_NavGraph
      */
     @Override
     public Iterable<Tile> neighbours(Tile t) {
-        return neighbours_(t.x, t.y);
+        return neighbours_(t.pos.x, t.pos.y);
     }
 
     /**
      * The estimated distance between two arbitrary vertices.
      */
     public float heuristic(Tile from, Tile to) {
-        if (diagonalMovementPossible)
+        if (diagonalMovementPossible) {
             // straight-line distance:
-            return (float) Math.sqrt(distSq(from.x, from.y, to.x, to.y));
-        else
+            return (float) Math.sqrt(distSq(from.pos.x, from.pos.y, to.pos.x, to.pos.y));
+        } else {
             // Manhattan distance:
-            return Math.abs(from.x - to.x) + Math.abs(from.y - to.y);
+            return Math.abs(from.pos.x - to.pos.x) + Math.abs(from.pos.y - to.pos.y);
+        }
     }
 
     /**
      * The distance between two neighboring tiles.
      */
     public float distance(Tile from, Tile to) {
-        if (from.x == to.x || from.y == to.y)
+        if (from.pos.x == to.pos.x || from.pos.y == to.pos.y)
             return 1;
         return 1.4142f;
     }
@@ -292,7 +317,7 @@ public class NethackSurface_NavGraph
 
     /**
      * This returns the set of frontier-tiles. A tile is a frontier tile if it is a
-     * seen/explored tile and it has at least one unexplored and unblocked neighbor.
+     * seen/explored tile, and it has at least one unexplored and unblocked neighbor.
      * Note that under this definition a frontier does not have to be reachable. You
      * can use {@link findPath} to check which frontiers are reachable.
      */
@@ -300,10 +325,10 @@ public class NethackSurface_NavGraph
         List<Tile> frontiers = new LinkedList<>();
         List<Tile> cannotBeFrontier = new LinkedList<>();
         for (Tile t : frontierCandidates) {
-            List<Tile> pneighbors = physicalNeighbours(t.x, t.y);
+            List<Tile> pneighbors = physicalNeighbours(t.pos);
             boolean isFrontier = false;
             for (Tile n : pneighbors) {
-                if (!hasbeenSeen(n.x, n.y)) {
+                if (!hasbeenSeen(n.pos.x, n.pos.y)) {
                     frontiers.add(t);
                     isFrontier = true;
                     break;
@@ -326,7 +351,7 @@ public class NethackSurface_NavGraph
     }
 
     public List<Tile> explore(Tile startingLocation, Tile heuristicLocation) {
-        return explore(startingLocation.x, startingLocation.y, heuristicLocation.x, heuristicLocation.y);
+        return explore(startingLocation.pos.x, startingLocation.pos.y, heuristicLocation.pos.x, heuristicLocation.pos.y);
     }
 
     public List<Tile> explore(int x, int y, int heuristicX, int heuristicY) {
@@ -336,14 +361,14 @@ public class NethackSurface_NavGraph
         if (frontiers.isEmpty())
             return null;
         // sort the frontiers ascendingly, by their geometric distance to (x,y):
-        frontiers.sort((p1, p2) -> Float.compare(distSq(p1.x, p1.y, x, y), distSq(p2.x, p2.y, heuristicX, heuristicY)));
+        frontiers.sort((p1, p2) -> Float.compare(distSq(p1.pos.x, p1.pos.y, x, y), distSq(p2.pos.x, p2.pos.y, heuristicX, heuristicY)));
 
         // System.out.println(">>> #frontiers:" + frontiers.size()) ;
 
         for (Tile front : frontiers) {
             // System.out.println(">>> (" + x + "," + y + ") --> (" + front.x + "," +
             // front.y + ")" ) ;
-            List<Tile> path = findPath(x, y, front.x, front.y);
+            List<Tile> path = findPath(x, y, front.pos.x, front.pos.y);
             // System.out.println("==== path " + path) ;
             // System.out.println("frontier path " + path +" frontier vertices: "+
             // front.fst);
@@ -354,101 +379,219 @@ public class NethackSurface_NavGraph
         return null;
     }
 
-    @Override
-    public String toString() {
-        StringBuffer z = new StringBuffer();
-        for (int y = 0; y < sizeY; y++) {
-            for (int x = 0; x < sizeX; x++) {
-                Tile o = null;
-                Map<Integer, NonNavigableTile> mapx = obstacles.get(x);
-                if (mapx != null)
-                    o = mapx.get(y);
-                boolean wasSeen = hasbeenSeen(x, y);
-                char c = ' ';
-                if (o == null) {
-                    if (wasSeen)
-                        c = '.';
-                } else {
-                    if (o instanceof Wall) {
-                        c = wasSeen ? 'W' : 'w';
-                    }
-                    if (o instanceof Door) {
-                        Door d = (Door) o;
-                        if (d.isOpen) {
-                            c = wasSeen ? 'O' : 'o';
-                        } else {
-                            c = wasSeen ? 'X' : 'x';
-                        }
-                    }
-                }
-                z.append(c);
-            }
-            if (y != sizeY - 1) {
-                z.append(System.lineSeparator());
+    public boolean hasTile(IntVec2D pos) { return getAnyTile(pos) != null; }
+
+    private Tile getAnyTile(IntVec2D pos) {
+        Tile t = getFloor(pos);
+        if (t != null) {
+            return t;
+        }
+
+        return getObstacle(pos);
+    }
+
+    private NonNavigableTile getObstacle(IntVec2D pos) {
+        var xmap = obstacles.get(pos.x);
+        if (xmap != null) {
+            return xmap.get(pos.y);
+        }
+        return null;
+    }
+
+    private Tile getFloor(IntVec2D pos) {
+        var fmap = floors.get(pos.x);
+        if (fmap != null) {
+            return fmap.get(pos.y);
+        }
+        return null;
+    }
+
+
+    public List<IntVec2D> VisibleCoordinates(IntVec2D agentPosition, Level level) {
+        // First reset visibility
+        for (var xmap: obstacles.values()) {
+            for (Tile t: xmap.values()) {
+                t.visible = false;
             }
         }
-        return z.toString();
+
+        for (var fmap: floors.values()) {
+            for (Tile t: fmap.values()) {
+                t.visible = false;
+            }
+        }
+
+        // Perform BFS on the graph
+        HashSet<IntVec2D> visibleCoordinates = new HashSet<>();
+        Queue<IntVec2D> queue = new LinkedList<>();
+        queue.add(agentPosition);
+
+        // While there are coordinates left to be explored
+        while (queue.size() > 0) {
+            IntVec2D nextPos = queue.remove();
+            // Already processed
+            if (visibleCoordinates.contains(nextPos)) {
+                continue;
+            }
+
+            Tile t = getAnyTile(nextPos);
+            // Void
+            if (t == null) {
+                continue;
+            }
+
+            // Definitely not visible
+            if (level.getEntity(nextPos).color == Color.TRANSPARENT) {
+                continue;
+            }
+
+            // Get the neighbours
+            List<IntVec2D> neighbours = physicalNeighbourCoordinates(nextPos);
+            if (isDoorway(nextPos)) {
+                // Does not have a lit floor tile next to it, so we assume we cannot see it
+                if (neighbours.stream().noneMatch(coord -> isFloor(coord) && level.getEntity(coord).color != Color.TRANSPARENT)) {
+                    continue;
+                }
+            }
+
+            // Current tile is visible
+            t.visible = true;
+            visibleCoordinates.add(nextPos);
+
+            // Wall or closed door blocks from seeing further
+            if (isBlocking(new Tile(nextPos))) {
+                continue;
+            } // Open doors  except if the agent is in that position
+            else if (!isCorridor(nextPos) && !isDoorway(nextPos) || nextPos == agentPosition) {
+                queue.addAll(neighbours);
+            } // Only add tiles for further exploration if they
+            else {
+                Stream<IntVec2D> adjacentFloors = neighbours.stream().filter(coord -> !isDoorway(coord) && !isCorridor(coord) && !isBlocking(coord));
+                queue.addAll(adjacentFloors.collect(Collectors.toList()));
+            }
+        }
+
+        return new ArrayList<>(visibleCoordinates);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        // Add row by row to the stringbuilder
+        for (int y = 0; y < sizeY; y++) {
+            boolean visibleSection = false;
+            for (int x = 0; x < sizeX; x++) {
+                // Get tile, if it doens't know the type it is not know or void.
+                Tile t = getAnyTile(new IntVec2D(x, y));
+                boolean wasSeen = hasbeenSeen(x, y);
+                if (t == null) {
+                    sb.append(wasSeen ? '?' : ' ');
+                    continue;
+                }
+
+                // Set color if it changed
+                if (visibleSection != t.visible) {
+                    sb.append(t.visible ? Color.GREEN_BRIGHT.stringCode() : Color.RESET.stringCode());
+                    visibleSection = t.visible;
+                }
+
+                sb.append(t.toChar(wasSeen));
+            }
+
+            // Reset color
+            sb.append(Color.RESET.stringCode());
+
+            // Don't add line after last row
+            if (y != sizeY - 1) {
+                sb.append(System.lineSeparator());
+            }
+        }
+        return sb.toString();
     }
 
     public static class Tile {
-        public int x;
-        public int y;
+        public IntVec2D pos;
+        public boolean visible = false;
 
-        public Tile() {
+        public Tile(IntVec2D pos) {
+            this.pos = pos;
         }
 
         public Tile(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-
-        public Tile(float x, float y) {
-            this.x = Math.round(x);
-            this.y = Math.round(y);
+            this.pos = new IntVec2D(x, y);
         }
 
         @Override
         public boolean equals(Object o) {
             if (o instanceof Tile) {
                 Tile t = (Tile) o;
-                return this.x == t.x && this.y == t.y;
+                return pos.x == t.pos.x && pos.y == t.pos.y;
             }
             return false;
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(x, y);
+            return Objects.hash(pos);
         }
 
         @Override
         public String toString() {
-            return "(" + x + "," + y + ")";
+            return "(" + pos.x + "," + pos.y + ")";
         }
+
+        public char toChar(boolean wasSeen) { return '?'; }
+    }
+
+    public static class Floor extends Tile {
+        public Floor(IntVec2D pos) { super(pos); }
+
+        @Override
+        public char toChar(boolean wasSeen) { return '·'; }
+    }
+
+    public static class Doorway extends Tile {
+        public Doorway(IntVec2D pos) { super(pos); }
+
+        @Override
+        public char toChar(boolean wasSeen) { return '·'; }
+    }
+
+    public static class Corridor extends Tile {
+        public Corridor(IntVec2D pos) { super(pos); }
+
+        @Override
+        public char toChar(boolean wasSeen) { return '-'; }
     }
 
     public static class NonNavigableTile extends Tile {
-        public NonNavigableTile(int x, int y) {
-            super(x, y);
-        }
+        public NonNavigableTile(IntVec2D pos) { super(pos); }
     }
 
     public static class Wall extends NonNavigableTile {
-        public Wall(int x, int y) {
-            super(x, y);
-        }
+        public Wall(IntVec2D pos) { super(pos); }
+
+        @Override
+        public char toChar(boolean wasSeen) { return wasSeen ? 'W' : 'w'; }
     }
 
     public static class Door extends NonNavigableTile {
         boolean isOpen = false;
 
-        public Door(int x, int y) {
-            super(x, y);
+        public Door(IntVec2D pos) { super(pos); }
+
+        public Door(IntVec2D pos, boolean isOpen) {
+            super(pos);
+            this.isOpen = isOpen;
         }
 
-        public Door(int x, int y, boolean isOpen) {
-            super(x, y);
-            this.isOpen = isOpen;
+        @Override
+        public char toChar(boolean wasSeen) {
+            if (isOpen) {
+                return wasSeen ? 'O' : 'o';
+            } else {
+                return wasSeen ? 'X' : 'x';
+            }
         }
     }
 }

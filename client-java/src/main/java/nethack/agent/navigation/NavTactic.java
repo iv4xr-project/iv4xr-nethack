@@ -1,19 +1,22 @@
 package nethack.agent.navigation;
 
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
+import eu.iv4xr.framework.spatial.IntVec2D;
 import nethack.agent.AgentState;
 import nethack.utils.NethackSurface_NavGraph.Tile;
 import nl.uu.cs.aplib.mainConcepts.SimpleState;
 import nl.uu.cs.aplib.mainConcepts.Tactic;
 import nl.uu.cs.aplib.utils.Pair;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 
 public class NavTactic {
     public static Tactic navigateTo(Pair<Integer, Tile> location) {
-        return NavAction.navigateTo(location.fst, location.snd.x, location.snd.y).lift();
+        return NavAction.navigateTo(location.fst, location.snd.pos.x, location.snd.pos.y).lift();
     }
 
     // Construct a tactic that would guide the agent to a tile to the target entity.
@@ -29,14 +32,13 @@ public class NavTactic {
                         return null;
                     }
                     WorldEntity a = S.worldmodel.elements.get(S.worldmodel().agentId);
-                    Tile agentPos = NavUtils.toTile(S.worldmodel.position);
-                    WorldEntity e = entitySelector.apply(S.worldmodel.elements.values().stream().toList());
+                    WorldEntity e = entitySelector.apply(new ArrayList<>(S.worldmodel.elements.values()));
                     if (e == null) {
                         return null;
                     }
-                    Tile target = NavUtils.toTile(e.position);
-                    List<Pair<Integer, Tile>> path = NavUtils.adjustedFindPath(S, NavUtils.levelId(a), agentPos.x, agentPos.y, NavUtils.levelId(e), target.x,
-                            target.y);
+                    IntVec2D from = NavUtils.loc2(S.worldmodel.position);
+                    IntVec2D to = NavUtils.loc2(e.position);
+                    List<Pair<Integer, Tile>> path = NavUtils.adjustedFindPath(S, NavUtils.levelId(a), from, NavUtils.levelId(e), to);
                     if (path == null) {
                         System.out.print("No path aparently");
                         return null;
@@ -48,7 +50,7 @@ public class NavTactic {
 
     // Construct a tactic that would guide the agent to a tile adjacent to the location.
     public static Tactic navigateNextTo(Pair<Integer, Tile> location, boolean allowDiagonally) {
-        return NavAction.navigateTo(location.fst, location.snd.x, location.snd.y).on_((AgentState S) -> {
+        return NavAction.navigateTo(location.fst, location.snd.pos.x, location.snd.pos.y).on_((AgentState S) -> {
             WorldEntity player = S.worldmodel.elements.get(S.worldmodel.agentId);
             Tile p = NavUtils.toTile(player.position);
             return !NavUtils.adjacent(p, location.snd, allowDiagonally);

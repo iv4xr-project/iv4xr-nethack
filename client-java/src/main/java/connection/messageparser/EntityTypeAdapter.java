@@ -6,6 +6,7 @@ import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import nethack.object.Color;
 import nethack.object.Entity;
+import nethack.object.EntityType;
 
 import java.io.IOException;
 
@@ -17,10 +18,14 @@ public class EntityTypeAdapter extends TypeAdapter<Entity> {
         JsonToken token = reader.peek();
         if (token.equals(JsonToken.BEGIN_ARRAY)) {
             reader.beginArray();
+            int glyph = (int) reader.nextInt();
             char symbol = (char) reader.nextInt();
             Color color = new ColorTypeAdapter().read(reader);
             reader.endArray();
-            return Entity.fromValues(symbol, color);
+
+            // Infer Entity type
+            EntityType type = Utils.toEntityType(glyph, symbol, color);
+            return new Entity(glyph, symbol, type, color);
         } else {
             return null;
         }

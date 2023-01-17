@@ -59,7 +59,7 @@ public class Sandbox {
                 agent.update();
                 logger.debug(String.format("** [%d] agent @%s", k, NavUtils.toTile(state.worldmodel.position)));
             }
-            state.updateState("player");
+            state.updateState();
             renderUtils.render();
             commander.writeCommand("Render", "");
         }

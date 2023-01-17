@@ -3,20 +3,17 @@ package nethack.object;
 // Source: https://www.baeldung.com/java-enum-values
 // Actions listed at: /python-server/lib/nle/nle/nethack/actions.py
 public class Entity {
+    public int glyph;
     public Color color;
     public char symbol;
     public EntityType type;
     public String id;
 
-    Entity(char symbol, EntityType type, Color color) {
+    public Entity(int glyph, char symbol, EntityType type, Color color) {
+        this.glyph = glyph;
         this.color = color;
         this.symbol = symbol;
         this.type = type;
-    }
-
-    public static Entity fromValues(char symbol, Color color) {
-        EntityType type = EntityType.fromSymbol(symbol, color);
-        return new Entity(symbol, type, color);
     }
 
     public boolean closedDoor() {

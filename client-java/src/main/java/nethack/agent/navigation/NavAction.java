@@ -2,6 +2,7 @@ package nethack.agent.navigation;
 
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
+import eu.iv4xr.framework.spatial.IntVec2D;
 import nethack.agent.AgentState;
 import nethack.utils.NethackSurface_NavGraph.Tile;
 import nl.uu.cs.aplib.mainConcepts.Action;
@@ -28,8 +29,7 @@ public class NavAction {
             if (!S.agentIsAlive())
                 return null;
             WorldEntity agent = S.worldmodel.elements.get(S.worldmodel().agentId);
-            Tile agentPos = NavUtils.toTile(S.worldmodel.position);
-            List<Pair<Integer, Tile>> path = NavUtils.adjustedFindPath(S, NavUtils.levelId(agent), agentPos.x, agentPos.y, levelId, x, y);
+            List<Pair<Integer, Tile>> path = NavUtils.adjustedFindPath(S, NavUtils.levelId(agent), NavUtils.loc2(S.worldmodel.position), levelId, NavUtils.loc2(x, y));
             if (path == null) {
                 return null;
             }
@@ -38,7 +38,7 @@ public class NavAction {
         });
     }
 
-    // Construct an action that would guide the agent to to the target entity.
+    // Construct an action that would guide the agent to the target entity.
     public static Action navigateTo(String targetId) {
         return action("move-to").do2((AgentState S) -> (Tile nextTile) -> {
             logger.info(String.format(">>> navigateTo %s", nextTile));
@@ -55,20 +55,18 @@ public class NavAction {
                 return null;
             }
             WorldEntity a = S.worldmodel.elements.get(S.worldmodel().agentId);
-            Tile agentPos = NavUtils.toTile(S.worldmodel.position);
+            IntVec2D agentPos = NavUtils.toTile(S.worldmodel.position).pos;
             WorldEntity e = S.worldmodel.elements.get(targetId);
             if (e == null) {
                 System.out.print("Cannot navigate since it is nextdoor");
                 return null;
             }
-            Tile target = NavUtils.toTile(e.position);
 //			if (NavUtils.levelId(a) == NavUtils.levelId(e) && NavUtils.adjacent(agentPos, target, false)) {
 //				Tile[] nextTile = {};
 //				System.out.print("Found path");
 //				return nextTile;
 //			}
-            List<Pair<Integer, Tile>> path = NavUtils.adjustedFindPath(S, NavUtils.levelId(a), agentPos.x, agentPos.y, NavUtils.levelId(e), target.x,
-                    target.y);
+            List<Pair<Integer, Tile>> path = NavUtils.adjustedFindPath(S, NavUtils.levelId(a), agentPos, NavUtils.levelId(e), NavUtils.loc2(e.position));
             if (path == null) {
                 System.out.print("No path aparently");
                 return null;
@@ -119,8 +117,7 @@ public class NavAction {
 //				System.out.print("Found path");
 //				return nextTile;
 //			}
-            List<Pair<Integer, Tile>> path = NavUtils.adjustedFindPath(S, NavUtils.levelId(a), agentPos.x, agentPos.y, NavUtils.levelId(e), target.x,
-                    target.y);
+            List<Pair<Integer, Tile>> path = NavUtils.adjustedFindPath(S, NavUtils.levelId(a), NavUtils.loc2(S.worldmodel.position), NavUtils.levelId(e), NavUtils.loc2(e.position));
             if (path == null) {
                 System.out.println("No path aparently");
                 return null;
@@ -147,9 +144,9 @@ public class NavAction {
             Tile agentPos = NavUtils.toTile(S.worldmodel.position);
             List<Pair<Integer, Tile>> path;
             if (heuristicLocation == null) {
-                path = S.multiLayerNav.explore(NavUtils.loc3(NavUtils.levelId(a), agentPos.x, agentPos.y));
+                path = S.multiLayerNav.explore(NavUtils.loc3(NavUtils.levelId(a), NavUtils.loc2(S.worldmodel.position)));
             } else
-                path = S.multiLayerNav.explore(NavUtils.loc3(NavUtils.levelId(a), agentPos.x, agentPos.y), heuristicLocation);
+                path = S.multiLayerNav.explore(NavUtils.loc3(NavUtils.levelId(a), NavUtils.loc2(S.worldmodel.position)), heuristicLocation);
             if (path == null) {
                 return null;
             }

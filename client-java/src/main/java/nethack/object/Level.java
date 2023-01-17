@@ -1,6 +1,8 @@
 package nethack.object;
 
 import eu.iv4xr.framework.spatial.IntVec2D;
+import nethack.agent.navigation.NavUtils;
+import nl.uu.cs.aplib.exampleUsages.miniDungeon.testAgent.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,14 +23,14 @@ public class Level {
         return "level" + nr;
     }
 
-    public List<IntVec2D> visibleTiles(IntVec2D playerPos) {
+    public List<IntVec2D> mapTiles(IntVec2D playerPos) {
         List<IntVec2D> points = new ArrayList<IntVec2D>();
         for (int x = 0; x < WIDTH; x++) {
             for (int y = 0; y < HEIGHT; y++) {
+                IntVec2D pos = new IntVec2D(x, y);
                 Entity e = getEntity(x, y);
                 if (e.type == EntityType.VOID) {
-                    if (Math.abs(playerPos.x - x) <= 1 && Math.abs(playerPos.y - y) <= 1
-                            && (playerPos.x != x || playerPos.y != y)) {
+                    if (NavUtils.adjacent(playerPos, pos, true)) {
                         points.add(new IntVec2D(x, y));
                     }
                     continue;
@@ -61,7 +63,7 @@ public class Level {
     }
 
     public Entity getEntity(IntVec2D p) {
-        return map[p.y][p.x];
+        return getEntity(p.x, p.y);
     }
 
     public Entity getEntity(int x, int y) {
@@ -69,7 +71,7 @@ public class Level {
     }
 
     public void setEntity(IntVec2D p, Entity entity) {
-        map[p.y][p.x] = entity;
+        setEntity(p.x, p.y, entity);
     }
 
     public void setEntity(int x, int y, Entity entity) {
@@ -85,11 +87,11 @@ public class Level {
                 // Color changed so add it to the line
                 if (currentColor != map[y][x].color) {
                     currentColor = map[y][x].color;
-                    sb.append("\033[" + map[y][x].color.colorCode + "m");
+                    sb.append(map[y][x].color.stringCode());
                 }
                 sb.append(map[y][x].symbol);
             }
-            sb.append("\033[m");
+            sb.append(Color.RESET.stringCode());
             if (y != map.length - 1) {
                 sb.append(System.lineSeparator());
             }

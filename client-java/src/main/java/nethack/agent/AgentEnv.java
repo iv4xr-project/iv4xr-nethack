@@ -50,8 +50,8 @@ public class AgentEnv extends Iv4xrEnvironment {
         wom.elements.put(app.gameState.player.id, toWorldEntity(app.gameState.player));
 
         // adding visible objects:
-        List<IntVec2D> visibleTiles = app.level().visibleTiles(app.gameState.player.position2D);
-        for (IntVec2D pos : visibleTiles) {
+        List<IntVec2D> mapTiles = app.level().mapTiles(app.gameState.player.position2D);
+        for (IntVec2D pos : mapTiles) {
             Entity e = app.level().getEntity(pos);
             if (unimportantTypes.contains(e.type)) {
                 continue;
@@ -126,19 +126,19 @@ public class AgentEnv extends Iv4xrEnvironment {
         }
         aux.properties.put("recentlyRemoved", removed);
 
-        // currently visible tiles:
-        List<IntVec2D> visibleTiles_ = app.level().visibleTiles(app.gameState.player.position2D);
-        Serializable[] visibleTiles = new Serializable[visibleTiles_.size()];
+        // Part of the map that has updates, definitely visible, or permanently visible
+        List<IntVec2D> mapTiles_ = app.level().mapTiles(app.gameState.player.position2D);
+        Serializable[] mapTiles = new Serializable[mapTiles_.size()];
         k = 0;
-        for (IntVec2D pos : visibleTiles_) {
-            int levelId = app.gameState.stats.zeroIndexLevelNumber;
+        for (IntVec2D pos : mapTiles_) {
             Entity e = app.level().getEntity(pos);
             EntityType entityType = e.type;
-            Serializable[] entry = {levelId, pos, entityType};
-            visibleTiles[k] = entry;
+            Serializable[] entry = {pos, entityType};
+            mapTiles[k] = entry;
             k++;
         }
-        aux.properties.put("visibleTiles", visibleTiles);
+        aux.properties.put("mapTiles", mapTiles);
+        aux.properties.put("levelId", app.gameState.stats.zeroIndexLevelNumber);
 
         return aux;
     }

@@ -27,8 +27,8 @@ def write_obs(sock, env, obs):
     Encode and send an observation.
     """
     jsonable = util.to_jsonable(env.observation_space, obs)
-    zipped_map = zip(jsonable['chars'][0], jsonable['colors'][0])
-    entities = np.array([[char, color] for char, color in zipped_map])
+    zipped_map = zip(jsonable['glyphs'][0], jsonable['chars'][0], jsonable['colors'][0])
+    entities = np.array([[glyph, char, color] for glyph, char, color in zipped_map])
     entities = np.swapaxes(entities, 1, 2)
 
     inv_items = zip(jsonable['inv_letters'][0], jsonable['inv_oclasses'][0], jsonable['inv_strs'][0])

@@ -3,6 +3,7 @@ package nethack.agent.navigation;
 import eu.iv4xr.framework.extensions.pathfinding.LayeredAreasNavigation;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
+import eu.iv4xr.framework.spatial.IntVec2D;
 import eu.iv4xr.framework.spatial.Vec3;
 import nethack.agent.AgentState;
 import nethack.object.Command;
@@ -20,8 +21,7 @@ public class NavUtils {
     static int distTo(AgentState S, WorldEntity e) {
         WorldEntity player = S.worldmodel.elements.get(S.worldmodel.agentId);
         Tile p = toTile(player.position);
-        Tile target = toTile(e.position);
-        List<Pair<Integer, Tile>> path = adjustedFindPath(S, levelId(player), p.x, p.y, levelId(e), target.x, target.y);
+        List<Pair<Integer, Tile>> path = adjustedFindPath(S, levelId(player), NavUtils.loc2(player.position), levelId(e), NavUtils.loc2(e.position));
         if (path == null)
             return Integer.MAX_VALUE;
         return path.size() - 1;
@@ -32,11 +32,10 @@ public class NavUtils {
      * pretend that the source (x0,y0) and destination (x1,y1) are non-blocking
      * (even if they are, e.g. if one of them is an occupied tile).
      */
-    public static List<Pair<Integer, Tile>> adjustedFindPath(AgentState state, int level0, int x0, int y0, int level1,
-                                                             int x1, int y1) {
+    public static List<Pair<Integer, Tile>> adjustedFindPath(AgentState state, int level0, IntVec2D pos0, int level1, IntVec2D pos1) {
         LayeredAreasNavigation<Tile, NethackSurface_NavGraph> nav = state.multiLayerNav;
-        Pair<Integer, Tile> oldLocation = loc3(level0, x0, y0);
-        Pair<Integer, Tile> newLocation = loc3(level1, x1, y1);
+        Pair<Integer, Tile> oldLocation = loc3(level0, pos0);
+        Pair<Integer, Tile> newLocation = loc3(level1, pos1);
         boolean srcOriginalBlockingState = nav.isBlocking(oldLocation);
         boolean destOriginalBlockingState = nav.isBlocking(newLocation);
         nav.toggleBlockingOff(oldLocation);
@@ -54,19 +53,42 @@ public class NavUtils {
     public static Tile toTile(int x, int y) {
         return new Tile(x, y);
     }
-
-    static Pair<Integer, Tile> loc3(int levelId, int x, int y) {
-        return new Pair<>(levelId, toTile(x, y));
+    public static Tile toTile(IntVec2D pos) {
+        return new Tile(pos);
     }
 
-    public static boolean adjacent(Vec3 pos1, Vec3 pos2, boolean allowDiagonally) {
-        return adjacent(toTile(pos1), toTile(pos2), allowDiagonally);
+    public static IntVec2D loc2(int x, int y) {
+        return new IntVec2D(x, y);
+    }
+
+    public static IntVec2D loc2(Vec3 pos) {
+        return new IntVec2D((int)pos.x, (int)pos.y);
+    }
+
+    static Pair<Integer, Tile> loc3(int levelNr, int x, int y) {
+        return loc3(levelNr, loc2(x, y));
+    }
+
+    static Pair<Integer, Tile> loc3(int levelNr, IntVec2D pos) {
+        return new Pair<>(levelNr, toTile(pos));
+    }
+
+    public static boolean adjacent(Vec3 vec1, Vec3 vec2, boolean allowDiagonally) {
+        return adjacent(toTile(vec1), toTile(vec2), allowDiagonally);
+    }
+
+    public static boolean adjacent(IntVec2D pos1, IntVec2D pos2, boolean allowDiagonally) {
+        return adjacent(pos1.x, pos1.y, pos2.x, pos2.y, allowDiagonally);
     }
 
     // Check if two tiles are adjacent.
     public static boolean adjacent(Tile tile1, Tile tile2, boolean allowDiagonally) {
-        int dx = Math.abs(tile1.x - tile2.x);
-        int dy = Math.abs(tile1.y - tile2.y);
+        return adjacent(tile1.pos.x, tile1.pos.y, tile2.pos.x, tile2.pos.y, allowDiagonally);
+    }
+
+    private static boolean adjacent(int x0, int y0, int x1, int y1, boolean allowDiagonally) {
+        int dx = Math.abs(x0 - x1);
+        int dy = Math.abs(y0 - y1);
 
         // Further than 1 away or same tile
         if (dx > 1 || dy > 1 || (dx == 0 && dy == 0)) {
@@ -76,7 +98,7 @@ public class NavUtils {
     }
 
     public static int manhattanDist(Tile t1, Tile t2) {
-        return Math.abs(t1.x - t2.x) + Math.abs(t1.y - t2.y);
+        return Math.abs(t1.pos.x - t2.pos.x) + Math.abs(t1.pos.y - t2.pos.y);
     }
 
     public static int levelId(WorldEntity e) {
@@ -124,28 +146,28 @@ public class NavUtils {
     }
 
     public static Command stepToCommand(AgentState state, Tile targetTile) {
-        Tile t0 = toTile(state.worldmodel.position);
-        if (!adjacent(t0, targetTile, true)) {
+        IntVec2D agentPos = NavUtils.loc2(state.worldmodel.position);
+        if (!adjacent(agentPos, targetTile.pos, true)) {
             throw new IllegalArgumentException("");
         }
 
-        if (targetTile.y > t0.y) {
-            if (targetTile.x > t0.x) {
+        if (targetTile.pos.y > agentPos.y) {
+            if (targetTile.pos.x > agentPos.x) {
                 return Command.DIRECTION_SE;
-            } else if (targetTile.x < t0.x) {
+            } else if (targetTile.pos.x < agentPos.x) {
                 return Command.DIRECTION_SW;
             } else {
                 return Command.DIRECTION_S;
             }
-        } else if (targetTile.y < t0.y) {
-            if (targetTile.x > t0.x) {
+        } else if (targetTile.pos.y < agentPos.y) {
+            if (targetTile.pos.x > agentPos.x) {
                 return Command.DIRECTION_NE;
-            } else if (targetTile.x < t0.x) {
+            } else if (targetTile.pos.x < agentPos.x) {
                 return Command.DIRECTION_NW;
             } else {
                 return Command.DIRECTION_N;
             }
-        } else if (targetTile.x > t0.x) {
+        } else if (targetTile.pos.x > agentPos.x) {
             return Command.DIRECTION_E;
         } else {
             return Command.DIRECTION_W;

@@ -22,14 +22,15 @@ public enum Color {
     MAGENTA(5, "38;5;171"),
     CYAN(6, "38;5;51"),
     GRAY(7, "0;90"),
-    TRANSPARENT(8, "38;5;239"),
+    TRANSPARENT(8, "0;30"/*"38;5;239"*/),
     ORANGE(9, "38;5;208"),
     GREEN_BRIGHT(10, "0;92"),
     YELLOW(11, "0;93"),
     BLUE_BRIGHT(12, "38;5;33"),
     MAGENTA_BRIGHT(13, "38;5;207"),
     CYAN_BRIGHT(14, "0;96"),
-    WHITE(15, "0;97");
+    WHITE(15, "0;97"),
+    RESET(-1, "");
 
     private static final Map<Integer, Color> BY_VALUE = new HashMap<>();
 
@@ -39,7 +40,7 @@ public enum Color {
         }
     }
 
-    public String colorCode;
+    private String colorCode;
     private int value;
 
     Color(int value, String colorCode) {
@@ -58,5 +59,9 @@ public enum Color {
         for (Color color : Color.values()) {
             System.out.println("\033[" + color.colorCode + "m " + color.name());
         }
+    }
+
+    public String stringCode() {
+        return String.format("\033[%sm", colorCode);
     }
 }

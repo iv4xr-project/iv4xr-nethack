@@ -7,12 +7,11 @@ import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.spatial.IntVec2D;
 import eu.iv4xr.framework.spatial.Vec3;
 import nethack.agent.navigation.NavUtils;
+import nethack.object.Entity;
 import nethack.object.EntityType;
 import nethack.object.Level;
 import nethack.utils.NethackSurface_NavGraph;
-import nethack.utils.NethackSurface_NavGraph.Door;
-import nethack.utils.NethackSurface_NavGraph.Tile;
-import nethack.utils.NethackSurface_NavGraph.Wall;
+import nethack.utils.NethackSurface_NavGraph.*;
 import nl.uu.cs.aplib.mainConcepts.Environment;
 import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.LogManager;
@@ -20,6 +19,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -71,12 +71,9 @@ public class AgentState extends Iv4xrAgentState<Void> {
 
     private void addNewNavGraph(boolean withPortal) {
         NethackSurface_NavGraph newNav = new NethackSurface_NavGraph();
-        newNav.sizeX = Level.WIDTH;
-        newNav.sizeY = Level.HEIGHT;
-        newNav.diagonalMovementPossible = true;
 
         if (withPortal) {
-            Vec3 playerPosition = env().app.gameState.player.position;
+            IntVec2D playerPosition = env().app.gameState.player.position2D;
             Tile lowPortal = new Tile(playerPosition.x, playerPosition.y);
             Tile highPortal = new Tile(playerPosition.x, playerPosition.y);
             multiLayerNav.addNextArea(newNav, lowPortal, highPortal, true);
@@ -87,42 +84,61 @@ public class AgentState extends Iv4xrAgentState<Void> {
 
     @Override
     public void updateState(String agentId) {
-        super.updateState(agentId);
+        updateState();
+    }
+
+    public void updateState() {
+        super.updateState("player");
         WorldEntity aux = auxState();
-        Serializable[] seenTiles = (Serializable[]) aux.properties.get("visibleTiles");
+        int levelNr = (int)aux.properties.get("levelId");
+        Serializable[] seenTiles = (Serializable[]) aux.properties.get("mapTiles");
+
         for (Serializable entry_ : seenTiles) {
             Serializable[] entry = (Serializable[]) entry_;
-            int levelNumber = (int) entry[0];
-            IntVec2D pos = (IntVec2D) entry[1];
-            EntityType type = (EntityType) entry[2];
+            IntVec2D pos = (IntVec2D) entry[0];
+            EntityType type = (EntityType) entry[1];
 
             // If detecting a new maze, need to allocate a nav-graph for this maze:
-            if (levelNumber >= multiLayerNav.areas.size()) {
-                logger.info("Adding a new level: " + levelNumber);
+            if (levelNr >= multiLayerNav.areas.size()) {
+                logger.info(String.format("Adding a new level: %s", levelNr));
                 addNewNavGraph(true);
             }
 
-            multiLayerNav.markAsSeen(new Pair<>(levelNumber, new Tile(pos.x, pos.y)));
+            multiLayerNav.markAsSeen(new Pair<>(levelNr, new Tile(pos)));
             switch (type) {
                 case VOID:
                 case WALL:
                 case BOULDER:
-                    multiLayerNav.addObstacle(new Pair<>(levelNumber, new Wall(pos.x, pos.y)));
+                    multiLayerNav.addObstacle(new Pair<>(levelNr, new Wall(pos)));
                     break;
                 case CORRIDOR:
+                    multiLayerNav.removeObstacle(new Pair<>(levelNr, new Corridor(pos)));
+                    break;
                 case FLOOR:
-                    multiLayerNav.removeObstacle(new Pair<>(levelNumber, new Tile(pos.x, pos.y)));
+                    multiLayerNav.removeObstacle(new Pair<>(levelNr, new Floor(pos)));
                     break;
                 case DOOR:
                     boolean isOpen = !env().app.gameState.level().getEntity(pos).closedDoor();
-                    multiLayerNav.addObstacle(new Pair<>(levelNumber, new Door(pos.x, pos.y, isOpen)));
+                    multiLayerNav.addObstacle(new Pair<>(levelNr, new Door(pos, isOpen)));
+                    break;
+                case DOORWAY:
+                    multiLayerNav.removeObstacle(new Pair<>(levelNr, new Doorway(pos)));
                     break;
                 default:
                     // Current logic does not treat other objects as obstacles (Player/Pet/Monster)
-                    multiLayerNav.setBlockingState(new Pair<>(levelNumber, new Tile(pos.x, pos.y)), false);
+//                    multiLayerNav.setBlockingState(new Pair<>(levelNr, new Tile(coordinate)), false);
+                    if (multiLayerNav.areas.get(levelNr).hasTile(pos)) {
+                        multiLayerNav.setBlockingState(new Pair<>(levelNr, new Tile(pos)), false);
+                    } else {
+                        multiLayerNav.removeObstacle(new Pair<>(levelNr, new Tile(pos)));
+                    }
                     break;
             }
         }
+
+        NethackSurface_NavGraph navGraph = multiLayerNav.areas.get(levelNr);
+        Level level = env().app.gameState.level();
+        List<IntVec2D> visibleCoordinates = navGraph.VisibleCoordinates(env().app.gameState.player.position2D, level);
 
         // removing entities that are no longer in the game-board, except players:
         Serializable[] removedEntities = (Serializable[]) aux.properties.get("recentlyRemoved");
@@ -171,7 +187,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
         Tile p = NavUtils.toTile(env().app.gameState.player.position);
 
         List<WorldEntity> ms = worldmodel.elements
-                .values().stream().filter(e -> e.type == type.name()
+                .values().stream().filter(e -> Objects.equals(e.type, type.name())
                         && NavUtils.levelId(player) == NavUtils.levelId(e) && NavUtils.adjacent(p, NavUtils.toTile(e.position), allowDiagonally))
                 .collect(Collectors.toList());
 
@@ -188,7 +204,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
 
     public boolean nextToEntity(String entityId, boolean allowDiagonally) {
         Tile p = NavUtils.toTile(env().app.gameState.player.position);
-        List<WorldEntity> ms = worldmodel.elements.values().stream().filter(e -> e.position != null && e.id == entityId && NavUtils.adjacent(p, NavUtils.toTile(e.position), allowDiagonally)).collect(Collectors.toList());
+        List<WorldEntity> ms = worldmodel.elements.values().stream().filter(e -> e.position != null && Objects.equals(e.id, entityId) && NavUtils.adjacent(p, NavUtils.toTile(e.position), allowDiagonally)).collect(Collectors.toList());
         return ms.size() > 0;
     }
 }
