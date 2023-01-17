@@ -4,7 +4,7 @@ import eu.iv4xr.framework.spatial.IntVec2D;
 import eu.iv4xr.framework.spatial.Vec3;
 
 public class Player {
-    public final String id = "player";
+    public static final String id = "player";
     public Inventory inventory;
 
     public Vec3 position;

@@ -10,6 +10,7 @@ import nethack.agent.navigation.NavTactic;
 import nethack.agent.navigation.NavUtils;
 import nethack.object.Command;
 import nethack.object.EntityType;
+import nethack.object.Player;
 import nethack.object.Seed;
 import nethack.utils.RenderUtils;
 import nl.uu.cs.aplib.mainConcepts.Goal;
@@ -59,7 +60,7 @@ public class Sandbox {
                 agent.update();
                 logger.debug(String.format("** [%d] agent @%s", k, NavUtils.toTile(state.worldmodel.position)));
             }
-            state.updateState();
+            state.updateState(Player.id);
             renderUtils.render();
             commander.writeCommand("Render", "");
         }

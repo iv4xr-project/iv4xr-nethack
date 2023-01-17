@@ -1,5 +1,7 @@
 package nethack.object;
 
+import eu.iv4xr.framework.spatial.IntVec2D;
+
 // Source: https://www.baeldung.com/java-enum-values
 // Actions listed at: /python-server/lib/nle/nle/nethack/actions.py
 public class Entity {
@@ -18,32 +20,18 @@ public class Entity {
 
     public boolean closedDoor() {
         if (type != EntityType.DOOR) {
-            System.out.println("NOT A DOOR?!");
+            throw new IllegalCallerException("Checking closed door on a non door?! Got type " + type.name());
         }
 
         return symbol == '+';
     }
 
-    public void assignId(int x, int y) {
-        if (type == EntityType.PLAYER || type == EntityType.PET) {
-            id = type.name();
+    public void assignId(IntVec2D pos) {
+        if (type == EntityType.DOOR) {
+            id = String.format("%s_%d_%d", type.name(), pos.x, pos.y);
         } else {
-            id = String.format("%s_%d_%d", type.name(), x, y);
+            id = String.format("%s_%d", type.name(), glyph);
         }
-    }
-
-    public boolean becameTransparent(Entity newState) {
-        if (!newState.color.equals(Color.TRANSPARENT) || color.equals(Color.TRANSPARENT)) {
-            return false;
-        }
-        return newState.symbol == symbol && newState.type == type;
-    }
-
-    public boolean becameVisible(Entity newState) {
-        if (!color.equals(Color.TRANSPARENT) || newState.color.equals(Color.TRANSPARENT)) {
-            return false;
-        }
-        return newState.symbol == symbol && newState.type == type;
     }
 
     @Override
@@ -52,11 +40,10 @@ public class Entity {
             return false;
         }
 
-        if (!Entity.class.isAssignableFrom(obj.getClass())) {
-            return false;
+        if (obj instanceof Entity) {
+            Entity other = (Entity) obj;
+            return glyph == other.glyph && symbol == other.symbol && other.color.equals(color) && type == other.type;
         }
-
-        Entity other = (Entity) obj;
-        return other.color.equals(color) && other.symbol == symbol && other.type == type;
+        return false;
     }
 }

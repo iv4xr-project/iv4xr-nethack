@@ -145,8 +145,9 @@ public class NavAction {
             List<Pair<Integer, Tile>> path;
             if (heuristicLocation == null) {
                 path = S.multiLayerNav.explore(NavUtils.loc3(NavUtils.levelId(a), NavUtils.loc2(S.worldmodel.position)));
-            } else
+            } else {
                 path = S.multiLayerNav.explore(NavUtils.loc3(NavUtils.levelId(a), NavUtils.loc2(S.worldmodel.position)), heuristicLocation);
+            }
             if (path == null) {
                 return null;
             }

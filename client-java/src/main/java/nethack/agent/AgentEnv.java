@@ -6,10 +6,7 @@ import eu.iv4xr.framework.mainConcepts.WorldModel;
 import eu.iv4xr.framework.spatial.IntVec2D;
 import eu.iv4xr.framework.spatial.Vec3;
 import nethack.NetHack;
-import nethack.object.Command;
-import nethack.object.Entity;
-import nethack.object.EntityType;
-import nethack.object.Player;
+import nethack.object.*;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -26,17 +23,15 @@ import java.util.Set;
 public class AgentEnv extends Iv4xrEnvironment {
     public NetHack app;
 
-    Set<EntityType> unimportantTypes = new HashSet<>(
-            Arrays.asList(EntityType.WALL, EntityType.CORRIDOR, EntityType.FLOOR, EntityType.VOID, EntityType.PLAYER)
+    private static final Set<EntityType> ignoredTypes = new HashSet<>(
+            Arrays.asList(EntityType.WALL, EntityType.CORRIDOR, EntityType.FLOOR, EntityType.ICE, EntityType.VOID, EntityType.DOORWAY)
     );
 
     public AgentEnv(NetHack app) {
         this.app = app;
     }
 
-    /**
-     * Observing does not advance the game turn.
-     */
+    // Observing does not advance the game turn.
     @Override
     public WorldModel observe(String agentId) {
         WorldModel wom = new WorldModel();
@@ -49,31 +44,35 @@ public class AgentEnv extends Iv4xrEnvironment {
         wom.elements.put(aux.id, aux);
         wom.elements.put(app.gameState.player.id, toWorldEntity(app.gameState.player));
 
-        // adding visible objects:
-        List<IntVec2D> mapTiles = app.level().mapTiles(app.gameState.player.position2D);
-        for (IntVec2D pos : mapTiles) {
-            Entity e = app.level().getEntity(pos);
-            if (unimportantTypes.contains(e.type)) {
+        // Add changed coordinates
+        Level level = app.level();
+        for (IntVec2D pos : level.changedCoordinates) {
+            Entity e = level.getEntity(pos);
+
+            // Unimportant types, and player is updated seperatedly
+            if (ignoredTypes.contains(e.type) || e.type == EntityType.PLAYER) {
                 continue;
             }
-            e.assignId(pos.x, pos.y);
-            wom.elements.put(e.id, toWorldEntity(e, pos.x, pos.y));
+
+            e.assignId(pos);
+            wom.elements.put(e.id, toWorldEntity(e, pos));
         }
 
-        // time-stamp the elements:
+        // Time-stamp the elements:
         for (WorldEntity e : wom.elements.values()) {
             e.timestamp = wom.timestamp;
         }
+
         return wom;
     }
 
     public WorldModel action(Command action) {
         app.step(action);
-        return observe("player");
+        return observe(Player.id);
     }
 
     WorldEntity toWorldEntity(Player p) {
-        WorldEntity we = new WorldEntity("id", p.id, true);
+        WorldEntity we = new WorldEntity(Player.id, EntityType.PLAYER.name(), true);
         we.properties.put("level", app.gameState.stats.zeroIndexLevelNumber);
         we.properties.put("hp", app.gameState.player.hp);
         we.properties.put("hpmax", app.gameState.player.hpMax);
@@ -81,7 +80,7 @@ public class AgentEnv extends Iv4xrEnvironment {
         return we;
     }
 
-    WorldEntity toWorldEntity(Entity e, int x, int y) {
+    WorldEntity toWorldEntity(Entity e, IntVec2D pos) {
         if (e.type == EntityType.VOID) {
             return null;
         }
@@ -91,12 +90,6 @@ public class AgentEnv extends Iv4xrEnvironment {
         String type = e.type.name();
 
         switch (e.type) {
-            case WALL:
-            case FLOOR:
-            case CORRIDOR:
-                we = new WorldEntity(e.id, type, false);
-                we.properties.put("level", level);
-                break;
             case DOOR:
                 we = new WorldEntity(e.id, type, false);
                 we.properties.put("level", level);
@@ -108,7 +101,7 @@ public class AgentEnv extends Iv4xrEnvironment {
                 break;
         }
 
-        we.position = new Vec3(x, y, level);
+        we.position = new Vec3(pos.x, pos.y, level);
         return we;
     }
 
@@ -116,29 +109,20 @@ public class AgentEnv extends Iv4xrEnvironment {
         WorldEntity aux = new WorldEntity("aux", "aux", true);
         aux.properties.put("time", app.gameState.stats.time);
         aux.properties.put("status", app.gameState.done);
+        aux.properties.put("levelId", app.gameState.stats.zeroIndexLevelNumber);
 
-        // recently removed objects:
-        String[] removed = new String[app.gameState.level().removedEntities.size()];
+        // Part of the map that has updates that might be relevant to the map navigation state
+        Level level = app.level();
+        List<IntVec2D> changedCoordinates_ = level.changedCoordinates;
+        Serializable[] changedCoordinates = new Serializable[changedCoordinates_.size()];
         int k = 0;
-        for (Entity e : app.gameState.level().removedEntities) {
-            removed[k] = e.id;
-            k++;
-        }
-        aux.properties.put("recentlyRemoved", removed);
-
-        // Part of the map that has updates, definitely visible, or permanently visible
-        List<IntVec2D> mapTiles_ = app.level().mapTiles(app.gameState.player.position2D);
-        Serializable[] mapTiles = new Serializable[mapTiles_.size()];
-        k = 0;
-        for (IntVec2D pos : mapTiles_) {
-            Entity e = app.level().getEntity(pos);
+        for (IntVec2D pos : changedCoordinates_) {
+            Entity e = level.getEntity(pos);
             EntityType entityType = e.type;
             Serializable[] entry = {pos, entityType};
-            mapTiles[k] = entry;
-            k++;
+            changedCoordinates[k++] = entry;
         }
-        aux.properties.put("mapTiles", mapTiles);
-        aux.properties.put("levelId", app.gameState.stats.zeroIndexLevelNumber);
+        aux.properties.put("changedCoordinates", changedCoordinates);
 
         return aux;
     }

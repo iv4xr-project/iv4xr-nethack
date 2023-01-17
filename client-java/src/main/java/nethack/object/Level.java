@@ -8,10 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Level {
-    public static final int HEIGHT = 21;
-    public static final int WIDTH = 79;
+    public static final int HEIGHT = 21, WIDTH = 79;
     public Entity[][] map;
-    public List<Entity> removedEntities;
+    public List<IntVec2D> changedCoordinates = new ArrayList<>();
     private int nr;
 
     public Level(int levelNr, Entity[][] entities) {
@@ -23,40 +22,33 @@ public class Level {
         return "level" + nr;
     }
 
-    public List<IntVec2D> mapTiles(IntVec2D playerPos) {
-        List<IntVec2D> points = new ArrayList<IntVec2D>();
-        for (int x = 0; x < WIDTH; x++) {
-            for (int y = 0; y < HEIGHT; y++) {
-                IntVec2D pos = new IntVec2D(x, y);
-                Entity e = getEntity(x, y);
-                if (e.type == EntityType.VOID) {
-                    if (NavUtils.adjacent(playerPos, pos, true)) {
-                        points.add(new IntVec2D(x, y));
-                    }
-                    continue;
-                } else if (e.color == Color.TRANSPARENT) {
-                    continue;
-                } else {
-                    points.add(new IntVec2D(x, y));
-                }
-            }
-        }
-        return points;
-    }
-
-    public void setRemovedEntities(Level oldLevel) {
-        removedEntities = new ArrayList<Entity>();
-
+    public void setChangedCoordinates(Level oldLevel) {
+        changedCoordinates.clear();
+        // This is the first observation of the level, returns all relevant coordinates
         if (oldLevel == null) {
+            System.out.println("Set all coordinates of entities");
+            setWithAllCoordinates();
             return;
         }
 
+        System.out.println("Set only the changes");
+        // If it is a subsequent observation, only give coordinates of fields that changed
         for (int x = 0; x < WIDTH; x++) {
             for (int y = 0; y < HEIGHT; y++) {
-                if (!getEntity(x, y).equals(oldLevel.getEntity(x, y))) {
-//					String s = String.format("(%s->%s x,y:%d,%d)", map[y][x].symbol, oldLevel.map[y][x].symbol, x, y);
-//					System.out.print(s);
-                    removedEntities.add(oldLevel.getEntity(x, y));
+                if (!oldLevel.getEntity(x, y).equals(getEntity(x, y))) {
+                    changedCoordinates.add(new IntVec2D(x, y));
+                }
+            }
+        }
+    }
+
+    // Returns coordinates of everything that is not VOID
+    private void setWithAllCoordinates() {
+        for (int x = 0; x < WIDTH; x++) {
+            for (int y = 0; y < HEIGHT; y++) {
+                Entity e = getEntity(x, y);
+                if (e.type != EntityType.VOID) {
+                    changedCoordinates.add(new IntVec2D(x, y));
                 }
             }
         }

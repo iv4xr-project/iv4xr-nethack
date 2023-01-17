@@ -34,10 +34,10 @@ public class NethackSurface_NavGraph
         CanDealWithDynamicObstacle<NethackSurface_NavGraph.Tile> {
 
     // The x coordinates of this tiled-surface starts from 0 until sizeX-1
-    public final int sizeX = Level.WIDTH;
+    public final static int sizeX = Level.WIDTH;
     // The y coordinates of this tiled-surface starts from 0 until sizeY-1
-    public final int sizeY = Level.HEIGHT;
-    public final boolean diagonalMovementPossible = true;
+    public final static int sizeY = Level.HEIGHT;
+    public final static boolean diagonalMovementPossible = true;
     public Map<Integer, Map<Integer, NonNavigableTile>> obstacles = new HashMap<>();
     public Map<Integer, Map<Integer, Tile>> floors = new HashMap<>();
     public Map<Integer, Set<Integer>> seen = new HashMap<>();
@@ -202,7 +202,7 @@ public class NethackSurface_NavGraph
         frontierCandidates.clear();
     }
 
-    public List<IntVec2D> physicalNeighbourCoordinates(IntVec2D pos) {
+    public static List<IntVec2D> physicalNeighbourCoordinates(IntVec2D pos) {
         int left = pos.x - 1;
         int right = pos.x + 1;
         int below = pos.y - 1;
@@ -479,7 +479,7 @@ public class NethackSurface_NavGraph
         StringBuilder sb = new StringBuilder();
         // Add row by row to the stringbuilder
         for (int y = 0; y < sizeY; y++) {
-            boolean visibleSection = false;
+            Color currentColor = Color.RESET;
             for (int x = 0; x < sizeX; x++) {
                 // Get tile, if it doens't know the type it is not know or void.
                 Tile t = getAnyTile(new IntVec2D(x, y));
@@ -489,11 +489,12 @@ public class NethackSurface_NavGraph
                     continue;
                 }
 
-                // Set color if it changed
-                if (visibleSection != t.visible) {
-                    sb.append(t.visible ? Color.GREEN_BRIGHT.stringCode() : Color.RESET.stringCode());
-                    visibleSection = t.visible;
-                }
+                // Check for color swap
+                Color desiredColor = t.visible ? Color.GREEN_BRIGHT : Color.RESET;
+                if (!desiredColor.equals(currentColor)) {
+                    sb.append(desiredColor.stringCode());
+                    currentColor = desiredColor;
+                };
 
                 sb.append(t.toChar(wasSeen));
             }

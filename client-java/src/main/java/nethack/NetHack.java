@@ -143,14 +143,17 @@ public class NetHack {
     private StepType step(Command command, int index) {
         logger.info("Command: " + command);
         StepState stepState = commander.sendCommand("Step", index, StepState.class);
-        stepState.level.setRemovedEntities(gameState.level());
-
-        // Add to world
-        if (stepState.stats.zeroIndexLevelNumber == gameState.world.size()) {
-            gameState.world.add(null);
+        if (stepState.done) {
+            logger.info("Game run terminated, step indicated: done");
+            return StepType.Valid;
         }
 
-        if (stepState.stats.zeroIndexLevelNumber >= 0) {
+        // Add to world if new level is explored
+        if (stepState.stats.zeroIndexLevelNumber == gameState.world.size()) {
+            stepState.level.setChangedCoordinates(null);
+            gameState.world.add(stepState.level);
+        } else {
+            stepState.level.setChangedCoordinates(gameState.world.get(stepState.stats.zeroIndexLevelNumber));
             gameState.world.set(stepState.stats.zeroIndexLevelNumber, stepState.level);
         }
 

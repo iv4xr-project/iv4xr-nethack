@@ -5,11 +5,11 @@ import eu.iv4xr.framework.extensions.pathfinding.Navigatable;
 import eu.iv4xr.framework.mainConcepts.Iv4xrAgentState;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.spatial.IntVec2D;
-import eu.iv4xr.framework.spatial.Vec3;
 import nethack.agent.navigation.NavUtils;
 import nethack.object.Entity;
 import nethack.object.EntityType;
 import nethack.object.Level;
+import nethack.object.Player;
 import nethack.utils.NethackSurface_NavGraph;
 import nethack.utils.NethackSurface_NavGraph.*;
 import nl.uu.cs.aplib.mainConcepts.Environment;
@@ -18,8 +18,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.Serializable;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -40,7 +39,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
     }
 
     /**
-     * We are not going to keep an Nav-graph, but will instead keep a
+     * We are not going to keep a Nav-graph, but will instead keep a
      * layered-nav-graphs.
      */
     @Override
@@ -49,7 +48,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
     }
 
     /**
-     * We are not going to keep an Nav-graph, but will instead keep a
+     * We are not going to keep a Nav-graph, but will instead keep a
      * layered-nav-graphs.
      */
     @Override
@@ -66,7 +65,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
     }
 
     public WorldEntity auxState() {
-        return worldmodel().elements.get("aux");
+        return worldmodel.elements.get("aux");
     }
 
     private void addNewNavGraph(boolean withPortal) {
@@ -84,16 +83,18 @@ public class AgentState extends Iv4xrAgentState<Void> {
 
     @Override
     public void updateState(String agentId) {
-        updateState();
+        super.updateState(agentId);
+        updateMap();
+        updateEntities();
     }
 
-    public void updateState() {
-        super.updateState("player");
+    private void updateMap() {
         WorldEntity aux = auxState();
         int levelNr = (int)aux.properties.get("levelId");
-        Serializable[] seenTiles = (Serializable[]) aux.properties.get("mapTiles");
 
-        for (Serializable entry_ : seenTiles) {
+        Serializable[] changedCoordinates = (Serializable[]) aux.properties.get("changedCoordinates");
+        logger.debug(String.format("update state with %d new coordinates", changedCoordinates.length));
+        for (Serializable entry_ : changedCoordinates) {
             Serializable[] entry = (Serializable[]) entry_;
             IntVec2D pos = (IntVec2D) entry[0];
             EntityType type = (EntityType) entry[1];
@@ -106,7 +107,6 @@ public class AgentState extends Iv4xrAgentState<Void> {
 
             multiLayerNav.markAsSeen(new Pair<>(levelNr, new Tile(pos)));
             switch (type) {
-                case VOID:
                 case WALL:
                 case BOULDER:
                     multiLayerNav.addObstacle(new Pair<>(levelNr, new Wall(pos)));
@@ -125,8 +125,8 @@ public class AgentState extends Iv4xrAgentState<Void> {
                     multiLayerNav.removeObstacle(new Pair<>(levelNr, new Doorway(pos)));
                     break;
                 default:
-                    // Current logic does not treat other objects as obstacles (Player/Pet/Monster)
-//                    multiLayerNav.setBlockingState(new Pair<>(levelNr, new Tile(coordinate)), false);
+                    // If the tile has been seen we switch the state to non-blocking.
+                    // If we don't know the type of the tile, we for now put a tile in its place
                     if (multiLayerNav.areas.get(levelNr).hasTile(pos)) {
                         multiLayerNav.setBlockingState(new Pair<>(levelNr, new Tile(pos)), false);
                     } else {
@@ -137,21 +137,55 @@ public class AgentState extends Iv4xrAgentState<Void> {
         }
 
         NethackSurface_NavGraph navGraph = multiLayerNav.areas.get(levelNr);
+        IntVec2D playerPos = NavUtils.loc2(worldmodel.position);
+        // Each entity that is next to the agent which is void is a wall
+        List<IntVec2D> adjacentCoords = NethackSurface_NavGraph.physicalNeighbourCoordinates(playerPos);
+        for (IntVec2D adjacentPos: adjacentCoords) {
+            if (!navGraph.hasTile(adjacentPos)) {
+                multiLayerNav.markAsSeen(new Pair<>(levelNr, new Tile(adjacentPos)));
+                multiLayerNav.addObstacle(new Pair<>(levelNr, new Wall(adjacentPos)));
+            }
+        }
+    }
+
+    private void updateEntities() {
+        // Update visibility cone
+        WorldEntity aux = auxState();
+        int levelNr = (int)aux.properties.get("levelId");
+        NethackSurface_NavGraph navGraph = multiLayerNav.areas.get(levelNr);
+        IntVec2D playerPos = NavUtils.loc2(worldmodel.position);
         Level level = env().app.gameState.level();
-        List<IntVec2D> visibleCoordinates = navGraph.VisibleCoordinates(env().app.gameState.player.position2D, level);
+        HashSet<IntVec2D> visibleCoordinates = new HashSet<>(navGraph.VisibleCoordinates(playerPos, level));
 
-        // removing entities that are no longer in the game-board, except players:
-        Serializable[] removedEntities = (Serializable[]) aux.properties.get("recentlyRemoved");
-        for (Serializable entry_ : removedEntities) {
-            String id = (String) entry_;
-            if (id == null) {
+        // Remove all entities that are in vision range but can't be seen.
+        List<String> idsToRemove = new ArrayList<>();
+        for (WorldEntity we: worldmodel.elements.values()) {
+            if (we.position == null) {
+                System.out.printf("%s [%s]%n", we.id, we.type);
+                continue;
+            } else {
+                System.out.printf("<%d,%d> %s [%s]%n", (int)we.position.x, (int)we.position.y, we.id, we.type);
+            }
+            if (we.id.equals(Player.id) || we.id.equals("aux")) {
                 continue;
             }
 
-            if (id.equals("player")) {
+            IntVec2D entityPosition = NavUtils.loc2(we.position);
+            // If it is not inside the visibility then do not update.
+            if (!visibleCoordinates.contains(entityPosition)) {
                 continue;
             }
-            this.worldmodel.elements.remove(id);
+
+            Entity e = level.getEntity(entityPosition);
+            e.assignId(entityPosition);
+            if (!e.id.equals(we.id)) {
+                idsToRemove.add(we.id);
+            }
+        }
+
+        // Separate loop since it changes the map
+        for (String id: idsToRemove) {
+            worldmodel.elements.remove(id);
         }
     }
 
@@ -184,7 +218,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
      */
     public List<WorldEntity> adjacentEntities(EntityType type, boolean allowDiagonally) {
         WorldEntity player = worldmodel.elements.get("player");
-        Tile p = NavUtils.toTile(env().app.gameState.player.position);
+        Tile p = NavUtils.toTile(player.position);
 
         List<WorldEntity> ms = worldmodel.elements
                 .values().stream().filter(e -> Objects.equals(e.type, type.name())
