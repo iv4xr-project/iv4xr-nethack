@@ -395,9 +395,9 @@ public class NethackSurface_NavGraph
             }
         }
 
-        // Perform BFS on the graph
+        // Perform BFS on the graph, initiate the queue with the agent position and all the lit floor tiles
         HashSet<IntVec2D> visibleCoordinates = new HashSet<>();
-        Queue<IntVec2D> queue = new LinkedList<>();
+        Queue<IntVec2D> queue = new LinkedList<>(level.visibleFloors);
         queue.add(agentPosition);
 
         // While there are coordinates left to be explored
@@ -435,13 +435,9 @@ public class NethackSurface_NavGraph
             // Wall or closed door blocks from seeing further
             if (isBlocking(new Tile(nextPos))) {
                 continue;
-            } // Open doors  except if the agent is in that position
-            else if (!isCorridor(nextPos) && !isDoorway(nextPos) || nextPos == agentPosition) {
+            } // Only add all neighbours if it is floor or the current position of the agent
+            else if (isFloor(nextPos) || nextPos == agentPosition) {
                 queue.addAll(neighbours);
-            } // Only add tiles for further exploration if they
-            else {
-                Stream<IntVec2D> adjacentFloors = neighbours.stream().filter(coord -> !isDoorway(coord) && !isCorridor(coord) && !isBlocking(coord));
-                queue.addAll(adjacentFloors.collect(Collectors.toList()));
             }
         }
 
