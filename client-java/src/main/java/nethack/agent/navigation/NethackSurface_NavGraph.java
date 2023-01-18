@@ -21,7 +21,7 @@ import java.util.stream.Stream;
  * blocking/unblocking.
  *
  * <p>
- * The class also implements {@link Xnavigatable}, so it offers methods to do
+ * The class also implements {@link Navigatable} and {@link XPathfinder}, so it offers methods to do
  * pathfinding and exploration over the world.
  *
  * @author Wish
@@ -33,11 +33,10 @@ public class NethackSurface_NavGraph
         CanDealWithDynamicObstacle<NethackSurface_NavGraph.Tile> {
 
     // The x coordinates of this tiled-surface starts from 0 until sizeX-1
-    public final static int sizeX = Level.WIDTH;
+    private final static int sizeX = Level.WIDTH;
     // The y coordinates of this tiled-surface starts from 0 until sizeY-1
-    public final static int sizeY = Level.HEIGHT;
-    public Map<Integer, Map<Integer, NonNavigableTile>> obstacles = new HashMap<>();
-    public Map<Integer, Map<Integer, Tile>> floors = new HashMap<>();
+    private final static int sizeY = Level.HEIGHT;
+    private Map<Integer, Map<Integer, Tile>> tiles = new HashMap<>();
     public Map<Integer, Set<Integer>> seen = new HashMap<>();
     public Pathfinder<Tile> pathfinder = new AStar<>();
     /**
@@ -53,30 +52,20 @@ public class NethackSurface_NavGraph
      * Add a non-navigable tile (obstacle).
      */
     public void addObstacle(Tile o) {
-        if (!(o instanceof NonNavigableTile))
+        if (!(o instanceof NonNavigableTile)) {
             throw new IllegalArgumentException();
-
-        Map<Integer, NonNavigableTile> xMap = obstacles.computeIfAbsent(o.pos.x, k -> new HashMap<>());
-        xMap.put(o.pos.y, (NonNavigableTile) o);
-
-        // Remove floor
-        Map<Integer, Tile> fMap = floors.get(o.pos.x);
-        if (fMap != null) {
-            fMap.remove(o.pos.y);
         }
+
+        Map<Integer, Tile> xMap = tiles.computeIfAbsent(o.pos.x, k -> new HashMap<>());
+        xMap.put(o.pos.y, o);
     }
 
     /**
      * Remove a non-navigable tile (obstacle).
      */
     public void removeObstacle(Tile o) {
-        Map<Integer, NonNavigableTile> xMap = obstacles.get(o.pos.x);
-        if (xMap != null) {
-            xMap.remove(o.pos.y);
-        }
-
-        Map<Integer, Tile> fMap = floors.computeIfAbsent(o.pos.x, k -> new HashMap<>());
-        fMap.put(o.pos.y, o);
+        Map<Integer, Tile> xMap = tiles.computeIfAbsent(o.pos.x, k -> new HashMap<>());
+        xMap.put(o.pos.y, o);
     }
 
     public void markAsSeen(Tile p) {
@@ -85,8 +74,8 @@ public class NethackSurface_NavGraph
         frontierCandidates.add(p);
     }
 
-    public void markAsSeen(List<Tile> newlyseen) {
-        for (Tile p : newlyseen) {
+    public void markAsSeen(List<Tile> newlySeen) {
+        for (Tile p : newlySeen) {
             markAsSeen(p);
         }
     }
@@ -311,7 +300,7 @@ public class NethackSurface_NavGraph
      * This returns the set of frontier-tiles. A tile is a frontier tile if it is a
      * seen/explored tile, and it has at least one unexplored and unblocked neighbor.
      * Note that under this definition a frontier does not have to be reachable. You
-     * can use {@link findPath} to check which frontiers are reachable.
+     * can use findPath to check which frontiers are reachable.
      */
     public List<Tile> getFrontier() {
         List<Tile> frontiers = new LinkedList<>();
@@ -371,29 +360,28 @@ public class NethackSurface_NavGraph
         return null;
     }
 
-    public boolean hasTile(IntVec2D pos) { return getAnyTile(pos) != null; }
+    public boolean hasTile(IntVec2D pos) { return getTile(pos) != null; }
 
-    private Tile getAnyTile(IntVec2D pos) {
-        Tile t = getFloor(pos);
-        if (t != null) {
-            return t;
+    private Tile getTile(IntVec2D pos) {
+        var fmap = tiles.get(pos.x);
+        if (fmap != null) {
+            return fmap.get(pos.y);
         }
-
-        return getObstacle(pos);
+        return null;
     }
 
     private NonNavigableTile getObstacle(IntVec2D pos) {
-        var xmap = obstacles.get(pos.x);
-        if (xmap != null) {
-            return xmap.get(pos.y);
+        Tile t = getTile(pos);
+        if (t instanceof NonNavigableTile) {
+            return (NonNavigableTile)t;
         }
         return null;
     }
 
     private Tile getFloor(IntVec2D pos) {
-        var fmap = floors.get(pos.x);
-        if (fmap != null) {
-            return fmap.get(pos.y);
+        Tile t = getTile(pos);
+        if (t != null && !(t instanceof NonNavigableTile)) {
+            return t;
         }
         return null;
     }
@@ -401,14 +389,8 @@ public class NethackSurface_NavGraph
 
     public List<IntVec2D> VisibleCoordinates(IntVec2D agentPosition, Level level) {
         // First reset visibility
-        for (var xmap: obstacles.values()) {
+        for (var xmap: tiles.values()) {
             for (Tile t: xmap.values()) {
-                t.visible = false;
-            }
-        }
-
-        for (var fmap: floors.values()) {
-            for (Tile t: fmap.values()) {
                 t.visible = false;
             }
         }
@@ -426,7 +408,7 @@ public class NethackSurface_NavGraph
                 continue;
             }
 
-            Tile t = getAnyTile(nextPos);
+            Tile t = getTile(nextPos);
             // Void
             if (t == null) {
                 continue;
@@ -473,8 +455,8 @@ public class NethackSurface_NavGraph
         for (int y = 0; y < sizeY; y++) {
             Color currentColor = Color.RESET;
             for (int x = 0; x < sizeX; x++) {
-                // Get tile, if it doens't know the type it is not know or void.
-                Tile t = getAnyTile(new IntVec2D(x, y));
+                // Get tile, if it doesn't know the type it is not know or void.
+                Tile t = getTile(new IntVec2D(x, y));
                 boolean wasSeen = hasbeenSeen(x, y);
                 if (t == null) {
                     sb.append(wasSeen ? '?' : ' ');
@@ -486,7 +468,7 @@ public class NethackSurface_NavGraph
                 if (!desiredColor.equals(currentColor)) {
                     sb.append(desiredColor.stringCode());
                     currentColor = desiredColor;
-                };
+                }
 
                 sb.append(t.toChar(wasSeen));
             }
