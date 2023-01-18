@@ -5,15 +5,18 @@ import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import eu.iv4xr.framework.spatial.IntVec2D;
 import eu.iv4xr.framework.spatial.Vec3;
+import nethack.Loggers;
 import nethack.agent.AgentState;
 import nethack.object.Command;
-import nethack.utils.NethackSurface_NavGraph;
-import nethack.utils.NethackSurface_NavGraph.Tile;
+import nethack.agent.navigation.NethackSurface_NavGraph.Tile;
 import nl.uu.cs.aplib.utils.Pair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
 public class NavUtils {
+    static final Logger logger = LogManager.getLogger(Loggers.NavLogger);
     /**
      * Distance in terms of path-length from the agent that owns S to the entity e.
      * It uses adjustedFindPath to calculate the path.
@@ -22,8 +25,9 @@ public class NavUtils {
         WorldEntity player = S.worldmodel.elements.get(S.worldmodel.agentId);
         Tile p = toTile(player.position);
         List<Pair<Integer, Tile>> path = adjustedFindPath(S, levelId(player), NavUtils.loc2(player.position), levelId(e), NavUtils.loc2(e.position));
-        if (path == null)
+        if (path == null) {
             return Integer.MAX_VALUE;
+        }
         return path.size() - 1;
     }
 

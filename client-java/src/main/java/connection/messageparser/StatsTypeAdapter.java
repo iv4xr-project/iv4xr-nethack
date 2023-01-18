@@ -4,20 +4,24 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
+import connection.ConnectionLoggers;
 import eu.iv4xr.framework.spatial.IntVec2D;
 import eu.iv4xr.framework.spatial.Vec3;
 import nethack.object.Player;
 import nethack.object.Player.Alignment;
 import nethack.object.Stats;
 import nl.uu.cs.aplib.utils.Pair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
 // Source: https://studytrails.com/2016/09/12/java-google-json-type-adapter/
 public class StatsTypeAdapter extends TypeAdapter<Pair<Stats, Player>> {
+    static final Logger logger = LogManager.getLogger(ConnectionLoggers.TypeAdapterLogger);
     @Override
     public Pair<Stats, Player> read(JsonReader reader) throws IOException {
-        // the first token is the start array
+        // The first token is the start array
         int[] values = new int[27];
         JsonToken token = reader.peek();
         if (token.equals(JsonToken.BEGIN_ARRAY)) {
@@ -73,8 +77,8 @@ public class StatsTypeAdapter extends TypeAdapter<Pair<Stats, Player>> {
                 player.alignment = Alignment.LAWFUL;
                 break;
             default:
-                System.out.println("Alignment value " + values[26] + " not valid");
-                return null;
+                logger.error(String.format("Alignment value %d not valid",  values[26]));
+                throw new IllegalArgumentException("Alignment of " + values[26] + "is not recognized");
         }
 
         return new Pair<Stats, Player>(stats, player);

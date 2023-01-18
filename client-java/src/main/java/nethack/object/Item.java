@@ -1,6 +1,7 @@
 package nethack.object;
 
 public class Item {
+    // Additional information possibly at: server-python\lib\nle\build\include\onames.h
     public char symbol;
     public ItemType type;
     public String description;

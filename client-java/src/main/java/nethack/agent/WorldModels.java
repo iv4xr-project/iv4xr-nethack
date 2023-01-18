@@ -4,7 +4,7 @@ import eu.iv4xr.framework.mainConcepts.WorldModel;
 import eu.iv4xr.framework.spatial.Vec3;
 import nethack.agent.navigation.NavUtils;
 import nethack.object.Command;
-import nethack.utils.NethackSurface_NavGraph.Tile;
+import nethack.agent.navigation.NethackSurface_NavGraph.Tile;
 
 public class WorldModels {
     static WorldModel kickDoor(AgentState state, Vec3 targetTile) {

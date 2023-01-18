@@ -5,13 +5,14 @@ import eu.iv4xr.framework.extensions.pathfinding.Navigatable;
 import eu.iv4xr.framework.mainConcepts.Iv4xrAgentState;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.spatial.IntVec2D;
+import nethack.Loggers;
 import nethack.agent.navigation.NavUtils;
 import nethack.object.Entity;
 import nethack.object.EntityType;
 import nethack.object.Level;
 import nethack.object.Player;
-import nethack.utils.NethackSurface_NavGraph;
-import nethack.utils.NethackSurface_NavGraph.*;
+import nethack.agent.navigation.NethackSurface_NavGraph;
+import nethack.agent.navigation.NethackSurface_NavGraph.*;
 import nl.uu.cs.aplib.mainConcepts.Environment;
 import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.LogManager;
@@ -30,7 +31,7 @@ import java.util.stream.Collectors;
  * @author wish
  */
 public class AgentState extends Iv4xrAgentState<Void> {
-    static final Logger logger = LogManager.getLogger(AgentState.class);
+    static final Logger logger = LogManager.getLogger(Loggers.AgentLogger);
     public LayeredAreasNavigation<Tile, NethackSurface_NavGraph> multiLayerNav;
 
     @Override
@@ -161,10 +162,10 @@ public class AgentState extends Iv4xrAgentState<Void> {
         List<String> idsToRemove = new ArrayList<>();
         for (WorldEntity we: worldmodel.elements.values()) {
             if (we.position == null) {
-                System.out.printf("%s [%s]%n", we.id, we.type);
+                logger.debug(String.format("%s [%s]", we.id, we.type));
                 continue;
             } else {
-                System.out.printf("<%d,%d> %s [%s]%n", (int)we.position.x, (int)we.position.y, we.id, we.type);
+                logger.debug(String.format("<%d,%d> %s [%s]", (int)we.position.x, (int)we.position.y, we.id, we.type));
             }
             if (we.id.equals(Player.id) || we.id.equals("aux")) {
                 continue;
@@ -240,5 +241,21 @@ public class AgentState extends Iv4xrAgentState<Void> {
         Tile p = NavUtils.toTile(env().app.gameState.player.position);
         List<WorldEntity> ms = worldmodel.elements.values().stream().filter(e -> e.position != null && Objects.equals(e.id, entityId) && NavUtils.adjacent(p, NavUtils.toTile(e.position), allowDiagonally)).collect(Collectors.toList());
         return ms.size() > 0;
+    }
+
+    public void render() {
+        NethackSurface_NavGraph layer = multiLayerNav.areas.get(env().app.gameState.stats.zeroIndexLevelNumber);
+
+        String[] navigation = layer.toString().split(System.lineSeparator());
+        String[] game = env().app.gameState.toString().split(System.lineSeparator());
+
+        System.out.println(game[0]);
+
+        for (int i = 0; i < Level.HEIGHT; i++) {
+            System.out.println(game[i + 1] + " " + navigation[i]);
+        }
+
+        System.out.println(game[Level.HEIGHT + 1]);
+        System.out.println(game[Level.HEIGHT + 2]);
     }
 }

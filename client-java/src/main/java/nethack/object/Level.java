@@ -1,13 +1,18 @@
 package nethack.object;
 
 import eu.iv4xr.framework.spatial.IntVec2D;
+import nethack.Loggers;
 import nethack.agent.navigation.NavUtils;
 import nl.uu.cs.aplib.exampleUsages.miniDungeon.testAgent.Utils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Level {
+    public static final Logger logger = LogManager.getLogger(Loggers.NetHackLogger);
+
     public static final int HEIGHT = 21, WIDTH = 79;
     public Entity[][] map;
     public List<IntVec2D> changedCoordinates = new ArrayList<>();
@@ -26,12 +31,12 @@ public class Level {
         changedCoordinates.clear();
         // This is the first observation of the level, returns all relevant coordinates
         if (oldLevel == null) {
-            System.out.println("Set all coordinates of entities");
+            logger.debug("Set all coordinates of entities");
             setWithAllCoordinates();
             return;
         }
 
-        System.out.println("Set only the changes");
+        logger.debug("Set only the changes in the level");
         // If it is a subsequent observation, only give coordinates of fields that changed
         for (int x = 0; x < WIDTH; x++) {
             for (int y = 0; y < HEIGHT; y++) {

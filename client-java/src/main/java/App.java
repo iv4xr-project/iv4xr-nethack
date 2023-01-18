@@ -1,3 +1,4 @@
+import connection.ConnectionLoggers;
 import connection.SendCommandClient;
 import nethack.NetHack;
 import nethack.object.Seed;
@@ -7,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 
 public class App {
-    static final Logger logger = LogManager.getLogger(App.class);
+    static final Logger logger = LogManager.getLogger(ConnectionLoggers.ConnectionLogger);
 
     public static void main(String[] args) throws IOException {
         // Initialize socket connection

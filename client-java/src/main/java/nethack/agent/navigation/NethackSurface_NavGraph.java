@@ -1,8 +1,7 @@
-package nethack.utils;
+package nethack.agent.navigation;
 
 import eu.iv4xr.framework.extensions.pathfinding.*;
 import eu.iv4xr.framework.spatial.IntVec2D;
-import nethack.agent.navigation.NavUtils;
 import nethack.object.Color;
 import nethack.object.Level;
 
@@ -37,7 +36,6 @@ public class NethackSurface_NavGraph
     public final static int sizeX = Level.WIDTH;
     // The y coordinates of this tiled-surface starts from 0 until sizeY-1
     public final static int sizeY = Level.HEIGHT;
-    public final static boolean diagonalMovementPossible = true;
     public Map<Integer, Map<Integer, NonNavigableTile>> obstacles = new HashMap<>();
     public Map<Integer, Map<Integer, Tile>> floors = new HashMap<>();
     public Map<Integer, Set<Integer>> seen = new HashMap<>();
@@ -217,16 +215,15 @@ public class NethackSurface_NavGraph
             candidates.add(new IntVec2D(pos.x, below));
         if (above < sizeY)
             candidates.add(new IntVec2D(pos.x, above));
-        if (diagonalMovementPossible) {
-            if (left >= 0 && below >= 0)
-                candidates.add(new IntVec2D(left, below));
-            if (left >= 0 && above < sizeY)
-                candidates.add(new IntVec2D(left, above));
-            if (right < sizeX && above < sizeY)
-                candidates.add(new IntVec2D(right, above));
-            if (right < sizeX && below >= 0)
-                candidates.add(new IntVec2D(right, below));
-        }
+        // Diagonal moves
+        if (left >= 0 && below >= 0)
+            candidates.add(new IntVec2D(left, below));
+        if (left >= 0 && above < sizeY)
+            candidates.add(new IntVec2D(left, above));
+        if (right < sizeX && above < sizeY)
+            candidates.add(new IntVec2D(right, above));
+        if (right < sizeX && below >= 0)
+            candidates.add(new IntVec2D(right, below));
 
         return candidates;
     }
@@ -289,13 +286,8 @@ public class NethackSurface_NavGraph
      * The estimated distance between two arbitrary vertices.
      */
     public float heuristic(Tile from, Tile to) {
-        if (diagonalMovementPossible) {
-            // straight-line distance:
-            return (float) Math.sqrt(distSq(from.pos.x, from.pos.y, to.pos.x, to.pos.y));
-        } else {
-            // Manhattan distance:
-            return Math.abs(from.pos.x - to.pos.x) + Math.abs(from.pos.y - to.pos.y);
-        }
+        // straight-line distance
+        return (float) Math.sqrt(distSq(from.pos.x, from.pos.y, to.pos.x, to.pos.y));
     }
 
     /**

@@ -4,16 +4,20 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
+import connection.ConnectionLoggers;
 import nethack.object.Seed;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
 public class SeedTypeAdapter extends TypeAdapter<Seed> {
+    static final Logger logger = LogManager.getLogger(ConnectionLoggers.TypeAdapterLogger);
     @Override
     public Seed read(JsonReader reader) throws IOException {
         String core = "";
         String disp = "";
-        Boolean reseed = false;
+        boolean reseed = false;
 
         JsonToken token = reader.peek();
         if (token.equals(JsonToken.BEGIN_OBJECT)) {
@@ -31,6 +35,7 @@ public class SeedTypeAdapter extends TypeAdapter<Seed> {
                         reseed = reader.nextBoolean();
                         break;
                     default:
+                        logger.error(String.format("Seed field \"%s\" unknown", objectEntry));
                         throw new IllegalArgumentException(String.format("Seed field \"%s\" unknown", objectEntry));
                 }
             }

@@ -2,14 +2,16 @@ package connection.messageparser;
 
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
+import connection.ConnectionLoggers;
 import nethack.object.Color;
 import nethack.object.EntityType;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Utils {
+    static final Logger logger = LogManager.getLogger(ConnectionLoggers.TypeAdapterLogger);
     public static String readString(JsonReader reader) throws IOException {
         StringBuilder message = new StringBuilder();
         JsonToken token = reader.peek();
@@ -40,7 +42,7 @@ public class Utils {
             return type;
         }
 
-        System.out.println(String.format("%s%s%s: %d UNKNOWN", color.stringCode(), symbol, Color.RESET.stringCode(), glyph));
+        logger.warn(String.format("%s%s%s: %d UNKNOWN", color.stringCode(), symbol, Color.RESET.stringCode(), glyph));
         return EntityType.UNKNOWN;
     }
 

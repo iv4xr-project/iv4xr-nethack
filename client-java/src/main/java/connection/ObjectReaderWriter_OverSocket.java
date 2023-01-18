@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import connection.messageparser.ObservationMessageTypeAdapter;
 import connection.messageparser.SeedTypeAdapter;
-import nethack.StepState;
+import nethack.object.StepState;
 import nethack.object.Inventory;
 import nethack.object.Level;
 import nethack.object.Seed;
@@ -21,7 +21,7 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * Provide a convenient reader/writer to read and write objects over a socket.
- * This allows an object to be send over the socket (to a recipient on the other
+ * This allows an object to be sent over the socket (to a recipient on the other
  * side of the socket-connection), encoded as a Json-string. Similarly, the
  * reader can receive an object, encoded as a Json-string, that was sent to this
  * class over the socket. Note that this implies that the object sent like this
@@ -34,11 +34,10 @@ import java.nio.charset.StandardCharsets;
  * Note: this class was taken over from iv4xrDemo.
  */
 public class ObjectReaderWriter_OverSocket {
-    static final Logger logger = LogManager.getLogger(ObjectReaderWriter_OverSocket.class);
-    // Configuring the json serializer/deserializer. Register custom serializers
-    // here.
-    // Transient modifiers should be excluded, otherwise they will be send with json
-    private static Gson gson = new GsonBuilder()
+    static final Logger logger = LogManager.getLogger(ConnectionLoggers.MessageLogger);
+    // Configuring the json serializer/deserializer. Register custom serializers here.
+    // Transient modifiers should be excluded, otherwise they will be sent with json
+    private static final Gson gson = new GsonBuilder()
             .registerTypeAdapter(ObservationMessage.class, new ObservationMessageTypeAdapter()).serializeNulls()
             .registerTypeAdapter(Seed.class, new SeedTypeAdapter()).serializeNulls()
             .excludeFieldsWithModifiers(Modifier.TRANSIENT).create();
@@ -61,12 +60,13 @@ public class ObjectReaderWriter_OverSocket {
      */
     public void write(Object packageToSend) throws IOException {
         String json = gson.toJson(packageToSend);
+        logger.info("** SENDING...");
         logger.debug("** SENDING: " + json);
         writer.println(json);
     }
 
     public StepState readStepState() throws IOException {
-        logger.debug("** waiting for answer....");
+        logger.info("** waiting for answer....");
 
         reader.ready();
         String response = reader.readLine();
@@ -101,11 +101,12 @@ public class ObjectReaderWriter_OverSocket {
             return (T) readStepState();
         }
 
-        logger.debug("** waiting for answer....");
+        logger.info("** waiting for answer....");
         reader.ready();
         String response = reader.readLine();
         // String response = readResponse();
         // we do not have to cast to T, since req.responseType is of type Class<T>
+        logger.info("** RECEIVED response");
         logger.debug("** RECEIVING: " + response);
         return gson.fromJson(response, expectedClassOfResultObj);
     }

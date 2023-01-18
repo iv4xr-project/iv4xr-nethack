@@ -3,10 +3,11 @@ package nethack.agent;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import eu.iv4xr.framework.spatial.Vec3;
+import nethack.Loggers;
 import nethack.agent.navigation.NavTactic;
 import nethack.agent.navigation.NavUtils;
 import nethack.object.EntityType;
-import nethack.utils.NethackSurface_NavGraph.Tile;
+import nethack.agent.navigation.NethackSurface_NavGraph.Tile;
 import nl.uu.cs.aplib.mainConcepts.Action;
 import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.LogManager;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 import static nl.uu.cs.aplib.AplibEDSL.*;
 
 public class Actions {
-    static final Logger logger = LogManager.getLogger(Actions.class);
+    static final Logger logger = LogManager.getLogger(Loggers.GoalLogger);
 
     /**
      * Construct an action that would interact with an entity of the given id. The

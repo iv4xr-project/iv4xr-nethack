@@ -4,13 +4,17 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
+import connection.ConnectionLoggers;
 import nethack.object.Item;
 import nethack.object.ItemType;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
 
 public class ItemTypeAdapter extends TypeAdapter<Item> {
+    static final Logger logger = LogManager.getLogger(ConnectionLoggers.TypeAdapterLogger);
     @Override
     public Item read(JsonReader reader) throws IOException {
         // the first token is the start array
@@ -27,6 +31,7 @@ public class ItemTypeAdapter extends TypeAdapter<Item> {
             }
             return new Item(symbol, type, description);
         } else {
+            logger.warn("Tried to read an item, however it was not in an array");
             return null;
         }
     }

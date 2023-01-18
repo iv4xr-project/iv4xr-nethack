@@ -4,6 +4,7 @@ import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import nethack.object.EntityType;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class EntitySelector {
@@ -15,7 +16,7 @@ public class EntitySelector {
     }
 
     public static List<WorldEntity> entityTypeSelector(List<WorldEntity> entities, EntityType entityType) {
-        return entities.stream().filter(e -> e.type == entityType.name()).collect(Collectors.toList());
+        return entities.stream().filter(e -> Objects.equals(e.type, entityType.name())).collect(Collectors.toList());
     }
 
     public static List<WorldEntity> closedDoor(List<WorldEntity> entities) {

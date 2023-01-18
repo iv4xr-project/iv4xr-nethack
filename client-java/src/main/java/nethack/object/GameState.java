@@ -1,25 +1,32 @@
-package nethack;
+package nethack.object;
 
+import nethack.Loggers;
 import nethack.object.Level;
 import nethack.object.Player;
 import nethack.object.Stats;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameState {
+    public static final Logger logger = LogManager.getLogger(Loggers.NetHackLogger);
+
     public Stats stats;
     public Player player;
     public String message;
     public boolean done;
     public Object info;
-    public List<Level> world = new ArrayList<Level>();
+    public List<Level> world = new ArrayList<>();
 
     public Level level() {
         if (stats == null) {
+            logger.warn("Cannot retrieve level from GameState without stats, return null");
             return null;
         }
         if (stats.zeroIndexLevelNumber < 0) {
+            logger.warn("Cannot retrieve level < 0, return null");
             return null;
         }
         return world.get(stats.zeroIndexLevelNumber);

@@ -28,7 +28,7 @@ import java.net.Socket;
  * @author Wish
  */
 public class SendCommandClient {
-    static final Logger logger = LogManager.getLogger(SendCommandClient.class);
+    static final Logger logger = LogManager.getLogger(ConnectionLoggers.ConnectionLogger);
     String host;
     int port;
     Socket socket;

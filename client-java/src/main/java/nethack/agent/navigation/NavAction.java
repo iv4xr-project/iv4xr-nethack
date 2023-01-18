@@ -3,8 +3,9 @@ package nethack.agent.navigation;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import eu.iv4xr.framework.spatial.IntVec2D;
+import nethack.Loggers;
 import nethack.agent.AgentState;
-import nethack.utils.NethackSurface_NavGraph.Tile;
+import nethack.agent.navigation.NethackSurface_NavGraph.Tile;
 import nl.uu.cs.aplib.mainConcepts.Action;
 import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.LogManager;
@@ -15,7 +16,7 @@ import java.util.List;
 import static nl.uu.cs.aplib.AplibEDSL.action;
 
 public class NavAction {
-    static final Logger logger = LogManager.getLogger(NavAction.class);
+    static final Logger logger = LogManager.getLogger(Loggers.NavLogger);
 
     /**
      * Construct an action that would guide the agent to the given location.
@@ -51,14 +52,14 @@ public class NavAction {
             // (3) a singleton array of tile --> the next tile to move to
             //
             if (!S.agentIsAlive()) {
-                System.out.print("Cannot navigate since agent is dead");
+                logger.debug("Cannot navigate since agent is dead");
                 return null;
             }
             WorldEntity a = S.worldmodel.elements.get(S.worldmodel().agentId);
             IntVec2D agentPos = NavUtils.toTile(S.worldmodel.position).pos;
             WorldEntity e = S.worldmodel.elements.get(targetId);
             if (e == null) {
-                System.out.print("Cannot navigate since it is nextdoor");
+                logger.debug("Cannot navigate since it is nextdoor");
                 return null;
             }
 //			if (NavUtils.levelId(a) == NavUtils.levelId(e) && NavUtils.adjacent(agentPos, target, false)) {
@@ -68,10 +69,10 @@ public class NavAction {
 //			}
             List<Pair<Integer, Tile>> path = NavUtils.adjustedFindPath(S, NavUtils.levelId(a), agentPos, NavUtils.levelId(e), NavUtils.loc2(e.position));
             if (path == null) {
-                System.out.print("No path aparently");
+                logger.debug("No path apparently");
                 return null;
             }
-            System.out.print("Found path");
+            logger.debug("Found path");
             return path.get(1).snd;
         });
     }
@@ -97,19 +98,19 @@ public class NavAction {
             // (3) a singleton array of tile --> the next tile to move to
             //
             if (!S.agentIsAlive()) {
-                System.out.print("Cannot navigate since agent is dead");
+                logger.debug("Cannot navigate since agent is dead");
                 return null;
             }
             WorldEntity a = S.worldmodel.elements.get(S.worldmodel().agentId);
             Tile agentPos = NavUtils.toTile(S.worldmodel.position);
             WorldEntity e = S.worldmodel.elements.get(targetId);
             if (e == null) {
-                System.out.println("Cannot navigate since it is nextdoor");
+                logger.debug("Cannot navigate since it is nextdoor");
                 return null;
             }
             Tile target = NavUtils.toTile(e.position);
             if (S.nextToEntity(targetId, allowDiagonally)) {
-                System.out.println(String.format("Next to item id:%s", targetId));
+                logger.debug(String.format("Next to item id:%s", targetId));
                 return null;
             }
 //			if (NavUtils.levelId(a) == NavUtils.levelId(e) && NavUtils.adjacent(agentPos, target, false)) {
@@ -119,10 +120,10 @@ public class NavAction {
 //			}
             List<Pair<Integer, Tile>> path = NavUtils.adjustedFindPath(S, NavUtils.levelId(a), NavUtils.loc2(S.worldmodel.position), NavUtils.levelId(e), NavUtils.loc2(e.position));
             if (path == null) {
-                System.out.println("No path aparently");
+                logger.debug("No path apparently");
                 return null;
             }
-            System.out.println("Found path");
+            logger.debug("Found path");
             return path.get(1).snd;
         });
     }

@@ -1,4 +1,4 @@
-package nethack;
+package nethack.object;
 
 import nethack.object.Level;
 import nethack.object.Player;

@@ -2,19 +2,22 @@ package nethack.agent.navigation;
 
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.spatial.IntVec2D;
+import nethack.Loggers;
 import nethack.agent.AgentState;
-import nethack.utils.NethackSurface_NavGraph.Tile;
+import nethack.agent.navigation.NethackSurface_NavGraph.Tile;
 import nl.uu.cs.aplib.mainConcepts.SimpleState;
 import nl.uu.cs.aplib.mainConcepts.Tactic;
 import nl.uu.cs.aplib.utils.Pair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 
 public class NavTactic {
+    static final Logger logger = LogManager.getLogger(Loggers.NavLogger);
     public static Tactic navigateTo(Pair<Integer, Tile> location) {
         return NavAction.navigateTo(location.fst, location.snd.pos.x, location.snd.pos.y).lift();
     }
@@ -28,7 +31,7 @@ public class NavTactic {
         return NavAction.navigateTo()
                 .on((AgentState S) -> {
                     if (!S.agentIsAlive()) {
-                        System.out.print("Cannot navigate since agent is dead");
+                        logger.debug("Cannot navigate since agent is dead");
                         return null;
                     }
                     WorldEntity a = S.worldmodel.elements.get(S.worldmodel().agentId);
@@ -40,10 +43,10 @@ public class NavTactic {
                     IntVec2D to = NavUtils.loc2(e.position);
                     List<Pair<Integer, Tile>> path = NavUtils.adjustedFindPath(S, NavUtils.levelId(a), from, NavUtils.levelId(e), to);
                     if (path == null) {
-                        System.out.print("No path aparently");
+                        logger.debug("No path apparently");
                         return null;
                     }
-                    System.out.print("Found path to stairs down");
+                    logger.debug("Found path entity");
                     return path.get(1).snd;
                 }).lift();
     }

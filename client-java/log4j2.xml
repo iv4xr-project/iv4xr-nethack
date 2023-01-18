@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+	<!-- Source: https://mkyong.com/logging/apache-log4j-2-tutorials/ -->
+    <Appenders>
+        <Console name="LogToConsole" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+        <File name="LogToFile" fileName="app.log">
+            <PatternLayout>
+                <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+            </PatternLayout>
+        </File>
+    </Appenders>
+    <Loggers>
+        <Logger name="Connection" level="debug" additivity="false">
+            <AppenderRef ref="LogToFile" level="debug"/>
+            <AppenderRef ref="LogToConsole" level="info"/>
+        </Logger>
+        <Logger name="Message" level="debug" additivity="false">
+            <AppenderRef ref="LogToFile" level="info"/>
+        </Logger>
+        <Logger name="TypeAdapter" level="debug" additivity="false">
+            <AppenderRef ref="LogToFile" level="debug"/>
+            <AppenderRef ref="LogToConsole" level="info"/>
+        </Logger>
+
+        <Logger name="NetHack" level="debug" additivity="false">
+            <AppenderRef ref="LogToFile" level="debug"/>
+            <AppenderRef ref="LogToConsole" level="info"/>
+        </Logger>
+        <Logger name="Navigation" level="debug" additivity="false">
+            <AppenderRef ref="LogToFile" level="info"/>
+            <AppenderRef ref="LogToConsole" level="info"/>
+        </Logger>
+        <Logger name="Goal/Tactic/Action" level="debug" additivity="false">
+            <AppenderRef ref="LogToFile" level="debug"/>
+            <AppenderRef ref="LogToConsole" level="info"/>
+        </Logger>
+        <Logger name="Agent" level="debug" additivity="false">
+            <AppenderRef ref="LogToFile" level="debug"/>
+            <AppenderRef ref="LogToConsole" level="info"/>
+        </Logger>
+
+        <Root level="debug" additivity="false">
+            <AppenderRef ref="LogToFile" level="debug"/>
+            <AppenderRef ref="LogToConsole" level="debug"/>
+        </Root>
+    </Loggers>
+</Configuration>

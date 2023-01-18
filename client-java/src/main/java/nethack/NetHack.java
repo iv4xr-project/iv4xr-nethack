@@ -1,10 +1,7 @@
 package nethack;
 
 import connection.SendCommandClient;
-import nethack.object.Command;
-import nethack.object.GameMode;
-import nethack.object.Level;
-import nethack.object.Seed;
+import nethack.object.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,7 +9,7 @@ import java.util.Objects;
 import java.util.Scanner;
 
 public class NetHack {
-    public static final Logger logger = LogManager.getLogger(NetHack.class);
+    public static final Logger logger = LogManager.getLogger(Loggers.NetHackLogger);
     public GameState gameState = new GameState();
     public GameMode gameMode;
     public Seed seed;
@@ -66,7 +63,7 @@ public class NetHack {
                 render();
             }
         }
-        logger.info("Gamestate indicates it is done, loop stopped");
+        logger.info("GameState indicates it is done, loop stopped");
     }
 
     public void close() {
@@ -113,11 +110,11 @@ public class NetHack {
                 System.out.println(gameState);
                 return StepType.Special;
             case ADDITIONAL_SHOW_SEED:
-                System.out.println("Seed: " + getSeed());
+                logger.info("Seed: " + getSeed());
                 return StepType.Special;
             case ADDITIONAL_SET_SEED:
                 int index = Integer.parseInt(command.stroke.substring(1));
-                System.out.println("New seed is:" + index);
+                logger.info("New seed is:" + index);
                 setSeed(Seed.presets[index]);
                 return StepType.Special;
             case COMMAND_INVENTORY:

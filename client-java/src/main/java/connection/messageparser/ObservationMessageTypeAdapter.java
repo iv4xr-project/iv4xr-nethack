@@ -4,14 +4,18 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
+import connection.ConnectionLoggers;
 import connection.ObservationMessage;
 import nethack.object.*;
 import nl.uu.cs.aplib.utils.Pair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
 // Source: https://studytrails.com/2016/09/12/java-google-json-type-adapter/
 public class ObservationMessageTypeAdapter extends TypeAdapter<ObservationMessage> {
+    static final Logger logger = LogManager.getLogger(ConnectionLoggers.TypeAdapterLogger);
     @Override
     public ObservationMessage read(JsonReader reader) throws IOException {
         // the first token is the start array
@@ -37,13 +41,15 @@ public class ObservationMessageTypeAdapter extends TypeAdapter<ObservationMessag
                         observationMessage.items = readItems(reader);
                         break;
                     default:
-                        throw new IllegalArgumentException(String.format("Unknown observationMessage key: %s", objectEntry));
+                        String errorMsg = String.format("Unknown observationMessage key: %s", objectEntry);
+                        logger.error(errorMsg);
+                        throw new IllegalArgumentException(errorMsg);
                 }
             }
             reader.endObject();
             return observationMessage;
         } else {
-            System.out.println("Not an object");
+            logger.error("Trying to read observation message, however not an object");
             return null;
         }
     }
