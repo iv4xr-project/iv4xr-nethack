@@ -1,14 +1,14 @@
-package nethack.agent.navigation;
+package agent.navigation;
 
+import agent.AgentLoggers;
 import eu.iv4xr.framework.extensions.pathfinding.LayeredAreasNavigation;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import eu.iv4xr.framework.spatial.IntVec2D;
 import eu.iv4xr.framework.spatial.Vec3;
-import nethack.Loggers;
-import nethack.agent.AgentState;
+import agent.AgentState;
 import nethack.object.Command;
-import nethack.agent.navigation.NethackSurface_NavGraph.Tile;
+import agent.navigation.NethackSurface_NavGraph.Tile;
 import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,7 +16,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.List;
 
 public class NavUtils {
-    static final Logger logger = LogManager.getLogger(Loggers.NavLogger);
+    static final Logger logger = LogManager.getLogger(AgentLoggers.NavLogger);
     /**
      * Distance in terms of path-length from the agent that owns S to the entity e.
      * It uses adjustedFindPath to calculate the path.

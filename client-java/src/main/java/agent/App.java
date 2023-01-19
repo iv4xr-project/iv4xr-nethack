@@ -1,15 +1,14 @@
-package nethack.agent;
+package agent;
 
+import agent.navigation.NavUtils;
 import connection.ConnectionLoggers;
 import connection.SendCommandClient;
 import eu.iv4xr.framework.mainConcepts.TestAgent;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
-import nethack.Loggers;
 import nethack.NetHack;
 import nethack.NetHack.StepType;
-import nethack.agent.navigation.NavTactic;
-import nethack.agent.navigation.NavUtils;
+import agent.navigation.NavTactic;
 import nethack.object.Command;
 import nethack.object.EntityType;
 import nethack.object.Player;
@@ -24,9 +23,9 @@ import java.util.List;
 
 import static nl.uu.cs.aplib.AplibEDSL.*;
 
-public class Sandbox {
+public class App {
     static final Logger connectionLogger = LogManager.getLogger(ConnectionLoggers.ConnectionLogger);
-    static final Logger agentLogger = LogManager.getLogger(Loggers.AgentLogger);
+    static final Logger agentLogger = LogManager.getLogger(AgentLoggers.AgentLogger);
 
     public static void main(String[] args) throws Exception {
         // Initialize socket connection

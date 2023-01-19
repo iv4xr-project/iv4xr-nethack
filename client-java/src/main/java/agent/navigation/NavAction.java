@@ -1,11 +1,11 @@
-package nethack.agent.navigation;
+package agent.navigation;
 
+import agent.AgentLoggers;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import eu.iv4xr.framework.spatial.IntVec2D;
-import nethack.Loggers;
-import nethack.agent.AgentState;
-import nethack.agent.navigation.NethackSurface_NavGraph.Tile;
+import agent.AgentState;
+import agent.navigation.NethackSurface_NavGraph.Tile;
 import nl.uu.cs.aplib.mainConcepts.Action;
 import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.LogManager;
@@ -16,7 +16,7 @@ import java.util.List;
 import static nl.uu.cs.aplib.AplibEDSL.action;
 
 public class NavAction {
-    static final Logger logger = LogManager.getLogger(Loggers.NavLogger);
+    static final Logger logger = LogManager.getLogger(AgentLoggers.NavLogger);
 
     /**
      * Construct an action that would guide the agent to the given location.

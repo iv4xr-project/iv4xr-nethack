@@ -1,10 +1,7 @@
 package nethack.object;
 
 import eu.iv4xr.framework.spatial.IntVec2D;
-import nethack.Loggers;
-import nethack.agent.navigation.NavUtils;
-import nethack.agent.navigation.NethackSurface_NavGraph;
-import nl.uu.cs.aplib.exampleUsages.miniDungeon.testAgent.Utils;
+import nethack.NetHackLoggers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Level {
-    public static final Logger logger = LogManager.getLogger(Loggers.NetHackLogger);
+    public static final Logger logger = LogManager.getLogger(NetHackLoggers.NetHackLogger);
     public static final int HEIGHT = 21, WIDTH = 79;
     public Entity[][] map;
     public List<IntVec2D> changedCoordinates = new ArrayList<>();

@@ -1,16 +1,14 @@
-package nethack.agent.navigation;
+package agent.navigation;
 
+import agent.AgentLoggers;
 import eu.iv4xr.framework.extensions.pathfinding.*;
 import eu.iv4xr.framework.spatial.IntVec2D;
-import nethack.Loggers;
 import nethack.object.Color;
 import nethack.object.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Representing a navigation graph over a 2D tiled-world. The world is assumed
@@ -35,7 +33,7 @@ public class NethackSurface_NavGraph
         XPathfinder<NethackSurface_NavGraph.Tile>,
         CanDealWithDynamicObstacle<NethackSurface_NavGraph.Tile> {
 
-    static final Logger logger = LogManager.getLogger(Loggers.NavLogger);
+    static final Logger logger = LogManager.getLogger(AgentLoggers.NavLogger);
     // The dimensions of the graph
     private final static int sizeX = Level.WIDTH, sizeY = Level.HEIGHT;
     private Tile[][] tiles = new Tile[sizeY + 2][sizeX + 2];

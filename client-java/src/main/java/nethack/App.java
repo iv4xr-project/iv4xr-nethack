@@ -1,3 +1,5 @@
+package nethack;
+
 import connection.ConnectionLoggers;
 import connection.SendCommandClient;
 import nethack.NetHack;

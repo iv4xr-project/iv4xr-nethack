@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.Scanner;
 
 public class NetHack {
-    public static final Logger logger = LogManager.getLogger(Loggers.NetHackLogger);
+    public static final Logger logger = LogManager.getLogger(NetHackLoggers.NetHackLogger);
     public GameState gameState = new GameState();
     public GameMode gameMode;
     public Seed seed;

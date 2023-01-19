@@ -1,18 +1,17 @@
-package nethack.agent;
+package agent;
 
+import agent.navigation.NavUtils;
 import eu.iv4xr.framework.extensions.pathfinding.LayeredAreasNavigation;
 import eu.iv4xr.framework.extensions.pathfinding.Navigatable;
 import eu.iv4xr.framework.mainConcepts.Iv4xrAgentState;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.spatial.IntVec2D;
-import nethack.Loggers;
-import nethack.agent.navigation.NavUtils;
 import nethack.object.Entity;
 import nethack.object.EntityType;
 import nethack.object.Level;
 import nethack.object.Player;
-import nethack.agent.navigation.NethackSurface_NavGraph;
-import nethack.agent.navigation.NethackSurface_NavGraph.*;
+import agent.navigation.NethackSurface_NavGraph;
+import agent.navigation.NethackSurface_NavGraph.*;
 import nl.uu.cs.aplib.mainConcepts.Environment;
 import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.LogManager;
@@ -31,7 +30,7 @@ import java.util.stream.Collectors;
  * @author wish
  */
 public class AgentState extends Iv4xrAgentState<Void> {
-    static final Logger logger = LogManager.getLogger(Loggers.AgentLogger);
+    static final Logger logger = LogManager.getLogger(AgentLoggers.AgentLogger);
     public LayeredAreasNavigation<Tile, NethackSurface_NavGraph> multiLayerNav;
 
     @Override

@@ -1,6 +1,6 @@
 package nethack.object;
 
-import nethack.Loggers;
+import nethack.NetHackLoggers;
 import nethack.object.Level;
 import nethack.object.Player;
 import nethack.object.Stats;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameState {
-    public static final Logger logger = LogManager.getLogger(Loggers.NetHackLogger);
+    public static final Logger logger = LogManager.getLogger(NetHackLoggers.NetHackLogger);
 
     public Stats stats;
     public Player player;

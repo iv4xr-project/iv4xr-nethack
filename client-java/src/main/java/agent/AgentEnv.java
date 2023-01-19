@@ -1,4 +1,4 @@
-package nethack.agent;
+package agent;
 
 import eu.iv4xr.framework.mainConcepts.Iv4xrEnvironment;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;

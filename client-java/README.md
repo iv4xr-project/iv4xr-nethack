@@ -10,7 +10,7 @@ The purpose of this directory is to interpret the GameState sent by the [server]
 
 This Maven project should work on any OS, it has been tested on Ubuntu and Windows.
 
-*Note: the entry points for this project are [App.java](src/main/java/App.java) and [Sandbox.java](src/main/java/nethack/agent/Sandbox.java).*
+*Note: the entry points for this project are [nethack.App.java](src/main/java/App.java) and [agent.App.java](src/main/java/agent/App.java).*
 
 ## IntelliJ IDEA
 
