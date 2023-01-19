@@ -2,8 +2,11 @@ package nethack.agent.navigation;
 
 import eu.iv4xr.framework.extensions.pathfinding.*;
 import eu.iv4xr.framework.spatial.IntVec2D;
+import nethack.Loggers;
 import nethack.object.Color;
 import nethack.object.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -32,12 +35,10 @@ public class NethackSurface_NavGraph
         XPathfinder<NethackSurface_NavGraph.Tile>,
         CanDealWithDynamicObstacle<NethackSurface_NavGraph.Tile> {
 
-    // The x coordinates of this tiled-surface starts from 0 until sizeX-1
-    private final static int sizeX = Level.WIDTH;
-    // The y coordinates of this tiled-surface starts from 0 until sizeY-1
-    private final static int sizeY = Level.HEIGHT;
-    private Map<Integer, Map<Integer, Tile>> tiles = new HashMap<>();
-    public Map<Integer, Set<Integer>> seen = new HashMap<>();
+    static final Logger logger = LogManager.getLogger(Loggers.NavLogger);
+    // The dimensions of the graph
+    private final static int sizeX = Level.WIDTH, sizeY = Level.HEIGHT;
+    private Tile[][] tiles = new Tile[sizeY + 2][sizeX + 2];
     public Pathfinder<Tile> pathfinder = new AStar<>();
     /**
      * If true, the pathfinder will assume that the whole navgraph has been "seen",
@@ -56,33 +57,33 @@ public class NethackSurface_NavGraph
             throw new IllegalArgumentException();
         }
 
-        Map<Integer, Tile> xMap = tiles.computeIfAbsent(o.pos.x, k -> new HashMap<>());
-        xMap.put(o.pos.y, o);
+        tiles[o.pos.y + 1][o.pos.x + 1] = o;
     }
 
     /**
      * Remove a non-navigable tile (obstacle).
      */
     public void removeObstacle(Tile o) {
-        Map<Integer, Tile> xMap = tiles.computeIfAbsent(o.pos.x, k -> new HashMap<>());
-        xMap.put(o.pos.y, o);
+        tiles[o.pos.y + 1][o.pos.x + 1] = o;
     }
 
     public void markAsSeen(Tile p) {
-        Set<Integer> ys = seen.computeIfAbsent(p.pos.x, k -> new HashSet<>());
-        ys.add(p.pos.y);
-        frontierCandidates.add(p);
-    }
-
-    public void markAsSeen(List<Tile> newlySeen) {
-        for (Tile p : newlySeen) {
-            markAsSeen(p);
+        Tile t = getTile(p.pos);
+        if (t != null) {
+            t.seen = true;
+            frontierCandidates.add(p);
+        } else {
+            logger.warn(String.format("Tried to mark a null tile as seen @%s", p.pos));
         }
     }
 
+    public void markAsSeen(List<Tile> newlySeen) {
+        newlySeen.forEach(this::markAsSeen);
+    }
+
     public boolean hasbeenSeen(int x, int y) {
-        Set<Integer> ys = seen.get(x);
-        return ys != null && ys.contains(y);
+        Tile t = getTile(x, y);
+        return t != null && t.seen;
     }
 
     public boolean hasbeenSeen(Tile tile) {
@@ -93,26 +94,25 @@ public class NethackSurface_NavGraph
      * The tile is blocking (true) if it is a wall or a closed door. Else it is
      * non-blocking (false).
      */
-    private boolean isBlocking(IntVec2D pos) {
-        return isBlocking(new Tile(pos));
-    }
-
     public boolean isBlocking(Tile tile) {
-        if (isWall(tile.pos))
-            return true;
-        if (isDoor(tile.pos)) {
-            NonNavigableTile o = getObstacle(tile.pos);
-            Door door = (Door) o;
-            return !door.isOpen;
-        }
-        return false;
+        return isBlocking(tile.pos);
     }
 
-    public boolean isDiagonalDoorMove(Tile tile, int x, int y) {
-        if (tile.pos.x == x || tile.pos.y == y) {
+    private boolean isBlocking(IntVec2D pos) {
+        Tile t = getTile(pos);
+
+        if (t instanceof Door) {
+            Door d = (Door)t;
+            return !d.isOpen;
+        }
+        return t instanceof Wall;
+    }
+
+    public boolean isDiagonalDoorMove(IntVec2D pos, int x, int y) {
+        if (pos.x == x || pos.y == y) {
             return false;
         }
-        return isDoor(tile.pos) || isDoor(new IntVec2D(x, y));
+        return isDoor(pos) || isDoor(new IntVec2D(x, y));
     }
 
     @Override
@@ -185,53 +185,33 @@ public class NethackSurface_NavGraph
      * Mark all vertices as "unseen".
      */
     public void wipeOutMemory() {
-        seen.clear();
+        for (Tile[] row: tiles) {
+            for (Tile t: row) {
+                if (t != null) {
+                    t.seen = false;
+                }
+            }
+        }
         frontierCandidates.clear();
     }
 
-    public static List<IntVec2D> physicalNeighbourCoordinates(IntVec2D pos) {
+    public static IntVec2D[] physicalNeighbourCoordinates(IntVec2D pos) {
         int left = pos.x - 1;
         int right = pos.x + 1;
         int below = pos.y - 1;
         int above = pos.y + 1;
 
-        List<IntVec2D> candidates = new ArrayList<>();
-        if (left >= 0)
-            candidates.add(new IntVec2D(left, pos.y));
-        if (right < sizeX)
-            candidates.add(new IntVec2D(right, pos.y));
-        if (below >= 0)
-            candidates.add(new IntVec2D(pos.x, below));
-        if (above < sizeY)
-            candidates.add(new IntVec2D(pos.x, above));
-        // Diagonal moves
-        if (left >= 0 && below >= 0)
-            candidates.add(new IntVec2D(left, below));
-        if (left >= 0 && above < sizeY)
-            candidates.add(new IntVec2D(left, above));
-        if (right < sizeX && above < sizeY)
-            candidates.add(new IntVec2D(right, above));
-        if (right < sizeX && below >= 0)
-            candidates.add(new IntVec2D(right, below));
-
-        return candidates;
-    }
-
-    /**
-     * Return the neighbors of a tile. A tile u is a neighbor of a tile t if u is
-     * adjacent to t. This method does not consider whether u has been seen or not,
-     * nor whether u is navigable.
-     */
-    public List<Tile> physicalNeighbours(IntVec2D pos) {
-        List<IntVec2D> neighbourCoordinates = physicalNeighbourCoordinates(pos);
-        List<Tile> candidates = neighbourCoordinates.stream().map(Tile::new).collect(Collectors.toList());
-
-//        candidates = candidates.stream()
-//            // .filter(c -> ! isBlocked(c.x,c.y))
-//            .collect(Collectors.toList());
-//        System.out.println("&&&& " + candidates.size());
-
-        return candidates;
+        return new IntVec2D[]{
+            new IntVec2D(left, pos.y),
+            new IntVec2D(right, pos.y),
+            new IntVec2D(pos.x, below),
+            new IntVec2D(pos.x, above),
+            // Diagonal moves
+            new IntVec2D(left, below),
+            new IntVec2D(left, above),
+            new IntVec2D(right, above),
+            new IntVec2D(right, below),
+        };
     }
 
     /**
@@ -242,19 +222,34 @@ public class NethackSurface_NavGraph
      *
      * <p>
      * Only neighbors that have been seen before will be included.
+     *
+     * <p>
+     * For optimization purposes Lists with filters or streams have been avoided
+     * Instead arrays are used and at the end a list is built
      */
     public List<Tile> neighbours_(int x, int y) {
-        List<Tile> candidates = physicalNeighbours(new IntVec2D(x, y));
-        // System.out.println("=== (" + x + "," + y + ") -> " + candidates.size()) ;
+        IntVec2D[] candidates = physicalNeighbourCoordinates(new IntVec2D(x, y));
+        int nrResults = 0;
+        boolean[] toNeighbour = new boolean[candidates.length];
 
-        // Cant navigate to block and cannot diagonally move in/out a door
-        candidates = candidates.stream().filter(c -> !isBlocking(c) && !isDiagonalDoorMove(c, x, y)).collect(Collectors.toList());
-
-        if (!perfect_memory_pathfinding) {
-            candidates = candidates.stream().filter(c -> hasbeenSeen(c.pos.x, c.pos.y)).collect(Collectors.toList());
+        for (int i = 0; i < candidates.length; i++) {
+            IntVec2D candidate = candidates[i];
+            toNeighbour[i] = !isBlocking(candidate) && !isDiagonalDoorMove(candidate, x, y);
+            if (!perfect_memory_pathfinding) {
+                toNeighbour[i] = toNeighbour[i] && hasbeenSeen(candidate.x, candidate.y);
+            }
+            if (toNeighbour[i]) {
+                nrResults++;
+            }
         }
-        // System.out.println("=== " + candidates.size() + ":" + candidates) ;
-        return candidates;
+
+        List<Tile> result = new ArrayList<>(nrResults);
+        for (int i = 0; i < candidates.length; i++) {
+            if (toNeighbour[i]) {
+                result.add(new Tile(candidates[i]));
+            }
+        }
+        return result;
     }
 
     /**
@@ -306,10 +301,10 @@ public class NethackSurface_NavGraph
         List<Tile> frontiers = new LinkedList<>();
         List<Tile> cannotBeFrontier = new LinkedList<>();
         for (Tile t : frontierCandidates) {
-            List<Tile> pneighbors = physicalNeighbours(t.pos);
+            IntVec2D[] pneighbors = physicalNeighbourCoordinates(t.pos);
             boolean isFrontier = false;
-            for (Tile n : pneighbors) {
-                if (!hasbeenSeen(n.pos.x, n.pos.y)) {
+            for (IntVec2D n : pneighbors) {
+                if (!hasbeenSeen(n.x, n.y)) {
                     frontiers.add(t);
                     isFrontier = true;
                     break;
@@ -363,11 +358,11 @@ public class NethackSurface_NavGraph
     public boolean hasTile(IntVec2D pos) { return getTile(pos) != null; }
 
     private Tile getTile(IntVec2D pos) {
-        var fmap = tiles.get(pos.x);
-        if (fmap != null) {
-            return fmap.get(pos.y);
-        }
-        return null;
+        return getTile(pos.x, pos.y);
+    }
+
+    private Tile getTile(int x, int y) {
+        return tiles[y + 1][x + 1];
     }
 
     private NonNavigableTile getObstacle(IntVec2D pos) {
@@ -386,12 +381,13 @@ public class NethackSurface_NavGraph
         return null;
     }
 
-
     public List<IntVec2D> VisibleCoordinates(IntVec2D agentPosition, Level level) {
-        // First reset visibility
-        for (var xmap: tiles.values()) {
-            for (Tile t: xmap.values()) {
-                t.visible = false;
+        // First reset visibility of all tiles to false
+        for (Tile[] row: tiles) {
+            for (Tile t: row) {
+                if (t != null) {
+                    t.visible = false;
+                }
             }
         }
 
@@ -420,10 +416,10 @@ public class NethackSurface_NavGraph
             }
 
             // Get the neighbours
-            List<IntVec2D> neighbours = physicalNeighbourCoordinates(nextPos);
+            IntVec2D[] neighbours = physicalNeighbourCoordinates(nextPos);
             if (isDoorway(nextPos)) {
                 // Does not have a lit floor tile next to it, so we assume we cannot see it
-                if (neighbours.stream().noneMatch(coord -> isFloor(coord) && level.getEntity(coord).color != Color.TRANSPARENT)) {
+                if (Arrays.stream(neighbours).noneMatch(coord -> isFloor(coord) && level.getEntity(coord).color != Color.TRANSPARENT)) {
                     continue;
                 }
             }
@@ -437,7 +433,7 @@ public class NethackSurface_NavGraph
                 continue;
             } // Only add all neighbours if it is floor or the current position of the agent
             else if (isFloor(nextPos) || nextPos == agentPosition) {
-                queue.addAll(neighbours);
+                queue.addAll(Arrays.asList(neighbours));
             }
         }
 
@@ -483,6 +479,7 @@ public class NethackSurface_NavGraph
     public static class Tile {
         public IntVec2D pos;
         public boolean visible = false;
+        public boolean seen = false;
 
         public Tile(IntVec2D pos) {
             this.pos = pos;

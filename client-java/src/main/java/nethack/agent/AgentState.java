@@ -106,7 +106,6 @@ public class AgentState extends Iv4xrAgentState<Void> {
                 addNewNavGraph(true);
             }
 
-            multiLayerNav.markAsSeen(new Pair<>(levelNr, new Tile(pos)));
             switch (type) {
                 case WALL:
                 case BOULDER:
@@ -129,22 +128,25 @@ public class AgentState extends Iv4xrAgentState<Void> {
                     // If the tile has been seen we switch the state to non-blocking.
                     // If we don't know the type of the tile, we for now put a tile in its place
                     if (multiLayerNav.areas.get(levelNr).hasTile(pos)) {
-                        multiLayerNav.setBlockingState(new Pair<>(levelNr, new Tile(pos)), false);
+                        multiLayerNav.toggleBlockingOff(new Pair<>(levelNr, new Tile(pos)));
                     } else {
                         multiLayerNav.removeObstacle(new Pair<>(levelNr, new Tile(pos)));
                     }
                     break;
             }
+
+            // Lastly mark it as seen
+            multiLayerNav.markAsSeen(new Pair<>(levelNr, new Tile(pos)));
         }
 
         NethackSurface_NavGraph navGraph = multiLayerNav.areas.get(levelNr);
         IntVec2D playerPos = NavUtils.loc2(worldmodel.position);
         // Each entity that is next to the agent which is void is a wall
-        List<IntVec2D> adjacentCoords = NethackSurface_NavGraph.physicalNeighbourCoordinates(playerPos);
+        IntVec2D[] adjacentCoords = NethackSurface_NavGraph.physicalNeighbourCoordinates(playerPos);
         for (IntVec2D adjacentPos: adjacentCoords) {
             if (!navGraph.hasTile(adjacentPos)) {
-                multiLayerNav.markAsSeen(new Pair<>(levelNr, new Tile(adjacentPos)));
                 multiLayerNav.addObstacle(new Pair<>(levelNr, new Wall(adjacentPos)));
+                multiLayerNav.markAsSeen(new Pair<>(levelNr, new Tile(adjacentPos)));
             }
         }
     }
