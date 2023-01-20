@@ -6,7 +6,8 @@ import eu.iv4xr.framework.spatial.Vec3;
 public class Player {
     public static final String ID = "player";
     public Inventory inventory;
-
+    public Vec3 previousPosition;
+    public IntVec2D previousPosition2D;
     public Vec3 position;
     public IntVec2D position2D;
     public int strength;

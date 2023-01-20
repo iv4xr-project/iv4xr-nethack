@@ -156,6 +156,12 @@ public class NetHack {
 
         // Set all members to the correct values
         gameState.message = stepState.message;
+
+        // Remeber last position of player
+        if (gameState.player != null) {
+            stepState.player.previousPosition = gameState.player.position;
+            stepState.player.previousPosition2D = gameState.player.position2D;
+        }
         gameState.player = stepState.player;
         gameState.stats = stepState.stats;
         gameState.done = stepState.done;

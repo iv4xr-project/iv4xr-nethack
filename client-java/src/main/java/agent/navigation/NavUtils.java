@@ -77,6 +77,10 @@ public class NavUtils {
         return new Pair<>(levelNr, toTile(pos));
     }
 
+    static Pair<Integer, Tile> loc3(Vec3 pos) {
+        return new Pair<>((int)pos.z, toTile(pos));
+    }
+
     public static boolean adjacent(Vec3 vec1, Vec3 vec2, boolean allowDiagonally) {
         return adjacent(toTile(vec1), toTile(vec2), allowDiagonally);
     }

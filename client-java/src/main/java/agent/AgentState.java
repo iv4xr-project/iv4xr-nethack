@@ -60,6 +60,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
     public AgentState setEnvironment(Environment env) {
         super.setEnvironment(env);
         multiLayerNav = new LayeredAreasNavigation<>();
+        multiLayerNav.setPerfectMemoryPathfinding(true);
         addNewNavGraph(false);
         return this;
     }
@@ -72,10 +73,10 @@ public class AgentState extends Iv4xrAgentState<Void> {
         NetHackSurface newNav = new NetHackSurface();
 
         if (withPortal) {
-            IntVec2D playerPosition = env().app.gameState.player.position2D;
-            Tile lowPortal = new Tile(playerPosition.x, playerPosition.y);
-            Tile highPortal = new Tile(playerPosition.x, playerPosition.y);
-            multiLayerNav.addNextArea(newNav, lowPortal, highPortal, true);
+            Player player = env().app.gameState.player;
+            Tile previousLevelStairCase = new Tile(player.previousPosition2D);
+            Tile nextLevelStairCase = new Tile(player.position2D);
+            multiLayerNav.addNextArea(newNav, previousLevelStairCase, nextLevelStairCase, true);
         } else {
             multiLayerNav.addNextArea(newNav, null, null, false);
         }

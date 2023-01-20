@@ -7,5 +7,5 @@ public class Doorway extends Tile {
     public Doorway(IntVec2D pos) { super(pos); }
 
     @Override
-    public char toChar() { return '·'; }
+    public char toChar() { return '~'; }
 }

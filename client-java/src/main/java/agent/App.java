@@ -48,19 +48,19 @@ public class App {
         int k = 0;
         // Now we run the agent:
         while (G.getStatus().inProgress() && k++ < 700) {
-//            Command command = nethack.waitCommand(true);
-//            if (command != null) {
-//                StepType stepType = nethack.step(command);
-//                if (stepType != StepType.Valid) {
-//                    continue;
-//                }
-//            } else {
+            Command command = nethack.waitCommand(true);
+            if (command != null) {
+                StepType stepType = nethack.step(command);
+                if (stepType != StepType.Valid) {
+                    continue;
+                }
+            } else {
                 agent.update();
-//                agentLogger.debug(String.format("** [%d] agent @%s", k, NavUtils.toTile(state.worldmodel.position)));
-//            }
+                agentLogger.debug(String.format("** [%d] agent @%s", k, NavUtils.toTile(state.worldmodel.position)));
+            }
             state.updateState(Player.ID);
             state.render();
-//            commander.writeCommand("Render", "");
+            commander.writeCommand("Render", "");
         }
 
         agentLogger.info(String.format("Closing NetHack since the loop in agent has surpassed %d steps", k));

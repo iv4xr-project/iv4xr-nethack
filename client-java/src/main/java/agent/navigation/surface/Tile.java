@@ -3,6 +3,8 @@ package agent.navigation.surface;
 
 import eu.iv4xr.framework.spatial.IntVec2D;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Tile {
@@ -10,6 +12,7 @@ public class Tile {
     public boolean visible = false;
     public boolean seen = false;
     public final boolean seeThrough = true;
+    public List<Tile> neighbours = new ArrayList<>(8);
 
     public Tile(IntVec2D pos) {
         this.pos = pos;
@@ -21,6 +24,10 @@ public class Tile {
 
     @Override
     public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        }
+
         if (o instanceof Tile) {
             Tile t = (Tile) o;
             return pos.x == t.pos.x && pos.y == t.pos.y;

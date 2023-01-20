@@ -40,7 +40,7 @@ public class NetHackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
      * essentially turns off memory-based path finding. The default of this flag is
      * false.
      */
-    boolean perfect_memory_pathfinding = false;
+    boolean perfect_memory_pathfinding = true;
     Set<Tile> frontierCandidates = new HashSet<>();
 
     private boolean isDiagonalDoorMove(IntVec2D pos0, IntVec2D pos1) {
@@ -193,6 +193,18 @@ public class NetHackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
         }
 
         tiles[o.pos.y + 1][o.pos.x + 1] = o;
+        updateNeighbours(o);
+    }
+
+    private void updateNeighbours(Tile t) {
+        t.neighbours = neighbours_(t.pos);
+        for (IntVec2D neighbourCoordinate: physicalNeighbourCoordinates(t.pos)) {
+            Tile neighbour = getTile(neighbourCoordinate);
+            if (neighbour == null) {
+                continue;
+            }
+            neighbour.neighbours = neighbours_(neighbour.pos);
+        }
     }
 
     /**
@@ -201,6 +213,7 @@ public class NetHackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
     @Override
     public void removeObstacle(Tile o) {
         tiles[o.pos.y + 1][o.pos.x + 1] = o;
+        updateNeighbours(o);
     }
 
     /**
@@ -235,6 +248,7 @@ public class NetHackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
             Door door = (Door) t;
             door.isOpen = !isBlocking;
         }
+        updateNeighbours(t);
     }
     //endregion
 
@@ -259,9 +273,13 @@ public class NetHackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
         Tile t = getTile(p.pos);
         if (t != null) {
             t.seen = true;
-            frontierCandidates.add(p);
+            // Do not mark frontiers around tiles that are blocking
+            if (!isBlocking(t)) {
+                frontierCandidates.add(p);
+            }
         } else {
             logger.warn(String.format("Tried to mark a null tile as seen @%s", p.pos));
+            throw new IllegalStateException("Cannot try to mark a tile as seen which is not present");
         }
     }
 
@@ -286,11 +304,13 @@ public class NetHackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
             }
             if (!isFrontier) {
                 cannotBeFrontier.add(t);
+//                System.out.printf("Cannot be frontier %s%n", t);
             }
         }
         // remove tiles that are obviously not frontiers:
-        frontierCandidates.removeAll(cannotBeFrontier);
-        // System.out.println(">>> Sparse2D.getFrontier() is called") ;
+        cannotBeFrontier.forEach(frontierCandidates::remove);
+//        System.out.printf(">>> Sparse2D.getFrontier() is called, size=\"%d\"%n", frontiers.size());
+//        System.out.printf(">>> candidates, size=\"%d\"%n", frontierCandidates.size());
         return frontiers;
     }
 
@@ -323,6 +343,7 @@ public class NetHackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
     }
 
     public List<Tile> findPath(Tile from, Tile to) {
+//        System.out.printf("FindPath: %s->%s %n", from.pos, to.pos);
         return pathfinder.findPath(this, from, to);
     }
 
@@ -382,7 +403,30 @@ public class NetHackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
      */
     @Override
     public Iterable<Tile> neighbours(Tile t) {
-        return neighbours_(t.pos.x, t.pos.y);
+        Tile tile = getTile(t.pos);
+        if (tile == null) {
+            return new ArrayList<>();
+        }
+        return getTile(tile.pos).neighbours;
+//
+//        List<Tile> firstList = getTile(tile.pos).neighbours;
+//        List<Tile> secondList = neighbours_(tile.pos);
+//
+//        if (firstList.size() != secondList.size()) {
+//            System.out.printf("-------%s-------%n", tile.pos);
+//            System.out.println("-------TILE LIST-------");
+//            for (Tile neighbour: firstList) {
+//                System.out.println(neighbour.pos);
+//            }
+//
+//            System.out.println("-------TRUE LIST-------");
+//            for (Tile neighbour: secondList) {
+//                System.out.println(neighbour.pos);
+//            }
+//            System.out.println();
+//        }
+//
+//        return secondList;
     }
 
     /**
@@ -398,8 +442,7 @@ public class NetHackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
      * For optimization purposes Lists with filters or streams have been avoided
      * Instead arrays are used and at the end a list is built
      */
-    private List<Tile> neighbours_(int x, int y) {
-        IntVec2D pos = new IntVec2D(x, y);
+    private List<Tile> neighbours_(IntVec2D pos) {
         IntVec2D[] candidates = physicalNeighbourCoordinates(pos);
         int nrResults = 0;
         boolean[] toNeighbour = new boolean[candidates.length];
