@@ -42,12 +42,12 @@ public class App {
         AgentState state = new AgentState();
         GoalStructure G = explore();
 
-        TestAgent agent = new TestAgent("player", "player").attachState(state).attachEnvironment(env).setGoal(G);
+        TestAgent agent = new TestAgent(Player.ID, "player").attachState(state).attachEnvironment(env).setGoal(G);
 
         agentLogger.info(">> Start agent loop...");
         int k = 0;
         // Now we run the agent:
-        while (G.getStatus().inProgress() && k++ < 400) {
+        while (G.getStatus().inProgress() && k++ < 700) {
             Command command = nethack.waitCommand(true);
             if (command != null) {
                 StepType stepType = nethack.step(command);
@@ -58,12 +58,12 @@ public class App {
                 agent.update();
                 agentLogger.debug(String.format("** [%d] agent @%s", k, NavUtils.toTile(state.worldmodel.position)));
             }
-            state.updateState(Player.id);
+            state.updateState(Player.ID);
             state.render();
             commander.writeCommand("Render", "");
         }
 
-        agentLogger.info(String.format("Closing nethack since the loop in agent has surpassed %d steps", k));
+        agentLogger.info(String.format("Closing NetHack since the loop in agent has surpassed %d steps", k));
         nethack.close();
 
         // Close socket connection

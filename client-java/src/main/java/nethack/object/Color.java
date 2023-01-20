@@ -1,5 +1,9 @@
 package nethack.object;
 
+import connection.SendCommandClient;
+import nethack.NetHack;
+
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,8 +11,7 @@ public enum Color {
     // Reference file: server-python/lib/nle/src/decl.c
     // Stack-overflow on terminal colors:
     // https://www.w3schools.blog/ansi-colors-java
-    // Prefixes: https://invisible-island.net/xterm/ctlseqs/ctlseqs.html (Under:
-    // Character Attributes (SGR))
+    // Prefixes: https://invisible-island.net/xterm/ctlseqs/ctlseqs.html (Under: Character Attributes (SGR))
     // Complete documentation:
     // https://www.ecma-international.org/wp-content/uploads/ECMA-48_5th_edition_june_1991.pdf
     // (8.3.117 SGR - Select graphic rendition)
@@ -20,9 +23,9 @@ public enum Color {
     BROWN(3, "38;5;173"),
     BLUE(4, "0;34"),
     MAGENTA(5, "38;5;171"),
-    CYAN(6, "38;5;51"),
-    GRAY(7, "0;90"),
-    TRANSPARENT(8, "0;30"/*"38;5;239"*/),
+    CYAN(6, "38;5;123"),
+    GRAY(7, ""),
+    TRANSPARENT(8, "0;90"),
     ORANGE(9, "38;5;208"),
     GREEN_BRIGHT(10, "0;92"),
     YELLOW(11, "0;93"),
@@ -40,8 +43,8 @@ public enum Color {
         }
     }
 
-    private String colorCode;
-    private int value;
+    private final String colorCode;
+    private final int value;
 
     Color(int value, String colorCode) {
         this.value = value;
@@ -55,13 +58,17 @@ public enum Color {
         throw new IllegalArgumentException("Color value not known: " + value);
     }
 
-    public static void colorpalette() {
+    public String stringCode() {
+        return String.format("\033[%sm", colorCode);
+    }
+
+    private static void colorpalette() {
         for (Color color : Color.values()) {
             System.out.println("\033[" + color.colorCode + "m " + color.name());
         }
     }
 
-    public String stringCode() {
-        return String.format("\033[%sm", colorCode);
+    public static void main(String[] args) throws IOException {
+        colorpalette();
     }
 }

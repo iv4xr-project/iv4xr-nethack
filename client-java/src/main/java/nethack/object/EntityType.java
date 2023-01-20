@@ -7,6 +7,7 @@ public enum EntityType implements Serializable {
     AMULET,
     ARMOR,
     BALL,
+    PRISON_BARS,
     BOULDER,
     CORRIDOR,
     DOOR,

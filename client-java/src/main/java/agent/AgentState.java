@@ -168,7 +168,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
             } else {
                 logger.debug(String.format("<%d,%d> %s [%s]", (int)we.position.x, (int)we.position.y, we.id, we.type));
             }
-            if (we.id.equals(Player.id) || we.id.equals("aux")) {
+            if (we.id.equals(Player.ID) || we.id.equals("aux")) {
                 continue;
             }
 

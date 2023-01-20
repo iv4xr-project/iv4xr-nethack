@@ -42,7 +42,7 @@ public class AgentEnv extends Iv4xrEnvironment {
 
         WorldEntity aux = mkGameAuxState();
         wom.elements.put(aux.id, aux);
-        wom.elements.put(app.gameState.player.id, toWorldEntity(app.gameState.player));
+        wom.elements.put(app.gameState.player.ID, toWorldEntity(app.gameState.player));
 
         // Add changed coordinates
         Level level = app.level();
@@ -68,11 +68,11 @@ public class AgentEnv extends Iv4xrEnvironment {
 
     public WorldModel action(Command action) {
         app.step(action);
-        return observe(Player.id);
+        return observe(Player.ID);
     }
 
     WorldEntity toWorldEntity(Player p) {
-        WorldEntity we = new WorldEntity(Player.id, EntityType.PLAYER.name(), true);
+        WorldEntity we = new WorldEntity(Player.ID, EntityType.PLAYER.name(), true);
         we.properties.put("level", app.gameState.stats.zeroIndexLevelNumber);
         we.properties.put("hp", app.gameState.player.hp);
         we.properties.put("hpmax", app.gameState.player.hpMax);
