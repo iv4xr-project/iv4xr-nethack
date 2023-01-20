@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import connection.messageparser.ObservationMessageTypeAdapter;
 import connection.messageparser.SeedTypeAdapter;
+import eu.iv4xr.framework.spatial.Vec3;
 import nethack.object.StepState;
 import nethack.object.Inventory;
 import nethack.object.Level;
@@ -78,6 +79,7 @@ public class ObjectReaderWriter_OverSocket {
 
         StepState stepState = new StepState();
         stepState.player = obsMessage.player;
+        stepState.player.position = new Vec3(obsMessage.player.position.x, obsMessage.player.position.y, obsMessage.stats.zeroIndexLevelNumber);
         stepState.player.inventory = new Inventory(obsMessage.items);
         stepState.stats = obsMessage.stats;
         stepState.done = stepMessage.done;

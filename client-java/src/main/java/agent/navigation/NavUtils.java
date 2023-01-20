@@ -37,7 +37,7 @@ public class NavUtils {
      * (even if they are, e.g. if one of them is an occupied tile).
      */
     public static List<Pair<Integer, Tile>> adjustedFindPath(AgentState state, int level0, IntVec2D pos0, int level1, IntVec2D pos1) {
-        LayeredAreasNavigation<Tile, NethackSurface> nav = state.multiLayerNav;
+        LayeredAreasNavigation<Tile, NetHackSurface> nav = state.multiLayerNav;
         Pair<Integer, Tile> oldLocation = loc3(level0, pos0);
         Pair<Integer, Tile> newLocation = loc3(level1, pos1);
         boolean srcOriginalBlockingState = nav.isBlocking(oldLocation);

@@ -20,6 +20,10 @@ public class WorldModels {
         return NavUtils.moveTo(state, targetTile);
     }
 
+    static WorldModel descendStairs(AgentState state) {
+        return state.env().action(Command.MISC_DOWN);
+    }
+
     static WorldModel doNothing(AgentState state) {
         return state.env().action(Command.MISC_MORE);
     }

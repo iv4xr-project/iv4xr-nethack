@@ -1,5 +1,6 @@
 package agent;
 
+import agent.navigation.NavUtils;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import nethack.object.EntityType;
 
@@ -9,7 +10,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Predicates {
-
     public static Predicate<AgentState> inCombat_and_hpNotCritical = S -> {
         WorldEntity player = S.worldmodel.elements.get(S.worldmodel.agentId);
         int hp = (int) player.properties.get("hp");
@@ -20,6 +20,12 @@ public class Predicates {
         List<WorldEntity> doors = S.adjacentEntities(EntityType.DOOR, false);
         doors = doors.stream().filter(d -> (boolean) d.properties.get("closed")).collect(Collectors.toList());
         return doors.size() > 0;
+    };
+
+    public static Predicate<AgentState> on_stairs_down = S -> {
+        List<WorldEntity> stairs = findOfType(S, EntityType.STAIRS_DOWN);
+        stairs = stairs.stream().filter(s -> s.position.equals(S.worldmodel.position)).collect(Collectors.toList());
+        return stairs.size() > 0;
     };
 
     public static WorldEntity closed_door = null;

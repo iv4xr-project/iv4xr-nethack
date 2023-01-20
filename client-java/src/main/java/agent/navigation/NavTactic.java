@@ -38,15 +38,16 @@ public class NavTactic {
                     WorldEntity e = entitySelector.apply(new ArrayList<>(S.worldmodel.elements.values()));
                     if (e == null) {
                         return null;
+                    } else if (a.position.equals(e.position)) {
+                        return null;
                     }
-                    IntVec2D from = NavUtils.loc2(S.worldmodel.position);
+                    IntVec2D from = NavUtils.loc2(a.position);
                     IntVec2D to = NavUtils.loc2(e.position);
                     List<Pair<Integer, Tile>> path = NavUtils.adjustedFindPath(S, NavUtils.levelId(a), from, NavUtils.levelId(e), to);
                     if (path == null) {
                         logger.debug("No path apparently");
                         return null;
                     }
-                    logger.debug("Found path entity");
                     return path.get(1).snd;
                 }).lift();
     }

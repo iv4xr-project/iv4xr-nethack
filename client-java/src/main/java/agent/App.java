@@ -56,10 +56,10 @@ public class App {
 //                }
 //            } else {
                 agent.update();
-                agentLogger.debug(String.format("** [%d] agent @%s", k, NavUtils.toTile(state.worldmodel.position)));
+//                agentLogger.debug(String.format("** [%d] agent @%s", k, NavUtils.toTile(state.worldmodel.position)));
 //            }
-//            state.updateState(Player.ID);
-//            state.render();
+            state.updateState(Player.ID);
+            state.render();
 //            commander.writeCommand("Render", "");
         }
 
@@ -72,7 +72,7 @@ public class App {
     }
 
     private static GoalStructure explore() {
-        Goal G = goal("Main [Explore floor]").toSolve((Pair<AgentState, WorldModel> proposal) -> {
+        Goal G = goal("Main").toSolve((Pair<AgentState, WorldModel> proposal) -> {
             return false;
 //			return tacticLib.explorationExhausted(proposal.fst);
         }).withTactic(FIRSTof(
@@ -89,6 +89,8 @@ public class App {
                 NavTactic.navigateToWorldEntity((List<WorldEntity> we) -> {
                     return EntitySelector.selectFirst(EntitySelector.entityTypeSelector(we, EntityType.STAIRS_DOWN));
                 }),
+                Actions.descendStairs()
+                        .on_(Predicates.on_stairs_down).lift(),
                 ABORT()
         ));
 

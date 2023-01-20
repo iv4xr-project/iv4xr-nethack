@@ -28,7 +28,7 @@ import java.util.*;
  *
  * @author Wish
  */
-public class NethackSurface implements Navigatable<Tile>, XPathfinder<Tile>, CanDealWithDynamicObstacle<Tile> {
+public class NetHackSurface implements Navigatable<Tile>, XPathfinder<Tile>, CanDealWithDynamicObstacle<Tile> {
     public Pathfinder<Tile> pathfinder = new AStar<>();
 
     static final Logger logger = LogManager.getLogger(AgentLoggers.NavLogger);
@@ -43,11 +43,11 @@ public class NethackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
     boolean perfect_memory_pathfinding = false;
     Set<Tile> frontierCandidates = new HashSet<>();
 
-    private boolean isDiagonalDoorMove(IntVec2D pos, int x, int y) {
-        if (pos.x == x || pos.y == y) {
+    private boolean isDiagonalDoorMove(IntVec2D pos0, IntVec2D pos1) {
+        if (pos0.x == pos1.x || pos0.y == pos1.y) {
             return false;
         }
-        return isDoor(pos) || isDoor(new IntVec2D(x, y));
+        return isDoor(pos0) || isDoor(pos1);
     }
 
     private boolean isDoor(IntVec2D pos) {
@@ -101,7 +101,9 @@ public class NethackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
         HashSet<IntVec2D> visibleCoordinates = new HashSet<>();
         HashSet<IntVec2D> processedCoordinates = new HashSet<>();
         Queue<IntVec2D> queue = new LinkedList<>(level.visibleFloors);
-        queue.add(agentPosition);
+
+        processedCoordinates.add(agentPosition);
+        queue.addAll(Arrays.asList(physicalNeighbourCoordinates(agentPosition)));
 
         // While there are coordinates left to be explored
         while (queue.size() > 0) {
@@ -110,8 +112,8 @@ public class NethackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
             if (processedCoordinates.contains(nextPos)) {
                 continue;
             }
-
             processedCoordinates.add(nextPos);
+
             Tile t = getTile(nextPos);
             if (t == null) {
                 continue;
@@ -136,7 +138,7 @@ public class NethackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
             if (!t.seeThrough) {
                 continue;
             } // Only add all neighbours if it is floor or the current position of the agent
-            else if (t instanceof Floor || nextPos == agentPosition) {
+            else if (t instanceof Floor) {
                 queue.addAll(Arrays.asList(neighbours));
             }
         }
@@ -217,7 +219,7 @@ public class NethackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
             Door d = (Door)t;
             return !d.isOpen;
         }
-        return t instanceof Wall;
+        return t instanceof Obstacle;
     }
 
     /**
@@ -397,13 +399,14 @@ public class NethackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
      * Instead arrays are used and at the end a list is built
      */
     private List<Tile> neighbours_(int x, int y) {
-        IntVec2D[] candidates = physicalNeighbourCoordinates(new IntVec2D(x, y));
+        IntVec2D pos = new IntVec2D(x, y);
+        IntVec2D[] candidates = physicalNeighbourCoordinates(pos);
         int nrResults = 0;
         boolean[] toNeighbour = new boolean[candidates.length];
 
         for (int i = 0; i < candidates.length; i++) {
             IntVec2D candidate = candidates[i];
-            toNeighbour[i] = !isBlocking(candidate) && !isDiagonalDoorMove(candidate, x, y);
+            toNeighbour[i] = !isBlocking(candidate) && !isDiagonalDoorMove(candidate, pos);
             if (!perfect_memory_pathfinding) {
                 toNeighbour[i] = toNeighbour[i] && hasbeenSeen(candidate);
             }

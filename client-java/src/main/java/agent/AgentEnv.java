@@ -42,7 +42,7 @@ public class AgentEnv extends Iv4xrEnvironment {
 
         WorldEntity aux = mkGameAuxState();
         wom.elements.put(aux.id, aux);
-        wom.elements.put(app.gameState.player.ID, toWorldEntity(app.gameState.player));
+        wom.elements.put(Player.ID, toWorldEntity(app.gameState.player));
 
         // Add changed coordinates
         Level level = app.level();
@@ -89,16 +89,13 @@ public class AgentEnv extends Iv4xrEnvironment {
         int level = app.gameState.stats.zeroIndexLevelNumber;
         String type = e.type.name();
 
-        switch (e.type) {
-            case DOOR:
-                we = new WorldEntity(e.id, type, false);
-                we.properties.put("level", level);
-                we.properties.put("closed", e.closedDoor());
-                break;
-            default:
-                we = new WorldEntity(e.id, type, true);
-                we.properties.put("level", level);
-                break;
+        if (e.type == EntityType.DOOR) {
+            we = new WorldEntity(e.id, type, false);
+            we.properties.put("level", level);
+            we.properties.put("closed", e.closedDoor());
+        } else {
+            we = new WorldEntity(e.id, type, true);
+            we.properties.put("level", level);
         }
 
         we.position = new Vec3(pos.x, pos.y, level);

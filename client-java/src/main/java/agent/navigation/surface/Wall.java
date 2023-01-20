@@ -1,6 +1,5 @@
 package agent.navigation.surface;
 
-import agent.navigation.NethackSurface;
 import eu.iv4xr.framework.spatial.IntVec2D;
 
 public class Wall extends Obstacle {
