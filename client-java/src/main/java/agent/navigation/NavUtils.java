@@ -8,7 +8,7 @@ import eu.iv4xr.framework.spatial.IntVec2D;
 import eu.iv4xr.framework.spatial.Vec3;
 import agent.AgentState;
 import nethack.object.Command;
-import agent.navigation.NethackSurface_NavGraph.Tile;
+import agent.navigation.surface.Tile;
 import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -37,7 +37,7 @@ public class NavUtils {
      * (even if they are, e.g. if one of them is an occupied tile).
      */
     public static List<Pair<Integer, Tile>> adjustedFindPath(AgentState state, int level0, IntVec2D pos0, int level1, IntVec2D pos1) {
-        LayeredAreasNavigation<Tile, NethackSurface_NavGraph> nav = state.multiLayerNav;
+        LayeredAreasNavigation<Tile, NethackSurface> nav = state.multiLayerNav;
         Pair<Integer, Tile> oldLocation = loc3(level0, pos0);
         Pair<Integer, Tile> newLocation = loc3(level1, pos1);
         boolean srcOriginalBlockingState = nav.isBlocking(oldLocation);

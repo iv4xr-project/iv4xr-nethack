@@ -2,7 +2,7 @@ package agent;
 
 import agent.navigation.NavUtils;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
-import agent.navigation.NethackSurface_NavGraph.Tile;
+import agent.navigation.surface.Tile;
 import nl.uu.cs.aplib.mainConcepts.Tactic;
 
 /**

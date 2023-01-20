@@ -1,11 +1,11 @@
 package agent.navigation;
 
 import agent.AgentLoggers;
+import agent.navigation.surface.*;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import eu.iv4xr.framework.spatial.IntVec2D;
 import agent.AgentState;
-import agent.navigation.NethackSurface_NavGraph.Tile;
 import nl.uu.cs.aplib.mainConcepts.Action;
 import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.LogManager;

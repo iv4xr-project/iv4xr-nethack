@@ -10,8 +10,8 @@ import nethack.object.Entity;
 import nethack.object.EntityType;
 import nethack.object.Level;
 import nethack.object.Player;
-import agent.navigation.NethackSurface_NavGraph;
-import agent.navigation.NethackSurface_NavGraph.*;
+import agent.navigation.NethackSurface;
+import agent.navigation.surface.*;
 import nl.uu.cs.aplib.mainConcepts.Environment;
 import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.LogManager;
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
  */
 public class AgentState extends Iv4xrAgentState<Void> {
     static final Logger logger = LogManager.getLogger(AgentLoggers.AgentLogger);
-    public LayeredAreasNavigation<Tile, NethackSurface_NavGraph> multiLayerNav;
+    public LayeredAreasNavigation<Tile, NethackSurface> multiLayerNav;
 
     @Override
     public AgentEnv env() {
@@ -69,7 +69,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
     }
 
     private void addNewNavGraph(boolean withPortal) {
-        NethackSurface_NavGraph newNav = new NethackSurface_NavGraph();
+        NethackSurface newNav = new NethackSurface();
 
         if (withPortal) {
             IntVec2D playerPosition = env().app.gameState.player.position2D;
@@ -138,10 +138,10 @@ public class AgentState extends Iv4xrAgentState<Void> {
             multiLayerNav.markAsSeen(new Pair<>(levelNr, new Tile(pos)));
         }
 
-        NethackSurface_NavGraph navGraph = multiLayerNav.areas.get(levelNr);
+        NethackSurface navGraph = multiLayerNav.areas.get(levelNr);
         IntVec2D playerPos = NavUtils.loc2(worldmodel.position);
         // Each entity that is next to the agent which is void is a wall
-        IntVec2D[] adjacentCoords = NethackSurface_NavGraph.physicalNeighbourCoordinates(playerPos);
+        IntVec2D[] adjacentCoords = NethackSurface.physicalNeighbourCoordinates(playerPos);
         for (IntVec2D adjacentPos: adjacentCoords) {
             if (!navGraph.hasTile(adjacentPos)) {
                 multiLayerNav.addObstacle(new Pair<>(levelNr, new Wall(adjacentPos)));
@@ -154,7 +154,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
         // Update visibility cone
         WorldEntity aux = auxState();
         int levelNr = (int)aux.properties.get("levelId");
-        NethackSurface_NavGraph navGraph = multiLayerNav.areas.get(levelNr);
+        NethackSurface navGraph = multiLayerNav.areas.get(levelNr);
         IntVec2D playerPos = NavUtils.loc2(worldmodel.position);
         Level level = env().app.gameState.level();
         HashSet<IntVec2D> visibleCoordinates = new HashSet<>(navGraph.VisibleCoordinates(playerPos, level));
@@ -245,7 +245,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
     }
 
     public void render() {
-        NethackSurface_NavGraph layer = multiLayerNav.areas.get(env().app.gameState.stats.zeroIndexLevelNumber);
+        NethackSurface layer = multiLayerNav.areas.get(env().app.gameState.stats.zeroIndexLevelNumber);
 
         String[] navigation = layer.toString().split(System.lineSeparator());
         String[] game = env().app.gameState.toString().split(System.lineSeparator());
