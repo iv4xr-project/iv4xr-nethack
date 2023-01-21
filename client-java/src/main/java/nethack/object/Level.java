@@ -42,12 +42,11 @@ public class Level {
         changedCoordinates.clear();
         // This is the first observation of the level, returns all relevant coordinates
         if (oldLevel == null) {
-            logger.debug("Set all coordinates of entities");
             setWithAllCoordinates();
+            logger.debug(String.format("Has set all coordinates of entities (%d entities)", changedCoordinates.size()));
             return;
         }
 
-        logger.debug("Set only the changes in the level");
         // If it is a subsequent observation, only give coordinates of fields that changed
         for (int x = 0; x < WIDTH; x++) {
             for (int y = 0; y < HEIGHT; y++) {
@@ -56,6 +55,7 @@ public class Level {
                 }
             }
         }
+        logger.debug(String.format("Set only the changes in the level (%d entities)", changedCoordinates.size()));
     }
 
     // Returns coordinates of everything that is not VOID

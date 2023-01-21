@@ -35,14 +35,23 @@ public class App {
             return;
         }
 
-        // Main game loop
+        runAgent(commander);
+
+        // Close socket connection
+        connectionLogger.info("Closing connection");
+        commander.close();
+    }
+
+    private static void runAgent(SendCommandClient commander) {
 //		NetHack nethack = new NetHack(commander, Seed.randomSeed());
-        NetHack nethack = new NetHack(commander, Seed.presets[0]);
+        NetHack nethack = new NetHack(commander, Seed.presets[1]);
         AgentEnv env = new AgentEnv(nethack);
         AgentState state = new AgentState();
         GoalStructure G = explore();
 
+        // Update state after init to initialize navgraph correctly
         TestAgent agent = new TestAgent(Player.ID, "player").attachState(state).attachEnvironment(env).setGoal(G);
+        state.updateState(Player.ID);
 
         agentLogger.info(">> Start agent loop...");
         int k = 0;
@@ -58,17 +67,12 @@ public class App {
                 agent.update();
                 agentLogger.debug(String.format("** [%d] agent @%s", k, NavUtils.toTile(state.worldmodel.position)));
             }
-            state.updateState(Player.ID);
             state.render();
             commander.writeCommand("Render", "");
         }
 
         agentLogger.info(String.format("Closing NetHack since the loop in agent has surpassed %d steps", k));
         nethack.close();
-
-        // Close socket connection
-        connectionLogger.info("Closing connection");
-        commander.close();
     }
 
     private static GoalStructure explore() {

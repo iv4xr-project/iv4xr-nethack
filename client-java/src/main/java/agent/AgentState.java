@@ -30,7 +30,8 @@ import java.util.stream.Collectors;
  * @author wish
  */
 public class AgentState extends Iv4xrAgentState<Void> {
-    static final Logger logger = LogManager.getLogger(AgentLoggers.AgentLogger);
+    static final Logger agentLogger = LogManager.getLogger(AgentLoggers.AgentLogger);
+    static final Logger WOMLogger = LogManager.getLogger(AgentLoggers.WOMLogger);
     public LayeredAreasNavigation<Tile, NetHackSurface> multiLayerNav;
 
     @Override
@@ -94,7 +95,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
         int levelNr = (int)aux.properties.get("levelId");
 
         Serializable[] changedCoordinates = (Serializable[]) aux.properties.get("changedCoordinates");
-        logger.debug(String.format("update state with %d new coordinates", changedCoordinates.length));
+        agentLogger.debug(String.format("update state with %d new coordinates", changedCoordinates.length));
         for (Serializable entry_ : changedCoordinates) {
             Serializable[] entry = (Serializable[]) entry_;
             IntVec2D pos = (IntVec2D) entry[0];
@@ -102,7 +103,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
 
             // If detecting a new maze, need to allocate a nav-graph for this maze:
             if (levelNr >= multiLayerNav.areas.size()) {
-                logger.info(String.format("Adding a new level: %s", levelNr));
+                agentLogger.info(String.format("Adding a new level: %s", levelNr));
                 addNewNavGraph(true);
             }
 
@@ -165,12 +166,13 @@ public class AgentState extends Iv4xrAgentState<Void> {
 
         // Remove all entities that are in vision range but can't be seen.
         List<String> idsToRemove = new ArrayList<>();
+        WOMLogger.info(String.format("WOM contains %d elements", worldmodel.elements.size()));
         for (WorldEntity we: worldmodel.elements.values()) {
             if (we.position == null) {
-                logger.debug(String.format("%s [%s]", we.id, we.type));
+                WOMLogger.debug(String.format("%s [%s]", we.id, we.type));
                 continue;
             } else {
-                logger.debug(String.format("%d <%d,%d> %s [%s]", (int)we.position.z, (int)we.position.x, (int)we.position.y, we.id, we.type));
+                WOMLogger.debug(String.format("%d <%d,%d> %s [%s]", (int)we.position.z, (int)we.position.x, (int)we.position.y, we.id, we.type));
             }
             if (we.id.equals(Player.ID) || we.id.equals("aux")) {
                 continue;
@@ -185,6 +187,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
             Entity e = level.getEntity(entityPosition);
             e.assignId(entityPosition);
             if (!e.id.equals(we.id)) {
+                WOMLogger.debug(String.format("REMOVE: %s [%s]", we.id, we.type));
                 idsToRemove.add(we.id);
             }
         }
@@ -232,7 +235,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
                 .collect(Collectors.toList());
 
         if (ms.size() > 0) {
-            logger.debug(String.format("Found %d %s nearby (diagonal=%b)", ms.size(), type.name(), allowDiagonally));
+            agentLogger.debug(String.format("Found %d %s nearby (diagonal=%b)", ms.size(), type.name(), allowDiagonally));
         }
 
         return ms;

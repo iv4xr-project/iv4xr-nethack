@@ -232,9 +232,9 @@ public enum Command {
     public int getIndex(GameMode gameMode) {
         switch (gameMode) {
             case NetHack:
-                return COMMAND_TO_NETHACK_INDEX.get(this);
+                return COMMAND_TO_NETHACK_INDEX.getOrDefault(this, -1);
             default:
-                return COMMAND_TO_NETHACKCHALLENGE_INDEX.get(this);
+                return COMMAND_TO_NETHACKCHALLENGE_INDEX.getOrDefault(this, -1);
         }
     }
 }

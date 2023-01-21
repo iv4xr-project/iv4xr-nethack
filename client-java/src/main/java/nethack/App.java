@@ -8,6 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 public class App {
     static final Logger logger = LogManager.getLogger(ConnectionLoggers.ConnectionLogger);
@@ -20,18 +21,32 @@ public class App {
             return;
         }
 
-        // Main game loop
-        NetHack nethack = new NetHack(commander);
-
-        nethack.setSeed(Seed.presets[0]);
-        Seed currentSeed = nethack.getSeed();
-        System.out.println(currentSeed);
-
-        nethack.loop();
-        nethack.close();
+        playGame(commander);
 
         // Close socket connection
         logger.info("Closing connection");
         commander.close();
+    }
+
+    private static void playGame(SendCommandClient commander) throws IOException {
+        NetHack nethack = new NetHack(commander);
+        nethack.loop();
+        nethack.close();
+    }
+
+    private static void gotThroughGame(SendCommandClient commander) throws IOException {
+        NetHack nethack = new NetHack(commander, Seed.presets[1]);
+
+        // Eternally go through new seeds
+        while (true) {
+            Seed seed = Seed.randomSeed();
+            nethack.setSeed(seed);
+            System.out.println(seed);
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }

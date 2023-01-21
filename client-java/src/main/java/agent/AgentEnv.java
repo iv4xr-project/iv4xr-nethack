@@ -7,6 +7,8 @@ import eu.iv4xr.framework.spatial.IntVec2D;
 import eu.iv4xr.framework.spatial.Vec3;
 import nethack.NetHack;
 import nethack.object.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -21,6 +23,7 @@ import java.util.Set;
  * @author wish
  */
 public class AgentEnv extends Iv4xrEnvironment {
+    static final Logger logger = LogManager.getLogger(AgentLoggers.WOMLogger);
     public NetHack app;
 
     private static final Set<EntityType> ignoredTypes = new HashSet<>(
@@ -49,12 +52,13 @@ public class AgentEnv extends Iv4xrEnvironment {
         for (IntVec2D pos : level.changedCoordinates) {
             Entity e = level.getEntity(pos);
 
-            // Unimportant types, and player is updated seperatedly
+            // Unimportant types, and player is updated separately
             if (ignoredTypes.contains(e.type) || e.type == EntityType.PLAYER) {
                 continue;
             }
 
             e.assignId(pos);
+            logger.debug(String.format("%s %s Added", e.id, pos));
             wom.elements.put(e.id, toWorldEntity(e, pos));
         }
 
@@ -81,10 +85,6 @@ public class AgentEnv extends Iv4xrEnvironment {
     }
 
     WorldEntity toWorldEntity(Entity e, IntVec2D pos) {
-        if (e.type == EntityType.VOID) {
-            return null;
-        }
-
         WorldEntity we;
         int level = app.gameState.stats.zeroIndexLevelNumber;
         String type = e.type.name();

@@ -45,6 +45,7 @@ public class EntityTypeAdapter extends TypeAdapter<Entity> {
         if (type != EntityType.UNKNOWN) {
             return type;
         }
+//        logger.warn(String.format("%s%s%s: %d UNKNOWN", color.stringCode(), symbol, Color.RESET.stringCode(), glyph));
 
         type = toEntityType(symbol, color);
         if (type != EntityType.UNKNOWN) {
@@ -57,6 +58,8 @@ public class EntityTypeAdapter extends TypeAdapter<Entity> {
 
     private static EntityType toEntityType(int glyph) {
         switch (glyph) {
+            case 2359:
+                return EntityType.VOID;
             case 2379:
             case 2378:
                 return EntityType.FLOOR;

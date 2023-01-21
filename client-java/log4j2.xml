@@ -40,6 +40,10 @@
             <AppenderRef ref="LogToFile" level="debug"/>
             <AppenderRef ref="LogToConsole" level="info"/>
         </Logger>
+        <Logger name="WOM" level="debug" additivity="false">
+            <AppenderRef ref="LogToFile" level="debug"/>
+            <AppenderRef ref="LogToConsole" level="info"/>
+        </Logger>
 
         <Root level="debug" additivity="false">
             <AppenderRef ref="LogToFile" level="debug"/>
