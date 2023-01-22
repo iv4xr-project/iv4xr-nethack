@@ -1,5 +1,6 @@
 package agent;
 
+import agent.navigation.NavTactic;
 import agent.selector.EntitySelector;
 import agent.selector.TileSelector;
 import connection.ConnectionLoggers;
@@ -8,7 +9,6 @@ import eu.iv4xr.framework.mainConcepts.TestAgent;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import nethack.NetHack;
 import nethack.NetHack.StepType;
-import agent.navigation.NavTactic;
 import nethack.enums.Command;
 import nethack.object.Player;
 import nethack.object.Seed;

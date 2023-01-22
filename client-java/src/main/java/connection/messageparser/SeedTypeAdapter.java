@@ -13,6 +13,7 @@ import java.io.IOException;
 
 public class SeedTypeAdapter extends TypeAdapter<Seed> {
     static final Logger logger = LogManager.getLogger(ConnectionLoggers.TypeAdapterLogger);
+
     @Override
     public Seed read(JsonReader reader) throws IOException {
         String core = "";

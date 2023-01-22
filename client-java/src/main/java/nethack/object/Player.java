@@ -30,5 +30,7 @@ public class Player {
     public int carryingCapacity;
     public int condition;
     public Alignment alignment;
-    public Player() {}
+
+    public Player() {
+    }
 }

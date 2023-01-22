@@ -1,25 +1,28 @@
 package agent;
 
 import agent.navigation.NavUtils;
+import agent.navigation.NetHackSurface;
+import agent.navigation.surface.*;
 import eu.iv4xr.framework.extensions.pathfinding.LayeredAreasNavigation;
 import eu.iv4xr.framework.extensions.pathfinding.Navigatable;
 import eu.iv4xr.framework.mainConcepts.Iv4xrAgentState;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.spatial.IntVec2D;
 import nethack.NetHack;
-import nethack.object.Entity;
 import nethack.enums.EntityType;
+import nethack.object.Entity;
 import nethack.object.Level;
 import nethack.object.Player;
-import agent.navigation.NetHackSurface;
-import agent.navigation.surface.*;
 import nl.uu.cs.aplib.mainConcepts.Environment;
 import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -40,7 +43,9 @@ public class AgentState extends Iv4xrAgentState<Void> {
         return (AgentEnv) super.env();
     }
 
-    public NetHack app() { return env().app; }
+    public NetHack app() {
+        return env().app;
+    }
 
     /**
      * We are not going to keep a Nav-graph, but will instead keep a
@@ -94,12 +99,12 @@ public class AgentState extends Iv4xrAgentState<Void> {
     }
 
     public NetHackSurface area() {
-        return multiLayerNav.areas.get((int)worldmodel.position.z);
+        return multiLayerNav.areas.get((int) worldmodel.position.z);
     }
 
     private void updateMap() {
         WorldEntity aux = auxState();
-        int levelNr = (int)aux.properties.get("levelId");
+        int levelNr = (int) aux.properties.get("levelId");
 
         Serializable[] changedCoordinates = (Serializable[]) aux.properties.get("changedCoordinates");
         agentLogger.debug(String.format("update state with %d new coordinates", changedCoordinates.length));
@@ -154,7 +159,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
         IntVec2D playerPos = NavUtils.loc2(worldmodel.position);
         // Each entity that is next to the agent which is void is a wall
         IntVec2D[] adjacentCoords = NavUtils.neighbourCoordinates(playerPos);
-        for (IntVec2D adjacentPos: adjacentCoords) {
+        for (IntVec2D adjacentPos : adjacentCoords) {
             if (!navGraph.hasTile(adjacentPos)) {
                 multiLayerNav.addObstacle(new Pair<>(levelNr, new Wall(adjacentPos)));
                 multiLayerNav.markAsSeen(new Pair<>(levelNr, new Tile(adjacentPos)));
@@ -165,7 +170,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
     private void updateEntities() {
         // Update visibility cone
         WorldEntity aux = auxState();
-        int levelNr = (int)aux.properties.get("levelId");
+        int levelNr = (int) aux.properties.get("levelId");
         NetHackSurface navGraph = multiLayerNav.areas.get(levelNr);
         IntVec2D playerPos = NavUtils.loc2(worldmodel.position);
         Level level = env().app.gameState.level();
@@ -174,12 +179,12 @@ public class AgentState extends Iv4xrAgentState<Void> {
         // Remove all entities that are in vision range but can't be seen.
         List<String> idsToRemove = new ArrayList<>();
         WOMLogger.info(String.format("WOM contains %d elements", worldmodel.elements.size()));
-        for (WorldEntity we: worldmodel.elements.values()) {
+        for (WorldEntity we : worldmodel.elements.values()) {
             if (we.position == null) {
                 WOMLogger.debug(String.format("%s [%s]", we.id, we.type));
                 continue;
             } else {
-                WOMLogger.debug(String.format("%d <%d,%d> %s [%s]", (int)we.position.z, (int)we.position.x, (int)we.position.y, we.id, we.type));
+                WOMLogger.debug(String.format("%d <%d,%d> %s [%s]", (int) we.position.z, (int) we.position.x, (int) we.position.y, we.id, we.type));
             }
             if (we.id.equals(Player.ID) || we.id.equals("aux")) {
                 continue;
@@ -200,7 +205,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
         }
 
         // Separate loop since it changes the map
-        for (String id: idsToRemove) {
+        for (String id : idsToRemove) {
             worldmodel.elements.remove(id);
         }
     }

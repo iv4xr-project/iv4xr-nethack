@@ -1,14 +1,14 @@
 package agent.navigation;
 
 import agent.AgentLoggers;
+import agent.AgentState;
+import agent.navigation.surface.Tile;
 import eu.iv4xr.framework.extensions.pathfinding.LayeredAreasNavigation;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import eu.iv4xr.framework.spatial.IntVec2D;
 import eu.iv4xr.framework.spatial.Vec3;
-import agent.AgentState;
 import nethack.enums.Command;
-import agent.navigation.surface.Tile;
 import nethack.object.Player;
 import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.LogManager;
@@ -18,6 +18,7 @@ import java.util.List;
 
 public class NavUtils {
     static final Logger logger = LogManager.getLogger(AgentLoggers.NavLogger);
+
     /**
      * Distance in terms of path-length from the agent that owns S to the entity e.
      * It uses adjustedFindPath to calculate the path.
@@ -58,6 +59,7 @@ public class NavUtils {
     public static Tile toTile(int x, int y) {
         return new Tile(x, y);
     }
+
     public static Tile toTile(IntVec2D pos) {
         return new Tile(pos);
     }
@@ -67,7 +69,7 @@ public class NavUtils {
     }
 
     public static IntVec2D loc2(Vec3 pos) {
-        return new IntVec2D((int)pos.x, (int)pos.y);
+        return new IntVec2D((int) pos.x, (int) pos.y);
     }
 
     static Pair<Integer, Tile> loc3(int levelNr, int x, int y) {
@@ -79,7 +81,7 @@ public class NavUtils {
     }
 
     static Pair<Integer, Tile> loc3(Vec3 pos) {
-        return new Pair<>((int)pos.z, toTile(pos));
+        return new Pair<>((int) pos.z, toTile(pos));
     }
 
     public static boolean adjacent(Vec3 vec1, Vec3 vec2, boolean allowDiagonally) {

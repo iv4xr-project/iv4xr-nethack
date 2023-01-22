@@ -55,10 +55,6 @@ public enum Color {
         throw new IllegalArgumentException("Color value not known: " + value);
     }
 
-    public String stringCode() {
-        return String.format("\033[%sm", colorCode);
-    }
-
     private static void colorpalette() {
         for (Color color : Color.values()) {
             System.out.println("\033[" + color.colorCode + "m " + color.name());
@@ -67,5 +63,9 @@ public enum Color {
 
     public static void main(String[] args) throws IOException {
         colorpalette();
+    }
+
+    public String stringCode() {
+        return String.format("\033[%sm", colorCode);
     }
 }

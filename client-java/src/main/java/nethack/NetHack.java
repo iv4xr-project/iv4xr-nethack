@@ -3,7 +3,10 @@ package nethack;
 import connection.SendCommandClient;
 import nethack.enums.Command;
 import nethack.enums.GameMode;
-import nethack.object.*;
+import nethack.object.GameState;
+import nethack.object.Level;
+import nethack.object.Seed;
+import nethack.object.StepState;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

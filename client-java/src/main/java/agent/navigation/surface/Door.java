@@ -6,7 +6,9 @@ public class Door extends Obstacle {
     public boolean isOpen = false;
     public boolean seeThrough = isOpen;
 
-    public Door(IntVec2D pos) { super(pos); }
+    public Door(IntVec2D pos) {
+        super(pos);
+    }
 
     public Door(IntVec2D pos, boolean isOpen) {
         super(pos);

@@ -2,8 +2,8 @@ package agent.navigation;
 
 import agent.AgentLoggers;
 import agent.AgentState;
+import agent.navigation.surface.Tile;
 import agent.selector.EntitySelector;
-import agent.navigation.surface.*;
 import agent.selector.TileSelector;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.spatial.IntVec2D;
@@ -20,6 +20,7 @@ import java.util.List;
 
 public class NavTactic {
     static final Logger logger = LogManager.getLogger(AgentLoggers.NavLogger);
+
     public static Tactic navigateTo(Pair<Integer, Tile> location) {
         return NavAction.navigateTo(location.fst, location.snd.pos.x, location.snd.pos.y).lift();
     }
@@ -31,95 +32,95 @@ public class NavTactic {
 
     public static Tactic navigateToWorldEntity(EntitySelector entitySelector) {
         return NavAction.navigateTo()
-            .on((AgentState S) -> {
-                Vec3 agentPos = S.worldmodel.position;
-                WorldEntity e = entitySelector.apply(new ArrayList<>(S.worldmodel.elements.values()), S);
-                if (e == null) {
-                    return null;
-                } else if (agentPos.equals(e.position)) {
-                    return null;
-                }
-                Tile nextTile = NavUtils.nextTile(NavUtils.adjustedFindPath(S, NavUtils.loc3(agentPos), NavUtils.loc3(e.position)));
-                if (nextTile == null) {
-                    return null;
-                }
-                logger.debug(String.format(">>> navigateToWorldEntity (%s) via %s", entitySelector, nextTile));
-                return nextTile;
-            }).lift();
+                .on((AgentState S) -> {
+                    Vec3 agentPos = S.worldmodel.position;
+                    WorldEntity e = entitySelector.apply(new ArrayList<>(S.worldmodel.elements.values()), S);
+                    if (e == null) {
+                        return null;
+                    } else if (agentPos.equals(e.position)) {
+                        return null;
+                    }
+                    Tile nextTile = NavUtils.nextTile(NavUtils.adjustedFindPath(S, NavUtils.loc3(agentPos), NavUtils.loc3(e.position)));
+                    if (nextTile == null) {
+                        return null;
+                    }
+                    logger.debug(String.format(">>> navigateToWorldEntity (%s) via %s", entitySelector, nextTile));
+                    return nextTile;
+                }).lift();
     }
 
     public static Tactic navigateToTile(TileSelector tileSelector) {
         return NavAction.navigateTo()
-            .on((AgentState S) -> {
-                List<Tile> tiles = new ArrayList<>();
-                for (Tile[] row: S.area().tiles) {
-                    for (Tile tile: row) {
-                        if (tile != null) {
-                            tiles.add(tile);
+                .on((AgentState S) -> {
+                    List<Tile> tiles = new ArrayList<>();
+                    for (Tile[] row : S.area().tiles) {
+                        for (Tile tile : row) {
+                            if (tile != null) {
+                                tiles.add(tile);
+                            }
                         }
                     }
-                }
-                Tile t = tileSelector.apply(tiles, S);
-                if (t == null) {
-                    logger.debug("Tile does not exist in level");
-                    return null;
-                }
-                Vec3 agentPos = S.worldmodel.position;
-                Tile nextTile = NavUtils.nextTile(NavUtils.adjustedFindPath(S, NavUtils.loc3(agentPos), NavUtils.loc3((int)agentPos.z, t.pos)));
-                if (nextTile == null) {
-                    return null;
-                }
-                logger.debug(String.format(">>> navigateToTile (%s) via %s", tileSelector, nextTile));
-                return nextTile;
-            }).lift();
+                    Tile t = tileSelector.apply(tiles, S);
+                    if (t == null) {
+                        logger.debug("Tile does not exist in level");
+                        return null;
+                    }
+                    Vec3 agentPos = S.worldmodel.position;
+                    Tile nextTile = NavUtils.nextTile(NavUtils.adjustedFindPath(S, NavUtils.loc3(agentPos), NavUtils.loc3((int) agentPos.z, t.pos)));
+                    if (nextTile == null) {
+                        return null;
+                    }
+                    logger.debug(String.format(">>> navigateToTile (%s) via %s", tileSelector, nextTile));
+                    return nextTile;
+                }).lift();
     }
 
     public static Tactic navigateNextToTile(TileSelector tileSelector, boolean allowDiagonal) {
         return NavAction.navigateTo()
-            .on((AgentState S) -> {
-                List<Tile> tiles = new ArrayList<>();
-                for (Tile[] row: S.area().tiles) {
-                    for (Tile tile: row) {
-                        if (tile != null) {
-                            tiles.add(tile);
+                .on((AgentState S) -> {
+                    List<Tile> tiles = new ArrayList<>();
+                    for (Tile[] row : S.area().tiles) {
+                        for (Tile tile : row) {
+                            if (tile != null) {
+                                tiles.add(tile);
+                            }
                         }
                     }
-                }
-                Tile t = tileSelector.apply(tiles, S);
-                if (t == null) {
-                    logger.debug("Tile does not exist in level");
-                    return null;
-                }
-                Vec3 agentPos = S.worldmodel.position;
-                NetHackSurface surface = S.area();
-                List<Pair<Integer, Tile>> path = null;
-                for (IntVec2D pos: NavUtils.neighbourCoordinates(t.pos)) {
-                    if (pos.equals(NavUtils.loc2(agentPos))) {
+                    Tile t = tileSelector.apply(tiles, S);
+                    if (t == null) {
+                        logger.debug("Tile does not exist in level");
                         return null;
                     }
-                    if (!surface.hasTile(pos)) {
-                        continue;
-                    }
-                    if (surface.isBlocking(pos)) {
-                        continue;
+                    Vec3 agentPos = S.worldmodel.position;
+                    NetHackSurface surface = S.area();
+                    List<Pair<Integer, Tile>> path = null;
+                    for (IntVec2D pos : NavUtils.neighbourCoordinates(t.pos)) {
+                        if (pos.equals(NavUtils.loc2(agentPos))) {
+                            return null;
+                        }
+                        if (!surface.hasTile(pos)) {
+                            continue;
+                        }
+                        if (surface.isBlocking(pos)) {
+                            continue;
+                        }
+
+                        List<Pair<Integer, Tile>> pathToNeighbour = NavUtils.adjustedFindPath(S, NavUtils.loc3(agentPos), NavUtils.loc3((int) agentPos.z, pos));
+                        if (pathToNeighbour == null) {
+                            continue;
+                        }
+                        if (path == null || pathToNeighbour.size() < path.size()) {
+                            path = pathToNeighbour;
+                        }
                     }
 
-                    List<Pair<Integer, Tile>> pathToNeighbour = NavUtils.adjustedFindPath(S, NavUtils.loc3(agentPos), NavUtils.loc3((int)agentPos.z, pos));
-                    if (pathToNeighbour == null) {
-                        continue;
+                    Tile nextTile = NavUtils.nextTile(path);
+                    if (nextTile == null) {
+                        return null;
                     }
-                    if (path == null || pathToNeighbour.size() < path.size()) {
-                        path = pathToNeighbour;
-                    }
-                }
-
-                Tile nextTile = NavUtils.nextTile(path);
-                if (nextTile == null) {
-                    return null;
-                }
-                logger.debug(String.format(">>> navigateNextToTile (%s) via %s (allowdiagonal=%b)", tileSelector, nextTile, allowDiagonal));
-                return nextTile;
-            }).lift();
+                    logger.debug(String.format(">>> navigateNextToTile (%s) via %s (allowdiagonal=%b)", tileSelector, nextTile, allowDiagonal));
+                    return nextTile;
+                }).lift();
     }
 
     // Construct a tactic that would guide the agent to a tile adjacent to the location.

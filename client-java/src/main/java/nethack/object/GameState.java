@@ -1,9 +1,6 @@
 package nethack.object;
 
 import nethack.NetHackLoggers;
-import nethack.object.Level;
-import nethack.object.Player;
-import nethack.object.Stats;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

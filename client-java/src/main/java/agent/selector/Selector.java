@@ -6,17 +6,15 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public abstract class Selector<T> {
-    protected enum SelectionType {FIRST, LAST, CLOSEST, FARTHEST}
     protected SelectionType selectionType;
     protected Predicate<T> predicate = null;
     protected boolean onlySameLevel = true;
-
-    public Selector (SelectionType selectionType, Predicate<T> predicate) {
+    public Selector(SelectionType selectionType, Predicate<T> predicate) {
         this.selectionType = selectionType;
         this.predicate = predicate;
     }
 
-    public Selector (SelectionType selectionType) {
+    public Selector(SelectionType selectionType) {
         this.selectionType = selectionType;
     }
 
@@ -34,4 +32,6 @@ public abstract class Selector<T> {
             throw new IllegalArgumentException("Cannot call general select for: " + selectionType);
         }
     }
+
+    protected enum SelectionType {FIRST, LAST, CLOSEST, FARTHEST}
 }

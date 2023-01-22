@@ -14,8 +14,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class TileSelector extends Selector<Tile> {
+    public static final TileSelector wallSelector = new TileSelector(SelectionType.CLOSEST, Wall.class, t -> {
+        Wall w = (Wall) t;
+        return w.timesSearched < 10;
+    });
     Class tileClass;
-    public static final TileSelector wallSelector = new TileSelector(SelectionType.CLOSEST, Wall.class, t -> { Wall w = (Wall)t; return w.timesSearched < 10;});
+
     public TileSelector(SelectionType selectionType, Class tileClass, Predicate<Tile> predicate) {
         super(selectionType, predicate);
         this.tileClass = tileClass;

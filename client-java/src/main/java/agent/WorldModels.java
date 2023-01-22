@@ -1,10 +1,10 @@
 package agent;
 
 import agent.navigation.NavUtils;
+import agent.navigation.surface.Tile;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import eu.iv4xr.framework.spatial.Vec3;
 import nethack.enums.Command;
-import agent.navigation.surface.Tile;
 
 public class WorldModels {
     static WorldModel kickDoor(AgentState state, Vec3 targetTile) {
@@ -27,7 +27,9 @@ public class WorldModels {
         return state.env().action(eatCommand);
     }
 
-    static WorldModel performCommand(AgentState state, Command command) { return state.env().action(command); }
+    static WorldModel performCommand(AgentState state, Command command) {
+        return state.env().action(command);
+    }
 
     static WorldModel doNothing(AgentState state) {
         return state.env().action(Command.MISC_MORE);

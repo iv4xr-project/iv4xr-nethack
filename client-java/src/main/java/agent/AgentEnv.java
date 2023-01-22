@@ -8,7 +8,9 @@ import eu.iv4xr.framework.spatial.Vec3;
 import nethack.NetHack;
 import nethack.enums.Command;
 import nethack.enums.EntityType;
-import nethack.object.*;
+import nethack.object.Entity;
+import nethack.object.Level;
+import nethack.object.Player;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,11 +28,10 @@ import java.util.Set;
  */
 public class AgentEnv extends Iv4xrEnvironment {
     static final Logger logger = LogManager.getLogger(AgentLoggers.WOMLogger);
-    public NetHack app;
-
     private static final Set<EntityType> ignoredTypes = new HashSet<>(
             Arrays.asList(EntityType.WALL, EntityType.CORRIDOR, EntityType.FLOOR, EntityType.ICE, EntityType.VOID, EntityType.DOORWAY)
     );
+    public NetHack app;
 
     public AgentEnv(NetHack app) {
         this.app = app;

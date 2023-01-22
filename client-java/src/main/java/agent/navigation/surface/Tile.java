@@ -7,13 +7,15 @@ import java.util.List;
 import java.util.Objects;
 
 public class Tile {
+    public final boolean seeThrough = true;
     public IntVec2D pos;
     public boolean visible = false;
     public boolean seen = false;
-    public final boolean seeThrough = true;
     public List<Tile> neighbours = new ArrayList<>(8);
 
-    public Tile(IntVec2D pos) { this.pos = pos; }
+    public Tile(IntVec2D pos) {
+        this.pos = pos;
+    }
 
     public Tile(int x, int y) {
         this.pos = new IntVec2D(x, y);
@@ -42,5 +44,7 @@ public class Tile {
         return "(" + pos.x + "," + pos.y + ")";
     }
 
-    public char toChar() { return '?'; }
+    public char toChar() {
+        return '?';
+    }
 }

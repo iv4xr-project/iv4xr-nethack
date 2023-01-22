@@ -2,6 +2,7 @@ package agent;
 
 import agent.navigation.NavUtils;
 import agent.navigation.NetHackSurface;
+import agent.navigation.surface.Tile;
 import agent.navigation.surface.Wall;
 import agent.selector.ItemSelector;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
@@ -10,7 +11,6 @@ import eu.iv4xr.framework.spatial.IntVec2D;
 import eu.iv4xr.framework.spatial.Vec3;
 import nethack.enums.Command;
 import nethack.enums.EntityType;
-import agent.navigation.surface.Tile;
 import nethack.enums.HungerState;
 import nethack.object.Item;
 import nethack.object.Player;
@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static nl.uu.cs.aplib.AplibEDSL.*;
+import static nl.uu.cs.aplib.AplibEDSL.action;
 
 public class Actions {
     static final Logger logger = LogManager.getLogger(AgentLoggers.GoalLogger);
@@ -76,15 +76,15 @@ public class Actions {
         return action("search").do2((AgentState S) -> (List<Wall> walls) -> {
             logger.info(">>> searchWalls");
             WorldModel newwom = WorldModels.performCommand(S, Command.COMMAND_SEARCH);
-            for (Wall wall: walls) {
+            for (Wall wall : walls) {
                 wall.timesSearched++;
             }
             return new Pair<>(S, newwom);
         }).on((AgentState S) -> {
-            NetHackSurface surface = S.multiLayerNav.areas.get((int)S.worldmodel.position.z);
+            NetHackSurface surface = S.multiLayerNav.areas.get((int) S.worldmodel.position.z);
             IntVec2D[] neighbours = NavUtils.neighbourCoordinates(NavUtils.loc2(S.worldmodel.position));
             List<Wall> walls = new ArrayList<>();
-            for (IntVec2D neighbour: neighbours) {
+            for (IntVec2D neighbour : neighbours) {
                 Tile t = surface.getTile(neighbour);
                 if (t instanceof Wall) {
                     Wall wall = (Wall) t;

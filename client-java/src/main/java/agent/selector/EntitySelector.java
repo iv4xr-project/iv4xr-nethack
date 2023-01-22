@@ -14,8 +14,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class EntitySelector extends Selector<WorldEntity> {
-    public final static EntitySelector closedDoor = new EntitySelector(SelectionType.FIRST, EntityType.DOOR, d -> (boolean)d.properties.get("closed"));
+    public final static EntitySelector closedDoor = new EntitySelector(SelectionType.FIRST, EntityType.DOOR, d -> (boolean) d.properties.get("closed"));
     public final static EntitySelector stairsDown = new EntitySelector(SelectionType.FIRST, EntityType.STAIRS_DOWN);
+    public final static EntitySelector money = new EntitySelector(SelectionType.CLOSEST, EntityType.GOLD);
 
     EntityType entityType;
 

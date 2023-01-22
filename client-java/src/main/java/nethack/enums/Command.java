@@ -163,8 +163,8 @@ public enum Command {
         }
     }
 
-    public String stroke;
     private final String description;
+    public String stroke;
 
     Command(String stroke, String description) {
         this.stroke = stroke;

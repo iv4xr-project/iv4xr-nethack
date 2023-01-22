@@ -2,7 +2,6 @@ package agent.navigation;
 
 import agent.AgentLoggers;
 import agent.navigation.surface.*;
-import alice.tuprolog.Int;
 import eu.iv4xr.framework.extensions.pathfinding.*;
 import eu.iv4xr.framework.spatial.IntVec2D;
 import nethack.enums.Color;
@@ -30,11 +29,10 @@ import java.util.*;
  * @author Wish
  */
 public class NetHackSurface implements Navigatable<Tile>, XPathfinder<Tile>, CanDealWithDynamicObstacle<Tile> {
-    public Pathfinder<Tile> pathfinder = new AStar<>();
-
     static final Logger logger = LogManager.getLogger(AgentLoggers.NavLogger);
     static final int sizeX = Level.WIDTH, sizeY = Level.HEIGHT;
     public final Tile[][] tiles = new Tile[sizeY + 2][sizeX + 2];
+    public Pathfinder<Tile> pathfinder = new AStar<>();
     /**
      * If true, the pathfinder will assume that the whole NavGraph has been "seen",
      * so no vertex would count as unreachable because it is still unseen. This
@@ -43,6 +41,16 @@ public class NetHackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
      */
     boolean perfect_memory_pathfinding = true;
     Set<Tile> frontierCandidates = new HashSet<>();
+
+    static float distSq(int x1, int y1, int x2, int y2) {
+        float dx = x2 - x1;
+        float dy = y2 - y1;
+        return dx * dx + dy * dy;
+    }
+
+    public static float distSq(IntVec2D pos0, IntVec2D pos1) {
+        return distSq(pos0.x, pos0.y, pos1.x, pos1.y);
+    }
 
     private boolean isDiagonalDoorMove(IntVec2D pos0, IntVec2D pos1) {
         if (pos0.x == pos1.x || pos0.y == pos1.y) {
@@ -65,11 +73,17 @@ public class NetHackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
         return o instanceof Floor;
     }
 
-    private boolean blocksVision(IntVec2D pos) { return blocksVision(getTile(pos)); }
+    private boolean blocksVision(IntVec2D pos) {
+        return blocksVision(getTile(pos));
+    }
 
-    private boolean blocksVision(Tile t) { return !t.seeThrough; }
+    private boolean blocksVision(Tile t) {
+        return !t.seeThrough;
+    }
 
-    public boolean hasTile(IntVec2D pos) { return getTile(pos) != null; }
+    public boolean hasTile(IntVec2D pos) {
+        return getTile(pos) != null;
+    }
 
     public Tile getTile(IntVec2D pos) {
         return getTile(pos.x, pos.y);
@@ -82,7 +96,7 @@ public class NetHackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
     private Obstacle getObstacle(IntVec2D pos) {
         Tile t = getTile(pos);
         if (t instanceof Obstacle) {
-            return (Obstacle)t;
+            return (Obstacle) t;
         }
         return null;
     }
@@ -153,10 +167,12 @@ public class NetHackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
         return new ArrayList<>(visibleCoordinates);
     }
 
+    //region CanDealWithDynamicObstacle interface
+
     private void resetVisibility() {
         // First reset visibility of all tiles to false
-        for (Tile[] row: tiles) {
-            for (Tile t: row) {
+        for (Tile[] row : tiles) {
+            for (Tile t : row) {
                 if (t != null) {
                     t.visible = false;
                 }
@@ -189,7 +205,6 @@ public class NetHackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
         return sb.toString();
     }
 
-    //region CanDealWithDynamicObstacle interface
     /**
      * Add a non-navigable tile (obstacle).
      */
@@ -205,7 +220,7 @@ public class NetHackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
 
     private void updateNeighbours(Tile t) {
         t.neighbours = neighbours_(t.pos);
-        for (IntVec2D neighbourCoordinate: NavUtils.neighbourCoordinates(t.pos)) {
+        for (IntVec2D neighbourCoordinate : NavUtils.neighbourCoordinates(t.pos)) {
             Tile neighbour = getTile(neighbourCoordinate);
             if (neighbour == null) {
                 continue;
@@ -231,12 +246,13 @@ public class NetHackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
     public boolean isBlocking(Tile tile) {
         return isBlocking(tile.pos);
     }
+    //endregion
 
     public boolean isBlocking(IntVec2D pos) {
         Tile t = getTile(pos);
 
         if (t instanceof Door) {
-            Door d = (Door)t;
+            Door d = (Door) t;
             return !d.isOpen;
         }
         return t instanceof Obstacle;
@@ -257,7 +273,6 @@ public class NetHackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
         }
         updateNeighbours(t);
     }
-    //endregion
 
     //region XPathfinder interface
     @Override
@@ -347,16 +362,6 @@ public class NetHackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
         return findPath(new Tile(fromX, fromY), new Tile(toX, toY));
     }
 
-    static float distSq(int x1, int y1, int x2, int y2) {
-        float dx = x2 - x1;
-        float dy = y2 - y1;
-        return dx * dx + dy * dy;
-    }
-
-    public static float distSq(IntVec2D pos0, IntVec2D pos1) {
-        return distSq(pos0.x, pos0.y, pos1.x, pos1.y);
-    }
-
     /**
      * When true then the pathfinder will consider all nodes in the graph to have
      * been seen.
@@ -380,8 +385,8 @@ public class NetHackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
      */
     @Override
     public void wipeOutMemory() {
-        for (Tile[] row: tiles) {
-            for (Tile t: row) {
+        for (Tile[] row : tiles) {
+            for (Tile t : row) {
                 if (t != null) {
                     t.seen = false;
                 }
@@ -392,6 +397,7 @@ public class NetHackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
     //endregion
 
     //region Navigatable interface
+
     /**
      * Return the neighbors of a tile. A tile u is a neighbor of a tile t if u is
      * adjacent to t, and moreover u is navigable (e.g. it is not a wall or a closed
@@ -422,12 +428,12 @@ public class NetHackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
         if (firstList.size() != secondList.size()) {
             System.out.printf("-------%s-------%n", tile.pos);
             System.out.println("-------TILE LIST-------");
-            for (Tile neighbour: firstList) {
+            for (Tile neighbour : firstList) {
                 System.out.println(neighbour.pos);
             }
 
             System.out.println("-------TRUE LIST-------");
-            for (Tile neighbour: secondList) {
+            for (Tile neighbour : secondList) {
                 System.out.println(neighbour.pos);
             }
             System.out.println();

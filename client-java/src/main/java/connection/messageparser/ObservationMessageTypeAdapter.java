@@ -16,6 +16,7 @@ import java.io.IOException;
 // Source: https://studytrails.com/2016/09/12/java-google-json-type-adapter/
 public class ObservationMessageTypeAdapter extends TypeAdapter<ObservationMessage> {
     static final Logger logger = LogManager.getLogger(ConnectionLoggers.TypeAdapterLogger);
+
     @Override
     public ObservationMessage read(JsonReader reader) throws IOException {
         // the first token is the start array

@@ -5,10 +5,10 @@ import com.google.gson.GsonBuilder;
 import connection.messageparser.ObservationMessageTypeAdapter;
 import connection.messageparser.SeedTypeAdapter;
 import eu.iv4xr.framework.spatial.Vec3;
-import nethack.object.StepState;
 import nethack.object.Inventory;
 import nethack.object.Level;
 import nethack.object.Seed;
+import nethack.object.StepState;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

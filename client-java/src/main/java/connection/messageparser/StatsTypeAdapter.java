@@ -20,6 +20,7 @@ import java.io.IOException;
 // Source: https://studytrails.com/2016/09/12/java-google-json-type-adapter/
 public class StatsTypeAdapter extends TypeAdapter<Pair<Stats, Player>> {
     static final Logger logger = LogManager.getLogger(ConnectionLoggers.TypeAdapterLogger);
+
     @Override
     public Pair<Stats, Player> read(JsonReader reader) throws IOException {
         // The first token is the start array

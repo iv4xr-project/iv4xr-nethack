@@ -11,9 +11,6 @@ import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.List;
-
-import static agent.navigation.NavUtils.nextTile;
 import static nl.uu.cs.aplib.AplibEDSL.action;
 
 public class NavAction {

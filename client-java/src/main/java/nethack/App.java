@@ -2,7 +2,6 @@ package nethack;
 
 import connection.ConnectionLoggers;
 import connection.SendCommandClient;
-import nethack.NetHack;
 import nethack.object.Seed;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

@@ -1,7 +1,6 @@
 package agent.selector;
 
 import agent.AgentState;
-import agent.navigation.NavUtils;
 import nethack.enums.ItemType;
 import nethack.object.Item;
 
@@ -12,9 +11,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ItemSelector extends Selector<Item> {
-    ItemType itemType;
-
     public final static ItemSelector inventoryFood = new ItemSelector(SelectionType.FIRST, ItemType.FOOD);
+    ItemType itemType;
 
     public ItemSelector(SelectionType selectionType, ItemType itemType, Predicate<Item> predicate) {
         super(selectionType, predicate);
