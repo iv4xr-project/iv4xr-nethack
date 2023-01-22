@@ -18,6 +18,7 @@ public class Seed {
     public static final Seed[] presets = new Seed[]{
             new Seed("15175518238868522894", "13159468426723296085", false), // Room with closed door
             new Seed("3109400832504553971", "9958254807296285881", false), // Start room only walls
+            new Seed("1978032860031487687", "16734812270076554578", false), // Kicks at empty space
             new Seed("0", "0", false), // Portal left of player
     };
     public OptionalLong core;

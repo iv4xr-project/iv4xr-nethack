@@ -119,6 +119,10 @@ public class NetHack {
                 logger.info("New seed is:" + index);
                 setSeed(Seed.presets[index]);
                 return StepType.Special;
+            case ADDITIONAL_ASCII:
+                char character = command.stroke.charAt(1);
+                logger.info("Send stroke: " + character);
+                return step(Command.ADDITIONAL_ASCII, character);
             case COMMAND_INVENTORY:
                 System.out.println(gameState.player.inventory);
                 return StepType.Special;
@@ -141,12 +145,23 @@ public class NetHack {
 
     private StepType step(Command command, int index) {
         logger.info("Command: " + command);
-        StepState stepState = commander.sendCommand("Step", index, StepState.class);
+        StepState stepState = commander.sendCommand("step", index, StepState.class);
+        updateGameState(stepState);
+        return StepType.Valid;
+    }
+
+    private StepType step(Command command, char character) {
+        logger.info(String.format("Command: %s %s", command, character));
+        StepState stepState = commander.sendCommand("step_stroke", character, StepState.class);
+        updateGameState(stepState);
+        return StepType.Valid;
+    }
+
+    private void updateGameState(StepState stepState) {
         if (stepState.done) {
             logger.info("Game run terminated, step indicated: done");
-            return StepType.Valid;
+            return;
         }
-
         // Add to world if new level is explored
         if (stepState.stats.zeroIndexLevelNumber == gameState.world.size()) {
             stepState.level.setChangedCoordinates(null);
@@ -168,7 +183,6 @@ public class NetHack {
         gameState.stats = stepState.stats;
         gameState.done = stepState.done;
         gameState.info = stepState.info;
-        return StepType.Valid;
     }
 
     public enum StepType {

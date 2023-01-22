@@ -4,7 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum HungerState {
-    SATURATED(1),
+    SATIATED(0),
+    NORMAL(1),
     HUNGRY(2),
     WEAK(3),
     FAINTING(4);

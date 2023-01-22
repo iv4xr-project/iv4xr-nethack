@@ -159,7 +159,7 @@ public class NavUtils {
     public static Command stepToCommand(AgentState state, Tile targetTile) {
         IntVec2D agentPos = NavUtils.loc2(state.worldmodel.position);
         if (!adjacent(agentPos, targetTile.pos, true)) {
-            throw new IllegalArgumentException("");
+            throw new IllegalArgumentException(String.format("Step from %s to %s is illegal", agentPos, targetTile));
         }
 
         if (targetTile.pos.y > agentPos.y) {
@@ -196,6 +196,25 @@ public class NavUtils {
             // The first element is the src itself, so we need to pick the next one:
             return path.get(1).snd;
         }
+    }
+
+    public static IntVec2D[] neighbourCoordinates(IntVec2D pos) {
+        int left = pos.x - 1;
+        int right = pos.x + 1;
+        int below = pos.y - 1;
+        int above = pos.y + 1;
+
+        return new IntVec2D[]{
+                new IntVec2D(left, pos.y),
+                new IntVec2D(right, pos.y),
+                new IntVec2D(pos.x, below),
+                new IntVec2D(pos.x, above),
+                // Diagonal moves
+                new IntVec2D(left, below),
+                new IntVec2D(left, above),
+                new IntVec2D(right, above),
+                new IntVec2D(right, below),
+        };
     }
 
 //	/**

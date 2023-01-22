@@ -20,6 +20,13 @@ public class WorldModels {
         return NavUtils.moveTo(state, targetTile);
     }
 
+    static WorldModel eatFood(AgentState state, char itemSlot) {
+        state.env().action(Command.COMMAND_EAT);
+        Command eatCommand = Command.ADDITIONAL_ASCII;
+        eatCommand.stroke = String.format("-%s", itemSlot);
+        return state.env().action(eatCommand);
+    }
+
     static WorldModel performCommand(AgentState state, Command command) { return state.env().action(command); }
 
     static WorldModel doNothing(AgentState state) {

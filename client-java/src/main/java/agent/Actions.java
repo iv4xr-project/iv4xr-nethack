@@ -3,6 +3,7 @@ package agent;
 import agent.navigation.NavUtils;
 import agent.navigation.NetHackSurface;
 import agent.navigation.surface.Wall;
+import agent.selector.ItemSelector;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import eu.iv4xr.framework.spatial.IntVec2D;
@@ -10,12 +11,16 @@ import eu.iv4xr.framework.spatial.Vec3;
 import nethack.enums.Command;
 import nethack.enums.EntityType;
 import agent.navigation.surface.Tile;
+import nethack.enums.HungerState;
+import nethack.object.Item;
+import nethack.object.Player;
 import nl.uu.cs.aplib.mainConcepts.Action;
 import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static nl.uu.cs.aplib.AplibEDSL.*;
@@ -77,7 +82,7 @@ public class Actions {
             return new Pair<>(S, newwom);
         }).on((AgentState S) -> {
             NetHackSurface surface = S.multiLayerNav.areas.get((int)S.worldmodel.position.z);
-            IntVec2D[] neighbours = NetHackSurface.physicalNeighbourCoordinates(NavUtils.loc2(S.worldmodel.position));
+            IntVec2D[] neighbours = NavUtils.neighbourCoordinates(NavUtils.loc2(S.worldmodel.position));
             List<Wall> walls = new ArrayList<>();
             for (IntVec2D neighbour: neighbours) {
                 Tile t = surface.getTile(neighbour);
@@ -92,6 +97,22 @@ public class Actions {
                 return null;
             }
             return walls;
+        });
+    }
+
+    static Action eatFood() {
+        return action("eat food").do2((AgentState S) -> (Item item) -> {
+            logger.info(String.format(">>> eatFood: ", item));
+            WorldModel newwom = WorldModels.eatFood(S, item.symbol);
+            return new Pair<>(S, newwom);
+        }).on((AgentState S) -> {
+            Player player = S.app().gameState.player;
+            // Player stomach full enough
+            if (player.hungerState == HungerState.NORMAL || player.hungerState == HungerState.SATIATED) {
+                return null;
+            }
+            Item foodItem = ItemSelector.inventoryFood.apply(Arrays.asList(player.inventory.items), S);
+            return foodItem;
         });
     }
 }

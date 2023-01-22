@@ -27,17 +27,6 @@ public class Predicates {
         return stairs.size() > 0;
     };
 
-    public static WorldEntity closed_door = null;
-    public static Predicate<AgentState> closed_door_set = S -> {
-        return closed_door != null;
-    };
-
-    public static Predicate<AgentState> closed_door_exists = S -> {
-        List<WorldEntity> doors = findOfType(S, EntityType.DOOR);
-        doors = doors.stream().filter(d -> (boolean) d.properties.get("closed")).collect(Collectors.toList());
-        return doors.size() > 0;
-    };
-
     public static List<WorldEntity> findOfType(AgentState S, EntityType type) {
         return S.worldmodel.elements.values().stream().filter(x -> Objects.equals(x.type, type.name())).collect(Collectors.toList());
     }

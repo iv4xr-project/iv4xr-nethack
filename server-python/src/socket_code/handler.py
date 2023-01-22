@@ -97,6 +97,8 @@ def loop(sock, uni, env: Env):
                 return
             case 'step':
                 handle_step(sock, env, int(arg))
+            case 'step_stroke':
+                handle_step_stroke(sock, env, arg)
             case unknown:
                 logging.warning(f'Action "{unknown}" not known')
 
@@ -152,6 +154,17 @@ def handle_step(sock, env, action):
     obs, rew, done, info = env.step(action)
     write.write_obs(sock, env, obs)
     write.write_step(sock, done, info)
+    sock.flush()
+
+def handle_step_stroke(sock, env, stroke):
+    """
+    Step the environment and send the result.
+    """
+    raw_obs, done = env.nethack.step(ord(stroke[0]))
+    # Raw observation needs to get zipped
+    obs = env._get_observation(raw_obs)
+    write.write_obs(sock, env, obs)
+    write.write_step(sock, done, None)
     sock.flush()
 
 

@@ -2,6 +2,7 @@ package agent.navigation;
 
 import agent.AgentLoggers;
 import agent.navigation.surface.*;
+import alice.tuprolog.Int;
 import eu.iv4xr.framework.extensions.pathfinding.*;
 import eu.iv4xr.framework.spatial.IntVec2D;
 import nethack.enums.Color;
@@ -98,12 +99,18 @@ public class NetHackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
         resetVisibility();
 
         // Perform BFS on the graph, initiate the queue with the agent position and all the lit floor tiles
-        HashSet<IntVec2D> visibleCoordinates = new HashSet<>();
+        IntVec2D[] agentNeighbours = NavUtils.neighbourCoordinates(agentPosition);
+        for (IntVec2D neighbour : agentNeighbours) {
+            Tile neighbourTile = getTile(neighbour);
+            neighbourTile.visible = true;
+        }
+
+        HashSet<IntVec2D> visibleCoordinates = new HashSet<>(Arrays.asList(agentNeighbours));
         HashSet<IntVec2D> processedCoordinates = new HashSet<>();
         Queue<IntVec2D> queue = new LinkedList<>(level.visibleFloors);
 
         processedCoordinates.add(agentPosition);
-        queue.addAll(Arrays.asList(physicalNeighbourCoordinates(agentPosition)));
+        queue.addAll(Arrays.asList(NavUtils.neighbourCoordinates(agentPosition)));
 
         // While there are coordinates left to be explored
         while (queue.size() > 0) {
@@ -117,12 +124,12 @@ public class NetHackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
             Tile t = getTile(nextPos);
             if (t == null) {
                 continue;
-            } else if (level.getEntity(nextPos).color == Color.TRANSPARENT && !NavUtils.adjacent(agentPosition, nextPos, true)) {
+            } else if (level.getEntity(nextPos).color == Color.TRANSPARENT) {
                 continue;
             }
 
             // Get the neighbours
-            IntVec2D[] neighbours = physicalNeighbourCoordinates(nextPos);
+            IntVec2D[] neighbours = NavUtils.neighbourCoordinates(nextPos);
             if (t instanceof Doorway) {
                 // Does not have a lit floor tile next to it, so we assume we cannot see it
                 if (Arrays.stream(neighbours).noneMatch(coord -> isFloor(coord) && level.getEntity(coord).color != Color.TRANSPARENT)) {
@@ -198,7 +205,7 @@ public class NetHackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
 
     private void updateNeighbours(Tile t) {
         t.neighbours = neighbours_(t.pos);
-        for (IntVec2D neighbourCoordinate: physicalNeighbourCoordinates(t.pos)) {
+        for (IntVec2D neighbourCoordinate: NavUtils.neighbourCoordinates(t.pos)) {
             Tile neighbour = getTile(neighbourCoordinate);
             if (neighbour == null) {
                 continue;
@@ -293,7 +300,7 @@ public class NetHackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
         List<Tile> frontiers = new LinkedList<>();
         List<Tile> cannotBeFrontier = new LinkedList<>();
         for (Tile t : frontierCandidates) {
-            IntVec2D[] pneighbors = physicalNeighbourCoordinates(t.pos);
+            IntVec2D[] pneighbors = NavUtils.neighbourCoordinates(t.pos);
             boolean isFrontier = false;
             for (IntVec2D n : pneighbors) {
                 if (!hasbeenSeen(n)) {
@@ -443,7 +450,7 @@ public class NetHackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
      * Instead arrays are used and at the end a list is built
      */
     private List<Tile> neighbours_(IntVec2D pos) {
-        IntVec2D[] candidates = physicalNeighbourCoordinates(pos);
+        IntVec2D[] candidates = NavUtils.neighbourCoordinates(pos);
         int nrResults = 0;
         boolean[] toNeighbour = new boolean[candidates.length];
 
@@ -465,25 +472,6 @@ public class NetHackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
             }
         }
         return result;
-    }
-
-    public static IntVec2D[] physicalNeighbourCoordinates(IntVec2D pos) {
-        int left = pos.x - 1;
-        int right = pos.x + 1;
-        int below = pos.y - 1;
-        int above = pos.y + 1;
-
-        return new IntVec2D[]{
-                new IntVec2D(left, pos.y),
-                new IntVec2D(right, pos.y),
-                new IntVec2D(pos.x, below),
-                new IntVec2D(pos.x, above),
-                // Diagonal moves
-                new IntVec2D(left, below),
-                new IntVec2D(left, above),
-                new IntVec2D(right, above),
-                new IntVec2D(right, below),
-        };
     }
 
     /**

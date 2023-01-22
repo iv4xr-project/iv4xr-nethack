@@ -41,7 +41,7 @@ public class App {
 
     private static void runAgent(SendCommandClient commander) {
 //		NetHack nethack = new NetHack(commander, Seed.randomSeed());
-        NetHack nethack = new NetHack(commander, Seed.presets[1]);
+        NetHack nethack = new NetHack(commander, Seed.presets[2]);
         AgentEnv env = new AgentEnv(nethack);
         AgentState state = new AgentState();
         GoalStructure G = explore();
@@ -86,17 +86,23 @@ public class App {
 //			return tacticLib.explorationExhausted(proposal.fst);
         }).withTactic(FIRSTof(
                 TacticLib.abortOnDeath(),
+                // Survival
                 Actions.attackMonster()
                         .on_(Predicates.inCombat_and_hpNotCritical).lift(),
+                Actions.eatFood().lift(),
+
+                // Navigation
                 Actions.kickDoor()
                         .on_(Predicates.near_closedDoor).lift(),
-                // Navigate to closed door
                 NavTactic.navigateToWorldEntity(EntitySelector.closedDoor),
                 NavTactic.explore(),
-                // Navigate to stairs
+
+                // Go to next level
                 NavTactic.navigateToWorldEntity(EntitySelector.stairsDown),
                 Actions.singleAction(Command.MISC_DOWN)
                         .on_(Predicates.on_stairs_down).lift(),
+
+                // Explore walls for hidden doors
                 NavTactic.navigateNextToTile(TileSelector.wallSelector, true),
                 Actions.searchWalls().lift(),
                 ABORT()

@@ -153,7 +153,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
         NetHackSurface navGraph = multiLayerNav.areas.get(levelNr);
         IntVec2D playerPos = NavUtils.loc2(worldmodel.position);
         // Each entity that is next to the agent which is void is a wall
-        IntVec2D[] adjacentCoords = NetHackSurface.physicalNeighbourCoordinates(playerPos);
+        IntVec2D[] adjacentCoords = NavUtils.neighbourCoordinates(playerPos);
         for (IntVec2D adjacentPos: adjacentCoords) {
             if (!navGraph.hasTile(adjacentPos)) {
                 multiLayerNav.addObstacle(new Pair<>(levelNr, new Wall(adjacentPos)));

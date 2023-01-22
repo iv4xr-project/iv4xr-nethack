@@ -48,15 +48,19 @@ def write_obs(sock, env, obs):
     write_field_str(sock, json_dump)
 
 
-def write_step(sock, done, info,):
-    step_json = {
-        'done': done,
-        'info': info,
-    }
+def write_step(sock, done, info):
+    if info:
+        step_json = {
+            'done': done,
+            'info': info,
+        }
+    else:
+        step_json = {
+            'done': done,
+        }
     json_dump = json.dumps(step_json, separators=(',', ':'))
     print("WRITE Step")
     write_field_str(sock, json_dump)
-
 
 def write_space(sock, space):
     """
