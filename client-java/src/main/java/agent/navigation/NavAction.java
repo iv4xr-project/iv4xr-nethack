@@ -27,10 +27,8 @@ public class NavAction {
             WorldModel newwom = NavUtils.moveTo(S, nextTile);
             return new Pair<>(S, newwom);
         }).on((AgentState S) -> {
-            if (!S.agentIsAlive())
-                return null;
             WorldEntity agent = S.worldmodel.elements.get(S.worldmodel().agentId);
-            List<Pair<Integer, Tile>> path = NavUtils.adjustedFindPath(S, NavUtils.levelId(agent), NavUtils.loc2(S.worldmodel.position), levelId, NavUtils.loc2(x, y));
+            List<Pair<Integer, Tile>> path = NavUtils.adjustedFindPath(S, NavUtils.levelNr(agent), NavUtils.loc2(S.worldmodel.position), levelId, NavUtils.loc2(x, y));
             if (path == null) {
                 return null;
             }
@@ -46,15 +44,9 @@ public class NavAction {
             WorldModel newwom = NavUtils.moveTo(S, nextTile);
             return new Pair<>(S, newwom);
         }).on((AgentState S) -> {
-            // return three possible values:
+            // return two possible values:
             // (1) null --> the action is not enabled
-            // (2 disabled) empty array of tiles --> the agent is already next to the target
-            // (3) a singleton array of tile --> the next tile to move to
-            //
-            if (!S.agentIsAlive()) {
-                logger.debug("Cannot navigate since agent is dead");
-                return null;
-            }
+            // (2) a singleton array of tile --> the next tile to move to
             WorldEntity a = S.worldmodel.elements.get(S.worldmodel().agentId);
             IntVec2D agentPos = NavUtils.toTile(S.worldmodel.position).pos;
             WorldEntity e = S.worldmodel.elements.get(targetId);
@@ -62,12 +54,7 @@ public class NavAction {
                 logger.debug("Cannot navigate since it is nextdoor");
                 return null;
             }
-//			if (NavUtils.levelId(a) == NavUtils.levelId(e) && NavUtils.adjacent(agentPos, target, false)) {
-//				Tile[] nextTile = {};
-//				System.out.print("Found path");
-//				return nextTile;
-//			}
-            List<Pair<Integer, Tile>> path = NavUtils.adjustedFindPath(S, NavUtils.levelId(a), agentPos, NavUtils.levelId(e), NavUtils.loc2(e.position));
+            List<Pair<Integer, Tile>> path = NavUtils.adjustedFindPath(S, NavUtils.levelNr(a), agentPos, NavUtils.levelNr(e), NavUtils.loc2(e.position));
             if (path == null) {
                 logger.debug("No path apparently");
                 return null;
@@ -92,15 +79,9 @@ public class NavAction {
             WorldModel newwom = NavUtils.moveTo(S, nextTile);
             return new Pair<>(S, newwom);
         }).on((AgentState S) -> {
-            // return three possible values:
+            // return two possible values:
             // (1) null --> the action is not enabled
-            // (2 disabled) empty array of tiles --> the agent is already next to the target
-            // (3) a singleton array of tile --> the next tile to move to
-            //
-            if (!S.agentIsAlive()) {
-                logger.debug("Cannot navigate since agent is dead");
-                return null;
-            }
+            // (2) a singleton array of tile --> the next tile to move to
             WorldEntity a = S.worldmodel.elements.get(S.worldmodel().agentId);
             Tile agentPos = NavUtils.toTile(S.worldmodel.position);
             WorldEntity e = S.worldmodel.elements.get(targetId);
@@ -113,12 +94,7 @@ public class NavAction {
                 logger.debug(String.format("Next to item id:%s", targetId));
                 return null;
             }
-//			if (NavUtils.levelId(a) == NavUtils.levelId(e) && NavUtils.adjacent(agentPos, target, false)) {
-//				Tile[] nextTile = {};
-//				System.out.print("Found path");
-//				return nextTile;
-//			}
-            List<Pair<Integer, Tile>> path = NavUtils.adjustedFindPath(S, NavUtils.levelId(a), NavUtils.loc2(S.worldmodel.position), NavUtils.levelId(e), NavUtils.loc2(e.position));
+            List<Pair<Integer, Tile>> path = NavUtils.adjustedFindPath(S, NavUtils.levelNr(a), NavUtils.loc2(S.worldmodel.position), NavUtils.levelNr(e), NavUtils.loc2(e.position));
             if (path == null) {
                 logger.debug("No path apparently");
                 return null;
@@ -139,15 +115,16 @@ public class NavAction {
             logger.info(String.format(">>> explore %s", nextTile));
             return new Pair<>(S, newwom);
         }).on((AgentState S) -> {
-            if (!S.agentIsAlive())
-                return null;
+            // return two possible values:
+            // (1) null --> the action is not enabled
+            // (2) a singleton array of tile --> the next tile to move to
             WorldEntity a = S.worldmodel.elements.get(S.worldmodel().agentId);
             Tile agentPos = NavUtils.toTile(S.worldmodel.position);
             List<Pair<Integer, Tile>> path;
             if (heuristicLocation == null) {
-                path = S.multiLayerNav.explore(NavUtils.loc3(NavUtils.levelId(a), NavUtils.loc2(S.worldmodel.position)));
+                path = S.multiLayerNav.explore(NavUtils.loc3(NavUtils.levelNr(a), NavUtils.loc2(S.worldmodel.position)));
             } else {
-                path = S.multiLayerNav.explore(NavUtils.loc3(NavUtils.levelId(a), NavUtils.loc2(S.worldmodel.position)), heuristicLocation);
+                path = S.multiLayerNav.explore(NavUtils.loc3(NavUtils.levelNr(a), NavUtils.loc2(S.worldmodel.position)), heuristicLocation);
             }
             if (path == null) {
                 return null;

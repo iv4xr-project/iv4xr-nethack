@@ -3,7 +3,12 @@ package agent;
 import agent.navigation.NavUtils;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import agent.navigation.surface.Tile;
+import nl.uu.cs.aplib.mainConcepts.Action;
 import nl.uu.cs.aplib.mainConcepts.Tactic;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import static nl.uu.cs.aplib.AplibEDSL.*;
 
 /**
  * Provide several basic actions and tactics.
@@ -18,6 +23,7 @@ import nl.uu.cs.aplib.mainConcepts.Tactic;
  * @author wish
  */
 public class TacticLib {
+    static final Logger logger = LogManager.getLogger(AgentLoggers.AgentLogger);
     /**
      * This constructs a "default" tactic to interact with an entity. The tactic is
      * enabled if the entity is known in the agent's state/wom, and if it is
@@ -25,12 +31,10 @@ public class TacticLib {
      */
     public Tactic interactTac(String targetId) {
         return Actions.interact(targetId).on((AgentState S) -> {
-            if (!S.agentIsAlive())
-                return null;
             WorldEntity a = S.worldmodel.elements.get(S.worldmodel().agentId);
             Tile agentPos = NavUtils.toTile(S.worldmodel.position);
             WorldEntity e = S.worldmodel.elements.get(targetId);
-            if (e == null || NavUtils.levelId(a) != NavUtils.levelId(e)) {
+            if (e == null || NavUtils.levelNr(a) != NavUtils.levelNr(e)) {
                 return null;
             }
             Tile target = NavUtils.toTile(e.position);
@@ -39,5 +43,16 @@ public class TacticLib {
             }
             return null;
         }).lift();
+    }
+
+    public static Tactic abortOnDeath() {
+        return ABORT().on((AgentState S) -> {
+            boolean agentAlive = S.agentIsAlive();
+            if (agentAlive) {
+                return null;
+            }
+            logger.info(">>> Agent dead, abort");
+            return true;
+        });
     }
 }

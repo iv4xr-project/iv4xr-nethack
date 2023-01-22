@@ -29,8 +29,8 @@
             <AppenderRef ref="LogToConsole" level="info"/>
         </Logger>
         <Logger name="Navigation" level="debug" additivity="false">
-            <AppenderRef ref="LogToFile" level="info"/>
-            <AppenderRef ref="LogToConsole" level="info"/>
+            <AppenderRef ref="LogToFile" level="debug"/>
+            <AppenderRef ref="LogToConsole" level="debug"/>
         </Logger>
         <Logger name="Goal/Tactic/Action" level="debug" additivity="false">
             <AppenderRef ref="LogToFile" level="debug"/>

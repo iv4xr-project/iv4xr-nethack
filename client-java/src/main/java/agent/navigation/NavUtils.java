@@ -24,7 +24,7 @@ public class NavUtils {
     static int distTo(AgentState S, WorldEntity e) {
         WorldEntity player = S.worldmodel.elements.get(S.worldmodel.agentId);
         Tile p = toTile(player.position);
-        List<Pair<Integer, Tile>> path = adjustedFindPath(S, levelId(player), NavUtils.loc2(player.position), levelId(e), NavUtils.loc2(e.position));
+        List<Pair<Integer, Tile>> path = adjustedFindPath(S, levelNr(player), NavUtils.loc2(player.position), levelNr(e), NavUtils.loc2(e.position));
         if (path == null) {
             return Integer.MAX_VALUE;
         }
@@ -37,9 +37,11 @@ public class NavUtils {
      * (even if they are, e.g. if one of them is an occupied tile).
      */
     public static List<Pair<Integer, Tile>> adjustedFindPath(AgentState state, int level0, IntVec2D pos0, int level1, IntVec2D pos1) {
+        return adjustedFindPath(state, loc3(level0, pos0), loc3(level1, pos1));
+    }
+
+    public static List<Pair<Integer, Tile>> adjustedFindPath(AgentState state, Pair<Integer, Tile> oldLocation, Pair<Integer, Tile> newLocation) {
         LayeredAreasNavigation<Tile, NetHackSurface> nav = state.multiLayerNav;
-        Pair<Integer, Tile> oldLocation = loc3(level0, pos0);
-        Pair<Integer, Tile> newLocation = loc3(level1, pos1);
         boolean srcOriginalBlockingState = nav.isBlocking(oldLocation);
         boolean destOriginalBlockingState = nav.isBlocking(newLocation);
         nav.toggleBlockingOff(oldLocation);
@@ -109,8 +111,12 @@ public class NavUtils {
         return Math.abs(t1.pos.x - t2.pos.x) + Math.abs(t1.pos.y - t2.pos.y);
     }
 
-    public static int levelId(WorldEntity e) {
+    public static int levelNr(WorldEntity e) {
         return (int) e.properties.get("level");
+    }
+
+    public static int levelNr(Vec3 pos) {
+        return (int) pos.z;
     }
 
     /**
@@ -119,8 +125,8 @@ public class NavUtils {
      * large multiplier (1000000).
      */
     public static float distanceBetweenEntities(WorldEntity e1, WorldEntity e2) {
-        int e1_level = levelId(e1);
-        int e2_level = levelId(e2);
+        int e1_level = levelNr(e1);
+        int e2_level = levelNr(e2);
 
         if (e1_level == e2_level) {
             Vec3 p1 = e1.position.copy();

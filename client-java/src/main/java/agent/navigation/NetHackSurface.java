@@ -2,8 +2,10 @@ package agent.navigation;
 
 import agent.AgentLoggers;
 import agent.navigation.surface.*;
+import alice.tuprolog.Int;
 import eu.iv4xr.framework.extensions.pathfinding.*;
 import eu.iv4xr.framework.spatial.IntVec2D;
+import eu.iv4xr.framework.spatial.Vec3;
 import nethack.object.Color;
 import nethack.object.Level;
 import org.apache.logging.log4j.LogManager;
@@ -33,7 +35,7 @@ public class NetHackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
 
     static final Logger logger = LogManager.getLogger(AgentLoggers.NavLogger);
     static final int sizeX = Level.WIDTH, sizeY = Level.HEIGHT;
-    final Tile[][] tiles = new Tile[sizeY + 2][sizeX + 2];
+    public final Tile[][] tiles = new Tile[sizeY + 2][sizeX + 2];
     /**
      * If true, the pathfinder will assume that the whole NavGraph has been "seen",
      * so no vertex would count as unreachable because it is still unseen. This
@@ -70,7 +72,7 @@ public class NetHackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
 
     public boolean hasTile(IntVec2D pos) { return getTile(pos) != null; }
 
-    private Tile getTile(IntVec2D pos) {
+    public Tile getTile(IntVec2D pos) {
         return getTile(pos.x, pos.y);
     }
 
@@ -225,7 +227,7 @@ public class NetHackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
         return isBlocking(tile.pos);
     }
 
-    private boolean isBlocking(IntVec2D pos) {
+    public boolean isBlocking(IntVec2D pos) {
         Tile t = getTile(pos);
 
         if (t instanceof Door) {
@@ -304,13 +306,9 @@ public class NetHackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
             }
             if (!isFrontier) {
                 cannotBeFrontier.add(t);
-//                System.out.printf("Cannot be frontier %s%n", t);
             }
         }
-        // remove tiles that are obviously not frontiers:
         cannotBeFrontier.forEach(frontierCandidates::remove);
-//        System.out.printf(">>> Sparse2D.getFrontier() is called, size=\"%d\"%n", frontiers.size());
-//        System.out.printf(">>> candidates, size=\"%d\"%n", frontierCandidates.size());
         return frontiers;
     }
 
@@ -326,15 +324,8 @@ public class NetHackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
         // sort the frontiers in ascending order, by their geometric distance to (x,y):
         frontiers.sort((p1, p2) -> Float.compare(distSq(p1.pos.x, p1.pos.y, x, y), distSq(p2.pos.x, p2.pos.y, heuristicX, heuristicY)));
 
-        // System.out.println(">>> #frontiers:" + frontiers.size()) ;
-
         for (Tile front : frontiers) {
-            // System.out.println(">>> (" + x + "," + y + ") --> (" + front.x + "," +
-            // front.y + ")" ) ;
             List<Tile> path = findPath(x, y, front.pos.x, front.pos.y);
-            // System.out.println("==== path " + path) ;
-            // System.out.println("frontier path " + path +" frontier vertices: "+
-            // front.fst);
             if (path != null) {
                 return path;
             }
@@ -342,8 +333,8 @@ public class NetHackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
         return null;
     }
 
+    @Override
     public List<Tile> findPath(Tile from, Tile to) {
-//        System.out.printf("FindPath: %s->%s %n", from.pos, to.pos);
         return pathfinder.findPath(this, from, to);
     }
 
@@ -351,10 +342,14 @@ public class NetHackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
         return findPath(new Tile(fromX, fromY), new Tile(toX, toY));
     }
 
-    float distSq(int x1, int y1, int x2, int y2) {
+    static float distSq(int x1, int y1, int x2, int y2) {
         float dx = x2 - x1;
         float dy = y2 - y1;
         return dx * dx + dy * dy;
+    }
+
+    public static float distSq(IntVec2D pos0, IntVec2D pos1) {
+        return distSq(pos0.x, pos0.y, pos1.x, pos1.y);
     }
 
     /**
@@ -407,26 +402,33 @@ public class NetHackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
         if (tile == null) {
             return new ArrayList<>();
         }
-        return getTile(tile.pos).neighbours;
-//
-//        List<Tile> firstList = getTile(tile.pos).neighbours;
-//        List<Tile> secondList = neighbours_(tile.pos);
-//
-//        if (firstList.size() != secondList.size()) {
-//            System.out.printf("-------%s-------%n", tile.pos);
-//            System.out.println("-------TILE LIST-------");
-//            for (Tile neighbour: firstList) {
-//                System.out.println(neighbour.pos);
-//            }
-//
-//            System.out.println("-------TRUE LIST-------");
-//            for (Tile neighbour: secondList) {
-//                System.out.println(neighbour.pos);
-//            }
-//            System.out.println();
-//        }
-//
-//        return secondList;
+        if (true) {
+            return getTile(tile.pos).neighbours;
+        } else {
+            return neighbours_(tile.pos);
+        }
+    }
+
+    public Iterable<Tile> neighboursDebug(Tile t) {
+        Tile tile = getTile(t.pos);
+        List<Tile> firstList = getTile(tile.pos).neighbours;
+        List<Tile> secondList = neighbours_(tile.pos);
+
+        if (firstList.size() != secondList.size()) {
+            System.out.printf("-------%s-------%n", tile.pos);
+            System.out.println("-------TILE LIST-------");
+            for (Tile neighbour: firstList) {
+                System.out.println(neighbour.pos);
+            }
+
+            System.out.println("-------TRUE LIST-------");
+            for (Tile neighbour: secondList) {
+                System.out.println(neighbour.pos);
+            }
+            System.out.println();
+        }
+
+        return secondList;
     }
 
     /**

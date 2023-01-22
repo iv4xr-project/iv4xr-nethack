@@ -1,10 +1,14 @@
 package agent;
 
 import agent.navigation.NavUtils;
+import agent.navigation.NetHackSurface;
+import agent.navigation.surface.Wall;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
+import eu.iv4xr.framework.spatial.IntVec2D;
 import eu.iv4xr.framework.spatial.Vec3;
 import agent.navigation.NavTactic;
+import nethack.object.Command;
 import nethack.object.EntityType;
 import agent.navigation.surface.Tile;
 import nl.uu.cs.aplib.mainConcepts.Action;
@@ -12,6 +16,7 @@ import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -57,55 +62,39 @@ public class Actions {
         });
     }
 
-    static Action descendStairs() {
-        return action("descend stairs").do1((AgentState S) -> {
-            logger.info(">>> descendStairs");
-            WorldModel newwom = WorldModels.descendStairs(S);
+    static Action singleAction(Command command) {
+        return action(String.format("perform command: %s", command)).do1((AgentState S) -> {
+            logger.info(String.format(">>> command: %s", command));
+            WorldModel newwom = WorldModels.performCommand(S, command);
             return new Pair<>(S, newwom);
         });
     }
 
-    static Action addClosedDoor() {
-        return action("Add door to list").do1((AgentState S) -> {
-            List<WorldEntity> doors = S.worldmodel.elements.values().stream()
-                    .filter(d -> Objects.equals(d.type, EntityType.DOOR.toString()) && (boolean) d.properties.get("closed"))
-                    .collect(Collectors.toList());
-            WorldEntity we = doors.get(0);
-            Predicates.closed_door = doors.get(0);
-            logger.info(String.format(">>> addClosedDoor @%s", we.position));
-            return new Pair<>(S, WorldModels.doNothing(S));
-        });
-    }
-
-    static Action walkToClosedDoor() {
-        return action("Add door to list").do1((AgentState S) -> {
-            List<WorldEntity> doors = S.worldmodel.elements.values().stream().filter(x -> x.type == EntityType.DOOR.toString()).collect(Collectors.toList());
-            doors = doors.stream().filter(d -> (boolean) d.properties.get("closed")).collect(Collectors.toList());
-            WorldEntity we = doors.get(0);
-            Predicates.closed_door = doors.get(0);
-            logger.info(String.format(">>> addClosedDoor @%s", we.position));
-            return new Pair<>(S, WorldModels.doNothing(S));
-        });
-    }
-
-    static Action openClosedDoor() {
-        // Works using Addbefore with Abort call in main goal.
-        return addBefore((AgentState S) -> {
-            WorldEntity we = Predicates.closed_door;
-            Tile m = NavUtils.toTile(we.position);
-            logger.info(String.format(">>> openClosedDoor @%s", m));
-            return goal("open closed door").toSolve((Pair<AgentState, WorldModel> proposal) -> {
-                // Should return true if door is opened
-                return false;
-            }).withTactic(FIRSTof(
-                    Actions.attackMonster()
-                            .on_(Predicates.inCombat_and_hpNotCritical).lift(),
-                    NavTactic.navigateNextTo(we.id, false),
-                    SEQ(Actions.kickDoor()
-                            .on_(Predicates.near_closedDoor).lift(), ABORT()),
-                    NavTactic.explore(),
-                    ABORT()
-            )).lift();
+    static Action searchWalls() {
+        return action("search").do2((AgentState S) -> (List<Wall> walls) -> {
+            logger.info(">>> searchWalls");
+            WorldModel newwom = WorldModels.performCommand(S, Command.COMMAND_SEARCH);
+            for (Wall wall: walls) {
+                wall.timesSearched++;
+            }
+            return new Pair<>(S, newwom);
+        }).on((AgentState S) -> {
+            NetHackSurface surface = S.multiLayerNav.areas.get((int)S.worldmodel.position.z);
+            IntVec2D[] neighbours = NetHackSurface.physicalNeighbourCoordinates(NavUtils.loc2(S.worldmodel.position));
+            List<Wall> walls = new ArrayList<>();
+            for (IntVec2D neighbour: neighbours) {
+                Tile t = surface.getTile(neighbour);
+                if (t instanceof Wall) {
+                    Wall wall = (Wall) t;
+                    if (wall.timesSearched < 10) {
+                        walls.add(wall);
+                    }
+                }
+            }
+            if (walls.size() == 0) {
+                return null;
+            }
+            return walls;
         });
     }
 }

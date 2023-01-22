@@ -1,16 +1,16 @@
 package agent;
 
 import agent.navigation.NavUtils;
+import agent.selector.EntitySelector;
+import agent.selector.TileSelector;
 import connection.ConnectionLoggers;
 import connection.SendCommandClient;
 import eu.iv4xr.framework.mainConcepts.TestAgent;
-import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import nethack.NetHack;
 import nethack.NetHack.StepType;
 import agent.navigation.NavTactic;
 import nethack.object.Command;
-import nethack.object.EntityType;
 import nethack.object.Player;
 import nethack.object.Seed;
 import nl.uu.cs.aplib.mainConcepts.Goal;
@@ -18,8 +18,6 @@ import nl.uu.cs.aplib.mainConcepts.GoalStructure;
 import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.List;
 
 import static nl.uu.cs.aplib.AplibEDSL.*;
 
@@ -67,6 +65,9 @@ public class App {
                 agent.update();
                 agentLogger.debug(String.format("** [%d] agent @%s", k, NavUtils.toTile(state.worldmodel.position)));
             }
+
+            // Need to update state for render
+            state.updateState(Player.ID);
             state.render();
             commander.writeCommand("Render", "");
         }
@@ -80,21 +81,20 @@ public class App {
             return false;
 //			return tacticLib.explorationExhausted(proposal.fst);
         }).withTactic(FIRSTof(
+                TacticLib.abortOnDeath(),
                 Actions.attackMonster()
                         .on_(Predicates.inCombat_and_hpNotCritical).lift(),
                 Actions.kickDoor()
                         .on_(Predicates.near_closedDoor).lift(),
                 // Navigate to closed door
-                NavTactic.navigateToWorldEntity((List<WorldEntity> we) -> {
-                    return EntitySelector.selectFirst(EntitySelector.closedDoor(EntitySelector.entityTypeSelector(we, EntityType.DOOR)));
-                }),
+                NavTactic.navigateToWorldEntity(EntitySelector.closedDoor),
                 NavTactic.explore(),
                 // Navigate to stairs
-                NavTactic.navigateToWorldEntity((List<WorldEntity> we) -> {
-                    return EntitySelector.selectFirst(EntitySelector.entityTypeSelector(we, EntityType.STAIRS_DOWN));
-                }),
-                Actions.descendStairs()
+                NavTactic.navigateToWorldEntity(EntitySelector.stairsDown),
+                Actions.singleAction(Command.MISC_DOWN)
                         .on_(Predicates.on_stairs_down).lift(),
+                NavTactic.navigateNextToTile(TileSelector.wallSelector, true),
+                Actions.searchWalls().lift(),
                 ABORT()
         ));
 

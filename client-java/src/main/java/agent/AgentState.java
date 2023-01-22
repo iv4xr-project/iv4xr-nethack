@@ -6,6 +6,7 @@ import eu.iv4xr.framework.extensions.pathfinding.Navigatable;
 import eu.iv4xr.framework.mainConcepts.Iv4xrAgentState;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.spatial.IntVec2D;
+import nethack.NetHack;
 import nethack.object.Entity;
 import nethack.object.EntityType;
 import nethack.object.Level;
@@ -38,6 +39,8 @@ public class AgentState extends Iv4xrAgentState<Void> {
     public AgentEnv env() {
         return (AgentEnv) super.env();
     }
+
+    public NetHack app() { return env().app; }
 
     /**
      * We are not going to keep a Nav-graph, but will instead keep a
@@ -88,6 +91,10 @@ public class AgentState extends Iv4xrAgentState<Void> {
         super.updateState(agentId);
         updateMap();
         updateEntities();
+    }
+
+    public NetHackSurface area() {
+        return multiLayerNav.areas.get((int)worldmodel.position.z);
     }
 
     private void updateMap() {
@@ -231,7 +238,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
 
         List<WorldEntity> ms = worldmodel.elements
                 .values().stream().filter(e -> Objects.equals(e.type, type.name())
-                        && NavUtils.levelId(player) == NavUtils.levelId(e) && NavUtils.adjacent(p, NavUtils.toTile(e.position), allowDiagonally))
+                        && NavUtils.levelNr(player) == NavUtils.levelNr(e) && NavUtils.adjacent(p, NavUtils.toTile(e.position), allowDiagonally))
                 .collect(Collectors.toList());
 
         if (ms.size() > 0) {
