@@ -119,7 +119,7 @@ public class NetHackSurface implements Navigatable<Tile>, XPathfinder<Tile>, Can
             Tile t = getTile(nextPos);
             if (t == null) {
                 continue;
-            } else if (level.getEntity(nextPos).color == Color.TRANSPARENT) {
+            } else if (level.getEntity(nextPos).color == Color.TRANSPARENT && !NavUtils.adjacent(agentPosition, nextPos, true)) {
                 continue;
             }
 
