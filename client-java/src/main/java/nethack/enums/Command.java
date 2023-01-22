@@ -5,7 +5,7 @@ import java.util.Map;
 
 // Actions listed at: /python-server/lib/nle/nle/nethack/actions.py
 public enum Command {
-    //	Direction
+    // Direction
     DIRECTION_N("k", "Move N"),
     DIRECTION_E("l", "Move E"),
     DIRECTION_S("j", "Move S"),
@@ -24,13 +24,13 @@ public enum Command {
     DIRECTION_LONG_SW("B", "Run SW"),
     DIRECTION_LONG_NW("Y", "Run NW"),
 
-    //  Misc
+    // Misc
     MISC_UP("<", "Up stairs"),
     MISC_DOWN(">", "Down stairs"),
     MISC_WAIT(".", "Wait"),
     MISC_MORE(" ", "Next message"),
 
-    //  Commands
+    // Commands
     COMMAND_EXTCMD("#", "Longer cmd"),
     COMMAND_EXTLIST("?", "This window"),
     COMMAND_ADJUST("#a", "Adjust inv letters"),
@@ -117,7 +117,7 @@ public enum Command {
     COMMAND_WIPE("#w", "Wipe face"),
     COMMAND_ZAP("z", "Use wand"),
 
-    //  Characters
+    // Characters
     TEXTCHARACTER_PLUS("%+", "Show spells"),
     TEXTCHARACTER_MINUS("%-", ""),
     TEXTCHARACTER_SPACE("% ", ""),

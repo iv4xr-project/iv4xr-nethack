@@ -63,7 +63,7 @@ public class StatsTypeAdapter extends TypeAdapter<Pair<Stats, Player>> {
         stats.time = values[20];
         player.hungerState = HungerState.fromValue(values[21]);
         player.carryingCapacity = values[22];
-//		gameState.dungeonNumber = values[23];
+//      gameState.dungeonNumber = values[23];
         stats.oneIndexLevelNumber = values[24];
         stats.zeroIndexLevelNumber = values[24] - 1;
         player.condition = values[25];

@@ -5,7 +5,7 @@ public class Stats {
     public int depth;
     public int monsterLevel;
     public int time;
-    //	public int dungeonNumber;
+//    public int dungeonNumber;
     public int zeroIndexLevelNumber;
     public int oneIndexLevelNumber;
 

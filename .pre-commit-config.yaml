@@ -7,23 +7,28 @@ repos:
     rev: v2.3.0
     hooks:
       - id: check-merge-conflict
+        exclude: server-python/lib/|server-python/nethack-server-env/|client-java/target/
       - id: check-xml
+        exclude: server-python/lib/|server-python/nethack-server-env/|client-java/target/
       - id: end-of-file-fixer
+        exclude: server-python/lib/|server-python/nethack-server-env/|client-java/target/
       - id: trailing-whitespace
+        exclude: server-python/lib/|server-python/nethack-server-env/|client-java/target/
       - id: check-added-large-files
+        exclude: server-python/lib/|server-python/nethack-server-env/|client-java/target/
       - id: check-symlinks
+        exclude: server-python/lib/|server-python/nethack-server-env/|client-java/target/
       - id: name-tests-test
+        exclude: server-python/lib/|server-python/nethack-server-env/|client-java/target/
       - id: requirements-txt-fixer
+        exclude: server-python/lib/|server-python/nethack-server-env/|client-java/target/
   # Prohibit tabs in files
   - repo: https://github.com/Lucas-C/pre-commit-hooks
     rev: v1.1.10
     hooks:
       - id: forbid-tabs
         files: .(hs|lhs|cs|pxd|py|py3|pyw|pyx|pyz|pyi|c|cc|cxx|cpp|c\+\+|hpp|h|h\+\+|hh|R|java)
-  # - repo: https://github.com/psf/black
-  #   rev: 19.3b0
-  #   hooks:
-  #     - id: black
+        exclude: server-python/lib/|server-python/nethack-server-env/|client-java/target/
   # Lint yaml files
   - repo: https://github.com/adrienverge/yamllint
     rev: v1.26.3
@@ -33,39 +38,10 @@ repos:
           extends: default,
           rules:{new-lines: disable, line-length: {max: 140}}
           }"]
+        exclude: server-python/lib/|server-python/nethack-server-env/|client-java/target/
   # Lint bash files
   - repo: https://github.com/shellcheck-py/shellcheck-py
     rev: v0.7.2.1
     hooks:
       - id: shellcheck
-  # Lint gitlab ci files
-  # - repo: https://gitlab.com/devopshq/gitlab-ci-linter
-  #   rev: v1.0.3
-  #   hooks:
-  #     - id: gitlab-ci-linter
-  # Lint dockerfiles
-  - repo: https://github.com/hadolint/hadolint
-    rev: v2.7.0
-    hooks:
-      - id: hadolint
-  # Lint terraform files
-  # - repo: https://github.com/antonbabenko/pre-commit-terraform
-  #   rev: v1.50.0
-  #   hooks:
-  #     - id: terraform_tflint
-  #     - id: terraform_validate
-  #     - id: terraform_docs
-  #     - id: terraform_docs_replace
-  - repo: local
-    hooks:
-      - id: hlint
-        name: HLint
-        entry: hlint # Uses local hlint
-        language: python
-        files: .l?hs
-      - id: ormolu
-        name: Ormolu formatter
-        entry: ormolu
-        language: python
-        files: .l?hs
-        args: [--mode, inplace]
+        exclude: server-python/lib/|server-python/nethack-server-env/|client-java/target/

@@ -40,7 +40,7 @@ public class App {
     }
 
     private static void runAgent(SendCommandClient commander) {
-//		NetHack nethack = new NetHack(commander, Seed.randomSeed());
+//      NetHack nethack = new NetHack(commander, Seed.randomSeed());
         NetHack nethack = new NetHack(commander, Seed.presets[2]);
         AgentEnv env = new AgentEnv(nethack);
         AgentState state = new AgentState();
@@ -83,7 +83,7 @@ public class App {
     private static GoalStructure explore() {
         Goal G = goal("Main").toSolve((Pair<AgentState, WorldModel> proposal) -> {
             return false;
-//			return tacticLib.explorationExhausted(proposal.fst);
+//          return tacticLib.explorationExhausted(proposal.fst);
         }).withTactic(FIRSTof(
                 TacticLib.abortOnDeath(),
                 // Survival

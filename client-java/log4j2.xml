@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="INFO">
-	<!-- Source: https://mkyong.com/logging/apache-log4j-2-tutorials/ -->
+    <!-- Source: https://mkyong.com/logging/apache-log4j-2-tutorials/ -->
     <Appenders>
         <Console name="LogToConsole" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>

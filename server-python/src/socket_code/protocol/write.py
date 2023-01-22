@@ -78,4 +78,3 @@ def write_seed(sock, seed):
     json_dump = json.dumps(seed_json, separators=(',', ':'))
     print("WRITE Seed")
     write_field_str(sock, json_dump)
-
