@@ -9,6 +9,7 @@ public abstract class Selector<T> {
     protected enum SelectionType {FIRST, LAST, CLOSEST, FARTHEST}
     protected SelectionType selectionType;
     protected Predicate<T> predicate = null;
+    protected boolean onlySameLevel = true;
 
     public Selector (SelectionType selectionType, Predicate<T> predicate) {
         this.selectionType = selectionType;
@@ -20,8 +21,6 @@ public abstract class Selector<T> {
     }
 
     public abstract T apply(List<T> elems, AgentState S);
-
-    public T apply(List<T> elems) { return apply(elems, null); }
 
     protected T select(List<T> elems, AgentState S) {
         int n = elems.size();

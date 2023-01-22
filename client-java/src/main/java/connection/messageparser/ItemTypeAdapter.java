@@ -6,7 +6,7 @@ import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import connection.ConnectionLoggers;
 import nethack.object.Item;
-import nethack.object.ItemType;
+import nethack.enums.ItemType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

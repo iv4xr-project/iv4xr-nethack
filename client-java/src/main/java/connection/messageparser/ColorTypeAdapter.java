@@ -3,7 +3,7 @@ package connection.messageparser;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import nethack.object.Color;
+import nethack.enums.Color;
 
 import java.io.IOException;
 

@@ -1,6 +1,5 @@
 package agent.navigation.surface;
 
-
 import eu.iv4xr.framework.spatial.IntVec2D;
 
 import java.util.ArrayList;
@@ -14,9 +13,7 @@ public class Tile {
     public final boolean seeThrough = true;
     public List<Tile> neighbours = new ArrayList<>(8);
 
-    public Tile(IntVec2D pos) {
-        this.pos = pos;
-    }
+    public Tile(IntVec2D pos) { this.pos = pos; }
 
     public Tile(int x, int y) {
         this.pos = new IntVec2D(x, y);

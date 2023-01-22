@@ -2,6 +2,8 @@ package nethack.object;
 
 import eu.iv4xr.framework.spatial.IntVec2D;
 import eu.iv4xr.framework.spatial.Vec3;
+import nethack.enums.Alignment;
+import nethack.enums.HungerState;
 
 public class Player {
     public static final String ID = "player";
@@ -24,16 +26,9 @@ public class Player {
     public int armorClass;
     public int experienceLevel;
     public int experiencePoints;
-    public int hungerState;
+    public HungerState hungerState;
     public int carryingCapacity;
     public int condition;
     public Alignment alignment;
-    public Player() {
-    }
-
-    public static enum Alignment {
-        LAWFUL,
-        NEUTRAL,
-        CHAOTIC
-    }
+    public Player() {}
 }

@@ -5,7 +5,7 @@ import agent.navigation.NavUtils;
 import agent.navigation.NetHackSurface;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.spatial.IntVec2D;
-import nethack.object.EntityType;
+import nethack.enums.EntityType;
 
 import java.util.List;
 import java.util.Objects;
@@ -31,7 +31,7 @@ public class EntitySelector extends Selector<WorldEntity> {
 
     @Override
     public WorldEntity apply(List<WorldEntity> entities, AgentState S) {
-        return select(filter(entities), S);
+        return select(filter(entities, S), S);
     }
 
     @Override
@@ -67,17 +67,22 @@ public class EntitySelector extends Selector<WorldEntity> {
         }
     }
 
-    private List<WorldEntity> filter(List<WorldEntity> entities) {
-        Stream<WorldEntity> stream;
-        if (entityType != null && predicate != null) {
-            stream = entities.stream().filter(we -> Objects.equals(we.type, entityType.name()) && predicate.test(we));
-        } else if (entityType != null) {
-            stream = entities.stream().filter(we -> Objects.equals(we.type, entityType.name()));
-        } else if (predicate != null) {
-            stream = entities.stream().filter(we -> predicate.test(we));
-        } else {
-            stream = entities.stream();
+    private List<WorldEntity> filter(List<WorldEntity> entities, AgentState S) {
+        Stream<WorldEntity> stream = entities.stream();
+        if (entityType != null) {
+            stream = stream.filter(we -> Objects.equals(we.type, entityType.name()));
+        }
+        if (predicate != null) {
+            stream = stream.filter(we -> predicate.test(we));
+        }
+        if (onlySameLevel) {
+            stream = stream.filter(we -> NavUtils.levelNr(we) == NavUtils.levelNr(S.worldmodel.position));
         }
         return stream.collect(Collectors.toList());
+    }
+
+    @Override
+    public String toString() {
+        return String.format("EntitySelector: %s %s (hasPredicate=%b)", selectionType, entityType, predicate != null);
     }
 }

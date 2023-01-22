@@ -6,6 +6,8 @@ import eu.iv4xr.framework.mainConcepts.WorldModel;
 import eu.iv4xr.framework.spatial.IntVec2D;
 import eu.iv4xr.framework.spatial.Vec3;
 import nethack.NetHack;
+import nethack.enums.Command;
+import nethack.enums.EntityType;
 import nethack.object.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

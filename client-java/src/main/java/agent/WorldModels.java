@@ -3,7 +3,7 @@ package agent;
 import agent.navigation.NavUtils;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import eu.iv4xr.framework.spatial.Vec3;
-import nethack.object.Command;
+import nethack.enums.Command;
 import agent.navigation.surface.Tile;
 
 public class WorldModels {

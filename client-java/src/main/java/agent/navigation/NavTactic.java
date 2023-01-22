@@ -33,20 +33,18 @@ public class NavTactic {
         return NavAction.navigateTo()
             .on((AgentState S) -> {
                 Vec3 agentPos = S.worldmodel.position;
-                WorldEntity e = entitySelector.apply(new ArrayList<>(S.worldmodel.elements.values()));
+                WorldEntity e = entitySelector.apply(new ArrayList<>(S.worldmodel.elements.values()), S);
                 if (e == null) {
                     return null;
                 } else if (agentPos.equals(e.position)) {
                     return null;
                 }
-                IntVec2D from = NavUtils.loc2(agentPos);
-                IntVec2D to = NavUtils.loc2(e.position);
-                List<Pair<Integer, Tile>> path = NavUtils.adjustedFindPath(S, NavUtils.levelNr(agentPos), from, NavUtils.levelNr(e), to);
-                if (path == null) {
-                    logger.debug("No path apparently");
+                Tile nextTile = NavUtils.nextTile(NavUtils.adjustedFindPath(S, NavUtils.loc3(agentPos), NavUtils.loc3(e.position)));
+                if (nextTile == null) {
                     return null;
                 }
-                return path.get(1).snd;
+                logger.debug(String.format(">>> navigateToWorldEntity (%s) via %s", entitySelector, nextTile));
+                return nextTile;
             }).lift();
     }
 
@@ -67,12 +65,12 @@ public class NavTactic {
                     return null;
                 }
                 Vec3 agentPos = S.worldmodel.position;
-                List<Pair<Integer, Tile>> path = NavUtils.adjustedFindPath(S, NavUtils.loc3(agentPos), NavUtils.loc3((int)agentPos.z, t.pos));
-                if (path == null) {
-                    logger.debug("No path apparently");
+                Tile nextTile = NavUtils.nextTile(NavUtils.adjustedFindPath(S, NavUtils.loc3(agentPos), NavUtils.loc3((int)agentPos.z, t.pos)));
+                if (nextTile == null) {
                     return null;
                 }
-                return path.get(1).snd;
+                logger.debug(String.format(">>> navigateToTile (%s) via %s", tileSelector, nextTile));
+                return nextTile;
             }).lift();
     }
 
@@ -102,8 +100,7 @@ public class NavTactic {
                     if (!surface.hasTile(pos)) {
                         continue;
                     }
-                    boolean blocking = surface.isBlocking(pos);
-                    if (blocking) {
+                    if (surface.isBlocking(pos)) {
                         continue;
                     }
 
@@ -115,20 +112,20 @@ public class NavTactic {
                         path = pathToNeighbour;
                     }
                 }
-                if (path == null) {
-                    logger.debug("No path apparently");
+
+                Tile nextTile = NavUtils.nextTile(path);
+                if (nextTile == null) {
                     return null;
                 }
-                return path.get(1).snd;
+                logger.debug(String.format(">>> navigateNextToTile (%s) via %s (allowdiagonal=%b)", tileSelector, nextTile, allowDiagonal));
+                return nextTile;
             }).lift();
     }
 
     // Construct a tactic that would guide the agent to a tile adjacent to the location.
     public static Tactic navigateNextTo(Pair<Integer, Tile> location, boolean allowDiagonally) {
         return NavAction.navigateTo(location.fst, location.snd.pos.x, location.snd.pos.y).on_((AgentState S) -> {
-            WorldEntity player = S.worldmodel.elements.get(S.worldmodel.agentId);
-            Tile p = NavUtils.toTile(player.position);
-            return !NavUtils.adjacent(p, location.snd, allowDiagonally);
+            return !NavUtils.adjacent(new Tile(NavUtils.loc2(S.worldmodel.position)), location.snd, allowDiagonally);
         }).lift();
     }
 

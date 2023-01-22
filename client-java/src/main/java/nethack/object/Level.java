@@ -2,6 +2,8 @@ package nethack.object;
 
 import eu.iv4xr.framework.spatial.IntVec2D;
 import nethack.NetHackLoggers;
+import nethack.enums.Color;
+import nethack.enums.EntityType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

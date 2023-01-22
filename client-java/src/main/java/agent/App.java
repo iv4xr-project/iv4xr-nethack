@@ -1,6 +1,5 @@
 package agent;
 
-import agent.navigation.NavUtils;
 import agent.selector.EntitySelector;
 import agent.selector.TileSelector;
 import connection.ConnectionLoggers;
@@ -10,7 +9,7 @@ import eu.iv4xr.framework.mainConcepts.WorldModel;
 import nethack.NetHack;
 import nethack.NetHack.StepType;
 import agent.navigation.NavTactic;
-import nethack.object.Command;
+import nethack.enums.Command;
 import nethack.object.Player;
 import nethack.object.Seed;
 import nl.uu.cs.aplib.mainConcepts.Goal;
@@ -52,9 +51,14 @@ public class App {
         state.updateState(Player.ID);
 
         agentLogger.info(">> Start agent loop...");
-        int k = 0;
+        int jumpToTurn = 0; // 875;
         // Now we run the agent:
-        while (G.getStatus().inProgress() && k++ < 700) {
+        while (G.getStatus().inProgress()) {
+            if (state.app().gameState.stats.time < jumpToTurn) {
+                agent.update();
+                continue;
+            }
+
             Command command = nethack.waitCommand(true);
             if (command != null) {
                 StepType stepType = nethack.step(command);
@@ -63,7 +67,7 @@ public class App {
                 }
             } else {
                 agent.update();
-                agentLogger.debug(String.format("** [%d] agent @%s", k, NavUtils.toTile(state.worldmodel.position)));
+                agentLogger.debug(String.format("** agent @%s", state.worldmodel.position));
             }
 
             // Need to update state for render
@@ -72,7 +76,7 @@ public class App {
             commander.writeCommand("Render", "");
         }
 
-        agentLogger.info(String.format("Closing NetHack since the loop in agent has surpassed %d steps", k));
+        agentLogger.info("Closing NetHack since the loop in agent has terminated");
         nethack.close();
     }
 

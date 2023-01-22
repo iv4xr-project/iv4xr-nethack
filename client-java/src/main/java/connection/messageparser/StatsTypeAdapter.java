@@ -7,8 +7,9 @@ import com.google.gson.stream.JsonWriter;
 import connection.ConnectionLoggers;
 import eu.iv4xr.framework.spatial.IntVec2D;
 import eu.iv4xr.framework.spatial.Vec3;
+import nethack.enums.Alignment;
+import nethack.enums.HungerState;
 import nethack.object.Player;
-import nethack.object.Player.Alignment;
 import nethack.object.Stats;
 import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.LogManager;
@@ -59,27 +60,13 @@ public class StatsTypeAdapter extends TypeAdapter<Pair<Stats, Player>> {
         player.experienceLevel = values[18];
         player.experiencePoints = values[19];
         stats.time = values[20];
-        player.hungerState = values[21];
+        player.hungerState = HungerState.fromValue(values[21]);
         player.carryingCapacity = values[22];
 //		gameState.dungeonNumber = values[23];
         stats.oneIndexLevelNumber = values[24];
         stats.zeroIndexLevelNumber = values[24] - 1;
         player.condition = values[25];
-
-        switch (values[26]) {
-            case -1:
-                player.alignment = Alignment.CHAOTIC;
-                break;
-            case 0:
-                player.alignment = Alignment.NEUTRAL;
-                break;
-            case 1:
-                player.alignment = Alignment.LAWFUL;
-                break;
-            default:
-                logger.error(String.format("Alignment value %d not valid",  values[26]));
-                throw new IllegalArgumentException("Alignment of " + values[26] + "is not recognized");
-        }
+        player.alignment = Alignment.fromValue(values[26]);
 
         return new Pair<Stats, Player>(stats, player);
     }

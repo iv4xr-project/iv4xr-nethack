@@ -1,4 +1,4 @@
-package nethack.object;
+package nethack.enums;
 
 // Source: server-python\lib\nle\include\objclass.h
 public enum ItemType {

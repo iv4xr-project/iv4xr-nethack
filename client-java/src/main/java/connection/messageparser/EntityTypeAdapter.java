@@ -5,9 +5,9 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import connection.ConnectionLoggers;
-import nethack.object.Color;
+import nethack.enums.Color;
 import nethack.object.Entity;
-import nethack.object.EntityType;
+import nethack.enums.EntityType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

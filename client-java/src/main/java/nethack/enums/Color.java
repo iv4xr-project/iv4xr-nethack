@@ -1,7 +1,4 @@
-package nethack.object;
-
-import connection.SendCommandClient;
-import nethack.NetHack;
+package nethack.enums;
 
 import java.io.IOException;
 import java.util.HashMap;

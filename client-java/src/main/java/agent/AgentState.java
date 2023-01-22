@@ -8,7 +8,7 @@ import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.spatial.IntVec2D;
 import nethack.NetHack;
 import nethack.object.Entity;
-import nethack.object.EntityType;
+import nethack.enums.EntityType;
 import nethack.object.Level;
 import nethack.object.Player;
 import agent.navigation.NetHackSurface;

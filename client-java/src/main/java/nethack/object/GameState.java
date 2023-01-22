@@ -42,9 +42,9 @@ public class GameState {
                 player.position2D.x, player.position2D.y, player.strength, player.dexterity,
                 player.constitution, player.intelligence, player.wisdom, player.charisma, player.alignment.name(),
                 stats.score);
-        String secondStatsLine = String.format("Dlvl:%d $:%d HP:%d(%d) Pw:%d(%d) AC:%d Xp:%d/%d T:%d",
+        String secondStatsLine = String.format("Dlvl:%d $:%d HP:%d(%d) Pw:%d(%d) AC:%d Xp:%d/%d T:%d %s",
                 stats.oneIndexLevelNumber, player.gold, player.hp, player.hpMax, player.energy, player.energyMax,
-                player.armorClass, player.experienceLevel, player.experiencePoints, stats.time);
+                player.armorClass, player.experienceLevel, player.experiencePoints, stats.time, player.hungerState);
         sb.append(firstStatsLine).append(System.lineSeparator());
         sb.append(secondStatsLine).append(System.lineSeparator());
 

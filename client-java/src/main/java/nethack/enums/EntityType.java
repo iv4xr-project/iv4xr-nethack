@@ -1,4 +1,4 @@
-package nethack.object;
+package nethack.enums;
 
 import java.io.Serializable;
 

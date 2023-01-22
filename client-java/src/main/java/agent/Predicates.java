@@ -1,8 +1,7 @@
 package agent;
 
-import agent.navigation.NavUtils;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
-import nethack.object.EntityType;
+import nethack.enums.EntityType;
 
 import java.util.List;
 import java.util.Objects;

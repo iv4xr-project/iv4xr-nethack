@@ -1,4 +1,4 @@
-package nethack.object;
+package nethack.enums;
 
 public enum GameMode {
     NetHackChallenge("NetHackChallenge-v0"), // Does not allow seeding

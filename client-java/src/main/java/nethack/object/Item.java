@@ -1,5 +1,7 @@
 package nethack.object;
 
+import nethack.enums.ItemType;
+
 public class Item {
     // Additional information possibly at: server-python\lib\nle\build\include\onames.h
     public char symbol;

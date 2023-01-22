@@ -1,6 +1,8 @@
 package nethack.object;
 
 import eu.iv4xr.framework.spatial.IntVec2D;
+import nethack.enums.Color;
+import nethack.enums.EntityType;
 
 // Source: https://www.baeldung.com/java-enum-values
 // Actions listed at: /python-server/lib/nle/nle/nethack/actions.py

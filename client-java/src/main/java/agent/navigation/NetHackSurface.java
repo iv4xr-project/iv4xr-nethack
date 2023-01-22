@@ -2,11 +2,9 @@ package agent.navigation;
 
 import agent.AgentLoggers;
 import agent.navigation.surface.*;
-import alice.tuprolog.Int;
 import eu.iv4xr.framework.extensions.pathfinding.*;
 import eu.iv4xr.framework.spatial.IntVec2D;
-import eu.iv4xr.framework.spatial.Vec3;
-import nethack.object.Color;
+import nethack.enums.Color;
 import nethack.object.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

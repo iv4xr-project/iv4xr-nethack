@@ -7,9 +7,8 @@ import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import eu.iv4xr.framework.spatial.IntVec2D;
 import eu.iv4xr.framework.spatial.Vec3;
-import agent.navigation.NavTactic;
-import nethack.object.Command;
-import nethack.object.EntityType;
+import nethack.enums.Command;
+import nethack.enums.EntityType;
 import agent.navigation.surface.Tile;
 import nl.uu.cs.aplib.mainConcepts.Action;
 import nl.uu.cs.aplib.utils.Pair;
@@ -18,8 +17,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 import static nl.uu.cs.aplib.AplibEDSL.*;
 

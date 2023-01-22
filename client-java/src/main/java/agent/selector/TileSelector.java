@@ -5,12 +5,8 @@ import agent.navigation.NavUtils;
 import agent.navigation.NetHackSurface;
 import agent.navigation.surface.Tile;
 import agent.navigation.surface.Wall;
-import agent.selector.EntitySelector;
-import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.spatial.IntVec2D;
-import nethack.object.EntityType;
 
-import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -79,5 +75,10 @@ public class TileSelector extends Selector<Tile> {
             stream = tiles.stream();
         }
         return stream.collect(Collectors.toList());
+    }
+
+    @Override
+    public String toString() {
+        return String.format("TileSelector: %s %s (hasPredicate=%b)", selectionType, tileClass, predicate != null);
     }
 }

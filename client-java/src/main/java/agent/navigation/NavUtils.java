@@ -7,8 +7,9 @@ import eu.iv4xr.framework.mainConcepts.WorldModel;
 import eu.iv4xr.framework.spatial.IntVec2D;
 import eu.iv4xr.framework.spatial.Vec3;
 import agent.AgentState;
-import nethack.object.Command;
+import nethack.enums.Command;
 import agent.navigation.surface.Tile;
+import nethack.object.Player;
 import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,9 +23,7 @@ public class NavUtils {
      * It uses adjustedFindPath to calculate the path.
      */
     static int distTo(AgentState S, WorldEntity e) {
-        WorldEntity player = S.worldmodel.elements.get(S.worldmodel.agentId);
-        Tile p = toTile(player.position);
-        List<Pair<Integer, Tile>> path = adjustedFindPath(S, levelNr(player), NavUtils.loc2(player.position), levelNr(e), NavUtils.loc2(e.position));
+        List<Pair<Integer, Tile>> path = adjustedFindPath(S, NavUtils.loc3(S.worldmodel.position), NavUtils.loc3(e.position));
         if (path == null) {
             return Integer.MAX_VALUE;
         }
@@ -145,9 +144,7 @@ public class NavUtils {
      * (1000000).
      */
     public static float distanceToAgent(AgentState S, WorldEntity e) {
-        String agentName = S.worldmodel.agentId;
-        WorldEntity player = S.worldmodel.elements.get(agentName);
-        return distanceBetweenEntities(player, e);
+        return distanceBetweenEntities(S.worldmodel.elements.get(Player.ID), e);
     }
 
     public static WorldModel moveTo(AgentState state, Tile targetTile) {
@@ -185,6 +182,19 @@ public class NavUtils {
             return Command.DIRECTION_E;
         } else {
             return Command.DIRECTION_W;
+        }
+    }
+
+    public static Tile nextTile(List<Pair<Integer, Tile>> path) {
+        if (path == null) {
+            logger.debug("Path not found");
+            return null;
+        } else if (path.size() == 0) {
+            logger.debug("Already on location, path is length 0");
+            return null;
+        } else {
+            // The first element is the src itself, so we need to pick the next one:
+            return path.get(1).snd;
         }
     }
 
