@@ -1,18 +1,18 @@
 package nethack.enums;
 
 public enum GameMode {
-    NetHackChallenge("NetHackChallenge-v0"), // Does not allow seeding
-    NetHack("NetHack-v0"), // Allows for seeding
-    ;
+  NetHackChallenge("NetHackChallenge-v0"), // Does not allow seeding
+  NetHack("NetHack-v0"), // Allows for seeding
+  ;
 
-    private String environmentName;
+  private String environmentName;
 
-    GameMode(String environmentName) {
-        this.environmentName = environmentName;
-    }
+  GameMode(String environmentName) {
+    this.environmentName = environmentName;
+  }
 
-    @Override
-    public String toString() {
-        return environmentName;
-    }
+  @Override
+  public String toString() {
+    return environmentName;
+  }
 }
