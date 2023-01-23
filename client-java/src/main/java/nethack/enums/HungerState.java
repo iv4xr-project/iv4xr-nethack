@@ -4,11 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum HungerState {
+  OVERSATIATED(-1),
   SATIATED(0),
   NORMAL(1),
   HUNGRY(2),
   WEAK(3),
-  FAINTING(4);
+  FAINTING(4),
+  STARVED(5);
 
   private static final Map<Integer, HungerState> BY_VALUE = new HashMap<>();
 

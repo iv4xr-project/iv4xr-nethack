@@ -4,6 +4,7 @@ import static nl.uu.cs.aplib.AplibEDSL.action;
 
 import agent.AgentLoggers;
 import agent.AgentState;
+import agent.Sounds;
 import agent.navigation.surface.Tile;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
@@ -101,9 +102,10 @@ public class NavAction {
         .do2(
             (AgentState S) ->
                 (Tile nextTile) -> {
-                  WorldModel newwom = NavUtils.moveTo(S, nextTile);
+                  Sounds.explore();
                   logger.info(
                       String.format(">>> explore to %s via %s", heuristicLocation, nextTile));
+                  WorldModel newwom = NavUtils.moveTo(S, nextTile);
                   return new Pair<>(S, newwom);
                 })
         .on(

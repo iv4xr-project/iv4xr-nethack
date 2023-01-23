@@ -123,7 +123,6 @@ public class NetHack {
         return StepType.Special;
       case ADDITIONAL_ASCII:
         char character = command.stroke.charAt(1);
-        logger.info("Send stroke: " + character);
         return step(Command.ADDITIONAL_ASCII, character);
       case COMMAND_INVENTORY:
         System.out.println(gameState.player.inventory);

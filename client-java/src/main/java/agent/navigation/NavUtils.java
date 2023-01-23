@@ -222,14 +222,7 @@ public class NavUtils {
 
   /** check if the location of the entity e is reachable from the agent current position. */
   public static boolean isReachable(AgentState S, WorldEntity e) {
-    var agentName = S.worldmodel.agentId;
-    var player = S.worldmodel.elements.get(agentName);
-    int player_maze = (int) player.properties.get("maze");
-    int e_maze = (int) e.properties.get("maze");
-
-    var t1 = toTile(player.position);
-    var t2 = toTile(e.position);
-    var path = adjustedFindPath(S, player_maze, t1.x, t1.y, e_maze, t2.x, t2.y);
+    var path = adjustedFindPath(S, loc3(S.worldmodel.position), loc3(e.position));
     return path != null && path.size() > 0;
   }
 }

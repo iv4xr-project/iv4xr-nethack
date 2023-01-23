@@ -48,6 +48,7 @@ public class Actions {
     return action("attack")
         .do1(
             (AgentState S) -> {
+              Sounds.attack();
               List<WorldEntity> ms = S.adjacentEntities(EntityType.MONSTER, true);
               // just choose the first one:
               Vec3 position = ms.get(0).position;
@@ -62,6 +63,7 @@ public class Actions {
     return action("kick door")
         .do1(
             (AgentState S) -> {
+              Sounds.door();
               List<WorldEntity> ms = S.adjacentEntities(EntityType.DOOR, false);
               Vec3 position = ms.get(0).position;
               logger.info(String.format(">>> kickDoor @%s", position));
@@ -86,6 +88,7 @@ public class Actions {
             (AgentState S) ->
                 (List<Wall> walls) -> {
                   logger.info(">>> searchWalls");
+                  Sounds.search();
                   WorldModel newwom = WorldModels.performCommand(S, Command.COMMAND_SEARCH);
                   for (Wall wall : walls) {
                     wall.timesSearched++;
@@ -119,6 +122,7 @@ public class Actions {
         .do2(
             (AgentState S) ->
                 (Item item) -> {
+                  Sounds.eat();
                   logger.info(String.format(">>> eatFood: ", item));
                   WorldModel newwom = WorldModels.eatFood(S, item.symbol);
                   return new Pair<>(S, newwom);
@@ -128,12 +132,11 @@ public class Actions {
               Player player = S.app().gameState.player;
               // Player stomach full enough
               if (player.hungerState == HungerState.NORMAL
-                  || player.hungerState == HungerState.SATIATED) {
+                  || player.hungerState == HungerState.SATIATED
+                  || player.hungerState == HungerState.OVERSATIATED) {
                 return null;
               }
-              Item foodItem =
-                  ItemSelector.inventoryFood.apply(Arrays.asList(player.inventory.items), S);
-              return foodItem;
+              return ItemSelector.inventoryFood.apply(Arrays.asList(player.inventory.items), S);
             });
   }
 }

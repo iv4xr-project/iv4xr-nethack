@@ -24,25 +24,29 @@
             <AppenderRef ref="LogToConsole" level="info"/>
         </Logger>
 
-        <Logger name="NetHack" level="debug" additivity="false">
+        <Logger name="⚔️" level="debug" additivity="false">
             <AppenderRef ref="LogToFile" level="debug"/>
             <AppenderRef ref="LogToConsole" level="info"/>
         </Logger>
-        <Logger name="Navigation" level="debug" additivity="false">
+
+        <Logger name="🧭" level="debug" additivity="false">
             <AppenderRef ref="LogToFile" level="info"/>
             <AppenderRef ref="LogToConsole" level="info"/>
         </Logger>
-        <Logger name="Goal/Tactic/Action" level="debug" additivity="false">
+        <Logger name="💡" level="debug" additivity="false">
             <AppenderRef ref="LogToFile" level="debug"/>
             <AppenderRef ref="LogToConsole" level="info"/>
         </Logger>
-        <Logger name="Agent" level="debug" additivity="false">
+        <Logger name="🕵️" level="debug" additivity="false">
             <AppenderRef ref="LogToFile" level="debug"/>
             <AppenderRef ref="LogToConsole" level="info"/>
         </Logger>
-        <Logger name="WOM" level="debug" additivity="false">
+        <Logger name="🌎" level="debug" additivity="false">
             <AppenderRef ref="LogToFile" level="debug"/>
             <AppenderRef ref="LogToConsole" level="info"/>
+        </Logger>
+        <Logger name="🎵" level="debug" additivity="false">
+            <AppenderRef ref="LogToConsole" level="debug"/>
         </Logger>
 
         <Root level="debug" additivity="false">

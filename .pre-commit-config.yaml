@@ -15,7 +15,8 @@ repos:
       - id: trailing-whitespace
         exclude: server-python/lib/|server-python/nethack-server-env/|client-java/target/
       - id: check-added-large-files
-        exclude: server-python/lib/|server-python/nethack-server-env/|client-java/target/
+        args: ['--maxkb=1500']
+        exclude: server-python/lib/|server-python/nethack-server-env/|client-java/target/|client-java/sounds/
       - id: check-symlinks
         exclude: server-python/lib/|server-python/nethack-server-env/|client-java/target/
       - id: name-tests-test

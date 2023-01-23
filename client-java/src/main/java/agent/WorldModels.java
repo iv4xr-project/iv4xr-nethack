@@ -21,10 +21,11 @@ public class WorldModels {
   }
 
   static WorldModel eatFood(AgentState state, char itemSlot) {
-    state.env().action(Command.COMMAND_EAT);
+    performCommand(state, Command.COMMAND_EAT);
     Command eatCommand = Command.ADDITIONAL_ASCII;
     eatCommand.stroke = String.format("-%s", itemSlot);
-    return state.env().action(eatCommand);
+    performCommand(state, eatCommand);
+    return performCommand(state, Command.MISC_MORE);
   }
 
   static WorldModel performCommand(AgentState state, Command command) {
@@ -32,6 +33,6 @@ public class WorldModels {
   }
 
   static WorldModel doNothing(AgentState state) {
-    return state.env().action(Command.MISC_MORE);
+    return performCommand(state, Command.MISC_MORE);
   }
 }
