@@ -58,15 +58,7 @@ public class NavTactic {
     return NavAction.navigateTo()
         .on(
             (AgentState S) -> {
-              List<Tile> tiles = new ArrayList<>();
-              for (Tile[] row : S.area().tiles) {
-                for (Tile tile : row) {
-                  if (tile != null) {
-                    tiles.add(tile);
-                  }
-                }
-              }
-              Tile t = tileSelector.apply(tiles, S);
+              Tile t = tileSelector.apply(S);
               if (t == null) {
                 logger.debug("Tile does not exist in level");
                 return null;
@@ -89,15 +81,7 @@ public class NavTactic {
     return NavAction.navigateTo()
         .on(
             (AgentState S) -> {
-              List<Tile> tiles = new ArrayList<>();
-              for (Tile[] row : S.area().tiles) {
-                for (Tile tile : row) {
-                  if (tile != null) {
-                    tiles.add(tile);
-                  }
-                }
-              }
-              Tile t = tileSelector.apply(tiles, S);
+              Tile t = tileSelector.apply(S);
               if (t == null) {
                 logger.debug("Tile does not exist in level");
                 return null;
@@ -133,7 +117,7 @@ public class NavTactic {
               }
               logger.debug(
                   String.format(
-                      ">>> navigateNextToTile (%s) via %s (allowdiagonal=%b)",
+                      ">>> navigateNextToTile (%s) via %s (allowDiagonal=%b)",
                       tileSelector, nextTile, allowDiagonal));
               return nextTile;
             })

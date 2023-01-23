@@ -28,6 +28,7 @@ public class NetHackSurface
   static final Logger logger = LogManager.getLogger(AgentLoggers.NavLogger);
   static final int sizeX = Level.WIDTH, sizeY = Level.HEIGHT;
   public final Tile[][] tiles = new Tile[sizeY + 2][sizeX + 2];
+  private final Map<String, HashSet<IntVec2D>> tileTypes = new HashMap<String, HashSet<IntVec2D>>();
   public Pathfinder<Tile> pathfinder = new AStar<>();
   /**
    * If true, the pathfinder will assume that the whole NavGraph has been "seen", so no vertex would
@@ -238,8 +239,36 @@ public class NetHackSurface
           String.format("Cannot add obstacle since %s is not one", o.getClass()));
     }
 
+    replaceTile(tiles[o.pos.y + 1][o.pos.x + 1], o);
     tiles[o.pos.y + 1][o.pos.x + 1] = o;
     updateNeighbours(o);
+  }
+
+  /** Remove a non-navigable tile (obstacle). */
+  @Override
+  public void removeObstacle(Tile o) {
+    replaceTile(tiles[o.pos.y + 1][o.pos.x + 1], o);
+    tiles[o.pos.y + 1][o.pos.x + 1] = o;
+    updateNeighbours(o);
+  }
+
+  private void replaceTile(Tile oldTile, Tile newTile) {
+    // Remove old tile from the list of tiles
+    if (oldTile != null) {
+      String oldTypeName = oldTile.getClass().getName();
+      if (tileTypes.containsKey(oldTypeName)) {
+        tileTypes.get(oldTypeName).remove(oldTile.pos);
+      }
+    }
+
+    // Add tile to object types
+    String newTypeName = newTile.getClass().getName();
+    tileTypes.putIfAbsent(newTypeName, new HashSet<>());
+    tileTypes.get(newTypeName).add(newTile.pos);
+  }
+
+  public HashSet<IntVec2D> getCoordinatesOfTileType(Class tileClass) {
+    return tileTypes.get(tileClass.getName());
   }
 
   private void updateNeighbours(Tile t) {
@@ -251,13 +280,6 @@ public class NetHackSurface
       }
       neighbour.neighbours = neighbours_(neighbour.pos);
     }
-  }
-
-  /** Remove a non-navigable tile (obstacle). */
-  @Override
-  public void removeObstacle(Tile o) {
-    tiles[o.pos.y + 1][o.pos.x + 1] = o;
-    updateNeighbours(o);
   }
 
   /**
@@ -290,7 +312,7 @@ public class NetHackSurface
     Tile t = getTile(tile.pos);
     if (t instanceof Door) {
       Door door = (Door) t;
-      door.isOpen = !isBlocking;
+      door.setBlockingState(isBlocking);
     }
     updateNeighbours(t);
   }

@@ -3,7 +3,6 @@ package agent;
 import static nl.uu.cs.aplib.AplibEDSL.ABORT;
 
 import agent.navigation.NavUtils;
-import agent.navigation.surface.Tile;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import nl.uu.cs.aplib.mainConcepts.Tactic;
 import org.apache.logging.log4j.LogManager;
@@ -43,15 +42,14 @@ public class TacticLib {
     return Actions.interact(targetId)
         .on(
             (AgentState S) -> {
-              WorldEntity a = S.worldmodel.elements.get(S.worldmodel().agentId);
-              Tile agentPos = NavUtils.toTile(S.worldmodel.position);
               WorldEntity e = S.worldmodel.elements.get(targetId);
-              if (e == null || NavUtils.levelNr(a) != NavUtils.levelNr(e)) {
+              if (e == null
+                  || NavUtils.levelNr(S.worldmodel.position) != NavUtils.levelNr(e.position)) {
                 return null;
               }
-              Tile target = NavUtils.toTile(e.position);
-              if (NavUtils.adjacent(agentPos, target, true)) {
-                return target;
+              if (NavUtils.adjacent(
+                  NavUtils.loc2(S.worldmodel.position), NavUtils.loc2(e.position), true)) {
+                return NavUtils.loc2(e.position);
               }
               return null;
             })

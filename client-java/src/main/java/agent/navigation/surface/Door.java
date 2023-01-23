@@ -4,6 +4,7 @@ import eu.iv4xr.framework.spatial.IntVec2D;
 
 public class Door extends Obstacle {
   public boolean isOpen = false;
+  public boolean isLocked = false;
   public boolean seeThrough = isOpen;
 
   public Door(IntVec2D pos) {
@@ -13,6 +14,15 @@ public class Door extends Obstacle {
   public Door(IntVec2D pos, boolean isOpen) {
     super(pos);
     this.isOpen = isOpen;
+  }
+
+  public void setBlockingState(boolean isBlocking) {
+    if (isBlocking) {
+      isOpen = false;
+    } else {
+      isOpen = true;
+      isLocked = false;
+    }
   }
 
   @Override

@@ -4,6 +4,7 @@ import static nl.uu.cs.aplib.AplibEDSL.*;
 
 import agent.navigation.NavTactic;
 import agent.selector.EntitySelector;
+import agent.selector.TileSelector;
 import connection.ConnectionLoggers;
 import connection.SendCommandClient;
 import eu.iv4xr.framework.mainConcepts.TestAgent;
@@ -99,20 +100,17 @@ public class App {
                     Actions.eatFood().lift(),
 
                     // Navigation
-                    Actions.kickDoor().on_(Predicates.near_closedDoor).lift(),
-                    NavTactic.navigateToWorldEntity(EntitySelector.closedDoor),
+                    Actions.kickDoor().on(Predicates.get_closedDoor()).lift(),
+                    NavTactic.navigateNextToTile(TileSelector.closedDoorSelector, false),
                     NavTactic.explore(),
 
-                    //                    // Go to next level
-                    //
-                    // NavTactic.navigateToWorldEntity(EntitySelector.stairsDown),
-                    //
-                    // Actions.singleAction(Command.MISC_DOWN).on_(Predicates.on_stairs_down).lift(),
+                    // Go to next level
+                    NavTactic.navigateToWorldEntity(EntitySelector.stairsDown),
+                    Actions.singleAction(Command.MISC_DOWN).on_(Predicates.on_stairs_down).lift(),
 
-                    //                    // Explore walls for hidden doors
-                    //                    NavTactic.navigateNextToTile(TileSelector.wallSelector,
-                    // true),
-                    //                    Actions.searchWalls().lift(),
+                    // Explore walls for hidden doors
+                    NavTactic.navigateNextToTile(TileSelector.wallSelector, true),
+                    Actions.searchWalls().lift(),
                     ABORT()));
 
     return G.lift(); // REPEAT(G.lift());

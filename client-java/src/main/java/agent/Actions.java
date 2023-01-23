@@ -61,15 +61,27 @@ public class Actions {
   // Construct an action that would kick the door.
   static Action kickDoor() {
     return action("kick door")
-        .do1(
-            (AgentState S) -> {
-              Sounds.door();
-              List<WorldEntity> ms = S.adjacentEntities(EntityType.DOOR, false);
-              Vec3 position = ms.get(0).position;
-              logger.info(String.format(">>> kickDoor @%s", position));
-              WorldModel newwom = WorldModels.kickDoor(S, position);
-              return new Pair<>(S, newwom);
-            });
+        .do2(
+            (AgentState S) ->
+                (Tile door) -> {
+                  Sounds.door();
+                  logger.info(String.format(">>> kickDoor @%s", door));
+                  WorldModel newwom = WorldModels.kickDoor(S, door);
+                  return new Pair<>(S, newwom);
+                });
+  }
+
+  // Construct an action that would kick the door.
+  static Action openDoor() {
+    return action("open door")
+        .do2(
+            (AgentState S) ->
+                (Tile door) -> {
+                  Sounds.door();
+                  logger.info(String.format(">>> kickDoor @%s", door));
+                  WorldModel newwom = WorldModels.kickDoor(S, door);
+                  return new Pair<>(S, newwom);
+                });
   }
 
   static Action singleAction(Command command) {

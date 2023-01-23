@@ -96,7 +96,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
 
   private void updateMap() {
     WorldEntity aux = auxState();
-    int levelNr = (int) aux.properties.get("levelId");
+    int levelNr = (int) aux.properties.get("levelNr");
 
     Serializable[] changedCoordinates = (Serializable[]) aux.properties.get("changedCoordinates");
     agentLogger.debug(
@@ -124,7 +124,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
           multiLayerNav.removeObstacle(new Pair<>(levelNr, new Floor(pos)));
           break;
         case DOOR:
-          boolean isOpen = !env().app.gameState.level().getEntity(pos).closedDoor();
+          boolean isOpen = !env().app.level().getEntity(pos).closedDoor();
           multiLayerNav.addObstacle(new Pair<>(levelNr, new Door(pos, isOpen)));
           break;
         case DOORWAY:
@@ -165,8 +165,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
   private void updateEntities() {
     // Update visibility cone
     WorldEntity aux = auxState();
-    int levelNr = (int) aux.properties.get("levelId");
-    NetHackSurface navGraph = multiLayerNav.areas.get(levelNr);
+    NetHackSurface navGraph = area();
     IntVec2D playerPos = NavUtils.loc2(worldmodel.position);
     Level level = env().app.gameState.level();
     HashSet<IntVec2D> visibleCoordinates =
@@ -233,16 +232,16 @@ public class AgentState extends Iv4xrAgentState<Void> {
    * owns this state.
    */
   public List<WorldEntity> adjacentEntities(EntityType type, boolean allowDiagonally) {
-    WorldEntity player = worldmodel.elements.get("player");
-    Tile p = NavUtils.toTile(player.position);
-
     List<WorldEntity> ms =
         worldmodel.elements.values().stream()
             .filter(
                 e ->
                     Objects.equals(e.type, type.name())
-                        && NavUtils.levelNr(player) == NavUtils.levelNr(e)
-                        && NavUtils.adjacent(p, NavUtils.toTile(e.position), allowDiagonally))
+                        && NavUtils.levelNr(worldmodel.position) == NavUtils.levelNr(e.position)
+                        && NavUtils.adjacent(
+                            NavUtils.toTile(worldmodel.position),
+                            NavUtils.toTile(e.position),
+                            allowDiagonally))
             .collect(Collectors.toList());
 
     if (ms.size() > 0) {

@@ -3,9 +3,12 @@ package agent.selector;
 import agent.AgentState;
 import agent.navigation.NavUtils;
 import agent.navigation.NetHackSurface;
+import agent.navigation.surface.Door;
 import agent.navigation.surface.Tile;
 import agent.navigation.surface.Wall;
 import eu.iv4xr.framework.spatial.IntVec2D;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -21,6 +24,25 @@ public class TileSelector extends Selector<Tile> {
             Wall w = (Wall) t;
             return w.timesSearched < 10;
           });
+
+  public static final TileSelector closedDoorSelector =
+      new TileSelector(
+          SelectionType.CLOSEST,
+          Door.class,
+          t -> {
+            Door d = (Door) t;
+            return !d.isOpen;
+          });
+
+  public static final TileSelector lockedDoorSelector =
+      new TileSelector(
+          SelectionType.CLOSEST,
+          Door.class,
+          t -> {
+            Door d = (Door) t;
+            return !d.isLocked && !d.isOpen;
+          });
+
   Class tileClass;
 
   public TileSelector(SelectionType selectionType, Class tileClass, Predicate<Tile> predicate) {
@@ -28,9 +50,27 @@ public class TileSelector extends Selector<Tile> {
     this.tileClass = tileClass;
   }
 
-  public TileSelector(SelectionType selectionType, Class tileClass) {
-    super(selectionType);
-    this.tileClass = tileClass;
+  public Tile apply(AgentState S) {
+    List<Tile> tiles = new ArrayList<>();
+    NetHackSurface surface = S.area();
+    if (tileClass != null) {
+      HashSet<IntVec2D> tilesOfType = surface.getCoordinatesOfTileType(tileClass);
+      if (tilesOfType == null) {
+        return null;
+      }
+      for (IntVec2D pos : tilesOfType) {
+        tiles.add(surface.getTile(pos));
+      }
+    } else {
+      for (Tile[] row : S.area().tiles) {
+        for (Tile tile : row) {
+          if (tile != null) {
+            tiles.add(tile);
+          }
+        }
+      }
+    }
+    return apply(tiles, S);
   }
 
   @Override
@@ -40,6 +80,10 @@ public class TileSelector extends Selector<Tile> {
 
   @Override
   public Tile select(List<Tile> tiles, AgentState S) {
+    if (tiles.isEmpty()) {
+      return null;
+    }
+
     if (selectionType == SelectionType.FIRST || selectionType == SelectionType.LAST) {
       return super.select(tiles, S);
     }

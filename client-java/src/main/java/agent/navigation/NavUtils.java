@@ -114,10 +114,6 @@ public class NavUtils {
     return Math.abs(t1.pos.x - t2.pos.x) + Math.abs(t1.pos.y - t2.pos.y);
   }
 
-  public static int levelNr(WorldEntity e) {
-    return (int) e.properties.get("level");
-  }
-
   public static int levelNr(Vec3 pos) {
     return (int) pos.z;
   }
@@ -127,8 +123,8 @@ public class NavUtils {
    * the distance is the difference between mazeIds times some large multiplier (1000000).
    */
   public static float distanceBetweenEntities(WorldEntity e1, WorldEntity e2) {
-    int e1_level = levelNr(e1);
-    int e2_level = levelNr(e2);
+    int e1_level = levelNr(e1.position);
+    int e2_level = levelNr(e2.position);
 
     if (e1_level == e2_level) {
       Vec3 p1 = e1.position.copy();

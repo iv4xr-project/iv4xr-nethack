@@ -31,6 +31,7 @@ public class AgentEnv extends Iv4xrEnvironment {
       new HashSet<>(
           Arrays.asList(
               EntityType.WALL,
+              EntityType.DOOR,
               EntityType.CORRIDOR,
               EntityType.FLOOR,
               EntityType.ICE,
@@ -85,7 +86,6 @@ public class AgentEnv extends Iv4xrEnvironment {
 
   WorldEntity toWorldEntity(Player p) {
     WorldEntity we = new WorldEntity(Player.ID, EntityType.PLAYER.name(), true);
-    we.properties.put("level", app.gameState.stats.zeroIndexLevelNumber);
     we.properties.put("hp", app.gameState.player.hp);
     we.properties.put("hpmax", app.gameState.player.hpMax);
     we.position = p.position;
@@ -93,20 +93,8 @@ public class AgentEnv extends Iv4xrEnvironment {
   }
 
   WorldEntity toWorldEntity(Entity e, IntVec2D pos) {
-    WorldEntity we;
-    int level = app.gameState.stats.zeroIndexLevelNumber;
-    String type = e.type.name();
-
-    if (e.type == EntityType.DOOR) {
-      we = new WorldEntity(e.id, type, false);
-      we.properties.put("level", level);
-      we.properties.put("closed", e.closedDoor());
-    } else {
-      we = new WorldEntity(e.id, type, true);
-      we.properties.put("level", level);
-    }
-
-    we.position = new Vec3(pos.x, pos.y, level);
+    WorldEntity we = new WorldEntity(e.id, e.type.name(), true);
+    we.position = new Vec3(pos.x, pos.y, app.gameState.stats.zeroIndexLevelNumber);
     return we;
   }
 
@@ -114,7 +102,7 @@ public class AgentEnv extends Iv4xrEnvironment {
     WorldEntity aux = new WorldEntity("aux", "aux", true);
     aux.properties.put("time", app.gameState.stats.time);
     aux.properties.put("status", app.gameState.done);
-    aux.properties.put("levelId", app.gameState.stats.zeroIndexLevelNumber);
+    aux.properties.put("levelNr", app.gameState.stats.zeroIndexLevelNumber);
 
     // Part of the map that has updates that might be relevant to the map navigation state
     Level level = app.level();

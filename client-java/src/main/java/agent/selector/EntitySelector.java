@@ -41,6 +41,10 @@ public class EntitySelector extends Selector<WorldEntity> {
 
   @Override
   protected WorldEntity select(List<WorldEntity> entities, AgentState S) {
+    if (entities.isEmpty()) {
+      return null;
+    }
+
     if (selectionType == SelectionType.FIRST || selectionType == SelectionType.LAST) {
       return super.select(entities, S);
     }
@@ -81,7 +85,9 @@ public class EntitySelector extends Selector<WorldEntity> {
       stream = stream.filter(we -> predicate.test(we));
     }
     if (onlySameLevel) {
-      stream = stream.filter(we -> NavUtils.levelNr(we) == NavUtils.levelNr(S.worldmodel.position));
+      stream =
+          stream.filter(
+              we -> NavUtils.levelNr(we.position) == NavUtils.levelNr(S.worldmodel.position));
     }
     return stream.collect(Collectors.toList());
   }

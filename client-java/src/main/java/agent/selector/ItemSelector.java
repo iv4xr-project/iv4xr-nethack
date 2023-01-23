@@ -31,6 +31,10 @@ public class ItemSelector extends Selector<Item> {
 
   @Override
   protected Item select(List<Item> items, AgentState S) {
+    if (items.isEmpty()) {
+      return null;
+    }
+
     if (selectionType == SelectionType.FIRST || selectionType == SelectionType.LAST) {
       return super.select(items, S);
     }
