@@ -136,7 +136,9 @@ public class AgentState extends Iv4xrAgentState<Void> {
         default:
           // If the tile has been seen we switch the state to non-blocking.
           // If we don't know the type of the tile, we for now put a tile in its place
-          if (multiLayerNav.areas.get(levelNr).hasTile(pos)) {
+          if (area().canBeDoor(pos)) {
+            multiLayerNav.removeObstacle(new Pair<>(levelNr, new Door(pos, true)));
+          } else if (area().hasTile(pos)) {
             multiLayerNav.toggleBlockingOff(new Pair<>(levelNr, new Tile(pos)));
           } else {
             multiLayerNav.removeObstacle(new Pair<>(levelNr, new Tile(pos)));
@@ -151,7 +153,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
     NetHackSurface navGraph = multiLayerNav.areas.get(levelNr);
     IntVec2D playerPos = NavUtils.loc2(worldmodel.position);
     // Each entity that is next to the agent which is void is a wall
-    IntVec2D[] adjacentCoords = NavUtils.neighbourCoordinates(playerPos);
+    IntVec2D[] adjacentCoords = NavUtils.neighbourCoordinates(playerPos, true);
     for (IntVec2D adjacentPos : adjacentCoords) {
       if (!navGraph.hasTile(adjacentPos)) {
         multiLayerNav.addObstacle(new Pair<>(levelNr, new Wall(adjacentPos)));

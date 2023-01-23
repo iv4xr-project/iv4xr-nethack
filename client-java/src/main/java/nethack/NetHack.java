@@ -13,7 +13,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class NetHack {
-  public static final Logger logger = LogManager.getLogger(NetHackLoggers.NetHackLogger);
+  public static final Logger netHackLogger = LogManager.getLogger(NetHackLoggers.NetHackLogger);
+  public static final Logger seedLogger = LogManager.getLogger(NetHackLoggers.SeedLogger);
   public GameState gameState = new GameState();
   public GameMode gameMode;
   public Seed seed;
@@ -38,23 +39,25 @@ public class NetHack {
   private void init(SendCommandClient commander, GameMode gameMode) {
     this.commander = commander;
     this.gameMode = gameMode;
-    logger.info("Initialize game");
+    netHackLogger.info("Initialize game");
     commander.read(Object.class);
   }
 
   public Seed getSeed() {
-    return commander.sendCommand("Get_seed", null, Seed.class);
+    Seed seed = commander.sendCommand("Get_seed", null, Seed.class);
+    seedLogger.info("Current seed: " + seed);
+    return seed;
   }
 
   public void setSeed(Seed seed) {
     gameMode = GameMode.NetHack;
+    seedLogger.info("New seed is:" + seed);
     commander.writeCommand("Set_seed", seed);
     reset();
   }
 
   public void reset() {
     commander.sendCommand("Reset", gameMode.toString(), Object.class);
-
     step(Command.MISC_MORE);
     render();
   }
@@ -67,11 +70,11 @@ public class NetHack {
         render();
       }
     }
-    logger.info("GameState indicates it is done, loop stopped");
+    netHackLogger.info("GameState indicates it is done, loop stopped");
   }
 
   public void close() {
-    logger.info("Close game");
+    netHackLogger.info("Close game");
     commander.writeCommand("Close", "");
   }
 
@@ -114,11 +117,9 @@ public class NetHack {
         System.out.println(gameState);
         return StepType.Special;
       case ADDITIONAL_SHOW_SEED:
-        logger.info("Seed: " + getSeed());
         return StepType.Special;
       case ADDITIONAL_SET_SEED:
         int index = Integer.parseInt(command.stroke.substring(1));
-        logger.info("New seed is:" + index);
         setSeed(Seed.presets[index]);
         return StepType.Special;
       case ADDITIONAL_ASCII:
@@ -137,7 +138,8 @@ public class NetHack {
 
     int index = command.getIndex(gameMode);
     if (index < 0) {
-      logger.warn(String.format("Command: %s not available in GameMode: %s", command, gameMode));
+      netHackLogger.warn(
+          String.format("Command: %s not available in GameMode: %s", command, gameMode));
       return StepType.Invalid;
     }
 
@@ -145,14 +147,14 @@ public class NetHack {
   }
 
   private StepType step(Command command, int index) {
-    logger.info("Command: " + command);
+    netHackLogger.info("Command: " + command);
     StepState stepState = commander.sendCommand("step", index, StepState.class);
     updateGameState(stepState);
     return StepType.Valid;
   }
 
   private StepType step(Command command, char character) {
-    logger.info(String.format("Command: %s %s", command, character));
+    netHackLogger.info(String.format("Command: %s %s", command, character));
     StepState stepState = commander.sendCommand("step_stroke", character, StepState.class);
     updateGameState(stepState);
     return StepType.Valid;
@@ -160,7 +162,7 @@ public class NetHack {
 
   private void updateGameState(StepState stepState) {
     if (stepState.done) {
-      logger.info("Game run terminated, step indicated: done");
+      netHackLogger.info("Game run terminated, step indicated: done");
       return;
     }
     // Add to world if new level is explored

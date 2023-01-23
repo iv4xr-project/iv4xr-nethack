@@ -105,7 +105,7 @@ public class NavTactic {
               Vec3 agentPos = S.worldmodel.position;
               NetHackSurface surface = S.area();
               List<Pair<Integer, Tile>> path = null;
-              for (IntVec2D pos : NavUtils.neighbourCoordinates(t.pos)) {
+              for (IntVec2D pos : NavUtils.neighbourCoordinates(t.pos, true)) {
                 if (pos.equals(NavUtils.loc2(agentPos))) {
                   return null;
                 }

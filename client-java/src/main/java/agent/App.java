@@ -4,7 +4,6 @@ import static nl.uu.cs.aplib.AplibEDSL.*;
 
 import agent.navigation.NavTactic;
 import agent.selector.EntitySelector;
-import agent.selector.TileSelector;
 import connection.ConnectionLoggers;
 import connection.SendCommandClient;
 import eu.iv4xr.framework.mainConcepts.TestAgent;
@@ -40,8 +39,8 @@ public class App {
   }
 
   private static void runAgent(SendCommandClient commander) {
-    //      NetHack nethack = new NetHack(commander, Seed.randomSeed());
-    NetHack nethack = new NetHack(commander, Seed.presets[2]);
+    //    NetHack nethack = new NetHack(commander, Seed.randomSeed());
+    NetHack nethack = new NetHack(commander, Seed.presets[3]);
     AgentEnv env = new AgentEnv(nethack);
     AgentState state = new AgentState();
     GoalStructure G = explore();
@@ -52,7 +51,7 @@ public class App {
     state.updateState(Player.ID);
 
     agentLogger.info(">> Start agent loop...");
-    int jumpToTurn = 0; // 875;
+    int jumpToTurn = 0;
     // Now we run the agent:
     while (G.getStatus().inProgress()) {
       if (state.app().gameState.stats.time < jumpToTurn) {
@@ -76,6 +75,9 @@ public class App {
       state.render();
       commander.writeCommand("Render", "");
     }
+
+    state.render();
+    commander.writeCommand("Render", "");
 
     agentLogger.info("Closing NetHack since the loop in agent has terminated");
     nethack.close();
@@ -101,15 +103,18 @@ public class App {
                     NavTactic.navigateToWorldEntity(EntitySelector.closedDoor),
                     NavTactic.explore(),
 
-                    // Go to next level
-                    NavTactic.navigateToWorldEntity(EntitySelector.stairsDown),
-                    Actions.singleAction(Command.MISC_DOWN).on_(Predicates.on_stairs_down).lift(),
+                    //                    // Go to next level
+                    //
+                    // NavTactic.navigateToWorldEntity(EntitySelector.stairsDown),
+                    //
+                    // Actions.singleAction(Command.MISC_DOWN).on_(Predicates.on_stairs_down).lift(),
 
-                    // Explore walls for hidden doors
-                    NavTactic.navigateNextToTile(TileSelector.wallSelector, true),
-                    Actions.searchWalls().lift(),
+                    //                    // Explore walls for hidden doors
+                    //                    NavTactic.navigateNextToTile(TileSelector.wallSelector,
+                    // true),
+                    //                    Actions.searchWalls().lift(),
                     ABORT()));
 
-    return REPEAT(G.lift());
+    return G.lift(); // REPEAT(G.lift());
   }
 }

@@ -99,7 +99,7 @@ public class Actions {
             (AgentState S) -> {
               NetHackSurface surface = S.multiLayerNav.areas.get((int) S.worldmodel.position.z);
               IntVec2D[] neighbours =
-                  NavUtils.neighbourCoordinates(NavUtils.loc2(S.worldmodel.position));
+                  NavUtils.neighbourCoordinates(NavUtils.loc2(S.worldmodel.position), true);
               List<Wall> walls = new ArrayList<>();
               for (IntVec2D neighbour : neighbours) {
                 Tile t = surface.getTile(neighbour);

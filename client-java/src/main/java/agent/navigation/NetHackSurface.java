@@ -61,6 +61,32 @@ public class NetHackSurface
     return o instanceof Door;
   }
 
+  public boolean canBeDoor(IntVec2D pos) {
+    Tile t = getTile(pos);
+    if (t == null) {
+      return false;
+    }
+    if (t.getClass() == Tile.class) {
+      IntVec2D[] neighbours = NavUtils.neighbourCoordinates(pos, false);
+      int horizontalWalls = 0, verticalWalls = 0;
+      for (int i = 0; i < neighbours.length; i++) {
+        Tile neighbourTile = getTile(neighbours[i]);
+        boolean tileCanBeWall = neighbourTile == null || neighbourTile instanceof Wall;
+        if (!tileCanBeWall) {
+          continue;
+        }
+        if (neighbours[i].x == pos.x) {
+          horizontalWalls++;
+        } else {
+          verticalWalls++;
+        }
+      }
+
+      return verticalWalls + horizontalWalls == 2 && (verticalWalls == 2 || horizontalWalls == 2);
+    }
+    return false;
+  }
+
   private boolean isFloor(IntVec2D pos) {
     Tile o = getFloor(pos);
     if (o == null) return false;
@@ -108,7 +134,7 @@ public class NetHackSurface
 
     // Perform BFS on the graph, initiate the queue with the agent position and all the lit floor
     // tiles
-    IntVec2D[] agentNeighbours = NavUtils.neighbourCoordinates(agentPosition);
+    IntVec2D[] agentNeighbours = NavUtils.neighbourCoordinates(agentPosition, true);
     for (IntVec2D neighbour : agentNeighbours) {
       Tile neighbourTile = getTile(neighbour);
       neighbourTile.visible = true;
@@ -119,7 +145,7 @@ public class NetHackSurface
     Queue<IntVec2D> queue = new LinkedList<>(level.visibleFloors);
 
     processedCoordinates.add(agentPosition);
-    queue.addAll(Arrays.asList(NavUtils.neighbourCoordinates(agentPosition)));
+    queue.addAll(Arrays.asList(NavUtils.neighbourCoordinates(agentPosition, true)));
 
     // While there are coordinates left to be explored
     while (queue.size() > 0) {
@@ -138,7 +164,7 @@ public class NetHackSurface
       }
 
       // Get the neighbours
-      IntVec2D[] neighbours = NavUtils.neighbourCoordinates(nextPos);
+      IntVec2D[] neighbours = NavUtils.neighbourCoordinates(nextPos, true);
       if (t instanceof Doorway) {
         // Does not have a lit floor tile next to it, so we assume we cannot see it
         if (Arrays.stream(neighbours)
@@ -218,7 +244,7 @@ public class NetHackSurface
 
   private void updateNeighbours(Tile t) {
     t.neighbours = neighbours_(t.pos);
-    for (IntVec2D neighbourCoordinate : NavUtils.neighbourCoordinates(t.pos)) {
+    for (IntVec2D neighbourCoordinate : NavUtils.neighbourCoordinates(t.pos, true)) {
       Tile neighbour = getTile(neighbourCoordinate);
       if (neighbour == null) {
         continue;
@@ -310,7 +336,7 @@ public class NetHackSurface
     List<Tile> frontiers = new LinkedList<>();
     List<Tile> cannotBeFrontier = new LinkedList<>();
     for (Tile t : frontierCandidates) {
-      IntVec2D[] pneighbors = NavUtils.neighbourCoordinates(t.pos);
+      IntVec2D[] pneighbors = NavUtils.neighbourCoordinates(t.pos, true);
       boolean isFrontier = false;
       for (IntVec2D n : pneighbors) {
         if (!hasbeenSeen(n)) {
@@ -447,7 +473,7 @@ public class NetHackSurface
    * used and at the end a list is built
    */
   private List<Tile> neighbours_(IntVec2D pos) {
-    IntVec2D[] candidates = NavUtils.neighbourCoordinates(pos);
+    IntVec2D[] candidates = NavUtils.neighbourCoordinates(pos, true);
     int nrResults = 0;
     boolean[] toNeighbour = new boolean[candidates.length];
 

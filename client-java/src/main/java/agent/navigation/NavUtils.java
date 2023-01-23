@@ -201,23 +201,32 @@ public class NavUtils {
     }
   }
 
-  public static IntVec2D[] neighbourCoordinates(IntVec2D pos) {
+  public static IntVec2D[] neighbourCoordinates(IntVec2D pos, boolean allowDiagonal) {
     int left = pos.x - 1;
     int right = pos.x + 1;
     int below = pos.y - 1;
     int above = pos.y + 1;
 
-    return new IntVec2D[] {
-      new IntVec2D(left, pos.y),
-      new IntVec2D(right, pos.y),
-      new IntVec2D(pos.x, below),
-      new IntVec2D(pos.x, above),
-      // Diagonal moves
-      new IntVec2D(left, below),
-      new IntVec2D(left, above),
-      new IntVec2D(right, above),
-      new IntVec2D(right, below),
-    };
+    if (allowDiagonal) {
+      return new IntVec2D[] {
+        new IntVec2D(left, pos.y),
+        new IntVec2D(right, pos.y),
+        new IntVec2D(pos.x, below),
+        new IntVec2D(pos.x, above),
+        // Diagonal moves
+        new IntVec2D(left, below),
+        new IntVec2D(left, above),
+        new IntVec2D(right, above),
+        new IntVec2D(right, below),
+      };
+    } else {
+      return new IntVec2D[] {
+        new IntVec2D(left, pos.y),
+        new IntVec2D(right, pos.y),
+        new IntVec2D(pos.x, below),
+        new IntVec2D(pos.x, above),
+      };
+    }
   }
 
   /** check if the location of the entity e is reachable from the agent current position. */
