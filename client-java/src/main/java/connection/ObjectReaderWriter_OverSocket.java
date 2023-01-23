@@ -83,12 +83,12 @@ public class ObjectReaderWriter_OverSocket {
         new Vec3(
             obsMessage.player.position.x,
             obsMessage.player.position.y,
-            obsMessage.stats.zeroIndexLevelNumber);
+            obsMessage.stats.zeroIndexDepth);
     stepState.player.inventory = new Inventory(obsMessage.items);
     stepState.stats = obsMessage.stats;
     stepState.done = stepMessage.done;
     stepState.info = stepMessage.info;
-    stepState.level = new Level(obsMessage.stats.zeroIndexLevelNumber, obsMessage.entities);
+    stepState.level = new Level(obsMessage.stats.zeroIndexDepth, obsMessage.entities);
     stepState.message = obsMessage.message;
     return stepState;
   }

@@ -33,16 +33,22 @@ public class Predicates {
     };
   }
 
+  public static Function<AgentState, Tile> get_lockedDoor() {
+    return S -> {
+      Tile t = TileSelector.lockedDoorSelector.apply(S);
+      if (t == null) {
+        return null;
+      }
+      if (!NavUtils.adjacent(t.pos, NavUtils.loc2(S.worldmodel.position), false)) {
+        return null;
+      }
+      return t;
+    };
+  }
+
   public static Predicate<AgentState> near_closedDoor = S -> get_closedDoor().apply(S) != null;
 
-  public static Predicate<AgentState> near_lockedDoor =
-      S -> {
-        Tile t = TileSelector.lockedDoorSelector.apply(S);
-        if (t == null) {
-          return false;
-        }
-        return NavUtils.adjacent(t.pos, NavUtils.loc2(S.worldmodel.position), false);
-      };
+  public static Predicate<AgentState> near_lockedDoor = S -> get_lockedDoor().apply(S) != null;
 
   public static Predicate<AgentState> on_stairs_down =
       S -> {

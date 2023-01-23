@@ -4,6 +4,7 @@ import static nl.uu.cs.aplib.AplibEDSL.action;
 
 import agent.navigation.NavUtils;
 import agent.navigation.NetHackSurface;
+import agent.navigation.surface.Door;
 import agent.navigation.surface.Tile;
 import agent.navigation.surface.Wall;
 import agent.selector.ItemSelector;
@@ -14,6 +15,7 @@ import eu.iv4xr.framework.spatial.Vec3;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import nethack.enums.Command;
 import nethack.enums.EntityType;
 import nethack.enums.HungerState;
@@ -64,8 +66,8 @@ public class Actions {
         .do2(
             (AgentState S) ->
                 (Tile door) -> {
-                  Sounds.door();
-                  logger.info(String.format(">>> kickDoor @%s", door));
+                  Sounds.door_kick();
+                  logger.info(String.format("kickDoor @%s", door));
                   WorldModel newwom = WorldModels.kickDoor(S, door);
                   return new Pair<>(S, newwom);
                 });
@@ -76,10 +78,14 @@ public class Actions {
     return action("open door")
         .do2(
             (AgentState S) ->
-                (Tile door) -> {
+                (Tile doorTile) -> {
                   Sounds.door();
-                  logger.info(String.format(">>> kickDoor @%s", door));
-                  WorldModel newwom = WorldModels.kickDoor(S, door);
+                  logger.info(String.format("open door @%s", doorTile));
+                  WorldModel newwom = NavUtils.moveTo(S, doorTile);
+                  if (Objects.equals(S.app().gameState.message, "This door is locked.")) {
+                    Door d = (Door) doorTile;
+                    d.isLocked = true;
+                  }
                   return new Pair<>(S, newwom);
                 });
   }
@@ -88,7 +94,7 @@ public class Actions {
     return action(String.format("perform command: %s", command))
         .do1(
             (AgentState S) -> {
-              logger.info(String.format(">>> command: %s", command));
+              logger.info(String.format("command: %s", command));
               WorldModel newwom = WorldModels.performCommand(S, command);
               return new Pair<>(S, newwom);
             });
@@ -99,7 +105,7 @@ public class Actions {
         .do2(
             (AgentState S) ->
                 (List<Wall> walls) -> {
-                  logger.info(">>> searchWalls");
+                  logger.info("searchWalls");
                   Sounds.search();
                   WorldModel newwom = WorldModels.performCommand(S, Command.COMMAND_SEARCH);
                   for (Wall wall : walls) {

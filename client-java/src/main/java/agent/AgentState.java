@@ -281,9 +281,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
   }
 
   public void render() {
-    NetHackSurface layer = multiLayerNav.areas.get(env().app.gameState.stats.zeroIndexLevelNumber);
-
-    String[] navigation = layer.toString().split(System.lineSeparator());
+    String[] navigation = area().toString().split(System.lineSeparator());
     String[] game = env().app.gameState.toString().split(System.lineSeparator());
 
     System.out.println(game[0]);

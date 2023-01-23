@@ -41,7 +41,7 @@ public class TileSelector extends Selector<Tile> {
           Door.class,
           t -> {
             Door d = (Door) t;
-            return !d.isLocked && !d.isOpen;
+            return d.isLocked && !d.isOpen;
           });
 
   public static final TileSelector stairDown =

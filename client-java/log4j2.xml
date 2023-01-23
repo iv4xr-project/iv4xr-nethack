@@ -22,7 +22,6 @@
             <AppenderRef ref="LogToConsole" level="info"/>
         </Logger>
         <Logger name="Message" level="debug" additivity="false">
-            <AppenderRef ref="LogToFile" level="info"/>
         </Logger>
         <Logger name="TypeAdapter" level="debug" additivity="false">
             <AppenderRef ref="LogToFile" level="debug"/>
@@ -52,7 +51,7 @@
             <AppenderRef ref="LogToConsole" level="info"/>
         </Logger>
         <Logger name="🌎" level="debug" additivity="false">
-            <AppenderRef ref="LogToFile" level="debug"/>
+            <AppenderRef ref="LogToFile" level="info"/>
             <AppenderRef ref="LogToConsole" level="info"/>
         </Logger>
         <Logger name="🎵" level="debug" additivity="false">

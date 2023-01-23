@@ -16,6 +16,7 @@ public class Inventory {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
+    sb.append(String.format("Inventory:%n"));
     for (Item i : items) {
       if (i == null) {
         continue;

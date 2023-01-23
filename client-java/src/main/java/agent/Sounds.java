@@ -25,6 +25,8 @@ public class Sounds {
           new AbstractMap.SimpleEntry<>("door", new File("./sounds/424496_door.wav")),
           new AbstractMap.SimpleEntry<>("sword", new File("./sounds/441666_sword-slash.wav")),
           new AbstractMap.SimpleEntry<>("bowl", new File("./sounds/448073_ceramic-bowl.wav")),
+          new AbstractMap.SimpleEntry<>(
+              "door_kick", new File("./sounds/452600_door-wood-kick-open.wav")),
           new AbstractMap.SimpleEntry<>("ding", new File("./sounds/454612_ding.wav")),
           new AbstractMap.SimpleEntry<>("piano", new File("./sounds/587634_piano.wav")));
 
@@ -46,6 +48,10 @@ public class Sounds {
 
   public static void door() {
     playSound("door");
+  }
+
+  public static void door_kick() {
+    playSound("door_kick");
   }
 
   public static void eat() {

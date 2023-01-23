@@ -51,7 +51,8 @@ public class App {
         new TestAgent(Player.ID, "player").attachState(state).attachEnvironment(env).setGoal(G);
     state.updateState(Player.ID);
 
-    agentLogger.info(">> Start agent loop...");
+    agentLogger.info("Start agent loop...");
+    //    int jumpToTurn = 1108;
     int jumpToTurn = 0;
     // Now we run the agent:
     while (G.getStatus().inProgress()) {
@@ -68,7 +69,7 @@ public class App {
         }
       } else {
         agent.update();
-        agentLogger.debug(String.format("** agent @%s", state.worldmodel.position));
+        agentLogger.debug(String.format("agent @%s", state.worldmodel.position));
       }
 
       // Need to update state for render
@@ -101,7 +102,8 @@ public class App {
                     NavTactic.navigateToWorldEntity(EntitySelector.money),
 
                     // Navigation
-                    Actions.kickDoor().on(Predicates.get_closedDoor()).lift(),
+                    Actions.kickDoor().on(Predicates.get_lockedDoor()).lift(),
+                    Actions.openDoor().on(Predicates.get_closedDoor()).lift(),
                     NavTactic.navigateNextToTile(TileSelector.closedDoorSelector, false),
                     NavTactic.explore(),
 

@@ -2,6 +2,7 @@ package nethack.enums;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 // Actions listed at: /python-server/lib/nle/nle/nethack/actions.py
 public enum Command {
@@ -118,24 +119,25 @@ public enum Command {
   COMMAND_ZAP("z", "Use wand"),
 
   // Characters
-  TEXTCHARACTER_PLUS("%+", "Show spells"),
-  TEXTCHARACTER_MINUS("%-", ""),
-  TEXTCHARACTER_SPACE("% ", ""),
-  TEXTCHARACTER_APOS("%\'", ""),
-  TEXTCHARACTER_QUOTE("%\"", ""),
-  TEXTCHARACTER_NUM_0("%0", ""),
-  TEXTCHARACTER_NUM_1("%1", ""),
-  TEXTCHARACTER_NUM_2("%2", ""),
-  TEXTCHARACTER_NUM_3("%3", ""),
-  TEXTCHARACTER_NUM_4("%4", ""),
-  TEXTCHARACTER_NUM_5("%5", ""),
-  TEXTCHARACTER_NUM_6("%6", ""),
-  TEXTCHARACTER_NUM_7("%7", ""),
-  TEXTCHARACTER_NUM_8("%8", ""),
-  TEXTCHARACTER_NUM_9("%9", ""),
-  TEXTCHARACTER_DOLLAR("%$", ""),
+  TEXT_CHARACTER_PLUS("%+", "Show spells"),
+  TEXT_CHARACTER_MINUS("%-", ""),
+  TEXT_CHARACTER_SPACE("% ", ""),
+  TEXT_CHARACTER_APOS("%\'", ""),
+  TEXT_CHARACTER_QUOTE("%\"", ""),
+  TEXT_CHARACTER_NUM_0("%0", ""),
+  TEXT_CHARACTER_NUM_1("%1", ""),
+  TEXT_CHARACTER_NUM_2("%2", ""),
+  TEXT_CHARACTER_NUM_3("%3", ""),
+  TEXT_CHARACTER_NUM_4("%4", ""),
+  TEXT_CHARACTER_NUM_5("%5", ""),
+  TEXT_CHARACTER_NUM_6("%6", ""),
+  TEXT_CHARACTER_NUM_7("%7", ""),
+  TEXT_CHARACTER_NUM_8("%8", ""),
+  TEXT_CHARACTER_NUM_9("%9", ""),
+  TEXT_CHARACTER_DOLLAR("%$", ""),
 
   ADDITIONAL_SHOW_SEED("@?", "Show seed"),
+  ADDITIONAL_SHOW_VERBOSE("@v", "Show all information"),
   ADDITIONAL_SET_SEED("@▉", "Set seed"),
   ADDITIONAL_ASCII("-▉", "Perform literal action");
 
@@ -246,22 +248,22 @@ public enum Command {
         COMMAND_WIELD,
         COMMAND_WIPE,
         COMMAND_ZAP,
-        TEXTCHARACTER_PLUS,
-        TEXTCHARACTER_MINUS,
-        TEXTCHARACTER_SPACE,
-        TEXTCHARACTER_APOS,
-        TEXTCHARACTER_QUOTE,
-        TEXTCHARACTER_NUM_0,
-        TEXTCHARACTER_NUM_1,
-        TEXTCHARACTER_NUM_2,
-        TEXTCHARACTER_NUM_3,
-        TEXTCHARACTER_NUM_4,
-        TEXTCHARACTER_NUM_5,
-        TEXTCHARACTER_NUM_6,
-        TEXTCHARACTER_NUM_7,
-        TEXTCHARACTER_NUM_8,
-        TEXTCHARACTER_NUM_9,
-        TEXTCHARACTER_DOLLAR
+        TEXT_CHARACTER_PLUS,
+        TEXT_CHARACTER_MINUS,
+        TEXT_CHARACTER_SPACE,
+        TEXT_CHARACTER_APOS,
+        TEXT_CHARACTER_QUOTE,
+        TEXT_CHARACTER_NUM_0,
+        TEXT_CHARACTER_NUM_1,
+        TEXT_CHARACTER_NUM_2,
+        TEXT_CHARACTER_NUM_3,
+        TEXT_CHARACTER_NUM_4,
+        TEXT_CHARACTER_NUM_5,
+        TEXT_CHARACTER_NUM_6,
+        TEXT_CHARACTER_NUM_7,
+        TEXT_CHARACTER_NUM_8,
+        TEXT_CHARACTER_NUM_9,
+        TEXT_CHARACTER_DOLLAR
       };
   static final Command[] nethackCommands =
       new Command[] {
@@ -347,10 +349,10 @@ public enum Command {
         COMMAND_WIELD,
         COMMAND_WIPE,
         COMMAND_ZAP,
-        TEXTCHARACTER_PLUS,
-        TEXTCHARACTER_QUOTE,
-        TEXTCHARACTER_DOLLAR,
-        TEXTCHARACTER_SPACE
+        TEXT_CHARACTER_PLUS,
+        TEXT_CHARACTER_QUOTE,
+        TEXT_CHARACTER_DOLLAR,
+        TEXT_CHARACTER_SPACE
       };
   static final Command[] additionalCommands =
       new Command[] {ADDITIONAL_SHOW_SEED, ADDITIONAL_SET_SEED};
@@ -450,11 +452,9 @@ public enum Command {
   }
 
   public int getIndex(GameMode gameMode) {
-    switch (gameMode) {
-      case NetHack:
-        return COMMAND_TO_NETHACK_INDEX.getOrDefault(this, -1);
-      default:
-        return COMMAND_TO_NETHACKCHALLENGE_INDEX.getOrDefault(this, -1);
+    if (Objects.requireNonNull(gameMode) == GameMode.NetHack) {
+      return COMMAND_TO_NETHACK_INDEX.getOrDefault(this, -1);
     }
+    return COMMAND_TO_NETHACKCHALLENGE_INDEX.getOrDefault(this, -1);
   }
 }

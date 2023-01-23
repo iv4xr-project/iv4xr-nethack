@@ -116,6 +116,9 @@ public class NetHack {
       case COMMAND_REDRAW:
         System.out.println(gameState);
         return StepType.Special;
+      case ADDITIONAL_SHOW_VERBOSE:
+        System.out.print(gameState.verbose());
+        return StepType.Special;
       case ADDITIONAL_SHOW_SEED:
         return StepType.Special;
       case ADDITIONAL_SET_SEED:
@@ -166,13 +169,12 @@ public class NetHack {
       return;
     }
     // Add to world if new level is explored
-    if (stepState.stats.zeroIndexLevelNumber == gameState.world.size()) {
+    if (stepState.stats.zeroIndexDepth == gameState.world.size()) {
       stepState.level.setChangedCoordinates(null);
       gameState.world.add(stepState.level);
     } else {
-      stepState.level.setChangedCoordinates(
-          gameState.world.get(stepState.stats.zeroIndexLevelNumber));
-      gameState.world.set(stepState.stats.zeroIndexLevelNumber, stepState.level);
+      stepState.level.setChangedCoordinates(gameState.world.get(stepState.stats.zeroIndexDepth));
+      gameState.world.set(stepState.stats.zeroIndexDepth, stepState.level);
     }
 
     // Set all members to the correct values

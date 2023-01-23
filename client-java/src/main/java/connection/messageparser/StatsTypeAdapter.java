@@ -37,6 +37,7 @@ public class StatsTypeAdapter extends TypeAdapter<Pair<Stats, Player>> {
     return toPair(values);
   }
 
+  // Source: server-python\lib\nle\win\rl\winrl.cc
   private Pair<Stats, Player> toPair(int[] values) {
     Player player = new Player();
     Stats stats = new Stats();
@@ -52,19 +53,20 @@ public class StatsTypeAdapter extends TypeAdapter<Pair<Stats, Player>> {
     stats.score = values[9];
     player.hp = values[10];
     player.hpMax = values[11];
-    stats.depth = values[12];
+    stats.oneIndexDepth = values[12];
+    stats.zeroIndexDepth = stats.oneIndexDepth - 1;
     player.gold = values[13];
     player.energy = values[14];
     player.energyMax = values[15];
     player.armorClass = values[16];
+    stats.monsterLevel = values[17];
     player.experienceLevel = values[18];
     player.experiencePoints = values[19];
     stats.time = values[20];
     player.hungerState = HungerState.fromValue(values[21]);
     player.carryingCapacity = values[22];
-    //      gameState.dungeonNumber = values[23];
-    stats.oneIndexLevelNumber = values[24];
-    stats.zeroIndexLevelNumber = values[24] - 1;
+    stats.dungeonNumber = values[23];
+    stats.levelNumber = values[24];
     player.condition = values[25];
     player.alignment = Alignment.fromValue(values[26]);
 

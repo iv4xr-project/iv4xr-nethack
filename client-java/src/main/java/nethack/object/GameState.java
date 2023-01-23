@@ -21,11 +21,20 @@ public class GameState {
       logger.warn("Cannot retrieve level from GameState without stats, return null");
       return null;
     }
-    if (stats.zeroIndexLevelNumber < 0) {
-      logger.warn("Cannot retrieve level < 0, return null");
+    if (stats.zeroIndexDepth < 0) {
+      logger.warn("Cannot retrieve depth < 0, return null");
       return null;
     }
-    return world.get(stats.zeroIndexLevelNumber);
+    return world.get(stats.zeroIndexDepth);
+  }
+
+  public String verbose() {
+    StringBuilder sb = new StringBuilder();
+    sb.append(message).append(System.lineSeparator());
+    sb.append(level()).append(System.lineSeparator());
+    sb.append(stats.verbose()).append(System.lineSeparator());
+    sb.append(player.verbose()).append(System.lineSeparator());
+    return sb.toString();
   }
 
   @Override
@@ -50,7 +59,7 @@ public class GameState {
     String secondStatsLine =
         String.format(
             "Dlvl:%d $:%d HP:%d(%d) Pw:%d(%d) AC:%d Xp:%d/%d T:%d %s",
-            stats.oneIndexLevelNumber,
+            stats.oneIndexDepth,
             player.gold,
             player.hp,
             player.hpMax,

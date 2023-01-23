@@ -32,4 +32,31 @@ public class Player {
   public Alignment alignment;
 
   public Player() {}
+
+  public String verbose() {
+    StringBuilder sb = new StringBuilder();
+    sb.append(String.format("PlayerInfo:%n"));
+    sb.append(String.format("Position:%s%n", position));
+    sb.append(String.format("Strength:%d%n", strength));
+    sb.append(String.format("dexterity:%d%n", dexterity));
+    sb.append(String.format("constitution:%d%n", constitution));
+    sb.append(String.format("intelligence:%d%n", intelligence));
+    sb.append(String.format("wisdom:%d%n", wisdom));
+    sb.append(String.format("charisma:%d%n", charisma));
+    sb.append(String.format("hp:%d%n", hp));
+    sb.append(String.format("hpMax:%d%n", hpMax));
+    sb.append(String.format("gold:%d%n", gold));
+    sb.append(String.format("energy:%d%n", energy));
+    sb.append(String.format("energyMax:%d%n", energyMax));
+    sb.append(String.format("armorClass:%d%n", armorClass));
+    sb.append(String.format("experienceLevel:%d%n", experienceLevel));
+    sb.append(String.format("experiencePoints:%d%n", experiencePoints));
+    sb.append(String.format("hungerState:%s%n", hungerState));
+    sb.append(String.format("carryingCapacity:%d%n", carryingCapacity));
+    sb.append(String.format("condition:%d%n", condition));
+    sb.append(String.format("alignment:%s%n", alignment));
+    sb.append(System.lineSeparator());
+    sb.append(inventory);
+    return sb.toString();
+  }
 }

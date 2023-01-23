@@ -11,5 +11,6 @@ All of these samples, found on [freesound](https://freesound.org) have been trim
 424496 - This work is licensed under the Creative Commons 0 License - https://freesound.org/people/bolkmar/sounds/424496/
 441666 - This work is licensed under the Creative Commons 0 License. - https://freesound.org/people/ethanchase7744/sounds/441666/
 448073 - This work is licensed under the Creative Commons 0 License. - https://freesound.org/people/Anthousai/sounds/448073/
+452600 - This work is licensed under the Creative Commons 0 License. - https://freesound.org/people/kyles/sounds/452600/
 454612 - This work is licensed under the Attribution 4.0 License. - https://freesound.org/people/richcraftstudios/sounds/454612/
 587634 - This work is licensed under the Creative Commons 0 License. - https://freesound.org/people/GAMEDRIX974/sounds/587634/

@@ -97,7 +97,7 @@ public class AgentEnv extends Iv4xrEnvironment {
 
   WorldEntity toWorldEntity(Entity e, IntVec2D pos) {
     WorldEntity we = new WorldEntity(e.id, e.type.name(), true);
-    we.position = new Vec3(pos.x, pos.y, app.gameState.stats.zeroIndexLevelNumber);
+    we.position = new Vec3(pos.x, pos.y, app.gameState.stats.zeroIndexDepth);
     return we;
   }
 
@@ -105,7 +105,7 @@ public class AgentEnv extends Iv4xrEnvironment {
     WorldEntity aux = new WorldEntity("aux", "aux", true);
     aux.properties.put("time", app.gameState.stats.time);
     aux.properties.put("status", app.gameState.done);
-    aux.properties.put("levelNr", app.gameState.stats.zeroIndexLevelNumber);
+    aux.properties.put("levelNr", app.gameState.stats.zeroIndexDepth);
 
     // Part of the map that has updates that might be relevant to the map navigation state
     Level level = app.level();
