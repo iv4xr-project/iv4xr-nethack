@@ -24,7 +24,7 @@ public class NavAction {
             (AgentState S) ->
                 (Tile nextTile) -> {
                   logger.info(
-                      String.format(">>> navigateTo %d (%d, %d) via %s", levelNr, x, y, nextTile));
+                      String.format("navigateTo %d (%d, %d) via %s", levelNr, x, y, nextTile));
                   WorldModel newwom = NavUtils.moveTo(S, nextTile);
                   return new Pair<>(S, newwom);
                 })
@@ -41,7 +41,7 @@ public class NavAction {
         .do2(
             (AgentState S) ->
                 (Tile nextTile) -> {
-                  logger.info(String.format(">>> navigateTo %s via %s", targetId, nextTile));
+                  logger.info(String.format("navigateTo %s via %s", targetId, nextTile));
                   WorldModel newwom = NavUtils.moveTo(S, nextTile);
                   return new Pair<>(S, newwom);
                 })
@@ -63,7 +63,7 @@ public class NavAction {
         .do2(
             (AgentState S) ->
                 (Tile nextTile) -> {
-                  logger.info(String.format(">>> navigateTo ? via %s", nextTile));
+                  logger.info(String.format("navigateTo ? via %s", nextTile));
                   WorldModel newwom = NavUtils.moveTo(S, nextTile);
                   return new Pair<>(S, newwom);
                 });
@@ -75,7 +75,7 @@ public class NavAction {
         .do2(
             (AgentState S) ->
                 (Tile nextTile) -> {
-                  logger.info(String.format(">>> navigateNextTo %s via %s", targetId, nextTile));
+                  logger.info(String.format("navigateNextTo %s via %s", targetId, nextTile));
                   WorldModel newwom = NavUtils.moveTo(S, nextTile);
                   return new Pair<>(S, newwom);
                 })
@@ -103,8 +103,7 @@ public class NavAction {
             (AgentState S) ->
                 (Tile nextTile) -> {
                   Sounds.explore();
-                  logger.info(
-                      String.format(">>> explore to %s via %s", heuristicLocation, nextTile));
+                  logger.info(String.format("explore to %s via %s", heuristicLocation, nextTile));
                   WorldModel newwom = NavUtils.moveTo(S, nextTile);
                   return new Pair<>(S, newwom);
                 })

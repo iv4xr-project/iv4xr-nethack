@@ -1,6 +1,7 @@
 package agent;
 
 import agent.navigation.NavUtils;
+import agent.navigation.surface.Stair;
 import agent.navigation.surface.Tile;
 import agent.selector.TileSelector;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
@@ -40,18 +41,16 @@ public class Predicates {
         if (t == null) {
           return false;
         }
-        ;
         return NavUtils.adjacent(t.pos, NavUtils.loc2(S.worldmodel.position), false);
       };
 
   public static Predicate<AgentState> on_stairs_down =
       S -> {
-        List<WorldEntity> stairs = findOfType(S, EntityType.STAIRS_DOWN);
-        stairs =
-            stairs.stream()
-                .filter(s -> s.position.equals(S.worldmodel.position))
-                .collect(Collectors.toList());
-        return stairs.size() > 0;
+        Tile t = S.area().getTile(NavUtils.loc2(S.worldmodel.position));
+        if (!(t instanceof Stair)) {
+          return false;
+        }
+        return !((Stair) t).goesUp;
       };
 
   public static List<WorldEntity> findOfType(AgentState S, EntityType type) {

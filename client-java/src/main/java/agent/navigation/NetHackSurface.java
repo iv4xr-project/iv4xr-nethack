@@ -192,7 +192,6 @@ public class NetHackSurface
   }
 
   // region CanDealWithDynamicObstacle interface
-
   private void resetVisibility() {
     // First reset visibility of all tiles to false
     for (Tile[] row : tiles) {

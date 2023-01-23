@@ -1,5 +1,7 @@
 package agent;
 
+import static nethack.enums.EntityType.STAIRS_UP;
+
 import agent.navigation.NavUtils;
 import agent.navigation.NetHackSurface;
 import agent.navigation.surface.*;
@@ -133,15 +135,23 @@ public class AgentState extends Iv4xrAgentState<Void> {
         case PRISON_BARS:
           multiLayerNav.addObstacle(new Pair<>(levelNr, new PrisonBars(pos)));
           break;
+        case STAIRS_DOWN:
+        case STAIRS_UP:
+          multiLayerNav.removeObstacle(
+              new Pair<>(levelNr, new Stair(pos, type == EntityType.STAIRS_UP)));
+          break;
+        case SINK:
+          multiLayerNav.removeObstacle(new Pair<>(levelNr, new Sink(pos)));
+          break;
         default:
           // If the tile has been seen we switch the state to non-blocking.
           // If we don't know the type of the tile, we for now put a tile in its place
-          if (area().canBeDoor(pos)) {
-            multiLayerNav.removeObstacle(new Pair<>(levelNr, new Door(pos, true)));
-          } else if (area().hasTile(pos)) {
-            multiLayerNav.toggleBlockingOff(new Pair<>(levelNr, new Tile(pos)));
-          } else {
+          if (!area().hasTile(pos)) {
             multiLayerNav.removeObstacle(new Pair<>(levelNr, new Tile(pos)));
+          } else if (area().canBeDoor(pos)) {
+            multiLayerNav.removeObstacle(new Pair<>(levelNr, new Door(pos, true)));
+          } else {
+            multiLayerNav.toggleBlockingOff(new Pair<>(levelNr, new Tile(pos)));
           }
           break;
       }
@@ -244,7 +254,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
                             allowDiagonally))
             .collect(Collectors.toList());
 
-    if (ms.size() > 0) {
+    if (!ms.isEmpty()) {
       agentLogger.debug(
           String.format(
               "Found %d %s nearby (diagonal=%b)", ms.size(), type.name(), allowDiagonally));
@@ -267,7 +277,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
                         && Objects.equals(e.id, entityId)
                         && NavUtils.adjacent(p, NavUtils.toTile(e.position), allowDiagonally))
             .collect(Collectors.toList());
-    return ms.size() > 0;
+    return !ms.isEmpty();
   }
 
   public void render() {

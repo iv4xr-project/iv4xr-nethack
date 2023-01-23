@@ -5,6 +5,7 @@ import eu.iv4xr.framework.spatial.IntVec2D;
 public class Door extends Obstacle {
   public boolean isOpen = false;
   public boolean isLocked = false;
+
   public boolean seeThrough = isOpen;
 
   public Door(IntVec2D pos) {

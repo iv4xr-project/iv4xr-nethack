@@ -4,6 +4,7 @@ import agent.AgentState;
 import agent.navigation.NavUtils;
 import agent.navigation.NetHackSurface;
 import agent.navigation.surface.Door;
+import agent.navigation.surface.Stair;
 import agent.navigation.surface.Tile;
 import agent.navigation.surface.Wall;
 import eu.iv4xr.framework.spatial.IntVec2D;
@@ -41,6 +42,14 @@ public class TileSelector extends Selector<Tile> {
           t -> {
             Door d = (Door) t;
             return !d.isLocked && !d.isOpen;
+          });
+
+  public static final TileSelector stairDown =
+      new TileSelector(
+          SelectionType.FIRST,
+          Stair.class,
+          t -> {
+            return !((Stair) t).goesUp;
           });
 
   Class tileClass;

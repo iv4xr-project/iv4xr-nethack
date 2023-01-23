@@ -21,8 +21,6 @@ public class EntityTypeAdapter extends TypeAdapter<Entity> {
     if (type != EntityType.UNKNOWN) {
       return type;
     }
-    //        logger.warn(String.format("%s%s%s: %d UNKNOWN", color.stringCode(), symbol,
-    // Color.RESET.stringCode(), glyph));
 
     type = toEntityType(symbol, color);
     if (type != EntityType.UNKNOWN) {
@@ -37,13 +35,23 @@ public class EntityTypeAdapter extends TypeAdapter<Entity> {
 
   private static EntityType toEntityType(int glyph) {
     switch (glyph) {
-      case 2359:
-        return EntityType.VOID;
+      case 5913: // White :
+        return EntityType.STATUE;
+      case 2389:
+        return EntityType.SINK;
+      case 2380:
+        return EntityType.CORRIDOR;
       case 2379:
       case 2378:
         return EntityType.FLOOR;
       case 2371:
         return EntityType.DOORWAY;
+      case 2359:
+        return EntityType.VOID;
+      case 397: // Pet dog
+        return EntityType.PET;
+      case 16: // Same character as pet dog, but not the PET
+        return EntityType.MONSTER;
     }
 
     return EntityType.UNKNOWN;
@@ -63,7 +71,7 @@ public class EntityTypeAdapter extends TypeAdapter<Entity> {
       case '`':
         return EntityType.BOULDER;
       case '#':
-        return color == Color.CYAN ? EntityType.PRISON_BARS : EntityType.CORRIDOR;
+        return color == Color.CYAN ? EntityType.PRISON_BARS : EntityType.UNKNOWN;
       case '+':
         return color == Color.BROWN ? EntityType.DOOR : EntityType.SPELLBOOK;
         // DOORWAY;
@@ -87,7 +95,6 @@ public class EntityTypeAdapter extends TypeAdapter<Entity> {
         return EntityType.ITEM;
       case 'I':
         return color == Color.TRANSPARENT ? EntityType.LAST_LOCATION : EntityType.MONSTER;
-      case 'd':
       case 'f':
         return color == Color.WHITE ? EntityType.PET : EntityType.MONSTER;
       case 'u':

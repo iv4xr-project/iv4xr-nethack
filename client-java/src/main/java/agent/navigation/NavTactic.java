@@ -48,7 +48,7 @@ public class NavTactic {
                 return null;
               }
               logger.debug(
-                  String.format(">>> navigateToWorldEntity (%s) via %s", entitySelector, nextTile));
+                  String.format("navigateToWorldEntity (%s) via %s", entitySelector, nextTile));
               return nextTile;
             })
         .lift();
@@ -71,7 +71,7 @@ public class NavTactic {
               if (nextTile == null) {
                 return null;
               }
-              logger.debug(String.format(">>> navigateToTile (%s) via %s", tileSelector, nextTile));
+              logger.debug(String.format("navigateToTile (%s) via %s", tileSelector, nextTile));
               return nextTile;
             })
         .lift();
@@ -89,7 +89,7 @@ public class NavTactic {
               Vec3 agentPos = S.worldmodel.position;
               NetHackSurface surface = S.area();
               List<Pair<Integer, Tile>> path = null;
-              for (IntVec2D pos : NavUtils.neighbourCoordinates(t.pos, true)) {
+              for (IntVec2D pos : NavUtils.neighbourCoordinates(t.pos, allowDiagonal)) {
                 if (pos.equals(NavUtils.loc2(agentPos))) {
                   return null;
                 }
@@ -117,7 +117,7 @@ public class NavTactic {
               }
               logger.debug(
                   String.format(
-                      ">>> navigateNextToTile (%s) via %s (allowDiagonal=%b)",
+                      "navigateNextToTile (%s) via %s (allowDiagonal=%b)",
                       tileSelector, nextTile, allowDiagonal));
               return nextTile;
             })

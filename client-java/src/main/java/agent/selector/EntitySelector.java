@@ -16,8 +16,6 @@ public class EntitySelector extends Selector<WorldEntity> {
   public static final EntitySelector closedDoor =
       new EntitySelector(
           SelectionType.FIRST, EntityType.DOOR, d -> (boolean) d.properties.get("closed"));
-  public static final EntitySelector stairsDown =
-      new EntitySelector(SelectionType.FIRST, EntityType.STAIRS_DOWN);
   public static final EntitySelector money =
       new EntitySelector(SelectionType.CLOSEST, EntityType.GOLD);
 

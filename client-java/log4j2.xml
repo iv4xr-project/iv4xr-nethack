@@ -40,8 +40,8 @@
         </Logger>
 
         <Logger name="🧭" level="debug" additivity="false">
-            <AppenderRef ref="LogToFile" level="info"/>
-            <AppenderRef ref="LogToConsole" level="info"/>
+            <AppenderRef ref="LogToFile" level="debug"/>
+            <AppenderRef ref="LogToConsole" level="debug"/>
         </Logger>
         <Logger name="💡" level="debug" additivity="false">
             <AppenderRef ref="LogToFile" level="debug"/>
@@ -53,7 +53,7 @@
         </Logger>
         <Logger name="🌎" level="debug" additivity="false">
             <AppenderRef ref="LogToFile" level="debug"/>
-            <AppenderRef ref="LogToConsole" level="debug"/>
+            <AppenderRef ref="LogToConsole" level="info"/>
         </Logger>
         <Logger name="🎵" level="debug" additivity="false">
             <AppenderRef ref="LogToConsole" level="debug"/>

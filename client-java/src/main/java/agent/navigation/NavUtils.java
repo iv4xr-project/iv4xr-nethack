@@ -188,8 +188,8 @@ public class NavUtils {
     if (path == null) {
       logger.debug("Path not found");
       return null;
-    } else if (path.size() == 0) {
-      logger.debug("Already on location, path is length 0");
+    } else if (path.size() <= 1) {
+      logger.debug(String.format("Already on location, path is length %s", path.size()));
       return null;
     } else {
       // The first element is the src itself, so we need to pick the next one:

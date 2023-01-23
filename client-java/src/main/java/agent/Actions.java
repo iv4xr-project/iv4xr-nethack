@@ -116,13 +116,10 @@ public class Actions {
               for (IntVec2D neighbour : neighbours) {
                 Tile t = surface.getTile(neighbour);
                 if (t instanceof Wall) {
-                  Wall wall = (Wall) t;
-                  if (wall.timesSearched < 10) {
-                    walls.add(wall);
-                  }
+                  walls.add((Wall) t);
                 }
               }
-              if (walls.size() == 0) {
+              if (walls.isEmpty()) {
                 return null;
               }
               return walls;
@@ -135,7 +132,7 @@ public class Actions {
             (AgentState S) ->
                 (Item item) -> {
                   Sounds.eat();
-                  logger.info(String.format(">>> eatFood: ", item));
+                  logger.info(String.format(">>> eatFood: %s", item));
                   WorldModel newwom = WorldModels.eatFood(S, item.symbol);
                   return new Pair<>(S, newwom);
                 })

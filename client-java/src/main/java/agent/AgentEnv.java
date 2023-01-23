@@ -36,7 +36,10 @@ public class AgentEnv extends Iv4xrEnvironment {
               EntityType.FLOOR,
               EntityType.ICE,
               EntityType.VOID,
-              EntityType.DOORWAY));
+              EntityType.DOORWAY,
+              EntityType.STAIRS_UP,
+              EntityType.STAIRS_DOWN,
+              EntityType.SINK));
   public NetHack app;
 
   public AgentEnv(NetHack app) {
