@@ -18,6 +18,8 @@ import src.socket_code.protocol.read as read
 import src.socket_code.protocol.util as util
 import gym
 import nle
+import src.logger as logger
+import logging
 from gym import Env
 import universe_plugin
 
@@ -26,6 +28,8 @@ def main():
     """
     Executable entry-point.
     """
+    logger.initialize_handler()
+
     parser = ArgumentParser()
     parser.add_argument('--addr', action='store', type=str, dest='addr')
     parser.add_argument('--fd', action='store', type=int, dest='fd')
@@ -57,7 +61,7 @@ def handle(sock_file, info):
             if env:
                 env.close()
     except util.ProtoException as exc:
-        log('%s gave error: %s' % (info.addr, str(exc)))
+        logging.error('%s gave error: %s' % (info.addr, str(exc)))
 
 
 def handshake(sock):
@@ -65,6 +69,7 @@ def handshake(sock):
     Perform the initial handshake and return the resulting
     Gym environment.
     """
+    logging.debug(f"Init env {CURRENT_ENV}")
     try:
         env = gym.make(CURRENT_ENV)
         return handle_reset(sock, env, CURRENT_ENV)
@@ -82,9 +87,11 @@ def loop(sock, uni, env: Env):
     while True:
         json_msg = read.read_json(sock)
         arg = json_msg['arg']
+        msg_type = str(json_msg['cmd']).lower()
+        logging.info(f"Received message of type {msg_type} (with args={arg is not None})")
 
         # Handle msg type
-        match str(json_msg['cmd']).lower():
+        match msg_type:
             case 'reset':
                 env = handle_reset(sock, env, arg)
             case 'set_seed':
@@ -137,7 +144,7 @@ def handle_get_seed(sock, env):
     try:
         seed = env.get_seeds()
     except RuntimeError:
-        print('Getting seed failed, not a valid env for this action')
+        logging.warning('Getting seed failed, not a valid env for this action')
 
     if seed:
         write.write_seed(sock, seed)
@@ -173,13 +180,6 @@ def handle_render(env):
     Render the environment.
     """
     env.render()
-
-
-def log(msg):
-    """
-    Log logs a message to the console.
-    """
-    sys.stderr.write(msg + '\n')
 
 
 if __name__ == '__main__':

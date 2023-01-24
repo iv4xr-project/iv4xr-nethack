@@ -2,6 +2,7 @@
 Low-level API for protocol-specific encoding/decoding.
 """
 import json
+import logging
 
 import numpy as np
 import src.socket_code.protocol.util as util
@@ -11,6 +12,7 @@ def write_field(sock, field):
     """
     Write a variable length data field.
     """
+    logging.debug(f"WRITING: {field}")
     sock.write(field)
 
 
@@ -44,7 +46,7 @@ def write_obs(sock, env, obs):
     # print(jsonable.keys())
 
     json_dump = json.dumps(sparse_observation, separators=(',', ':'))
-    print("WRITE Observation")
+    logging.info("WRITE Observation")
     write_field_str(sock, json_dump)
 
 
@@ -59,7 +61,7 @@ def write_step(sock, done, info):
             'done': done,
         }
     json_dump = json.dumps(step_json, separators=(',', ':'))
-    print("WRITE Step")
+    logging.info("WRITE Step")
     write_field_str(sock, json_dump)
 
 def write_space(sock, space):
@@ -76,5 +78,5 @@ def write_seed(sock, seed):
         'reseed': seed[2],
     }
     json_dump = json.dumps(seed_json, separators=(',', ':'))
-    print("WRITE Seed")
+    logging.info("WRITE Seed")
     write_field_str(sock, json_dump)

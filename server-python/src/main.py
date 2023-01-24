@@ -30,5 +30,5 @@ def nethack_gym():
 
 
 if __name__ == '__main__':
-    logger.initialize()
+    logger.initialize_server()
     main()

@@ -6,6 +6,7 @@ import os
 import sys
 import subprocess
 import socket
+import logging
 
 if sys.version_info >= (3, 0):
     import socketserver
@@ -17,10 +18,11 @@ def serve(port=5001, universe=False, setup_code=''):
     """
     Run a server on the given port.
     """
+    logging.info(f"Starting server (port={port})")
     server = Server(('127.0.0.1', port), Handler)
     server.universe = universe
     server.setup_code = setup_code
-    print('Listening on port ' + str(port) + '...')
+    logging.info(f"Listening on port {port}...")
     server.serve_forever()
 
 
@@ -53,12 +55,13 @@ class Handler(socketserver.BaseRequestHandler):
         if self.server.universe:
             args.append('--universe')
 
+        logging.debug(f'Initialize handler with command: {"".join(args)}')
         # Greatly reduces latency on Linux.
         if sys.platform in ['linux', 'linux2', 'darwin']:
             self.request.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
         try:
-            print('Connection from ' + str(self.client_address))
+            logging.info('Connection from ' + str(self.client_address))
             if sys.version_info >= (3, 2):
                 proc = subprocess.Popen(args,
                                         stdin=sys.stdin,
@@ -73,4 +76,4 @@ class Handler(socketserver.BaseRequestHandler):
                                         close_fds=False)
             proc.wait()
         finally:
-            print('Disconnected from ' + str(self.client_address))
+            logging.info(f"Disconnected from {self.client_address}")
