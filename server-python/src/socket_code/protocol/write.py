@@ -3,9 +3,17 @@ Low-level API for protocol-specific encoding/decoding.
 """
 import json
 import logging
+import time
+import struct
 
 import numpy as np
 import src.socket_code.protocol.util as util
+from src.socket_code.protocol.util import ProtoException
+
+
+OBS_BYTE = util.to_byte(1)
+STEP_BYTE = util.to_byte(2)
+SEED_BYTE = util.to_byte(3)
 
 
 def write_field(sock, field):
@@ -15,68 +23,104 @@ def write_field(sock, field):
     logging.debug(f"WRITING: {field}")
     sock.write(field)
 
+def to_bool(bool):
+    return struct.pack('b', bool)
 
-def write_field_str(sock, field):
+
+def to_2byte(values: [int]):
+    if type(values) is not list and type(values) is not np.ndarray:
+        values = [values]
+    try:
+        n = len(values)
+        return struct.pack(f'>{n}H', *values)
+    except Exception as e:
+        logging.warning(f"to_2byte: {values}")
+        raise e
+
+def to_4byte(values: [int]):
+    if type(values) is not list and type(values) is not np.ndarray:
+        values = [values]
+    try:
+        n = len(values)
+        return struct.pack(f'>{n}i', *values)
+    except Exception as e:
+        logging.warning(f"to_4byte: {values}")
+        raise e
+
+def string_to_bytes(ints: np.array, trim=False):
     """
-    Write a variable length string field.
+    String to bytes
     """
-    text = field.encode('utf-8') + b'\n'
-    write_field(sock, text)
+    if trim:
+        ints = np.trim_zeros(ints)
+    length_byte = to_2byte(len(ints))
+    return length_byte + to_2byte(ints)
+
+
+def write_str(sock, string):
+    length_byte = to_2byte(len(string))
+    chars = [ord(c) for c in string]
+    write_field(sock, length_byte + to_2byte(chars))
 
 
 def write_obs(sock, env, obs):
     """
     Encode and send an observation.
     """
-    jsonable = util.to_jsonable(env.observation_space, obs)
-    zipped_map = zip(jsonable['glyphs'][0], jsonable['chars'][0], jsonable['colors'][0])
-    entities = np.array([[glyph, char, color] for glyph, char, color in zipped_map])
-    entities = np.swapaxes(entities, 1, 2)
-
-    inv_items = zip(jsonable['inv_letters'][0], jsonable['inv_oclasses'][0], jsonable['inv_strs'][0])
-    inv_items = [[item[0], item[1], item[2]] for item in inv_items]
-
-    sparse_observation = {
-        'blstats': jsonable['blstats'][0],
-        'entities': entities.tolist(),
-        'message': jsonable['message'][0],
-        'inventory': inv_items,
-    }
-
-    # print(jsonable.keys())
-
-    json_dump = json.dumps(sparse_observation, separators=(',', ':'))
     logging.info("WRITE Observation")
-    write_field_str(sock, json_dump)
+
+    write_field(sock, OBS_BYTE)
+    write_field(sock, to_4byte(obs['blstats']))
+    write_field(sock, string_to_bytes(obs['message'], True))
+    write_map(sock, obs['chars'], obs['colors'], obs['glyphs'])
+    write_inv(sock, obs['inv_letters'], obs['inv_oclasses'], obs['inv_strs'])
+    logging.info("DONE WRITE Observation")
 
 
 def write_step(sock, done, info):
-    if info:
-        step_json = {
-            'done': done,
-            'info': info,
-        }
-    else:
-        step_json = {
-            'done': done,
-        }
-    json_dump = json.dumps(step_json, separators=(',', ':'))
+    # 'info': info,
     logging.info("WRITE Step")
-    write_field_str(sock, json_dump)
-
-def write_space(sock, space):
-    """
-    Encode and write a gym.Space.
-    """
-    write_field_str(sock, json.dumps(util.space_json(space)))
-
+    write_field(sock, STEP_BYTE)
+    write_field(sock, to_bool(done))
 
 def write_seed(sock, seed):
-    seed_json = {
-        'core': seed[0],
-        'disp': seed[1],
-        'reseed': seed[2],
-    }
-    json_dump = json.dumps(seed_json, separators=(',', ':'))
     logging.info("WRITE Seed")
-    write_field_str(sock, json_dump)
+    write_field(sock, SEED_BYTE)
+    write_str(sock, str(seed[0]))
+    write_str(sock, str(seed[1]))
+    write_field(sock, to_bool(seed[2]))
+
+
+def write_inv(sock, inv_letters: [int], inv_oclasses: [int], inv_strs: [int]):
+    """
+    Inventory is first a byte with number of items, then byte for
+    """
+    nr_items = len(np.trim_zeros(inv_letters))
+    msg = util.to_byte([nr_items])
+
+    for i in range(nr_items):
+        letter_byte = to_2byte(inv_letters[i])
+        class_byte = util.to_byte(inv_oclasses[i])
+        inv_str = string_to_bytes(inv_strs[i], True)
+
+        msg += letter_byte + class_byte + inv_str
+
+    write_field(sock, msg)
+
+def write_map(sock, map_chars, map_colors, map_glyphs):
+    """
+    Encode the entire map in bytes
+    """
+    height = len(map_chars)
+    width = len(map_chars[0])
+    msg = b''
+
+    for y in range(height):
+        for x in range(width):
+            char_byte = to_2byte(map_chars[y][x])
+            color_byte = util.to_byte(map_colors[y][x])
+            glyph_4byte = to_2byte(map_glyphs[y][x])
+
+            msg += char_byte + color_byte + glyph_4byte
+
+    write_field(sock, msg)

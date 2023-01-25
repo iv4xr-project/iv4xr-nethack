@@ -1,20 +1,27 @@
-package connection.messageparser;
+package connection.messagedecoder;
 
-import com.google.gson.TypeAdapter;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonToken;
-import com.google.gson.stream.JsonWriter;
-import connection.ConnectionLoggers;
+import java.io.DataInputStream;
 import java.io.IOException;
 import nethack.enums.Color;
 import nethack.enums.EntityType;
 import nethack.object.Entity;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 // Source: https://studytrails.com/2016/09/12/java-google-json-type-adapter/
-public class EntityTypeAdapter extends TypeAdapter<Entity> {
-  static final Logger logger = LogManager.getLogger(ConnectionLoggers.TypeAdapterLogger);
+public class EntityDecoder extends Decoder {
+  public static Entity decode(DataInputStream input) {
+    try {
+      char symbol = input.readChar();
+      int colorCode = input.readByte();
+      int glyph = input.readShort();
+
+      Color color = Color.fromValue(colorCode);
+      EntityType type = toEntityType(glyph, symbol, color);
+      return new Entity(glyph, symbol, type, color);
+
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
 
   private static EntityType toEntityType(int glyph, char symbol, Color color) {
     EntityType type = toEntityType(glyph);
@@ -133,27 +140,4 @@ public class EntityTypeAdapter extends TypeAdapter<Entity> {
 
     return EntityType.UNKNOWN;
   }
-
-  @Override
-  public Entity read(JsonReader reader) throws IOException {
-    // the first token is the start array
-    JsonToken token = reader.peek();
-    if (token.equals(JsonToken.BEGIN_ARRAY)) {
-      reader.beginArray();
-      int glyph = (int) reader.nextInt();
-      char symbol = (char) reader.nextInt();
-      Color color = new ColorTypeAdapter().read(reader);
-      reader.endArray();
-
-      // Infer Entity type
-      EntityType type = toEntityType(glyph, symbol, color);
-      return new Entity(glyph, symbol, type, color);
-    } else {
-      logger.warn("Tried to read an entity, however it was not in an array");
-      return null;
-    }
-  }
-
-  @Override
-  public void write(JsonWriter out, Entity entity) throws IOException {}
 }

@@ -1,6 +1,6 @@
 package nethack;
 
-import connection.SendCommandClient;
+import connection.SocketClient;
 import java.util.Objects;
 import java.util.Scanner;
 import nethack.enums.Command;
@@ -19,32 +19,33 @@ public class NetHack {
   public GameMode gameMode;
   public Seed seed;
 
-  SendCommandClient commander;
+  SocketClient client;
 
-  public NetHack(SendCommandClient commander) {
+  public NetHack(SocketClient commander) {
     init(commander, GameMode.NetHackChallenge);
     reset();
   }
 
-  public NetHack(SendCommandClient commander, Seed seed) {
+  public NetHack(SocketClient client, Seed seed) {
     if (seed == null) {
-      init(commander, GameMode.NetHackChallenge);
+      init(client, GameMode.NetHackChallenge);
       reset();
     } else {
-      init(commander, GameMode.NetHack);
+      init(client, GameMode.NetHack);
       setSeed(seed);
     }
   }
 
-  private void init(SendCommandClient commander, GameMode gameMode) {
-    this.commander = commander;
+  private void init(SocketClient client, GameMode gameMode) {
+    this.client = client;
     this.gameMode = gameMode;
     netHackLogger.info("Initialize game");
-    commander.read(Object.class);
+    client.readObservationMessage();
+    //    client.sendReset(gameMode.toString());
   }
 
   public Seed getSeed() {
-    Seed seed = commander.sendCommand("Get_seed", null, Seed.class);
+    Seed seed = client.sendGetSeed();
     seedLogger.info("Current seed: " + seed);
     return seed;
   }
@@ -52,12 +53,12 @@ public class NetHack {
   public void setSeed(Seed seed) {
     gameMode = GameMode.NetHack;
     seedLogger.info("New seed is:" + seed);
-    commander.writeCommand("Set_seed", seed);
+    client.sendSetSeed(seed);
     reset();
   }
 
   public void reset() {
-    commander.sendCommand("Reset", gameMode.toString(), Object.class);
+    client.sendReset(gameMode.toString());
     step(Command.MISC_MORE);
     render();
   }
@@ -75,7 +76,7 @@ public class NetHack {
 
   public void close() {
     netHackLogger.info("Close game");
-    commander.writeCommand("Close", "");
+    client.sendClose();
   }
 
   public Level level() {
@@ -83,7 +84,7 @@ public class NetHack {
   }
 
   public void render() {
-    commander.writeCommand("Render", "");
+    client.sendRender();
     System.out.println(gameState);
   }
 
@@ -120,6 +121,8 @@ public class NetHack {
         System.out.print(gameState.verbose());
         return StepType.Special;
       case ADDITIONAL_SHOW_SEED:
+        Seed seed = client.sendGetSeed();
+        System.out.print(seed);
         return StepType.Special;
       case ADDITIONAL_SET_SEED:
         int index = Integer.parseInt(command.stroke.substring(1));
@@ -151,14 +154,14 @@ public class NetHack {
 
   private StepType step(Command command, int index) {
     netHackLogger.info("Command: " + command);
-    StepState stepState = commander.sendCommand("step", index, StepState.class);
+    StepState stepState = client.sendStep(index);
     updateGameState(stepState);
     return StepType.Valid;
   }
 
   private StepType step(Command command, char character) {
     netHackLogger.info(String.format("Command: %s %s", command, character));
-    StepState stepState = commander.sendCommand("step_stroke", character, StepState.class);
+    StepState stepState = client.sendStepStroke(character);
     updateGameState(stepState);
     return StepType.Valid;
   }

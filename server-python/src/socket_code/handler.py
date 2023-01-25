@@ -74,7 +74,7 @@ def handshake(sock):
         env = gym.make(CURRENT_ENV)
         return handle_reset(sock, env, CURRENT_ENV)
     except gym.error.Error as gym_exc:
-        write.write_field_str(sock, str(gym_exc))
+        write.write_field(sock, write.string_to_bytes(str(gym_exc)))
         sock.flush()
         raise gym_exc
 
@@ -85,56 +85,76 @@ def loop(sock, uni, env: Env):
     apply them to the given Gym environment.
     """
     while True:
-        json_msg = read.read_json(sock)
-        arg = json_msg['arg']
-        msg_type = str(json_msg['cmd']).lower()
-        logging.info(f"Received message of type {msg_type} (with args={arg is not None})")
+        logging.info("Reading byte")
+        message_bit = read.read_byte(sock)
+
+        # RESET_BYTE = util.to_byte(1)
+        # SET_SEED_BYTE = util.to_byte(2)
+        # GET_SEED_BYTE = util.to_byte(3)
+        # RENDER_BYTE = util.to_byte(4)
+        # CLOSE_BYTE = util.to_byte(5)
+        # STEP_BYTE = util.to_byte(6)
+        # STEP_STROKE_BYTE = util.to_byte(7)
 
         # Handle msg type
-        match msg_type:
-            case 'reset':
-                env = handle_reset(sock, env, arg)
-            case 'set_seed':
-                env = handle_set_seed(env, arg)
-            case 'get_seed':
+        match int(message_bit):
+            case read.RESET_BYTE:
+                logging.info("Reset")
+                env = handle_reset(sock, env, None)
+            case read.SET_SEED_BYTE:
+                logging.info("Set seed")
+                env = handle_set_seed(sock, env)
+            case read.GET_SEED_BYTE:
+                logging.info("Get seed")
                 handle_get_seed(sock, env)
-            case 'render':
+            case read.RENDER_BYTE:
+                logging.info("Render")
                 handle_render(env)
-            case 'close':
-                return
-            case 'step':
-                handle_step(sock, env, int(arg))
-            case 'step_stroke':
-                handle_step_stroke(sock, env, arg)
+            case read.CLOSE_BYTE:
+                logging.info("Close")
+            case read.STEP_BYTE:
+                logging.info("Step")
+                handle_step(sock, env)
+            case read.STEP_STROKE_BYTE:
+                logging.info("Step stroke")
+                handle_step_stroke(sock, env)
             case unknown:
                 logging.warning(f'Action "{unknown}" not known')
 
+    logging.info('exits loop')
 
-def handle_reset(sock, env, arg):
+
+def handle_reset(sock, env, desired_env):
     """
     Reset the environment and send the result.
     """
     global CURRENT_ENV
 
-    if arg != CURRENT_ENV:
-        env = gym.make(arg)
-        CURRENT_ENV = arg
+    if not desired_env:
+        desired_env = read.read_string(sock)
+    if desired_env != CURRENT_ENV:
+        env = gym.make(desired_env)
+        CURRENT_ENV = desired_env
 
     write.write_obs(sock, env, env.reset())
     sock.flush()
     return env
 
 
-def handle_set_seed(env, seed):
+def handle_set_seed(sock, env):
     """
     Set the seed of the next run
     """
     global CURRENT_ENV
     if CURRENT_ENV != "NetHack-v0":
+        logging.info(f"Env changed to {CURRENT_ENV} for seeding")
         CURRENT_ENV = "NetHack-v0"
         env = gym.make(CURRENT_ENV)
 
-    env.seed(int(seed['core']), int(seed['disp']), seed['reseed'])
+    core = read.read_string(sock)
+    disp = read.read_string(sock)
+    reseed = read.read_bool(sock)
+    env.seed(int(core), int(disp), reseed)
     return env
 
 
@@ -149,25 +169,27 @@ def handle_get_seed(sock, env):
     if seed:
         write.write_seed(sock, seed)
     else:
-        write.write_field_str(sock, "")
+        write.string_to_bytes(sock, write.string_to_bytes(""))
 
     sock.flush()
 
 
-def handle_step(sock, env, action):
+def handle_step(sock, env):
     """
     Step the environment and send the result.
     """
+    action = read.read_int(sock)
     obs, rew, done, info = env.step(action)
     write.write_obs(sock, env, obs)
     write.write_step(sock, done, info)
     sock.flush()
 
-def handle_step_stroke(sock, env, stroke):
+def handle_step_stroke(sock, env):
     """
     Step the environment and send the result.
     """
-    raw_obs, done = env.nethack.step(ord(stroke[0]))
+    stroke = chr(read.read_short(sock))
+    raw_obs, done = env.nethack.step(ord(stroke))
     # Raw observation needs to get zipped
     obs = env._get_observation(raw_obs)
     write.write_obs(sock, env, obs)

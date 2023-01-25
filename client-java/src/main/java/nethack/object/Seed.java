@@ -1,6 +1,5 @@
 package nethack.object;
 
-import java.util.OptionalLong;
 import java.util.Random;
 
 // From Python documentation:
@@ -24,19 +23,14 @@ public class Seed {
         new Seed("1978032860031487687", "16734812270076554578", false), // Shop at level 4
         new Seed("0", "0", false), // Portal left of player
       };
-  public OptionalLong core;
-  public OptionalLong disp;
   public boolean reseed;
-  public String dispSeed;
-  public String coreSeed;
+  public String disp;
+  public String core;
 
   public Seed(String core, String disp, boolean reseed) {
-    this.core = OptionalLong.of(Long.parseUnsignedLong(core));
-    this.disp = OptionalLong.of(Long.parseUnsignedLong(disp));
     this.reseed = reseed;
-
-    this.dispSeed = disp;
-    this.coreSeed = core;
+    this.disp = disp;
+    this.core = core;
   }
 
   // Generate a random seed
@@ -50,10 +44,7 @@ public class Seed {
 
   @Override
   public String toString() {
-    String coreStr = core.isPresent() ? coreSeed : "";
-    String dispStr = disp.isPresent() ? dispSeed : "";
     return String.format(
-        "%s %s %b [return new Seed(\"%s\", \"%s\", %b);]",
-        coreSeed, dispSeed, reseed, coreStr, dispStr, reseed);
+        "%s %s %b [return new Seed(\"%s\", \"%s\", %b);]", core, disp, reseed, core, disp, reseed);
   }
 }

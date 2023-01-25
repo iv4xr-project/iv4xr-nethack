@@ -1,7 +1,7 @@
 package nethack;
 
 import connection.ConnectionLoggers;
-import connection.SendCommandClient;
+import connection.SocketClient;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import nethack.object.Seed;
@@ -13,27 +13,27 @@ public class App {
 
   public static void main(String[] args) throws IOException {
     // Initialize socket connection
-    SendCommandClient commander = new SendCommandClient("127.0.0.1", 5001);
-    if (!commander.socketReady()) {
+    SocketClient client = new SocketClient("127.0.0.1", 5001);
+    if (!client.socketReady()) {
       logger.fatal("Unsuccessful socket connection");
       return;
     }
 
-    playGame(commander);
+    playGame(client);
 
     // Close socket connection
     logger.info("Closing connection");
-    commander.close();
+    client.close();
   }
 
-  private static void playGame(SendCommandClient commander) throws IOException {
-    NetHack nethack = new NetHack(commander);
+  private static void playGame(SocketClient client) throws IOException {
+    NetHack nethack = new NetHack(client);
     nethack.loop();
     nethack.close();
   }
 
-  private static void gotThroughGame(SendCommandClient commander) throws IOException {
-    NetHack nethack = new NetHack(commander, Seed.presets[1]);
+  private static void gotThroughGame(SocketClient client) throws IOException {
+    NetHack nethack = new NetHack(client, Seed.presets[1]);
 
     // Eternally go through new seeds
     while (true) {

@@ -1,5 +1,7 @@
 from gym import spaces
 import numpy as np
+import logging
+import struct
 
 
 class ProtoException(Exception):
@@ -7,6 +9,16 @@ class ProtoException(Exception):
     Exception type used for all protocol-related errors.
     """
     pass
+
+
+def to_byte(values):
+    if type(values) is not list and type(values) is not np.ndarray:
+        values = [values]
+    try:
+        n = len(values)
+        return struct.pack(f'>{n}B', *values)
+    except Exception:
+        logging.warning(f"to_byte: {values}")
 
 
 def from_jsonable(space, obj):

@@ -1,13 +1,15 @@
 package nethack.object;
 
 public class Inventory {
-  public static final int SIZE = 55;
+  public static final int MAX_SIZE = 55;
   public Item[] items;
 
   public Inventory(Item[] items) {
-    if (items.length != Inventory.SIZE) {
+    if (items.length > Inventory.MAX_SIZE) {
       throw new IllegalArgumentException(
-          String.format("Inventory item length should be %d but was %d", SIZE, items.length));
+          String.format(
+              "Inventory item length should not be larger than %d but was %d",
+              MAX_SIZE, items.length));
     }
 
     this.items = items;

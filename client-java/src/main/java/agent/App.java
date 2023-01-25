@@ -6,7 +6,7 @@ import agent.navigation.NavTactic;
 import agent.selector.EntitySelector;
 import agent.selector.TileSelector;
 import connection.ConnectionLoggers;
-import connection.SendCommandClient;
+import connection.SocketClient;
 import eu.iv4xr.framework.mainConcepts.TestAgent;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import nethack.NetHack;
@@ -26,20 +26,20 @@ public class App {
 
   public static void main(String[] args) throws Exception {
     // Initialize socket connection
-    SendCommandClient commander = new SendCommandClient("127.0.0.1", 5001);
-    if (!commander.socketReady()) {
+    SocketClient client = new SocketClient("127.0.0.1", 5001);
+    if (!client.socketReady()) {
       connectionLogger.fatal("Unsuccessful socket connection");
       return;
     }
 
-    runAgent(commander);
+    runAgent(client);
 
     // Close socket connection
     connectionLogger.info("Closing connection");
-    commander.close();
+    client.close();
   }
 
-  private static void runAgent(SendCommandClient commander) {
+  private static void runAgent(SocketClient commander) {
     //    NetHack nethack = new NetHack(commander, Seed.randomSeed());
     NetHack nethack = new NetHack(commander, Seed.presets[0]);
     AgentEnv env = new AgentEnv(nethack);
@@ -52,13 +52,19 @@ public class App {
     state.updateState(Player.ID);
 
     agentLogger.info("Start agent loop...");
-    //    int jumpToTurn = 1108;
-    int jumpToTurn = 0;
+    int jumpToTurn = 1108;
+    int k = 0;
+    //    int jumpToTurn = 0;
     // Now we run the agent:
+    agentLogger.fatal("Start now");
     while (G.getStatus().inProgress()) {
       if (state.app().gameState.stats.time < jumpToTurn) {
         agent.update();
+        k++;
         continue;
+      } else {
+        agentLogger.fatal(String.format("Done after %d steps", k));
+        System.exit(0);
       }
 
       Command command = nethack.waitCommand(true);
@@ -75,11 +81,11 @@ public class App {
       // Need to update state for render
       state.updateState(Player.ID);
       state.render();
-      commander.writeCommand("Render", "");
+      commander.sendRender();
     }
 
     state.render();
-    commander.writeCommand("Render", "");
+    commander.sendRender();
 
     agentLogger.info("Closing NetHack since the loop in agent has terminated");
     nethack.close();
