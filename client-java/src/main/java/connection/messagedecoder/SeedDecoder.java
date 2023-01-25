@@ -8,7 +8,7 @@ public class SeedDecoder extends Decoder {
   public static Seed decode(DataInputStream input) {
     try {
 
-      if (input.readByte() != DecoderBit.SeedBit.bitValue) {
+      if (input.readByte() != DecoderBit.SeedBit.value) {
         logger.fatal("Did not receive seed message byte");
         System.exit(-1);
       }

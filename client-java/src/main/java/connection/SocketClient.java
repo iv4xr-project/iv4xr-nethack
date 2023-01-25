@@ -101,9 +101,16 @@ public class SocketClient {
   }
 
   public StepState sendStep(int index) {
-    writeBit(Encoder.EncoderBit.StepBit);
-    Encoder.sendInt(writer, index);
+    long now = System.nanoTime();
+    boolean verbose = false;
+    try {
+      writer.write(new byte[] {Encoder.EncoderBit.StepBit.value, (byte) index});
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
     flush();
+    long now1 = System.nanoTime();
+    if (verbose) System.out.printf("SENDING COMMAND TOOK: %d%n", now1 - now);
     return readStepState();
   }
 
@@ -115,7 +122,7 @@ public class SocketClient {
   }
 
   private void writeBit(Encoder.EncoderBit bit) {
-    Encoder.writeByte(writer, bit.bitValue);
+    Encoder.writeByte(writer, bit.value);
   }
 
   public Seed readSeed() {
@@ -129,9 +136,12 @@ public class SocketClient {
 
   public StepState readStepState() {
     logger.info("** waiting for answer....");
-
+    boolean verbose = true;
+    long now = System.nanoTime();
     ObservationMessage obsMessage = readObservationMessage();
     StepMessage stepMessage = StepMessageDecoder.decode(reader);
+    long now1 = System.nanoTime();
+    if (verbose) System.out.printf("READ OBSMESSAGE TOOK: %d%n%n", now1 - now);
 
     StepState stepState = new StepState();
     stepState.player = obsMessage.player;
@@ -146,6 +156,8 @@ public class SocketClient {
     stepState.info = null;
     stepState.level = new Level(obsMessage.stats.zeroIndexDepth, obsMessage.entities);
     stepState.message = obsMessage.message;
+    long now2 = System.nanoTime();
+    //    System.out.printf("EXIT TOOK: %d%n", now2-now1);
     return stepState;
   }
 

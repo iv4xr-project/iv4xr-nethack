@@ -50,8 +50,9 @@ public enum Color {
   }
 
   public static Color fromValue(int value) {
-    if (BY_VALUE.containsKey(value)) {
-      return BY_VALUE.get(value);
+    Color color = BY_VALUE.get(value);
+    if (color != null) {
+      return color;
     }
     throw new IllegalArgumentException("Color value not known: " + value);
   }

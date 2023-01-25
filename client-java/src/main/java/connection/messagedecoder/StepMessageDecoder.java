@@ -8,7 +8,7 @@ public class StepMessageDecoder extends Decoder {
   public static StepMessage decode(DataInputStream input) {
     try {
       StepMessage stepMessage = new StepMessage();
-      if (input.readByte() != DecoderBit.StepBit.bitValue) {
+      if (input.readByte() != DecoderBit.StepBit.value) {
         logger.fatal("Did not receive step message byte");
         System.exit(-1);
       }

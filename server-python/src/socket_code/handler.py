@@ -9,6 +9,7 @@ import os
 import io
 import sys
 import logging
+import time
 
 # Add path to run from commandline
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
@@ -84,42 +85,71 @@ def loop(sock, uni, env: Env):
     Handle commands from the client as they come in and
     apply them to the given Gym environment.
     """
+    measure_point = time.time()
+    msg_type = "INIT"
+    acc_done = 0
+    acc_recv = 0
+    acc = 0
     while True:
-        logging.info("Reading byte")
-        message_bit = read.read_byte(sock)
+        if acc == 50:
+            logging.warning(f"AVG: READY = {acc_recv / 50} Done = {acc_done / 50}")
+            acc_done = 0
+            acc_recv = 0
+            acc = 0
+            sys.exit()
 
-        # RESET_BYTE = util.to_byte(1)
-        # SET_SEED_BYTE = util.to_byte(2)
-        # GET_SEED_BYTE = util.to_byte(3)
-        # RENDER_BYTE = util.to_byte(4)
-        # CLOSE_BYTE = util.to_byte(5)
-        # STEP_BYTE = util.to_byte(6)
-        # STEP_STROKE_BYTE = util.to_byte(7)
+        diff = time.time() - measure_point
+        acc_done += diff
+        logging.warning(f"DONE after: {diff:.5f} (type={msg_type})")
+        measure_point = time.time()
+
+        message_bit = int(read.read_byte(sock))
+        diff = time.time() - measure_point
+        acc_recv += diff
+        logging.warning(f"RECV after: {diff:.5f}")
+        measure_point = time.time()
+
+        if msg_type == "INIT":
+            acc_done = 0
+            acc_recv = 0
+            acc = 0
 
         # Handle msg type
-        match int(message_bit):
+        match message_bit:
             case read.RESET_BYTE:
+                msg_type = "Reset"
                 logging.info("Reset")
                 env = handle_reset(sock, env, None)
             case read.SET_SEED_BYTE:
+                msg_type = "Set seed"
                 logging.info("Set seed")
                 env = handle_set_seed(sock, env)
             case read.GET_SEED_BYTE:
+                msg_type = "Get seed"
                 logging.info("Get seed")
                 handle_get_seed(sock, env)
             case read.RENDER_BYTE:
+                msg_type = "Render"
                 logging.info("Render")
                 handle_render(env)
             case read.CLOSE_BYTE:
+                msg_type = "Close"
                 logging.info("Close")
             case read.STEP_BYTE:
+                point = time.time()
+                msg_type = "Step"
                 logging.info("Step")
                 handle_step(sock, env)
+                # print("STEP: TOOK", time.time() - point)
             case read.STEP_STROKE_BYTE:
+                msg_type = "Step stroke"
                 logging.info("Step stroke")
                 handle_step_stroke(sock, env)
             case unknown:
+                msg_type = "Unknown"
                 logging.warning(f'Action "{unknown}" not known')
+
+        acc += 1
 
     logging.info('exits loop')
 
@@ -178,11 +208,23 @@ def handle_step(sock, env):
     """
     Step the environment and send the result.
     """
-    action = read.read_int(sock)
+    verbose = False
+    measure = time.time()
+    action = read.read_byte(sock)
+    if verbose:print("READ_STEP_INT", time.time() - measure)
+    measure = time.time()
     obs, rew, done, info = env.step(action)
+    if verbose:print("NETHACK", time.time() - measure)
+    measure = time.time()
+
     write.write_obs(sock, env, obs)
+    if verbose:print("OBS",time.time() - measure)
+    measure = time.time()
     write.write_step(sock, done, info)
+    if verbose:print("STEP", time.time() - measure)
+    measure = time.time()
     sock.flush()
+    if verbose:print("FLUSH", time.time() - measure)
 
 def handle_step_stroke(sock, env):
     """

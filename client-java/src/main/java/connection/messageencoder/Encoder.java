@@ -50,10 +50,10 @@ public abstract class Encoder {
     CloseBit(5),
     StepBit(6),
     StepStrokeBit(7);
-    public int bitValue = 0;
+    public byte value = 0;
 
     private EncoderBit(int bitValue) {
-      this.bitValue = bitValue;
+      this.value = (byte) bitValue;
     }
   }
 }

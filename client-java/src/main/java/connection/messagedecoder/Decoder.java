@@ -13,10 +13,10 @@ public abstract class Decoder {
     ObservationBit(1),
     StepBit(2),
     SeedBit(3);
-    public int bitValue;
+    public byte value;
 
-    private DecoderBit(int bitValue) {
-      this.bitValue = bitValue;
+    private DecoderBit(int value) {
+      this.value = (byte) value;
     }
   }
 
@@ -30,6 +30,14 @@ public abstract class Decoder {
       }
 
       return String.valueOf(chars);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  public static byte readByte(DataInputStream input) {
+    try {
+      return input.readByte();
     } catch (IOException e) {
       throw new RuntimeException(e);
     }

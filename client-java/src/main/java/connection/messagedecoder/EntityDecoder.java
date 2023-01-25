@@ -10,13 +10,25 @@ import nethack.object.Entity;
 public class EntityDecoder extends Decoder {
   public static Entity decode(DataInputStream input) {
     try {
+      long now = System.nanoTime();
+      boolean verbose = false;
       char symbol = input.readChar();
       int colorCode = input.readByte();
       int glyph = input.readShort();
 
+      long now1 = System.nanoTime();
+      if (verbose) System.out.printf("READ STUFF TOOK: %d%n", now1 - now);
+
       Color color = Color.fromValue(colorCode);
       EntityType type = toEntityType(glyph, symbol, color);
-      return new Entity(glyph, symbol, type, color);
+      long maps = System.nanoTime();
+      if (verbose)
+        System.out.printf(
+            "READ Interpret COLOR+TYPE OF (%s, %s) TOOK: %d%n", color, type, maps - now1);
+      Entity e = new Entity(glyph, symbol, type, color);
+      long now2 = System.nanoTime();
+      if (verbose) System.out.printf("CREATING ENTITY TOOK: %d%n", now2 - maps);
+      return e;
 
     } catch (IOException e) {
       throw new RuntimeException(e);
