@@ -69,9 +69,9 @@ public class AgentEnv extends Iv4xrEnvironment {
         continue;
       }
 
-      e.assignId(pos);
-      logger.debug(String.format("%s %s Added", e.id, pos));
-      wom.elements.put(e.id, toWorldEntity(e, pos));
+      String id = e.createId(pos);
+      logger.debug(String.format("%s %s Added", id, pos));
+      wom.elements.put(id, toWorldEntity(e, pos));
     }
 
     // Time-stamp the elements:
@@ -96,7 +96,8 @@ public class AgentEnv extends Iv4xrEnvironment {
   }
 
   WorldEntity toWorldEntity(Entity e, IntVec2D pos) {
-    WorldEntity we = new WorldEntity(e.id, e.type.name(), true);
+    String id = e.createId(pos);
+    WorldEntity we = new WorldEntity(id, e.type.name(), true);
     we.position = new Vec3(pos.x, pos.y, app.gameState.stats.zeroIndexDepth);
     return we;
   }

@@ -58,9 +58,10 @@ public class App {
     // Now we run the agent:
     agentLogger.fatal("Start now");
     while (G.getStatus().inProgress()) {
-      if (state.app().gameState.stats.time < jumpToTurn) {
+      if (k < jumpToTurn) {
         agent.update();
         k++;
+        System.out.println(k);
         continue;
       } else {
         agentLogger.fatal(String.format("Done after %d steps", k));

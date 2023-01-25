@@ -85,34 +85,34 @@ def loop(sock, uni, env: Env):
     Handle commands from the client as they come in and
     apply them to the given Gym environment.
     """
-    measure_point = time.time()
-    msg_type = "INIT"
-    acc_done = 0
-    acc_recv = 0
-    acc = 0
+    # measure_point = time.time()
+    # msg_type = "INIT"
+    # acc_done = 0
+    # acc_recv = 0
+    # acc = 0
     while True:
-        if acc == 50:
-            logging.warning(f"AVG: READY = {acc_recv / 50} Done = {acc_done / 50}")
-            acc_done = 0
-            acc_recv = 0
-            acc = 0
-            sys.exit()
+        # if acc == 50:
+        #     logging.warning(f"AVG: READY = {acc_recv / 50} Done = {acc_done / 50}")
+        #     acc_done = 0
+        #     acc_recv = 0
+        #     acc = 0
+        #     sys.exit()
 
-        diff = time.time() - measure_point
-        acc_done += diff
-        logging.warning(f"DONE after: {diff:.5f} (type={msg_type})")
-        measure_point = time.time()
+        # diff = time.time() - measure_point
+        # acc_done += diff
+        # logging.warning(f"DONE after: {diff:.5f} (type={msg_type})")
+        # measure_point = time.time()
 
         message_bit = int(read.read_byte(sock))
-        diff = time.time() - measure_point
-        acc_recv += diff
-        logging.warning(f"RECV after: {diff:.5f}")
-        measure_point = time.time()
-
-        if msg_type == "INIT":
-            acc_done = 0
-            acc_recv = 0
-            acc = 0
+        # diff = time.time() - measure_point
+        # acc_recv += diff
+        # logging.warning(f"RECV after: {diff:.5f}")
+        # measure_point = time.time()
+        #
+        # if msg_type == "INIT":
+        #     acc_done = 0
+        #     acc_recv = 0
+        #     acc = 0
 
         # Handle msg type
         match message_bit:
@@ -149,7 +149,7 @@ def loop(sock, uni, env: Env):
                 msg_type = "Unknown"
                 logging.warning(f'Action "{unknown}" not known')
 
-        acc += 1
+        # acc += 1
 
     logging.info('exits loop')
 

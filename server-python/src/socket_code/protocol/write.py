@@ -69,21 +69,22 @@ def write_obs(sock, env, obs):
     """
     logging.info("WRITE Observation")
 
-    time_1 = time.time()
-    write_field(sock, OBS_BYTE)
-    sock.flush()
-    time_2 = time.time()
-    write_field(sock, to_4byte(obs['blstats']))
-    time_3 = time.time()
-    write_field(sock, string_to_bytes(obs['message'], True))
-    time_4 = time.time()
+    start = time.time()
+    sock.write(OBS_BYTE)
+    # write_field(sock, OBS_BYTE)
+    # sock.flush()
+    sock.write(struct.pack('>27i', *obs['blstats']))
+    # sock.flush()
+    sock.write(struct.pack('>256B', *obs['message']))
+    # sock.flush()
     write_map(sock, obs['chars'], obs['colors'], obs['glyphs'])
-    time_5 = time.time()
+    # sock.flush()
     write_inv(sock, obs['inv_letters'], obs['inv_oclasses'], obs['inv_strs'])
-    time_6 = time.time()
+    # sock.flush()
+    stop = time.time()
     logging.info("DONE WRITE Observation")
 
-    # print(time_2 - time_1, time_3- time_2, time_4-time_3, time_5-time_4, time_6 - time_5)
+    # print("OBSTIME", stop - start)
 
     # FLUSHES: READY: 0.03470071792602539 Done = 0.026265687942504883
 
@@ -92,7 +93,6 @@ def write_step(sock, done, info):
     # 'info': info,
     logging.info("WRITE Step")
     write_field(sock, STEP_BYTE)
-    sock.flush()
     write_field(sock, to_bool(done))
 
 def write_seed(sock, seed):
@@ -112,11 +112,7 @@ def write_inv(sock, inv_letters: [int], inv_oclasses: [int], inv_strs: [int]):
     sock.write(util.to_byte([nr_items]))
 
     for i in range(nr_items):
-        letter_byte = to_2byte(inv_letters[i])
-        class_byte = util.to_byte(inv_oclasses[i])
-        inv_str = string_to_bytes(inv_strs[i], True)
-
-        sock.write(letter_byte + class_byte + inv_str)
+        sock.write(struct.pack(">HB80B", inv_letters[i], inv_oclasses[i], *inv_strs[i]))
 
 def write_map(sock, map_chars, map_colors, map_glyphs):
     """
@@ -127,7 +123,5 @@ def write_map(sock, map_chars, map_colors, map_glyphs):
 
     for y in range(height):
         for x in range(width):
-            sock.write(struct.pack(">HBH", map_chars[y][x], map_colors[y][x], map_glyphs[y][x]))
+            sock.write(struct.pack(">BBH", map_chars[y][x], map_colors[y][x], map_glyphs[y][x]))
         sock.flush()
-
-    sock.flush()

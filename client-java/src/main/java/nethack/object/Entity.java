@@ -7,11 +7,11 @@ import nethack.enums.EntityType;
 // Source: https://www.baeldung.com/java-enum-values
 // Actions listed at: /python-server/lib/nle/nle/nethack/actions.py
 public class Entity {
-  public int glyph;
-  public Color color;
-  public char symbol;
-  public EntityType type;
-  public String id;
+  public final int glyph;
+  public final Color color;
+  public final char symbol;
+  public final EntityType type;
+  //  public String id = new String(100);
 
   public Entity(int glyph, char symbol, EntityType type, Color color) {
     this.glyph = glyph;
@@ -29,12 +29,8 @@ public class Entity {
     return symbol == '+';
   }
 
-  public void assignId(IntVec2D pos) {
-    if (type == EntityType.DOOR) {
-      id = String.format("%s_%d_%d", type.name(), pos.x, pos.y);
-    } else {
-      id = String.format("%s_%d", type.name(), glyph);
-    }
+  public String createId(IntVec2D pos) {
+    return String.format("%s_%d", type.name(), glyph);
   }
 
   @Override

@@ -1,14 +1,11 @@
 package connection;
 
-import nethack.object.Entity;
-import nethack.object.Item;
-import nethack.object.Player;
-import nethack.object.Stats;
+import nethack.object.*;
 
 public class ObservationMessage {
-  public Stats stats;
-  public Player player;
-  public Entity[][] entities;
+  public final Stats stats = new Stats();
+  public final Player player = new Player();
+  public final Entity[][] entities = new Entity[Level.HEIGHT][Level.WIDTH];
   public String message;
   public Item[] items;
 
