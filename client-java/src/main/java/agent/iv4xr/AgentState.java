@@ -63,7 +63,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
     super.setEnvironment(env);
     multiLayerNav = new LayeredAreasNavigation<>();
     multiLayerNav.setPerfectMemoryPathfinding(true);
-    addNewNavGraph(false);
+    addNewNavGraph(0, false);
     return this;
   }
 
@@ -71,8 +71,8 @@ public class AgentState extends Iv4xrAgentState<Void> {
     return worldmodel.elements.get("aux");
   }
 
-  private void addNewNavGraph(boolean withPortal) {
-    NetHackSurface newNav = new NetHackSurface();
+  private void addNewNavGraph(int levelNr, boolean withPortal) {
+    NetHackSurface newNav = new NetHackSurface(levelNr);
 
     if (withPortal) {
       Player player = env().app.gameState.player;
@@ -110,7 +110,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
       // If detecting a new maze, need to allocate a nav-graph for this maze:
       if (levelNr >= multiLayerNav.areas.size()) {
         agentLogger.info(String.format("Adding a new level: %s", levelNr));
-        addNewNavGraph(true);
+        addNewNavGraph(levelNr, true);
       }
 
       switch (type) {

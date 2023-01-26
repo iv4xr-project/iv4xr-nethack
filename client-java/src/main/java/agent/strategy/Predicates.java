@@ -12,6 +12,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import nethack.enums.EntityType;
+import nl.uu.cs.aplib.utils.Pair;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,13 +25,13 @@ public class Predicates {
       };
 
   @Contract(pure = true)
-  public static @NotNull Function<AgentState, Tile> get_closedDoor() {
+  public static @NotNull Function<AgentState, Pair<Integer, Tile>> get_closedDoor() {
     return S -> {
-      Tile t = TileSelector.closedDoorSelector.apply(S);
+      Pair<Integer, Tile> t = TileSelector.closedDoorSelector.apply(S);
       if (t == null) {
         return null;
       }
-      if (!NavUtils.adjacent(t.pos, NavUtils.loc2(S.worldmodel.position), false)) {
+      if (!NavUtils.adjacent(t.snd.pos, NavUtils.loc2(S.worldmodel.position), false)) {
         return null;
       }
       return t;
@@ -38,22 +39,18 @@ public class Predicates {
   }
 
   @Contract(pure = true)
-  public static @NotNull Function<AgentState, Tile> get_lockedDoor() {
+  public static @NotNull Function<AgentState, Pair<Integer, Tile>> get_lockedDoor() {
     return S -> {
-      Tile t = TileSelector.lockedDoorSelector.apply(S);
+      Pair<Integer, Tile> t = TileSelector.lockedDoorSelector.apply(S);
       if (t == null) {
         return null;
       }
-      if (!NavUtils.adjacent(t.pos, NavUtils.loc2(S.worldmodel.position), false)) {
+      if (!NavUtils.adjacent(t.snd.pos, NavUtils.loc2(S.worldmodel.position), false)) {
         return null;
       }
       return t;
     };
   }
-
-  public static Predicate<AgentState> near_closedDoor = S -> get_closedDoor().apply(S) != null;
-
-  public static Predicate<AgentState> near_lockedDoor = S -> get_lockedDoor().apply(S) != null;
 
   public static Predicate<AgentState> on_stairs_down =
       S -> {

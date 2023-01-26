@@ -15,14 +15,15 @@ import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import nl.uu.cs.aplib.utils.Pair;
 
-public class TileSelector extends Selector<Tile> {
+public class TileSelector extends Selector<Pair<Integer, Tile>> {
   public static final TileSelector wallSelector =
       new TileSelector(
           SelectionType.CLOSEST,
           Wall.class,
           t -> {
-            Wall w = (Wall) t;
+            Wall w = (Wall) t.snd;
             return w.timesSearched < 10;
           });
 
@@ -31,7 +32,7 @@ public class TileSelector extends Selector<Tile> {
           SelectionType.CLOSEST,
           Door.class,
           t -> {
-            Door d = (Door) t;
+            Door d = (Door) t.snd;
             return !d.isOpen;
           });
 
@@ -40,7 +41,7 @@ public class TileSelector extends Selector<Tile> {
           SelectionType.CLOSEST,
           Door.class,
           t -> {
-            Door d = (Door) t;
+            Door d = (Door) t.snd;
             return d.isLocked && !d.isOpen;
           });
 
@@ -49,18 +50,19 @@ public class TileSelector extends Selector<Tile> {
           SelectionType.FIRST,
           Stair.class,
           t -> {
-            return !((Stair) t).goesUp;
+            return !((Stair) t.snd).goesUp;
           });
 
   Class tileClass;
 
-  public TileSelector(SelectionType selectionType, Class tileClass, Predicate<Tile> predicate) {
+  public TileSelector(
+      SelectionType selectionType, Class tileClass, Predicate<Pair<Integer, Tile>> predicate) {
     super(selectionType, predicate);
     this.tileClass = tileClass;
   }
 
-  public Tile apply(AgentState S) {
-    List<Tile> tiles = new ArrayList<>();
+  public Pair<Integer, Tile> apply(AgentState S) {
+    List<Pair<Integer, Tile>> tiles = new ArrayList<>();
     NetHackSurface surface = S.area();
     if (tileClass != null) {
       HashSet<IntVec2D> tilesOfType = surface.getCoordinatesOfTileType(tileClass);
@@ -68,13 +70,13 @@ public class TileSelector extends Selector<Tile> {
         return null;
       }
       for (IntVec2D pos : tilesOfType) {
-        tiles.add(surface.getTile(pos));
+        tiles.add(new Pair<Integer, Tile>(surface.levelNr, surface.getTile(pos)));
       }
     } else {
       for (Tile[] row : S.area().tiles) {
         for (Tile tile : row) {
           if (tile != null) {
-            tiles.add(tile);
+            tiles.add(new Pair<>(surface.levelNr, tile));
           }
         }
       }
@@ -83,12 +85,12 @@ public class TileSelector extends Selector<Tile> {
   }
 
   @Override
-  public Tile apply(List<Tile> tiles, AgentState S) {
+  public Pair<Integer, Tile> apply(List<Pair<Integer, Tile>> tiles, AgentState S) {
     return select(filter(tiles), S);
   }
 
   @Override
-  public Tile select(List<Tile> tiles, AgentState S) {
+  public Pair<Integer, Tile> select(List<Pair<Integer, Tile>> tiles, AgentState S) {
     if (tiles.isEmpty()) {
       return null;
     }
@@ -100,11 +102,11 @@ public class TileSelector extends Selector<Tile> {
     int n = tiles.size();
     // Goes wrong for multiple levels
     IntVec2D agentPos = NavUtils.loc2(S.worldmodel.position);
-    float min = NetHackSurface.distSq(agentPos, tiles.get(0).pos);
+    float min = NetHackSurface.distSq(agentPos, tiles.get(0).snd.pos);
     float max = min;
     int minIndex = 0, maxIndex = 0;
     for (int i = 1; i < n; i++) {
-      float dist = NetHackSurface.distSq(agentPos, tiles.get(i).pos);
+      float dist = NetHackSurface.distSq(agentPos, tiles.get(i).snd.pos);
       if (dist < min) {
         min = dist;
         minIndex = i;
@@ -123,13 +125,14 @@ public class TileSelector extends Selector<Tile> {
     }
   }
 
-  private List<Tile> filter(List<Tile> tiles) {
-    Stream<Tile> stream;
+  private List<Pair<Integer, Tile>> filter(List<Pair<Integer, Tile>> tiles) {
+    Stream<Pair<Integer, Tile>> stream;
     if (tileClass != null && predicate != null) {
       stream =
-          tiles.stream().filter(t -> Objects.equals(tileClass, t.getClass()) && predicate.test(t));
+          tiles.stream()
+              .filter(t -> Objects.equals(tileClass, t.snd.getClass()) && predicate.test(t));
     } else if (tileClass != null) {
-      stream = tiles.stream().filter(t -> Objects.equals(tileClass, t.getClass()));
+      stream = tiles.stream().filter(t -> Objects.equals(tileClass, t.snd.getClass()));
     } else if (predicate != null) {
       stream = tiles.stream().filter(t -> predicate.test(t));
     } else {

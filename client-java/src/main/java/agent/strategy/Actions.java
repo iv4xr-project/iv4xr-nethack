@@ -41,7 +41,7 @@ public class Actions {
     return action("interact")
         .do2(
             (AgentState S) ->
-                (Tile nextTile) -> {
+                (Pair<Integer, Tile> nextTile) -> {
                   WorldModel newwom = NavUtils.moveTo(S, nextTile);
                   logger.info(String.format(">>> interact %s", nextTile));
                   return new Pair<>(S, newwom);
@@ -68,7 +68,7 @@ public class Actions {
     return action("kick door")
         .do2(
             (AgentState S) ->
-                (Tile door) -> {
+                (Pair<Integer, Tile> door) -> {
                   Sounds.door_kick();
                   logger.info(String.format("kickDoor @%s", door));
                   WorldModel newwom = WorldModels.kickDoor(S, door);
@@ -81,12 +81,12 @@ public class Actions {
     return action("open door")
         .do2(
             (AgentState S) ->
-                (Tile doorTile) -> {
+                (Pair<Integer, Tile> doorTile) -> {
                   Sounds.door();
                   logger.info(String.format("open door @%s", doorTile));
                   WorldModel newwom = NavUtils.moveTo(S, doorTile);
                   if (Objects.equals(S.app().gameState.message, "This door is locked.")) {
-                    Door d = (Door) doorTile;
+                    Door d = (Door) doorTile.snd;
                     d.isLocked = true;
                   }
                   return new Pair<>(S, newwom);

@@ -30,6 +30,11 @@ public class NetHackSurface
   public final Tile[][] tiles = new Tile[sizeY + 2][sizeX + 2];
   private final Map<String, HashSet<IntVec2D>> tileTypes = new HashMap<String, HashSet<IntVec2D>>();
   public Pathfinder<Tile> pathfinder = new AStar<>();
+  public int levelNr;
+
+  public NetHackSurface(int levelNr) {
+    this.levelNr = levelNr;
+  }
   /**
    * If true, the pathfinder will assume that the whole NavGraph has been "seen", so no vertex would
    * count as unreachable because it is still unseen. This essentially turns off memory-based path
@@ -70,13 +75,13 @@ public class NetHackSurface
     if (t.getClass() == Tile.class) {
       IntVec2D[] neighbours = NavUtils.neighbourCoordinates(pos, false);
       int horizontalWalls = 0, verticalWalls = 0;
-      for (int i = 0; i < neighbours.length; i++) {
-        Tile neighbourTile = getTile(neighbours[i]);
+      for (IntVec2D neighbour : neighbours) {
+        Tile neighbourTile = getTile(neighbour);
         boolean tileCanBeWall = neighbourTile == null || neighbourTile instanceof Wall;
         if (!tileCanBeWall) {
           continue;
         }
-        if (neighbours[i].x == pos.x) {
+        if (neighbour.x == pos.x) {
           horizontalWalls++;
         } else {
           verticalWalls++;

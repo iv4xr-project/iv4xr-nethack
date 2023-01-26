@@ -51,11 +51,6 @@
       <version>24.0.0</version>
       <scope>compile</scope>
     </dependency>
-    <dependency>
-      <groupId>hu.ssh</groupId>
-      <artifactId>java-progressbar</artifactId>
-      <version>0.1.0</version>
-    </dependency>
   </dependencies>
 
   <build>

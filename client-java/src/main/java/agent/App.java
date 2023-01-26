@@ -47,7 +47,7 @@ public class App {
         new TestAgent(Player.ID, "player").attachState(state).attachEnvironment(env).setGoal(G);
     state.updateState(Player.ID);
 
-    fastForwardToTurn(0, agent, state);
+    fastForwardToTurn(1108, agent, state);
     mainAgentLoop(commander, agent, state, G, nethack);
 
     agentLogger.info("Closing NetHack since the loop in agent has terminated");

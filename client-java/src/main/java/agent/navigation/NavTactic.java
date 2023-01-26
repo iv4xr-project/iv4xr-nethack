@@ -40,7 +40,7 @@ public class NavTactic {
               } else if (agentPos.equals(e.position)) {
                 return null;
               }
-              Tile nextTile =
+              Pair<Integer, Tile> nextTile =
                   NavUtils.nextTile(
                       NavUtils.adjustedFindPath(
                           S, NavUtils.loc3(agentPos), NavUtils.loc3(e.position)));
@@ -58,16 +58,16 @@ public class NavTactic {
     return NavAction.navigateTo()
         .on(
             (AgentState S) -> {
-              Tile t = tileSelector.apply(S);
+              Pair<Integer, Tile> t = tileSelector.apply(S);
               if (t == null) {
                 logger.debug("Tile does not exist in level");
                 return null;
               }
               Vec3 agentPos = S.worldmodel.position;
-              Tile nextTile =
+              Pair<Integer, Tile> nextTile =
                   NavUtils.nextTile(
                       NavUtils.adjustedFindPath(
-                          S, NavUtils.loc3(agentPos), NavUtils.loc3((int) agentPos.z, t.pos)));
+                          S, NavUtils.loc3(agentPos), NavUtils.loc3((int) agentPos.z, t.snd.pos)));
               if (nextTile == null) {
                 return null;
               }
@@ -81,7 +81,7 @@ public class NavTactic {
     return NavAction.navigateTo()
         .on(
             (AgentState S) -> {
-              Tile t = tileSelector.apply(S);
+              Pair<Integer, Tile> t = tileSelector.apply(S);
               if (t == null) {
                 logger.debug("Tile does not exist in level");
                 return null;
@@ -89,7 +89,7 @@ public class NavTactic {
               Vec3 agentPos = S.worldmodel.position;
               NetHackSurface surface = S.area();
               List<Pair<Integer, Tile>> path = null;
-              for (IntVec2D pos : NavUtils.neighbourCoordinates(t.pos, allowDiagonal)) {
+              for (IntVec2D pos : NavUtils.neighbourCoordinates(t.snd.pos, allowDiagonal)) {
                 if (pos.equals(NavUtils.loc2(agentPos))) {
                   return null;
                 }
@@ -111,7 +111,7 @@ public class NavTactic {
                 }
               }
 
-              Tile nextTile = NavUtils.nextTile(path);
+              Pair<Integer, Tile> nextTile = NavUtils.nextTile(path);
               if (nextTile == null) {
                 return null;
               }

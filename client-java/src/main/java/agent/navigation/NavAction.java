@@ -22,7 +22,7 @@ public class NavAction {
     return action("move-to")
         .do2(
             (AgentState S) ->
-                (Tile nextTile) -> {
+                (Pair<Integer, Tile> nextTile) -> {
                   logger.info(
                       String.format("navigateTo %d (%d, %d) via %s", levelNr, x, y, nextTile));
                   WorldModel newwom = NavUtils.moveTo(S, nextTile);
@@ -40,7 +40,7 @@ public class NavAction {
     return action("move-to")
         .do2(
             (AgentState S) ->
-                (Tile nextTile) -> {
+                (Pair<Integer, Tile> nextTile) -> {
                   logger.info(String.format("navigateTo %s via %s", targetId, nextTile));
                   WorldModel newwom = NavUtils.moveTo(S, nextTile);
                   return new Pair<>(S, newwom);
@@ -62,7 +62,7 @@ public class NavAction {
     return action("move-to")
         .do2(
             (AgentState S) ->
-                (Tile nextTile) -> {
+                (Pair<Integer, Tile> nextTile) -> {
                   logger.info(String.format("navigateTo ? via %s", nextTile));
                   WorldModel newwom = NavUtils.moveTo(S, nextTile);
                   return new Pair<>(S, newwom);
@@ -74,7 +74,7 @@ public class NavAction {
     return action("move-to")
         .do2(
             (AgentState S) ->
-                (Tile nextTile) -> {
+                (Pair<Integer, Tile> nextTile) -> {
                   logger.info(String.format("navigateNextTo %s via %s", targetId, nextTile));
                   WorldModel newwom = NavUtils.moveTo(S, nextTile);
                   return new Pair<>(S, newwom);
@@ -101,7 +101,7 @@ public class NavAction {
     return action("explore")
         .do2(
             (AgentState S) ->
-                (Tile nextTile) -> {
+                (Pair<Integer, Tile> nextTile) -> {
                   Sounds.explore();
                   logger.info(String.format("explore to %s via %s", heuristicLocation, nextTile));
                   WorldModel newwom = NavUtils.moveTo(S, nextTile);

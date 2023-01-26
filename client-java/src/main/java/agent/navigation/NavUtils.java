@@ -145,46 +145,53 @@ public class NavUtils {
     return distanceBetweenEntities(S.worldmodel.elements.get(Player.ID), e);
   }
 
-  public static WorldModel moveTo(AgentState state, Tile targetTile) {
+  public static WorldModel moveTo(AgentState state, Pair<Integer, Tile> targetTile) {
     Command command = stepToCommand(state, targetTile);
     return state.env().action(command);
   }
 
   public static WorldModel moveTo(AgentState state, Vec3 targetPosition) {
-    return moveTo(state, toTile(targetPosition));
+    return moveTo(state, loc3(targetPosition));
   }
 
-  public static Command stepToCommand(AgentState state, Tile targetTile) {
-    IntVec2D agentPos = NavUtils.loc2(state.worldmodel.position);
-    if (!adjacent(agentPos, targetTile.pos, true)) {
-      throw new IllegalArgumentException(
-          String.format("Step from %s to %s is illegal", agentPos, targetTile));
+  public static Command stepToCommand(AgentState state, Pair<Integer, Tile> targetTile) {
+    int agentLevel = NavUtils.levelNr(state.worldmodel.position);
+    if (targetTile.fst != agentLevel) {
+      if (targetTile.fst > agentLevel) {
+        return Command.MISC_DOWN;
+      } else {
+        return Command.MISC_UP;
+      }
     }
 
-    if (targetTile.pos.y > agentPos.y) {
-      if (targetTile.pos.x > agentPos.x) {
+    IntVec2D agentPos = NavUtils.loc2(state.worldmodel.position);
+    IntVec2D targetPos = targetTile.snd.pos;
+    assert adjacent(agentPos, targetPos, true);
+
+    if (targetPos.y > agentPos.y) {
+      if (targetPos.x > agentPos.x) {
         return Command.DIRECTION_SE;
-      } else if (targetTile.pos.x < agentPos.x) {
+      } else if (targetPos.x < agentPos.x) {
         return Command.DIRECTION_SW;
       } else {
         return Command.DIRECTION_S;
       }
-    } else if (targetTile.pos.y < agentPos.y) {
-      if (targetTile.pos.x > agentPos.x) {
+    } else if (targetPos.y < agentPos.y) {
+      if (targetPos.x > agentPos.x) {
         return Command.DIRECTION_NE;
-      } else if (targetTile.pos.x < agentPos.x) {
+      } else if (targetPos.x < agentPos.x) {
         return Command.DIRECTION_NW;
       } else {
         return Command.DIRECTION_N;
       }
-    } else if (targetTile.pos.x > agentPos.x) {
+    } else if (targetPos.x > agentPos.x) {
       return Command.DIRECTION_E;
     } else {
       return Command.DIRECTION_W;
     }
   }
 
-  public static Tile nextTile(List<Pair<Integer, Tile>> path) {
+  public static Pair<Integer, Tile> nextTile(List<Pair<Integer, Tile>> path) {
     if (path == null) {
       logger.debug("Path not found");
       return null;
@@ -193,7 +200,7 @@ public class NavUtils {
       return null;
     } else {
       // The first element is the src itself, so we need to pick the next one:
-      return path.get(1).snd;
+      return path.get(1);
     }
   }
 
