@@ -7,11 +7,8 @@ import nethack.object.Seed;
 public class SeedDecoder extends Decoder {
   public static Seed decode(DataInputStream input) {
     try {
-
-      if (input.readByte() != DecoderBit.SeedBit.value) {
-        logger.fatal("Did not receive seed message byte");
-        System.exit(-1);
-      }
+      int inputByte = input.readByte();
+      assert inputByte == DecoderBit.SeedBit.value;
 
       String core = readString(input);
       String disp = readString(input);

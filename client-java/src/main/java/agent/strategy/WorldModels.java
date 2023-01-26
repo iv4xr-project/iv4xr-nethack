@@ -1,5 +1,6 @@
-package agent;
+package agent.strategy;
 
+import agent.iv4xr.AgentState;
 import agent.navigation.NavUtils;
 import agent.navigation.surface.Tile;
 import eu.iv4xr.framework.mainConcepts.WorldModel;

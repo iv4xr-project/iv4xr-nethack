@@ -1,61 +1,69 @@
 package connection.messagedecoder;
 
-import connection.ObservationMessage;
 import eu.iv4xr.framework.spatial.IntVec2D;
 import eu.iv4xr.framework.spatial.Vec3;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.util.Arrays;
 import nethack.enums.Alignment;
 import nethack.enums.HungerState;
+import nethack.object.Player;
+import nethack.object.Stats;
+import nl.uu.cs.aplib.utils.Pair;
 
 // Source: https://studytrails.com/2016/09/12/java-google-json-type-adapter/
 public class StatsDecoder extends Decoder {
-  public static void decode(DataInputStream input, ObservationMessage observationMessage) {
+  public static Pair<Stats, Player> decode(DataInputStream input) {
+    byte[] byteInformation;
     try {
-      byte[] byteInformation = input.readNBytes(27 * 4);
-      int[] blStats = new int[27];
-      for (int i = 0; i < blStats.length; i++) {
-        blStats[i] =
-            ((byteInformation[i * 4] << 24)
-                + (byteInformation[i * 4 + 1] << 16)
-                + (byteInformation[i * 4 + 2] << 8)
-                + (byteInformation[i * 4 + 3]));
-      }
-      populate(blStats, observationMessage);
+      byteInformation = input.readNBytes(27 * 4);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+    int[] blStats = new int[27];
+    for (int i = 0; i < blStats.length; i++) {
+      byte[] arr = Arrays.copyOfRange(byteInformation, i * 4, i * 4 + 4);
+      ByteBuffer bb = ByteBuffer.wrap(arr);
+      blStats[i] = bb.getInt();
+    }
+    return inPair(blStats);
   }
 
   // Source: server-python\lib\nle\win\rl\winrl.cc
-  private static void populate(int[] values, ObservationMessage observationMessage) {
-    observationMessage.stats.oneIndexDepth = values[12];
-    observationMessage.stats.zeroIndexDepth = values[12] - 1;
+  private static Pair<Stats, Player> inPair(int[] values) {
+    Player player = new Player();
+    Stats stats = new Stats();
 
-    observationMessage.player.position = new Vec3(values[0], values[1], values[12] - 1);
-    observationMessage.player.position2D = new IntVec2D(values[0], values[1]);
-    observationMessage.player.strength = values[2];
-    observationMessage.player.dexterity = values[4];
-    observationMessage.player.constitution = values[5];
-    observationMessage.player.intelligence = values[6];
-    observationMessage.player.wisdom = values[7];
-    observationMessage.player.charisma = values[8];
-    observationMessage.stats.score = values[9];
-    observationMessage.player.hp = values[10];
-    observationMessage.player.hpMax = values[11];
-    observationMessage.player.gold = values[13];
-    observationMessage.player.energy = values[14];
-    observationMessage.player.energyMax = values[15];
-    observationMessage.player.armorClass = values[16];
-    observationMessage.stats.monsterLevel = values[17];
-    observationMessage.player.experienceLevel = values[18];
-    observationMessage.player.experiencePoints = values[19];
-    observationMessage.stats.time = values[20];
-    observationMessage.player.hungerState = HungerState.fromValue(values[21]);
-    observationMessage.player.carryingCapacity = values[22];
-    observationMessage.stats.dungeonNumber = values[23];
-    observationMessage.stats.levelNumber = values[24];
-    observationMessage.player.condition = values[25];
-    observationMessage.player.alignment = Alignment.fromValue(values[26]);
+    stats.oneIndexDepth = values[12];
+    stats.zeroIndexDepth = values[12] - 1;
+
+    player.position = new Vec3(values[0], values[1], values[12] - 1);
+    player.position2D = new IntVec2D(values[0], values[1]);
+    player.strength = values[2];
+    player.dexterity = values[4];
+    player.constitution = values[5];
+    player.intelligence = values[6];
+    player.wisdom = values[7];
+    player.charisma = values[8];
+    stats.score = values[9];
+    player.hp = values[10];
+    player.hpMax = values[11];
+    player.gold = values[13];
+    player.energy = values[14];
+    player.energyMax = values[15];
+    player.armorClass = values[16];
+    stats.monsterLevel = values[17];
+    player.experienceLevel = values[18];
+    player.experiencePoints = values[19];
+    stats.time = values[20];
+    player.hungerState = HungerState.fromValue(values[21]);
+    player.carryingCapacity = values[22];
+    stats.dungeonNumber = values[23];
+    stats.levelNumber = values[24];
+    player.condition = values[25];
+    player.alignment = Alignment.fromValue(values[26]);
+
+    return new Pair<Stats, Player>(stats, player);
   }
 }

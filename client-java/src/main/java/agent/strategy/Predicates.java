@@ -1,5 +1,6 @@
-package agent;
+package agent.strategy;
 
+import agent.iv4xr.AgentState;
 import agent.navigation.NavUtils;
 import agent.navigation.surface.Stair;
 import agent.navigation.surface.Tile;
@@ -11,6 +12,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import nethack.enums.EntityType;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 public class Predicates {
   public static Predicate<AgentState> inCombat_and_hpNotCritical =
@@ -20,7 +23,8 @@ public class Predicates {
         return hp > 5 && S.nextToEntity(EntityType.MONSTER, true);
       };
 
-  public static Function<AgentState, Tile> get_closedDoor() {
+  @Contract(pure = true)
+  public static @NotNull Function<AgentState, Tile> get_closedDoor() {
     return S -> {
       Tile t = TileSelector.closedDoorSelector.apply(S);
       if (t == null) {
@@ -33,7 +37,8 @@ public class Predicates {
     };
   }
 
-  public static Function<AgentState, Tile> get_lockedDoor() {
+  @Contract(pure = true)
+  public static @NotNull Function<AgentState, Tile> get_lockedDoor() {
     return S -> {
       Tile t = TileSelector.lockedDoorSelector.apply(S);
       if (t == null) {
@@ -59,7 +64,7 @@ public class Predicates {
         return !((Stair) t).goesUp;
       };
 
-  public static List<WorldEntity> findOfType(AgentState S, EntityType type) {
+  public static List<WorldEntity> findOfType(@NotNull AgentState S, EntityType type) {
     return S.worldmodel.elements.values().stream()
         .filter(x -> Objects.equals(x.type, type.name()))
         .collect(Collectors.toList());

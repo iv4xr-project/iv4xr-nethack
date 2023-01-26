@@ -1,5 +1,6 @@
-package agent;
+package agent.iv4xr;
 
+import agent.AgentLoggers;
 import eu.iv4xr.framework.mainConcepts.Iv4xrEnvironment;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;

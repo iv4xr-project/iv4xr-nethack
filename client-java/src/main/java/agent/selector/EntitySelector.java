@@ -1,6 +1,6 @@
 package agent.selector;
 
-import agent.AgentState;
+import agent.iv4xr.AgentState;
 import agent.navigation.NavUtils;
 import agent.navigation.NetHackSurface;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;

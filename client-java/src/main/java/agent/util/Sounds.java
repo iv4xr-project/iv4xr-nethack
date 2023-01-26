@@ -1,5 +1,6 @@
-package agent;
+package agent.util;
 
+import agent.AgentLoggers;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -13,7 +14,8 @@ import org.apache.logging.log4j.Logger;
 
 public class Sounds {
   static final Logger logger = LogManager.getLogger(AgentLoggers.SoundLogger);
-  static Map<String, Clip> clipCollection = new HashMap<String, Clip>();
+  static Map<String, Clip> clipCollection = new HashMap<>();
+  private static boolean soundsEnabled = true;
 
   static final Map<String, File> soundCollection =
       Map.ofEntries(
@@ -42,6 +44,14 @@ public class Sounds {
     }
   }
 
+  public static void enableSound() {
+    soundsEnabled = true;
+  }
+
+  public static void disableSound() {
+    soundsEnabled = false;
+  }
+
   public static void attack() {
     playSound("sword");
   }
@@ -67,6 +77,10 @@ public class Sounds {
   }
 
   private static void playSound(String soundName) {
+    if (!soundsEnabled) {
+      return;
+    }
+
     logger.debug(soundName);
     Clip clip = clipCollection.get(soundName);
     // To prevent having to reset the audio resource, just set the start time at 0

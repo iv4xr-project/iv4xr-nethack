@@ -135,7 +135,7 @@ public class SocketClient {
   }
 
   public StepState readStepState() {
-    logger.info("** waiting for answer....");
+    logger.info("** waiting for StepState....");
     boolean verbose = false;
     long now = System.nanoTime();
     ObservationMessage obsMessage = readObservationMessage();

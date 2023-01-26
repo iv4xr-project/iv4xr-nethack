@@ -13,7 +13,7 @@ public abstract class Decoder {
     ObservationBit(1),
     StepBit(2),
     SeedBit(3);
-    public byte value;
+    public final byte value;
 
     private DecoderBit(int value) {
       this.value = (byte) value;

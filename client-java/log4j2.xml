@@ -64,9 +64,15 @@
 <!--            <AppenderRef ref="LogToConsole" level="debug"/>-->
 <!--        </Logger>-->
 
+<!--        <Root level="debug" additivity="false">-->
+<!--            <AppenderRef ref="LogToFile" level="debug"/>-->
+<!--            <AppenderRef ref="LogToConsole" level="debug"/>-->
+<!--        </Root>-->
+
         <Root level="debug" additivity="false">
             <AppenderRef ref="LogToFile" level="fatal"/>
             <AppenderRef ref="LogToConsole" level="fatal"/>
         </Root>
+
     </Loggers>
 </Configuration>

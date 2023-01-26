@@ -1,6 +1,6 @@
 package agent.selector;
 
-import agent.AgentState;
+import agent.iv4xr.AgentState;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;

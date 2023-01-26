@@ -13,6 +13,7 @@ public class ItemDecoder extends Decoder {
       int itemClass = input.readByte();
       byte[] chars = input.readNBytes(80);
       String description = new String(chars, StandardCharsets.UTF_8);
+      description = description.replaceAll("\0", "");
       ItemType type = ItemType.values()[itemClass];
 
       return new Item(symbol, type, description);

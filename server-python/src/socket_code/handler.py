@@ -20,7 +20,6 @@ import src.socket_code.protocol.util as util
 import gym
 import nle
 import src.logger as logger
-import logging
 from gym import Env
 import universe_plugin
 
@@ -70,14 +69,9 @@ def handshake(sock):
     Perform the initial handshake and return the resulting
     Gym environment.
     """
-    logging.debug(f"Init env {CURRENT_ENV}")
-    try:
-        env = gym.make(CURRENT_ENV)
-        return handle_reset(sock, env, CURRENT_ENV)
-    except gym.error.Error as gym_exc:
-        write.write_field(sock, write.string_to_bytes(str(gym_exc)))
-        sock.flush()
-        raise gym_exc
+    logging.info(f"Init env {CURRENT_ENV}")
+    env = gym.make(CURRENT_ENV)
+    return handle_reset(sock, env, CURRENT_ENV)
 
 
 def loop(sock, uni, env: Env):
@@ -85,73 +79,51 @@ def loop(sock, uni, env: Env):
     Handle commands from the client as they come in and
     apply them to the given Gym environment.
     """
-    # measure_point = time.time()
-    # msg_type = "INIT"
-    # acc_done = 0
-    # acc_recv = 0
-    # acc = 0
+    last_point = time.time()
+    iterations = 0
+    acc_rcv = 0
+    acc_done = 0
     while True:
-        # if acc == 50:
-        #     logging.warning(f"AVG: READY = {acc_recv / 50} Done = {acc_done / 50}")
-        #     acc_done = 0
-        #     acc_recv = 0
-        #     acc = 0
-        #     sys.exit()
-
-        # diff = time.time() - measure_point
-        # acc_done += diff
-        # logging.warning(f"DONE after: {diff:.5f} (type={msg_type})")
-        # measure_point = time.time()
-
+        if iterations == 50:
+            print(f"RCV in: {acc_rcv / 50} DONE in: {acc_done / 50}")
+            # sys.exit()
+        iterations += 1
         message_bit = int(read.read_byte(sock))
-        # diff = time.time() - measure_point
-        # acc_recv += diff
-        # logging.warning(f"RECV after: {diff:.5f}")
-        # measure_point = time.time()
-        #
-        # if msg_type == "INIT":
-        #     acc_done = 0
-        #     acc_recv = 0
-        #     acc = 0
+        current_time = time.time()
+        # print("RCV in:", current_time - last_point)
+        acc_rcv += current_time - last_point
+        last_point = current_time
 
         # Handle msg type
         match message_bit:
             case read.RESET_BYTE:
-                msg_type = "Reset"
-                logging.info("Reset")
+                logging.debug("Reset")
                 env = handle_reset(sock, env, None)
             case read.SET_SEED_BYTE:
-                msg_type = "Set seed"
-                logging.info("Set seed")
+                logging.debug("Set seed")
                 env = handle_set_seed(sock, env)
             case read.GET_SEED_BYTE:
-                msg_type = "Get seed"
-                logging.info("Get seed")
+                logging.debug("Get seed")
                 handle_get_seed(sock, env)
             case read.RENDER_BYTE:
-                msg_type = "Render"
-                logging.info("Render")
-                handle_render(env)
+                logging.debug("Render")
+                env.render()
             case read.CLOSE_BYTE:
-                msg_type = "Close"
-                logging.info("Close")
+                logging.debug("Close")
+                return
             case read.STEP_BYTE:
-                point = time.time()
-                msg_type = "Step"
-                logging.info("Step")
+                logging.debug("Step")
                 handle_step(sock, env)
-                # print("STEP: TOOK", time.time() - point)
             case read.STEP_STROKE_BYTE:
-                msg_type = "Step stroke"
-                logging.info("Step stroke")
+                logging.debug("Step stroke")
                 handle_step_stroke(sock, env)
             case unknown:
-                msg_type = "Unknown"
                 logging.warning(f'Action "{unknown}" not known')
 
-        # acc += 1
-
-    logging.info('exits loop')
+        current_time = time.time()
+        # print("DONE in:", current_time - last_point)
+        acc_done += current_time - last_point
+        last_point = current_time
 
 
 def handle_reset(sock, env, desired_env):
@@ -189,18 +161,9 @@ def handle_set_seed(sock, env):
 
 
 def handle_get_seed(sock, env):
-    seed = None
-
-    try:
-        seed = env.get_seeds()
-    except RuntimeError:
-        logging.warning('Getting seed failed, not a valid env for this action')
-
-    if seed:
-        write.write_seed(sock, seed)
-    else:
-        write.string_to_bytes(sock, write.string_to_bytes(""))
-
+    assert CURRENT_ENV == "NetHack-v0"
+    seed = env.get_seeds()
+    write.write_seed(sock, seed)
     sock.flush()
 
 
@@ -208,23 +171,12 @@ def handle_step(sock, env):
     """
     Step the environment and send the result.
     """
-    verbose = False
-    measure = time.time()
     action = read.read_byte(sock)
-    if verbose:print("READ_STEP_INT", time.time() - measure)
-    measure = time.time()
     obs, rew, done, info = env.step(action)
-    if verbose:print("NETHACK", time.time() - measure)
-    measure = time.time()
-
     write.write_obs(sock, env, obs)
-    if verbose:print("OBS",time.time() - measure)
-    measure = time.time()
     write.write_step(sock, done, info)
-    if verbose:print("STEP", time.time() - measure)
-    measure = time.time()
     sock.flush()
-    if verbose:print("FLUSH", time.time() - measure)
+
 
 def handle_step_stroke(sock, env):
     """
@@ -237,13 +189,6 @@ def handle_step_stroke(sock, env):
     write.write_obs(sock, env, obs)
     write.write_step(sock, done, None)
     sock.flush()
-
-
-def handle_render(env):
-    """
-    Render the environment.
-    """
-    env.render()
 
 
 if __name__ == '__main__':

@@ -1,7 +1,7 @@
 package agent.navigation;
 
 import agent.AgentLoggers;
-import agent.AgentState;
+import agent.iv4xr.AgentState;
 import agent.navigation.surface.Tile;
 import eu.iv4xr.framework.extensions.pathfinding.LayeredAreasNavigation;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;

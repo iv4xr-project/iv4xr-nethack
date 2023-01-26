@@ -1,7 +1,6 @@
-package agent;
+package agent.iv4xr;
 
-import static nethack.enums.EntityType.STAIRS_UP;
-
+import agent.AgentLoggers;
 import agent.navigation.NavUtils;
 import agent.navigation.NetHackSurface;
 import agent.navigation.surface.*;
@@ -174,12 +173,10 @@ public class AgentState extends Iv4xrAgentState<Void> {
 
   private void updateEntities() {
     // Update visibility cone
-    WorldEntity aux = auxState();
-    NetHackSurface navGraph = area();
     IntVec2D playerPos = NavUtils.loc2(worldmodel.position);
     Level level = env().app.gameState.level();
     HashSet<IntVec2D> visibleCoordinates =
-        new HashSet<>(navGraph.VisibleCoordinates(playerPos, level));
+        new HashSet<>(area().VisibleCoordinates(playerPos, level));
 
     // Remove all entities that are in vision range but can't be seen.
     List<String> idsToRemove = new ArrayList<>();

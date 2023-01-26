@@ -5,6 +5,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import nethack.object.*;
+import nl.uu.cs.aplib.utils.Pair;
 
 // Source: https://studytrails.com/2016/09/12/java-google-json-type-adapter/
 public class ObservationMessageDecoder extends Decoder {
@@ -14,20 +15,22 @@ public class ObservationMessageDecoder extends Decoder {
       boolean verbose = false;
 
       long now = System.nanoTime();
-      if (input.readByte() != DecoderBit.ObservationBit.value) {
-        logger.fatal("Did not receive observation message byte");
-        System.exit(-1);
-      }
+
+      int inputByte = input.readByte();
+      assert inputByte == DecoderBit.ObservationBit.value;
       long now_bit = System.nanoTime();
       if (verbose) System.out.printf("READ BIT TOOK: %d%n", now_bit - now);
 
-      StatsDecoder.decode(input, observationMessage);
+      Pair<Stats, Player> pair = StatsDecoder.decode(input);
+      observationMessage.stats = pair.fst;
+      observationMessage.player = pair.snd;
 
       long now_blstats = System.nanoTime();
       if (verbose) System.out.printf("READ BLSTATS TOOK: %d%n", now_blstats - now_bit);
 
       byte[] chars = input.readNBytes(256);
       observationMessage.message = new String(chars, StandardCharsets.UTF_8);
+      observationMessage.message = observationMessage.message.replaceAll("\0", "");
 
       long now_1 = System.nanoTime();
       if (verbose) System.out.printf("READ MESSAGE TOOK: %d%n", now_1 - now_blstats);

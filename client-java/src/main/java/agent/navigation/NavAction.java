@@ -3,9 +3,9 @@ package agent.navigation;
 import static nl.uu.cs.aplib.AplibEDSL.action;
 
 import agent.AgentLoggers;
-import agent.AgentState;
-import agent.Sounds;
+import agent.iv4xr.AgentState;
 import agent.navigation.surface.Tile;
+import agent.util.Sounds;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import eu.iv4xr.framework.spatial.Vec3;

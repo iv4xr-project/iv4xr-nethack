@@ -48,7 +48,6 @@ class LogFormatter(logging.Formatter):
 
 # Setup logging
 def _setup_logging(console_log_output, console_log_level, console_log_color, logfile_file, logfile_log_level, logfile_log_color, log_line_template):
-
     # Create logger
     # For simplicity, we use the root logger, i.e. call 'logging.getLogger()'
     # without name argument. This way we can simply use module methods
@@ -110,13 +109,15 @@ def _initialize(logger_name: str):
     # Remove all previous handlers to prevent unexpected behaviour
     logging.root.handlers = []
     print("Initializing server logger...")
-    if not _setup_logging(console_log_output="stdout", console_log_level="warn", console_log_color=True,
+    if not _setup_logging(console_log_output="stdout", console_log_level="info", console_log_color=True,
                           logfile_file=f"./logs/{logger_name}.log", logfile_log_level="warn", logfile_log_color=False,
                           log_line_template=f"%(color_on)s[%(asctime)s] [{logger_name}] [%(levelname)-8s] %(message)s%(color_off)s"):
         raise Exception(f"Failed to setup logging for {logger_name}, aborting.")
 
+
 def initialize_server():
     _initialize('server')
+
 
 def initialize_handler():
     _initialize('handler')

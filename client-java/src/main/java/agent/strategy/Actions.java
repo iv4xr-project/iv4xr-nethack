@@ -1,13 +1,16 @@
-package agent;
+package agent.strategy;
 
 import static nl.uu.cs.aplib.AplibEDSL.action;
 
+import agent.AgentLoggers;
+import agent.iv4xr.AgentState;
 import agent.navigation.NavUtils;
 import agent.navigation.NetHackSurface;
 import agent.navigation.surface.Door;
 import agent.navigation.surface.Tile;
 import agent.navigation.surface.Wall;
 import agent.selector.ItemSelector;
+import agent.util.Sounds;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import eu.iv4xr.framework.spatial.IntVec2D;
