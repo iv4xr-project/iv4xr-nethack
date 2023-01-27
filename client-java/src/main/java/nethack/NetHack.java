@@ -41,7 +41,6 @@ public class NetHack {
     this.gameMode = gameMode;
     netHackLogger.info("Initialize game");
     client.readObservationMessage();
-    //    client.sendReset(gameMode.toString());
   }
 
   public Seed getSeed() {
@@ -124,10 +123,6 @@ public class NetHack {
         Seed seed = client.sendGetSeed();
         System.out.print(seed);
         return StepType.Special;
-      case ADDITIONAL_SET_SEED:
-        int index = Integer.parseInt(command.stroke.substring(1));
-        setSeed(Seed.presets[index]);
-        return StepType.Special;
       case ADDITIONAL_ASCII:
         char character = command.stroke.charAt(1);
         return step(Command.ADDITIONAL_ASCII, character);
@@ -171,11 +166,16 @@ public class NetHack {
       netHackLogger.info("Game run terminated, step indicated: done");
       return;
     }
+
+    // Does not skip a level
+    assert stepState.stats.zeroIndexDepth <= gameState.world.size()
+        : "Dropped down more than 1 level??";
     // Add to world if new level is explored
     if (stepState.stats.zeroIndexDepth == gameState.world.size()) {
       stepState.level.setChangedCoordinates(null);
       gameState.world.add(stepState.level);
     } else {
+      netHackLogger.info(stepState.stats.zeroIndexDepth);
       stepState.level.setChangedCoordinates(gameState.world.get(stepState.stats.zeroIndexDepth));
       gameState.world.set(stepState.stats.zeroIndexDepth, stepState.level);
     }
@@ -183,7 +183,7 @@ public class NetHack {
     // Set all members to the correct values
     gameState.message = stepState.message;
 
-    // Remeber last position of player
+    // Remember last position of player
     if (gameState.player != null) {
       stepState.player.previousPosition = gameState.player.position;
       stepState.player.previousPosition2D = gameState.player.position2D;

@@ -138,7 +138,6 @@ public enum Command {
 
   ADDITIONAL_SHOW_SEED("@?", "Show seed"),
   ADDITIONAL_SHOW_VERBOSE("@v", "Show all information"),
-  ADDITIONAL_SET_SEED("@▉", "Set seed"),
   ADDITIONAL_ASCII("-▉", "Perform literal action");
 
   static final Command[] nethackChallengeCommands =
@@ -354,10 +353,9 @@ public enum Command {
         TEXT_CHARACTER_DOLLAR,
         TEXT_CHARACTER_SPACE
       };
-  static final Command[] additionalCommands =
-      new Command[] {ADDITIONAL_SHOW_SEED, ADDITIONAL_SET_SEED};
+  static final Command[] additionalCommands = new Command[] {ADDITIONAL_SHOW_SEED};
   private static final Map<String, Command> BY_STROKE = new HashMap<>();
-  private static final Map<Command, Integer> COMMAND_TO_NETHACKCHALLENGE_INDEX = new HashMap<>();
+  private static final Map<Command, Integer> COMMAND_TO_NETHACK_CHALLENGE_INDEX = new HashMap<>();
   private static final Map<Command, Integer> COMMAND_TO_NETHACK_INDEX = new HashMap<>();
 
   static {
@@ -369,7 +367,7 @@ public enum Command {
     }
     int i = 0;
     for (Command c : nethackChallengeCommands) {
-      COMMAND_TO_NETHACKCHALLENGE_INDEX.put(c, i++);
+      COMMAND_TO_NETHACK_CHALLENGE_INDEX.put(c, i++);
     }
     i = 0;
     for (Command c : nethackCommands) {
@@ -388,16 +386,6 @@ public enum Command {
   public static Command fromValue(String stroke) {
     if (BY_STROKE.containsKey(stroke)) {
       return BY_STROKE.get(stroke);
-    } else if (stroke.startsWith("@")) {
-      String indexStr = stroke.substring(1);
-      try {
-        Integer.parseInt(indexStr);
-      } catch (NumberFormatException ex) {
-        return null;
-      }
-      Command c = Command.ADDITIONAL_SET_SEED;
-      c.stroke = stroke;
-      return c;
     } else if (stroke.startsWith("-")) {
       Command c = Command.ADDITIONAL_ASCII;
       c.stroke = stroke;
@@ -455,6 +443,6 @@ public enum Command {
     if (Objects.requireNonNull(gameMode) == GameMode.NetHack) {
       return COMMAND_TO_NETHACK_INDEX.getOrDefault(this, -1);
     }
-    return COMMAND_TO_NETHACKCHALLENGE_INDEX.getOrDefault(this, -1);
+    return COMMAND_TO_NETHACK_CHALLENGE_INDEX.getOrDefault(this, -1);
   }
 }

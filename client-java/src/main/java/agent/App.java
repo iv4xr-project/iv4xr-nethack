@@ -8,11 +8,12 @@ import agent.util.Sounds;
 import connection.ConnectionLoggers;
 import connection.SocketClient;
 import eu.iv4xr.framework.mainConcepts.TestAgent;
+import nethack.Config;
 import nethack.NetHack;
 import nethack.enums.Command;
 import nethack.object.Player;
-import nethack.object.Seed;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
+import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,7 +23,8 @@ public class App {
 
   public static void main(String[] args) throws Exception {
     // Initialize socket connection
-    SocketClient client = new SocketClient("127.0.0.1", 5001);
+    Pair<String, Integer> info = Config.getConnectionInfo();
+    SocketClient client = new SocketClient(info.fst, info.snd);
     if (!client.socketReady()) {
       connectionLogger.fatal("Unsuccessful socket connection");
       return;
@@ -36,8 +38,7 @@ public class App {
   }
 
   private static void runAgent(SocketClient commander) {
-    //    NetHack nethack = new NetHack(commander, Seed.randomSeed());
-    NetHack nethack = new NetHack(commander, Seed.presets[0]);
+    NetHack nethack = new NetHack(commander, Config.getSeed());
     AgentEnv env = new AgentEnv(nethack);
     AgentState state = new AgentState();
     GoalStructure G = GoalLib.explore();
@@ -47,7 +48,7 @@ public class App {
         new TestAgent(Player.ID, "player").attachState(state).attachEnvironment(env).setGoal(G);
     state.updateState(Player.ID);
 
-    fastForwardToTurn(1108, agent, state);
+    fastForwardToTurn(Config.getStartTurn(), agent, state);
     mainAgentLoop(commander, agent, state, G, nethack);
 
     agentLogger.info("Closing NetHack since the loop in agent has terminated");
@@ -55,9 +56,9 @@ public class App {
   }
 
   private static void fastForwardToTurn(int desiredTurnNr, TestAgent agent, AgentState state) {
-    assert desiredTurnNr >= 0;
+    assert desiredTurnNr > 0 : "Cannot fast forward to a 0 or negative turn";
 
-    if (desiredTurnNr == 0) {
+    if (desiredTurnNr == 1) {
       return;
     }
 
@@ -68,7 +69,7 @@ public class App {
       bar.update(state.app().gameState.stats.time, desiredTurnNr);
       agent.update();
     }
-    Sounds.enableSound();
+    Sounds.setSound(Config.getSoundState());
     state.render();
   }
 

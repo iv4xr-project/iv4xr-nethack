@@ -5,6 +5,7 @@ import connection.SocketClient;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import nethack.object.Seed;
+import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,7 +14,9 @@ public class App {
 
   public static void main(String[] args) throws IOException {
     // Initialize socket connection
-    SocketClient client = new SocketClient("127.0.0.1", 5001);
+    Pair<String, Integer> info = Config.getConnectionInfo();
+    SocketClient client = new SocketClient(info.fst, info.snd);
+    //    SocketClient client = new SocketClient("127.0.0.1", 5001);
     if (!client.socketReady()) {
       logger.fatal("Unsuccessful socket connection");
       return;
@@ -27,13 +30,13 @@ public class App {
   }
 
   private static void playGame(SocketClient client) throws IOException {
-    NetHack nethack = new NetHack(client);
+    NetHack nethack = new NetHack(client, Config.getSeed());
     nethack.loop();
     nethack.close();
   }
 
-  private static void gotThroughGame(SocketClient client) throws IOException {
-    NetHack nethack = new NetHack(client, Seed.presets[1]);
+  private static void goThroughGame(SocketClient client) throws IOException {
+    NetHack nethack = new NetHack(client, Config.getSeed());
 
     // Eternally go through new seeds
     while (true) {

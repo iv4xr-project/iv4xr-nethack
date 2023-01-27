@@ -45,11 +45,15 @@ public class Sounds {
   }
 
   public static void enableSound() {
-    soundsEnabled = true;
+    setSound(true);
   }
 
   public static void disableSound() {
-    soundsEnabled = false;
+    setSound(false);
+  }
+
+  public static void setSound(boolean enabled) {
+    soundsEnabled = enabled;
   }
 
   public static void attack() {
