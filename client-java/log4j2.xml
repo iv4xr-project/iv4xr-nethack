@@ -17,18 +17,15 @@
         </File>
     </Appenders>
     <Loggers>
-        <Logger name="Connection" level="debug" additivity="false">
+        <Logger name="📡" level="debug" additivity="false">
             <AppenderRef ref="LogToFile" level="info"/>
             <AppenderRef ref="LogToConsole" level="info"/>
         </Logger>
-        <Logger name="Message" level="debug" additivity="false">
-            <AppenderRef ref="LogToFile" level="info"/>
-        </Logger>
-        <Logger name="Decoder" level="debug" additivity="false">
+        <Logger name="📬" level="debug" additivity="false">
             <AppenderRef ref="LogToFile" level="info"/>
             <AppenderRef ref="LogToConsole" level="info"/>
         </Logger>
-        <Logger name="Encoder" level="debug" additivity="false">
+        <Logger name="📦" level="debug" additivity="false">
             <AppenderRef ref="LogToFile" level="info"/>
             <AppenderRef ref="LogToConsole" level="info"/>
         </Logger>

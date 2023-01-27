@@ -13,7 +13,6 @@ import nethack.NetHack;
 import nethack.enums.Command;
 import nethack.object.Player;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
-import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,17 +22,8 @@ public class App {
 
   public static void main(String[] args) throws Exception {
     // Initialize socket connection
-    Pair<String, Integer> info = Config.getConnectionInfo();
-    SocketClient client = new SocketClient(info.fst, info.snd);
-    if (!client.socketReady()) {
-      connectionLogger.fatal("Unsuccessful socket connection");
-      return;
-    }
-
+    SocketClient client = new SocketClient();
     runAgent(client);
-
-    // Close socket connection
-    connectionLogger.info("Closing connection");
     client.close();
   }
 

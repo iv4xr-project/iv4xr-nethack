@@ -10,10 +10,12 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import nethack.Config;
 import nethack.object.Inventory;
 import nethack.object.Level;
 import nethack.object.Seed;
 import nethack.object.StepState;
+import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,13 +31,14 @@ public class SocketClient {
    * Constructor. Will set up the needed socket to communicate with the given server hosted at the
    * given host-id, at the given port.
    */
-  public SocketClient(String host, int port) {
-    this.host = host;
-    this.port = port;
+  public SocketClient() {
+    Pair<String, Integer> info = Config.getConnectionInfo();
+    this.host = info.fst;
+    this.port = info.snd;
     int maxWaitTime = 20000;
     logger.info(
         String.format(
-            "> Trying to connect with a host on %s:%s (will time-out after %s seconds)",
+            "Trying to connect with a host on %s:%s (will time-out after %s seconds)",
             host, port, maxWaitTime / 1000));
 
     long startTime = System.nanoTime();
@@ -48,12 +51,9 @@ public class SocketClient {
       } catch (IOException ignored) {
       }
     }
-    if (socketReady()) {
-      logger.info(String.format("> CONNECTED with %s:%s", host, port));
-    } else {
-      logger.warn(
-          String.format("> Could NOT establish a connection with the host %s:%s.", host, port));
-    }
+    assert socketReady()
+        : String.format("Could NOT establish a connection with the host %s:%s.", host, port);
+    logger.info(String.format("CONNECTED with %s:%s", host, port));
   }
 
   /**
@@ -170,6 +170,7 @@ public class SocketClient {
   }
 
   public void close() throws IOException {
+    logger.info("Closing socket connection");
     if (reader != null) reader.close();
     if (writer != null) writer.close();
     socket.close();
