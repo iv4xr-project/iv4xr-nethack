@@ -1,4 +1,4 @@
-package agent.navigation;
+package agent.navigation.strategy;
 
 import static nl.uu.cs.aplib.AplibEDSL.action;
 

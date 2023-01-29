@@ -1,8 +1,8 @@
 package agent.selector;
 
 import agent.iv4xr.AgentState;
-import agent.navigation.NavUtils;
 import agent.navigation.NetHackSurface;
+import agent.navigation.strategy.NavUtils;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.List;

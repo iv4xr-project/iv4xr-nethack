@@ -2,20 +2,52 @@ package agent.navigation.surface;
 
 import eu.iv4xr.framework.spatial.IntVec2D;
 
-public class Stair extends Tile {
-  public boolean goesUp = false;
+public class Stair extends Tile implements Climbable, Walkable, Printable {
+  private boolean isVisible = false;
+  public ClimbType climbType;
 
-  public Stair(IntVec2D pos, boolean goesUp) {
+  public Stair(IntVec2D pos, ClimbType climbType) {
     super(pos);
-    this.goesUp = goesUp;
+    this.climbType = climbType;
   }
 
-  public Stair(int x, int y, boolean goesUp) {
+  public Stair(int x, int y, ClimbType climbType) {
     super(x, y);
-    this.goesUp = goesUp;
+    this.climbType = climbType;
   }
 
+  @Override
   public char toChar() {
-    return goesUp ? '<' : '>';
+    return climbType == ClimbType.Ascendable ? '<' : '>';
+  }
+
+  @Override
+  public boolean isSeeThrough() {
+    return true;
+  }
+
+  @Override
+  public boolean isVisible() {
+    return isVisible;
+  }
+
+  @Override
+  public void setVisible(boolean isVisible) {
+    this.isVisible = isVisible;
+  }
+
+  @Override
+  public boolean isWalkable() {
+    return true;
+  }
+
+  @Override
+  public ClimbType getClimbType() {
+    return null;
+  }
+
+  @Override
+  public Climbable getOtherSide() {
+    return null;
   }
 }

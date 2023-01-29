@@ -1,7 +1,8 @@
 package agent.strategy;
 
 import agent.iv4xr.AgentState;
-import agent.navigation.NavUtils;
+import agent.navigation.strategy.NavUtils;
+import agent.navigation.surface.Climbable;
 import agent.navigation.surface.Stair;
 import agent.navigation.surface.Tile;
 import agent.selector.TileSelector;
@@ -58,7 +59,7 @@ public class Predicates {
         if (!(t instanceof Stair)) {
           return false;
         }
-        return !((Stair) t).goesUp;
+        return ((Stair) t).climbType == Climbable.ClimbType.Descendable;
       };
 
   public static List<WorldEntity> findOfType(@NotNull AgentState S, EntityType type) {

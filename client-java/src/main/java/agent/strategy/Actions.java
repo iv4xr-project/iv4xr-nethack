@@ -4,8 +4,8 @@ import static nl.uu.cs.aplib.AplibEDSL.action;
 
 import agent.AgentLoggers;
 import agent.iv4xr.AgentState;
-import agent.navigation.NavUtils;
 import agent.navigation.NetHackSurface;
+import agent.navigation.strategy.NavUtils;
 import agent.navigation.surface.Door;
 import agent.navigation.surface.Tile;
 import agent.navigation.surface.Wall;

@@ -3,7 +3,7 @@ package agent.strategy;
 import static nl.uu.cs.aplib.AplibEDSL.*;
 
 import agent.iv4xr.AgentState;
-import agent.navigation.NavTactic;
+import agent.navigation.strategy.NavTactic;
 import agent.selector.EntitySelector;
 import agent.selector.TileSelector;
 import eu.iv4xr.framework.mainConcepts.WorldModel;

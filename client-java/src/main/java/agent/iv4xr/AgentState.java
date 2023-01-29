@@ -1,8 +1,8 @@
 package agent.iv4xr;
 
 import agent.AgentLoggers;
-import agent.navigation.NavUtils;
 import agent.navigation.NetHackSurface;
+import agent.navigation.strategy.NavUtils;
 import agent.navigation.surface.*;
 import eu.iv4xr.framework.extensions.pathfinding.LayeredAreasNavigation;
 import eu.iv4xr.framework.extensions.pathfinding.Navigatable;
@@ -126,7 +126,11 @@ public class AgentState extends Iv4xrAgentState<Void> {
           break;
         case DOOR:
           boolean isOpen = !env().app.level().getEntity(pos).closedDoor();
-          multiLayerNav.addObstacle(new Pair<>(levelNr, new Door(pos, isOpen)));
+          if (isOpen) {
+            multiLayerNav.removeObstacle(new Pair<>(levelNr, new Door(pos, isOpen)));
+          } else {
+            multiLayerNav.addObstacle(new Pair<>(levelNr, new Door(pos, isOpen)));
+          }
           break;
         case DOORWAY:
           multiLayerNav.removeObstacle(new Pair<>(levelNr, new Doorway(pos)));
@@ -135,9 +139,11 @@ public class AgentState extends Iv4xrAgentState<Void> {
           multiLayerNav.addObstacle(new Pair<>(levelNr, new PrisonBars(pos)));
           break;
         case STAIRS_DOWN:
+          multiLayerNav.removeObstacle(
+              new Pair<>(levelNr, new Stair(pos, Climbable.ClimbType.Descendable)));
         case STAIRS_UP:
           multiLayerNav.removeObstacle(
-              new Pair<>(levelNr, new Stair(pos, type == EntityType.STAIRS_UP)));
+              new Pair<>(levelNr, new Stair(pos, Climbable.ClimbType.Ascendable)));
           break;
         case SINK:
           multiLayerNav.removeObstacle(new Pair<>(levelNr, new Sink(pos)));
@@ -146,7 +152,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
           // If the tile has been seen we switch the state to non-blocking.
           // If we don't know the type of the tile, we for now put a tile in its place
           if (!area().hasTile(pos)) {
-            multiLayerNav.removeObstacle(new Pair<>(levelNr, new Tile(pos)));
+            multiLayerNav.addObstacle(new Pair<>(levelNr, new Tile(pos)));
           } else if (area().canBeDoor(pos)) {
             multiLayerNav.removeObstacle(new Pair<>(levelNr, new Door(pos, true)));
           } else {

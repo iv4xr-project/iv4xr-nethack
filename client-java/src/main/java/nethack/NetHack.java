@@ -175,7 +175,6 @@ public class NetHack {
       stepState.level.setChangedCoordinates(null);
       gameState.world.add(stepState.level);
     } else {
-      netHackLogger.info(stepState.stats.zeroIndexDepth);
       stepState.level.setChangedCoordinates(gameState.world.get(stepState.stats.zeroIndexDepth));
       gameState.world.set(stepState.stats.zeroIndexDepth, stepState.level);
     }

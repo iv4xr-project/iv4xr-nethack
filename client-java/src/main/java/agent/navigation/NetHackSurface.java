@@ -1,6 +1,7 @@
 package agent.navigation;
 
 import agent.AgentLoggers;
+import agent.navigation.strategy.NavUtils;
 import agent.navigation.surface.*;
 import eu.iv4xr.framework.extensions.pathfinding.*;
 import eu.iv4xr.framework.spatial.IntVec2D;
@@ -28,7 +29,7 @@ public class NetHackSurface
   static final Logger logger = LogManager.getLogger(AgentLoggers.NavLogger);
   static final int sizeX = Level.WIDTH, sizeY = Level.HEIGHT;
   public final Tile[][] tiles = new Tile[sizeY + 2][sizeX + 2];
-  private final Map<String, HashSet<IntVec2D>> tileTypes = new HashMap<String, HashSet<IntVec2D>>();
+  private final Map<String, HashSet<IntVec2D>> tileTypes = new HashMap<>();
   public Pathfinder<Tile> pathfinder = new AStar<>();
   public int levelNr;
 
@@ -62,9 +63,8 @@ public class NetHackSurface
   }
 
   private boolean isDoor(IntVec2D pos) {
-    Obstacle o = getObstacle(pos);
-    if (o == null) return false;
-    return o instanceof Door;
+    Tile t = getTile(pos);
+    return t instanceof Door;
   }
 
   public boolean canBeDoor(IntVec2D pos) {
@@ -94,17 +94,7 @@ public class NetHackSurface
   }
 
   private boolean isFloor(IntVec2D pos) {
-    Tile o = getFloor(pos);
-    if (o == null) return false;
-    return o instanceof Floor;
-  }
-
-  private boolean blocksVision(IntVec2D pos) {
-    return blocksVision(getTile(pos));
-  }
-
-  private boolean blocksVision(Tile t) {
-    return !t.seeThrough;
+    return getTile(pos) instanceof Floor;
   }
 
   public boolean hasTile(IntVec2D pos) {
@@ -119,22 +109,6 @@ public class NetHackSurface
     return tiles[y + 1][x + 1];
   }
 
-  private Obstacle getObstacle(IntVec2D pos) {
-    Tile t = getTile(pos);
-    if (t instanceof Obstacle) {
-      return (Obstacle) t;
-    }
-    return null;
-  }
-
-  private Tile getFloor(IntVec2D pos) {
-    Tile t = getTile(pos);
-    if (t != null && !(t instanceof Obstacle)) {
-      return t;
-    }
-    return null;
-  }
-
   public List<IntVec2D> VisibleCoordinates(IntVec2D agentPosition, Level level) {
     resetVisibility();
 
@@ -143,7 +117,10 @@ public class NetHackSurface
     IntVec2D[] agentNeighbours = NavUtils.neighbourCoordinates(agentPosition, true);
     for (IntVec2D neighbour : agentNeighbours) {
       Tile neighbourTile = getTile(neighbour);
-      neighbourTile.visible = true;
+      if (!(neighbourTile instanceof Viewable)) {
+        continue;
+      }
+      ((Viewable) neighbourTile).setVisible(true);
     }
 
     HashSet<IntVec2D> visibleCoordinates = new HashSet<>(Arrays.asList(agentNeighbours));
@@ -163,7 +140,7 @@ public class NetHackSurface
       processedCoordinates.add(nextPos);
 
       Tile t = getTile(nextPos);
-      if (t == null) {
+      if (!(t instanceof Viewable)) {
         continue;
       } else if (level.getEntity(nextPos).color == Color.TRANSPARENT) {
         continue;
@@ -181,14 +158,11 @@ public class NetHackSurface
       }
 
       // Current tile is visible
-      t.visible = true;
+      ((Viewable) t).setVisible(true);
       visibleCoordinates.add(nextPos);
 
-      // Do not add new candidates if the current one blocks vision
-      if (!t.seeThrough) {
-        continue;
-      } // Only add all neighbours if it is floor or the current position of the agent
-      else if (t instanceof Floor) {
+      // Only add all neighbours if it is floor
+      if (t instanceof Floor) {
         queue.addAll(Arrays.asList(neighbours));
       }
     }
@@ -201,8 +175,8 @@ public class NetHackSurface
     // First reset visibility of all tiles to false
     for (Tile[] row : tiles) {
       for (Tile t : row) {
-        if (t != null) {
-          t.visible = false;
+        if (t instanceof Viewable) {
+          ((Viewable) t).setVisible(false);
         }
       }
     }
@@ -218,12 +192,10 @@ public class NetHackSurface
         Tile t = getTile(new IntVec2D(x, y));
         if (t == null) {
           sb.append(' ');
-        } else if (t.visible) {
-          sb.append(Color.GREEN_BRIGHT.stringCode())
-              .append(t.toChar())
-              .append(Color.RESET.stringCode());
+        } else if (!(t instanceof Printable)) {
+          sb.append('?');
         } else {
-          sb.append(t.toChar());
+          sb.append(((Printable) t).toColoredString());
         }
       }
 
@@ -238,11 +210,8 @@ public class NetHackSurface
   /** Add a non-navigable tile (obstacle). */
   @Override
   public void addObstacle(Tile o) {
-    if (!(o instanceof Obstacle)) {
-      throw new IllegalArgumentException(
-          String.format("Cannot add obstacle since %s is not one", o.getClass()));
-    }
-
+    assert !(o instanceof Walkable) || !((Walkable) o).isWalkable()
+        : "Obstacle is not actually an obstacle since it can be passed";
     replaceTile(tiles[o.pos.y + 1][o.pos.x + 1], o);
     tiles[o.pos.y + 1][o.pos.x + 1] = o;
     updateNeighbours(o);
@@ -251,6 +220,8 @@ public class NetHackSurface
   /** Remove a non-navigable tile (obstacle). */
   @Override
   public void removeObstacle(Tile o) {
+    assert o instanceof Walkable && ((Walkable) o).isWalkable()
+        : "RemoveObstacle must insert a walkable tile";
     replaceTile(tiles[o.pos.y + 1][o.pos.x + 1], o);
     tiles[o.pos.y + 1][o.pos.x + 1] = o;
     updateNeighbours(o);
@@ -297,12 +268,7 @@ public class NetHackSurface
 
   public boolean isBlocking(IntVec2D pos) {
     Tile t = getTile(pos);
-
-    if (t instanceof Door) {
-      Door d = (Door) t;
-      return !d.isOpen;
-    }
-    return t instanceof Obstacle;
+    return !(t instanceof Walkable) || !((Walkable) t).isWalkable();
   }
 
   /**

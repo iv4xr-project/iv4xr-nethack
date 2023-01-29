@@ -1,7 +1,8 @@
-package agent.navigation;
+package agent.navigation.strategy;
 
 import agent.AgentLoggers;
 import agent.iv4xr.AgentState;
+import agent.navigation.NetHackSurface;
 import agent.navigation.surface.Tile;
 import agent.selector.EntitySelector;
 import agent.selector.TileSelector;

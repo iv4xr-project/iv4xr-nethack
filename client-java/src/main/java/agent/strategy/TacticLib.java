@@ -4,7 +4,7 @@ import static nl.uu.cs.aplib.AplibEDSL.ABORT;
 
 import agent.AgentLoggers;
 import agent.iv4xr.AgentState;
-import agent.navigation.NavUtils;
+import agent.navigation.strategy.NavUtils;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import nl.uu.cs.aplib.mainConcepts.Tactic;
 import org.apache.logging.log4j.LogManager;

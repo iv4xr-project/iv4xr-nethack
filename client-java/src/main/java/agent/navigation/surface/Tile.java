@@ -6,9 +6,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class Tile {
-  public final boolean seeThrough = true;
   public IntVec2D pos;
-  public boolean visible = false;
   public boolean seen = false;
   public List<Tile> neighbours = new ArrayList<>(8);
 
@@ -41,9 +39,5 @@ public class Tile {
   @Override
   public String toString() {
     return "(" + pos.x + "," + pos.y + ")";
-  }
-
-  public char toChar() {
-    return '?';
   }
 }

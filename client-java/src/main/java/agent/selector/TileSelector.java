@@ -1,12 +1,9 @@
 package agent.selector;
 
 import agent.iv4xr.AgentState;
-import agent.navigation.NavUtils;
 import agent.navigation.NetHackSurface;
-import agent.navigation.surface.Door;
-import agent.navigation.surface.Stair;
-import agent.navigation.surface.Tile;
-import agent.navigation.surface.Wall;
+import agent.navigation.strategy.NavUtils;
+import agent.navigation.surface.*;
 import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -50,7 +47,7 @@ public class TileSelector extends Selector<Pair<Integer, Tile>> {
           SelectionType.FIRST,
           Stair.class,
           t -> {
-            return !((Stair) t.snd).goesUp;
+            return ((Stair) t.snd).getClimbType() == Climbable.ClimbType.Descendable;
           });
 
   Class tileClass;

@@ -2,11 +2,13 @@ package agent.navigation.surface;
 
 import eu.iv4xr.framework.spatial.IntVec2D;
 
-public class Door extends Obstacle {
+public class Door extends Tile implements Walkable, Printable {
   public boolean isOpen = false;
   public boolean isLocked = false;
 
   public boolean seeThrough = isOpen;
+
+  boolean isVisible = false;
 
   public Door(IntVec2D pos) {
     super(pos);
@@ -26,12 +28,31 @@ public class Door extends Obstacle {
     }
   }
 
-  @Override
   public char toChar() {
     if (isOpen) {
       return seen ? 'O' : 'o';
     } else {
       return seen ? 'X' : 'x';
     }
+  }
+
+  @Override
+  public boolean isSeeThrough() {
+    return isOpen && !isLocked;
+  }
+
+  @Override
+  public boolean isVisible() {
+    return isVisible;
+  }
+
+  @Override
+  public void setVisible(boolean isVisible) {
+    this.isVisible = isVisible;
+  }
+
+  @Override
+  public boolean isWalkable() {
+    return isSeeThrough();
   }
 }
