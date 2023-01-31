@@ -2,56 +2,30 @@
 // Translated by CS2J (http://www.cs2j.com): 30/01/2023 14:06:34
 //
 
-package HPASharp.Graph;
+package agent.navigation.hpastar.graph;
 
-import HPASharp.Infrastructure.Id;
+import agent.navigation.hpastar.infrastructure.Id;
+import java.util.HashMap;
+import java.util.Map;
 
-public class AbstractNode implements INode<AbstractNode, AbstractNodeInfo, AbstractEdge> {
-  private Id<AbstractNode> __NodeId;
+public class AbstractNode extends INode<AbstractNode, AbstractNodeInfo, AbstractEdge> {
+  public Id<AbstractNode> nodeId;
+  public AbstractNodeInfo info;
+  public Map<Id<AbstractNode>, AbstractEdge> edges = new HashMap<>();
 
-  public Id<AbstractNode> getNodeId() {
-    return __NodeId;
+  public AbstractNode(Id<AbstractNode> nodeId, AbstractNodeInfo info) {
+    this.nodeId = nodeId;
+    this.info = info;
   }
 
-  public void setNodeId(Id<AbstractNode> value) {
-    __NodeId = value;
+  public void removeEdge(Id<AbstractNode> targetNodeId) {
+    edges.remove(targetNodeId);
   }
 
-  private AbstractNodeInfo __Info;
-
-  public AbstractNodeInfo getInfo() {
-    return __Info;
-  }
-
-  public void setInfo(AbstractNodeInfo value) {
-    __Info = value;
-  }
-
-  private IDictionary<Id<AbstractNode>, AbstractEdge> __Edges =
-      new IDictionary<Id<AbstractNode>, AbstractEdge>();
-
-  public IDictionary<Id<AbstractNode>, AbstractEdge> getEdges() {
-    return __Edges;
-  }
-
-  public void setEdges(IDictionary<Id<AbstractNode>, AbstractEdge> value) {
-    __Edges = value;
-  }
-
-  public AbstractNode(Id<AbstractNode> nodeId, AbstractNodeInfo info) throws Exception {
-    setNodeId(nodeId);
-    setInfo(info);
-    setEdges(new Dictionary<Id<AbstractNode>, AbstractEdge>());
-  }
-
-  public void removeEdge(Id<AbstractNode> targetNodeId) throws Exception {
-    getEdges().Remove(targetNodeId);
-  }
-
-  public void addEdge(AbstractEdge edge) throws Exception {
-    if (!getEdges().ContainsKey(edge.getTargetNodeId())
-        || getEdges()[edge.getTargetNodeId()].Info.Level < edge.getInfo().getLevel()) {
-      getEdges()[edge.getTargetNodeId()] = edge;
+  public void addEdge(AbstractEdge edge) {
+    if (!edges.containsKey(edge.targetNodeId)
+        || edges.get(edge.targetNodeId).info.level < edge.info.level) {
+      edges.put(edge.targetNodeId, edge);
     }
   }
 }

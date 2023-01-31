@@ -2,26 +2,21 @@
 // Translated by CS2J (http://www.cs2j.com): 30/01/2023 14:06:34
 //
 
-package HPASharp;
+package agent.navigation.hpastar;
 
-import HPASharp.Graph.AbstractNode;
-import HPASharp.Infrastructure.Id;
-import HPASharp.IPathNode;
+import agent.navigation.hpastar.graph.AbstractNode;
+import agent.navigation.hpastar.infrastructure.Id;
 
-public class AbstractPathNode   implements IPathNode
-{
-    public AbstractPathNode() {
-    }
+public class AbstractPathNode implements IPathNode {
+  public Id<AbstractNode> id;
+  public int level;
 
-    public Id<AbstractNode> Id;
-    public int Level = new int();
-    public AbstractPathNode(Id<AbstractNode> id, int lvl) throws Exception {
-        Id = id;
-        Level = lvl;
-    }
+  public AbstractPathNode(Id<AbstractNode> id, int lvl) {
+    this.id = id;
+    level = lvl;
+  }
 
-    public int getIdValue() throws Exception {
-        return Id.getIdValue();
-    }
-
+  public int getIdValue() {
+    return id.getIdValue();
+  }
 }

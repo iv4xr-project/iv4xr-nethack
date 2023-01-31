@@ -2,17 +2,16 @@
 // Translated by CS2J (http://www.cs2j.com): 30/01/2023 14:06:33
 //
 
-package HPASharp.Factories;
+package agent.navigation.hpastar.factories;
 
-import HPASharp.ConcreteMap;
-import HPASharp.IPassability;
-import HPASharp.TileType;
+import agent.navigation.hpastar.ConcreteMap;
+import agent.navigation.hpastar.IPassability;
+import agent.navigation.hpastar.TileType;
 
 /** Constructs ConcreteMap objects */
 public class ConcreteMapFactory {
   public static ConcreteMap createConcreteMap(
-      int width, int height, IPassability passability, TileType tilingType) throws Exception {
-    ConcreteMap tiling = new ConcreteMap(tilingType, width, height, passability);
-    return tiling;
+      int width, int height, IPassability passability, TileType tilingType) {
+    return new ConcreteMap(tilingType, width, height, passability);
   }
 }

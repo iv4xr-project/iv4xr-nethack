@@ -2,25 +2,19 @@
 // Translated by CS2J (http://www.cs2j.com): 30/01/2023 14:06:35
 //
 
-package HPASharp;
+package agent.navigation.hpastar;
 
 import CS2JNet.JavaSupport.language.RefSupport;
-import HPASharp.Infrastructure.Constants;
-import HPASharp.IPassability;
-import HPASharp.Position;
-import HPASharp.AbstractPathNode;
-import HPASharp.ConcreteMap;
-import HPASharp.ConcretePathNode;
-import HPASharp.Factories.ConcreteMapFactory;
-import HPASharp.Factories.EntranceStyle;
-import HPASharp.Factories.HierarchicalMapFactory;
-import HPASharp.Graph.ConcreteNode;
-import HPASharp.HierarchicalMap;
-import HPASharp.IPathNode;
-import HPASharp.Passabilities.FakePassability;
-import HPASharp.Program;
-import HPASharp.Search.HierarchicalSearch;
-import HPASharp.Smoother.SmoothWizard;
+import agent.navigation.hpastar.infrastructure.Constants;
+import agent.navigation.hpastar.Position;
+import agent.navigation.hpastar.factories.ConcreteMapFactory;
+import agent.navigation.hpastar.factories.EntranceStyle;
+import agent.navigation.hpastar.factories.HierarchicalMapFactory;
+import agent.navigation.hpastar.passabilities.FakePassability;
+import agent.navigation.hpastar.utils.RefSupport;
+import eu.iv4xr.framework.spatial.IntVec2D;
+
+import java.util.Random;
 
 public class Program
 {
@@ -69,8 +63,8 @@ public class Program
         "                    0111111111111111111111111111111111111110\r\n" +
         "                    0000000000000000000000000000000000000000\r\n" +
         "                ";
-        public ExamplePassability() throws Exception {
-            obstacles = new boolean[40, 40];
+        public ExamplePassability() {
+            obstacles = new boolean[40][40];
             /* [UNSUPPORTED] 'var' as type is unsupported "var" */ charlines = map.Split('\n').Select(/* [UNSUPPORTED] to translate lambda expressions we need an explicit delegate type, try adding a cast "(line) => {
                 return line.Trim();
             }" */).Where(/* [UNSUPPORTED] to translate lambda expressions we need an explicit delegate type, try adding a cast "(line) => {
@@ -81,26 +75,26 @@ public class Program
             for (int j = 0;j < obstacles.GetLength(1);j++)
                 for (int i = 0;i < obstacles.GetLength(0);i++)
                 {
-                    obstacles[i, j] = charlines[i][j] == '1';
+                    obstacles[i][j] = charlines[i][j] == '1';
                 }
         }
 
         Random rnd = new Random(700);
-        public Position getRandomFreePosition() throws Exception {
-            /* [UNSUPPORTED] 'var' as type is unsupported "var" */ x = rnd.Next(40);
-            /* [UNSUPPORTED] 'var' as type is unsupported "var" */ y = rnd.Next(40);
-            while (obstacles[x, y])
+        public IntVec2D getRandomFreePosition() {
+            int x = rnd.nextInt(40);
+            int y = rnd.nextInt(40);
+            while (obstacles[x][y])
             {
-                x = rnd.Next(40);
-                y = rnd.Next(40);
+                x = rnd.nextInt(40);
+                y = rnd.nextInt(40);
             }
-            return new Position(x, y);
+            return new IntVec2D(x, y);
         }
 
-        private boolean[][] obstacles = new boolean[][]();
-        public boolean canEnter(Position pos, RefSupport<int> cost) throws Exception {
+        private boolean[][] obstacles = new boolean[][];
+        public boolean canEnter(IntVec2D pos, RefSupport<Integer> cost) {
             cost.setValue(Constants.COST_ONE);
-            return !obstacles[pos.Y, pos.X];
+            return !obstacles[pos.y][pos.x];
         }
 
     }
@@ -109,7 +103,7 @@ public class Program
     //private static readonly int Width = 16;
     //private static readonly Position StartPosition = new Position(1, 0);
     //private static readonly Position EndPosition = new Position(15, 15);
-    public static void main6(String[] args) throws Exception {
+    public static void main6(String[] args) {
         ;
         ;
         ;
@@ -146,7 +140,7 @@ public class Program
         Console.WriteLine("Number of nodes: " + hierarchicalSearchPath.Count);
     }
 
-    public static void main2(String[] args) throws Exception {
+    public static void main2(String[] args) {
         ;
         ;
         ;
@@ -180,11 +174,11 @@ public class Program
         Console.WriteLine("Number of nodes: " + hierarchicalSearchPath.Count);
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         Program.Main(args);
     }
 
-    public static void Main(String[] args) throws Exception {
+    public static void Main(String[] args) {
         ;
         ;
         ;
@@ -242,7 +236,7 @@ public class Program
         }
     }
 
-    private static List<IPathNode> hierarchicalSearch(HierarchicalMap hierarchicalMap, int maxLevel, ConcreteMap concreteMap, Position startPosition, Position endPosition) throws Exception {
+    private static List<IPathNode> hierarchicalSearch(HierarchicalMap hierarchicalMap, int maxLevel, ConcreteMap concreteMap, Position startPosition, Position endPosition) {
         HierarchicalMapFactory factory = new HierarchicalMapFactory();
         /* [UNSUPPORTED] 'var' as type is unsupported "var" */ startAbsNode = factory.InsertAbstractNode(hierarchicalMap, startPosition);
         /* [UNSUPPORTED] 'var' as type is unsupported "var" */ targetAbsNode = factory.InsertAbstractNode(hierarchicalMap, endPosition);
@@ -257,7 +251,7 @@ public class Program
         return path;
     }
 
-    private static List<IPathNode> regularSearch(ConcreteMap concreteMap, Position startPosition, Position endPosition) throws Exception {
+    private static List<IPathNode> regularSearch(ConcreteMap concreteMap, Position startPosition, Position endPosition) {
         ConcreteGraph tilingGraph = concreteMap.getGraph();
         Func<int, int, ConcreteNode> getNode = /* [UNSUPPORTED] to translate lambda expressions we need an explicit delegate type, try adding a cast "(top, left) => {
             return tilingGraph.GetNode(concreteMap.GetNodeIdFromPos(top, left));
@@ -271,7 +265,7 @@ public class Program
         }" */));
     }
 
-    private static List<char> getCharVector(ConcreteMap concreteMap) throws Exception {
+    private static List<char> getCharVector(ConcreteMap concreteMap) {
         /* [UNSUPPORTED] 'var' as type is unsupported "var" */ result = new List<char>();
         /* [UNSUPPORTED] 'var' as type is unsupported "var" */ numberNodes = concreteMap.getNrNodes();
         for (/* [UNSUPPORTED] 'var' as type is unsupported "var" */ i = 0;i < numberNodes;i++)
@@ -281,11 +275,11 @@ public class Program
         return result;
     }
 
-    public static void printFormatted(ConcreteMap concreteMap, HierarchicalMap hierarchicalGraph, int clusterSize, List<Position> path) throws Exception {
+    public static void printFormatted(ConcreteMap concreteMap, HierarchicalMap hierarchicalGraph, int clusterSize, List<Position> path) {
         PrintFormatted(getCharVector(concreteMap), concreteMap, hierarchicalGraph, clusterSize, path);
     }
 
-    private static void printFormatted(List<char> chars, ConcreteMap concreteMap, HierarchicalMap hierarchicalGraph, int clusterSize, List<Position> path) throws Exception {
+    private static void printFormatted(List<char> chars, ConcreteMap concreteMap, HierarchicalMap hierarchicalGraph, int clusterSize, List<Position> path) {
         for (/* [UNSUPPORTED] 'var' as type is unsupported "var" */ y = 0;y < concreteMap.Height;y++)
         {
             if (y % clusterSize == 0)

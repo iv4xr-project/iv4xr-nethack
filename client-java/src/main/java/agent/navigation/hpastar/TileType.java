@@ -2,7 +2,7 @@
 // Translated by CS2J (http://www.cs2j.com): 30/01/2023 14:06:33
 //
 
-package HPASharp;
+package agent.navigation.hpastar;
 
 public enum TileType {
   Hex,

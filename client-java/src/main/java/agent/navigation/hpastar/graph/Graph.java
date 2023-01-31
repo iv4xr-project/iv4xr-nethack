@@ -2,80 +2,77 @@
 // Translated by CS2J (http://www.cs2j.com): 30/01/2023 14:06:34
 //
 
-package HPASharp.Graph;
+package agent.navigation.hpastar.graph;
 
-import HPASharp.Graph.IEdge;
-import HPASharp.Graph.INode;
-import HPASharp.Infrastructure.Id;
+import agent.navigation.hpastar.infrastructure.Id;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import nl.uu.cs.aplib.utils.Pair;
 
 /**
-* A graph is a set of nodes connected with edges. Each node and edge can hold
-* a certain amount of information, which is expressed in the templated parameters
-* NODEINFO and EDGEINFO
-*/
-public class Graph <TNode extends INode<TNode,TNodeInfo,TEdge>, TNodeInfo, TEdge extends IEdge<TNode,TEdgeInfo>, TEdgeInfo>
-{
-    // We store the nodes in a list because the main operations we use
-    // in this list are additions, random accesses and very few removals (only when
-    // adding or removing nodes to perform specific searches).
-    // This list is implicitly indexed by the nodeId, which makes removing a random
-    // Node in the list quite of a mess. We could use a dictionary to ease removals,
-    // but lists and arrays are faster for random accesses, and we need performance.
-    private List<TNode> __Nodes = new List<TNode>();
-    public List<TNode> getNodes() {
-        return __Nodes;
-    }
+ * A graph is a set of nodes connected with edges. Each node and edge can hold a certain amount of
+ * information, which is expressed in the templated parameters NODEINFO and EDGEINFO
+ */
+public class Graph<
+    TNode extends INode<TNode, TNodeInfo, TEdge>,
+    TNodeInfo,
+    TEdge extends IEdge<TNode, TEdgeInfo>,
+    TEdgeInfo> {
+  // We store the nodes in a list because the main operations we use
+  // in this list are additions, random accesses and very few removals (only when
+  // adding or removing nodes to perform specific searches).
+  // This list is implicitly indexed by the nodeId, which makes removing a random
+  // Node in the list quite of a mess. We could use a dictionary to ease removals,
+  // but lists and arrays are faster for random accesses, and we need performance.
+  public List<TNode> nodes = new ArrayList<>();
+  private final Function<Pair<Id<TNode>, TNodeInfo>, TNode> _nodeCreator;
+  private final Function<Pair<Id<TNode>, TEdgeInfo>, TEdge> _edgeCreator;
 
-    public void setNodes(List<TNode> value) {
-        __Nodes = value;
-    }
+  public Graph(
+      Function<Pair<Id<TNode>, TNodeInfo>, TNode> nodeCreator,
+      Function<Pair<Id<TNode>, TEdgeInfo>, TEdge> edgeCreator) {
+    _nodeCreator = nodeCreator;
+    _edgeCreator = edgeCreator;
+  }
 
-    private final Func<Id<TNode>, TNodeInfo, TNode> _nodeCreator = new Func<Id<TNode>, TNodeInfo, TNode>();
-    private final Func<Id<TNode>, TEdgeInfo, TEdge> _edgeCreator = new Func<Id<TNode>, TEdgeInfo, TEdge>();
-    public Graph(Func<Id<TNode>, TNodeInfo, TNode> nodeCreator, Func<Id<TNode>, TEdgeInfo, TEdge> edgeCreator) throws Exception {
-        setNodes(new List<TNode>());
-        _nodeCreator = nodeCreator;
-        _edgeCreator = edgeCreator;
-    }
+  /**
+   * Adds or updates a node with the provided info. A node is updated only if the nodeId provided
+   * previously existed.
+   */
+  public void addNode(Id<TNode> nodeId, TNodeInfo info) {
+    int size = nodeId.getIdValue() + 1;
+    if (nodes.size() < size) nodes.add(_nodeCreator.apply(new Pair<>(nodeId, info)));
+    else nodes.set(nodeId.getIdValue(), _nodeCreator.apply(new Pair<>(nodeId, info)));
+  }
 
-    /**
-    * Adds or updates a node with the provided info. A node is updated
-    * only if the nodeId provided previously existed.
-    */
-    public void addNode(Id<TNode> nodeId, TNodeInfo info) throws Exception {
-        /* [UNSUPPORTED] 'var' as type is unsupported "var" */ size = nodeId.getIdValue() + 1;
-        if (getNodes().Count < size)
-            getNodes().Add(_nodeCreator(nodeId, info));
-        else
-            getNodes()[nodeId.getIdValue()] = _nodeCreator(nodeId, info);
-    }
+  public void addEdge(Id<TNode> sourceNodeId, Id<TNode> targetNodeId, TEdgeInfo info) {
+    nodes
+        .get(sourceNodeId.getIdValue())
+        .addEdge(_edgeCreator.apply(new Pair<>(targetNodeId, info)));
+  }
 
-    public void addEdge(Id<TNode> sourceNodeId, Id<TNode> targetNodeId, TEdgeInfo info) throws Exception {
-        getNodes()[sourceNodeId.getIdValue()].AddEdge(_edgeCreator(targetNodeId, info));
+  public void removeEdgesFromAndToNode(Id<TNode> nodeId) {
+    for (Id<TNode> targetNodeId : nodes.get(nodeId.getIdValue()).edges.keySet()) {
+      nodes.get(targetNodeId.getIdValue()).removeEdge(nodeId);
     }
+    nodes.get(nodeId.getIdValue()).edges.clear();
+  }
 
-    public void removeEdgesFromAndToNode(Id<TNode> nodeId) throws Exception {
-        for (/* [UNSUPPORTED] 'var' as type is unsupported "var" */ targetNodeId : getNodes()[nodeId.getIdValue()].Edges.Keys)
-        {
-            getNodes()[targetNodeId.IdValue].RemoveEdge(nodeId);
-        }
-        getNodes()[nodeId.getIdValue()].Edges.Clear();
-    }
+  public void removeLastNode() {
+    nodes.remove(nodes.size() - 1);
+  }
 
-    public void removeLastNode() throws Exception {
-        getNodes().RemoveAt(getNodes().Count - 1);
-    }
+  public TNode getNode(Id<TNode> nodeId) {
+    return nodes.get(nodeId.getIdValue());
+  }
 
-    public TNode getNode(Id<TNode> nodeId) throws Exception {
-        return getNodes()[nodeId.getIdValue()];
-    }
+  public TNodeInfo getNodeInfo(Id<TNode> nodeId) {
+    return getNode(nodeId).info;
+  }
 
-    public TNodeInfo getNodeInfo(Id<TNode> nodeId) throws Exception {
-        return getNode(nodeId).Info;
-    }
-
-    public IDictionary<Id<TNode>, TEdge> getEdges(Id<TNode> nodeId) throws Exception {
-        return getNodes()[nodeId.getIdValue()].Edges;
-    }
-
+  public Map<Id<TNode>, TEdge> getEdges(Id<TNode> nodeId) {
+    return nodes.get(nodeId.getIdValue()).edges;
+  }
 }

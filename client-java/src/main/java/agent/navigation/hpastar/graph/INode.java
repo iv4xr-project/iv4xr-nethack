@@ -2,24 +2,17 @@
 // Translated by CS2J (http://www.cs2j.com): 30/01/2023 14:06:34
 //
 
-package HPASharp.Graph;
+package agent.navigation.hpastar.graph;
 
-import HPASharp.Infrastructure.Id;
+import agent.navigation.hpastar.infrastructure.Id;
+import java.util.Map;
 
-public interface INode<TId, TInfo, TEdge> {
-  Id<TId> getNodeId() throws Exception;
+public abstract class INode<TId, TInfo, TEdge> {
+  public Id<TId> nodeId;
+  public TInfo info;
+  public Map<Id<TId>, TEdge> edges;
 
-  void setNodeId(Id<TId> value) throws Exception;
+  public abstract void removeEdge(Id<TId> targetNodeId);
 
-  TInfo getInfo() throws Exception;
-
-  void setInfo(TInfo value) throws Exception;
-
-  IDictionary<Id<TId>, TEdge> getEdges() throws Exception;
-
-  void setEdges(IDictionary<Id<TId>, TEdge> value) throws Exception;
-
-  void removeEdge(Id<TId> targetNodeId) throws Exception;
-
-  void addEdge(TEdge targetNodeId) throws Exception;
+  public abstract void addEdge(TEdge targetNodeId);
 }

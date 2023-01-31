@@ -2,22 +2,20 @@
 // Translated by CS2J (http://www.cs2j.com): 30/01/2023 14:06:34
 //
 
-package HPASharp.Graph;
+package agent.navigation.hpastar.graph;
 
-import HPASharp.Graph.ConcreteEdge;
-import HPASharp.Graph.ConcreteEdgeInfo;
-import HPASharp.Graph.ConcreteNode;
-import HPASharp.Graph.ConcreteNodeInfo;
-import HPASharp.Graph.Graph;
+import agent.navigation.hpastar.infrastructure.Id;
+import nl.uu.cs.aplib.utils.Pair;
 
-public class ConcreteGraph  extends Graph<ConcreteNode,ConcreteNodeInfo,ConcreteEdge,ConcreteEdgeInfo>
-{
-    public ConcreteGraph() throws Exception {
-        super(/* [UNSUPPORTED] to translate lambda expressions we need an explicit delegate type, try adding a cast "(nodeid, info) => {
-            return new ConcreteNode(nodeid, info);
-        }" */, /* [UNSUPPORTED] to translate lambda expressions we need an explicit delegate type, try adding a cast "(nodeid, info) => {
-            return new ConcreteEdge(nodeid, info);
-        }" */);
-    }
-
+public class ConcreteGraph
+    extends Graph<ConcreteNode, ConcreteNodeInfo, ConcreteEdge, ConcreteEdgeInfo> {
+  public ConcreteGraph() {
+    super(
+        (Pair<Id<ConcreteNode>, ConcreteNodeInfo> pair) -> {
+          return new ConcreteNode(pair.fst, pair.snd);
+        },
+        (Pair<Id<ConcreteNode>, ConcreteEdgeInfo> pair) -> {
+          return new ConcreteEdge(pair.fst, pair.snd);
+        });
+  }
 }

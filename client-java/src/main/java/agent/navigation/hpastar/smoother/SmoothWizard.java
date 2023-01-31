@@ -2,21 +2,31 @@
 // Translated by CS2J (http://www.cs2j.com): 30/01/2023 14:06:35
 //
 
-package HPASharp.Smoother;
+package agent.navigation.hpastar.smoother;
 
-import HPASharp.ConcreteMap;
-import HPASharp.ConcretePathNode;
-import HPASharp.Graph.ConcreteNode;
-import HPASharp.Infrastructure.Constants;
-import HPASharp.Infrastructure.Id;
-import HPASharp.IPathNode;
-import HPASharp.Position;
-import HPASharp.Smoother.Direction;
-import HPASharp.TileType;
+import agent.navigation.hpastar.ConcreteMap;
+import agent.navigation.hpastar.ConcretePathNode;
+import agent.navigation.hpastar.graph.ConcreteGraph;
+import agent.navigation.hpastar.graph.ConcreteNode;
+import agent.navigation.hpastar.graph.ConcreteNodeInfo;
+import agent.navigation.hpastar.infrastructure.Constants;
+import agent.navigation.hpastar.infrastructure.Id;
+import agent.navigation.hpastar.IPathNode;
+import agent.navigation.hpastar.search.AStar;
+import agent.navigation.hpastar.search.Path;
+import agent.navigation.hpastar.TileType;
+import eu.iv4xr.framework.spatial.IntVec2D;
+import nl.uu.cs.aplib.utils.Pair;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 public class SmoothWizard
 {
-    private List<IPathNode> __InitialPath = new List<IPathNode>();
+    private List<IPathNode> __InitialPath = new ArrayList<>();
     public List<IPathNode> getInitialPath() {
         return __InitialPath;
     }
@@ -28,72 +38,64 @@ public class SmoothWizard
     private static final Id<ConcreteNode> INVALID_ID = Id<ConcreteNode>.From(Constants.NO_NODE);
     private final ConcreteMap _concreteMap;
     // This is a dictionary, indexed by nodeId, that tells in which order does this node occupy in the path
-    private final Dictionary<int, int> _pathMap = new Dictionary<int, int>();
-    public SmoothWizard(ConcreteMap concreteMap, List<IPathNode> path) throws Exception {
+    private final Map<Integer, Integer> _pathMap = new HashMap<>();
+    public SmoothWizard(ConcreteMap concreteMap, List<IPathNode> path) {
         setInitialPath(path);
         _concreteMap = concreteMap;
-        _pathMap = new Dictionary<int, int>();
-        for (/* [UNSUPPORTED] 'var' as type is unsupported "var" */ i = 0;i < getInitialPath().Count;i++)
-        {
-            _pathMap[getInitialPath()[i].IdValue] = i + 1;
+        for (int i = 0;i < getInitialPath().size();i++) {
+            _pathMap.put(getInitialPath().get(i).getIdValue(), i + 1);
         }
     }
 
-    private Position getPosition(Id<ConcreteNode> nodeId) throws Exception {
-        return _concreteMap.Graph.GetNodeInfo(nodeId).Position;
+    private IntVec2D getPosition(Id<ConcreteNode> nodeId) {
+        return _concreteMap.graph.getNodeInfo(nodeId).position;
     }
 
-    public List<IPathNode> smoothPath() throws Exception {
-        /* [UNSUPPORTED] 'var' as type is unsupported "var" */ smoothedPath = new List<IPathNode>();
-        /* [UNSUPPORTED] 'var' as type is unsupported "var" */ smoothedConcretePath = new List<ConcretePathNode>();
-        /* [UNSUPPORTED] 'var' as type is unsupported "var" */ index = 0;
-        for (;index < getInitialPath().Count && getInitialPath()[index] instanceof ConcretePathNode;index++)
-        {
-            ConcretePathNode pathNode = (ConcretePathNode)getInitialPath()[index];
-            if (smoothedConcretePath.Count == 0)
-                smoothedConcretePath.Add(pathNode);
-
+    public List<IPathNode> smoothPath() {
+        List<IPathNode> smoothedPath = new ArrayList<>();
+        List<ConcretePathNode> smoothedConcretePath = new ArrayList<>();
+        for (int index = 0;index < getInitialPath().size() && getInitialPath().get(index) instanceof ConcretePathNode;index++) {
+            ConcretePathNode pathNode = (ConcretePathNode)getInitialPath().get(index);
+            if (smoothedConcretePath.isEmpty()) {
+                smoothedConcretePath.add(pathNode);
+            }
             // add this node to the smoothed path
-            if (smoothedConcretePath[smoothedConcretePath.Count - 1].Id != pathNode.Id)
-            {
+            if (smoothedConcretePath.get(smoothedConcretePath.size() - 1).id != pathNode.id) {
                 // It's possible that, when smoothing, the next node that will be put in the path
                 // will not be adjacent. In those cases, since OpenRA requires a continuous path
                 // without breakings, we should calculate a new path for that section
-                /* [UNSUPPORTED] 'var' as type is unsupported "var" */ lastNodeInSmoothedPath = smoothedConcretePath[smoothedConcretePath.Count - 1];
+                ConcretePathNode lastNodeInSmoothedPath = smoothedConcretePath.get(smoothedConcretePath.size() - 1);
                 ConcretePathNode currentNodeInPath = pathNode;
-                if (!AreAdjacent(GetPosition(lastNodeInSmoothedPath.Id), getPosition(currentNodeInPath.Id)))
-                {
-                    /* [UNSUPPORTED] 'var' as type is unsupported "var" */ intermediatePath = GenerateIntermediateNodes(smoothedConcretePath[smoothedConcretePath.Count - 1].Id, pathNode.Id);
-                    for (int i = 1;i < intermediatePath.Count;i++)
-                    {
-                        smoothedConcretePath.Add(new ConcretePathNode(intermediatePath[i]));
+                if (!areAdjacent(getPosition(lastNodeInSmoothedPath.id), getPosition(currentNodeInPath.id))) {
+                    List<Id<ConcreteNode>> intermediatePath = generateIntermediateNodes(smoothedConcretePath.get(smoothedConcretePath.size() - 1).id, pathNode.id);
+                    for (int i = 1;i < intermediatePath.size();i++) {
+                        smoothedConcretePath.add(new ConcretePathNode(intermediatePath.get(i)));
                     }
                 }
 
-                smoothedConcretePath.Add(pathNode);
+                smoothedConcretePath.add(pathNode);
             }
 
-            index = DecideNextNodeToConsider(index);
+            index = decideNextNodeToConsider(index);
         }
-        for (/* [UNSUPPORTED] 'var' as type is unsupported "var" */ pathNode : smoothedConcretePath)
-        {
-            smoothedPath.Add(pathNode);
+        for (ConcretePathNode pathNode : smoothedConcretePath) {
+            smoothedPath.add(pathNode);
         }
-        for (;index < getInitialPath().Count;index++)
+        for (int index = 0; index < getInitialPath().size(); index++)
         {
-            smoothedPath.Add(getInitialPath()[index]);
+            smoothedPath.add(getInitialPath().get(index));
         }
         return smoothedPath;
     }
 
-    private int decideNextNodeToConsider(int index) throws Exception {
-        /* [UNSUPPORTED] 'var' as type is unsupported "var" */ newIndex = index;
+    private int decideNextNodeToConsider(int index) {
+        int newIndex = index;
         for (/* [UNSUPPORTED] 'var' as type is unsupported "var" */ dir = ((Enum)Direction.North).ordinal();dir <= ((Enum)Direction.NorthWest).ordinal();dir++)
         {
-            if (_concreteMap.TileType == TileType.Tile && dir > ((Enum)Direction.West).ordinal())
+            if (_concreteMap.tileType == TileType.Tile && dir > ((Enum)Direction.West).ordinal())
                 break;
 
-            /* [UNSUPPORTED] 'var' as type is unsupported "var" */ seenPathNode = AdvanceThroughDirection(Id<ConcreteNode>.From(getInitialPath()[index].IdValue), dir);
+            /* [UNSUPPORTED] 'var' as type is unsupported "var" */ seenPathNode = advanceThroughDirection(Id<ConcreteNode>.From(getInitialPath()[index].IdValue), dir);
             if (seenPathNode == INVALID_ID)
                 continue;
 
@@ -103,35 +105,35 @@ public class SmoothWizard
 
             // If the point we are advancing is the same as the previous one, we didn't
             // improve at all. Just continue looking other directions
-            if (index < getInitialPath().Count - 1 && seenPathNode.IdValue == getInitialPath()[index + 1].IdValue)
+            if (index < getInitialPath().size() - 1 && seenPathNode.IdValue == getInitialPath()[index + 1].IdValue)
                 continue;
 
             // If the point we are advancing is the same as a next node in the path,
             // we didn't improve either. Continue next direction
-            newIndex = _pathMap[seenPathNode.IdValue] - 2;
+            newIndex = _pathMap.get(seenPathNode.IdValue) - 2;
             break;
         }
         return newIndex;
     }
 
     // count the path reduction (e.g., 2)
-    private static boolean areAdjacent(Position a, Position b) throws Exception {
-        return Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y) <= 2;
+    private static boolean areAdjacent(IntVec2D a, IntVec2D b) {
+        return Math.abs(a.x - b.x) + Math.abs(a.y - b.y) <= 2;
     }
 
     // if the Manhattan distance between a and b is > 2, then they are not
     // (At least on OCTILE)
-    private List<Id<ConcreteNode>> generateIntermediateNodes(Id<ConcreteNode> nodeid1, Id<ConcreteNode> nodeid2) throws Exception {
-        AStar<ConcreteNode> search = new AStar<ConcreteNode>(_concreteMap, nodeid1, nodeid2);
-        /* [UNSUPPORTED] 'var' as type is unsupported "var" */ path = search.findPath();
-        return path.PathNodes;
+    private List<Id<ConcreteNode>> generateIntermediateNodes(Id<ConcreteNode> nodeid1, Id<ConcreteNode> nodeid2) {
+        AStar<ConcreteNode> search = new AStar<>(_concreteMap, nodeid1, nodeid2);
+        Path<ConcreteNode> path = search.findPath();
+        return path.pathNodes;
     }
 
     /**
     * Returns the next node in the init path in a straight line that
     * lies in the same direction as the origin node
     */
-    private Id<ConcreteNode> advanceThroughDirection(Id<ConcreteNode> originId, int direction) throws Exception {
+    private Id<ConcreteNode> advanceThroughDirection(Id<ConcreteNode> originId, int direction) {
         Id<ConcreteNode> nodeId = originId;
         Id<ConcreteNode> lastNodeId = originId;
         while (true)
@@ -140,75 +142,74 @@ public class SmoothWizard
             nodeId = advanceNode(nodeId,direction);
             // If in the direction we advanced there was an invalid node or we cannot enter the node,
             // just return that no node was found
-            if (nodeId == INVALID_ID || !_concreteMap.CanJump(getPosition(nodeId), getPosition(lastNodeId)))
+            if (nodeId == INVALID_ID || !_concreteMap.canJump(getPosition(nodeId), getPosition(lastNodeId)))
                 return INVALID_ID;
 
             // Otherwise, if the node we advanced was contained in the original path, and
             // it was positioned after the node we are analyzing, return it
-            if (_pathMap.ContainsKey(nodeId.getIdValue()) && _pathMap[nodeId.getIdValue()] > _pathMap[originId.getIdValue()])
+            if (_pathMap.containsKey(nodeId.getIdValue()) && _pathMap.get(nodeId.getIdValue()) > _pathMap.get(originId.getIdValue()))
             {
                 return nodeId;
             }
 
             // If we have found an obstacle, just return that no next node to advance was found
-            /* [UNSUPPORTED] 'var' as type is unsupported "var" */ newNodeInfo = _concreteMap.Graph.GetNodeInfo(nodeId);
-            if (newNodeInfo.IsObstacle)
+            ConcreteNodeInfo newNodeInfo = _concreteMap.graph.getNodeInfo(nodeId);
+            if (newNodeInfo.isObstacle) {
                 return INVALID_ID;
+            }
 
             lastNodeId = nodeId;
         }
     }
 
-    private Id<ConcreteNode> advanceNode(Id<ConcreteNode> nodeId, int direction) throws Exception {
-        /* [UNSUPPORTED] 'var' as type is unsupported "var" */ nodeInfo = _concreteMap.Graph.GetNodeInfo(nodeId);
-        /* [UNSUPPORTED] 'var' as type is unsupported "var" */ y = nodeInfo.Position.Y;
-        /* [UNSUPPORTED] 'var' as type is unsupported "var" */ x = nodeInfo.Position.X;
-        /* [UNSUPPORTED] 'var' as type is unsupported "var" */ tilingGraph = _concreteMap.Graph;
-        Func<int, int, ConcreteNode> getNode = /* [UNSUPPORTED] to translate lambda expressions we need an explicit delegate type, try adding a cast "(top, left) => {
-            return tilingGraph.GetNode(_concreteMap.GetNodeIdFromPos(top, left));
-        }" */;
+    private Id<ConcreteNode> advanceNode(Id<ConcreteNode> nodeId, int direction) {
+        ConcreteNodeInfo nodeInfo = _concreteMap.graph.getNodeInfo(nodeId);
+        int y = nodeInfo.position.y;
+        int x = nodeInfo.position.x;
+        ConcreteGraph tilingGraph = _concreteMap.graph;
+        Function<Pair<Integer, Integer>, ConcreteNode> getNode = (coords) -> { return tilingGraph.getNode(_concreteMap.getNodeIdFromPos(coords.fst, coords.snd)); };
         switch(Direction.values()[direction])
         {
             case North:
                 if (y == 0)
                     return INVALID_ID;
 
-                return getNode(x, y - 1).NodeId;
+                return getNode.apply(new Pair<>(x, y - 1)).nodeId;
             case East:
-                if (x == _concreteMap.Width - 1)
+                if (x == _concreteMap.width - 1)
                     return INVALID_ID;
 
-                return getNode(x + 1, y).NodeId;
+                return getNode.apply(new Pair<>(x + 1, y)).nodeId;
             case South:
-                if (y == _concreteMap.Height - 1)
+                if (y == _concreteMap.height - 1)
                     return INVALID_ID;
 
-                return getNode(x, y + 1).NodeId;
+                return getNode.apply(new Pair<>(x, y + 1)).nodeId;
             case West:
                 if (x == 0)
                     return INVALID_ID;
 
-                return getNode(x - 1, y).NodeId;
+                return getNode.apply(new Pair<>(x - 1, y)).nodeId;
             case NorthEast:
-                if (y == 0 || x == _concreteMap.Width - 1)
+                if (y == 0 || x == _concreteMap.width - 1)
                     return INVALID_ID;
 
-                return getNode(x + 1, y - 1).NodeId;
+                return getNode.apply(new Pair<>(x + 1, y - 1)).nodeId;
             case SouthEast:
-                if (y == _concreteMap.Height - 1 || x == _concreteMap.Width - 1)
+                if (y == _concreteMap.height - 1 || x == _concreteMap.width - 1)
                     return INVALID_ID;
 
-                return getNode(x + 1, y + 1).NodeId;
+                return getNode.apply(new Pair<>(x + 1, y + 1)).nodeId;
             case SouthWest:
-                if (y == _concreteMap.Height - 1 || x == 0)
+                if (y == _concreteMap.height - 1 || x == 0)
                     return INVALID_ID;
 
-                return getNode(x - 1, y + 1).NodeId;
+                return getNode.apply(new Pair<>(x - 1, y + 1)).nodeId;
             case NorthWest:
                 if (y == 0 || x == 0)
                     return INVALID_ID;
 
-                return getNode(x - 1, y - 1).NodeId;
+                return getNode.apply(new Pair<>(x - 1, y - 1)).nodeId;
             default:
                 return INVALID_ID;
 

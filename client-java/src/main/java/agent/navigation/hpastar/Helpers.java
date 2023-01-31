@@ -2,11 +2,12 @@
 // Translated by CS2J (http://www.cs2j.com): 30/01/2023 14:06:34
 //
 
-package HPASharp;
+package agent.navigation.hpastar;
 
+import eu.iv4xr.framework.spatial.IntVec2D;
 
 public class Helpers {
-  public static int getMaxEdges(TileType tileType) throws Exception {
+  public static int getMaxEdges(TileType tileType) {
     switch (tileType) {
       case Hex:
         return 6;
@@ -19,7 +20,7 @@ public class Helpers {
     return 0;
   }
 
-  public static boolean areAligned(Position p1, Position p2) throws Exception {
-    return p1.X == p2.X || p1.Y == p2.Y;
+  public static boolean areAligned(IntVec2D p1, IntVec2D p2) {
+    return p1.x == p2.x || p1.y == p2.y;
   }
 }

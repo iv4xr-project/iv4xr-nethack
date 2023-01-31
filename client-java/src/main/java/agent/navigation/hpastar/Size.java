@@ -2,32 +2,14 @@
 // Translated by CS2J (http://www.cs2j.com): 30/01/2023 14:06:34
 //
 
-package HPASharp;
+package agent.navigation.hpastar;
 
+public class Size {
+  public Size(int width, int height) {
+    this.width = width;
+    this.height = height;
+  }
 
-public class Size
-{
-    public Size(int width, int height) throws Exception {
-        setWidth(width);
-        setHeight(height);
-    }
-
-    private int __Height = new int();
-    public int getHeight() {
-        return __Height;
-    }
-
-    public void setHeight(int value) {
-        __Height = value;
-    }
-
-    private int __Width = new int();
-    public int getWidth() {
-        return __Width;
-    }
-
-    public void setWidth(int value) {
-        __Width = value;
-    }
-
+  public int height;
+  public int width;
 }

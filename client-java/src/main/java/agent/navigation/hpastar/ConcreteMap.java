@@ -2,119 +2,73 @@
 // Translated by CS2J (http://www.cs2j.com): 30/01/2023 14:06:33
 //
 
-package HPASharp;
+package agent.navigation.hpastar;
 
-import HPASharp.ConcreteMap;
-import HPASharp.Connection;
-import HPASharp.Factories.GraphFactory;
-import HPASharp.Graph.ConcreteGraph;
-import HPASharp.Graph.ConcreteNode;
-import HPASharp.Helpers;
-import HPASharp.Infrastructure.Constants;
-import HPASharp.Infrastructure.Id;
-import HPASharp.Infrastructure.IMap;
-import HPASharp.IPassability;
-import HPASharp.Position;
-import HPASharp.TileType;
+import agent.navigation.hpastar.factories.GraphFactory;
+import agent.navigation.hpastar.graph.ConcreteEdge;
+import agent.navigation.hpastar.graph.ConcreteGraph;
+import agent.navigation.hpastar.graph.ConcreteNode;
+import agent.navigation.hpastar.graph.ConcreteNodeInfo;
+import agent.navigation.hpastar.infrastructure.Constants;
+import agent.navigation.hpastar.infrastructure.Id;
+import agent.navigation.hpastar.infrastructure.IMap;
+import eu.iv4xr.framework.spatial.IntVec2D;
 
-public class ConcreteMap   implements IMap<ConcreteNode>
+import java.util.ArrayList;
+import java.util.List;
+
+public class ConcreteMap implements IMap<ConcreteNode>
 {
-    private IPassability __Passability;
-    public IPassability getPassability() {
-        return __Passability;
-    }
+    public IPassability passability;
+    public TileType tileType = TileType.Hex;
 
-    public void setPassability(IPassability value) {
-        __Passability = value;
-    }
+    public int height;
+    public int width;
+    public int maxEdges;
+    public ConcreteGraph graph;
+    public int getNrNodes() {return height * width; };
 
-    private TileType __TileType = TileType.Hex;
-    public TileType getTileType() {
-        return __TileType;
-    }
-
-    public void setTileType(TileType value) {
-        __TileType = value;
-    }
-
-    private int __Height = new int();
-    public int getHeight() {
-        return __Height;
-    }
-
-    public void setHeight(int value) {
-        __Height = value;
-    }
-
-    private int __Width = new int();
-    public int getWidth() {
-        return __Width;
-    }
-
-    public void setWidth(int value) {
-        __Width = value;
-    }
-
-    private int __MaxEdges = new int();
-    public int getMaxEdges() {
-        return __MaxEdges;
-    }
-
-    public void setMaxEdges(int value) {
-        __MaxEdges = value;
-    }
-
-    private ConcreteGraph __Graph;
-    public ConcreteGraph getGraph() {
-        return __Graph;
-    }
-
-    public void setGraph(ConcreteGraph value) {
-        __Graph = value;
-    }
-
-    public ConcreteMap(TileType tileType, int width, int height, IPassability passability) throws Exception {
-        setPassability(passability);
-        setTileType(tileType);
-        setMaxEdges(Helpers.getMaxEdges(tileType));
-        Height = height;
-        setWidth(width);
-        setGraph(GraphFactory.CreateGraph(width, height, getPassability()));
+    public ConcreteMap(TileType tileType, int width, int height, IPassability passability) {
+        this.passability = passability;
+        this.tileType = tileType;
+        this.maxEdges = Helpers.getMaxEdges(tileType);
+        this.height = height;
+        this.width = width;
+        this.graph = GraphFactory.createGraph(width, height, passability);
     }
 
     // Create a new concreteMap as a copy of another concreteMap (just copying obstacles)
-    public ConcreteMap slice(int horizOrigin, int vertOrigin, int width, int height, IPassability passability) throws Exception {
-        ConcreteMap slicedConcreteMap = new ConcreteMap(this.getTileType(),width,height,passability);
-        for (/* [UNSUPPORTED] 'var' as type is unsupported "var" */ slicedMapNode : slicedConcreteMap.getGraph().getNodes())
+    public ConcreteMap slice(int horizOrigin, int vertOrigin, int width, int height, IPassability passability) {
+        ConcreteMap slicedConcreteMap = new ConcreteMap(tileType, width, height, passability);
+        for (ConcreteNode slicedMapNode : slicedConcreteMap.graph.nodes)
         {
-            ConcreteNode globalConcreteNode = getGraph().getNode(getNodeIdFromPos(horizOrigin + slicedMapNode.Info.Position.X,vertOrigin + slicedMapNode.Info.Position.Y));
-            slicedMapNode.Info.IsObstacle = globalConcreteNode.getInfo().getIsObstacle();
-            slicedMapNode.Info.Cost = globalConcreteNode.getInfo().getCost();
+            ConcreteNode globalConcreteNode = graph.getNode(getNodeIdFromPos(horizOrigin + slicedMapNode.info.position.x,vertOrigin + slicedMapNode.info.position.y));
+            slicedMapNode.info.isObstacle = globalConcreteNode.info.isObstacle;
+            slicedMapNode.info.cost = globalConcreteNode.info.cost;
         }
         return slicedConcreteMap;
     }
 
-    Width* Height = new Width*();
-    public Id<ConcreteNode> getNodeIdFromPos(int x, int y) throws Exception {
-        return Id<ConcreteNode>.From(y * getWidth() + x);
+    public Id<ConcreteNode> getNodeIdFromPos(int x, int y) {
+        return Id<ConcreteNode>.From(y * width + x);
     }
 
-    public int getHeuristic(Id<ConcreteNode> startNodeId, Id<ConcreteNode> targetNodeId) throws Exception {
-        /* [UNSUPPORTED] 'var' as type is unsupported "var" */ startPosition = getGraph().getNodeInfo(startNodeId).getPosition();
-        /* [UNSUPPORTED] 'var' as type is unsupported "var" */ targetPosition = getGraph().getNodeInfo(targetNodeId).getPosition();
-        /* [UNSUPPORTED] 'var' as type is unsupported "var" */ startX = startPosition.X;
-        /* [UNSUPPORTED] 'var' as type is unsupported "var" */ targetX = targetPosition.X;
-        /* [UNSUPPORTED] 'var' as type is unsupported "var" */ startY = startPosition.Y;
-        /* [UNSUPPORTED] 'var' as type is unsupported "var" */ targetY = targetPosition.Y;
-        /* [UNSUPPORTED] 'var' as type is unsupported "var" */ diffX = Math.Abs(targetX - startX);
-        /* [UNSUPPORTED] 'var' as type is unsupported "var" */ diffY = Math.Abs(targetY - startY);
-        switch(getTileType())
+    public int getHeuristic(Id<ConcreteNode> startNodeId, Id<ConcreteNode> targetNodeId) {
+        IntVec2D startPosition = graph.getNodeInfo(startNodeId).position;
+        IntVec2D targetPosition = graph.getNodeInfo(targetNodeId).position;
+        int startX = startPosition.x;
+        int targetX = targetPosition.x;
+        int startY = startPosition.y;
+        int targetY = targetPosition.y;
+        int diffX = Math.abs(targetX - startX);
+        int diffY = Math.abs(targetY - startY);
+        switch(tileType)
         {
             case Hex:
                 {
                     // Vancouver distance
                     // See P.Yap: Grid-based Path-Finding (LNAI 2338 pp.44-55)
-                    /* [UNSUPPORTED] 'var' as type is unsupported "var" */ correction = 0;
+                    int correction = 0;
                     if (diffX % 2 != 0)
                     {
                         if (targetY < startY)
@@ -124,22 +78,19 @@ public class ConcreteMap   implements IMap<ConcreteNode>
 
                     }
 
+                    // TODO: Check formula is indeed wrong
                     // Note: formula in paper is wrong, corrected below.
-                    /* [UNSUPPORTED] 'var' as type is unsupported "var" */ dist = Math.Max(0, diffY - diffX / 2 - correction) + diffX;
-                    return dist * 1;
+                    return Math.max(0, diffY - diffX / 2 - correction) + diffX;
                 }
             case OctileUnicost:
-                return Math.Max(diffX, diffY) * Constants.COST_ONE;
+                return Math.max(diffX, diffY) * Constants.COST_ONE;
             case Octile:
-                int maxDiff = new int();
-                int minDiff = new int();
-                if (diffX > diffY)
-                {
+                int maxDiff;
+                int minDiff;
+                if (diffX > diffY) {
                     maxDiff = diffX;
                     minDiff = diffY;
-                }
-                else
-                {
+                } else {
                     maxDiff = diffY;
                     minDiff = diffX;
                 }
@@ -152,17 +103,17 @@ public class ConcreteMap   implements IMap<ConcreteNode>
         }
     }
 
-    public IEnumerable<Connection<ConcreteNode>> getConnections(Id<ConcreteNode> nodeId) throws Exception {
-        /* [UNSUPPORTED] 'var' as type is unsupported "var" */ result = new List<Connection<ConcreteNode>>();
-        ConcreteNode node = getGraph().getNode(nodeId);
-        ConcreteNodeInfo nodeInfo = node.getInfo();
-        for (/* [UNSUPPORTED] 'var' as type is unsupported "var" */ edge : node.getEdges().Values)
+    public Iterable<Connection<ConcreteNode>> getConnections(Id<ConcreteNode> nodeId) {
+        List<Connection<ConcreteNode>> result = new ArrayList<>();
+        ConcreteNode node = graph.getNode(nodeId);
+        ConcreteNodeInfo nodeInfo = node.info;
+        for (ConcreteEdge edge : node.edges.values())
         {
-            /* [UNSUPPORTED] 'var' as type is unsupported "var" */ targetNodeId = edge.TargetNodeId;
-            /* [UNSUPPORTED] 'var' as type is unsupported "var" */ targetNodeInfo = getGraph().GetNodeInfo(targetNodeId);
-            if (CanJump(targetNodeInfo.Position, nodeInfo.getPosition()) && !targetNodeInfo.IsObstacle)
-                result.Add(new Connection<ConcreteNode>(targetNodeId, edge.Info.Cost));
-
+            Id<ConcreteNode> targetNodeId = edge.targetNodeId;
+            ConcreteNodeInfo targetNodeInfo = graph.getNodeInfo(targetNodeId);
+            if (canJump(targetNodeInfo.position, nodeInfo.position) && !targetNodeInfo.isObstacle) {
+                result.add(new Connection<ConcreteNode>(targetNodeId, edge.info.cost));
+            }
         }
         return result;
     }
@@ -172,58 +123,53 @@ public class ConcreteMap   implements IMap<ConcreteNode>
     * this function does not consider intermediate points (it is
     * assumed you can jump between intermediate points)
     */
-    public boolean canJump(Position p1, Position p2) throws Exception {
-        if (getTileType() != getTileType().Octile && this.getTileType() != getTileType().OctileUnicost)
+    public boolean canJump(IntVec2D p1, IntVec2D p2) {
+        if (tileType != TileType.Octile && tileType != TileType.OctileUnicost)
             return true;
 
-        if (Helpers.areAligned(p1,p2))
+        if (Helpers.areAligned(p1, p2))
             return true;
 
         // The following piece of code existed in the original implementation.
         // It basically checks that you do not forcefully cross a blocked diagonal.
         // Honestly, this is weird, bad designed and supposes that each position is adjacent to each other.
-        ConcreteNodeInfo nodeInfo12 = getGraph().getNode(getNodeIdFromPos(p2.X,p1.Y)).getInfo();
-        ConcreteNodeInfo nodeInfo21 = getGraph().getNode(getNodeIdFromPos(p1.X,p2.Y)).getInfo();
-        return !(nodeInfo12.getIsObstacle() && nodeInfo21.getIsObstacle());
+        ConcreteNodeInfo nodeInfo12 = graph.getNode(getNodeIdFromPos(p2.x, p1.y)).info;
+        ConcreteNodeInfo nodeInfo21 = graph.getNode(getNodeIdFromPos(p1.x, p2.y)).info;
+        return !(nodeInfo12.isObstacle && nodeInfo21.isObstacle);
     }
 
-    private List<char> getCharVector() throws Exception {
-        /* [UNSUPPORTED] 'var' as type is unsupported "var" */ result = new List<char>();
-        /* [UNSUPPORTED] 'var' as type is unsupported "var" */ numberNodes = getNrNodes();
-        for (/* [UNSUPPORTED] 'var' as type is unsupported "var" */ i = 0;i < numberNodes;++i)
-            result.Add(getGraph().GetNodeInfo(Id<ConcreteNode>.From(i)).IsObstacle ? '@' : '.');
+    private List<Character> getCharVector() {
+        List<Character> result = new ArrayList<>();
+        int numberNodes = getNrNodes();
+        for (int i = 0;i < numberNodes;++i)
+            result.add(graph.getNodeInfo(Id<ConcreteNode>.From(i)).IsObstacle ? '@' : '.');
         return result;
     }
 
-    public void printFormatted() throws Exception {
+    public void printFormatted() {
         printFormatted(getCharVector());
     }
 
-    private void printFormatted(List<char> chars) throws Exception {
-        for (/* [UNSUPPORTED] 'var' as type is unsupported "var" */ y = 0;y < Height;++y)
-        {
-            for (/* [UNSUPPORTED] 'var' as type is unsupported "var" */ x = 0;x < getWidth();++x)
-            {
-                /* [UNSUPPORTED] 'var' as type is unsupported "var" */ nodeId = this.GetNodeIdFromPos(x, y);
-                Console.Write(chars[nodeId.IdValue]);
+    private void printFormatted(List<Character> chars) {
+        for (int y = 0; y < height; ++y) {
+            for (int x = 0; x < width; ++x) {
+                Id<ConcreteNode> nodeId = this.getNodeIdFromPos(x, y);
+                System.out.println(chars.get(nodeId.getIdValue()));
             }
-            Console.WriteLine();
+            System.out.println();
         }
     }
 
-    public void printFormatted(List<int> path) throws Exception {
-        /* [UNSUPPORTED] 'var' as type is unsupported "var" */ chars = getCharVector();
-        if (path.Count > 0)
-        {
-            for (/* [UNSUPPORTED] 'var' as type is unsupported "var" */ i : path)
-            {
-                chars[i] = 'x';
+    public void printFormatted(List<Integer> path) {
+        List<Character> chars = getCharVector();
+        if (!path.isEmpty()) {
+            for (int i : path) {
+                chars.set(i, 'x');
             }
-            chars[path[0]] = 'T';
-            chars[path[path.Count - 1]] = 'S';
+            chars.set(path.get(0), 'T');
+            chars.set(path.get(path.size() - 1), 'S');
         }
 
-        PrintFormatted(chars);
+        printFormatted(chars);
     }
-
 }
