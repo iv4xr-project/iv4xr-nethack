@@ -4,7 +4,9 @@
 
 package HPASharp.Factories;
 
-public enum EntranceStyle {
-  MiddleEntrance,
-  EndEntrance
+
+public enum EntranceStyle
+{
+    MiddleEntrance,
+    EndEntrance
 }
