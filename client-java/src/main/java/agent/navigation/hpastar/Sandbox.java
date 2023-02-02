@@ -19,23 +19,21 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import nethack.object.Level;
 import nl.uu.cs.aplib.utils.Pair;
 
 public class Sandbox {
   public static void main(String[] args) {
     int clusterSize = 8;
-    int maxLevel = 2;
-    int height = Level.HEIGHT;
-    int width = Level.WIDTH;
+    int maxLevel = 1;
+    int height = 128;
+    int width = 128;
 
-    IPassability passability = new FakePassability(width, height);
+    FakePassability passability = new FakePassability(width, height);
     ConcreteMap concreteMap =
         ConcreteMapFactory.createConcreteMap(width, height, passability, TileType.Octile);
-    HierarchicalMapFactory abstractMapFactory = new HierarchicalMapFactory();
     HierarchicalMap absTiling =
-        abstractMapFactory.createHierarchicalMap(
-            concreteMap, clusterSize, maxLevel, EntranceStyle.EndEntrance);
+        new HierarchicalMapFactory()
+            .createHierarchicalMap(concreteMap, clusterSize, maxLevel, EntranceStyle.EndEntrance);
     Function<Pair<IntVec2D, IntVec2D>, List<IPathNode>> doHierarchicalSearch =
         (positions) ->
             hierarchicalSearch(absTiling, maxLevel, concreteMap, positions.fst, positions.snd);
@@ -59,10 +57,10 @@ public class Sandbox {
         IntStream.range(0, 2000)
             .mapToObj(
                 i -> {
-                  IntVec2D pos1 = ((FakePassability) passability).getRandomFreePosition();
-                  IntVec2D pos2 = ((FakePassability) passability).getRandomFreePosition();
+                  IntVec2D pos1 = passability.getRandomFreePosition();
+                  IntVec2D pos2 = passability.getRandomFreePosition();
                   while (Math.abs(pos1.x - pos2.x) + Math.abs(pos1.y - pos2.y) < 10) {
-                    pos2 = ((FakePassability) passability).getRandomFreePosition();
+                    pos2 = passability.getRandomFreePosition();
                   }
                   return new Pair<IntVec2D, IntVec2D>(pos1, pos2);
                 })
@@ -70,15 +68,15 @@ public class Sandbox {
 
     long t1 = System.nanoTime();
     for (int i = 0; i < points.size(); i++) {
-      IntVec2D startPosition2 = points.get(i).fst;
-      IntVec2D endPosition2 = points.get(i).snd;
+      IntVec2D startPosition = points.get(i).fst;
+      IntVec2D endPosition = points.get(i).snd;
       List<IPathNode> regularSearchPath =
-          doHierarchicalSearch.apply(new Pair<>(startPosition2, endPosition2));
-      List<IntVec2D> posPath1 = toPositionPath.apply(regularSearchPath);
+          doHierarchicalSearch.apply(new Pair<>(startPosition, endPosition));
+      List<IntVec2D> posPath = toPositionPath.apply(regularSearchPath);
     }
     long t2 = System.nanoTime();
     long regularSearchTime = t2 - t1;
-    System.out.println(regularSearchTime);
+    System.out.printf("Searching 2000 paths took: %.2fs%n", regularSearchTime / 1000000000.0f);
   }
 
   private static List<IPathNode> hierarchicalSearch(
@@ -90,6 +88,7 @@ public class Sandbox {
     HierarchicalMapFactory factory = new HierarchicalMapFactory();
     Id<AbstractNode> startAbsNode = factory.insertAbstractNode(hierarchicalMap, startPosition);
     Id<AbstractNode> targetAbsNode = factory.insertAbstractNode(hierarchicalMap, endPosition);
+    assert startAbsNode != targetAbsNode;
     int maxPathsToRefine = Integer.MAX_VALUE;
     HierarchicalSearch hierarchicalSearch = new HierarchicalSearch();
     List<AbstractPathNode> abstractPath =
@@ -98,6 +97,7 @@ public class Sandbox {
     List<IPathNode> path =
         hierarchicalSearch.abstractPathToLowLevelPath(
             hierarchicalMap, abstractPath, hierarchicalMap.width, maxPathsToRefine);
+
     SmoothWizard smoother = new SmoothWizard(concreteMap, path);
     path = smoother.smoothPath();
     factory.removeAbstractNode(hierarchicalMap, targetAbsNode);

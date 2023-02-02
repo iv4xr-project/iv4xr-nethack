@@ -18,7 +18,7 @@ import java.util.List;
 
 public class ConcreteMap implements IMap<ConcreteNode> {
   public IPassability passability;
-  public TileType tileType = TileType.Hex;
+  public final TileType tileType;
 
   public int height;
   public int width;

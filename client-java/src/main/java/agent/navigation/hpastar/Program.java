@@ -268,6 +268,7 @@ public class Program {
         List<IPathNode> regularSearchPath =
             searchStrategy.apply(new Pair<>(startPosition2, endPosition2));
         List<IntVec2D> posPath1 = toPositionPath.apply(regularSearchPath);
+        System.out.println(posPath1);
       }
       long t2 = System.nanoTime();
       long regularSearchTime = t2 - t1;
@@ -307,7 +308,7 @@ public class Program {
 
     // Regular pathfinding
     AStar<ConcreteNode> searcher =
-        new AStar<ConcreteNode>(
+        new AStar<>(
             concreteMap,
             getNode.apply(new Pair<>(startPosition.x, startPosition.y)).nodeId,
             getNode.apply(new Pair<>(endPosition.x, endPosition.y)).nodeId);

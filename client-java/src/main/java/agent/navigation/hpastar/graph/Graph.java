@@ -57,7 +57,8 @@ public class Graph<
   }
 
   public void removeEdgesFromAndToNode(Id<TNode> nodeId) {
-    for (Id<TNode> targetNodeId : nodes.get(nodeId.getIdValue()).edges.keySet()) {
+    List<Id<TNode>> keys = new ArrayList<>(nodes.get(nodeId.getIdValue()).edges.keySet());
+    for (Id<TNode> targetNodeId : keys) {
       nodes.get(targetNodeId.getIdValue()).removeEdge(nodeId);
     }
     nodes.get(nodeId.getIdValue()).edges.clear();

@@ -48,7 +48,7 @@ public class GraphFactory {
   }
 
   private static void createEdges(ConcreteGraph graph, int width, int height, TileType tileType) {
-    for (int top = 0; top < height; ++top)
+    for (int top = 0; top < height; ++top) {
       for (int left = 0; left < width; ++left) {
         Id<ConcreteNode> nodeId = getNodeByPos(graph, left, top, width).nodeId;
         addEdge(graph, nodeId, left, top - 1, width, height, false);
@@ -75,6 +75,7 @@ public class GraphFactory {
           }
         }
       }
+    }
   }
 
   private static void createNodes(

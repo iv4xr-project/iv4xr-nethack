@@ -12,18 +12,18 @@ import java.util.Random;
 
 public class FakePassability implements IPassability {
   float obstaclePercentage = 0.20f;
-  private final boolean[][] obstacles;
+  final boolean[][] obstacles;
 
   public FakePassability(int width, int height) {
     obstacles = new boolean[width][height];
     createObstacles(obstaclePercentage, width, height, true);
   }
 
-  private Random random = new Random(1000);
+  private Random random = new Random(0);
 
   public boolean canEnter(IntVec2D pos, RefSupport<Integer> cost) {
     cost.setValue(Constants.COST_ONE);
-    return !obstacles[pos.y][pos.x];
+    return !obstacles[pos.x][pos.y];
   }
 
   /** Creates obstacles in the map */
@@ -31,7 +31,7 @@ public class FakePassability implements IPassability {
     int RAND_MAX = Integer.MAX_VALUE;
     int numberNodes = width * height;
     int numberObstacles = (int) (obstaclePercentage * numberNodes);
-    for (int count = 0; count < numberObstacles; ) {
+    for (int count = 0; count < numberObstacles; count++) {
       int randInt = Math.abs(random.nextInt());
       int nodeId = randInt / (RAND_MAX / numberNodes + 1) % (width * height);
       int x = nodeId % width;
@@ -54,11 +54,11 @@ public class FakePassability implements IPassability {
   }
 
   public IntVec2D getRandomFreePosition() {
-    int x = random.nextInt(40);
-    int y = random.nextInt(40);
+    int x = random.nextInt(obstacles.length);
+    int y = random.nextInt(obstacles[0].length);
     while (obstacles[x][y]) {
-      x = random.nextInt(40);
-      y = random.nextInt(40);
+      x = random.nextInt(obstacles.length);
+      y = random.nextInt(obstacles[0].length);
     }
     return new IntVec2D(x, y);
   }

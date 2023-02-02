@@ -24,27 +24,17 @@ import java.util.function.Function;
 import nl.uu.cs.aplib.utils.Pair;
 
 public class SmoothWizard {
-  private List<IPathNode> __InitialPath = new ArrayList<>();
-
-  public List<IPathNode> getInitialPath() {
-    return __InitialPath;
-  }
-
-  public void setInitialPath(List<IPathNode> value) {
-    __InitialPath = value;
-  }
-
+  private List<IPathNode> initialPath = new ArrayList<>();
   private static final Id<ConcreteNode> INVALID_ID = new Id<ConcreteNode>().from(Constants.NO_NODE);
   private final ConcreteMap _concreteMap;
-  // This is a dictionary, indexed by nodeId, that tells in which order does this node occupy in the
-  // path
+  // This is a map, indexed by nodeId, that tells in which order does this node occupy in the path
   private final Map<Integer, Integer> _pathMap = new HashMap<>();
 
   public SmoothWizard(ConcreteMap concreteMap, List<IPathNode> path) {
-    setInitialPath(path);
+    initialPath = path;
     _concreteMap = concreteMap;
-    for (int i = 0; i < getInitialPath().size(); i++) {
-      _pathMap.put(getInitialPath().get(i).getIdValue(), i + 1);
+    for (int i = 0; i < initialPath.size(); i++) {
+      _pathMap.put(initialPath.get(i).getIdValue(), i + 1);
     }
   }
 
@@ -53,20 +43,19 @@ public class SmoothWizard {
   }
 
   public List<IPathNode> smoothPath() {
-    List<IPathNode> smoothedPath = new ArrayList<>();
     List<ConcretePathNode> smoothedConcretePath = new ArrayList<>();
     for (int index = 0;
-        index < getInitialPath().size() && getInitialPath().get(index) instanceof ConcretePathNode;
+        index < initialPath.size() && initialPath.get(index) instanceof ConcretePathNode;
         index++) {
-      ConcretePathNode pathNode = (ConcretePathNode) getInitialPath().get(index);
+      ConcretePathNode pathNode = (ConcretePathNode) initialPath.get(index);
       if (smoothedConcretePath.isEmpty()) {
         smoothedConcretePath.add(pathNode);
       }
       // add this node to the smoothed path
-      if (smoothedConcretePath.get(smoothedConcretePath.size() - 1).id != pathNode.id) {
+      if (!smoothedConcretePath.get(smoothedConcretePath.size() - 1).id.equals(pathNode.id)) {
         // It's possible that, when smoothing, the next node that will be put in the path
         // will not be adjacent. In those cases, since OpenRA requires a continuous path
-        // without breakings, we should calculate a new path for that section
+        // without breaking, we should calculate a new path for that section
         ConcretePathNode lastNodeInSmoothedPath =
             smoothedConcretePath.get(smoothedConcretePath.size() - 1);
         ConcretePathNode currentNodeInPath = pathNode;
@@ -85,13 +74,7 @@ public class SmoothWizard {
 
       index = decideNextNodeToConsider(index);
     }
-    for (ConcretePathNode pathNode : smoothedConcretePath) {
-      smoothedPath.add(pathNode);
-    }
-    for (int index = 0; index < getInitialPath().size(); index++) {
-      smoothedPath.add(getInitialPath().get(index));
-    }
-    return smoothedPath;
+    return new ArrayList<>(smoothedConcretePath);
   }
 
   private int decideNextNodeToConsider(int index) {
@@ -103,17 +86,17 @@ public class SmoothWizard {
 
       Id<ConcreteNode> seenPathNode =
           advanceThroughDirection(
-              new Id<ConcreteNode>().from(getInitialPath().get(index).getIdValue()), dir);
+              new Id<ConcreteNode>().from(initialPath.get(index).getIdValue()), dir);
       if (seenPathNode == INVALID_ID) continue;
 
       // No node in advance in that direction, just continue
-      if (index > 0 && seenPathNode.getIdValue() == getInitialPath().get(index - 1).getIdValue())
+      if (index > 0 && seenPathNode.getIdValue() == initialPath.get(index - 1).getIdValue())
         continue;
 
       // If the point we are advancing is the same as the previous one, we didn't
       // improve at all. Just continue looking other directions
-      if (index < getInitialPath().size() - 1
-          && seenPathNode.getIdValue() == getInitialPath().get(index + 1).getIdValue()) continue;
+      if (index < initialPath.size() - 1
+          && seenPathNode.getIdValue() == initialPath.get(index + 1).getIdValue()) continue;
 
       // If the point we are advancing is the same as a next node in the path,
       // we didn't improve either. Continue next direction
@@ -125,7 +108,7 @@ public class SmoothWizard {
 
   // count the path reduction (e.g., 2)
   private static boolean areAdjacent(IntVec2D a, IntVec2D b) {
-    return Math.abs(a.x - b.x) + Math.abs(a.y - b.y) <= 2;
+    return Math.abs(a.x - b.x) <= 1 && Math.abs(a.y - b.y) <= 1;
   }
 
   // if the Manhattan distance between a and b is > 2, then they are not

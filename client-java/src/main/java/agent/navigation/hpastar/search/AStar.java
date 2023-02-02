@@ -21,31 +21,30 @@ public class AStar<TNode> {
   private NodeLookup<TNode> _nodeLookup;
 
   public AStar(IMap<TNode> map, Id<TNode> startNodeId, Id<TNode> targetNodeId) {
-    _isGoal = (Id<TNode> nodeId) -> nodeId == targetNodeId;
+    _isGoal = (Id<TNode> nodeId) -> nodeId.getIdValue() == targetNodeId.getIdValue();
     _calculateHeuristic = (Id<TNode> nodeId) -> map.getHeuristic(nodeId, targetNodeId);
-    this._map = map;
+    _map = map;
     int estimatedCost = _calculateHeuristic.apply(startNodeId);
-    AStarNode<TNode> startNode =
-        new AStarNode<TNode>(startNodeId, 0, estimatedCost, CellStatus.Open);
-    this._openQueue.add(new Priotisable<Id<TNode>>(startNodeId, startNode.f));
-    this._nodeLookup = new NodeLookup<TNode>(map.getNrNodes());
-    this._nodeLookup.setNodeValue(startNodeId, startNode);
+    AStarNode<TNode> startNode = new AStarNode<>(startNodeId, 0, estimatedCost, CellStatus.Open);
+    _openQueue.add(new Priotisable<Id<TNode>>(startNodeId, startNode.f));
+    _nodeLookup = new NodeLookup<TNode>(map.getNrNodes());
+    _nodeLookup.setNodeValue(startNodeId, startNode);
   }
 
   public final boolean nodeIsClosed(Id<TNode> nodeId) {
-    return (this._nodeLookup.nodeIsVisited(nodeId)
-        && (this._nodeLookup.getNodeValue(nodeId).status == CellStatus.Closed));
+    return _nodeLookup.nodeIsVisited(nodeId)
+        && _nodeLookup.getNodeValue(nodeId).status == CellStatus.Closed;
   }
 
   public final boolean canExpand() {
-    return ((this._openQueue != null) && (this._openQueue.size() != 0));
+    return !_openQueue.isEmpty();
   }
 
   public Path<TNode> findBidiPath(IMap<TNode> map, Id<TNode> startNodeId, Id<TNode> targetNodeId) {
     var search1 = new AStar<TNode>(map, startNodeId, targetNodeId);
     var search2 = new AStar<TNode>(map, targetNodeId, startNodeId);
     var expand = 0;
-    while ((search1.canExpand() && search2.canExpand())) {
+    while (search1.canExpand() && search2.canExpand()) {
       var frontier = search1.expand();
       expand++;
       if (search2.nodeIsClosed(frontier)) {
@@ -78,10 +77,10 @@ public class AStar<TNode> {
   }
 
   public final Path<TNode> findPath() {
-    while (this.canExpand()) {
-      var nodeId = this.expand();
+    while (canExpand()) {
+      var nodeId = expand();
       if (_isGoal.apply(nodeId)) {
-        return this.reconstructPathFrom(nodeId);
+        return reconstructPathFrom(nodeId);
       }
     }
 
@@ -89,42 +88,44 @@ public class AStar<TNode> {
   }
 
   private final Id<TNode> expand() {
-    var nodeId = this._openQueue.remove();
-    var node = this._nodeLookup.getNodeValue(nodeId.item);
-    this.processNeighbours(nodeId.item, node);
-    this._nodeLookup.setNodeValue(
+    var nodeId = _openQueue.remove();
+    var node = _nodeLookup.getNodeValue(nodeId.item);
+    processNeighbours(nodeId.item, node);
+    _nodeLookup.setNodeValue(
         nodeId.item, new AStarNode<TNode>(node.parent, node.g, node.h, CellStatus.Closed));
     return nodeId.item;
   }
 
   private final void processNeighbours(Id<TNode> nodeId, AStarNode<TNode> node) {
-    Iterable<Connection<TNode>> connections = this._map.getConnections(nodeId);
+    Iterable<Connection<TNode>> connections = _map.getConnections(nodeId);
     for (Connection<TNode> connection : connections) {
       int gCost = node.g + connection.cost;
       Id<TNode> neighbour = connection.target;
-      if (this._nodeLookup.nodeIsVisited(neighbour)) {
-        var targetAStarNode = this._nodeLookup.getNodeValue(neighbour);
+      if (_nodeLookup.nodeIsVisited(neighbour)) {
+        var targetAStarNode = _nodeLookup.getNodeValue(neighbour);
         //  If we already processed the neighbour in the past or we already found in the past
         //  a better path to reach this node that the current one, just skip it, else create
         //  and replace a new PathNode
-        if ((targetAStarNode.status == CellStatus.Closed || gCost >= targetAStarNode.g)) {
+        if (targetAStarNode.status == CellStatus.Closed || gCost >= targetAStarNode.g) {
           continue;
         }
 
         targetAStarNode = new AStarNode<TNode>(nodeId, gCost, targetAStarNode.h, CellStatus.Open);
         List<Priotisable<Id<TNode>>> items =
-            this._openQueue.stream().filter(i -> i.item == neighbour).collect(Collectors.toList());
+            _openQueue.stream()
+                .filter(i -> i.item.getIdValue() == neighbour.getIdValue())
+                .collect(Collectors.toList());
         assert items.size() == 1;
         Priotisable<Id<TNode>> item = items.get(0);
-        this._openQueue.remove(item);
-        this._openQueue.add(new Priotisable<>(item.item, targetAStarNode.f));
-        this._nodeLookup.setNodeValue(neighbour, targetAStarNode);
+        _openQueue.remove(item);
+        _openQueue.add(new Priotisable<>(item.item, targetAStarNode.f));
+        _nodeLookup.setNodeValue(neighbour, targetAStarNode);
       } else {
         int newHeuristic = _calculateHeuristic.apply(neighbour);
         AStarNode<TNode> newAStarNode =
             new AStarNode<>(nodeId, gCost, newHeuristic, CellStatus.Open);
-        this._openQueue.add(new Priotisable<>(neighbour, newAStarNode.f));
-        this._nodeLookup.setNodeValue(neighbour, newAStarNode);
+        _openQueue.add(new Priotisable<>(neighbour, newAStarNode.f));
+        _nodeLookup.setNodeValue(neighbour, newAStarNode);
       }
     }
   }

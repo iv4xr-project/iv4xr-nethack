@@ -5,40 +5,17 @@
 package agent.navigation.hpastar.infrastructure;
 
 public class Id<T> implements IId {
-  public boolean equals(Id<T> other) {
-    try {
-      return _value == other._value;
-    } catch (RuntimeException __dummyCatchVar0) {
-      throw __dummyCatchVar0;
-    } catch (Exception __dummyCatchVar0) {
-      throw new RuntimeException(__dummyCatchVar0);
-    }
-  }
-
   public int getIdValue() {
     return _value;
   }
 
+  @Override
   public boolean equals(Object obj) {
-    try {
-      if (null == obj) return false;
-
-      return obj instanceof Id && equals((Id<T>) obj);
-    } catch (RuntimeException __dummyCatchVar1) {
-      throw __dummyCatchVar1;
-    } catch (Exception __dummyCatchVar1) {
-      throw new RuntimeException(__dummyCatchVar1);
-    }
+    return obj instanceof Id && _value == (((Id<?>) obj)._value);
   }
 
   public int hashCode() {
-    try {
-      return Integer.valueOf(_value).hashCode();
-    } catch (RuntimeException __dummyCatchVar2) {
-      throw __dummyCatchVar2;
-    } catch (Exception __dummyCatchVar2) {
-      throw new RuntimeException(__dummyCatchVar2);
-    }
+    return Integer.valueOf(_value).hashCode();
   }
 
   private int _value;

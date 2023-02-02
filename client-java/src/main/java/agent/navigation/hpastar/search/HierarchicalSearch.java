@@ -29,8 +29,9 @@ public class HierarchicalSearch {
       return path;
     }
 
-    for (int level = maxSearchLevel; level > 1; level--)
+    for (int level = maxSearchLevel; level > 1; level--) {
       path = refineAbstractPath(map, path, level, maxPathsToRefine);
+    }
     return path;
   }
 
@@ -58,8 +59,7 @@ public class HierarchicalSearch {
     }
 
     List<AbstractPathNode> result = new ArrayList<>(path.pathNodes.size());
-    for (Object __dummyForeachVar0 : path.pathNodes) {
-      Id<AbstractNode> abstractNodeId = (Id<AbstractNode>) __dummyForeachVar0;
+    for (Id<AbstractNode> abstractNodeId : path.pathNodes) {
       result.add(new AbstractPathNode(abstractNodeId, level));
     }
     return result;
@@ -141,11 +141,13 @@ public class HierarchicalSearch {
         // Inter-cluster edge
         Id<ConcreteNode> lastConcreteNodeId = lastNodeInfo.concreteNodeId;
         Id<ConcreteNode> currentConcreteNodeId = currentNodeInfo.concreteNodeId;
-        if (((ConcretePathNode) result.get(result.size() - 1)).id != lastConcreteNodeId)
+        if (!((ConcretePathNode) result.get(result.size() - 1)).id.equals(lastConcreteNodeId)) {
           result.add(new ConcretePathNode(lastConcreteNodeId));
+        }
 
-        if (((ConcretePathNode) result.get(result.size() - 1)).id != currentConcreteNodeId)
+        if (!((ConcretePathNode) result.get(result.size() - 1)).id.equals(currentConcreteNodeId)) {
           result.add(new ConcretePathNode(currentConcreteNodeId));
+        }
       }
       lastAbstractNodeId = currentAbstractNodeId;
     }

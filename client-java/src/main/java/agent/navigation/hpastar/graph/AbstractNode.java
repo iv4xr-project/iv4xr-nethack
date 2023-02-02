@@ -5,12 +5,8 @@
 package agent.navigation.hpastar.graph;
 
 import agent.navigation.hpastar.infrastructure.Id;
-import java.util.HashMap;
-import java.util.Map;
 
 public class AbstractNode extends INode<AbstractNode, AbstractNodeInfo, AbstractEdge> {
-  public Map<Id<AbstractNode>, AbstractEdge> edges = new HashMap<>();
-
   public AbstractNode(Id<AbstractNode> nodeId, AbstractNodeInfo info) {
     this.nodeId = nodeId;
     this.info = info;
