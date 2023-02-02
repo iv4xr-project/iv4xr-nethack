@@ -9,8 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AbstractNode extends INode<AbstractNode, AbstractNodeInfo, AbstractEdge> {
-  public Id<AbstractNode> nodeId;
-  public AbstractNodeInfo info;
   public Map<Id<AbstractNode>, AbstractEdge> edges = new HashMap<>();
 
   public AbstractNode(Id<AbstractNode> nodeId, AbstractNodeInfo info) {

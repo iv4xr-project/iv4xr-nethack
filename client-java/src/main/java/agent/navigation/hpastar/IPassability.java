@@ -4,7 +4,6 @@
 
 package agent.navigation.hpastar;
 
-import CS2JNet.JavaSupport.language.RefSupport;
 import agent.navigation.hpastar.utils.RefSupport;
 import eu.iv4xr.framework.spatial.IntVec2D;
 

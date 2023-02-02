@@ -3,10 +3,9 @@ package agent.navigation.hpastar.search;
 import agent.navigation.hpastar.Connection;
 import agent.navigation.hpastar.infrastructure.IMap;
 import agent.navigation.hpastar.infrastructure.Id;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class AStar<TNode> {
 
@@ -16,20 +15,19 @@ public class AStar<TNode> {
 
   private IMap<TNode> _map;
 
-  private PriorityQueue<Id<TNode>> _openQueue;
+  private final PriorityQueue<Priotisable<Id<TNode>>> _openQueue =
+      new PriorityQueue<>(new PriotisableComperator<>());
 
   private NodeLookup<TNode> _nodeLookup;
-
-  private AStar() {}
 
   public AStar(IMap<TNode> map, Id<TNode> startNodeId, Id<TNode> targetNodeId) {
     _isGoal = (Id<TNode> nodeId) -> nodeId == targetNodeId;
     _calculateHeuristic = (Id<TNode> nodeId) -> map.getHeuristic(nodeId, targetNodeId);
     this._map = map;
-    var estimatedCost = _calculateHeuristic.apply(startNodeId);
-    var startNode = new AStarNode<TNode>(startNodeId, 0, estimatedCost, CellStatus.Open);
-    this._openQueue = new PriorityQueue<Id<TNode>>();
-    this._openQueue.add(startNodeId, startNode.f); // TODO: Add with priority
+    int estimatedCost = _calculateHeuristic.apply(startNodeId);
+    AStarNode<TNode> startNode =
+        new AStarNode<TNode>(startNodeId, 0, estimatedCost, CellStatus.Open);
+    this._openQueue.add(new Priotisable<Id<TNode>>(startNodeId, startNode.f));
     this._nodeLookup = new NodeLookup<TNode>(map.getNrNodes());
     this._nodeLookup.setNodeValue(startNodeId, startNode);
   }
@@ -68,7 +66,7 @@ public class AStar<TNode> {
       AStar<TNode> search1, AStar<TNode> search2, Id<TNode> frontier) {
     Path<TNode> halfPath1 = search1.reconstructPathFrom(frontier);
     Path<TNode> halfPath2 = search2.reconstructPathFrom(frontier);
-    halfPath2.pathNodes.Reverse();
+    Collections.reverse(halfPath2.pathNodes);
     List<Id<TNode>> p = halfPath2.pathNodes;
     if (!p.isEmpty()) {
       for (int i = 1; i < p.size(); i++) {
@@ -81,7 +79,7 @@ public class AStar<TNode> {
 
   public final Path<TNode> findPath() {
     while (this.canExpand()) {
-      var nodeId = this.Expand();
+      var nodeId = this.expand();
       if (_isGoal.apply(nodeId)) {
         return this.reconstructPathFrom(nodeId);
       }
@@ -92,34 +90,40 @@ public class AStar<TNode> {
 
   private final Id<TNode> expand() {
     var nodeId = this._openQueue.remove();
-    var node = this._nodeLookup.getNodeValue(nodeId);
-    this.processNeighbours(nodeId, node);
+    var node = this._nodeLookup.getNodeValue(nodeId.item);
+    this.processNeighbours(nodeId.item, node);
     this._nodeLookup.setNodeValue(
-        nodeId, new AStarNode<TNode>(node.parent, node.g, node.h, CellStatus.Closed));
-    return nodeId;
+        nodeId.item, new AStarNode<TNode>(node.parent, node.g, node.h, CellStatus.Closed));
+    return nodeId.item;
   }
 
   private final void processNeighbours(Id<TNode> nodeId, AStarNode<TNode> node) {
-    Enum<Connection<TNode>> connections = this._map.getConnections(nodeId);
+    Iterable<Connection<TNode>> connections = this._map.getConnections(nodeId);
     for (Connection<TNode> connection : connections) {
-      var gCost = node.g + connection.cost;
-      var neighbour = connection.target;
+      int gCost = node.g + connection.cost;
+      Id<TNode> neighbour = connection.target;
       if (this._nodeLookup.nodeIsVisited(neighbour)) {
         var targetAStarNode = this._nodeLookup.getNodeValue(neighbour);
         //  If we already processed the neighbour in the past or we already found in the past
         //  a better path to reach this node that the current one, just skip it, else create
         //  and replace a new PathNode
-        if (((targetAStarNode.status == CellStatus.Closed) || (gCost >= targetAStarNode.g))) {
-          // TODO: Warning!!! continue If
+        if ((targetAStarNode.status == CellStatus.Closed || gCost >= targetAStarNode.g)) {
+          continue;
         }
 
         targetAStarNode = new AStarNode<TNode>(nodeId, gCost, targetAStarNode.h, CellStatus.Open);
-        this._openQueue.UpdatePriority(neighbour, targetAStarNode.f);
+        List<Priotisable<Id<TNode>>> items =
+            this._openQueue.stream().filter(i -> i.item == neighbour).collect(Collectors.toList());
+        assert items.size() == 1;
+        Priotisable<Id<TNode>> item = items.get(0);
+        this._openQueue.remove(item);
+        this._openQueue.add(new Priotisable<>(item.item, targetAStarNode.f));
         this._nodeLookup.setNodeValue(neighbour, targetAStarNode);
       } else {
-        var newHeuristic = _calculateHeuristic.apply(neighbour);
-        var newAStarNode = new AStarNode<TNode>(nodeId, gCost, newHeuristic, CellStatus.Open);
-        this._openQueue.add(neighbour, newAStarNode.f);
+        int newHeuristic = _calculateHeuristic.apply(neighbour);
+        AStarNode<TNode> newAStarNode =
+            new AStarNode<>(nodeId, gCost, newHeuristic, CellStatus.Open);
+        this._openQueue.add(new Priotisable<>(neighbour, newAStarNode.f));
         this._nodeLookup.setNodeValue(neighbour, newAStarNode);
       }
     }
@@ -132,16 +136,44 @@ public class AStar<TNode> {
   ///  possible infinite loops in case of bugs, but meh...
   ///  </summary>
   private final Path<TNode> reconstructPathFrom(Id<TNode> destination) {
-    var pathNodes = new ArrayList<>();
-    var pathCost = this._nodeLookup.getNodeValue(destination).f;
-    var currentNode = destination;
+    List<Id<TNode>> pathNodes = new ArrayList<>();
+    int pathCost = this._nodeLookup.getNodeValue(destination).f;
+    Id<TNode> currentNode = destination;
     while ((this._nodeLookup.getNodeValue(currentNode).parent != currentNode)) {
       pathNodes.add(currentNode);
       currentNode = this._nodeLookup.getNodeValue(currentNode).parent;
     }
 
     pathNodes.add(currentNode);
-    pathNodes.Reverse();
+    Collections.reverse(pathNodes);
     return new Path<TNode>(pathNodes, pathCost);
+  }
+
+  /**
+   * Wraps around a type to add a float value on which can be sorted.
+   *
+   * @param <T> The type to wrap around.
+   */
+  class Priotisable<T> {
+    public float priority;
+    public T item;
+
+    /**
+     * Wrap around an item to add a priority on which can be sorted.
+     *
+     * @param item: The item to wrap around.
+     * @param priority: The priority on which can be sorted.
+     */
+    public Priotisable(T item, float priority) {
+      this.item = item;
+      this.priority = priority;
+    }
+  }
+
+  class PriotisableComperator<T> implements Comparator<Priotisable<T>> {
+    @Override
+    public int compare(Priotisable<T> o1, Priotisable<T> o2) {
+      return Float.compare(o1.priority, o2.priority);
+    }
   }
 }

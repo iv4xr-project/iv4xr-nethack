@@ -21,7 +21,7 @@ public class Id<T> implements IId {
 
   public boolean equals(Object obj) {
     try {
-      if (ReferenceEquals(null, obj)) return false;
+      if (null == obj) return false;
 
       return obj instanceof Id && equals((Id<T>) obj);
     } catch (RuntimeException __dummyCatchVar1) {
@@ -33,7 +33,7 @@ public class Id<T> implements IId {
 
   public int hashCode() {
     try {
-      return _value.GetHashCode();
+      return Integer.valueOf(_value).hashCode();
     } catch (RuntimeException __dummyCatchVar2) {
       throw __dummyCatchVar2;
     } catch (Exception __dummyCatchVar2) {
@@ -41,7 +41,9 @@ public class Id<T> implements IId {
     }
   }
 
-  private final int _value;
+  private int _value;
+
+  public Id() {}
 
   private Id(int value) {
     _value = value;

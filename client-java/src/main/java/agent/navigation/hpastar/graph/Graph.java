@@ -43,8 +43,11 @@ public class Graph<
    */
   public void addNode(Id<TNode> nodeId, TNodeInfo info) {
     int size = nodeId.getIdValue() + 1;
-    if (nodes.size() < size) nodes.add(_nodeCreator.apply(new Pair<>(nodeId, info)));
-    else nodes.set(nodeId.getIdValue(), _nodeCreator.apply(new Pair<>(nodeId, info)));
+    if (nodes.size() < size) {
+      nodes.add(_nodeCreator.apply(new Pair<>(nodeId, info)));
+    } else {
+      nodes.set(nodeId.getIdValue(), _nodeCreator.apply(new Pair<>(nodeId, info)));
+    }
   }
 
   public void addEdge(Id<TNode> sourceNodeId, Id<TNode> targetNodeId, TEdgeInfo info) {
@@ -69,7 +72,10 @@ public class Graph<
   }
 
   public TNodeInfo getNodeInfo(Id<TNode> nodeId) {
-    return getNode(nodeId).info;
+    TNode node = getNode(nodeId);
+    // TODO: Figure out why nodeInfo is suddenly null;
+    TNodeInfo nodeInfo = node.info;
+    return nodeInfo;
   }
 
   public Map<Id<TNode>, TEdge> getEdges(Id<TNode> nodeId) {

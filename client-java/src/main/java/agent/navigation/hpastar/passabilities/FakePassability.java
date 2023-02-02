@@ -28,11 +28,12 @@ public class FakePassability implements IPassability {
 
   /** Creates obstacles in the map */
   private void createObstacles(float obstaclePercentage, int width, int height, boolean avoidDiag) {
-    int RAND_MAX = 0x7fff;
+    int RAND_MAX = Integer.MAX_VALUE;
     int numberNodes = width * height;
     int numberObstacles = (int) (obstaclePercentage * numberNodes);
     for (int count = 0; count < numberObstacles; ) {
-      int nodeId = random.nextInt() / (RAND_MAX / numberNodes + 1) % (width * height);
+      int randInt = Math.abs(random.nextInt());
+      int nodeId = randInt / (RAND_MAX / numberNodes + 1) % (width * height);
       int x = nodeId % width;
       int y = nodeId / width;
       if (!obstacles[x][y]) {
