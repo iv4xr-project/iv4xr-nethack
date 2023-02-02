@@ -22,15 +22,13 @@ public class Cluster {
    * A 2D array which represents a distance between 2 entrances. This array could be represented as
    * a Dictionary, but it's faster to use an array.
    */
-  private final Map<Pair<Id<AbstractNode>, Id<AbstractNode>>, Integer> _distances =
-      new HashMap<Pair<Id<AbstractNode>, Id<AbstractNode>>, Integer>();
+  private final Map<Pair<Id<AbstractNode>, Id<AbstractNode>>, Integer> _distances = new HashMap<>();
 
   private final Map<Pair<Id<AbstractNode>, Id<AbstractNode>>, List<Id<ConcreteNode>>> _cachedPaths =
-      new HashMap<Pair<Id<AbstractNode>, Id<AbstractNode>>, List<Id<ConcreteNode>>>();
+      new HashMap<>();
   // Tells whether a path has already been calculated for 2 node ids
   private final Map<Pair<Id<AbstractNode>, Id<AbstractNode>>, Boolean> _distanceCalculated =
-      new HashMap<Pair<Id<AbstractNode>, Id<AbstractNode>>, Boolean>();
-  ;
+      new HashMap<>();
   public List<EntrancePoint> entrancePoints = new ArrayList<>();
 
   // This concreteMap object contains the subregion of the main grid that this cluster contains.
@@ -73,7 +71,7 @@ public class Cluster {
 
     Pair<Id<AbstractNode>, Id<AbstractNode>> tuple =
         new Pair<>(e1.abstractNodeId, e2.abstractNodeId);
-    Pair<Id<AbstractNode>, Id<AbstractNode>> invtuple =
+    Pair<Id<AbstractNode>, Id<AbstractNode>> invTuple =
         new Pair<>(e2.abstractNodeId, e1.abstractNodeId);
     if (_distanceCalculated.containsKey(tuple)) {
       return;
@@ -84,17 +82,18 @@ public class Cluster {
     AStar<ConcreteNode> search = new AStar<>(subConcreteMap, startNodeId, targetNodeId);
     Path<ConcreteNode> path = search.findPath();
     if (path.pathCost != -1) {
-      // Yeah, we are supposing reaching A - B is the same like reaching B - A. Which
-      // depending on the game this is NOT necessarily true (e.g climbing, downstepping a mountain)
+      // Yeah, we suppose reaching A - B is the same as reaching B - A. Which
+      // depending on the game this is NOT necessarily true (e.g. climbing, stepping down a
+      // mountain)
       _distances.put(tuple, path.pathCost);
-      _distances.put(invtuple, path.pathCost);
+      _distances.put(invTuple, path.pathCost);
       _cachedPaths.put(tuple, new ArrayList<>(path.pathNodes));
       Collections.reverse(path.pathNodes);
-      _cachedPaths.put(invtuple, path.pathNodes);
+      _cachedPaths.put(invTuple, path.pathNodes);
     }
 
     _distanceCalculated.put(tuple, true);
-    _distanceCalculated.put(invtuple, true);
+    _distanceCalculated.put(invTuple, true);
   }
 
   public void updatePathsForLocalEntrance(EntrancePoint srcEntrancePoint) {

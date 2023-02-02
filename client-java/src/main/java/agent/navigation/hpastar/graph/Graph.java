@@ -72,10 +72,7 @@ public class Graph<
   }
 
   public TNodeInfo getNodeInfo(Id<TNode> nodeId) {
-    TNode node = getNode(nodeId);
-    // TODO: Figure out why nodeInfo is suddenly null;
-    TNodeInfo nodeInfo = node.info;
-    return nodeInfo;
+    return getNode(nodeId).info;
   }
 
   public Map<Id<TNode>, TEdge> getEdges(Id<TNode> nodeId) {

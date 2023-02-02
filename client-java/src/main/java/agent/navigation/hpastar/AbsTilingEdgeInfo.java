@@ -27,6 +27,6 @@ public class AbsTilingEdgeInfo {
   }
 
   public void printInfo() {
-    System.out.println(this.toString());
+    System.out.println(this);
   }
 }
