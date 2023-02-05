@@ -33,8 +33,18 @@ public class NetHackSurface
   public Pathfinder<Tile> pathfinder = new AStar<>();
   public int levelNr;
 
+  // TODO: Use these variables
+  private int depth;
+  private int dungeonNr;
+
   public NetHackSurface(int levelNr) {
     this.levelNr = levelNr;
+  }
+
+  public NetHackSurface(int levelNr, int depth, int dungeonNr) {
+    this.levelNr = levelNr;
+    this.depth = depth;
+    this.dungeonNr = dungeonNr;
   }
   /**
    * If true, the pathfinder will assume that the whole NavGraph has been "seen", so no vertex would
@@ -72,25 +82,22 @@ public class NetHackSurface
     if (t == null) {
       return false;
     }
-    if (t.getClass() == Tile.class) {
-      IntVec2D[] neighbours = NavUtils.neighbourCoordinates(pos, false);
-      int horizontalWalls = 0, verticalWalls = 0;
-      for (IntVec2D neighbour : neighbours) {
-        Tile neighbourTile = getTile(neighbour);
-        boolean tileCanBeWall = neighbourTile == null || neighbourTile instanceof Wall;
-        if (!tileCanBeWall) {
-          continue;
-        }
-        if (neighbour.x == pos.x) {
-          horizontalWalls++;
-        } else {
-          verticalWalls++;
-        }
+    IntVec2D[] neighbours = NavUtils.neighbourCoordinates(pos, false);
+    int horizontalWalls = 0, verticalWalls = 0;
+    for (IntVec2D neighbour : neighbours) {
+      Tile neighbourTile = getTile(neighbour);
+      boolean tileCanBeWall = neighbourTile == null || neighbourTile instanceof Wall;
+      if (!tileCanBeWall) {
+        continue;
       }
-
-      return verticalWalls + horizontalWalls == 2 && (verticalWalls == 2 || horizontalWalls == 2);
+      if (neighbour.x == pos.x) {
+        horizontalWalls++;
+      } else {
+        verticalWalls++;
+      }
     }
-    return false;
+
+    return verticalWalls + horizontalWalls == 2 && (verticalWalls == 2 || horizontalWalls == 2);
   }
 
   private boolean isFloor(IntVec2D pos) {
@@ -131,7 +138,7 @@ public class NetHackSurface
     queue.addAll(Arrays.asList(NavUtils.neighbourCoordinates(agentPosition, true)));
 
     // While there are coordinates left to be explored
-    while (queue.size() > 0) {
+    while (!queue.isEmpty()) {
       IntVec2D nextPos = queue.remove();
       // Already processed
       if (processedCoordinates.contains(nextPos)) {
@@ -210,7 +217,7 @@ public class NetHackSurface
   /** Add a non-navigable tile (obstacle). */
   @Override
   public void addObstacle(Tile o) {
-    assert !(o instanceof Walkable) || !((Walkable) o).isWalkable()
+    assert !(o instanceof StraightWalkable) || !((StraightWalkable) o).isWalkable()
         : "Obstacle is not actually an obstacle since it can be passed";
     replaceTile(tiles[o.pos.y + 1][o.pos.x + 1], o);
     tiles[o.pos.y + 1][o.pos.x + 1] = o;
@@ -220,7 +227,7 @@ public class NetHackSurface
   /** Remove a non-navigable tile (obstacle). */
   @Override
   public void removeObstacle(Tile o) {
-    assert o instanceof Walkable && ((Walkable) o).isWalkable()
+    assert o instanceof StraightWalkable && ((StraightWalkable) o).isWalkable()
         : "RemoveObstacle must insert a walkable tile";
     replaceTile(tiles[o.pos.y + 1][o.pos.x + 1], o);
     tiles[o.pos.y + 1][o.pos.x + 1] = o;
@@ -465,7 +472,9 @@ public class NetHackSurface
    * used and at the end a list is built
    */
   private List<Tile> neighbours_(IntVec2D pos) {
-    IntVec2D[] candidates = NavUtils.neighbourCoordinates(pos, true);
+    boolean allowDiagonal = getTile(pos) instanceof Walkable;
+    IntVec2D[] candidates = NavUtils.neighbourCoordinates(pos, allowDiagonal);
+
     int nrResults = 0;
     boolean[] toNeighbour = new boolean[candidates.length];
 

@@ -1,5 +1,3 @@
 package agent.navigation.surface;
 
-public interface Walkable {
-  public boolean isWalkable();
-}
+public interface Walkable extends StraightWalkable {}

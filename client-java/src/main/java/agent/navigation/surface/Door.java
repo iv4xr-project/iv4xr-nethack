@@ -2,7 +2,7 @@ package agent.navigation.surface;
 
 import eu.iv4xr.framework.spatial.IntVec2D;
 
-public class Door extends Tile implements Walkable, Printable {
+public class Door extends Tile implements StraightWalkable, Printable {
   public boolean isOpen = false;
   public boolean isLocked = false;
 
