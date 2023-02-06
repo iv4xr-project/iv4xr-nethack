@@ -12,13 +12,14 @@ import agent.navigation.hpastar.graph.ConcreteNode;
 import agent.navigation.hpastar.graph.ConcreteNodeInfo;
 import agent.navigation.hpastar.infrastructure.Id;
 import agent.navigation.hpastar.utils.RefSupport;
+import agent.navigation.strategy.NavUtils;
 import eu.iv4xr.framework.spatial.IntVec2D;
 
 public class GraphFactory {
   public static ConcreteGraph createGraph(int width, int height, IPassability passability) {
     ConcreteGraph graph = new ConcreteGraph();
     createNodes(width, height, graph, passability);
-    createEdges(graph, width, height, TileType.Octile);
+    createEdges(graph, width, height, TileType.OctileUnicost, passability);
     return graph;
   }
 
@@ -47,25 +48,13 @@ public class GraphFactory {
     graph.addEdge(nodeId, targetNode.nodeId, new ConcreteEdgeInfo(cost));
   }
 
-  private static void createEdges(ConcreteGraph graph, int width, int height, TileType tileType) {
+  private static void createEdges(
+      ConcreteGraph graph, int width, int height, TileType tileType, IPassability passability) {
     for (int top = 0; top < height; ++top) {
       for (int left = 0; left < width; ++left) {
-        Id<ConcreteNode> nodeId = getNodeByPos(graph, left, top, width).nodeId;
-        addEdge(graph, nodeId, left, top - 1, width, height, false);
-        addEdge(graph, nodeId, left, top + 1, width, height, false);
-        addEdge(graph, nodeId, left - 1, top, width, height, false);
-        addEdge(graph, nodeId, left + 1, top, width, height, false);
-        if (tileType == TileType.Octile) {
-          addEdge(graph, nodeId, left + 1, top + 1, width, height, true);
-          addEdge(graph, nodeId, left - 1, top + 1, width, height, true);
-          addEdge(graph, nodeId, left + 1, top - 1, width, height, true);
-          addEdge(graph, nodeId, left - 1, top - 1, width, height, true);
-        } else if (tileType == TileType.OctileUnicost) {
-          addEdge(graph, nodeId, left + 1, top + 1, width, height, false);
-          addEdge(graph, nodeId, left - 1, top + 1, width, height, false);
-          addEdge(graph, nodeId, left + 1, top - 1, width, height, false);
-          addEdge(graph, nodeId, left - 1, top - 1, width, height, false);
-        } else if (tileType == TileType.Hex) {
+        IntVec2D currentPos = new IntVec2D(left, top);
+        Id<ConcreteNode> nodeId = getNodeByPos(graph, currentPos.x, currentPos.y, width).nodeId;
+        if (tileType == TileType.Hex) {
           if (left % 2 == 0) {
             addEdge(graph, nodeId, left + 1, top - 1, width, height, false);
             addEdge(graph, nodeId, left - 1, top - 1, width, height, false);
@@ -73,6 +62,15 @@ public class GraphFactory {
             addEdge(graph, nodeId, left + 1, top + 1, width, height, false);
             addEdge(graph, nodeId, left - 1, top + 1, width, height, false);
           }
+          continue;
+        }
+
+        for (IntVec2D neighbourPos : NavUtils.neighbourCoordinates(currentPos, true)) {
+          boolean isDiagonal = NavUtils.isDiagonal(currentPos, neighbourPos);
+          if (isDiagonal && !passability.canMoveDiagonal(currentPos, neighbourPos)) {
+            continue;
+          }
+          addEdge(graph, nodeId, neighbourPos.x, neighbourPos.y, width, height, isDiagonal);
         }
       }
     }

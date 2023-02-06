@@ -38,6 +38,6 @@ public class Tile {
 
   @Override
   public String toString() {
-    return "(" + pos.x + "," + pos.y + ")";
+    return "⁇";
   }
 }

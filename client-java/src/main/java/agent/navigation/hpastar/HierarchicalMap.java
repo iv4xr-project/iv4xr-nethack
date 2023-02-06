@@ -21,6 +21,7 @@ import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import nethack.object.Level;
 
 /** Abstract maps represent, as the name implies, an abstraction built over the concrete map. */
 public class HierarchicalMap implements IMap<AbstractNode> {
@@ -64,12 +65,12 @@ public class HierarchicalMap implements IMap<AbstractNode> {
     }
   }
 
-  public HierarchicalMap(ConcreteMap concreteMap, int clusterSize, int maxLevel) {
+  public HierarchicalMap(TileType tileType, int clusterSize, int maxLevel) {
     this.clusterSize = clusterSize;
     this.maxLevel = maxLevel;
-    setType(concreteMap.tileType);
-    height = concreteMap.height;
-    width = concreteMap.width;
+    setType(tileType);
+    height = Level.HEIGHT;
+    width = Level.WIDTH;
   }
 
   public int getHeuristic(Id<AbstractNode> startNodeId, Id<AbstractNode> targetNodeId) {
@@ -198,15 +199,8 @@ public class HierarchicalMap implements IMap<AbstractNode> {
     int currentRow2 = node2Pos.y - (node2Pos.y % offset);
     int currentCol1 = node1Pos.x - (node1Pos.x % offset);
     int currentCol2 = node2Pos.x - (node2Pos.x % offset);
-    if (currentRow1 != currentRow2) {
-      return false;
-    }
 
-    if (currentCol1 != currentCol2) {
-      return false;
-    }
-
-    return true;
+    return currentRow1 == currentRow2 && currentCol1 == currentCol2;
   }
 
   public void setCurrentLevelForSearches(int level) {

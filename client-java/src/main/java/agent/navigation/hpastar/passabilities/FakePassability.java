@@ -13,17 +13,21 @@ import java.util.Random;
 public class FakePassability implements IPassability {
   float obstaclePercentage = 0.20f;
   final boolean[][] obstacles;
+  private final Random random = new Random(0);
 
   public FakePassability(int width, int height) {
     obstacles = new boolean[width][height];
     createObstacles(obstaclePercentage, width, height, true);
   }
 
-  private Random random = new Random(0);
-
   public boolean canEnter(IntVec2D pos, RefSupport<Integer> cost) {
     cost.setValue(Constants.COST_ONE);
     return !obstacles[pos.x][pos.y];
+  }
+
+  @Override
+  public boolean canMoveDiagonal(IntVec2D pos1, IntVec2D pos2) {
+    return true;
   }
 
   /** Creates obstacles in the map */

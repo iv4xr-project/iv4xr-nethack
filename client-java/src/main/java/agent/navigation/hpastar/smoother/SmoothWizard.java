@@ -67,9 +67,9 @@ public class SmoothWizard {
           for (int i = 1; i < intermediatePath.size(); i++) {
             smoothedConcretePath.add(new ConcretePathNode(intermediatePath.get(i)));
           }
+        } else {
+          smoothedConcretePath.add(pathNode);
         }
-
-        smoothedConcretePath.add(pathNode);
       }
 
       index = decideNextNodeToConsider(index);

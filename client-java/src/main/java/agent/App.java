@@ -60,6 +60,7 @@ public class App {
       agent.update();
     }
     Sounds.setSound(Config.getSoundState());
+    state.updateState(Player.ID);
     state.render();
   }
 

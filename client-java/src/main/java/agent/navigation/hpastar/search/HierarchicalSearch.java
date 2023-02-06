@@ -129,25 +129,31 @@ public class HierarchicalSearch {
         Cluster cluster = map.getCluster(currentNodeClusterId);
         List<Id<ConcreteNode>> localPath =
             cluster.getPath(lastAbstractNodeId, currentAbstractNodeId);
-        List<IPathNode> concretePath = new ArrayList<>();
-        for (int i = 1; i < localPath.size(); i++) {
-          int concreteNodeId =
-              localNodeId2ConcreteNodeId(localPath.get(i).getIdValue(), cluster, mapWidth);
-          concretePath.add(new ConcretePathNode(new Id<ConcreteNode>().from(concreteNodeId)));
-        }
-        result.addAll(concretePath);
-        calculatedPaths++;
-      } else {
-        // Inter-cluster edge
-        Id<ConcreteNode> lastConcreteNodeId = lastNodeInfo.concreteNodeId;
-        Id<ConcreteNode> currentConcreteNodeId = currentNodeInfo.concreteNodeId;
-        if (!((ConcretePathNode) result.get(result.size() - 1)).id.equals(lastConcreteNodeId)) {
-          result.add(new ConcretePathNode(lastConcreteNodeId));
-        }
 
-        if (!((ConcretePathNode) result.get(result.size() - 1)).id.equals(currentConcreteNodeId)) {
-          result.add(new ConcretePathNode(currentConcreteNodeId));
+        // When local path is null, it means there is no direct path within the cluster
+        // Then we need to treat it as an intercluster path
+        if (localPath != null) {
+          List<IPathNode> concretePath = new ArrayList<>();
+          for (int i = 1; i < localPath.size(); i++) {
+            int concreteNodeId =
+                localNodeId2ConcreteNodeId(localPath.get(i).getIdValue(), cluster, mapWidth);
+            concretePath.add(new ConcretePathNode(new Id<ConcreteNode>().from(concreteNodeId)));
+          }
+          result.addAll(concretePath);
+          calculatedPaths++;
+          lastAbstractNodeId = currentAbstractNodeId;
+          continue;
         }
+      }
+      // Inter-cluster edge
+      Id<ConcreteNode> lastConcreteNodeId = lastNodeInfo.concreteNodeId;
+      Id<ConcreteNode> currentConcreteNodeId = currentNodeInfo.concreteNodeId;
+      if (!((ConcretePathNode) result.get(result.size() - 1)).id.equals(lastConcreteNodeId)) {
+        result.add(new ConcretePathNode(lastConcreteNodeId));
+      }
+
+      if (!((ConcretePathNode) result.get(result.size() - 1)).id.equals(currentConcreteNodeId)) {
+        result.add(new ConcretePathNode(currentConcreteNodeId));
       }
       lastAbstractNodeId = currentAbstractNodeId;
     }

@@ -109,6 +109,11 @@ public class Program {
       cost.setValue(Constants.COST_ONE);
       return !obstacles[pos.y][pos.x];
     }
+
+    @Override
+    public boolean canMoveDiagonal(IntVec2D pos1, IntVec2D pos2) {
+      return true;
+    }
   }
 
   public static void main6(String[] args) {

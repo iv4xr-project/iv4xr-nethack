@@ -2,6 +2,7 @@ package agent.iv4xr;
 
 import agent.AgentLoggers;
 import agent.navigation.NetHackSurface;
+import agent.navigation.hpastar.passabilities.NetHackPassibility;
 import agent.navigation.strategy.NavUtils;
 import agent.navigation.surface.*;
 import eu.iv4xr.framework.extensions.pathfinding.LayeredAreasNavigation;
@@ -151,10 +152,14 @@ public class AgentState extends Iv4xrAgentState<Void> {
         default:
           // If the tile has been seen we switch the state to non-blocking.
           // If we don't know the type of the tile, we for now put a tile in its place
-          if (!area().hasTile(pos)) {
+          if (area().nullTile(pos)) {
             multiLayerNav.addObstacle(new Pair<>(levelNr, new Tile(pos)));
           } else if (area().canBeDoor(pos)) {
-            multiLayerNav.removeObstacle(new Pair<>(levelNr, new Door(pos, true)));
+            if (area().getTile(pos).getClass() == Tile.class) {
+              multiLayerNav.removeObstacle(new Pair<>(levelNr, new Door(pos, true)));
+            } else {
+              // If the type is more specific than Tile, then don't change anything
+            }
           } else {
             multiLayerNav.toggleBlockingOff(new Pair<>(levelNr, new Tile(pos)));
           }
@@ -168,9 +173,9 @@ public class AgentState extends Iv4xrAgentState<Void> {
     NetHackSurface navGraph = multiLayerNav.areas.get(levelNr);
     IntVec2D playerPos = NavUtils.loc2(worldmodel.position);
     // Each entity that is next to the agent which is void is a wall
-    IntVec2D[] adjacentCoords = NavUtils.neighbourCoordinates(playerPos, true);
+    List<IntVec2D> adjacentCoords = NavUtils.neighbourCoordinates(playerPos, true);
     for (IntVec2D adjacentPos : adjacentCoords) {
-      if (!navGraph.hasTile(adjacentPos)) {
+      if (navGraph.nullTile(adjacentPos)) {
         multiLayerNav.addObstacle(new Pair<>(levelNr, new Wall(adjacentPos)));
         multiLayerNav.markAsSeen(new Pair<>(levelNr, new Tile(adjacentPos)));
       }
@@ -286,11 +291,13 @@ public class AgentState extends Iv4xrAgentState<Void> {
   public void render() {
     String[] navigation = area().toString().split(System.lineSeparator());
     String[] game = env().app.gameState.toString().split(System.lineSeparator());
+    NetHackPassibility netHackPassibility = new NetHackPassibility(area());
+    String[] passability = netHackPassibility.toString().split(System.lineSeparator());
 
     System.out.println(game[0]);
 
     for (int i = 0; i < Level.HEIGHT; i++) {
-      System.out.println(game[i + 1] + " " + navigation[i]);
+      System.out.printf("%s %s %s%n", game[i + 1], navigation[i], passability[i]);
     }
 
     System.out.println(game[Level.HEIGHT + 1]);

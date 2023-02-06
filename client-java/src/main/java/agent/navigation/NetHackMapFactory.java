@@ -1,6 +1,9 @@
-package agent.navigation.hpastar.factories;
+package agent.navigation;
 
 import agent.navigation.hpastar.*;
+import agent.navigation.hpastar.factories.Entrance;
+import agent.navigation.hpastar.factories.EntranceStyle;
+import agent.navigation.hpastar.factories.NodeBackup;
 import agent.navigation.hpastar.graph.*;
 import agent.navigation.hpastar.infrastructure.Constants;
 import agent.navigation.hpastar.infrastructure.Id;
@@ -9,38 +12,30 @@ import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import nethack.object.Level;
 import nl.uu.cs.aplib.utils.Pair;
 
-public class HierarchicalMapFactory {
+public class NetHackMapFactory {
+  static final int MAX_ENTRANCE_WIDTH = 6;
+  static final EntranceStyle entranceStyle = EntranceStyle.EndEntrance;
+  static final int CLUSTER_SIZE = 8;
+  static final int MAX_LEVEL = 10;
 
-  private final int MAX_ENTRANCE_WIDTH = 6;
-
-  private HierarchicalMap _hierarchicalMap;
-
-  private ConcreteMap _concreteMap;
-
-  private EntranceStyle _entranceStyle;
-
-  private int _clusterSize;
-
-  private int _maxLevel;
-
+  ConcreteMap concreteMap;
+  HierarchicalMap hierarchicalMap =
+      new HierarchicalMap(TileType.OctileUnicost, CLUSTER_SIZE, MAX_LEVEL);
   Map<Id<AbstractNode>, NodeBackup> nodeBackups = new HashMap<>();
 
-  public HierarchicalMap createHierarchicalMap(
-      ConcreteMap concreteMap, int clusterSize, int maxLevel, EntranceStyle style) {
-    _clusterSize = clusterSize;
-    _entranceStyle = style;
-    _maxLevel = maxLevel;
-    _concreteMap = concreteMap;
-    _hierarchicalMap = new HierarchicalMap(TileType.OctileUnicost, clusterSize, maxLevel);
+  public HierarchicalMap createHierarchicalMap(ConcreteMap concreteMap) {
     List<Entrance> entrances = new ArrayList<>();
     List<Cluster> clusters = new ArrayList<>();
+
+    this.concreteMap = concreteMap;
     createEntrancesAndClusters(entrances, clusters);
-    _hierarchicalMap.clusters = clusters;
+    hierarchicalMap.clusters = clusters;
     createAbstractNodes(entrances);
     createEdges(entrances, clusters);
-    return _hierarchicalMap;
+    return hierarchicalMap;
   }
 
   public void removeAbstractNode(HierarchicalMap map, Id<AbstractNode> nodeId) {
@@ -52,7 +47,7 @@ public class HierarchicalMapFactory {
   }
 
   public Id<AbstractNode> insertAbstractNode(HierarchicalMap map, IntVec2D pos) {
-    Id<ConcreteNode> nodeId = new Id<ConcreteNode>().from((pos.y * map.width) + pos.x);
+    Id<ConcreteNode> nodeId = new Id<ConcreteNode>().from(((pos.y * map.width) + pos.x));
     Id<AbstractNode> abstractNodeId = insertNodeIntoHierarchicalMap(map, nodeId, pos);
     map.addHierarchicalEdgesForAbstractNode(abstractNodeId);
     return abstractNodeId;
@@ -78,7 +73,7 @@ public class HierarchicalMapFactory {
     }
 
     Cluster cluster = map.findClusterForPosition(pos);
-    //  create global entrance
+    // Create global entrance
     Id<AbstractNode> abstractNodeId = new Id<AbstractNode>().from(map.getNrNodes());
     var entrance =
         cluster.addEntrance(
@@ -139,24 +134,24 @@ public class HierarchicalMapFactory {
   }
 
   private void createEdges(List<Entrance> entrances, List<Cluster> clusters) {
-    for (var entrance : entrances) {
-      createEntranceEdges(entrance, _hierarchicalMap.type);
+    for (Entrance entrance : entrances) {
+      createEntranceEdges(entrance, hierarchicalMap.type);
     }
 
-    for (var cluster : clusters) {
+    for (Cluster cluster : clusters) {
       cluster.createIntraClusterEdges();
       createIntraClusterEdges(cluster);
     }
 
-    _hierarchicalMap.createHierarchicalEdges();
+    hierarchicalMap.createHierarchicalEdges();
   }
 
   private void createEntranceEdges(Entrance entrance, AbsType type) {
-    var level = entrance.getEntranceLevel(_clusterSize, _maxLevel);
+    var level = entrance.getEntranceLevel(CLUSTER_SIZE, MAX_LEVEL);
     var srcAbstractNodeId =
-        _hierarchicalMap.concreteNodeIdToAbstractNodeIdMap.get(entrance.srcNode.nodeId);
+        hierarchicalMap.concreteNodeIdToAbstractNodeIdMap.get(entrance.srcNode.nodeId);
     var destAbstractNodeId =
-        _hierarchicalMap.concreteNodeIdToAbstractNodeIdMap.get(entrance.destNode.nodeId);
+        hierarchicalMap.concreteNodeIdToAbstractNodeIdMap.get(entrance.destNode.nodeId);
     var orientation = entrance.orientation;
     int cost = Constants.COST_ONE;
     switch (type) {
@@ -185,9 +180,9 @@ public class HierarchicalMapFactory {
         cost = unitCost;
         break;
     }
-    _hierarchicalMap.abstractGraph.addEdge(
+    hierarchicalMap.abstractGraph.addEdge(
         srcAbstractNodeId, destAbstractNodeId, new AbstractEdgeInfo(cost, level, true));
-    _hierarchicalMap.abstractGraph.addEdge(
+    hierarchicalMap.abstractGraph.addEdge(
         destAbstractNodeId, srcAbstractNodeId, new AbstractEdgeInfo(cost, level, true));
   }
 
@@ -199,7 +194,7 @@ public class HierarchicalMapFactory {
           var abstractEdgeInfo =
               new AbstractEdgeInfo(
                   cluster.getDistance(point1.abstractNodeId, point2.abstractNodeId), 1, false);
-          _hierarchicalMap.abstractGraph.addEdge(
+          hierarchicalMap.abstractGraph.addEdge(
               point1.abstractNodeId, point2.abstractNodeId, abstractEdgeInfo);
         }
       }
@@ -209,15 +204,13 @@ public class HierarchicalMapFactory {
   private void createEntrancesAndClusters(List<Entrance> entrances, List<Cluster> clusters) {
     int clusterId = 0;
     var entranceId = 0;
-    for (int top = 0, clusterY = 0; top < _concreteMap.height; top += _clusterSize, clusterY++) {
-      for (int left = 0, clusterX = 0;
-          left < _concreteMap.width;
-          left += _clusterSize, clusterX++) {
-        int width = Math.min(_clusterSize, _concreteMap.width - left);
-        int height = Math.min(_clusterSize, _concreteMap.height - top);
+    for (int top = 0, clusterY = 0; top < Level.HEIGHT; top += CLUSTER_SIZE, clusterY++) {
+      for (int left = 0, clusterX = 0; left < Level.WIDTH; left += CLUSTER_SIZE, clusterX++) {
+        int width = Math.min(CLUSTER_SIZE, Level.WIDTH - left);
+        int height = Math.min(CLUSTER_SIZE, Level.HEIGHT - top);
         Cluster cluster =
             new Cluster(
-                _concreteMap,
+                concreteMap,
                 new Id<Cluster>().from(clusterId),
                 clusterX,
                 clusterY,
@@ -313,7 +306,7 @@ public class HierarchicalMapFactory {
         continue;
       }
 
-      if ((_entranceStyle == EntranceStyle.EndEntrance && size > MAX_ENTRANCE_WIDTH)) {
+      if (entranceStyle == EntranceStyle.EndEntrance && size > MAX_ENTRANCE_WIDTH) {
         Pair<ConcreteNode, ConcreteNode> nodes = getNodesInEdge.apply(entranceStart);
         ConcreteNode srcNode = nodes.fst;
         ConcreteNode destNode = nodes.snd;
@@ -377,7 +370,7 @@ public class HierarchicalMapFactory {
   }
 
   private ConcreteNode getNode(int left, int top) {
-    return _concreteMap.graph.getNode(_concreteMap.getNodeIdFromPos(left, top));
+    return concreteMap.graph.getNode(concreteMap.getNodeIdFromPos(left, top));
   }
 
   private boolean entranceIsBlocked(
@@ -387,8 +380,8 @@ public class HierarchicalMapFactory {
   }
 
   private Cluster getCluster(List<Cluster> clusters, int left, int top) {
-    var clustersW = _hierarchicalMap.width / _clusterSize;
-    if (_hierarchicalMap.width % _clusterSize > 0) {
+    var clustersW = hierarchicalMap.width / CLUSTER_SIZE;
+    if (hierarchicalMap.width % CLUSTER_SIZE > 0) {
       clustersW++;
     }
 
@@ -398,9 +391,9 @@ public class HierarchicalMapFactory {
   private void createAbstractNodes(List<Entrance> entrancesList) {
     Iterable<AbstractNodeInfo> abstractNodes = generateAbstractNodes(entrancesList);
     for (AbstractNodeInfo abstractNode : abstractNodes) {
-      _hierarchicalMap.concreteNodeIdToAbstractNodeIdMap.put(
+      hierarchicalMap.concreteNodeIdToAbstractNodeIdMap.put(
           abstractNode.concreteNodeId, abstractNode.id);
-      _hierarchicalMap.abstractGraph.addNode(abstractNode.id, abstractNode);
+      hierarchicalMap.abstractGraph.addNode(abstractNode.id, abstractNode);
     }
   }
 
@@ -408,7 +401,7 @@ public class HierarchicalMapFactory {
     RefSupport<Integer> abstractNodeId = new RefSupport<>(0);
     Map<Id<ConcreteNode>, AbstractNodeInfo> abstractNodesDict = new HashMap<>();
     for (Entrance entrance : entrances) {
-      var level = entrance.getEntranceLevel(_clusterSize, _maxLevel);
+      var level = entrance.getEntranceLevel(CLUSTER_SIZE, MAX_LEVEL);
       createOrUpdateAbstractNodeFromConcreteNode(
           entrance.srcNode, entrance.cluster1, abstractNodeId, level, abstractNodesDict);
       createOrUpdateAbstractNodeFromConcreteNode(

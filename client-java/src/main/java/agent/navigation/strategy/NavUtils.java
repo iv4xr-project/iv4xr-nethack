@@ -9,8 +9,10 @@ import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import eu.iv4xr.framework.spatial.IntVec2D;
 import eu.iv4xr.framework.spatial.Vec3;
+import java.util.ArrayList;
 import java.util.List;
 import nethack.enums.Command;
+import nethack.object.Level;
 import nethack.object.Player;
 import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.LogManager;
@@ -98,6 +100,10 @@ public class NavUtils {
   // Check if two tiles are adjacent.
   public static boolean adjacent(Tile tile1, Tile tile2, boolean allowDiagonally) {
     return adjacent(tile1.pos.x, tile1.pos.y, tile2.pos.x, tile2.pos.y, allowDiagonally);
+  }
+
+  public static boolean isDiagonal(IntVec2D pos1, IntVec2D pos2) {
+    return pos1.x != pos2.x && pos1.y != pos2.y;
   }
 
   private static boolean adjacent(int x0, int y0, int x1, int y1, boolean allowDiagonally) {
@@ -205,32 +211,62 @@ public class NavUtils {
     }
   }
 
-  public static IntVec2D[] neighbourCoordinates(IntVec2D pos, boolean allowDiagonal) {
+  public static List<IntVec2D> neighbourCoordinates(IntVec2D pos, boolean allowDiagonal) {
+    List<IntVec2D> neighbourCoords = new ArrayList<>(2);
+
     int left = pos.x - 1;
     int right = pos.x + 1;
     int below = pos.y - 1;
     int above = pos.y + 1;
 
-    if (allowDiagonal) {
-      return new IntVec2D[] {
-        new IntVec2D(left, pos.y),
-        new IntVec2D(right, pos.y),
-        new IntVec2D(pos.x, below),
-        new IntVec2D(pos.x, above),
-        // Diagonal moves
-        new IntVec2D(left, below),
-        new IntVec2D(left, above),
-        new IntVec2D(right, above),
-        new IntVec2D(right, below),
-      };
-    } else {
-      return new IntVec2D[] {
-        new IntVec2D(left, pos.y),
-        new IntVec2D(right, pos.y),
-        new IntVec2D(pos.x, below),
-        new IntVec2D(pos.x, above),
-      };
+    boolean leftInsideMap = left >= 0;
+    boolean rightInsideMap = right < Level.WIDTH;
+
+    boolean belowInsideMap = below >= 0;
+    boolean aboveInsideMap = above < Level.HEIGHT;
+
+    if (leftInsideMap && rightInsideMap && belowInsideMap && aboveInsideMap) {
+      neighbourCoords.add(new IntVec2D(left, pos.y));
+      neighbourCoords.add(new IntVec2D(right, pos.y));
+      neighbourCoords.add(new IntVec2D(pos.x, below));
+      neighbourCoords.add(new IntVec2D(pos.x, above));
+
+      if (allowDiagonal) {
+        neighbourCoords.add(new IntVec2D(left, below));
+        neighbourCoords.add(new IntVec2D(left, above));
+        neighbourCoords.add(new IntVec2D(right, above));
+        neighbourCoords.add(new IntVec2D(right, below));
+      }
+
+      return neighbourCoords;
     }
+
+    if (leftInsideMap) {
+      neighbourCoords.add(new IntVec2D(left, pos.y));
+      if (allowDiagonal && belowInsideMap) {
+        neighbourCoords.add(new IntVec2D(left, below));
+      }
+      if (allowDiagonal && aboveInsideMap) {
+        neighbourCoords.add(new IntVec2D(left, above));
+      }
+    }
+    if (aboveInsideMap) {
+      neighbourCoords.add(new IntVec2D(pos.x, above));
+    }
+    if (belowInsideMap) {
+      neighbourCoords.add(new IntVec2D(pos.x, below));
+    }
+    if (rightInsideMap) {
+      neighbourCoords.add(new IntVec2D(right, pos.y));
+      if (allowDiagonal && belowInsideMap) {
+        neighbourCoords.add(new IntVec2D(right, below));
+      }
+      if (allowDiagonal && aboveInsideMap) {
+        neighbourCoords.add(new IntVec2D(right, above));
+      }
+    }
+
+    return neighbourCoords;
   }
 
   /** check if the location of the entity e is reachable from the agent current position. */

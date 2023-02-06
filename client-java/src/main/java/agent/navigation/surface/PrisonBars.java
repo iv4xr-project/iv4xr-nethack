@@ -11,7 +11,7 @@ public class PrisonBars extends Tile implements Printable {
   }
 
   public char toChar() {
-    return seen ? 'P' : 'p';
+    return '#';
   }
 
   @Override

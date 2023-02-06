@@ -20,4 +20,14 @@ public class EntrancePoint {
     this.abstractNodeId = abstractNodeId;
     this.relativePosition = relativePosition;
   }
+
+  @Override
+  public boolean equals(Object other) {
+    if (!(other instanceof EntrancePoint)) {
+      return false;
+    }
+    EntrancePoint otherEntrance = (EntrancePoint) other;
+    return abstractNodeId.equals(otherEntrance.abstractNodeId)
+        && relativePosition.equals(otherEntrance.relativePosition);
+  }
 }

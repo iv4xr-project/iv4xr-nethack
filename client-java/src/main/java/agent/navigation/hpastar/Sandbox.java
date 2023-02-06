@@ -88,7 +88,7 @@ public class Sandbox {
     HierarchicalMapFactory factory = new HierarchicalMapFactory();
     Id<AbstractNode> startAbsNode = factory.insertAbstractNode(hierarchicalMap, startPosition);
     Id<AbstractNode> targetAbsNode = factory.insertAbstractNode(hierarchicalMap, endPosition);
-    assert startAbsNode != targetAbsNode;
+    assert !startAbsNode.equals(targetAbsNode);
     int maxPathsToRefine = Integer.MAX_VALUE;
     HierarchicalSearch hierarchicalSearch = new HierarchicalSearch();
     List<AbstractPathNode> abstractPath =

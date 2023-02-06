@@ -94,7 +94,7 @@ public class NavTactic {
                 if (pos.equals(NavUtils.loc2(agentPos))) {
                   return null;
                 }
-                if (!surface.hasTile(pos)) {
+                if (surface.nullTile(pos)) {
                   continue;
                 }
                 if (surface.isBlocking(pos)) {

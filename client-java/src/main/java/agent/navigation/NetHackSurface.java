@@ -1,13 +1,23 @@
 package agent.navigation;
 
 import agent.AgentLoggers;
+import agent.navigation.hpastar.*;
+import agent.navigation.hpastar.factories.HierarchicalMapFactory;
+import agent.navigation.hpastar.graph.AbstractNode;
+import agent.navigation.hpastar.infrastructure.Id;
+import agent.navigation.hpastar.passabilities.NetHackPassibility;
+import agent.navigation.hpastar.search.HierarchicalSearch;
+import agent.navigation.hpastar.smoother.SmoothWizard;
 import agent.navigation.strategy.NavUtils;
 import agent.navigation.surface.*;
 import eu.iv4xr.framework.extensions.pathfinding.*;
 import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import nethack.enums.Color;
 import nethack.object.Level;
+import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -28,7 +38,7 @@ public class NetHackSurface
     implements Navigatable<Tile>, XPathfinder<Tile>, CanDealWithDynamicObstacle<Tile> {
   static final Logger logger = LogManager.getLogger(AgentLoggers.NavLogger);
   static final int sizeX = Level.WIDTH, sizeY = Level.HEIGHT;
-  public final Tile[][] tiles = new Tile[sizeY + 2][sizeX + 2];
+  public final Tile[][] tiles = new Tile[sizeY][sizeX];
   private final Map<String, HashSet<IntVec2D>> tileTypes = new HashMap<>();
   public Pathfinder<Tile> pathfinder = new AStar<>();
   public int levelNr;
@@ -46,6 +56,7 @@ public class NetHackSurface
     this.depth = depth;
     this.dungeonNr = dungeonNr;
   }
+
   /**
    * If true, the pathfinder will assume that the whole NavGraph has been "seen", so no vertex would
    * count as unreachable because it is still unseen. This essentially turns off memory-based path
@@ -82,7 +93,7 @@ public class NetHackSurface
     if (t == null) {
       return false;
     }
-    IntVec2D[] neighbours = NavUtils.neighbourCoordinates(pos, false);
+    List<IntVec2D> neighbours = NavUtils.neighbourCoordinates(pos, false);
     int horizontalWalls = 0, verticalWalls = 0;
     for (IntVec2D neighbour : neighbours) {
       Tile neighbourTile = getTile(neighbour);
@@ -104,8 +115,8 @@ public class NetHackSurface
     return getTile(pos) instanceof Floor;
   }
 
-  public boolean hasTile(IntVec2D pos) {
-    return getTile(pos) != null;
+  public boolean nullTile(IntVec2D pos) {
+    return getTile(pos) == null;
   }
 
   public Tile getTile(IntVec2D pos) {
@@ -113,7 +124,7 @@ public class NetHackSurface
   }
 
   private Tile getTile(int x, int y) {
-    return tiles[y + 1][x + 1];
+    return tiles[y][x];
   }
 
   public List<IntVec2D> VisibleCoordinates(IntVec2D agentPosition, Level level) {
@@ -121,7 +132,7 @@ public class NetHackSurface
 
     // Perform BFS on the graph, initiate the queue with the agent position and all the lit floor
     // tiles
-    IntVec2D[] agentNeighbours = NavUtils.neighbourCoordinates(agentPosition, true);
+    List<IntVec2D> agentNeighbours = NavUtils.neighbourCoordinates(agentPosition, true);
     for (IntVec2D neighbour : agentNeighbours) {
       Tile neighbourTile = getTile(neighbour);
       if (!(neighbourTile instanceof Viewable)) {
@@ -130,12 +141,12 @@ public class NetHackSurface
       ((Viewable) neighbourTile).setVisible(true);
     }
 
-    HashSet<IntVec2D> visibleCoordinates = new HashSet<>(Arrays.asList(agentNeighbours));
+    HashSet<IntVec2D> visibleCoordinates = new HashSet<>(agentNeighbours);
     HashSet<IntVec2D> processedCoordinates = new HashSet<>();
     Queue<IntVec2D> queue = new LinkedList<>(level.visibleFloors);
 
     processedCoordinates.add(agentPosition);
-    queue.addAll(Arrays.asList(NavUtils.neighbourCoordinates(agentPosition, true)));
+    queue.addAll(NavUtils.neighbourCoordinates(agentPosition, true));
 
     // While there are coordinates left to be explored
     while (!queue.isEmpty()) {
@@ -154,10 +165,10 @@ public class NetHackSurface
       }
 
       // Get the neighbours
-      IntVec2D[] neighbours = NavUtils.neighbourCoordinates(nextPos, true);
+      List<IntVec2D> neighbours = NavUtils.neighbourCoordinates(nextPos, true);
       if (t instanceof Doorway) {
         // Does not have a lit floor tile next to it, so we assume we cannot see it
-        if (Arrays.stream(neighbours)
+        if (neighbours.stream()
             .noneMatch(
                 coord -> isFloor(coord) && level.getEntity(coord).color != Color.TRANSPARENT)) {
           continue;
@@ -170,14 +181,13 @@ public class NetHackSurface
 
       // Only add all neighbours if it is floor
       if (t instanceof Floor) {
-        queue.addAll(Arrays.asList(neighbours));
+        queue.addAll(neighbours);
       }
     }
 
     return new ArrayList<>(visibleCoordinates);
   }
 
-  // region CanDealWithDynamicObstacle interface
   private void resetVisibility() {
     // First reset visibility of all tiles to false
     for (Tile[] row : tiles) {
@@ -214,13 +224,14 @@ public class NetHackSurface
     return sb.toString();
   }
 
+  // region CanDealWithDynamicObstacle interface
   /** Add a non-navigable tile (obstacle). */
   @Override
   public void addObstacle(Tile o) {
     assert !(o instanceof StraightWalkable) || !((StraightWalkable) o).isWalkable()
         : "Obstacle is not actually an obstacle since it can be passed";
-    replaceTile(tiles[o.pos.y + 1][o.pos.x + 1], o);
-    tiles[o.pos.y + 1][o.pos.x + 1] = o;
+    replaceTile(tiles[o.pos.y][o.pos.x], o);
+    tiles[o.pos.y][o.pos.x] = o;
     updateNeighbours(o);
   }
 
@@ -229,8 +240,8 @@ public class NetHackSurface
   public void removeObstacle(Tile o) {
     assert o instanceof StraightWalkable && ((StraightWalkable) o).isWalkable()
         : "RemoveObstacle must insert a walkable tile";
-    replaceTile(tiles[o.pos.y + 1][o.pos.x + 1], o);
-    tiles[o.pos.y + 1][o.pos.x + 1] = o;
+    replaceTile(tiles[o.pos.y][o.pos.x], o);
+    tiles[o.pos.y][o.pos.x] = o;
     updateNeighbours(o);
   }
 
@@ -271,11 +282,10 @@ public class NetHackSurface
   public boolean isBlocking(Tile tile) {
     return isBlocking(tile.pos);
   }
-  // endregion
 
   public boolean isBlocking(IntVec2D pos) {
     Tile t = getTile(pos);
-    return !(t instanceof Walkable) || !((Walkable) t).isWalkable();
+    return !(t instanceof StraightWalkable) || !((StraightWalkable) t).isWalkable();
   }
 
   /**
@@ -293,6 +303,7 @@ public class NetHackSurface
     }
     updateNeighbours(t);
   }
+  // endregion
 
   // region XPathfinder interface
   @Override
@@ -313,15 +324,11 @@ public class NetHackSurface
   @Override
   public void markAsSeen(Tile p) {
     Tile t = getTile(p.pos);
-    if (t != null) {
-      t.seen = true;
-      // Do not mark frontiers around tiles that are blocking
-      if (!isBlocking(t)) {
-        frontierCandidates.add(p);
-      }
-    } else {
-      logger.warn(String.format("Tried to mark a null tile as seen @%s", p.pos));
-      throw new IllegalStateException("Cannot try to mark a tile as seen which is not present");
+    assert t != null;
+    t.seen = true;
+    // Do not mark frontiers around tiles that are blocking
+    if (!isBlocking(t)) {
+      frontierCandidates.add(p);
     }
   }
 
@@ -335,7 +342,7 @@ public class NetHackSurface
     List<Tile> frontiers = new LinkedList<>();
     List<Tile> cannotBeFrontier = new LinkedList<>();
     for (Tile t : frontierCandidates) {
-      IntVec2D[] pneighbors = NavUtils.neighbourCoordinates(t.pos, true);
+      List<IntVec2D> pneighbors = NavUtils.neighbourCoordinates(t.pos, true);
       boolean isFrontier = false;
       for (IntVec2D n : pneighbors) {
         if (!hasbeenSeen(n)) {
@@ -362,8 +369,10 @@ public class NetHackSurface
 
   private List<Tile> explore(int x, int y, int heuristicX, int heuristicY) {
     List<Tile> frontiers = getFrontier();
+    if (frontiers.isEmpty()) {
+      return null;
+    }
 
-    if (frontiers.isEmpty()) return null;
     // sort the frontiers in ascending order, by their geometric distance to (x,y):
     frontiers.sort(
         (p1, p2) ->
@@ -380,8 +389,73 @@ public class NetHackSurface
     return null;
   }
 
+  private void findPathUsingPassibility(Tile from, Tile to) {
+    System.out.printf("SEARCH_PATH:%s->%s%n", from.pos, to.pos);
+    assert !nullTile(from.pos) && !nullTile(to.pos);
+
+    NetHackPassibility passibility = new NetHackPassibility(this);
+    ConcreteMap concreteMap =
+        new ConcreteMap(TileType.OctileUnicost, Level.WIDTH, Level.HEIGHT, passibility);
+    HierarchicalMap absTiling = new NetHackMapFactory().createHierarchicalMap(concreteMap);
+    Function<Pair<IntVec2D, IntVec2D>, List<IPathNode>> doHierarchicalSearch =
+        (positions) -> hierarchicalSearch(absTiling, concreteMap, positions.fst, positions.snd);
+
+    Function<List<IPathNode>, List<IntVec2D>> toPositionPath =
+        (path) -> {
+          return path.stream()
+              .map(
+                  (p) -> {
+                    if (p instanceof ConcretePathNode) {
+                      ConcretePathNode concretePathNode = (ConcretePathNode) p;
+                      return concreteMap.graph.getNodeInfo(concretePathNode.id).position;
+                    }
+
+                    AbstractPathNode abstractPathNode = (AbstractPathNode) p;
+                    return absTiling.abstractGraph.getNodeInfo(abstractPathNode.id).position;
+                  })
+              .collect(Collectors.toList());
+        };
+
+    long t1 = System.nanoTime();
+    IntVec2D startPosition = from.pos;
+    IntVec2D endPosition = to.pos;
+    List<IPathNode> regularSearchPath =
+        doHierarchicalSearch.apply(new Pair<>(startPosition, endPosition));
+    List<IntVec2D> posPath = toPositionPath.apply(regularSearchPath);
+    System.out.printf("FOUND_PATH:%s%n", posPath);
+    long t2 = System.nanoTime();
+    long regularSearchTime = t2 - t1;
+    //    System.out.printf("Searching paths took: %.2fs%n", regularSearchTime / 1000000000.0f);
+  }
+
+  private static List<IPathNode> hierarchicalSearch(
+      HierarchicalMap hierarchicalMap,
+      ConcreteMap concreteMap,
+      IntVec2D startPosition,
+      IntVec2D endPosition) {
+    HierarchicalMapFactory factory = new HierarchicalMapFactory();
+    Id<AbstractNode> startAbsNode = factory.insertAbstractNode(hierarchicalMap, startPosition);
+    Id<AbstractNode> targetAbsNode = factory.insertAbstractNode(hierarchicalMap, endPosition);
+    assert !startAbsNode.equals(targetAbsNode);
+    int maxPathsToRefine = Integer.MAX_VALUE;
+    HierarchicalSearch hierarchicalSearch = new HierarchicalSearch();
+    List<AbstractPathNode> abstractPath =
+        hierarchicalSearch.doHierarchicalSearch(
+            hierarchicalMap, startAbsNode, targetAbsNode, 10, maxPathsToRefine);
+    List<IPathNode> path =
+        hierarchicalSearch.abstractPathToLowLevelPath(
+            hierarchicalMap, abstractPath, hierarchicalMap.width, maxPathsToRefine);
+
+    SmoothWizard smoother = new SmoothWizard(concreteMap, path);
+    path = smoother.smoothPath();
+    factory.removeAbstractNode(hierarchicalMap, targetAbsNode);
+    factory.removeAbstractNode(hierarchicalMap, startAbsNode);
+    return path;
+  }
+
   @Override
   public List<Tile> findPath(Tile from, Tile to) {
+    findPathUsingPassibility(from, to);
     return pathfinder.findPath(this, from, to);
   }
 
@@ -473,13 +547,13 @@ public class NetHackSurface
    */
   private List<Tile> neighbours_(IntVec2D pos) {
     boolean allowDiagonal = getTile(pos) instanceof Walkable;
-    IntVec2D[] candidates = NavUtils.neighbourCoordinates(pos, allowDiagonal);
+    List<IntVec2D> candidates = NavUtils.neighbourCoordinates(pos, allowDiagonal);
 
     int nrResults = 0;
-    boolean[] toNeighbour = new boolean[candidates.length];
+    boolean[] toNeighbour = new boolean[candidates.size()];
 
-    for (int i = 0; i < candidates.length; i++) {
-      IntVec2D candidate = candidates[i];
+    for (int i = 0; i < candidates.size(); i++) {
+      IntVec2D candidate = candidates.get(i);
       toNeighbour[i] = !isBlocking(candidate) && !isDiagonalDoorMove(candidate, pos);
       if (!perfect_memory_pathfinding) {
         toNeighbour[i] = toNeighbour[i] && hasbeenSeen(candidate);
@@ -490,9 +564,9 @@ public class NetHackSurface
     }
 
     List<Tile> result = new ArrayList<>(nrResults);
-    for (int i = 0; i < candidates.length; i++) {
+    for (int i = 0; i < candidates.size(); i++) {
       if (toNeighbour[i]) {
-        result.add(new Tile(candidates[i]));
+        result.add(new Tile(candidates.get(i)));
       }
     }
     return result;
