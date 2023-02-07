@@ -35,10 +35,8 @@ public class StatsDecoder extends Decoder {
     Player player = new Player();
     Stats stats = new Stats();
 
-    stats.oneIndexDepth = values[12];
-    stats.zeroIndexDepth = values[12] - 1;
-
-    player.position = new Vec3(values[0], values[1], values[12] - 1);
+    stats.depth = values[12];
+    player.position = new Vec3(values[0], values[1], 0);
     player.position2D = new IntVec2D(values[0], values[1]);
     player.strength = values[2];
     player.dexterity = values[4];

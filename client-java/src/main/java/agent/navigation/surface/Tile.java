@@ -1,14 +1,11 @@
 package agent.navigation.surface;
 
 import eu.iv4xr.framework.spatial.IntVec2D;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class Tile {
   public IntVec2D pos;
   public boolean seen = false;
-  public List<Tile> neighbours = new ArrayList<>(8);
 
   public Tile(IntVec2D pos) {
     this.pos = pos;

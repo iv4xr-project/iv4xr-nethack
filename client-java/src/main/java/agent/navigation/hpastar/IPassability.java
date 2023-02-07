@@ -12,4 +12,6 @@ public interface IPassability {
   boolean canEnter(IntVec2D pos, RefSupport<Integer> movementCost);
 
   boolean canMoveDiagonal(IntVec2D pos1, IntVec2D pos2);
+
+  ConcreteMap getConcreteMap();
 }

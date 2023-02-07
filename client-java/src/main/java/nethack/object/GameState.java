@@ -1,8 +1,11 @@
 package nethack.object;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import nethack.NetHackLoggers;
+import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,24 +17,55 @@ public class GameState {
   public String message;
   public boolean done;
   public Object info;
-  public List<Level> world = new ArrayList<>();
+  private List<Level> world = new ArrayList<>();
+  private int currentLevelNr;
+  private Pair<Integer, Integer> currentIndex;
+  private final Map<Pair<Integer, Integer>, Integer> indexes = new HashMap<>();
 
-  public Level level() {
-    if (stats == null) {
-      logger.warn("Cannot retrieve level from GameState without stats, return null");
-      return null;
+  public Level getLevel() {
+    assert stats != null : "Cannot retrieve level from GameState without stats";
+    Pair<Integer, Integer> index = createIndex();
+    if (!index.equals(currentIndex)) {
+      if (!indexes.containsKey(index)) {
+        return null;
+      }
+      currentIndex = index;
+      currentLevelNr = indexes.get(currentIndex);
     }
-    if (stats.zeroIndexDepth < 0) {
-      logger.warn("Cannot retrieve depth < 0, return null");
-      return null;
+
+    return world.get(currentLevelNr);
+  }
+
+  // Assumes the stats are already updated
+  public void setLevel(Level level) {
+    Level previousLevel = getLevel();
+    Pair<Integer, Integer> index = createIndex();
+    if (!index.equals(currentIndex)) {
+      if (!indexes.containsKey(index)) {
+        indexes.put(index, world.size());
+        world.add(null);
+      }
+
+      currentIndex = index;
+      currentLevelNr = indexes.get(currentIndex);
     }
-    return world.get(stats.zeroIndexDepth);
+
+    level.setChangedCoordinates(previousLevel);
+    world.set(currentLevelNr, level);
+  }
+
+  public int getLevelNr() {
+    return indexes.get(createIndex());
+  }
+
+  private Pair<Integer, Integer> createIndex() {
+    return new Pair<>(stats.depth, stats.dungeonNumber);
   }
 
   public String verbose() {
     StringBuilder sb = new StringBuilder();
     sb.append(message).append(System.lineSeparator());
-    sb.append(level()).append(System.lineSeparator());
+    sb.append(getLevel()).append(System.lineSeparator());
     sb.append(stats.verbose()).append(System.lineSeparator());
     sb.append(player.verbose()).append(System.lineSeparator());
     return sb.toString();
@@ -41,7 +75,7 @@ public class GameState {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append(message).append(System.lineSeparator());
-    sb.append(level()).append(System.lineSeparator());
+    sb.append(getLevel()).append(System.lineSeparator());
 
     String firstStatsLine =
         String.format(
@@ -59,7 +93,7 @@ public class GameState {
     String secondStatsLine =
         String.format(
             "Dlvl:%d $:%d HP:%d(%d) Pw:%d(%d) AC:%d Xp:%d/%d T:%d %s",
-            stats.oneIndexDepth,
+            stats.depth,
             player.gold,
             player.hp,
             player.hpMax,

@@ -2,9 +2,9 @@ package agent.navigation.strategy;
 
 import agent.AgentLoggers;
 import agent.iv4xr.AgentState;
+import agent.navigation.HierarchicalAreasNavigation;
 import agent.navigation.NetHackSurface;
 import agent.navigation.surface.Tile;
-import eu.iv4xr.framework.extensions.pathfinding.LayeredAreasNavigation;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import eu.iv4xr.framework.spatial.IntVec2D;
@@ -46,7 +46,7 @@ public class NavUtils {
 
   public static List<Pair<Integer, Tile>> adjustedFindPath(
       AgentState state, Pair<Integer, Tile> oldLocation, Pair<Integer, Tile> newLocation) {
-    LayeredAreasNavigation<Tile, NetHackSurface> nav = state.multiLayerNav;
+    HierarchicalAreasNavigation<Tile, NetHackSurface> nav = state.hierarchicalNav;
     boolean srcOriginalBlockingState = nav.isBlocking(oldLocation);
     boolean destOriginalBlockingState = nav.isBlocking(newLocation);
     nav.toggleBlockingOff(oldLocation);
@@ -85,7 +85,7 @@ public class NavUtils {
     return new Pair<>(levelNr, toTile(pos));
   }
 
-  static Pair<Integer, Tile> loc3(Vec3 pos) {
+  public static Pair<Integer, Tile> loc3(Vec3 pos) {
     return new Pair<>((int) pos.z, toTile(pos));
   }
 

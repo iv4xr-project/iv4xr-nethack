@@ -146,15 +146,12 @@ public class SocketClient {
     StepState stepState = new StepState();
     stepState.player = obsMessage.player;
     stepState.player.position =
-        new Vec3(
-            obsMessage.player.position.x,
-            obsMessage.player.position.y,
-            obsMessage.stats.zeroIndexDepth);
+        new Vec3(obsMessage.player.position.x, obsMessage.player.position.y, 0);
     stepState.player.inventory = new Inventory(obsMessage.items);
     stepState.stats = obsMessage.stats;
     stepState.done = stepMessage.done;
     stepState.info = null;
-    stepState.level = new Level(obsMessage.stats.zeroIndexDepth, obsMessage.entities);
+    stepState.level = new Level(obsMessage.entities);
     stepState.message = obsMessage.message;
     long now2 = System.nanoTime();
     //    System.out.printf("EXIT TOOK: %d%n", now2-now1);

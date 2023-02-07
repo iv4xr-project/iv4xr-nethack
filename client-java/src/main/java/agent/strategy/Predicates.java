@@ -27,16 +27,18 @@ public class Predicates {
 
   @Contract(pure = true)
   public static @NotNull Function<AgentState, Pair<Integer, Tile>> get_closedDoor() {
-    return S -> {
-      Pair<Integer, Tile> t = TileSelector.closedDoorSelector.apply(S);
-      if (t == null) {
-        return null;
-      }
-      if (!NavUtils.adjacent(t.snd.pos, NavUtils.loc2(S.worldmodel.position), false)) {
-        return null;
-      }
-      return t;
-    };
+    return Predicates::closedDoor;
+  }
+
+  private static Pair<Integer, Tile> closedDoor(AgentState S) {
+    Pair<Integer, Tile> t = TileSelector.closedDoorSelector.apply(S);
+    if (t == null) {
+      return null;
+    }
+    if (!NavUtils.adjacent(t.snd.pos, NavUtils.loc2(S.worldmodel.position), false)) {
+      return null;
+    }
+    return t;
   }
 
   @Contract(pure = true)

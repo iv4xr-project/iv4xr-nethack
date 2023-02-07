@@ -1,20 +1,16 @@
 package agent.iv4xr;
 
 import agent.AgentLoggers;
+import agent.navigation.HierarchicalAreasNavigation;
 import agent.navigation.NetHackSurface;
-import agent.navigation.hpastar.passabilities.NetHackPassibility;
 import agent.navigation.strategy.NavUtils;
 import agent.navigation.surface.*;
-import eu.iv4xr.framework.extensions.pathfinding.LayeredAreasNavigation;
 import eu.iv4xr.framework.extensions.pathfinding.Navigatable;
 import eu.iv4xr.framework.mainConcepts.Iv4xrAgentState;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.spatial.IntVec2D;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 import nethack.NetHack;
 import nethack.enums.EntityType;
@@ -36,7 +32,7 @@ import org.apache.logging.log4j.Logger;
 public class AgentState extends Iv4xrAgentState<Void> {
   static final Logger agentLogger = LogManager.getLogger(AgentLoggers.AgentLogger);
   static final Logger WOMLogger = LogManager.getLogger(AgentLoggers.WOMLogger);
-  public LayeredAreasNavigation<Tile, NetHackSurface> multiLayerNav;
+  public HierarchicalAreasNavigation<Tile, NetHackSurface> hierarchicalNav;
 
   @Override
   public AgentEnv env() {
@@ -62,9 +58,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
   @Override
   public AgentState setEnvironment(Environment env) {
     super.setEnvironment(env);
-    multiLayerNav = new LayeredAreasNavigation<>();
-    multiLayerNav.setPerfectMemoryPathfinding(true);
-    addNewNavGraph(0, false);
+    addNewNavGraph(0);
     return this;
   }
 
@@ -72,16 +66,12 @@ public class AgentState extends Iv4xrAgentState<Void> {
     return worldmodel.elements.get("aux");
   }
 
-  private void addNewNavGraph(int levelNr, boolean withPortal) {
-    NetHackSurface newNav = new NetHackSurface(levelNr);
-
-    if (withPortal) {
-      Player player = env().app.gameState.player;
-      Tile previousLevelStairCase = new Tile(player.previousPosition2D);
-      Tile nextLevelStairCase = new Tile(player.position2D);
-      multiLayerNav.addNextArea(newNav, previousLevelStairCase, nextLevelStairCase, true);
+  private void addNewNavGraph(int levelNr) {
+    NetHackSurface newNav = new NetHackSurface();
+    if (hierarchicalNav == null) {
+      hierarchicalNav = new HierarchicalAreasNavigation<>(newNav);
     } else {
-      multiLayerNav.addNextArea(newNav, null, null, false);
+      hierarchicalNav.addNextArea(newNav);
     }
   }
 
@@ -93,91 +83,101 @@ public class AgentState extends Iv4xrAgentState<Void> {
   }
 
   public NetHackSurface area() {
-    return multiLayerNav.areas.get((int) worldmodel.position.z);
+    return hierarchicalNav.areas.get(NavUtils.levelNr(worldmodel.position));
   }
 
   private void updateMap() {
     WorldEntity aux = auxState();
     int levelNr = (int) aux.properties.get("levelNr");
+    // If detecting a new maze, need to allocate a nav-graph for this maze:
+    if (levelNr >= hierarchicalNav.areas.size()) {
+      agentLogger.info(String.format("Adding a new level: %s", levelNr));
+      hierarchicalNav.addNextArea(new NetHackSurface());
+      var previousLocation =
+          NavUtils.loc3(worldmodel.elements.get(Player.ID).getPreviousState().position);
+      var currentLocation = NavUtils.loc3(worldmodel.position);
+    }
 
     Serializable[] changedCoordinates = (Serializable[]) aux.properties.get("changedCoordinates");
     agentLogger.debug(
         String.format("update state with %d new coordinates", changedCoordinates.length));
+
     for (Serializable entry_ : changedCoordinates) {
       Serializable[] entry = (Serializable[]) entry_;
       IntVec2D pos = (IntVec2D) entry[0];
       EntityType type = (EntityType) entry[1];
 
-      // If detecting a new maze, need to allocate a nav-graph for this maze:
-      if (levelNr >= multiLayerNav.areas.size()) {
-        agentLogger.info(String.format("Adding a new level: %s", levelNr));
-        addNewNavGraph(levelNr, true);
-      }
-
       switch (type) {
+        case PLAYER:
+          if (area().nullTile(pos)) {
+            hierarchicalNav.removeObstacle(new Pair<>(levelNr, new Unknown(pos)));
+          } else {
+            hierarchicalNav.toggleBlockingOff(new Pair<>(levelNr, new Tile(pos)));
+          }
+          break;
         case WALL:
         case BOULDER:
-          multiLayerNav.addObstacle(new Pair<>(levelNr, new Wall(pos)));
+          hierarchicalNav.addObstacle(new Pair<>(levelNr, new Wall(pos)));
           break;
         case CORRIDOR:
-          multiLayerNav.removeObstacle(new Pair<>(levelNr, new Corridor(pos)));
+          hierarchicalNav.removeObstacle(new Pair<>(levelNr, new Corridor(pos)));
           break;
         case FLOOR:
-          multiLayerNav.removeObstacle(new Pair<>(levelNr, new Floor(pos)));
+          hierarchicalNav.removeObstacle(new Pair<>(levelNr, new Floor(pos)));
           break;
         case DOOR:
           boolean isOpen = !env().app.level().getEntity(pos).closedDoor();
           if (isOpen) {
-            multiLayerNav.removeObstacle(new Pair<>(levelNr, new Door(pos, isOpen)));
+            hierarchicalNav.removeObstacle(new Pair<>(levelNr, new Door(pos, isOpen)));
           } else {
-            multiLayerNav.addObstacle(new Pair<>(levelNr, new Door(pos, isOpen)));
+            hierarchicalNav.addObstacle(new Pair<>(levelNr, new Door(pos, isOpen)));
           }
           break;
         case DOORWAY:
-          multiLayerNav.removeObstacle(new Pair<>(levelNr, new Doorway(pos)));
+          hierarchicalNav.removeObstacle(new Pair<>(levelNr, new Doorway(pos)));
           break;
         case PRISON_BARS:
-          multiLayerNav.addObstacle(new Pair<>(levelNr, new PrisonBars(pos)));
+          hierarchicalNav.addObstacle(new Pair<>(levelNr, new PrisonBars(pos)));
           break;
         case STAIRS_DOWN:
-          multiLayerNav.removeObstacle(
+          hierarchicalNav.removeObstacle(
               new Pair<>(levelNr, new Stair(pos, Climbable.ClimbType.Descendable)));
         case STAIRS_UP:
-          multiLayerNav.removeObstacle(
+          hierarchicalNav.removeObstacle(
               new Pair<>(levelNr, new Stair(pos, Climbable.ClimbType.Ascendable)));
           break;
         case SINK:
-          multiLayerNav.removeObstacle(new Pair<>(levelNr, new Sink(pos)));
+          hierarchicalNav.removeObstacle(new Pair<>(levelNr, new Sink(pos)));
           break;
         default:
           // If the tile has been seen we switch the state to non-blocking.
           // If we don't know the type of the tile, we for now put a tile in its place
           if (area().nullTile(pos)) {
-            multiLayerNav.addObstacle(new Pair<>(levelNr, new Tile(pos)));
+            hierarchicalNav.removeObstacle(new Pair<>(levelNr, new Unknown(pos)));
           } else if (area().canBeDoor(pos)) {
-            if (area().getTile(pos).getClass() == Tile.class) {
-              multiLayerNav.removeObstacle(new Pair<>(levelNr, new Door(pos, true)));
+            if (area().getTile(pos).getClass() == Unknown.class) {
+              hierarchicalNav.removeObstacle(new Pair<>(levelNr, new Door(pos, true)));
             } else {
               // If the type is more specific than Tile, then don't change anything
             }
           } else {
-            multiLayerNav.toggleBlockingOff(new Pair<>(levelNr, new Tile(pos)));
+            hierarchicalNav.toggleBlockingOff(new Pair<>(levelNr, new Tile(pos)));
           }
           break;
       }
 
       // Lastly mark it as seen
-      multiLayerNav.markAsSeen(new Pair<>(levelNr, new Tile(pos)));
+      hierarchicalNav.markAsSeen(new Pair<>(levelNr, new Tile(pos)));
     }
 
-    NetHackSurface navGraph = multiLayerNav.areas.get(levelNr);
+    NetHackSurface navGraph = hierarchicalNav.areas.get(levelNr);
     IntVec2D playerPos = NavUtils.loc2(worldmodel.position);
     // Each entity that is next to the agent which is void is a wall
     List<IntVec2D> adjacentCoords = NavUtils.neighbourCoordinates(playerPos, true);
     for (IntVec2D adjacentPos : adjacentCoords) {
       if (navGraph.nullTile(adjacentPos)) {
-        multiLayerNav.addObstacle(new Pair<>(levelNr, new Wall(adjacentPos)));
-        multiLayerNav.markAsSeen(new Pair<>(levelNr, new Tile(adjacentPos)));
+        hierarchicalNav.addObstacle(new Pair<>(levelNr, new Wall(adjacentPos)));
+        hierarchicalNav.markAsSeen(new Pair<>(levelNr, new Tile(adjacentPos)));
       }
     }
   }
@@ -185,7 +185,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
   private void updateEntities() {
     // Update visibility cone
     IntVec2D playerPos = NavUtils.loc2(worldmodel.position);
-    Level level = env().app.gameState.level();
+    Level level = env().app.gameState.getLevel();
     HashSet<IntVec2D> visibleCoordinates =
         new HashSet<>(area().VisibleCoordinates(playerPos, level));
 
@@ -235,13 +235,9 @@ public class AgentState extends Iv4xrAgentState<Void> {
   /** Check if the agent that owns this state is alive in the game (its hp>0). */
   public boolean agentIsAlive() {
     WorldEntity a = worldmodel.elements.get(worldmodel.agentId);
-    if (a == null) {
-      throw new IllegalArgumentException();
-    }
+    assert a != null;
     Integer hp = (Integer) a.properties.get("hp");
-    if (hp == null) {
-      throw new IllegalArgumentException();
-    }
+    assert hp != null;
     return hp > 0;
   }
 
@@ -291,8 +287,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
   public void render() {
     String[] navigation = area().toString().split(System.lineSeparator());
     String[] game = env().app.gameState.toString().split(System.lineSeparator());
-    NetHackPassibility netHackPassibility = new NetHackPassibility(area());
-    String[] passability = netHackPassibility.toString().split(System.lineSeparator());
+    String[] passability = area().passabilityString().split(System.lineSeparator());
 
     System.out.println(game[0]);
 

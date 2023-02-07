@@ -4,6 +4,7 @@
 
 package agent.navigation.hpastar.passabilities;
 
+import agent.navigation.hpastar.ConcreteMap;
 import agent.navigation.hpastar.IPassability;
 import agent.navigation.hpastar.infrastructure.Constants;
 import agent.navigation.hpastar.utils.RefSupport;
@@ -28,6 +29,11 @@ public class FakePassability implements IPassability {
   @Override
   public boolean canMoveDiagonal(IntVec2D pos1, IntVec2D pos2) {
     return true;
+  }
+
+  @Override
+  public ConcreteMap getConcreteMap() {
+    return null;
   }
 
   /** Creates obstacles in the map */

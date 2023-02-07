@@ -15,10 +15,8 @@ public class Level {
   public Entity[][] map;
   public List<IntVec2D> changedCoordinates = new ArrayList<>();
   public List<IntVec2D> visibleFloors = new ArrayList<>();
-  private int nr;
 
-  public Level(int levelNr, Entity[][] entities) {
-    this.nr = levelNr;
+  public Level(Entity[][] entities) {
     this.map = entities;
 
     setVisibleFloors();
@@ -33,10 +31,6 @@ public class Level {
         }
       }
     }
-  }
-
-  public String id() {
-    return "level" + nr;
   }
 
   public void setChangedCoordinates(Level oldLevel) {

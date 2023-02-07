@@ -139,11 +139,11 @@ public class HierarchicalMapFactory {
   }
 
   private void createEdges(List<Entrance> entrances, List<Cluster> clusters) {
-    for (var entrance : entrances) {
+    for (Entrance entrance : entrances) {
       createEntranceEdges(entrance, _hierarchicalMap.type);
     }
 
-    for (var cluster : clusters) {
+    for (Cluster cluster : clusters) {
       cluster.createIntraClusterEdges();
       createIntraClusterEdges(cluster);
     }
@@ -396,6 +396,10 @@ public class HierarchicalMapFactory {
   }
 
   private void createAbstractNodes(List<Entrance> entrancesList) {
+    System.out.println(
+        entrancesList.stream()
+            .map(entrance -> entrance.srcNode.nodeId)
+            .collect(Collectors.toList()));
     Iterable<AbstractNodeInfo> abstractNodes = generateAbstractNodes(entrancesList);
     for (AbstractNodeInfo abstractNode : abstractNodes) {
       _hierarchicalMap.concreteNodeIdToAbstractNodeIdMap.put(
@@ -408,7 +412,7 @@ public class HierarchicalMapFactory {
     RefSupport<Integer> abstractNodeId = new RefSupport<>(0);
     Map<Id<ConcreteNode>, AbstractNodeInfo> abstractNodesDict = new HashMap<>();
     for (Entrance entrance : entrances) {
-      var level = entrance.getEntranceLevel(_clusterSize, _maxLevel);
+      int level = entrance.getEntranceLevel(_clusterSize, _maxLevel);
       createOrUpdateAbstractNodeFromConcreteNode(
           entrance.srcNode, entrance.cluster1, abstractNodeId, level, abstractNodesDict);
       createOrUpdateAbstractNodeFromConcreteNode(
@@ -428,11 +432,12 @@ public class HierarchicalMapFactory {
       Map<Id<ConcreteNode>, AbstractNodeInfo> abstractNodes) {
     AbstractNodeInfo abstractNodeInfo;
     if (!abstractNodes.containsKey(srcNode.nodeId)) {
-      cluster.addEntrance(
-          new Id<AbstractNode>().from(abstractNodeId.getValue()),
+      IntVec2D relativePosition =
           new IntVec2D(
               srcNode.info.position.x - cluster.origin.x,
-              srcNode.info.position.y - cluster.origin.y));
+              srcNode.info.position.y - cluster.origin.y);
+      assert relativePosition.x >= 0 && relativePosition.y >= 0;
+      cluster.addEntrance(new Id<AbstractNode>().from(abstractNodeId.getValue()), relativePosition);
       abstractNodeInfo =
           new AbstractNodeInfo(
               new Id<AbstractNode>().from(abstractNodeId.getValue()),

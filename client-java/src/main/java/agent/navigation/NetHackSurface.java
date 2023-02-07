@@ -4,10 +4,11 @@ import agent.AgentLoggers;
 import agent.navigation.hpastar.*;
 import agent.navigation.hpastar.factories.HierarchicalMapFactory;
 import agent.navigation.hpastar.graph.AbstractNode;
+import agent.navigation.hpastar.infrastructure.Constants;
 import agent.navigation.hpastar.infrastructure.Id;
-import agent.navigation.hpastar.passabilities.NetHackPassibility;
 import agent.navigation.hpastar.search.HierarchicalSearch;
 import agent.navigation.hpastar.smoother.SmoothWizard;
+import agent.navigation.hpastar.utils.RefSupport;
 import agent.navigation.strategy.NavUtils;
 import agent.navigation.surface.*;
 import eu.iv4xr.framework.extensions.pathfinding.*;
@@ -35,27 +36,17 @@ import org.apache.logging.log4j.Logger;
  * @author Wish
  */
 public class NetHackSurface
-    implements Navigatable<Tile>, XPathfinder<Tile>, CanDealWithDynamicObstacle<Tile> {
+    implements Navigatable<Tile>,
+        XPathfinder<Tile>,
+        CanDealWithDynamicObstacle<Tile>,
+        IPassability {
   static final Logger logger = LogManager.getLogger(AgentLoggers.NavLogger);
   static final int sizeX = Level.WIDTH, sizeY = Level.HEIGHT;
   public final Tile[][] tiles = new Tile[sizeY][sizeX];
   private final Map<String, HashSet<IntVec2D>> tileTypes = new HashMap<>();
   public Pathfinder<Tile> pathfinder = new AStar<>();
-  public int levelNr;
 
-  // TODO: Use these variables
-  private int depth;
-  private int dungeonNr;
-
-  public NetHackSurface(int levelNr) {
-    this.levelNr = levelNr;
-  }
-
-  public NetHackSurface(int levelNr, int depth, int dungeonNr) {
-    this.levelNr = levelNr;
-    this.depth = depth;
-    this.dungeonNr = dungeonNr;
-  }
+  public NetHackSurface() {}
 
   /**
    * If true, the pathfinder will assume that the whole NavGraph has been "seen", so no vertex would
@@ -230,9 +221,9 @@ public class NetHackSurface
   public void addObstacle(Tile o) {
     assert !(o instanceof StraightWalkable) || !((StraightWalkable) o).isWalkable()
         : "Obstacle is not actually an obstacle since it can be passed";
-    replaceTile(tiles[o.pos.y][o.pos.x], o);
+    Tile oldTile = tiles[o.pos.y][o.pos.x];
+    replaceTile(oldTile, o);
     tiles[o.pos.y][o.pos.x] = o;
-    updateNeighbours(o);
   }
 
   /** Remove a non-navigable tile (obstacle). */
@@ -240,9 +231,14 @@ public class NetHackSurface
   public void removeObstacle(Tile o) {
     assert o instanceof StraightWalkable && ((StraightWalkable) o).isWalkable()
         : "RemoveObstacle must insert a walkable tile";
-    replaceTile(tiles[o.pos.y][o.pos.x], o);
+    Tile oldTile = tiles[o.pos.y][o.pos.x];
+    replaceTile(oldTile, o);
     tiles[o.pos.y][o.pos.x] = o;
-    updateNeighbours(o);
+    if (oldTile instanceof StraightWalkable
+        && ((StraightWalkable) oldTile).isWalkable()
+        && oldTile instanceof Walkable == o instanceof Walkable) {
+      return;
+    }
   }
 
   private void replaceTile(Tile oldTile, Tile newTile) {
@@ -265,14 +261,15 @@ public class NetHackSurface
   }
 
   private void updateNeighbours(Tile t) {
-    t.neighbours = neighbours_(t.pos);
-    for (IntVec2D neighbourCoordinate : NavUtils.neighbourCoordinates(t.pos, true)) {
-      Tile neighbour = getTile(neighbourCoordinate);
-      if (neighbour == null) {
-        continue;
-      }
-      neighbour.neighbours = neighbours_(neighbour.pos);
-    }
+    // Update edges
+    //    t.neighbours = neighbours_(t.pos);
+    //    for (IntVec2D neighbourCoordinate : NavUtils.neighbourCoordinates(t.pos, true)) {
+    //      Tile neighbour = getTile(neighbourCoordinate);
+    //      if (neighbour == null) {
+    //        continue;
+    //      }
+    //      neighbour.neighbours = neighbours_(neighbour.pos);
+    //    }
   }
 
   /**
@@ -393,9 +390,7 @@ public class NetHackSurface
     System.out.printf("SEARCH_PATH:%s->%s%n", from.pos, to.pos);
     assert !nullTile(from.pos) && !nullTile(to.pos);
 
-    NetHackPassibility passibility = new NetHackPassibility(this);
-    ConcreteMap concreteMap =
-        new ConcreteMap(TileType.OctileUnicost, Level.WIDTH, Level.HEIGHT, passibility);
+    ConcreteMap concreteMap = getConcreteMap();
     HierarchicalMap absTiling = new NetHackMapFactory().createHierarchicalMap(concreteMap);
     Function<Pair<IntVec2D, IntVec2D>, List<IPathNode>> doHierarchicalSearch =
         (positions) -> hierarchicalSearch(absTiling, concreteMap, positions.fst, positions.snd);
@@ -505,34 +500,35 @@ public class NetHackSurface
     if (tile == null) {
       return new ArrayList<>();
     }
-    if (true) {
-      return getTile(tile.pos).neighbours;
+    if (false) {
+      throw new IllegalArgumentException("Blah");
+      //      return getTile(tile.pos).neighbours;
     } else {
       return neighbours_(tile.pos);
     }
   }
 
-  public Iterable<Tile> neighboursDebug(Tile t) {
-    Tile tile = getTile(t.pos);
-    List<Tile> firstList = getTile(tile.pos).neighbours;
-    List<Tile> secondList = neighbours_(tile.pos);
-
-    if (firstList.size() != secondList.size()) {
-      System.out.printf("-------%s-------%n", tile.pos);
-      System.out.println("-------TILE LIST-------");
-      for (Tile neighbour : firstList) {
-        System.out.println(neighbour.pos);
-      }
-
-      System.out.println("-------TRUE LIST-------");
-      for (Tile neighbour : secondList) {
-        System.out.println(neighbour.pos);
-      }
-      System.out.println();
-    }
-
-    return secondList;
-  }
+  //  public Iterable<Tile> neighboursDebug(Tile t) {
+  //    Tile tile = getTile(t.pos);
+  //    List<Tile> firstList = getTile(tile.pos).neighbours;
+  //    List<Tile> secondList = neighbours_(tile.pos);
+  //
+  //    if (firstList.size() != secondList.size()) {
+  //      System.out.printf("-------%s-------%n", tile.pos);
+  //      System.out.println("-------TILE LIST-------");
+  //      for (Tile neighbour : firstList) {
+  //        System.out.println(neighbour.pos);
+  //      }
+  //
+  //      System.out.println("-------TRUE LIST-------");
+  //      for (Tile neighbour : secondList) {
+  //        System.out.println(neighbour.pos);
+  //      }
+  //      System.out.println();
+  //    }
+  //
+  //    return secondList;
+  //  }
 
   /**
    * Return the neighbors of a tile. A tile u is a neighbor of a tile t if u is adjacent to t, and
@@ -574,14 +570,54 @@ public class NetHackSurface
 
   /** The estimated distance between two arbitrary vertices. */
   public float heuristic(Tile from, Tile to) {
-    // straight-line distance
-    return (float) Math.sqrt(distSq(from.pos.x, from.pos.y, to.pos.x, to.pos.y));
+    int dx = Math.abs(from.pos.x - to.pos.x);
+    int dy = Math.abs(from.pos.y - to.pos.y);
+    return Math.max(dx, dy);
   }
 
   /** The distance between two neighboring tiles. */
   public float distance(Tile from, Tile to) {
-    if (from.pos.x == to.pos.x || from.pos.y == to.pos.y) return 1;
-    return 1.4142f;
+    return 1;
   }
   // endregion
+
+  @Override
+  public boolean canEnter(IntVec2D pos, RefSupport<Integer> movementCost) {
+    movementCost.setValue(Constants.COST_ONE);
+    Tile t = getTile(pos);
+    if (t == null) {
+      return false;
+    }
+    //    return true;
+    return t instanceof StraightWalkable || t.getClass() == Tile.class;
+  }
+
+  @Override
+  public boolean canMoveDiagonal(IntVec2D pos1, IntVec2D pos2) {
+    Tile a = getTile(pos1);
+    Tile b = getTile(pos2);
+    return a instanceof Walkable && b instanceof Walkable;
+  }
+
+  public ConcreteMap getConcreteMap() {
+    //    ConcreteMapFactory.createConcreteMap(Level.WIDTH, Level.HEIGHT, this,
+    // TileType.OctileUnicost);
+    return new ConcreteMap(TileType.OctileUnicost, Level.WIDTH, Level.HEIGHT, this);
+  }
+
+  public String passabilityString() {
+    StringBuilder sb = new StringBuilder();
+    for (int y = 0; y < Level.HEIGHT; y++) {
+      for (int x = 0; x < Level.WIDTH; x++) {
+        if (canEnter(new IntVec2D(x, y), new RefSupport<>())) {
+          sb.append(' ');
+        } else {
+          sb.append('▓');
+        }
+      }
+      sb.append(System.lineSeparator());
+    }
+
+    return sb.toString();
+  }
 }

@@ -67,13 +67,14 @@ public class TileSelector extends Selector<Pair<Integer, Tile>> {
         return null;
       }
       for (IntVec2D pos : tilesOfType) {
-        tiles.add(new Pair<Integer, Tile>(surface.levelNr, surface.getTile(pos)));
+        tiles.add(
+            new Pair<Integer, Tile>(NavUtils.levelNr(S.worldmodel.position), surface.getTile(pos)));
       }
     } else {
       for (Tile[] row : S.area().tiles) {
         for (Tile tile : row) {
           if (tile != null) {
-            tiles.add(new Pair<>(surface.levelNr, tile));
+            tiles.add(new Pair<>(NavUtils.levelNr(S.worldmodel.position), tile));
           }
         }
       }

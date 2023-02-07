@@ -111,10 +111,10 @@ public class NavAction {
             (AgentState S) -> {
               Vec3 agentPos = S.worldmodel.position;
               if (heuristicLocation == null) {
-                return NavUtils.nextTile(S.multiLayerNav.explore(NavUtils.loc3(agentPos)));
+                return NavUtils.nextTile(S.hierarchicalNav.explore(NavUtils.loc3(agentPos)));
               } else {
                 return NavUtils.nextTile(
-                    S.multiLayerNav.explore(NavUtils.loc3(agentPos), heuristicLocation));
+                    S.hierarchicalNav.explore(NavUtils.loc3(agentPos), heuristicLocation));
               }
             });
   }

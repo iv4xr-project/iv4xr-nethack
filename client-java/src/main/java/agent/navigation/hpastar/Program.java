@@ -114,6 +114,11 @@ public class Program {
     public boolean canMoveDiagonal(IntVec2D pos1, IntVec2D pos2) {
       return true;
     }
+
+    @Override
+    public ConcreteMap getConcreteMap() {
+      return null;
+    }
   }
 
   public static void main6(String[] args) {

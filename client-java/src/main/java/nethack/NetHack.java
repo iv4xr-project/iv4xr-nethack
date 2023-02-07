@@ -79,7 +79,7 @@ public class NetHack {
   }
 
   public Level level() {
-    return gameState.level();
+    return gameState.getLevel();
   }
 
   public void render() {
@@ -89,7 +89,6 @@ public class NetHack {
 
   public Command waitCommand(boolean acceptNoCommand) {
     // Do not close scanner, otherwise it cannot read the next command
-    @SuppressWarnings("resource")
     Scanner scanner = new Scanner(System.in);
     if (acceptNoCommand) {
       System.out.print("(Optional) ");
@@ -127,10 +126,7 @@ public class NetHack {
         char character = command.stroke.charAt(1);
         return step(Command.ADDITIONAL_ASCII, character);
       case COMMAND_INVENTORY:
-        System.out.println(gameState.player.inventory);
-        return StepType.Special;
-      case COMMAND_INVENTTYPE:
-        // Does something different actually
+      case COMMAND_INVENTTYPE: // Should do something differently
         System.out.println(gameState.player.inventory);
         return StepType.Special;
       default:
@@ -167,28 +163,21 @@ public class NetHack {
       return;
     }
 
-    // Does not skip a level
-    assert stepState.stats.zeroIndexDepth <= gameState.world.size()
-        : "Dropped down more than 1 level??";
-    // Add to world if new level is explored
-    if (stepState.stats.zeroIndexDepth == gameState.world.size()) {
-      stepState.level.setChangedCoordinates(null);
-      gameState.world.add(stepState.level);
-    } else {
-      stepState.level.setChangedCoordinates(gameState.world.get(stepState.stats.zeroIndexDepth));
-      gameState.world.set(stepState.stats.zeroIndexDepth, stepState.level);
-    }
+    // Need to set new stats before setting the level
+    gameState.stats = stepState.stats;
+    gameState.setLevel(stepState.level);
 
     // Set all members to the correct values
     gameState.message = stepState.message;
-
     // Remember last position of player
     if (gameState.player != null) {
       stepState.player.previousPosition = gameState.player.position;
       stepState.player.previousPosition2D = gameState.player.position2D;
     }
     gameState.player = stepState.player;
-    gameState.stats = stepState.stats;
+    assert gameState.player.position.z == 0
+        : "Before this the levelNr is not known, assert is isnt set already";
+    gameState.player.position.z = gameState.getLevelNr();
     gameState.done = stepState.done;
     gameState.info = stepState.info;
   }

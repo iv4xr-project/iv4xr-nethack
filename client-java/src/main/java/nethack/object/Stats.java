@@ -2,8 +2,7 @@ package nethack.object;
 
 public class Stats {
   public int score;
-  public int zeroIndexDepth;
-  public int oneIndexDepth;
+  public int depth;
   public int monsterLevel;
   public int time;
   public int dungeonNumber;
@@ -15,7 +14,7 @@ public class Stats {
     StringBuilder sb = new StringBuilder();
     sb.append(String.format("Stats:%n"));
     sb.append(String.format("score:%s%n", score));
-    sb.append(String.format("depth (1 index):%d%n", oneIndexDepth));
+    sb.append(String.format("depth (1 index):%d%n", depth));
     sb.append(String.format("monsterLevel:%d%n", monsterLevel));
     sb.append(String.format("time:%d%n", time));
     sb.append(String.format("dungeonNumber:%d%n", dungeonNumber));

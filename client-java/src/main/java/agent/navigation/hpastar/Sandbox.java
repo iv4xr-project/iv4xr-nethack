@@ -16,7 +16,6 @@ import agent.navigation.hpastar.smoother.SmoothWizard;
 import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import nl.uu.cs.aplib.utils.Pair;
@@ -34,25 +33,7 @@ public class Sandbox {
     HierarchicalMap absTiling =
         new HierarchicalMapFactory()
             .createHierarchicalMap(concreteMap, clusterSize, maxLevel, EntranceStyle.EndEntrance);
-    Function<Pair<IntVec2D, IntVec2D>, List<IPathNode>> doHierarchicalSearch =
-        (positions) ->
-            hierarchicalSearch(absTiling, maxLevel, concreteMap, positions.fst, positions.snd);
 
-    Function<List<IPathNode>, List<IntVec2D>> toPositionPath =
-        (path) -> {
-          return path.stream()
-              .map(
-                  (p) -> {
-                    if (p instanceof ConcretePathNode) {
-                      ConcretePathNode concretePathNode = (ConcretePathNode) p;
-                      return concreteMap.graph.getNodeInfo(concretePathNode.id).position;
-                    }
-
-                    AbstractPathNode abstractPathNode = (AbstractPathNode) p;
-                    return absTiling.abstractGraph.getNodeInfo(abstractPathNode.id).position;
-                  })
-              .collect(Collectors.toList());
-        };
     List<Pair<IntVec2D, IntVec2D>> points =
         IntStream.range(0, 2000)
             .mapToObj(
@@ -71,8 +52,8 @@ public class Sandbox {
       IntVec2D startPosition = points.get(i).fst;
       IntVec2D endPosition = points.get(i).snd;
       List<IPathNode> regularSearchPath =
-          doHierarchicalSearch.apply(new Pair<>(startPosition, endPosition));
-      List<IntVec2D> posPath = toPositionPath.apply(regularSearchPath);
+          hierarchicalSearch(absTiling, maxLevel, concreteMap, startPosition, endPosition);
+      List<IntVec2D> posPath = toPositionPath(regularSearchPath, concreteMap, absTiling);
     }
     long t2 = System.nanoTime();
     long regularSearchTime = t2 - t1;
@@ -103,6 +84,22 @@ public class Sandbox {
     factory.removeAbstractNode(hierarchicalMap, targetAbsNode);
     factory.removeAbstractNode(hierarchicalMap, startAbsNode);
     return path;
+  }
+
+  private static List<IntVec2D> toPositionPath(
+      List<IPathNode> path, ConcreteMap concreteMap, HierarchicalMap absTiling) {
+    return path.stream()
+        .map(
+            (p) -> {
+              if (p instanceof ConcretePathNode) {
+                ConcretePathNode concretePathNode = (ConcretePathNode) p;
+                return concreteMap.graph.getNodeInfo(concretePathNode.id).position;
+              }
+
+              AbstractPathNode abstractPathNode = (AbstractPathNode) p;
+              return absTiling.abstractGraph.getNodeInfo(abstractPathNode.id).position;
+            })
+        .collect(Collectors.toList());
   }
 
   private static List<Character> getCharVector(ConcreteMap concreteMap) {

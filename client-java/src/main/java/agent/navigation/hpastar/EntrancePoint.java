@@ -19,6 +19,9 @@ public class EntrancePoint {
   public EntrancePoint(Id<AbstractNode> abstractNodeId, IntVec2D relativePosition) {
     this.abstractNodeId = abstractNodeId;
     this.relativePosition = relativePosition;
+
+    assert relativePosition.x >= 0 && relativePosition.y >= 0
+        : "Relative position should not be negative";
   }
 
   @Override

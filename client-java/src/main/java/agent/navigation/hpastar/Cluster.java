@@ -49,6 +49,7 @@ public class Cluster {
     this.id = id;
     this.clusterY = clusterY;
     this.clusterX = clusterX;
+    assert origin.x >= 0 && origin.y >= 0 : "Cannot handle negative coordinates";
     this.origin = origin;
     this.size = size;
   }
@@ -56,6 +57,7 @@ public class Cluster {
   public void createIntraClusterEdges() {
     for (EntrancePoint point1 : entrancePoints) {
       for (EntrancePoint point2 : entrancePoints) {
+        System.out.printf("%s,%s%n", point1.relativePosition, point2.relativePosition);
         computePathBetweenEntrances(point1, point2);
       }
     }
