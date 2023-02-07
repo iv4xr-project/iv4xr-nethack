@@ -44,8 +44,7 @@ public class Cluster {
       int clusterY,
       IntVec2D origin,
       Size size) {
-    subConcreteMap =
-        concreteMap.slice(origin.x, origin.y, size.width, size.height, concreteMap.passability);
+    subConcreteMap = concreteMap.slice(origin.x, origin.y, size, concreteMap.passability);
     this.id = id;
     this.clusterY = clusterY;
     this.clusterX = clusterX;
@@ -57,7 +56,6 @@ public class Cluster {
   public void createIntraClusterEdges() {
     for (EntrancePoint point1 : entrancePoints) {
       for (EntrancePoint point2 : entrancePoints) {
-        System.out.printf("%s,%s%n", point1.relativePosition, point2.relativePosition);
         computePathBetweenEntrances(point1, point2);
       }
     }
@@ -147,6 +145,8 @@ public class Cluster {
 
   @Override
   public String toString() {
-    return String.format("Cluster %s (%d,%d)", id, clusterX, clusterY);
+    return String.format(
+        "Cluster %s (%d,%d) origin:%s size:%d,%d",
+        id, clusterX, clusterY, origin, size.width, size.height);
   }
 }

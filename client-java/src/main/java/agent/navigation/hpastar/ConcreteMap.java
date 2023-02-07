@@ -20,28 +20,25 @@ public class ConcreteMap implements IMap<ConcreteNode> {
   public IPassability passability;
   public final TileType tileType;
 
-  public int height;
-  public int width;
+  public Size size;
   public int maxEdges;
   public ConcreteGraph graph;
 
   public int getNrNodes() {
-    return height * width;
+    return size.height * size.width;
   }
 
-  public ConcreteMap(TileType tileType, int width, int height, IPassability passability) {
+  public ConcreteMap(TileType tileType, Size size, IPassability passability) {
     this.passability = passability;
     this.tileType = tileType;
     this.maxEdges = Helpers.getMaxEdges(tileType);
-    this.height = height;
-    this.width = width;
-    this.graph = GraphFactory.createGraph(width, height, passability);
+    this.size = size;
+    this.graph = GraphFactory.createGraph(size, passability);
   }
 
   // Create a new concreteMap as a copy of another concreteMap (just copying obstacles)
-  public ConcreteMap slice(
-      int horizOrigin, int vertOrigin, int width, int height, IPassability passability) {
-    ConcreteMap slicedConcreteMap = new ConcreteMap(tileType, width, height, passability);
+  public ConcreteMap slice(int horizOrigin, int vertOrigin, Size size, IPassability passability) {
+    ConcreteMap slicedConcreteMap = new ConcreteMap(tileType, size, passability);
     for (ConcreteNode slicedMapNode : slicedConcreteMap.graph.nodes) {
       ConcreteNode globalConcreteNode =
           graph.getNode(
@@ -55,7 +52,7 @@ public class ConcreteMap implements IMap<ConcreteNode> {
   }
 
   public Id<ConcreteNode> getNodeIdFromPos(int x, int y) {
-    return new Id<ConcreteNode>().from(y * width + x);
+    return new Id<ConcreteNode>().from(y * size.width + x);
   }
 
   public int getHeuristic(Id<ConcreteNode> startNodeId, Id<ConcreteNode> targetNodeId) {
@@ -147,8 +144,8 @@ public class ConcreteMap implements IMap<ConcreteNode> {
   }
 
   private void printFormattedChars(List<Character> chars) {
-    for (int y = 0; y < height; ++y) {
-      for (int x = 0; x < width; ++x) {
+    for (int y = 0; y < size.height; ++y) {
+      for (int x = 0; x < size.width; ++x) {
         Id<ConcreteNode> nodeId = this.getNodeIdFromPos(x, y);
         System.out.println(chars.get(nodeId.getIdValue()));
       }

@@ -1,5 +1,6 @@
 package nethack.object;
 
+import agent.navigation.hpastar.Size;
 import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 public class Level {
   public static final Logger logger = LogManager.getLogger(NetHackLoggers.NetHackLogger);
-  public static final int HEIGHT = 21, WIDTH = 79;
+  public static final Size SIZE = new Size(79, 21);
   public Entity[][] map;
   public List<IntVec2D> changedCoordinates = new ArrayList<>();
   public List<IntVec2D> visibleFloors = new ArrayList<>();
@@ -23,8 +24,8 @@ public class Level {
   }
 
   private void setVisibleFloors() {
-    for (int x = 0; x < WIDTH; x++) {
-      for (int y = 0; y < HEIGHT; y++) {
+    for (int x = 0; x < SIZE.width; x++) {
+      for (int y = 0; y < SIZE.height; y++) {
         Entity e = getEntity(x, y);
         if (e.type == EntityType.FLOOR && e.color == Color.GRAY) {
           visibleFloors.add(new IntVec2D(x, y));
@@ -45,8 +46,8 @@ public class Level {
     }
 
     // If it is a subsequent observation, only give coordinates of fields that changed
-    for (int x = 0; x < WIDTH; x++) {
-      for (int y = 0; y < HEIGHT; y++) {
+    for (int x = 0; x < SIZE.width; x++) {
+      for (int y = 0; y < SIZE.height; y++) {
         if (!oldLevel.getEntity(x, y).equals(getEntity(x, y))) {
           changedCoordinates.add(new IntVec2D(x, y));
         }
@@ -59,8 +60,8 @@ public class Level {
 
   // Returns coordinates of everything that is not VOID
   private void setWithAllCoordinates() {
-    for (int x = 0; x < WIDTH; x++) {
-      for (int y = 0; y < HEIGHT; y++) {
+    for (int x = 0; x < SIZE.width; x++) {
+      for (int y = 0; y < SIZE.height; y++) {
         Entity e = getEntity(x, y);
         if (e.type != EntityType.VOID) {
           changedCoordinates.add(new IntVec2D(x, y));
@@ -88,9 +89,9 @@ public class Level {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    for (int y = 0; y < HEIGHT; y++) {
+    for (int y = 0; y < SIZE.height; y++) {
       Color currentColor = null;
-      for (int x = 0; x < WIDTH; x++) {
+      for (int x = 0; x < SIZE.width; x++) {
         // Color changed so add it to the line
         if (currentColor != map[y][x].color) {
           currentColor = map[y][x].color;

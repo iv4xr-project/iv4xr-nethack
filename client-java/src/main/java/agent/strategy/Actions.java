@@ -23,6 +23,7 @@ import nethack.enums.Command;
 import nethack.enums.EntityType;
 import nethack.enums.HungerState;
 import nethack.object.Item;
+import nethack.object.Level;
 import nethack.object.Player;
 import nl.uu.cs.aplib.mainConcepts.Action;
 import nl.uu.cs.aplib.utils.Pair;
@@ -121,7 +122,8 @@ public class Actions {
               NetHackSurface surface =
                   S.hierarchicalNav.areas.get(NavUtils.levelNr(S.worldmodel.position));
               List<IntVec2D> neighbours =
-                  NavUtils.neighbourCoordinates(NavUtils.loc2(S.worldmodel.position), true);
+                  NavUtils.neighbourCoordinates(
+                      NavUtils.loc2(S.worldmodel.position), Level.SIZE, true);
               List<Wall> walls = new ArrayList<>();
               for (IntVec2D neighbour : neighbours) {
                 Tile t = surface.getTile(neighbour);

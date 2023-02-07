@@ -21,12 +21,10 @@ import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import nethack.object.Level;
 
 /** Abstract maps represent, as the name implies, an abstraction built over the concrete map. */
 public class HierarchicalMap implements IMap<AbstractNode> {
-  public int height;
-  public int width;
+  public Size size;
   public AbstractGraph abstractGraph = new AbstractGraph();
   public int clusterSize;
   public int maxLevel;
@@ -65,12 +63,11 @@ public class HierarchicalMap implements IMap<AbstractNode> {
     }
   }
 
-  public HierarchicalMap(TileType tileType, int clusterSize, int maxLevel) {
+  public HierarchicalMap(TileType tileType, int clusterSize, int maxLevel, Size size) {
     this.clusterSize = clusterSize;
     this.maxLevel = maxLevel;
     setType(tileType);
-    height = Level.HEIGHT;
-    width = Level.WIDTH;
+    this.size = size;
   }
 
   public int getHeuristic(Id<AbstractNode> startNodeId, Id<AbstractNode> targetNodeId) {
@@ -175,9 +172,9 @@ public class HierarchicalMap implements IMap<AbstractNode> {
 
   public void setAllMapAsCurrentCluster() {
     currentClusterY0 = 0;
-    currentClusterY1 = height - 1;
+    currentClusterY1 = size.height - 1;
     currentClusterX0 = 0;
-    currentClusterX1 = width - 1;
+    currentClusterX1 = size.width - 1;
   }
 
   public void setCurrentClusterByPositionAndLevel(IntVec2D pos, int level) {
@@ -185,9 +182,9 @@ public class HierarchicalMap implements IMap<AbstractNode> {
     int nodeY = pos.y;
     int nodeX = pos.x;
     currentClusterY0 = nodeY - (nodeY % offset);
-    currentClusterY1 = Math.min(this.height - 1, this.currentClusterY0 + offset - 1);
+    currentClusterY1 = Math.min(size.height - 1, this.currentClusterY0 + offset - 1);
     currentClusterX0 = nodeX - (nodeX % offset);
-    currentClusterX1 = Math.min(this.width - 1, this.currentClusterX0 + offset - 1);
+    currentClusterX1 = Math.min(size.width - 1, this.currentClusterX0 + offset - 1);
   }
 
   public boolean belongToSameCluster(

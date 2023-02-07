@@ -18,5 +18,7 @@ public class ConcreteNode extends INode<ConcreteNode, ConcreteNodeInfo, Concrete
 
   public void addEdge(ConcreteEdge edge) {
     edges.put(edge.targetNodeId, edge);
+    // Don't add more than 8 edges
+    assert edges.size() <= 8;
   }
 }

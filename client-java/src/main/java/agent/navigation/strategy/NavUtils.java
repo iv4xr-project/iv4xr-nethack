@@ -4,6 +4,7 @@ import agent.AgentLoggers;
 import agent.iv4xr.AgentState;
 import agent.navigation.HierarchicalAreasNavigation;
 import agent.navigation.NetHackSurface;
+import agent.navigation.hpastar.Size;
 import agent.navigation.surface.Tile;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
@@ -12,7 +13,6 @@ import eu.iv4xr.framework.spatial.Vec3;
 import java.util.ArrayList;
 import java.util.List;
 import nethack.enums.Command;
-import nethack.object.Level;
 import nethack.object.Player;
 import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.LogManager;
@@ -211,8 +211,12 @@ public class NavUtils {
     }
   }
 
-  public static List<IntVec2D> neighbourCoordinates(IntVec2D pos, boolean allowDiagonal) {
+  public static List<IntVec2D> neighbourCoordinates(
+      IntVec2D pos, Size size, boolean allowDiagonal) {
     List<IntVec2D> neighbourCoords = new ArrayList<>(2);
+
+    assert pos.x >= 0 && pos.y >= 0 && pos.x < size.width && pos.y < size.height
+        : "Position outside the boundaries";
 
     int left = pos.x - 1;
     int right = pos.x + 1;
@@ -220,22 +224,22 @@ public class NavUtils {
     int above = pos.y + 1;
 
     boolean leftInsideMap = left >= 0;
-    boolean rightInsideMap = right < Level.WIDTH;
+    boolean rightInsideMap = right < size.width;
 
     boolean belowInsideMap = below >= 0;
-    boolean aboveInsideMap = above < Level.HEIGHT;
+    boolean aboveInsideMap = above < size.height;
 
     if (leftInsideMap && rightInsideMap && belowInsideMap && aboveInsideMap) {
-      neighbourCoords.add(new IntVec2D(left, pos.y));
-      neighbourCoords.add(new IntVec2D(right, pos.y));
       neighbourCoords.add(new IntVec2D(pos.x, below));
       neighbourCoords.add(new IntVec2D(pos.x, above));
+      neighbourCoords.add(new IntVec2D(left, pos.y));
+      neighbourCoords.add(new IntVec2D(right, pos.y));
 
       if (allowDiagonal) {
-        neighbourCoords.add(new IntVec2D(left, below));
-        neighbourCoords.add(new IntVec2D(left, above));
         neighbourCoords.add(new IntVec2D(right, above));
+        neighbourCoords.add(new IntVec2D(left, above));
         neighbourCoords.add(new IntVec2D(right, below));
+        neighbourCoords.add(new IntVec2D(left, below));
       }
 
       return neighbourCoords;
@@ -243,11 +247,13 @@ public class NavUtils {
 
     if (leftInsideMap) {
       neighbourCoords.add(new IntVec2D(left, pos.y));
-      if (allowDiagonal && belowInsideMap) {
-        neighbourCoords.add(new IntVec2D(left, below));
-      }
-      if (allowDiagonal && aboveInsideMap) {
-        neighbourCoords.add(new IntVec2D(left, above));
+      if (allowDiagonal) {
+        if (belowInsideMap) {
+          neighbourCoords.add(new IntVec2D(left, below));
+        }
+        if (aboveInsideMap) {
+          neighbourCoords.add(new IntVec2D(left, above));
+        }
       }
     }
     if (aboveInsideMap) {
@@ -258,11 +264,13 @@ public class NavUtils {
     }
     if (rightInsideMap) {
       neighbourCoords.add(new IntVec2D(right, pos.y));
-      if (allowDiagonal && belowInsideMap) {
-        neighbourCoords.add(new IntVec2D(right, below));
-      }
-      if (allowDiagonal && aboveInsideMap) {
-        neighbourCoords.add(new IntVec2D(right, above));
+      if (allowDiagonal) {
+        if (belowInsideMap) {
+          neighbourCoords.add(new IntVec2D(right, below));
+        }
+        if (aboveInsideMap) {
+          neighbourCoords.add(new IntVec2D(right, above));
+        }
       }
     }
 

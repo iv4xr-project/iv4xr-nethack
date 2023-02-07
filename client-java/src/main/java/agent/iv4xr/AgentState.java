@@ -173,7 +173,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
     NetHackSurface navGraph = hierarchicalNav.areas.get(levelNr);
     IntVec2D playerPos = NavUtils.loc2(worldmodel.position);
     // Each entity that is next to the agent which is void is a wall
-    List<IntVec2D> adjacentCoords = NavUtils.neighbourCoordinates(playerPos, true);
+    List<IntVec2D> adjacentCoords = NavUtils.neighbourCoordinates(playerPos, Level.SIZE, true);
     for (IntVec2D adjacentPos : adjacentCoords) {
       if (navGraph.nullTile(adjacentPos)) {
         hierarchicalNav.addObstacle(new Pair<>(levelNr, new Wall(adjacentPos)));
@@ -291,11 +291,11 @@ public class AgentState extends Iv4xrAgentState<Void> {
 
     System.out.println(game[0]);
 
-    for (int i = 0; i < Level.HEIGHT; i++) {
+    for (int i = 0; i < Level.SIZE.height; i++) {
       System.out.printf("%s %s %s%n", game[i + 1], navigation[i], passability[i]);
     }
 
-    System.out.println(game[Level.HEIGHT + 1]);
-    System.out.println(game[Level.HEIGHT + 2]);
+    System.out.println(game[Level.SIZE.height + 1]);
+    System.out.println(game[Level.SIZE.height + 2]);
   }
 }

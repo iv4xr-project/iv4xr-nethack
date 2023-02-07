@@ -69,10 +69,6 @@ public class Graph<
   }
 
   public TNode getNode(Id<TNode> nodeId) {
-    //    System.out.println(nodeId.getIdValue());
-    if (nodeId.getIdValue() < 0) {
-      System.out.println("TRACE");
-    }
     return nodes.get(nodeId.getIdValue());
   }
 

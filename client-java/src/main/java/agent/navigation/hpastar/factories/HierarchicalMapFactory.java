@@ -28,12 +28,12 @@ public class HierarchicalMapFactory {
   Map<Id<AbstractNode>, NodeBackup> nodeBackups = new HashMap<>();
 
   public HierarchicalMap createHierarchicalMap(
-      ConcreteMap concreteMap, int clusterSize, int maxLevel, EntranceStyle style) {
+      ConcreteMap concreteMap, int clusterSize, int maxLevel, EntranceStyle style, Size size) {
     _clusterSize = clusterSize;
     _entranceStyle = style;
     _maxLevel = maxLevel;
     _concreteMap = concreteMap;
-    _hierarchicalMap = new HierarchicalMap(TileType.OctileUnicost, clusterSize, maxLevel);
+    _hierarchicalMap = new HierarchicalMap(TileType.OctileUnicost, clusterSize, maxLevel, size);
     List<Entrance> entrances = new ArrayList<>();
     List<Cluster> clusters = new ArrayList<>();
     createEntrancesAndClusters(entrances, clusters);
@@ -52,7 +52,7 @@ public class HierarchicalMapFactory {
   }
 
   public Id<AbstractNode> insertAbstractNode(HierarchicalMap map, IntVec2D pos) {
-    Id<ConcreteNode> nodeId = new Id<ConcreteNode>().from((pos.y * map.width) + pos.x);
+    Id<ConcreteNode> nodeId = new Id<ConcreteNode>().from((pos.y * map.size.width) + pos.x);
     Id<AbstractNode> abstractNodeId = insertNodeIntoHierarchicalMap(map, nodeId, pos);
     map.addHierarchicalEdgesForAbstractNode(abstractNodeId);
     return abstractNodeId;
@@ -209,12 +209,15 @@ public class HierarchicalMapFactory {
   private void createEntrancesAndClusters(List<Entrance> entrances, List<Cluster> clusters) {
     int clusterId = 0;
     var entranceId = 0;
-    for (int top = 0, clusterY = 0; top < _concreteMap.height; top += _clusterSize, clusterY++) {
+    for (int top = 0, clusterY = 0;
+        top < _concreteMap.size.height;
+        top += _clusterSize, clusterY++) {
       for (int left = 0, clusterX = 0;
-          left < _concreteMap.width;
+          left < _concreteMap.size.width;
           left += _clusterSize, clusterX++) {
-        int width = Math.min(_clusterSize, _concreteMap.width - left);
-        int height = Math.min(_clusterSize, _concreteMap.height - top);
+        int width = Math.min(_clusterSize, _concreteMap.size.width - left);
+        int height = Math.min(_clusterSize, _concreteMap.size.height - top);
+
         Cluster cluster =
             new Cluster(
                 _concreteMap,
@@ -223,6 +226,7 @@ public class HierarchicalMapFactory {
                 clusterY,
                 new IntVec2D(left, top),
                 new Size(width, height));
+
         clusters.add(cluster);
         clusterId++;
         Cluster clusterAbove = top > 0 ? getCluster(clusters, clusterX, clusterY - 1) : null;
@@ -313,7 +317,7 @@ public class HierarchicalMapFactory {
         continue;
       }
 
-      if ((_entranceStyle == EntranceStyle.EndEntrance && size > MAX_ENTRANCE_WIDTH)) {
+      if (_entranceStyle == EntranceStyle.EndEntrance && size > MAX_ENTRANCE_WIDTH) {
         Pair<ConcreteNode, ConcreteNode> nodes = getNodesInEdge.apply(entranceStart);
         ConcreteNode srcNode = nodes.fst;
         ConcreteNode destNode = nodes.snd;
@@ -387,8 +391,8 @@ public class HierarchicalMapFactory {
   }
 
   private Cluster getCluster(List<Cluster> clusters, int left, int top) {
-    var clustersW = _hierarchicalMap.width / _clusterSize;
-    if (_hierarchicalMap.width % _clusterSize > 0) {
+    var clustersW = _hierarchicalMap.size.width / _clusterSize;
+    if (_hierarchicalMap.size.width % _clusterSize > 0) {
       clustersW++;
     }
 
@@ -396,10 +400,6 @@ public class HierarchicalMapFactory {
   }
 
   private void createAbstractNodes(List<Entrance> entrancesList) {
-    System.out.println(
-        entrancesList.stream()
-            .map(entrance -> entrance.srcNode.nodeId)
-            .collect(Collectors.toList()));
     Iterable<AbstractNodeInfo> abstractNodes = generateAbstractNodes(entrancesList);
     for (AbstractNodeInfo abstractNode : abstractNodes) {
       _hierarchicalMap.concreteNodeIdToAbstractNodeIdMap.put(

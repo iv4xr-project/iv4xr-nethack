@@ -58,9 +58,7 @@ public class SmoothWizard {
         // without breaking, we should calculate a new path for that section
         ConcretePathNode lastNodeInSmoothedPath =
             smoothedConcretePath.get(smoothedConcretePath.size() - 1);
-        ConcretePathNode currentNodeInPath = pathNode;
-        if (!areAdjacent(
-            getPosition(lastNodeInSmoothedPath.id), getPosition(currentNodeInPath.id))) {
+        if (!areAdjacent(getPosition(lastNodeInSmoothedPath.id), getPosition(pathNode.id))) {
           List<Id<ConcreteNode>> intermediatePath =
               generateIntermediateNodes(
                   smoothedConcretePath.get(smoothedConcretePath.size() - 1).id, pathNode.id);
@@ -167,11 +165,11 @@ public class SmoothWizard {
 
         return getNode.apply(new Pair<>(x, y - 1)).nodeId;
       case East:
-        if (x == _concreteMap.width - 1) return INVALID_ID;
+        if (x == _concreteMap.size.width - 1) return INVALID_ID;
 
         return getNode.apply(new Pair<>(x + 1, y)).nodeId;
       case South:
-        if (y == _concreteMap.height - 1) return INVALID_ID;
+        if (y == _concreteMap.size.height - 1) return INVALID_ID;
 
         return getNode.apply(new Pair<>(x, y + 1)).nodeId;
       case West:
@@ -179,15 +177,16 @@ public class SmoothWizard {
 
         return getNode.apply(new Pair<>(x - 1, y)).nodeId;
       case NorthEast:
-        if (y == 0 || x == _concreteMap.width - 1) return INVALID_ID;
+        if (y == 0 || x == _concreteMap.size.width - 1) return INVALID_ID;
 
         return getNode.apply(new Pair<>(x + 1, y - 1)).nodeId;
       case SouthEast:
-        if (y == _concreteMap.height - 1 || x == _concreteMap.width - 1) return INVALID_ID;
+        if (y == _concreteMap.size.height - 1 || x == _concreteMap.size.width - 1)
+          return INVALID_ID;
 
         return getNode.apply(new Pair<>(x + 1, y + 1)).nodeId;
       case SouthWest:
-        if (y == _concreteMap.height - 1 || x == 0) return INVALID_ID;
+        if (y == _concreteMap.size.height - 1 || x == 0) return INVALID_ID;
 
         return getNode.apply(new Pair<>(x - 1, y + 1)).nodeId;
       case NorthWest:

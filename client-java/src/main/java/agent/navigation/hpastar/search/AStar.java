@@ -21,7 +21,7 @@ public class AStar<TNode> {
   private NodeLookup<TNode> _nodeLookup;
 
   public AStar(IMap<TNode> map, Id<TNode> startNodeId, Id<TNode> targetNodeId) {
-    _isGoal = (Id<TNode> nodeId) -> nodeId.getIdValue() == targetNodeId.getIdValue();
+    _isGoal = (Id<TNode> nodeId) -> nodeId.equals(targetNodeId);
     _calculateHeuristic = (Id<TNode> nodeId) -> map.getHeuristic(nodeId, targetNodeId);
     _map = map;
     int estimatedCost = _calculateHeuristic.apply(startNodeId);
@@ -78,8 +78,10 @@ public class AStar<TNode> {
 
   public final Path<TNode> findPath() {
     while (canExpand()) {
-      var nodeId = expand();
+      Id<TNode> nodeId = expand();
+      //      System.out.printf("Expand: %s%n", nodeId);
       if (_isGoal.apply(nodeId)) {
+        //        System.out.printf("Found path%n");
         return reconstructPathFrom(nodeId);
       }
     }
@@ -112,9 +114,7 @@ public class AStar<TNode> {
 
         targetAStarNode = new AStarNode<TNode>(nodeId, gCost, targetAStarNode.h, CellStatus.Open);
         List<Priotisable<Id<TNode>>> items =
-            _openQueue.stream()
-                .filter(i -> i.item.getIdValue() == neighbour.getIdValue())
-                .collect(Collectors.toList());
+            _openQueue.stream().filter(i -> i.item.equals(neighbour)).collect(Collectors.toList());
         assert items.size() == 1;
         Priotisable<Id<TNode>> item = items.get(0);
         _openQueue.remove(item);
@@ -138,9 +138,9 @@ public class AStar<TNode> {
   ///  </summary>
   private final Path<TNode> reconstructPathFrom(Id<TNode> destination) {
     List<Id<TNode>> pathNodes = new ArrayList<>();
-    int pathCost = this._nodeLookup.getNodeValue(destination).f;
+    int pathCost = _nodeLookup.getNodeValue(destination).f;
     Id<TNode> currentNode = destination;
-    while ((this._nodeLookup.getNodeValue(currentNode).parent != currentNode)) {
+    while (_nodeLookup.getNodeValue(currentNode).parent != currentNode) {
       pathNodes.add(currentNode);
       currentNode = this._nodeLookup.getNodeValue(currentNode).parent;
     }

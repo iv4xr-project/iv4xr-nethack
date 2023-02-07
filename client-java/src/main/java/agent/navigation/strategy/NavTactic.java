@@ -11,6 +11,7 @@ import eu.iv4xr.framework.spatial.IntVec2D;
 import eu.iv4xr.framework.spatial.Vec3;
 import java.util.ArrayList;
 import java.util.List;
+import nethack.object.Level;
 import nl.uu.cs.aplib.mainConcepts.SimpleState;
 import nl.uu.cs.aplib.mainConcepts.Tactic;
 import nl.uu.cs.aplib.utils.Pair;
@@ -90,7 +91,8 @@ public class NavTactic {
               Vec3 agentPos = S.worldmodel.position;
               NetHackSurface surface = S.area();
               List<Pair<Integer, Tile>> path = null;
-              for (IntVec2D pos : NavUtils.neighbourCoordinates(t.snd.pos, allowDiagonal)) {
+              for (IntVec2D pos :
+                  NavUtils.neighbourCoordinates(t.snd.pos, Level.SIZE, allowDiagonal)) {
                 if (pos.equals(NavUtils.loc2(agentPos))) {
                   return null;
                 }

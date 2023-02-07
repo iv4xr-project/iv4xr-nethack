@@ -1,6 +1,5 @@
 package nethack;
 
-import connection.ConnectionLoggers;
 import connection.SocketClient;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -9,7 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class App {
-  static final Logger logger = LogManager.getLogger(ConnectionLoggers.ConnectionLogger);
+  static final Logger seedLogger = LogManager.getLogger(NetHackLoggers.SeedLogger);
 
   public static void main(String[] args) throws IOException {
     // Initialize socket connection
@@ -31,7 +30,7 @@ public class App {
     while (true) {
       Seed seed = Seed.randomSeed();
       nethack.setSeed(seed);
-      System.out.println(seed);
+      seedLogger.info(seed);
       try {
         TimeUnit.SECONDS.sleep(1);
       } catch (InterruptedException e) {

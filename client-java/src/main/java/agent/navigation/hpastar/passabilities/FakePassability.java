@@ -6,6 +6,7 @@ package agent.navigation.hpastar.passabilities;
 
 import agent.navigation.hpastar.ConcreteMap;
 import agent.navigation.hpastar.IPassability;
+import agent.navigation.hpastar.Size;
 import agent.navigation.hpastar.infrastructure.Constants;
 import agent.navigation.hpastar.utils.RefSupport;
 import eu.iv4xr.framework.spatial.IntVec2D;
@@ -16,9 +17,9 @@ public class FakePassability implements IPassability {
   final boolean[][] obstacles;
   private final Random random = new Random(0);
 
-  public FakePassability(int width, int height) {
-    obstacles = new boolean[width][height];
-    createObstacles(obstaclePercentage, width, height, true);
+  public FakePassability(Size size) {
+    obstacles = new boolean[size.width][size.height];
+    createObstacles(obstaclePercentage, true);
   }
 
   public boolean canEnter(IntVec2D pos, RefSupport<Integer> cost) {
@@ -37,13 +38,15 @@ public class FakePassability implements IPassability {
   }
 
   /** Creates obstacles in the map */
-  private void createObstacles(float obstaclePercentage, int width, int height, boolean avoidDiag) {
+  private void createObstacles(float obstaclePercentage, boolean avoidDiag) {
     int RAND_MAX = Integer.MAX_VALUE;
-    int numberNodes = width * height;
+    int width = obstacles.length;
+    int height = obstacles[0].length;
+    int numberNodes = obstacles.length * obstacles[0].length;
     int numberObstacles = (int) (obstaclePercentage * numberNodes);
     for (int count = 0; count < numberObstacles; count++) {
       int randInt = Math.abs(random.nextInt());
-      int nodeId = randInt / (RAND_MAX / numberNodes + 1) % (width * height);
+      int nodeId = randInt / (RAND_MAX / numberNodes + 1) % numberNodes;
       int x = nodeId % width;
       int y = nodeId / width;
       if (!obstacles[x][y]) {

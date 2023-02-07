@@ -124,19 +124,18 @@ public class Program {
   public static void main6(String[] args) {
     int clusterSize = 8;
     int maxLevel = 2;
-    int height = 70;
-    int width = 70;
+    Size size = new Size(70, 70);
 
     IntVec2D startPosition = new IntVec2D(1, 0);
     IntVec2D endPosition = new IntVec2D(69, 69);
     // Prepare the abstract graph beforehand
-    IPassability passability = new FakePassability(width, height);
+    IPassability passability = new FakePassability(size);
     ConcreteMap concreteMap =
-        ConcreteMapFactory.createConcreteMap(width, height, passability, TileType.Octile);
+        ConcreteMapFactory.createConcreteMap(size, passability, TileType.Octile);
     HierarchicalMapFactory abstractMapFactory = new HierarchicalMapFactory();
     HierarchicalMap absTiling =
         abstractMapFactory.createHierarchicalMap(
-            concreteMap, clusterSize, maxLevel, EntranceStyle.EndEntrance);
+            concreteMap, clusterSize, maxLevel, EntranceStyle.EndEntrance, size);
     // var edges = absTiling.AbstractGraph.Nodes.SelectMany(x => x.Edges.Values)
     //    .GroupBy(x => x.Info.Level)
     //    .ToDictionary(x => x.Key, x => x.Count());
@@ -170,19 +169,18 @@ public class Program {
   public static void main2(String[] args) {
     int clusterSize = 8;
     int maxLevel = 2;
-    int height = 128;
-    int width = 128;
+    Size size = new Size(128, 128);
 
     IntVec2D startPosition = new IntVec2D(17, 38);
     IntVec2D endPosition = new IntVec2D(16, 18);
     // Prepare the abstract graph beforehand
-    IPassability passability = new FakePassability(width, height);
+    IPassability passability = new FakePassability(size);
     ConcreteMap concreteMap =
-        ConcreteMapFactory.createConcreteMap(width, height, passability, TileType.Octile);
+        ConcreteMapFactory.createConcreteMap(size, passability, TileType.Octile);
     HierarchicalMapFactory abstractMapFactory = new HierarchicalMapFactory();
     HierarchicalMap absTiling =
         abstractMapFactory.createHierarchicalMap(
-            concreteMap, clusterSize, maxLevel, EntranceStyle.EndEntrance);
+            concreteMap, clusterSize, maxLevel, EntranceStyle.EndEntrance, size);
     long t1 = System.nanoTime();
     List<IPathNode> regularSearchPath = regularSearch(concreteMap, startPosition, endPosition);
     long t2 = System.nanoTime();
@@ -217,17 +215,16 @@ public class Program {
   public static void Main(String[] args) {
     int clusterSize = 8;
     int maxLevel = 2;
-    int height = 128;
-    int width = 128;
+    Size size = new Size(128, 128);
 
     // IPassability passability = new ExamplePassability();
-    IPassability passability = new FakePassability(width, height);
+    IPassability passability = new FakePassability(size);
     ConcreteMap concreteMap =
-        ConcreteMapFactory.createConcreteMap(width, height, passability, TileType.Octile);
+        ConcreteMapFactory.createConcreteMap(size, passability, TileType.Octile);
     HierarchicalMapFactory abstractMapFactory = new HierarchicalMapFactory();
     HierarchicalMap absTiling =
         abstractMapFactory.createHierarchicalMap(
-            concreteMap, clusterSize, maxLevel, EntranceStyle.EndEntrance);
+            concreteMap, clusterSize, maxLevel, EntranceStyle.EndEntrance, size);
     // var edges = absTiling.AbstractGraph.Nodes.SelectMany(x => x.Edges.Values)
     //    .GroupBy(x => x.Info.Level)
     //    .ToDictionary(x => x.Key, x => x.Count());
@@ -302,7 +299,7 @@ public class Program {
             hierarchicalMap, startAbsNode, targetAbsNode, maxLevel, maxPathsToRefine);
     List<IPathNode> path =
         hierarchicalSearch.abstractPathToLowLevelPath(
-            hierarchicalMap, abstractPath, hierarchicalMap.width, maxPathsToRefine);
+            hierarchicalMap, abstractPath, hierarchicalMap.size.width, maxPathsToRefine);
     SmoothWizard smoother = new SmoothWizard(concreteMap, path);
     path = smoother.smoothPath();
     factory.removeAbstractNode(hierarchicalMap, targetAbsNode);
@@ -353,11 +350,11 @@ public class Program {
       HierarchicalMap hierarchicalGraph,
       int clusterSize,
       List<IntVec2D> path) {
-    for (int y = 0; y < concreteMap.height; y++) {
+    for (int y = 0; y < concreteMap.size.height; y++) {
       if (y % clusterSize == 0)
         System.out.println("---------------------------------------------------------");
 
-      for (int x = 0; x < concreteMap.width; x++) {
+      for (int x = 0; x < concreteMap.size.width; x++) {
         //                Console.ForegroundColor = ConsoleColor.White;
         if (x % clusterSize == 0) System.out.print('|');
 

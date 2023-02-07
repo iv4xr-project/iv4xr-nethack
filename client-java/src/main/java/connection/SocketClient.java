@@ -21,6 +21,7 @@ import org.apache.logging.log4j.Logger;
 
 public class SocketClient {
   static final Logger logger = LogManager.getLogger(ConnectionLoggers.ConnectionLogger);
+  static final Logger profileLogger = LogManager.getLogger(ConnectionLoggers.ProfilerLogger);
   String host;
   int port;
   Socket socket;
@@ -102,7 +103,6 @@ public class SocketClient {
 
   public StepState sendStep(int index) {
     long now = System.nanoTime();
-    boolean verbose = false;
     try {
       writer.write(new byte[] {Encoder.EncoderBit.StepBit.value, (byte) index});
     } catch (IOException e) {
@@ -110,7 +110,7 @@ public class SocketClient {
     }
     flush();
     long now1 = System.nanoTime();
-    if (verbose) System.out.printf("SENDING COMMAND TOOK: %d%n", now1 - now);
+    profileLogger.trace(String.format("SENDING COMMAND TOOK: %d%n", now1 - now));
     return readStepState();
   }
 
@@ -136,12 +136,11 @@ public class SocketClient {
 
   public StepState readStepState() {
     logger.info("** waiting for StepState....");
-    boolean verbose = false;
     long now = System.nanoTime();
     ObservationMessage obsMessage = readObservationMessage();
     StepMessage stepMessage = StepMessageDecoder.decode(reader);
     long now1 = System.nanoTime();
-    if (verbose) System.out.printf("READ OBSMESSAGE TOOK: %d%n%n", now1 - now);
+    profileLogger.trace(String.format("READ OBSMESSAGE TOOK: %d%n%n", now1 - now));
 
     StepState stepState = new StepState();
     stepState.player = obsMessage.player;
@@ -154,7 +153,7 @@ public class SocketClient {
     stepState.level = new Level(obsMessage.entities);
     stepState.message = obsMessage.message;
     long now2 = System.nanoTime();
-    //    System.out.printf("EXIT TOOK: %d%n", now2-now1);
+    profileLogger.trace(String.format("EXIT TOOK: %d%n", now2 - now1));
     return stepState;
   }
 

@@ -36,9 +36,9 @@ public class ObservationMessageDecoder extends Decoder {
       if (verbose) System.out.printf("READ MESSAGE TOOK: %d%n", now_1 - now_blstats);
 
       long total = 0;
-      for (int y = 0; y < Level.HEIGHT; y++) {
-        byte[] entities = input.readNBytes(4 * Level.WIDTH);
-        for (int x = 0; x < Level.WIDTH; x++) {
+      for (int y = 0; y < Level.SIZE.height; y++) {
+        byte[] entities = input.readNBytes(4 * Level.SIZE.width);
+        for (int x = 0; x < Level.SIZE.width; x++) {
           long inbetween = System.nanoTime();
           char symbol = (char) entities[x * 4];
           int colorCode = entities[x * 4 + 1];

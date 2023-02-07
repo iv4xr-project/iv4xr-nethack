@@ -2,6 +2,7 @@ package agent.navigation;
 
 import agent.AgentLoggers;
 import agent.navigation.hpastar.*;
+import agent.navigation.hpastar.factories.EntranceStyle;
 import agent.navigation.hpastar.factories.HierarchicalMapFactory;
 import agent.navigation.hpastar.graph.AbstractNode;
 import agent.navigation.hpastar.infrastructure.Constants;
@@ -41,8 +42,7 @@ public class NetHackSurface
         CanDealWithDynamicObstacle<Tile>,
         IPassability {
   static final Logger logger = LogManager.getLogger(AgentLoggers.NavLogger);
-  static final int sizeX = Level.WIDTH, sizeY = Level.HEIGHT;
-  public final Tile[][] tiles = new Tile[sizeY][sizeX];
+  public final Tile[][] tiles = new Tile[Level.SIZE.height][Level.SIZE.width];
   private final Map<String, HashSet<IntVec2D>> tileTypes = new HashMap<>();
   public Pathfinder<Tile> pathfinder = new AStar<>();
 
@@ -84,7 +84,7 @@ public class NetHackSurface
     if (t == null) {
       return false;
     }
-    List<IntVec2D> neighbours = NavUtils.neighbourCoordinates(pos, false);
+    List<IntVec2D> neighbours = NavUtils.neighbourCoordinates(pos, Level.SIZE, false);
     int horizontalWalls = 0, verticalWalls = 0;
     for (IntVec2D neighbour : neighbours) {
       Tile neighbourTile = getTile(neighbour);
@@ -123,7 +123,7 @@ public class NetHackSurface
 
     // Perform BFS on the graph, initiate the queue with the agent position and all the lit floor
     // tiles
-    List<IntVec2D> agentNeighbours = NavUtils.neighbourCoordinates(agentPosition, true);
+    List<IntVec2D> agentNeighbours = NavUtils.neighbourCoordinates(agentPosition, Level.SIZE, true);
     for (IntVec2D neighbour : agentNeighbours) {
       Tile neighbourTile = getTile(neighbour);
       if (!(neighbourTile instanceof Viewable)) {
@@ -137,7 +137,7 @@ public class NetHackSurface
     Queue<IntVec2D> queue = new LinkedList<>(level.visibleFloors);
 
     processedCoordinates.add(agentPosition);
-    queue.addAll(NavUtils.neighbourCoordinates(agentPosition, true));
+    queue.addAll(NavUtils.neighbourCoordinates(agentPosition, Level.SIZE, true));
 
     // While there are coordinates left to be explored
     while (!queue.isEmpty()) {
@@ -156,7 +156,7 @@ public class NetHackSurface
       }
 
       // Get the neighbours
-      List<IntVec2D> neighbours = NavUtils.neighbourCoordinates(nextPos, true);
+      List<IntVec2D> neighbours = NavUtils.neighbourCoordinates(nextPos, Level.SIZE, true);
       if (t instanceof Doorway) {
         // Does not have a lit floor tile next to it, so we assume we cannot see it
         if (neighbours.stream()
@@ -194,8 +194,8 @@ public class NetHackSurface
   public String toString() {
     StringBuilder sb = new StringBuilder();
     // Add row by row to the StringBuilder
-    for (int y = 0; y < sizeY; y++) {
-      for (int x = 0; x < sizeX; x++) {
+    for (int y = 0; y < Level.SIZE.height; y++) {
+      for (int x = 0; x < Level.SIZE.width; x++) {
         // Get tile, if it doesn't know the type it is not know or void.
         Tile t = getTile(new IntVec2D(x, y));
         if (t == null) {
@@ -208,7 +208,7 @@ public class NetHackSurface
       }
 
       // Don't add line after last row
-      if (y != sizeY - 1) {
+      if (y != Level.SIZE.height - 1) {
         sb.append(System.lineSeparator());
       }
     }
@@ -339,7 +339,7 @@ public class NetHackSurface
     List<Tile> frontiers = new LinkedList<>();
     List<Tile> cannotBeFrontier = new LinkedList<>();
     for (Tile t : frontierCandidates) {
-      List<IntVec2D> pneighbors = NavUtils.neighbourCoordinates(t.pos, true);
+      List<IntVec2D> pneighbors = NavUtils.neighbourCoordinates(t.pos, Level.SIZE, true);
       boolean isFrontier = false;
       for (IntVec2D n : pneighbors) {
         if (!hasbeenSeen(n)) {
@@ -391,7 +391,9 @@ public class NetHackSurface
     assert !nullTile(from.pos) && !nullTile(to.pos);
 
     ConcreteMap concreteMap = getConcreteMap();
-    HierarchicalMap absTiling = new NetHackMapFactory().createHierarchicalMap(concreteMap);
+    HierarchicalMap absTiling =
+        new HierarchicalMapFactory()
+            .createHierarchicalMap(concreteMap, 8, 10, EntranceStyle.EndEntrance, Level.SIZE);
     Function<Pair<IntVec2D, IntVec2D>, List<IPathNode>> doHierarchicalSearch =
         (positions) -> hierarchicalSearch(absTiling, concreteMap, positions.fst, positions.snd);
 
@@ -439,7 +441,7 @@ public class NetHackSurface
             hierarchicalMap, startAbsNode, targetAbsNode, 10, maxPathsToRefine);
     List<IPathNode> path =
         hierarchicalSearch.abstractPathToLowLevelPath(
-            hierarchicalMap, abstractPath, hierarchicalMap.width, maxPathsToRefine);
+            hierarchicalMap, abstractPath, hierarchicalMap.size.width, maxPathsToRefine);
 
     SmoothWizard smoother = new SmoothWizard(concreteMap, path);
     path = smoother.smoothPath();
@@ -543,7 +545,7 @@ public class NetHackSurface
    */
   private List<Tile> neighbours_(IntVec2D pos) {
     boolean allowDiagonal = getTile(pos) instanceof Walkable;
-    List<IntVec2D> candidates = NavUtils.neighbourCoordinates(pos, allowDiagonal);
+    List<IntVec2D> candidates = NavUtils.neighbourCoordinates(pos, Level.SIZE, allowDiagonal);
 
     int nrResults = 0;
     boolean[] toNeighbour = new boolean[candidates.size()];
@@ -602,13 +604,13 @@ public class NetHackSurface
   public ConcreteMap getConcreteMap() {
     //    ConcreteMapFactory.createConcreteMap(Level.WIDTH, Level.HEIGHT, this,
     // TileType.OctileUnicost);
-    return new ConcreteMap(TileType.OctileUnicost, Level.WIDTH, Level.HEIGHT, this);
+    return new ConcreteMap(TileType.OctileUnicost, Level.SIZE, this);
   }
 
   public String passabilityString() {
     StringBuilder sb = new StringBuilder();
-    for (int y = 0; y < Level.HEIGHT; y++) {
-      for (int x = 0; x < Level.WIDTH; x++) {
+    for (int y = 0; y < Level.SIZE.height; y++) {
+      for (int x = 0; x < Level.SIZE.width; x++) {
         if (canEnter(new IntVec2D(x, y), new RefSupport<>())) {
           sb.append(' ');
         } else {

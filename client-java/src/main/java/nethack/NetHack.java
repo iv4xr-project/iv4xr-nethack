@@ -120,7 +120,7 @@ public class NetHack {
         return StepType.Special;
       case ADDITIONAL_SHOW_SEED:
         Seed seed = client.sendGetSeed();
-        System.out.print(seed);
+        seedLogger.info(seed);
         return StepType.Special;
       case ADDITIONAL_ASCII:
         char character = command.stroke.charAt(1);

@@ -26,13 +26,16 @@ public class AbsTilingNodeInfo {
   }
 
   public void printInfo() {
-    System.out.println("id: " + id);
-    System.out.println("; level: " + level);
-    System.out.println("; cluster: " + clusterId);
-    System.out.println("; row: " + position.y);
-    System.out.println("; col: " + position.x);
-    System.out.println("; center: " + centerId);
-    System.out.println("; local idx: " + localIdxCluster);
-    System.out.println();
+    StringBuilder sb = new StringBuilder();
+
+    sb.append("id: ").append(id).append(System.lineSeparator());
+    sb.append("; level: ").append(level).append(System.lineSeparator());
+    sb.append("; cluster: ").append(clusterId).append(System.lineSeparator());
+    sb.append("; row: ").append(position.y).append(System.lineSeparator());
+    sb.append("; col: ").append(position.x).append(System.lineSeparator());
+    sb.append("; center: ").append(centerId).append(System.lineSeparator());
+    sb.append("; local idx: ").append(localIdxCluster).append(System.lineSeparator());
+
+    System.out.println(sb.toString());
   }
 }

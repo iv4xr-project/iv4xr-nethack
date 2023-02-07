@@ -33,14 +33,12 @@ public class Entrance {
   }
 
   public int getEntranceLevel(int clusterSize, int maxLevel) {
-    int level;
-    Orientation __dummyScrutVar0 = orientation;
-    if (__dummyScrutVar0.equals(Orientation.Horizontal)) {
+    if (orientation.equals(Orientation.Horizontal)) {
       return determineLevel(clusterSize, maxLevel, srcNode.info.position.x);
-    } else if (__dummyScrutVar0.equals(Orientation.Vertical)) {
+    } else if (orientation.equals(Orientation.Vertical)) {
       return determineLevel(clusterSize, maxLevel, srcNode.info.position.y);
     } else {
-      return -1;
+      throw new RuntimeException("Orientation unknown");
     }
   }
 
@@ -60,5 +58,10 @@ public class Entrance {
       level++;
     }
     return Math.min(level, maxLevel);
+  }
+
+  @Override
+  public String toString() {
+    return String.format("Entrance %d %s %s %n", id.getIdValue(), cluster1, cluster2);
   }
 }

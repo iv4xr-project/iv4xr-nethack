@@ -5,6 +5,8 @@
 package agent.navigation;
 
 import agent.navigation.hpastar.*;
+import agent.navigation.hpastar.factories.EntranceStyle;
+import agent.navigation.hpastar.factories.HierarchicalMapFactory;
 import agent.navigation.hpastar.factories.NodeBackup;
 import agent.navigation.hpastar.graph.AbstractEdge;
 import agent.navigation.hpastar.graph.AbstractNode;
@@ -19,6 +21,7 @@ import eu.iv4xr.framework.extensions.pathfinding.XPathfinder;
 import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.*;
 import java.util.stream.Collectors;
+import nethack.object.Level;
 import nl.uu.cs.aplib.utils.Pair;
 
 public class HierarchicalAreasNavigation<
@@ -33,7 +36,10 @@ public class HierarchicalAreasNavigation<
 
   public HierarchicalAreasNavigation(Nav nav) {
     areas.add(nav);
-    map = new NetHackMapFactory().createHierarchicalMap(nav.getConcreteMap());
+    map =
+        new HierarchicalMapFactory()
+            .createHierarchicalMap(
+                nav.getConcreteMap(), 8, 10, EntranceStyle.EndEntrance, Level.SIZE);
   }
 
   public void addNextArea(Nav area) {
@@ -58,7 +64,7 @@ public class HierarchicalAreasNavigation<
             map, startAbsNode, targetAbsNode, 10, maxPathsToRefine);
     List<IPathNode> path =
         hierarchicalSearch.abstractPathToLowLevelPath(
-            map, abstractPath, map.width, maxPathsToRefine);
+            map, abstractPath, map.size.width, maxPathsToRefine);
 
     SmoothWizard smoother = new SmoothWizard(areas.get(0).getConcreteMap(), path);
     path = smoother.smoothPath();
@@ -71,7 +77,7 @@ public class HierarchicalAreasNavigation<
   }
 
   private Id<AbstractNode> insertAbstractNode(IntVec2D pos) {
-    Id<ConcreteNode> nodeId = new Id<ConcreteNode>().from((pos.y * map.width) + pos.x);
+    Id<ConcreteNode> nodeId = new Id<ConcreteNode>().from((pos.y * map.size.width) + pos.x);
     Id<AbstractNode> abstractNodeId = insertNodeIntoHierarchicalMap(map, nodeId, pos);
     map.addHierarchicalEdgesForAbstractNode(abstractNodeId);
     return abstractNodeId;
@@ -181,8 +187,7 @@ public class HierarchicalAreasNavigation<
   }
 
   public void addObstacle(Pair<Integer, NodeId> o) {
-    ((CanDealWithDynamicObstacle) ((XPathfinder) this.areas.get((Integer) o.fst)))
-        .addObstacle(o.snd);
+    areas.get(o.fst).addObstacle(o.snd);
   }
 
   public void removeObstacle(Pair<Integer, NodeId> o) {
