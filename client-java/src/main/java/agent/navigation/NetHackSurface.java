@@ -590,7 +590,6 @@ public class NetHackSurface
     if (t == null) {
       return false;
     }
-    //    return true;
     return t instanceof StraightWalkable || t.getClass() == Tile.class;
   }
 

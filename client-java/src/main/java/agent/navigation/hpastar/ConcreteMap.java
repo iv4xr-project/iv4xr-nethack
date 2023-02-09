@@ -118,6 +118,7 @@ public class ConcreteMap implements IMap<ConcreteNode> {
    * intermediate points (it is assumed you can jump between intermediate points)
    */
   public boolean canJump(IntVec2D p1, IntVec2D p2) {
+    // TODO: Check whether can jump
     if (tileType != TileType.Octile && tileType != TileType.OctileUnicost) return true;
 
     if (Helpers.areAligned(p1, p2)) return true;

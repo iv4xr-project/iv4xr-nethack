@@ -51,6 +51,7 @@ public class Graph<
   }
 
   public void addEdge(Id<TNode> sourceNodeId, Id<TNode> targetNodeId, TEdgeInfo info) {
+    System.out.printf("AddEdge: %s %s%n", sourceNodeId, targetNodeId);
     nodes
         .get(sourceNodeId.getIdValue())
         .addEdge(_edgeCreator.apply(new Pair<>(targetNodeId, info)));

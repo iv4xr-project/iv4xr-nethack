@@ -33,7 +33,7 @@ public class App {
     AgentState state = new AgentState();
     GoalStructure G = GoalLib.explore();
 
-    // Update state after init to initialize navgraph correctly
+    // Update state after init to initialize NavGraph correctly
     TestAgent agent =
         new TestAgent(Player.ID, "player").attachState(state).attachEnvironment(env).setGoal(G);
     state.updateState(Player.ID);

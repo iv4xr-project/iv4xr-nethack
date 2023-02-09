@@ -13,13 +13,13 @@ import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.Random;
 
 public class FakePassability implements IPassability {
-  float obstaclePercentage = 0.20f;
   final boolean[][] obstacles;
   private final Random random = new Random(0);
 
   public FakePassability(Size size) {
     obstacles = new boolean[size.width][size.height];
-    createObstacles(obstaclePercentage, true);
+    noObstaclesInCluster();
+    //    createRandomObstacles(true);
   }
 
   public boolean canEnter(IntVec2D pos, RefSupport<Integer> cost) {
@@ -37,8 +37,24 @@ public class FakePassability implements IPassability {
     return null;
   }
 
+  private void noObstaclesInCluster() {
+    for (int x = 0; x < obstacles.length; x++) {
+      for (int y = 0; y < obstacles[0].length; y++) {
+        if (x >= 1 && y >= 1 && x <= 6 && y <= 6) {
+          obstacles[x][y] = false;
+        } else if (x == 4 && y == 7) {
+          // 'Door"
+          obstacles[x][y] = false;
+        } else {
+          obstacles[x][y] = true;
+        }
+      }
+    }
+  }
+
   /** Creates obstacles in the map */
-  private void createObstacles(float obstaclePercentage, boolean avoidDiag) {
+  private void createRandomObstacles(boolean avoidDiag) {
+    float obstaclePercentage = 0.20f;
     int RAND_MAX = Integer.MAX_VALUE;
     int width = obstacles.length;
     int height = obstacles[0].length;

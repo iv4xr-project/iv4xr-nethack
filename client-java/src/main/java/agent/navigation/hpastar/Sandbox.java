@@ -8,14 +8,12 @@ import agent.navigation.hpastar.factories.ConcreteMapFactory;
 import agent.navigation.hpastar.factories.EntranceStyle;
 import agent.navigation.hpastar.factories.HierarchicalMapFactory;
 import agent.navigation.hpastar.graph.AbstractNode;
-import agent.navigation.hpastar.graph.ConcreteNode;
 import agent.navigation.hpastar.infrastructure.Id;
 import agent.navigation.hpastar.passabilities.FakePassability;
 import agent.navigation.hpastar.search.HierarchicalSearch;
 import agent.navigation.hpastar.smoother.SmoothWizard;
 import agent.navigation.strategy.NavUtils;
 import eu.iv4xr.framework.spatial.IntVec2D;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -25,7 +23,7 @@ public class Sandbox {
   public static void main(String[] args) {
     int clusterSize = 8;
     int maxLevel = 1;
-    Size size = new Size(128, 128);
+    Size size = new Size(8, 8);
 
     FakePassability passability = new FakePassability(size);
     ConcreteMap concreteMap =
@@ -36,17 +34,19 @@ public class Sandbox {
                 concreteMap, clusterSize, maxLevel, EntranceStyle.EndEntrance, size);
 
     List<Pair<IntVec2D, IntVec2D>> points =
-        IntStream.range(0, 2000)
+        IntStream.range(0, 1)
             .mapToObj(
                 i -> {
                   IntVec2D pos1 = passability.getRandomFreePosition();
                   IntVec2D pos2 = passability.getRandomFreePosition();
-                  while (Math.abs(pos1.x - pos2.x) + Math.abs(pos1.y - pos2.y) < 10) {
+                  while (Math.abs(pos1.x - pos2.x) + Math.abs(pos1.y - pos2.y) < 1) {
                     pos2 = passability.getRandomFreePosition();
                   }
                   return new Pair<IntVec2D, IntVec2D>(pos1, pos2);
                 })
             .collect(Collectors.toList());
+
+    points.set(0, new Pair<IntVec2D, IntVec2D>(new IntVec2D(3, 1), new IntVec2D(4, 7)));
 
     long t1 = System.nanoTime();
     for (int i = 0; i < points.size(); i++) {
@@ -55,7 +55,7 @@ public class Sandbox {
       List<IPathNode> regularSearchPath =
           hierarchicalSearch(absTiling, maxLevel, concreteMap, startPosition, endPosition);
       List<IntVec2D> posPath = toPositionPath(regularSearchPath, concreteMap, absTiling);
-      verifyPosPath(posPath);
+      System.out.printf("%s -> %s %s%n", startPosition, endPosition, posPath);
     }
     long t2 = System.nanoTime();
     long regularSearchTime = t2 - t1;
@@ -91,77 +91,30 @@ public class Sandbox {
 
   private static List<IntVec2D> toPositionPath(
       List<IPathNode> path, ConcreteMap concreteMap, HierarchicalMap absTiling) {
-    return path.stream()
-        .map(
-            (p) -> {
-              if (p instanceof ConcretePathNode) {
-                ConcretePathNode concretePathNode = (ConcretePathNode) p;
-                return concreteMap.graph.getNodeInfo(concretePathNode.id).position;
-              }
+    List<IntVec2D> posPath =
+        path.stream()
+            .map(
+                (p) -> {
+                  if (p instanceof ConcretePathNode) {
+                    ConcretePathNode concretePathNode = (ConcretePathNode) p;
+                    return concreteMap.graph.getNodeInfo(concretePathNode.id).position;
+                  }
 
-              AbstractPathNode abstractPathNode = (AbstractPathNode) p;
-              return absTiling.abstractGraph.getNodeInfo(abstractPathNode.id).position;
-            })
-        .collect(Collectors.toList());
-  }
+                  AbstractPathNode abstractPathNode = (AbstractPathNode) p;
+                  return absTiling.abstractGraph.getNodeInfo(abstractPathNode.id).position;
+                })
+            .collect(Collectors.toList());
 
-  private static void verifyPosPath(List<IntVec2D> posPath) {
     if (posPath.size() <= 1) {
-      return;
+      return posPath;
     }
     IntVec2D prevPos = posPath.get(0);
     for (int i = 1; i < posPath.size(); i++) {
       IntVec2D currentPos = posPath.get(i);
-      assert NavUtils.adjacent(prevPos, currentPos, true) : "Not all nodes are adjacent";
+      assert NavUtils.adjacent(prevPos, currentPos, true)
+          : String.format("Non adjacent node error at %s -> %s", prevPos, currentPos);
       prevPos = currentPos;
     }
-  }
-
-  private static List<Character> getCharVector(ConcreteMap concreteMap) {
-    List<Character> result = new ArrayList<>();
-    int numberNodes = concreteMap.getNrNodes();
-    for (int i = 0; i < numberNodes; i++) {
-      result.add(
-          concreteMap.graph.getNodeInfo(new Id<ConcreteNode>().from(i)).isObstacle ? '@' : '.');
-    }
-    return result;
-  }
-
-  public static void printFormatted(
-      ConcreteMap concreteMap,
-      HierarchicalMap hierarchicalGraph,
-      int clusterSize,
-      List<IntVec2D> path) {
-    printFormatted(getCharVector(concreteMap), concreteMap, hierarchicalGraph, clusterSize, path);
-  }
-
-  private static void printFormatted(
-      List<Character> chars,
-      ConcreteMap concreteMap,
-      HierarchicalMap hierarchicalGraph,
-      int clusterSize,
-      List<IntVec2D> path) {
-    for (int y = 0; y < concreteMap.size.height; y++) {
-      if (y % clusterSize == 0)
-        System.out.println("---------------------------------------------------------");
-
-      for (int x = 0; x < concreteMap.size.width; x++) {
-        if (x % clusterSize == 0) System.out.print('|');
-
-        Id<ConcreteNode> nodeId = concreteMap.getNodeIdFromPos(x, y);
-
-        int x0 = x;
-        int y0 = y;
-        System.out.print(
-            path.stream()
-                    .anyMatch(
-                        (node) -> {
-                          return node.x == x0 && node.x == y0;
-                        })
-                ? 'X'
-                : chars.get(nodeId.getIdValue()));
-      }
-      System.out.println();
-    }
+    return posPath;
   }
 }

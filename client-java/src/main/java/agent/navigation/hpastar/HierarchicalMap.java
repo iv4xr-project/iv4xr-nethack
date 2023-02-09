@@ -101,8 +101,11 @@ public class HierarchicalMap implements IMap<AbstractNode> {
       int level,
       boolean inter,
       List<Id<AbstractNode>> pathPathNodes) {
+    //    System.out.printf("%d -> %d cost:%d%n", sourceNodeId.getIdValue(),
+    // destNodeId.getIdValue(), cost);
     AbstractEdgeInfo edgeInfo = new AbstractEdgeInfo(cost, level, inter);
     edgeInfo.innerLowerLevelPath = pathPathNodes;
+    System.out.printf("AbsGraph AddEdge %s -> %s%n", sourceNodeId, destNodeId);
     abstractGraph.addEdge(sourceNodeId, destNodeId, edgeInfo);
   }
 

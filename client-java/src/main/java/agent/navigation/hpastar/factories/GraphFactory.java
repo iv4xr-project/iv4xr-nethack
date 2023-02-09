@@ -4,6 +4,7 @@
 
 package agent.navigation.hpastar.factories;
 
+import agent.navigation.hpastar.Cluster;
 import agent.navigation.hpastar.IPassability;
 import agent.navigation.hpastar.Size;
 import agent.navigation.hpastar.TileType;
@@ -34,7 +35,12 @@ public class GraphFactory {
     return new Id<ConcreteNode>().from(top * width + left);
   }
 
-  private static void addEdge(
+  public static Id<Cluster> getClusterIdFromPos(int left, int top, int width, int clusterSize) {
+    int nrClustersPerRow = width % clusterSize == 0 ? width / clusterSize : width / clusterSize + 1;
+    return new Id<Cluster>().from((top / clusterSize) * nrClustersPerRow + left / clusterSize);
+  }
+
+  public static void addEdge(
       ConcreteGraph graph, Id<ConcreteNode> nodeId, int x, int y, Size size, boolean isDiag) {
     if (y < 0 || y >= size.height || x < 0 || x >= size.width) return;
 
@@ -49,6 +55,9 @@ public class GraphFactory {
     for (int top = 0; top < size.height; ++top) {
       for (int left = 0; left < size.width; ++left) {
         IntVec2D currentPos = new IntVec2D(left, top);
+        if (!passability.canEnter(currentPos, new RefSupport<>())) {
+          continue;
+        }
         Id<ConcreteNode> nodeId =
             getNodeByPos(graph, currentPos.x, currentPos.y, size.width).nodeId;
         if (tileType == TileType.Hex) {
@@ -64,6 +73,9 @@ public class GraphFactory {
 
         List<IntVec2D> neighbours = NavUtils.neighbourCoordinates(currentPos, size, true);
         for (IntVec2D neighbourPos : neighbours) {
+          if (!passability.canEnter(neighbourPos, new RefSupport<>())) {
+            continue;
+          }
           boolean isDiagonal = NavUtils.isDiagonal(currentPos, neighbourPos);
           if (isDiagonal && !passability.canMoveDiagonal(currentPos, neighbourPos)) {
             continue;
