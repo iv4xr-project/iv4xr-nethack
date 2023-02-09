@@ -22,12 +22,12 @@ public class Cluster {
    * A 2D array which represents a distance between 2 entrances. This array could be represented as
    * a Dictionary, but it's faster to use an array.
    */
-  private final Map<Pair<Id<AbstractNode>, Id<AbstractNode>>, Integer> _distances = new HashMap<>();
+  private final Map<Pair<Id<AbstractNode>, Id<AbstractNode>>, Integer> distances = new HashMap<>();
 
-  private final Map<Pair<Id<AbstractNode>, Id<AbstractNode>>, List<Id<ConcreteNode>>> _cachedPaths =
+  private final Map<Pair<Id<AbstractNode>, Id<AbstractNode>>, List<Id<ConcreteNode>>> cachedPaths =
       new HashMap<>();
   // Tells whether a path has already been calculated for 2 node ids
-  private final Map<Pair<Id<AbstractNode>, Id<AbstractNode>>, Boolean> _distanceCalculated =
+  private final Map<Pair<Id<AbstractNode>, Id<AbstractNode>>, Boolean> distanceCalculated =
       new HashMap<>();
   public List<EntrancePoint> entrancePoints = new ArrayList<>();
 
@@ -73,7 +73,7 @@ public class Cluster {
         new Pair<>(e1.abstractNodeId, e2.abstractNodeId);
     Pair<Id<AbstractNode>, Id<AbstractNode>> invTuple =
         new Pair<>(e2.abstractNodeId, e1.abstractNodeId);
-    if (_distanceCalculated.containsKey(tuple)) {
+    if (distanceCalculated.containsKey(tuple)) {
       return;
     }
 
@@ -85,15 +85,15 @@ public class Cluster {
       // Yeah, we suppose reaching A - B is the same as reaching B - A. Which
       // depending on the game this is NOT necessarily true (e.g. climbing, stepping down a
       // mountain)
-      _distances.put(tuple, path.pathCost);
-      _distances.put(invTuple, path.pathCost);
-      _cachedPaths.put(tuple, new ArrayList<>(path.pathNodes));
+      distances.put(tuple, path.pathCost);
+      distances.put(invTuple, path.pathCost);
+      cachedPaths.put(tuple, new ArrayList<>(path.pathNodes));
       Collections.reverse(path.pathNodes);
-      _cachedPaths.put(invTuple, path.pathNodes);
+      cachedPaths.put(invTuple, path.pathNodes);
     }
 
-    _distanceCalculated.put(tuple, true);
-    _distanceCalculated.put(invTuple, true);
+    distanceCalculated.put(tuple, true);
+    distanceCalculated.put(invTuple, true);
   }
 
   public void updatePathsForLocalEntrance(EntrancePoint srcEntrancePoint) {
@@ -103,16 +103,16 @@ public class Cluster {
   }
 
   public int getDistance(Id<AbstractNode> abstractNodeId1, Id<AbstractNode> abstractNodeId2) {
-    return _distances.get(new Pair<>(abstractNodeId1, abstractNodeId2));
+    return distances.get(new Pair<>(abstractNodeId1, abstractNodeId2));
   }
 
   public List<Id<ConcreteNode>> getPath(
       Id<AbstractNode> abstractNodeId1, Id<AbstractNode> abstractNodeId2) {
-    return _cachedPaths.get(new Pair<>(abstractNodeId1, abstractNodeId2));
+    return cachedPaths.get(new Pair<>(abstractNodeId1, abstractNodeId2));
   }
 
   public boolean areConnected(Id<AbstractNode> abstractNodeId1, Id<AbstractNode> abstractNodeId2) {
-    return _distances.containsKey(new Pair<>(abstractNodeId1, abstractNodeId2));
+    return distances.containsKey(new Pair<>(abstractNodeId1, abstractNodeId2));
   }
 
   public int numberOfEntrances() {
@@ -130,16 +130,16 @@ public class Cluster {
     Id<AbstractNode> abstractNodeToRemove = entrancePoint.abstractNodeId;
     entrancePoints.remove(entrancePoints.size() - 1);
     List<Pair<Id<AbstractNode>, Id<AbstractNode>>> keysToRemove = new ArrayList<>();
-    for (Pair<Id<AbstractNode>, Id<AbstractNode>> key : _distanceCalculated.keySet()) {
+    for (Pair<Id<AbstractNode>, Id<AbstractNode>> key : distanceCalculated.keySet()) {
       if (key.fst == abstractNodeToRemove || key.snd == abstractNodeToRemove) {
         keysToRemove.add(key);
       }
     }
 
     for (Pair<Id<AbstractNode>, Id<AbstractNode>> key : keysToRemove) {
-      _distanceCalculated.remove(key);
-      _distances.remove(key);
-      _cachedPaths.remove(key);
+      distanceCalculated.remove(key);
+      distances.remove(key);
+      cachedPaths.remove(key);
     }
   }
 

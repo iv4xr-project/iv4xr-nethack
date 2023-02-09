@@ -23,7 +23,7 @@ public class Sandbox {
   public static void main(String[] args) {
     int clusterSize = 8;
     int maxLevel = 1;
-    Size size = new Size(8, 8);
+    Size size = new Size(8, 16);
 
     FakePassability passability = new FakePassability(size);
     ConcreteMap concreteMap =
@@ -32,6 +32,7 @@ public class Sandbox {
         new HierarchicalMapFactory()
             .createHierarchicalMap(
                 concreteMap, clusterSize, maxLevel, EntranceStyle.EndEntrance, size);
+    concreteMap.printFormatted();
 
     List<Pair<IntVec2D, IntVec2D>> points =
         IntStream.range(0, 1)
@@ -39,14 +40,14 @@ public class Sandbox {
                 i -> {
                   IntVec2D pos1 = passability.getRandomFreePosition();
                   IntVec2D pos2 = passability.getRandomFreePosition();
-                  while (Math.abs(pos1.x - pos2.x) + Math.abs(pos1.y - pos2.y) < 1) {
+                  while (Math.abs(pos1.x - pos2.x) + Math.abs(pos1.y - pos2.y) < 2) {
                     pos2 = passability.getRandomFreePosition();
                   }
                   return new Pair<IntVec2D, IntVec2D>(pos1, pos2);
                 })
             .collect(Collectors.toList());
 
-    points.set(0, new Pair<IntVec2D, IntVec2D>(new IntVec2D(3, 1), new IntVec2D(4, 7)));
+    points.set(0, new Pair<IntVec2D, IntVec2D>(new IntVec2D(3, 1), new IntVec2D(4, 9)));
 
     long t1 = System.nanoTime();
     for (int i = 0; i < points.size(); i++) {

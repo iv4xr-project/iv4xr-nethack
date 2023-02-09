@@ -17,7 +17,7 @@ public class EntrancePoint {
   public IntVec2D relativePosition;
 
   public EntrancePoint(Id<AbstractNode> abstractNodeId, IntVec2D relativePosition) {
-    System.out.printf("ENRANCEPOINT %s%n", abstractNodeId);
+    //    System.out.printf("ENRANCEPOINT %s%n", abstractNodeId);
 
     this.abstractNodeId = abstractNodeId;
     this.relativePosition = relativePosition;

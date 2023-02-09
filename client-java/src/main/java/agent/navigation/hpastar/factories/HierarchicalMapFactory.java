@@ -35,11 +35,9 @@ public class HierarchicalMapFactory {
     this.concreteMap = concreteMap;
     hierarchicalMap = new HierarchicalMap(TileType.OctileUnicost, clusterSize, maxLevel, size);
     List<Entrance> entrances = new ArrayList<>();
-    List<Cluster> clusters = new ArrayList<>();
-    createEntrancesAndClusters(entrances, clusters);
-    hierarchicalMap.clusters = clusters;
+    createEntrancesAndClusters(entrances);
     createAbstractNodes(entrances);
-    createEdges(entrances, clusters);
+    createEdges(entrances);
     return hierarchicalMap;
   }
 
@@ -87,7 +85,7 @@ public class HierarchicalMapFactory {
     map.concreteNodeIdToAbstractNodeIdMap.put(concreteNodeId, abstractNodeId);
     AbstractNodeInfo info =
         new AbstractNodeInfo(abstractNodeId, 1, cluster.id, pos, concreteNodeId);
-    System.out.printf("AbsGraph AddNode: %s%n", abstractNodeId);
+    //    System.out.printf("AbsGraph AddNode: %s%n", abstractNodeId);
     boolean edgeAdded = false;
     map.abstractGraph.addNode(abstractNodeId, info);
     for (EntrancePoint entrancePoint : cluster.entrancePoints) {
@@ -105,11 +103,11 @@ public class HierarchicalMapFactory {
       }
     }
 
-    if (edgeAdded) {
-      System.out.printf("Edge added%n");
-    } else {
-      System.out.printf("No edge added%n");
-    }
+    //    if (edgeAdded) {
+    //      System.out.printf("Edge added%n");
+    //    } else {
+    //      System.out.printf("No edge added%n");
+    //    }
 
     return abstractNodeId;
   }
@@ -150,12 +148,12 @@ public class HierarchicalMapFactory {
     nodeBackups.remove(nodeId);
   }
 
-  private void createEdges(List<Entrance> entrances, List<Cluster> clusters) {
+  private void createEdges(List<Entrance> entrances) {
     for (Entrance entrance : entrances) {
       createEntranceEdges(entrance, hierarchicalMap.type);
     }
 
-    for (Cluster cluster : clusters) {
+    for (Cluster cluster : hierarchicalMap.clusters) {
       cluster.createIntraClusterEdges();
       createIntraClusterEdges(cluster);
     }
@@ -197,7 +195,7 @@ public class HierarchicalMapFactory {
         cost = unitCost;
         break;
     }
-    System.out.printf("Abs AddEdge: %s -> %s%n", srcAbstractNodeId, destAbstractNodeId);
+    System.out.printf("InterCluster AddEdge: %s -> %s%n", srcAbstractNodeId, destAbstractNodeId);
     hierarchicalMap.abstractGraph.addEdge(
         srcAbstractNodeId, destAbstractNodeId, new AbstractEdgeInfo(cost, level, true));
     hierarchicalMap.abstractGraph.addEdge(
@@ -213,7 +211,7 @@ public class HierarchicalMapFactory {
               new AbstractEdgeInfo(
                   cluster.getDistance(point1.abstractNodeId, point2.abstractNodeId), 1, false);
           System.out.printf(
-              "Abs AddEdge: %s -> %s%n", point1.abstractNodeId, point2.abstractNodeId);
+              "IntraCluster AddEdge: %s -> %s%n", point1.abstractNodeId, point2.abstractNodeId);
           hierarchicalMap.abstractGraph.addEdge(
               point1.abstractNodeId, point2.abstractNodeId, abstractEdgeInfo);
         }
@@ -221,7 +219,7 @@ public class HierarchicalMapFactory {
     }
   }
 
-  private void createEntrancesAndClusters(List<Entrance> entrances, List<Cluster> clusters) {
+  private void createEntrancesAndClusters(List<Entrance> entrances) {
     int clusterId = 0;
     var entranceId = 0;
     for (int top = 0, clusterY = 0; top < concreteMap.size.height; top += clusterSize, clusterY++) {
@@ -240,10 +238,12 @@ public class HierarchicalMapFactory {
                 new IntVec2D(left, top),
                 new Size(width, height));
 
-        clusters.add(cluster);
+        hierarchicalMap.clusters.add(cluster);
         clusterId++;
-        Cluster clusterAbove = top > 0 ? getCluster(clusters, clusterX, clusterY - 1) : null;
-        Cluster clusterOnLeft = left > 0 ? getCluster(clusters, clusterX - 1, clusterY) : null;
+        Cluster clusterAbove =
+            top > 0 ? getCluster(hierarchicalMap.clusters, clusterX, clusterY - 1) : null;
+        Cluster clusterOnLeft =
+            left > 0 ? getCluster(hierarchicalMap.clusters, clusterX - 1, clusterY) : null;
         entrances.addAll(
             createInterClusterEntrances(
                 cluster, clusterAbove, clusterOnLeft, new RefSupport<>(entranceId)));
@@ -357,6 +357,8 @@ public class HierarchicalMapFactory {
         currentEntranceId.setValue(currentEntranceId.getValue() + 1);
         entrances.add(entrance1);
         entrances.add(entrance2);
+        System.out.printf(
+            "1. Entrance added between cluster %s -> %s%n", precedentCluster, currentCluster);
       } else {
         Pair<ConcreteNode, ConcreteNode> nodes =
             getNodesInEdge.apply((entranceEnd + entranceStart) / 2);
@@ -372,6 +374,8 @@ public class HierarchicalMapFactory {
                 orientation);
         currentEntranceId.setValue(currentEntranceId.getValue() + 1);
         entrances.add(entrance);
+        System.out.printf(
+            "2. Entrance added between cluster %s -> %s%n", precedentCluster, currentCluster);
       }
 
       entranceStart = entranceEnd;

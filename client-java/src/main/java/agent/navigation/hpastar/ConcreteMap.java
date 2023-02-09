@@ -148,7 +148,7 @@ public class ConcreteMap implements IMap<ConcreteNode> {
     for (int y = 0; y < size.height; ++y) {
       for (int x = 0; x < size.width; ++x) {
         Id<ConcreteNode> nodeId = this.getNodeIdFromPos(x, y);
-        System.out.println(chars.get(nodeId.getIdValue()));
+        System.out.print(chars.get(nodeId.getIdValue()));
       }
       System.out.println();
     }

@@ -4,10 +4,8 @@ import static nl.uu.cs.aplib.AplibEDSL.*;
 
 import agent.iv4xr.AgentState;
 import agent.navigation.strategy.NavTactic;
-import agent.selector.EntitySelector;
 import agent.selector.TileSelector;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
-import nethack.enums.Command;
 import nl.uu.cs.aplib.mainConcepts.Goal;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
 import nl.uu.cs.aplib.utils.Pair;
@@ -23,11 +21,11 @@ public class GoalLib {
                 })
             .withTactic(
                 FIRSTof(
-                    TacticLib.abortOnDeath(),
+                    //                    TacticLib.abortOnDeath(),
                     // Survival
                     Actions.attackMonster().on_(Predicates.inCombat_and_hpNotCritical).lift(),
-                    Actions.eatFood().lift(),
-                    NavTactic.navigateToWorldEntity(EntitySelector.money),
+                    //                    Actions.eatFood().lift(),
+                    //                    NavTactic.navigateToWorldEntity(EntitySelector.money),
 
                     // Navigation
                     Actions.kickDoor().on(Predicates.get_lockedDoor()).lift(),
@@ -35,13 +33,15 @@ public class GoalLib {
                     NavTactic.navigateNextToTile(TileSelector.closedDoorSelector, false),
                     NavTactic.explore(),
 
-                    // Go to next level
-                    NavTactic.navigateToTile(TileSelector.stairDown),
-                    Actions.singleAction(Command.MISC_DOWN).on_(Predicates.on_stairs_down).lift(),
-
-                    // Explore walls for hidden doors
-                    NavTactic.navigateNextToTile(TileSelector.wallSelector, true),
-                    Actions.searchWalls().lift(),
+                    //                    // Go to next level
+                    //                    NavTactic.navigateToTile(TileSelector.stairDown),
+                    //
+                    // Actions.singleAction(Command.MISC_DOWN).on_(Predicates.on_stairs_down).lift(),
+                    //
+                    //                    // Explore walls for hidden doors
+                    //                    NavTactic.navigateNextToTile(TileSelector.wallSelector,
+                    // true),
+                    //                    Actions.searchWalls().lift(),
                     ABORT()));
 
     return G.lift(); // REPEAT(G.lift());

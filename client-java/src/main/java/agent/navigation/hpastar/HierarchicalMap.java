@@ -81,6 +81,7 @@ public class HierarchicalMap implements IMap<AbstractNode> {
   // Manhattan distance, after testing a bit for hierarchical searches we do not need
   // the level of precision of Diagonal distance or euclidean distance
   public Cluster findClusterForPosition(IntVec2D pos) {
+    size.withinBounds(pos);
     Cluster foundCluster = null;
     for (Cluster cluster : clusters) {
       if (cluster.origin.y <= pos.y
@@ -101,11 +102,9 @@ public class HierarchicalMap implements IMap<AbstractNode> {
       int level,
       boolean inter,
       List<Id<AbstractNode>> pathPathNodes) {
-    //    System.out.printf("%d -> %d cost:%d%n", sourceNodeId.getIdValue(),
-    // destNodeId.getIdValue(), cost);
     AbstractEdgeInfo edgeInfo = new AbstractEdgeInfo(cost, level, inter);
     edgeInfo.innerLowerLevelPath = pathPathNodes;
-    System.out.printf("AbsGraph AddEdge %s -> %s%n", sourceNodeId, destNodeId);
+    //    System.out.printf("AbsGraph AddEdge %s -> %s%n", sourceNodeId, destNodeId);
     abstractGraph.addEdge(sourceNodeId, destNodeId, edgeInfo);
   }
 
@@ -185,9 +184,9 @@ public class HierarchicalMap implements IMap<AbstractNode> {
     int nodeY = pos.y;
     int nodeX = pos.x;
     currentClusterY0 = nodeY - (nodeY % offset);
-    currentClusterY1 = Math.min(size.height - 1, this.currentClusterY0 + offset - 1);
+    currentClusterY1 = Math.min(size.height - 1, currentClusterY0 + offset - 1);
     currentClusterX0 = nodeX - (nodeX % offset);
-    currentClusterX1 = Math.min(size.width - 1, this.currentClusterX0 + offset - 1);
+    currentClusterX1 = Math.min(size.width - 1, currentClusterX0 + offset - 1);
   }
 
   public boolean belongToSameCluster(
