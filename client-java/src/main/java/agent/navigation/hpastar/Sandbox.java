@@ -25,7 +25,7 @@ public class Sandbox {
     int maxLevel = 1;
     Size size = new Size(8, 16);
 
-    FakePassability passability = new FakePassability(size);
+    FakePassability passability = new FakePassability(size, false);
     ConcreteMap concreteMap =
         ConcreteMapFactory.createConcreteMap(size, passability, TileType.Octile);
     HierarchicalMap absTiling =

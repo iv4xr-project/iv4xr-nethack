@@ -600,6 +600,11 @@ public class NetHackSurface
     return a instanceof Walkable && b instanceof Walkable;
   }
 
+  @Override
+  public ConcreteMap slice(int horizOrigin, int vertOrigin, Size size) {
+    return null;
+  }
+
   public ConcreteMap getConcreteMap() {
     //    ConcreteMapFactory.createConcreteMap(Level.WIDTH, Level.HEIGHT, this,
     // TileType.OctileUnicost);

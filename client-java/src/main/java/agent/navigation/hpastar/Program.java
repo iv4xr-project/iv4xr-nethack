@@ -116,6 +116,11 @@ public class Program {
     }
 
     @Override
+    public ConcreteMap slice(int horizOrigin, int vertOrigin, Size size) {
+      return null;
+    }
+
+    @Override
     public ConcreteMap getConcreteMap() {
       return null;
     }
@@ -129,7 +134,7 @@ public class Program {
     IntVec2D startPosition = new IntVec2D(1, 0);
     IntVec2D endPosition = new IntVec2D(69, 69);
     // Prepare the abstract graph beforehand
-    IPassability passability = new FakePassability(size);
+    IPassability passability = new FakePassability(size, true);
     ConcreteMap concreteMap =
         ConcreteMapFactory.createConcreteMap(size, passability, TileType.Octile);
     HierarchicalMapFactory abstractMapFactory = new HierarchicalMapFactory();
@@ -174,7 +179,7 @@ public class Program {
     IntVec2D startPosition = new IntVec2D(17, 38);
     IntVec2D endPosition = new IntVec2D(16, 18);
     // Prepare the abstract graph beforehand
-    IPassability passability = new FakePassability(size);
+    IPassability passability = new FakePassability(size, true);
     ConcreteMap concreteMap =
         ConcreteMapFactory.createConcreteMap(size, passability, TileType.Octile);
     HierarchicalMapFactory abstractMapFactory = new HierarchicalMapFactory();
@@ -218,7 +223,7 @@ public class Program {
     Size size = new Size(128, 128);
 
     // IPassability passability = new ExamplePassability();
-    IPassability passability = new FakePassability(size);
+    IPassability passability = new FakePassability(size, true);
     ConcreteMap concreteMap =
         ConcreteMapFactory.createConcreteMap(size, passability, TileType.Octile);
     HierarchicalMapFactory abstractMapFactory = new HierarchicalMapFactory();

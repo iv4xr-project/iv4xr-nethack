@@ -13,5 +13,7 @@ public interface IPassability {
 
   boolean canMoveDiagonal(IntVec2D pos1, IntVec2D pos2);
 
+  ConcreteMap slice(int horizOrigin, int vertOrigin, Size size);
+
   ConcreteMap getConcreteMap();
 }

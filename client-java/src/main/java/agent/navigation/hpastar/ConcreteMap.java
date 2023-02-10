@@ -38,7 +38,7 @@ public class ConcreteMap implements IMap<ConcreteNode> {
 
   // Create a new concreteMap as a copy of another concreteMap (just copying obstacles)
   public ConcreteMap slice(int horizOrigin, int vertOrigin, Size size, IPassability passability) {
-    ConcreteMap slicedConcreteMap = new ConcreteMap(tileType, size, passability);
+    ConcreteMap slicedConcreteMap = passability.slice(horizOrigin, vertOrigin, size);
     for (ConcreteNode slicedMapNode : slicedConcreteMap.graph.nodes) {
       ConcreteNode globalConcreteNode =
           graph.getNode(

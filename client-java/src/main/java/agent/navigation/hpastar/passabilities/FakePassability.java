@@ -7,19 +7,31 @@ package agent.navigation.hpastar.passabilities;
 import agent.navigation.hpastar.ConcreteMap;
 import agent.navigation.hpastar.IPassability;
 import agent.navigation.hpastar.Size;
+import agent.navigation.hpastar.TileType;
 import agent.navigation.hpastar.infrastructure.Constants;
 import agent.navigation.hpastar.utils.RefSupport;
 import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.Random;
 
 public class FakePassability implements IPassability {
-  final boolean[][] obstacles;
+  private Size size;
+  private final boolean[][] obstacles;
   private final Random random = new Random(0);
 
-  public FakePassability(Size size) {
+  public FakePassability(Size size, boolean randomPreset) {
+    this.size = size;
     obstacles = new boolean[size.width][size.height];
-    noObstaclesInCluster();
-    //    createRandomObstacles(true);
+
+    if (randomPreset) {
+      createRandomObstacles(true);
+    } else {
+      noObstaclesInCluster();
+    }
+  }
+
+  private FakePassability(Size size) {
+    this.size = size;
+    obstacles = new boolean[size.width][size.height];
   }
 
   public boolean canEnter(IntVec2D pos, RefSupport<Integer> cost) {
@@ -33,13 +45,24 @@ public class FakePassability implements IPassability {
   }
 
   @Override
+  public ConcreteMap slice(int horizOrigin, int vertOrigin, Size size) {
+    FakePassability slice = new FakePassability(size);
+    for (int x = horizOrigin, relX = 0; x < this.size.width && relX < size.width; x++, relX++) {
+      for (int y = vertOrigin, relY = 0; y < this.size.height && relY < size.height; y++, relY++) {
+        slice.obstacles[relX][relY] = obstacles[x][y];
+      }
+    }
+    return new ConcreteMap(TileType.OctileUnicost, size, slice);
+  }
+
+  @Override
   public ConcreteMap getConcreteMap() {
     return null;
   }
 
   private void noObstaclesInCluster() {
-    for (int x = 0; x < obstacles.length; x++) {
-      for (int y = 0; y < obstacles[0].length; y++) {
+    for (int x = 0; x < size.width; x++) {
+      for (int y = 0; y < size.height; y++) {
         if (y >= 1 && x >= 1 && y <= 6 && x <= 6) {
           obstacles[x][y] = false;
         } else if (x == 4 && (y == 7 || y == 8 || y == 9)) {
@@ -56,21 +79,19 @@ public class FakePassability implements IPassability {
   private void createRandomObstacles(boolean avoidDiag) {
     float obstaclePercentage = 0.20f;
     int RAND_MAX = Integer.MAX_VALUE;
-    int width = obstacles.length;
-    int height = obstacles[0].length;
-    int numberNodes = obstacles.length * obstacles[0].length;
+    int numberNodes = size.width * size.height;
     int numberObstacles = (int) (obstaclePercentage * numberNodes);
     for (int count = 0; count < numberObstacles; count++) {
       int randInt = Math.abs(random.nextInt());
       int nodeId = randInt / (RAND_MAX / numberNodes + 1) % numberNodes;
-      int x = nodeId % width;
-      int y = nodeId / width;
+      int x = nodeId % size.width;
+      int y = nodeId / size.width;
       if (!obstacles[x][y]) {
         if (avoidDiag) {
-          if (!conflictDiag(y, x, -1, -1, width, height)
-              && !conflictDiag(y, x, -1, +1, width, height)
-              && !conflictDiag(y, x, +1, -1, width, height)
-              && !conflictDiag(y, x, +1, +1, width, height)) {
+          if (!conflictDiag(y, x, -1, -1, size.width, size.height)
+              && !conflictDiag(y, x, -1, +1, size.width, size.height)
+              && !conflictDiag(y, x, +1, -1, size.width, size.height)
+              && !conflictDiag(y, x, +1, +1, size.width, size.height)) {
             obstacles[x][y] = true;
             ++count;
           }
@@ -83,11 +104,11 @@ public class FakePassability implements IPassability {
   }
 
   public IntVec2D getRandomFreePosition() {
-    int x = random.nextInt(obstacles.length);
-    int y = random.nextInt(obstacles[0].length);
+    int x = random.nextInt(size.width);
+    int y = random.nextInt(size.height);
     while (obstacles[x][y]) {
-      x = random.nextInt(obstacles.length);
-      y = random.nextInt(obstacles[0].length);
+      x = random.nextInt(size.width);
+      y = random.nextInt(size.height);
     }
     return new IntVec2D(x, y);
   }
