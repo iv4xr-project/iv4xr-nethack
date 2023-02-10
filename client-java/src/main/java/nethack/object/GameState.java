@@ -6,11 +6,10 @@ import java.util.List;
 import java.util.Map;
 import nethack.NetHackLoggers;
 import nl.uu.cs.aplib.utils.Pair;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class GameState {
-  public static final Logger logger = LogManager.getLogger(NetHackLoggers.NetHackLogger);
+  public static final Logger logger = NetHackLoggers.NetHackLogger;
 
   public Stats stats;
   public Player player;

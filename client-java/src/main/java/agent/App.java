@@ -13,12 +13,11 @@ import nethack.NetHack;
 import nethack.enums.Command;
 import nethack.object.Player;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class App {
-  static final Logger connectionLogger = LogManager.getLogger(ConnectionLoggers.ConnectionLogger);
-  static final Logger agentLogger = LogManager.getLogger(AgentLoggers.AgentLogger);
+  static final Logger connectionLogger = ConnectionLoggers.ConnectionLogger;
+  static final Logger agentLogger = AgentLoggers.AgentLogger;
 
   public static void main(String[] args) throws Exception {
     // Initialize socket connection

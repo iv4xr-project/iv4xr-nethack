@@ -2,8 +2,7 @@ package agent.navigation.strategy;
 
 import agent.AgentLoggers;
 import agent.iv4xr.AgentState;
-import agent.navigation.HierarchicalAreasNavigation;
-import agent.navigation.NetHackSurface;
+import agent.navigation.HierarchicalNavigation;
 import agent.navigation.hpastar.Size;
 import agent.navigation.surface.Tile;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
@@ -15,11 +14,10 @@ import java.util.List;
 import nethack.enums.Command;
 import nethack.object.Player;
 import nl.uu.cs.aplib.utils.Pair;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class NavUtils {
-  static final Logger logger = LogManager.getLogger(AgentLoggers.NavLogger);
+  static final Logger logger = AgentLoggers.NavLogger;
 
   /**
    * Distance in terms of path-length from the agent that owns S to the entity e. It uses
@@ -46,7 +44,7 @@ public class NavUtils {
 
   public static List<Pair<Integer, Tile>> adjustedFindPath(
       AgentState state, Pair<Integer, Tile> oldLocation, Pair<Integer, Tile> newLocation) {
-    HierarchicalAreasNavigation<Tile, NetHackSurface> nav = state.hierarchicalNav;
+    HierarchicalNavigation nav = state.hierarchicalNav;
     boolean srcOriginalBlockingState = nav.isBlocking(oldLocation);
     boolean destOriginalBlockingState = nav.isBlocking(newLocation);
     nav.toggleBlockingOff(oldLocation);

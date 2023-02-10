@@ -3,11 +3,10 @@ package connection.messagedecoder;
 import connection.ConnectionLoggers;
 import java.io.DataInputStream;
 import java.io.IOException;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public abstract class Decoder {
-  protected static final Logger logger = LogManager.getLogger(ConnectionLoggers.DecoderLogger);
+  protected static final Logger logger = ConnectionLoggers.DecoderLogger;
 
   protected enum DecoderBit {
     ObservationBit(1),

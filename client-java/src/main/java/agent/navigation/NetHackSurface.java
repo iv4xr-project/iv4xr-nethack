@@ -1,26 +1,23 @@
 package agent.navigation;
 
 import agent.AgentLoggers;
-import agent.navigation.hpastar.*;
-import agent.navigation.hpastar.factories.EntranceStyle;
+import agent.navigation.hpastar.AbstractPathNode;
+import agent.navigation.hpastar.ConcreteMap;
+import agent.navigation.hpastar.HierarchicalMap;
+import agent.navigation.hpastar.IPathNode;
 import agent.navigation.hpastar.factories.HierarchicalMapFactory;
 import agent.navigation.hpastar.graph.AbstractNode;
-import agent.navigation.hpastar.infrastructure.Constants;
 import agent.navigation.hpastar.infrastructure.Id;
+import agent.navigation.hpastar.passabilities.NetHackPassability;
 import agent.navigation.hpastar.search.HierarchicalSearch;
 import agent.navigation.hpastar.smoother.SmoothWizard;
-import agent.navigation.hpastar.utils.RefSupport;
 import agent.navigation.strategy.NavUtils;
 import agent.navigation.surface.*;
 import eu.iv4xr.framework.extensions.pathfinding.*;
 import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 import nethack.enums.Color;
 import nethack.object.Level;
-import nl.uu.cs.aplib.utils.Pair;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
@@ -37,13 +34,11 @@ import org.apache.logging.log4j.Logger;
  * @author Wish
  */
 public class NetHackSurface
-    implements Navigatable<Tile>,
-        XPathfinder<Tile>,
-        CanDealWithDynamicObstacle<Tile>,
-        IPassability {
-  static final Logger logger = LogManager.getLogger(AgentLoggers.NavLogger);
+    implements Navigatable<Tile>, XPathfinder<Tile>, CanDealWithDynamicObstacle<Tile> {
+  static final Logger logger = AgentLoggers.NavLogger;
   public final Tile[][] tiles = new Tile[Level.SIZE.height][Level.SIZE.width];
   private final Map<String, HashSet<IntVec2D>> tileTypes = new HashMap<>();
+  public NetHackPassability passability = new NetHackPassability(Level.SIZE);
   public Pathfinder<Tile> pathfinder = new AStar<>();
 
   public NetHackSurface() {}
@@ -219,6 +214,7 @@ public class NetHackSurface
   /** Add a non-navigable tile (obstacle). */
   @Override
   public void addObstacle(Tile o) {
+    updatePassibility(o);
     assert !(o instanceof StraightWalkable) || !((StraightWalkable) o).isWalkable()
         : "Obstacle is not actually an obstacle since it can be passed";
     Tile oldTile = tiles[o.pos.y][o.pos.x];
@@ -229,6 +225,7 @@ public class NetHackSurface
   /** Remove a non-navigable tile (obstacle). */
   @Override
   public void removeObstacle(Tile o) {
+    updatePassibility(o);
     assert o instanceof StraightWalkable && ((StraightWalkable) o).isWalkable()
         : "RemoveObstacle must insert a walkable tile";
     Tile oldTile = tiles[o.pos.y][o.pos.x];
@@ -239,6 +236,12 @@ public class NetHackSurface
         && oldTile instanceof Walkable == o instanceof Walkable) {
       return;
     }
+  }
+
+  public boolean updatePassibility(Tile tile) {
+    boolean updated = passability.updateCanMoveDiagonally(tile.pos, tile instanceof Walkable);
+    updated = passability.updateObstacle(tile.pos, tile instanceof StraightWalkable) || updated;
+    return updated;
   }
 
   private void replaceTile(Tile oldTile, Tile newTile) {
@@ -389,40 +392,42 @@ public class NetHackSurface
   private void findPathUsingPassibility(Tile from, Tile to) {
     System.out.printf("SEARCH_PATH:%s->%s%n", from.pos, to.pos);
     assert !nullTile(from.pos) && !nullTile(to.pos);
-
-    ConcreteMap concreteMap = getConcreteMap();
-    HierarchicalMap absTiling =
-        new HierarchicalMapFactory()
-            .createHierarchicalMap(concreteMap, 8, 10, EntranceStyle.EndEntrance, Level.SIZE);
-    Function<Pair<IntVec2D, IntVec2D>, List<IPathNode>> doHierarchicalSearch =
-        (positions) -> hierarchicalSearch(absTiling, concreteMap, positions.fst, positions.snd);
-
-    Function<List<IPathNode>, List<IntVec2D>> toPositionPath =
-        (path) -> {
-          return path.stream()
-              .map(
-                  (p) -> {
-                    if (p instanceof ConcretePathNode) {
-                      ConcretePathNode concretePathNode = (ConcretePathNode) p;
-                      return concreteMap.graph.getNodeInfo(concretePathNode.id).position;
-                    }
-
-                    AbstractPathNode abstractPathNode = (AbstractPathNode) p;
-                    return absTiling.abstractGraph.getNodeInfo(abstractPathNode.id).position;
-                  })
-              .collect(Collectors.toList());
-        };
-
-    long t1 = System.nanoTime();
-    IntVec2D startPosition = from.pos;
-    IntVec2D endPosition = to.pos;
-    List<IPathNode> regularSearchPath =
-        doHierarchicalSearch.apply(new Pair<>(startPosition, endPosition));
-    List<IntVec2D> posPath = toPositionPath.apply(regularSearchPath);
-    System.out.printf("FOUND_PATH:%s%n", posPath);
-    long t2 = System.nanoTime();
-    long regularSearchTime = t2 - t1;
-    //    System.out.printf("Searching paths took: %.2fs%n", regularSearchTime / 1000000000.0f);
+    //
+    //    ConcreteMap concreteMap = getConcreteMap();
+    //    HierarchicalMap absTiling =
+    //        new HierarchicalMapFactory()
+    //            .createHierarchicalMap(concreteMap, 8, 10, EntranceStyle.EndEntrance, Level.SIZE);
+    //    Function<Pair<IntVec2D, IntVec2D>, List<IPathNode>> doHierarchicalSearch =
+    //        (positions) -> hierarchicalSearch(absTiling, concreteMap, positions.fst,
+    // positions.snd);
+    //
+    //    Function<List<IPathNode>, List<IntVec2D>> toPositionPath =
+    //        (path) -> {
+    //          return path.stream()
+    //              .map(
+    //                  (p) -> {
+    //                    if (p instanceof ConcretePathNode) {
+    //                      ConcretePathNode concretePathNode = (ConcretePathNode) p;
+    //                      return concreteMap.graph.getNodeInfo(concretePathNode.id).position;
+    //                    }
+    //
+    //                    AbstractPathNode abstractPathNode = (AbstractPathNode) p;
+    //                    return absTiling.abstractGraph.getNodeInfo(abstractPathNode.id).position;
+    //                  })
+    //              .collect(Collectors.toList());
+    //        };
+    //
+    //    long t1 = System.nanoTime();
+    //    IntVec2D startPosition = from.pos;
+    //    IntVec2D endPosition = to.pos;
+    //    List<IPathNode> regularSearchPath =
+    //        doHierarchicalSearch.apply(new Pair<>(startPosition, endPosition));
+    //    List<IntVec2D> posPath = toPositionPath.apply(regularSearchPath);
+    //    System.out.printf("FOUND_PATH:%s%n", posPath);
+    //    long t2 = System.nanoTime();
+    //    long regularSearchTime = t2 - t1;
+    //    //    System.out.printf("Searching paths took: %.2fs%n", regularSearchTime /
+    // 1000000000.0f);
   }
 
   private static List<IPathNode> hierarchicalSearch(
@@ -582,48 +587,4 @@ public class NetHackSurface
     return 1;
   }
   // endregion
-
-  @Override
-  public boolean canEnter(IntVec2D pos, RefSupport<Integer> movementCost) {
-    movementCost.setValue(Constants.COST_ONE);
-    Tile t = getTile(pos);
-    if (t == null) {
-      return false;
-    }
-    return t instanceof StraightWalkable || t.getClass() == Tile.class;
-  }
-
-  @Override
-  public boolean canMoveDiagonal(IntVec2D pos1, IntVec2D pos2) {
-    Tile a = getTile(pos1);
-    Tile b = getTile(pos2);
-    return a instanceof Walkable && b instanceof Walkable;
-  }
-
-  @Override
-  public ConcreteMap slice(int horizOrigin, int vertOrigin, Size size) {
-    return null;
-  }
-
-  public ConcreteMap getConcreteMap() {
-    //    ConcreteMapFactory.createConcreteMap(Level.WIDTH, Level.HEIGHT, this,
-    // TileType.OctileUnicost);
-    return new ConcreteMap(TileType.OctileUnicost, Level.SIZE, this);
-  }
-
-  public String passabilityString() {
-    StringBuilder sb = new StringBuilder();
-    for (int y = 0; y < Level.SIZE.height; y++) {
-      for (int x = 0; x < Level.SIZE.width; x++) {
-        if (canEnter(new IntVec2D(x, y), new RefSupport<>())) {
-          sb.append(' ');
-        } else {
-          sb.append('▓');
-        }
-      }
-      sb.append(System.lineSeparator());
-    }
-
-    return sb.toString();
-  }
 }

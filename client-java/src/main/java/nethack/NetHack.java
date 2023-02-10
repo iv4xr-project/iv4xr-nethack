@@ -9,12 +9,11 @@ import nethack.object.GameState;
 import nethack.object.Level;
 import nethack.object.Seed;
 import nethack.object.StepState;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class NetHack {
-  public static final Logger netHackLogger = LogManager.getLogger(NetHackLoggers.NetHackLogger);
-  public static final Logger seedLogger = LogManager.getLogger(NetHackLoggers.SeedLogger);
+  public static final Logger netHackLogger = NetHackLoggers.NetHackLogger;
+  public static final Logger seedLogger = NetHackLoggers.SeedLogger;
   public GameState gameState = new GameState();
   public GameMode gameMode;
   public Seed seed;
@@ -90,10 +89,12 @@ public class NetHack {
   public Command waitCommand(boolean acceptNoCommand) {
     // Do not close scanner, otherwise it cannot read the next command
     Scanner scanner = new Scanner(System.in);
+    String prompt = "";
     if (acceptNoCommand) {
-      System.out.print("(Optional) ");
+      prompt += "(Optional) ";
     }
-    System.out.print("Input a command: ");
+    prompt += "Input a command: ";
+    System.out.print(prompt);
 
     while (true) {
       String input = scanner.nextLine();

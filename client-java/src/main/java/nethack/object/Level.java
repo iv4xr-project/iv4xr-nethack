@@ -7,11 +7,10 @@ import java.util.List;
 import nethack.NetHackLoggers;
 import nethack.enums.Color;
 import nethack.enums.EntityType;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class Level {
-  public static final Logger logger = LogManager.getLogger(NetHackLoggers.NetHackLogger);
+  public static final Logger logger = NetHackLoggers.NetHackLogger;
   public static final Size SIZE = new Size(79, 21);
   public Entity[][] map;
   public List<IntVec2D> changedCoordinates = new ArrayList<>();

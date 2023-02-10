@@ -35,12 +35,6 @@ public class Id<T> implements IId {
   }
 
   public String toString() {
-    try {
-      return String.valueOf(_value);
-    } catch (RuntimeException __dummyCatchVar3) {
-      throw __dummyCatchVar3;
-    } catch (Exception __dummyCatchVar3) {
-      throw new RuntimeException(__dummyCatchVar3);
-    }
+    return String.valueOf(_value);
   }
 }

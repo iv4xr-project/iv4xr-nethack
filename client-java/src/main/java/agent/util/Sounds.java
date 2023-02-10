@@ -9,11 +9,10 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class Sounds {
-  static final Logger logger = LogManager.getLogger(AgentLoggers.SoundLogger);
+  static final Logger logger = AgentLoggers.SoundLogger;
   static Map<String, Clip> clipCollection = new HashMap<>();
   private static boolean soundsEnabled = true;
 

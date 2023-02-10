@@ -1,5 +1,6 @@
 package agent.navigation.hpastar.factories;
 
+import agent.AgentLoggers;
 import agent.navigation.hpastar.*;
 import agent.navigation.hpastar.graph.*;
 import agent.navigation.hpastar.infrastructure.Constants;
@@ -10,14 +11,15 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import nl.uu.cs.aplib.utils.Pair;
+import org.apache.logging.log4j.Logger;
 
 public class HierarchicalMapFactory {
-
+  static final Logger hpaLogger = AgentLoggers.HPALogger;
   private final int MAX_ENTRANCE_WIDTH = 6;
 
-  private HierarchicalMap hierarchicalMap;
+  public HierarchicalMap hierarchicalMap;
 
-  private ConcreteMap concreteMap;
+  public ConcreteMap concreteMap;
 
   private EntranceStyle entranceStyle;
 
@@ -119,7 +121,7 @@ public class HierarchicalMapFactory {
     nodeInfo.level = nodeBackup.level;
     abstractGraph.removeEdgesFromAndToNode(nodeId);
 
-    System.out.printf("Abs AddNode: %s%n", nodeId);
+    //    System.out.printf("Abs AddNode: %s%n", nodeId);
     abstractGraph.addNode(nodeId, nodeInfo);
     for (AbstractEdge edge : nodeBackup.edges) {
       var targetNodeId = edge.targetNodeId;
@@ -195,7 +197,8 @@ public class HierarchicalMapFactory {
         cost = unitCost;
         break;
     }
-    System.out.printf("InterCluster AddEdge: %s -> %s%n", srcAbstractNodeId, destAbstractNodeId);
+    hpaLogger.trace(
+        String.format("InterCluster AddEdge: %s -> %s", srcAbstractNodeId, destAbstractNodeId));
     hierarchicalMap.abstractGraph.addEdge(
         srcAbstractNodeId, destAbstractNodeId, new AbstractEdgeInfo(cost, level, true));
     hierarchicalMap.abstractGraph.addEdge(

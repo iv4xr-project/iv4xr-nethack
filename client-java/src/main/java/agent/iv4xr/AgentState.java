@@ -1,7 +1,7 @@
 package agent.iv4xr;
 
 import agent.AgentLoggers;
-import agent.navigation.HierarchicalAreasNavigation;
+import agent.navigation.HierarchicalNavigation;
 import agent.navigation.NetHackSurface;
 import agent.navigation.strategy.NavUtils;
 import agent.navigation.surface.*;
@@ -19,7 +19,6 @@ import nethack.object.Level;
 import nethack.object.Player;
 import nl.uu.cs.aplib.mainConcepts.Environment;
 import nl.uu.cs.aplib.utils.Pair;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
@@ -30,9 +29,10 @@ import org.apache.logging.log4j.Logger;
  * @author wish
  */
 public class AgentState extends Iv4xrAgentState<Void> {
-  static final Logger agentLogger = LogManager.getLogger(AgentLoggers.AgentLogger);
-  static final Logger WOMLogger = LogManager.getLogger(AgentLoggers.WOMLogger);
-  public HierarchicalAreasNavigation<Tile, NetHackSurface> hierarchicalNav;
+  static final Logger agentLogger = AgentLoggers.AgentLogger;
+  static final Logger WOMLogger = AgentLoggers.WOMLogger;
+  public HierarchicalNavigation hierarchicalNav;
+  int lastUpdate = 0;
 
   @Override
   public AgentEnv env() {
@@ -69,7 +69,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
   private void addNewNavGraph(int levelNr) {
     NetHackSurface newNav = new NetHackSurface();
     if (hierarchicalNav == null) {
-      hierarchicalNav = new HierarchicalAreasNavigation<>(newNav);
+      hierarchicalNav = new HierarchicalNavigation(newNav);
     } else {
       hierarchicalNav.addNextArea(newNav);
     }
@@ -77,6 +77,11 @@ public class AgentState extends Iv4xrAgentState<Void> {
 
   @Override
   public void updateState(String agentId) {
+    if (lastUpdate == app().gameState.stats.time) {
+      return;
+    }
+
+    lastUpdate = app().gameState.stats.time;
     super.updateState(agentId);
     updateMap();
     updateEntities();
@@ -285,17 +290,19 @@ public class AgentState extends Iv4xrAgentState<Void> {
   }
 
   public void render() {
+    StringBuilder sb = new StringBuilder();
     String[] navigation = area().toString().split(System.lineSeparator());
     String[] game = env().app.gameState.toString().split(System.lineSeparator());
-    String[] passability = area().passabilityString().split(System.lineSeparator());
+    String[] passability = area().passability.toString().split(System.lineSeparator());
 
-    System.out.println(game[0]);
+    sb.append(game[0]).append(System.lineSeparator());
 
     for (int i = 0; i < Level.SIZE.height; i++) {
-      System.out.printf("%s %s %s%n", game[i + 1], navigation[i], passability[i]);
+      sb.append(String.format("%s %s %s%n", game[i + 1], navigation[i], passability[i]));
     }
 
-    System.out.println(game[Level.SIZE.height + 1]);
-    System.out.println(game[Level.SIZE.height + 2]);
+    sb.append(game[Level.SIZE.height + 1]).append(System.lineSeparator());
+    sb.append(game[Level.SIZE.height + 2]).append(System.lineSeparator());
+    System.out.print(sb.toString());
   }
 }

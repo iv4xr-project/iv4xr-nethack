@@ -16,12 +16,11 @@ import nethack.object.Level;
 import nethack.object.Seed;
 import nethack.object.StepState;
 import nl.uu.cs.aplib.utils.Pair;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class SocketClient {
-  static final Logger logger = LogManager.getLogger(ConnectionLoggers.ConnectionLogger);
-  static final Logger profileLogger = LogManager.getLogger(ConnectionLoggers.ProfilerLogger);
+  static final Logger logger = ConnectionLoggers.ConnectionLogger;
+  static final Logger profileLogger = ConnectionLoggers.ProfilerLogger;
   String host;
   int port;
   Socket socket;

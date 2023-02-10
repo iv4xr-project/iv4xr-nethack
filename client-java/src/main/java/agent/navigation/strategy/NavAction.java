@@ -11,11 +11,10 @@ import eu.iv4xr.framework.mainConcepts.WorldModel;
 import eu.iv4xr.framework.spatial.Vec3;
 import nl.uu.cs.aplib.mainConcepts.Action;
 import nl.uu.cs.aplib.utils.Pair;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class NavAction {
-  static final Logger logger = LogManager.getLogger(AgentLoggers.NavLogger);
+  static final Logger logger = AgentLoggers.NavLogger;
 
   /** Construct an action that would guide the agent to the given location. */
   public static Action navigateTo(int levelNr, int x, int y) {

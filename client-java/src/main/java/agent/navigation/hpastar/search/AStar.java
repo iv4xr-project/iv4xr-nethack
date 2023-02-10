@@ -1,13 +1,16 @@
 package agent.navigation.hpastar.search;
 
+import agent.AgentLoggers;
 import agent.navigation.hpastar.Connection;
 import agent.navigation.hpastar.infrastructure.IMap;
 import agent.navigation.hpastar.infrastructure.Id;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import org.apache.logging.log4j.Logger;
 
 public class AStar<TNode> {
+  private final Logger hpaLogger = AgentLoggers.HPALogger;
 
   private final Function<Id<TNode>, Boolean> isGoal;
 
@@ -38,9 +41,9 @@ public class AStar<TNode> {
   public final Path<TNode> findPath() {
     while (canExpand()) {
       Id<TNode> nodeId = expand();
-      System.out.printf("Expand %s%n", nodeId.getIdValue());
+      hpaLogger.trace(String.format("Expand %s", nodeId.getIdValue()));
       if (isGoal.apply(nodeId)) {
-        System.out.printf("Found path%n");
+        hpaLogger.trace("Found path");
         return reconstructPathFrom(nodeId);
       }
     }

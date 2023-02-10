@@ -53,9 +53,6 @@ public class GraphFactory {
   private static void createEdges(
       Size size, ConcreteGraph graph, TileType tileType, IPassability passability) {
     for (int top = 0; top < size.height; ++top) {
-      if (top == 7) {
-        System.out.println();
-      }
       for (int left = 0; left < size.width; ++left) {
         IntVec2D currentPos = new IntVec2D(left, top);
         if (!passability.canEnter(currentPos, new RefSupport<>())) {

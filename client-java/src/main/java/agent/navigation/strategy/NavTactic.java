@@ -15,11 +15,10 @@ import nethack.object.Level;
 import nl.uu.cs.aplib.mainConcepts.SimpleState;
 import nl.uu.cs.aplib.mainConcepts.Tactic;
 import nl.uu.cs.aplib.utils.Pair;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class NavTactic {
-  static final Logger logger = LogManager.getLogger(AgentLoggers.NavLogger);
+  static final Logger logger = AgentLoggers.NavLogger;
 
   public static Tactic navigateTo(Pair<Integer, Tile> location) {
     return NavAction.navigateTo(location.fst, location.snd.pos.x, location.snd.pos.y).lift();

@@ -145,13 +145,15 @@ public class ConcreteMap implements IMap<ConcreteNode> {
   }
 
   private void printFormattedChars(List<Character> chars) {
+    StringBuilder sb = new StringBuilder();
     for (int y = 0; y < size.height; ++y) {
       for (int x = 0; x < size.width; ++x) {
         Id<ConcreteNode> nodeId = this.getNodeIdFromPos(x, y);
-        System.out.print(chars.get(nodeId.getIdValue()));
+        sb.append(chars.get(nodeId.getIdValue()));
       }
-      System.out.println();
+      sb.append(System.lineSeparator());
     }
+    System.out.print(sb.toString());
   }
 
   public void printFormatted(List<Integer> path) {

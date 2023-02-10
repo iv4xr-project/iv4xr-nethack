@@ -14,7 +14,7 @@ import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.Random;
 
 public class FakePassability implements IPassability {
-  private Size size;
+  private final Size size;
   private final boolean[][] obstacles;
   private final Random random = new Random(0);
 

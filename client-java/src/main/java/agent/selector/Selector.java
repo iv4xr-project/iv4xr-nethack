@@ -24,12 +24,13 @@ public abstract class Selector<T> {
     int n = elems.size();
     if (n == 0) {
       return null;
-    } else if (selectionType == SelectionType.FIRST) {
+    }
+    assert selectionType == SelectionType.FIRST || selectionType == SelectionType.LAST
+        : "No general selection implemented for " + selectionType;
+    if (selectionType == SelectionType.FIRST) {
       return elems.get(0);
-    } else if (selectionType == SelectionType.LAST) {
-      return elems.get(n - 1);
     } else {
-      throw new IllegalArgumentException("Cannot call general select for: " + selectionType);
+      return elems.get(n - 1);
     }
   }
 

@@ -51,10 +51,8 @@ public enum Color {
 
   public static Color fromValue(int value) {
     Color color = BY_VALUE.get(value);
-    if (color != null) {
-      return color;
-    }
-    throw new IllegalArgumentException("Color value not known: " + value);
+    assert color != null : String.format("Color value '%d' not known", value);
+    return color;
   }
 
   private static void colorpalette() {

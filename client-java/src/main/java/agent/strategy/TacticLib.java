@@ -7,7 +7,6 @@ import agent.iv4xr.AgentState;
 import agent.navigation.strategy.NavUtils;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import nl.uu.cs.aplib.mainConcepts.Tactic;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
@@ -21,7 +20,7 @@ import org.apache.logging.log4j.Logger;
  * @author wish
  */
 public class TacticLib {
-  static final Logger logger = LogManager.getLogger(AgentLoggers.AgentLogger);
+  static final Logger logger = AgentLoggers.AgentLogger;
 
   public static Tactic abortOnDeath() {
     return ABORT()

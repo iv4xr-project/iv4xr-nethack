@@ -27,11 +27,10 @@ import nethack.object.Level;
 import nethack.object.Player;
 import nl.uu.cs.aplib.mainConcepts.Action;
 import nl.uu.cs.aplib.utils.Pair;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class Actions {
-  static final Logger logger = LogManager.getLogger(AgentLoggers.GoalLogger);
+  static final Logger logger = AgentLoggers.GoalLogger;
 
   /**
    * Construct an action that would interact with an entity of the given id. The action's guard is

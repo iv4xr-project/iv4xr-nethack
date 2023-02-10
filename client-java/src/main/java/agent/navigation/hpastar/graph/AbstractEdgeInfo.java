@@ -21,16 +21,6 @@ public class AbstractEdgeInfo {
   }
 
   public String toString() {
-    try {
-      return ("cost: " + cost + "; level: " + level + "; interCluster: " + isInterClusterEdge);
-    } catch (RuntimeException __dummyCatchVar0) {
-      throw __dummyCatchVar0;
-    } catch (Exception __dummyCatchVar0) {
-      throw new RuntimeException(__dummyCatchVar0);
-    }
-  }
-
-  public void printInfo() {
-    System.out.println(this.toString());
+    return ("cost: " + cost + "; level: " + level + "; interCluster: " + isInterClusterEdge);
   }
 }

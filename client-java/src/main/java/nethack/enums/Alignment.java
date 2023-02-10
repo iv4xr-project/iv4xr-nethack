@@ -23,9 +23,7 @@ public enum Alignment {
   }
 
   public static Alignment fromValue(int value) {
-    if (BY_VALUE.containsKey(value)) {
-      return BY_VALUE.get(value);
-    }
-    throw new IllegalArgumentException("Alignment value not known: " + value);
+    assert BY_VALUE.containsKey(value) : String.format("Alignment value '%d' not known", value);
+    return BY_VALUE.get(value);
   }
 }

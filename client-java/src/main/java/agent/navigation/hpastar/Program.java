@@ -165,10 +165,21 @@ public class Program {
                   return absTiling.abstractGraph.getNodeInfo(abstractPathNode.id).position;
                 })
             .collect(Collectors.toList());
-    System.out.println("Regular search: " + regularSearchTime + " ms");
-    System.out.println("Number of nodes: " + regularSearchPath.size());
-    System.out.println("Hierachical search: " + hierarchicalSearchTime + " ms");
-    System.out.println("Number of nodes: " + hierarchicalSearchPath.size());
+
+    StringBuilder sb = new StringBuilder();
+    sb.append("Regular search: ")
+        .append(regularSearchTime)
+        .append(" ms")
+        .append(System.lineSeparator());
+    sb.append("Number of nodes: ").append(regularSearchPath.size()).append(System.lineSeparator());
+    sb.append("Hierachical search: ")
+        .append(hierarchicalSearchTime)
+        .append(" ms")
+        .append(System.lineSeparator());
+    sb.append("Number of nodes: ")
+        .append(hierarchicalSearchPath.size())
+        .append(System.lineSeparator());
+    System.out.print(sb.toString());
   }
 
   public static void main2(String[] args) {
@@ -207,10 +218,21 @@ public class Program {
                   return absTiling.abstractGraph.getNodeInfo(abstractPathNode.id).position;
                 })
             .collect(Collectors.toList());
-    System.out.println("Regular search: " + regularSearchTime + " ms");
-    System.out.println("Number of nodes: " + regularSearchPath.size());
-    System.out.println("Hierachical search: " + hierarchicalSearchTime + " ms");
-    System.out.println("Number of nodes: " + hierarchicalSearchPath.size());
+
+    StringBuilder sb = new StringBuilder();
+    sb.append("Regular search: ")
+        .append(regularSearchTime)
+        .append(" ms")
+        .append(System.lineSeparator());
+    sb.append("Number of nodes: ").append(regularSearchPath.size()).append(System.lineSeparator());
+    sb.append("Hierachical search: ")
+        .append(hierarchicalSearchTime)
+        .append(" ms")
+        .append(System.lineSeparator());
+    sb.append("Number of nodes: ")
+        .append(hierarchicalSearchPath.size())
+        .append(System.lineSeparator());
+    System.out.print(sb.toString());
   }
 
   public static void main(String[] args) {
@@ -355,13 +377,18 @@ public class Program {
       HierarchicalMap hierarchicalGraph,
       int clusterSize,
       List<IntVec2D> path) {
+    StringBuilder sb = new StringBuilder();
     for (int y = 0; y < concreteMap.size.height; y++) {
-      if (y % clusterSize == 0)
-        System.out.println("---------------------------------------------------------");
+      if (y % clusterSize == 0) {
+        sb.append("---------------------------------------------------------")
+            .append(System.lineSeparator());
+      }
 
       for (int x = 0; x < concreteMap.size.width; x++) {
         //                Console.ForegroundColor = ConsoleColor.White;
-        if (x % clusterSize == 0) System.out.print('|');
+        if (x % clusterSize == 0) {
+          sb.append('|');
+        }
 
         Id<ConcreteNode> nodeId = concreteMap.getNodeIdFromPos(x, y);
         //                /* [UNSUPPORTED] 'var' as type is unsupported "var" */ hasAbsNode =
@@ -385,7 +412,7 @@ public class Program {
 
         int x0 = x;
         int y0 = y;
-        System.out.print(
+        sb.append(
             path.stream()
                     .anyMatch(
                         (node) -> {
@@ -394,7 +421,8 @@ public class Program {
                 ? 'X'
                 : chars.get(nodeId.getIdValue()));
       }
-      System.out.println();
+      sb.append(System.lineSeparator());
     }
+    System.out.print(sb.toString());
   }
 }

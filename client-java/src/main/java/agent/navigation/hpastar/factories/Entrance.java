@@ -33,12 +33,11 @@ public class Entrance {
   }
 
   public int getEntranceLevel(int clusterSize, int maxLevel) {
+    assert orientation == Orientation.Horizontal || orientation == Orientation.Vertical;
     if (orientation.equals(Orientation.Horizontal)) {
       return determineLevel(clusterSize, maxLevel, srcNode.info.position.x);
-    } else if (orientation.equals(Orientation.Vertical)) {
-      return determineLevel(clusterSize, maxLevel, srcNode.info.position.y);
     } else {
-      throw new RuntimeException("Orientation unknown");
+      return determineLevel(clusterSize, maxLevel, srcNode.info.position.y);
     }
   }
 

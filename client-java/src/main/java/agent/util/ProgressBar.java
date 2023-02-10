@@ -36,7 +36,6 @@ public class ProgressBar {
 
     if (done == total) {
       System.out.flush();
-      System.out.println();
       init();
     }
   }

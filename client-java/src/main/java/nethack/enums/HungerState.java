@@ -27,9 +27,7 @@ public enum HungerState {
   }
 
   public static HungerState fromValue(int value) {
-    if (BY_VALUE.containsKey(value)) {
-      return BY_VALUE.get(value);
-    }
-    throw new IllegalArgumentException("HungerState value not known: " + value);
+    assert BY_VALUE.containsKey(value) : String.format("HungerState value '%d' not known", value);
+    return BY_VALUE.get(value);
   }
 }
