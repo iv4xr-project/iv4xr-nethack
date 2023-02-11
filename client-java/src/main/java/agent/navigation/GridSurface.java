@@ -47,7 +47,7 @@ public class GridSurface
    */
   private boolean perfect_memory_pathfinding = true;
 
-  private final ConcreteMap concreteMap;
+  public final ConcreteMap concreteMap;
   private final Size size;
   private final int clusterSize;
 
@@ -63,31 +63,32 @@ public class GridSurface
                 emptyConcreteMap, clusterSize, 1, EntranceStyle.EndEntrance, size);
   }
 
+  public IntVec2D toRelativePos(IntVec2D pos) {
+    assert NavUtils.withinBounds(pos, size);
+    return new IntVec2D(pos.x % clusterSize, pos.y % clusterSize);
+  }
+
   // region CanDealWithDynamicObstacle interface
   /** Add a non-navigable tile (obstacle). */
   @Override
   public void addObstacle(Tile o) {
-    updatePassibility(o);
     assert !(o instanceof StraightWalkable)
         : "Obstacle is not actually an obstacle since it can be passed";
-    Tile oldTile = tiles[o.pos.y][o.pos.x];
-    replaceTile(oldTile, o);
-    tiles[o.pos.y][o.pos.x] = o;
+    updateObstacle(o);
   }
 
   /** Remove a non-navigable tile (obstacle). */
   @Override
   public void removeObstacle(Tile o) {
-    updatePassibility(o);
     assert o instanceof StraightWalkable : "RemoveObstacle must insert a walkable tile";
+    updateObstacle(o);
+  }
+
+  private void updateObstacle(Tile o) {
+    updatePassibility(o);
     Tile oldTile = tiles[o.pos.y][o.pos.x];
     replaceTile(oldTile, o);
     tiles[o.pos.y][o.pos.x] = o;
-    if (oldTile instanceof StraightWalkable
-        && ((StraightWalkable) oldTile).isWalkable()
-        && oldTile instanceof Walkable == o instanceof Walkable) {
-      return;
-    }
   }
 
   public void updatePassibility(Tile tile) {
@@ -98,7 +99,7 @@ public class GridSurface
     concreteMap.passability.updateCanMoveDiagonally(tile.pos, tile instanceof Walkable);
     concreteMap.passability.updateObstacle(tile.pos, !(tile instanceof StraightWalkable));
 
-    // Update subconcreteMaps
+    // Update subConcreteMaps
     cluster.subConcreteMap.passability.updateCanMoveDiagonally(relPos, tile instanceof Walkable);
     cluster.subConcreteMap.passability.updateObstacle(relPos, !(tile instanceof StraightWalkable));
   }
@@ -264,6 +265,7 @@ public class GridSurface
     factory.removeAbstractNode(hierarchicalMap, startAbsNode);
 
     List<IntVec2D> posPath = toPositionPath(path, concreteMap);
+    System.out.printf("%s -> %s (%s)%n", from, to, posPath);
     verifyPath(from.pos, to.pos, posPath);
     return posPath.stream().map(Tile::new).collect(Collectors.toList());
   }
@@ -289,8 +291,8 @@ public class GridSurface
       return;
     }
 
-    assert path.get(0).equals(from) && path.get(path.size() - 1).equals(to)
-        : "Path from or to is empty";
+    assert path.get(0).equals(from) : "Path from or to is incorrect";
+    assert path.get(path.size() - 1).equals(to) : "Path to is incorrect";
 
     IntVec2D prevPos = path.get(0);
     for (int i = 1; i < path.size(); i++) {

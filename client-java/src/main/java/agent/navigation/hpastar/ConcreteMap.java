@@ -51,6 +51,10 @@ public class ConcreteMap implements IMap<ConcreteNode> {
     return slicedConcreteMap;
   }
 
+  public Id<ConcreteNode> getNodeIdFromPos(IntVec2D pos) {
+    return getNodeIdFromPos(pos.x, pos.y);
+  }
+
   public Id<ConcreteNode> getNodeIdFromPos(int x, int y) {
     return new Id<ConcreteNode>().from(y * size.width + x);
   }

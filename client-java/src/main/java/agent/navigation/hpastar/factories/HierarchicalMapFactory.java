@@ -105,12 +105,6 @@ public class HierarchicalMapFactory {
       }
     }
 
-    //    if (edgeAdded) {
-    //      System.out.printf("Edge added%n");
-    //    } else {
-    //      System.out.printf("No edge added%n");
-    //    }
-
     return abstractNodeId;
   }
 
@@ -463,7 +457,7 @@ public class HierarchicalMapFactory {
               new Id<AbstractNode>().from(abstractNodeId.getValue()),
               level,
               cluster.id,
-              new IntVec2D(srcNode.info.position.x, srcNode.info.position.y),
+              srcNode.info.position,
               srcNode.nodeId);
       abstractNodes.put(srcNode.nodeId, abstractNodeInfo);
       abstractNodeId.setValue(abstractNodeId.getValue() + 1);

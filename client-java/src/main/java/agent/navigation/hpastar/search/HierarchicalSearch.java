@@ -85,7 +85,9 @@ public class HierarchicalSearch {
           refinedAbstractPath.add(interNodePath.get(j));
         }
         calculatedPaths++;
-      } else refinedAbstractPath.add(new AbstractPathNode(path.get(i).id, level - 1));
+      } else {
+        refinedAbstractPath.add(new AbstractPathNode(path.get(i).id, level - 1));
+      }
     }
     return refinedAbstractPath;
   }
@@ -133,13 +135,15 @@ public class HierarchicalSearch {
         // When local path is null, it means there is no direct path within the cluster
         // Then we need to treat it as an intercluster path
         if (localPath != null) {
-          List<IPathNode> concretePath = new ArrayList<>();
-          for (int i = 1; i < localPath.size(); i++) {
+          for (int i = 0; i < localPath.size(); i++) {
+            // If there is only one node, we do need to add it isntead of skipping it
+            if (i == 0 && localPath.size() != 1) {
+              continue;
+            }
             int concreteNodeId =
                 localNodeId2ConcreteNodeId(localPath.get(i).getIdValue(), cluster, mapWidth);
-            concretePath.add(new ConcretePathNode(new Id<ConcreteNode>().from(concreteNodeId)));
+            result.add(new ConcretePathNode(new Id<ConcreteNode>().from(concreteNodeId)));
           }
-          result.addAll(concretePath);
           calculatedPaths++;
           lastAbstractNodeId = currentAbstractNodeId;
           continue;

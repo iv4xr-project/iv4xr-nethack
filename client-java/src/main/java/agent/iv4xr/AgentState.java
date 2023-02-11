@@ -32,7 +32,6 @@ public class AgentState extends Iv4xrAgentState<Void> {
   static final Logger agentLogger = AgentLoggers.AgentLogger;
   static final Logger WOMLogger = AgentLoggers.WOMLogger;
   public HierarchicalNavigation hierarchicalNav;
-  int lastUpdate = 0;
 
   @Override
   public AgentEnv env() {
@@ -77,11 +76,6 @@ public class AgentState extends Iv4xrAgentState<Void> {
 
   @Override
   public void updateState(String agentId) {
-    if (lastUpdate == app().gameState.stats.time) {
-      return;
-    }
-
-    lastUpdate = app().gameState.stats.time;
     super.updateState(agentId);
     updateMap();
     updateEntities();
@@ -181,6 +175,9 @@ public class AgentState extends Iv4xrAgentState<Void> {
         hierarchicalNav.markAsSeen(new Pair<>(levelNr, new Tile(adjacentPos)));
       }
     }
+
+    // Clear list of coordinates
+    aux.properties.put("changedCoordinates", new Serializable[0]);
   }
 
   private void updateEntities() {
@@ -289,15 +286,22 @@ public class AgentState extends Iv4xrAgentState<Void> {
     StringBuilder sb = new StringBuilder();
     String[] navigation = area().toString().split(System.lineSeparator());
     String[] game = env().app.gameState.toString().split(System.lineSeparator());
+    String[] hierarchicalMap = area().hierarchicalMap.toString().split(System.lineSeparator());
 
-    sb.append(game[0]).append(System.lineSeparator());
+    String formatString =
+        String.format(
+            "%%-%ds %%-%ds %%-%ds%n", Level.SIZE.width, Level.SIZE.width, Level.SIZE.width);
+    int n = Level.SIZE.height;
 
-    for (int i = 0; i < Level.SIZE.height; i++) {
-      sb.append(String.format("%s %s%n", game[i + 1], navigation[i]));
+    sb.append(String.format(formatString, game[0], "", hierarchicalMap[0]));
+
+    for (int i = 0; i < n; i++) {
+      sb.append(String.format(formatString, game[i + 1], navigation[i], hierarchicalMap[i + 1]));
     }
 
-    sb.append(game[Level.SIZE.height + 1]).append(System.lineSeparator());
-    sb.append(game[Level.SIZE.height + 2]).append(System.lineSeparator());
+    sb.append(String.format(formatString, game[n + 1], "", hierarchicalMap[n + 1]));
+    sb.append(String.format(formatString, game[n + 2], "", hierarchicalMap[n + 2]));
+    sb.append(String.format(formatString, "", "", hierarchicalMap[n + 3]));
     System.out.print(sb);
   }
 }

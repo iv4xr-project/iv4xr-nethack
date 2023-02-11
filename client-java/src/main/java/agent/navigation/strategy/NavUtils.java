@@ -209,12 +209,14 @@ public class NavUtils {
     }
   }
 
+  public static boolean withinBounds(IntVec2D pos, Size size) {
+    return pos.x >= 0 && pos.y >= 0 && pos.x < size.width && pos.y < size.height;
+  }
+
   public static List<IntVec2D> neighbourCoordinates(
       IntVec2D pos, Size size, boolean allowDiagonal) {
     List<IntVec2D> neighbourCoords = new ArrayList<>(2);
-
-    assert pos.x >= 0 && pos.y >= 0 && pos.x < size.width && pos.y < size.height
-        : "Position outside the boundaries";
+    assert withinBounds(pos, size) : "Position outside the boundaries";
 
     int left = pos.x - 1;
     int right = pos.x + 1;

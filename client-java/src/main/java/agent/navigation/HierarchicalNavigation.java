@@ -7,16 +7,13 @@ package agent.navigation;
 import agent.navigation.hpastar.*;
 import agent.navigation.hpastar.factories.GraphFactory;
 import agent.navigation.hpastar.factories.HierarchicalMapFactory;
-import agent.navigation.hpastar.graph.AbstractNode;
-import agent.navigation.hpastar.graph.ConcreteEdgeInfo;
-import agent.navigation.hpastar.graph.ConcreteNode;
+import agent.navigation.hpastar.graph.*;
 import agent.navigation.hpastar.infrastructure.Constants;
 import agent.navigation.hpastar.infrastructure.Id;
 import agent.navigation.hpastar.utils.RefSupport;
 import agent.navigation.strategy.NavUtils;
 import agent.navigation.surface.StraightWalkable;
 import agent.navigation.surface.Tile;
-import agent.navigation.surface.Walkable;
 import eu.iv4xr.framework.extensions.pathfinding.CanDealWithDynamicObstacle;
 import eu.iv4xr.framework.extensions.pathfinding.Navigatable;
 import eu.iv4xr.framework.extensions.pathfinding.XPathfinder;
@@ -226,17 +223,11 @@ public class HierarchicalNavigation
 
     Cluster originalCluster = map().findClusterForPosition(t.pos);
     ConcreteMap subConcreteMap = originalCluster.subConcreteMap;
-    IntVec2D relativePos =
-        new IntVec2D(o.snd.pos.x % map().clusterSize, o.snd.pos.y % map().clusterSize);
-    subConcreteMap.passability.updateObstacle(relativePos, false);
-    subConcreteMap.passability.updateCanMoveDiagonally(relativePos, t instanceof Walkable);
+    IntVec2D relativePos = areas.get(0).toRelativePos(t.pos);
 
-    var nodeId =
+    Id<ConcreteNode> nodeId =
         GraphFactory.getNodeByPos(
-                subConcreteMap.graph,
-                t.pos.x % map().clusterSize,
-                t.pos.y % map().clusterSize,
-                map().clusterSize)
+                subConcreteMap.graph, relativePos.x, relativePos.y, map().clusterSize)
             .nodeId;
     var node = subConcreteMap.graph.getNode(nodeId);
     node.info.isObstacle = false;
@@ -244,25 +235,55 @@ public class HierarchicalNavigation
     List<IntVec2D> neighbours = NavUtils.neighbourCoordinates(t.pos, map().size, true);
     for (IntVec2D neighbourPos : neighbours) {
       Cluster neighbourCluster = map().findClusterForPosition(neighbourPos);
-      if (!originalCluster.id.equals(neighbourCluster.id)) {
-        continue;
-      }
-      IntVec2D neighbourRelativePos =
-          new IntVec2D(neighbourPos.x % map().clusterSize, neighbourPos.y % map().clusterSize);
+      IntVec2D neighbourRelativePos = areas.get(0).toRelativePos(neighbourPos);
       ConcreteMap neighbourConcreteMap = neighbourCluster.subConcreteMap;
-      if (subConcreteMap.passability.cannotEnter(neighbourRelativePos, new RefSupport<>())) {
+      if (neighbourConcreteMap.passability.cannotEnter(neighbourRelativePos, new RefSupport<>())) {
         continue;
       }
-      var neighBourId =
-          GraphFactory.getNodeByPos(
-                  neighbourConcreteMap.graph,
-                  neighbourRelativePos.x,
-                  neighbourRelativePos.y,
-                  map().clusterSize)
-              .nodeId;
-      subConcreteMap.graph.addEdge(nodeId, neighBourId, new ConcreteEdgeInfo(Constants.COST_ONE));
-      subConcreteMap.graph.addEdge(neighBourId, nodeId, new ConcreteEdgeInfo(Constants.COST_ONE));
+      if (!originalCluster.id.equals(neighbourCluster.id)) {
+        addInterClusterEdge(originalCluster, relativePos, neighbourCluster, neighbourRelativePos);
+        continue;
+      } else {
+        Id<ConcreteNode> neighBourId =
+            GraphFactory.getNodeByPos(
+                    neighbourConcreteMap.graph,
+                    neighbourRelativePos.x,
+                    neighbourRelativePos.y,
+                    map().clusterSize)
+                .nodeId;
+        subConcreteMap.graph.addEdge(nodeId, neighBourId, new ConcreteEdgeInfo(Constants.COST_ONE));
+        subConcreteMap.graph.addEdge(neighBourId, nodeId, new ConcreteEdgeInfo(Constants.COST_ONE));
+      }
     }
+  }
+
+  private void addInterClusterEdge(
+      Cluster startCluster, IntVec2D startPos, Cluster targetCluster, IntVec2D targetPos) {
+    NetHackSurface surface = areas.get(0);
+
+    Id<AbstractNode> startAbsNodeId =
+        new Id<AbstractNode>().from(surface.hierarchicalMap.abstractGraph.nodes.size());
+    startCluster.addEntrance(startAbsNodeId, surface.toRelativePos(startPos));
+    var startNodeId = surface.concreteMap.getNodeIdFromPos(startPos);
+    AbstractNodeInfo startNodeInfo =
+        new AbstractNodeInfo(startAbsNodeId, 1, startCluster.id, startPos, startNodeId);
+    surface.hierarchicalMap.concreteNodeIdToAbstractNodeIdMap.put(startNodeId, startNodeInfo.id);
+    surface.hierarchicalMap.abstractGraph.addNode(startNodeInfo.id, startNodeInfo);
+
+    Id<AbstractNode> targetAbsNodeId =
+        new Id<AbstractNode>().from(surface.hierarchicalMap.abstractGraph.nodes.size());
+    targetCluster.addEntrance(targetAbsNodeId, surface.toRelativePos(targetPos));
+    var targetNodeId = surface.concreteMap.getNodeIdFromPos(targetPos);
+    AbstractNodeInfo targetNodeInfo =
+        new AbstractNodeInfo(targetAbsNodeId, 1, targetCluster.id, targetPos, targetNodeId);
+    surface.hierarchicalMap.concreteNodeIdToAbstractNodeIdMap.put(targetNodeId, targetNodeInfo.id);
+    surface.hierarchicalMap.abstractGraph.addNode(targetNodeInfo.id, targetNodeInfo);
+
+    System.out.printf("InterCluster AddEdge: %s -> %s%n", startAbsNodeId, targetAbsNodeId);
+    surface.hierarchicalMap.abstractGraph.addEdge(
+        startAbsNodeId, targetAbsNodeId, new AbstractEdgeInfo(Constants.COST_ONE, 1, true));
+    surface.hierarchicalMap.abstractGraph.addEdge(
+        targetAbsNodeId, startAbsNodeId, new AbstractEdgeInfo(Constants.COST_ONE, 1, true));
   }
 
   public void removeEdges(Pair<Integer, Tile> o) {
@@ -286,12 +307,9 @@ public class HierarchicalNavigation
     var node = subConcreteMap.graph.getNode(nodeId);
     node.info.isObstacle = true;
 
+    // TODO: Also remove edges that might
     subConcreteMap.graph.removeEdgesFromAndToNode(nodeId);
   }
-
-  public void addNode(Pair<Integer, Tile> node) {}
-
-  public void removeNode(Pair<Integer, Tile> node) {}
 
   @Override
   public Iterable<Pair<Integer, Tile>> neighbours(Pair<Integer, Tile> integerTilePair) {

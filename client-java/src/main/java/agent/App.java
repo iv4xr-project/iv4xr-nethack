@@ -94,7 +94,6 @@ public class App {
       // Need to update state for render
       state.updateState(Player.ID);
       state.render();
-      System.out.println(state.area().hierarchicalMap);
       commander.sendRender();
     }
 
