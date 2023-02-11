@@ -34,6 +34,18 @@ public class FakePassability implements IPassability {
     obstacles = new boolean[size.width][size.height];
   }
 
+  @Override
+  public boolean updateCanMoveDiagonally(IntVec2D pos, boolean canMoveDiagonally) {
+    return false;
+  }
+
+  @Override
+  public boolean updateObstacle(IntVec2D pos, boolean isObstacle) {
+    boolean update = obstacles[pos.x][pos.y] != isObstacle;
+    obstacles[pos.x][pos.y] = isObstacle;
+    return update;
+  }
+
   public boolean canEnter(IntVec2D pos, RefSupport<Integer> cost) {
     cost.setValue(Constants.COST_ONE);
     return !obstacles[pos.x][pos.y];
@@ -41,6 +53,11 @@ public class FakePassability implements IPassability {
 
   @Override
   public boolean canMoveDiagonal(IntVec2D pos1, IntVec2D pos2) {
+    return true;
+  }
+
+  @Override
+  public boolean canMoveDiagonal(IntVec2D pos) {
     return true;
   }
 

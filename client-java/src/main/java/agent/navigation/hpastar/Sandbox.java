@@ -13,6 +13,7 @@ import agent.navigation.hpastar.passabilities.FakePassability;
 import agent.navigation.hpastar.search.HierarchicalSearch;
 import agent.navigation.hpastar.smoother.SmoothWizard;
 import eu.iv4xr.framework.spatial.IntVec2D;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -22,9 +23,9 @@ public class Sandbox {
   public static void main(String[] args) {
     int clusterSize = 8;
     int maxLevel = 1;
-    Size size = new Size(128, 128);
+    Size size = new Size(8, 16);
 
-    FakePassability passability = new FakePassability(size, true);
+    FakePassability passability = new FakePassability(size, false);
     ConcreteMap concreteMap =
         ConcreteMapFactory.createConcreteMap(size, passability, TileType.Octile);
     HierarchicalMap absTiling =
@@ -33,20 +34,24 @@ public class Sandbox {
                 concreteMap, clusterSize, maxLevel, EntranceStyle.EndEntrance, size);
     concreteMap.printFormatted();
 
-    List<Pair<IntVec2D, IntVec2D>> points =
-        IntStream.range(0, 4000)
-            .mapToObj(
-                i -> {
-                  IntVec2D pos1 = passability.getRandomFreePosition();
-                  IntVec2D pos2 = passability.getRandomFreePosition();
-                  while (Math.abs(pos1.x - pos2.x) + Math.abs(pos1.y - pos2.y) < 2) {
-                    pos2 = passability.getRandomFreePosition();
-                  }
-                  return new Pair<IntVec2D, IntVec2D>(pos1, pos2);
-                })
-            .collect(Collectors.toList());
-
-    //    points.set(0, new Pair<IntVec2D, IntVec2D>(new IntVec2D(3, 1), new IntVec2D(4, 9)));
+    List<Pair<IntVec2D, IntVec2D>> points;
+    if (false) {
+      points =
+          IntStream.range(0, 2000)
+              .mapToObj(
+                  i -> {
+                    IntVec2D pos1 = passability.getRandomFreePosition();
+                    IntVec2D pos2 = passability.getRandomFreePosition();
+                    while (Math.abs(pos1.x - pos2.x) + Math.abs(pos1.y - pos2.y) < 2) {
+                      pos2 = passability.getRandomFreePosition();
+                    }
+                    return new Pair<IntVec2D, IntVec2D>(pos1, pos2);
+                  })
+              .collect(Collectors.toList());
+    } else {
+      points = new ArrayList<>();
+      points.add(new Pair<IntVec2D, IntVec2D>(new IntVec2D(3, 1), new IntVec2D(4, 9)));
+    }
 
     long t1 = System.nanoTime();
     for (int i = 0; i < points.size(); i++) {
@@ -54,8 +59,8 @@ public class Sandbox {
       IntVec2D endPosition = points.get(i).snd;
       List<IPathNode> regularSearchPath =
           hierarchicalSearch(absTiling, maxLevel, concreteMap, startPosition, endPosition);
-      //      List<IntVec2D> posPath = toPositionPath(regularSearchPath, concreteMap, absTiling);
-      //      System.out.printf("%s -> %s %s%n", startPosition, endPosition, posPath);
+      List<IntVec2D> posPath = toPositionPath(regularSearchPath, concreteMap, absTiling);
+      System.out.printf("%s -> %s %s%n", startPosition, endPosition, posPath);
     }
     long t2 = System.nanoTime();
     long regularSearchTime = t2 - t1;
@@ -86,7 +91,7 @@ public class Sandbox {
     path = smoother.smoothPath();
     factory.removeAbstractNode(hierarchicalMap, targetAbsNode);
     factory.removeAbstractNode(hierarchicalMap, startAbsNode);
-    return null;
+    return path;
   }
 
   private static List<IntVec2D> toPositionPath(

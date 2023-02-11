@@ -17,10 +17,12 @@ import agent.navigation.hpastar.infrastructure.IMap;
 import agent.navigation.hpastar.infrastructure.Id;
 import agent.navigation.hpastar.search.AStar;
 import agent.navigation.hpastar.search.Path;
+import agent.navigation.hpastar.utils.RefSupport;
 import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import nethack.enums.Color;
 
 /** Abstract maps represent, as the name implies, an abstraction built over the concrete map. */
 public class HierarchicalMap implements IMap<AbstractNode> {
@@ -309,5 +311,44 @@ public class HierarchicalMap implements IMap<AbstractNode> {
     for (int level = oldLevel + 1; level <= maxLevel; level++) {
       addEdgesToOtherEntrancesInCluster(abstractNodeInfo, level);
     }
+  }
+
+  @Override
+  public String toString() {
+    int nrClustersPerRow =
+        size.width % clusterSize == 0 ? size.width / clusterSize : size.width / clusterSize + 1;
+    int nrClustersPerColumn =
+        size.height % clusterSize == 0 ? size.height / clusterSize : size.height / clusterSize + 1;
+    StringBuilder sb = new StringBuilder();
+
+    for (int y = 0, clusterY = 0; y < size.height; y++, clusterY = y / clusterSize) {
+      int relY = y % clusterSize;
+      if (relY == 0) {
+        sb.append("-".repeat(size.width + nrClustersPerRow + 1)).append(System.lineSeparator());
+      }
+      for (int x = 0, clusterX = 0; x < size.width; x++, clusterX = x / clusterSize) {
+        Cluster cluster = findClusterForPosition(new IntVec2D(x, y));
+        int relX = x % clusterSize;
+        IntVec2D relPos = new IntVec2D(relX, relY);
+        if (relX == 0) {
+          sb.append('|');
+        }
+
+        Id<ConcreteNode> nodeId = cluster.subConcreteMap.getNodeIdFromPos(relX, relY);
+        ConcreteNode node = cluster.subConcreteMap.graph.getNode(nodeId);
+        if (!cluster.subConcreteMap.passability.canEnter(relPos, new RefSupport<>())) {
+          sb.append(Color.TRANSPARENT.stringCode());
+        } else if (cluster.subConcreteMap.passability.canMoveDiagonal(relPos)) {
+          sb.append(Color.GREEN_BRIGHT.stringCode());
+        } else {
+          sb.append(Color.CYAN_BRIGHT.stringCode());
+        }
+        sb.append(node.edges.size());
+        sb.append(Color.RESET.stringCode());
+      }
+      sb.append('|').append(System.lineSeparator());
+    }
+    sb.append("-".repeat(size.width + nrClustersPerRow + 1));
+    return sb.toString();
   }
 }

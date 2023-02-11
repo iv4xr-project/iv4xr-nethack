@@ -9,9 +9,15 @@ import eu.iv4xr.framework.spatial.IntVec2D;
 
 public interface IPassability {
   /** Tells whether for a given position this passability class can enter or not. */
+  public boolean updateCanMoveDiagonally(IntVec2D pos, boolean canMoveDiagonally);
+
+  public boolean updateObstacle(IntVec2D pos, boolean isObstacle);
+
   boolean canEnter(IntVec2D pos, RefSupport<Integer> movementCost);
 
   boolean canMoveDiagonal(IntVec2D pos1, IntVec2D pos2);
+
+  boolean canMoveDiagonal(IntVec2D pos);
 
   ConcreteMap slice(int horizOrigin, int vertOrigin, Size size);
 

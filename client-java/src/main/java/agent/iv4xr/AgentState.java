@@ -132,11 +132,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
           break;
         case DOOR:
           boolean isOpen = !env().app.level().getEntity(pos).closedDoor();
-          if (isOpen) {
-            hierarchicalNav.removeObstacle(new Pair<>(levelNr, new Door(pos, isOpen)));
-          } else {
-            hierarchicalNav.addObstacle(new Pair<>(levelNr, new Door(pos, isOpen)));
-          }
+          hierarchicalNav.removeObstacle(new Pair<>(levelNr, new Door(pos, isOpen)));
           break;
         case DOORWAY:
           hierarchicalNav.removeObstacle(new Pair<>(levelNr, new Doorway(pos)));
@@ -293,12 +289,11 @@ public class AgentState extends Iv4xrAgentState<Void> {
     StringBuilder sb = new StringBuilder();
     String[] navigation = area().toString().split(System.lineSeparator());
     String[] game = env().app.gameState.toString().split(System.lineSeparator());
-    String[] passability = area().passability.toString().split(System.lineSeparator());
 
     sb.append(game[0]).append(System.lineSeparator());
 
     for (int i = 0; i < Level.SIZE.height; i++) {
-      sb.append(String.format("%s %s %s%n", game[i + 1], navigation[i], passability[i]));
+      sb.append(String.format("%s %s%n", game[i + 1], navigation[i]));
     }
 
     sb.append(game[Level.SIZE.height + 1]).append(System.lineSeparator());

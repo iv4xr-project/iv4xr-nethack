@@ -31,7 +31,7 @@ import nl.uu.cs.aplib.utils.Pair;
 public class Program {
 
   public static class ExamplePassability implements IPassability {
-    private String map =
+    private final String map =
         "\r\n"
             + "                    0000000000000000000100000000000000000000\r\n"
             + "                    0111111111111111111111111111111111111110\r\n"
@@ -105,6 +105,16 @@ public class Program {
 
     private boolean[][] obstacles;
 
+    @Override
+    public boolean updateCanMoveDiagonally(IntVec2D pos, boolean canMoveDiagonally) {
+      return false;
+    }
+
+    @Override
+    public boolean updateObstacle(IntVec2D pos, boolean isObstacle) {
+      return false;
+    }
+
     public boolean canEnter(IntVec2D pos, RefSupport<Integer> cost) {
       cost.setValue(Constants.COST_ONE);
       return !obstacles[pos.y][pos.x];
@@ -113,6 +123,11 @@ public class Program {
     @Override
     public boolean canMoveDiagonal(IntVec2D pos1, IntVec2D pos2) {
       return true;
+    }
+
+    @Override
+    public boolean canMoveDiagonal(IntVec2D pos) {
+      return false;
     }
 
     @Override
@@ -296,9 +311,9 @@ public class Program {
 
     for (Function<Pair<IntVec2D, IntVec2D>, List<IPathNode>> searchStrategy : searchStrategies) {
       long t1 = System.nanoTime();
-      for (int i = 0; i < points.size(); i++) {
-        IntVec2D startPosition2 = points.get(i).fst;
-        IntVec2D endPosition2 = points.get(i).snd;
+      for (Pair<IntVec2D, IntVec2D> point : points) {
+        IntVec2D startPosition2 = point.fst;
+        IntVec2D endPosition2 = point.snd;
         List<IPathNode> regularSearchPath =
             searchStrategy.apply(new Pair<>(startPosition2, endPosition2));
         List<IntVec2D> posPath1 = toPositionPath.apply(regularSearchPath);

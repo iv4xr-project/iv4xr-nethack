@@ -50,12 +50,12 @@ public class EntitySelector extends Selector<WorldEntity> {
     int n = entities.size();
     // Goes wrong for multiple levels
     IntVec2D agentPos = NavUtils.loc2(S.worldmodel.position);
-    float min = NetHackSurface.distSq(agentPos, NavUtils.loc2(entities.get(0).position));
+    float min = NetHackSurface.heuristic(agentPos, NavUtils.loc2(entities.get(0).position));
     float max = min;
     int minIndex = 0, maxIndex = 0;
     for (int i = 1; i < n; i++) {
       WorldEntity we = entities.get(i);
-      float dist = NetHackSurface.distSq(agentPos, NavUtils.loc2(we.position));
+      float dist = NetHackSurface.heuristic(agentPos, NavUtils.loc2(we.position));
       if (dist < min) {
         min = dist;
         minIndex = i;

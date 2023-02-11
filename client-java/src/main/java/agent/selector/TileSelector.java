@@ -100,11 +100,11 @@ public class TileSelector extends Selector<Pair<Integer, Tile>> {
     int n = tiles.size();
     // Goes wrong for multiple levels
     IntVec2D agentPos = NavUtils.loc2(S.worldmodel.position);
-    float min = NetHackSurface.distSq(agentPos, tiles.get(0).snd.pos);
+    float min = NetHackSurface.heuristic(agentPos, tiles.get(0).snd.pos);
     float max = min;
     int minIndex = 0, maxIndex = 0;
     for (int i = 1; i < n; i++) {
-      float dist = NetHackSurface.distSq(agentPos, tiles.get(i).snd.pos);
+      float dist = NetHackSurface.heuristic(agentPos, tiles.get(i).snd.pos);
       if (dist < min) {
         min = dist;
         minIndex = i;

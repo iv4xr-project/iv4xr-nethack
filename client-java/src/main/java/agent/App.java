@@ -2,17 +2,21 @@ package agent;
 
 import agent.iv4xr.AgentEnv;
 import agent.iv4xr.AgentState;
+import agent.navigation.strategy.NavUtils;
+import agent.navigation.surface.Tile;
 import agent.strategy.GoalLib;
 import agent.util.ProgressBar;
 import agent.util.Sounds;
 import connection.ConnectionLoggers;
 import connection.SocketClient;
 import eu.iv4xr.framework.mainConcepts.TestAgent;
+import eu.iv4xr.framework.spatial.Vec3;
 import nethack.Config;
 import nethack.NetHack;
 import nethack.enums.Command;
 import nethack.object.Player;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
+import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.Logger;
 
 public class App {
@@ -37,8 +41,16 @@ public class App {
         new TestAgent(Player.ID, "player").attachState(state).attachEnvironment(env).setGoal(G);
     state.updateState(Player.ID);
 
-    fastForwardToTurn(Config.getStartTurn(), agent, state);
-    mainAgentLoop(commander, agent, state, G, nethack);
+    if (true) {
+      fastForwardToTurn(Config.getStartTurn(), agent, state);
+      mainAgentLoop(commander, agent, state, G, nethack);
+    } else {
+      Pair<Integer, Tile> from = NavUtils.loc3(new Vec3(6, 3, 0));
+      Pair<Integer, Tile> to = NavUtils.loc3(new Vec3(6, 7, 0));
+      System.out.println(state.area().hierarchicalMap);
+      var path = state.hierarchicalNav.findPath(from, to);
+      System.out.println(path);
+    }
 
     agentLogger.info("Closing NetHack since the loop in agent has terminated");
     nethack.close();
@@ -82,6 +94,7 @@ public class App {
       // Need to update state for render
       state.updateState(Player.ID);
       state.render();
+      System.out.println(state.area().hierarchicalMap);
       commander.sendRender();
     }
 

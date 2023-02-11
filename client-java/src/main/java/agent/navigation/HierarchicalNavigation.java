@@ -5,7 +5,6 @@
 package agent.navigation;
 
 import agent.navigation.hpastar.*;
-import agent.navigation.hpastar.factories.EntranceStyle;
 import agent.navigation.hpastar.factories.GraphFactory;
 import agent.navigation.hpastar.factories.HierarchicalMapFactory;
 import agent.navigation.hpastar.graph.AbstractNode;
@@ -13,12 +12,11 @@ import agent.navigation.hpastar.graph.ConcreteEdgeInfo;
 import agent.navigation.hpastar.graph.ConcreteNode;
 import agent.navigation.hpastar.infrastructure.Constants;
 import agent.navigation.hpastar.infrastructure.Id;
-import agent.navigation.hpastar.search.HierarchicalSearch;
-import agent.navigation.hpastar.smoother.SmoothWizard;
 import agent.navigation.hpastar.utils.RefSupport;
 import agent.navigation.strategy.NavUtils;
 import agent.navigation.surface.StraightWalkable;
 import agent.navigation.surface.Tile;
+import agent.navigation.surface.Walkable;
 import eu.iv4xr.framework.extensions.pathfinding.CanDealWithDynamicObstacle;
 import eu.iv4xr.framework.extensions.pathfinding.Navigatable;
 import eu.iv4xr.framework.extensions.pathfinding.XPathfinder;
@@ -26,7 +24,6 @@ import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
-import nethack.object.Level;
 import nl.uu.cs.aplib.utils.Pair;
 
 public class HierarchicalNavigation
@@ -35,13 +32,11 @@ public class HierarchicalNavigation
         CanDealWithDynamicObstacle<Pair<Integer, Tile>> {
   public List<NetHackSurface> areas = new LinkedList<>();
   boolean perfect_memory_pathfinding = false;
-  HierarchicalMapFactory mapFactory;
+  final HierarchicalMapFactory factory;
 
   public HierarchicalNavigation(NetHackSurface surface) {
     areas.add(surface);
-    mapFactory = new HierarchicalMapFactory();
-    mapFactory.createHierarchicalMap(
-        surface.passability.getConcreteMap(), 8, 10, EntranceStyle.EndEntrance, Level.SIZE);
+    factory = new HierarchicalMapFactory();
   }
 
   public void addNextArea(NetHackSurface area) {
@@ -59,37 +54,22 @@ public class HierarchicalNavigation
     int area1_id = (Integer) from.fst;
     int areaN_id = (Integer) to.fst;
 
-    Id<AbstractNode> startAbsNode = insertAbstractNode(from.snd.pos);
-    Id<AbstractNode> targetAbsNode = insertAbstractNode(to.snd.pos);
-    assert !startAbsNode.equals(targetAbsNode);
-    int maxPathsToRefine = Integer.MAX_VALUE;
-    HierarchicalSearch hierarchicalSearch = new HierarchicalSearch();
-    List<AbstractPathNode> abstractPath =
-        hierarchicalSearch.doHierarchicalSearch(
-            map(), startAbsNode, targetAbsNode, 10, maxPathsToRefine);
-    List<IPathNode> path =
-        hierarchicalSearch.abstractPathToLowLevelPath(
-            map(), abstractPath, map().size.width, maxPathsToRefine);
-
-    SmoothWizard smoother = new SmoothWizard(concreteMap(), path);
-    path = smoother.smoothPath();
-    mapFactory.removeAbstractNode(map(), targetAbsNode);
-    mapFactory.removeAbstractNode(map(), startAbsNode);
-    List<IntVec2D> posPath = toPositionPath(path, concreteMap());
-    return posPath.stream().map(pos -> new Pair<>(0, new Tile(pos))).collect(Collectors.toList());
+    assert area1_id == areaN_id : "No navigation between levels as of now";
+    var posPath = areas.get(area1_id).findPath(from.snd, to.snd);
+    return posPath.stream().map(tile -> new Pair<>(0, tile)).collect(Collectors.toList());
   }
 
   private HierarchicalMap map() {
-    return mapFactory.hierarchicalMap;
+    return areas.get(0).hierarchicalMap;
   }
 
   private ConcreteMap concreteMap() {
-    return mapFactory.concreteMap;
+    return factory.concreteMap;
   }
 
   private Id<AbstractNode> insertAbstractNode(IntVec2D pos) {
     Id<ConcreteNode> nodeId = new Id<ConcreteNode>().from(pos.y * map().size.width + pos.x);
-    Id<AbstractNode> abstractNodeId = mapFactory.insertNodeIntoHierarchicalMap(map(), nodeId, pos);
+    Id<AbstractNode> abstractNodeId = factory.insertNodeIntoHierarchicalMap(map(), nodeId, pos);
     map().addHierarchicalEdgesForAbstractNode(abstractNodeId);
     return abstractNodeId;
   }
@@ -121,6 +101,13 @@ public class HierarchicalNavigation
 
   public void removeObstacle(Pair<Integer, Tile> o) {
     areas.get(o.fst).removeObstacle(o.snd);
+
+    Cluster cluster = map().findClusterForPosition(o.snd.pos);
+    IntVec2D relativePos =
+        new IntVec2D(o.snd.pos.x % map().clusterSize, o.snd.pos.y % map().clusterSize);
+    ConcreteMap concreteMap = cluster.subConcreteMap;
+    concreteMap.passability.updateObstacle(relativePos, false);
+
     addEdges(o);
   }
 
@@ -236,9 +223,14 @@ public class HierarchicalNavigation
 
   public void addEdges(Pair<Integer, Tile> o) {
     Tile t = o.snd;
+
     Cluster originalCluster = map().findClusterForPosition(t.pos);
-    System.out.printf("Tile %s %s%n", t.pos, originalCluster);
     ConcreteMap subConcreteMap = originalCluster.subConcreteMap;
+    IntVec2D relativePos =
+        new IntVec2D(o.snd.pos.x % map().clusterSize, o.snd.pos.y % map().clusterSize);
+    subConcreteMap.passability.updateObstacle(relativePos, false);
+    subConcreteMap.passability.updateCanMoveDiagonally(relativePos, t instanceof Walkable);
+
     var nodeId =
         GraphFactory.getNodeByPos(
                 subConcreteMap.graph,
@@ -258,7 +250,7 @@ public class HierarchicalNavigation
       IntVec2D neighbourRelativePos =
           new IntVec2D(neighbourPos.x % map().clusterSize, neighbourPos.y % map().clusterSize);
       ConcreteMap neighbourConcreteMap = neighbourCluster.subConcreteMap;
-      if (!neighbourConcreteMap.passability.canEnter(neighbourRelativePos, new RefSupport<>())) {
+      if (!subConcreteMap.passability.canEnter(neighbourRelativePos, new RefSupport<>())) {
         continue;
       }
       var neighBourId =
@@ -269,6 +261,7 @@ public class HierarchicalNavigation
                   map().clusterSize)
               .nodeId;
       subConcreteMap.graph.addEdge(nodeId, neighBourId, new ConcreteEdgeInfo(Constants.COST_ONE));
+      subConcreteMap.graph.addEdge(neighBourId, nodeId, new ConcreteEdgeInfo(Constants.COST_ONE));
     }
   }
 
@@ -276,8 +269,13 @@ public class HierarchicalNavigation
     Tile t = (Tile) o.snd;
     assert !(t instanceof StraightWalkable);
 
-    Cluster cluster = map().findClusterForPosition(t.pos);
-    ConcreteMap subConcreteMap = cluster.subConcreteMap;
+    Cluster originalCluster = map().findClusterForPosition(t.pos);
+    ConcreteMap subConcreteMap = originalCluster.subConcreteMap;
+    IntVec2D relativePos =
+        new IntVec2D(o.snd.pos.x % map().clusterSize, o.snd.pos.y % map().clusterSize);
+    subConcreteMap.passability.updateObstacle(relativePos, true);
+    subConcreteMap.passability.updateCanMoveDiagonally(relativePos, false);
+
     var nodeId =
         GraphFactory.getNodeByPos(
                 subConcreteMap.graph,

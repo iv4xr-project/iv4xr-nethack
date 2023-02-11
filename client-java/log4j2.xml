@@ -62,7 +62,7 @@
 
         <Root level="debug" additivity="false">
             <AppenderRef ref="LogToFile" level="debug"/>
-            <AppenderRef ref="LogToConsole" level="debug"/>
+            <AppenderRef ref="LogToConsole" level="trace"/>
         </Root>
     </Loggers>
 </Configuration>
