@@ -16,9 +16,9 @@ import java.util.Random;
 // won't be reproducible.
 
 public class Seed {
-  public boolean reseed;
-  public String disp;
-  public String core;
+  public final boolean reseed;
+  public final String disp;
+  public final String core;
 
   public Seed(String core, String disp, boolean reseed) {
     this.reseed = reseed;

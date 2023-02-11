@@ -32,22 +32,20 @@ public class EmptyPassability implements IPassability {
   }
 
   @Override
-  public boolean updateCanMoveDiagonally(IntVec2D pos, boolean canMoveDiagonally) {
+  public void updateCanMoveDiagonally(IntVec2D pos, boolean canMoveDiagonally) {
     boolean updated = this.canMoveDiagonally[pos.y][pos.x] != canMoveDiagonally;
     this.canMoveDiagonally[pos.y][pos.x] = canMoveDiagonally;
-    return updated;
   }
 
   @Override
-  public boolean updateObstacle(IntVec2D pos, boolean isObstacle) {
+  public void updateObstacle(IntVec2D pos, boolean isObstacle) {
     boolean updated = this.obstacles[pos.y][pos.x] != isObstacle;
     this.obstacles[pos.y][pos.x] = isObstacle;
-    return updated;
   }
 
-  public boolean canEnter(IntVec2D pos, RefSupport<Integer> cost) {
+  public boolean cannotEnter(IntVec2D pos, RefSupport<Integer> cost) {
     cost.setValue(Constants.COST_ONE);
-    return !obstacles[pos.y][pos.x];
+    return obstacles[pos.y][pos.x];
   }
 
   @Override

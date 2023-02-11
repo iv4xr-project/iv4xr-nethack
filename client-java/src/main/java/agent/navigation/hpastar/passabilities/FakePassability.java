@@ -35,20 +35,17 @@ public class FakePassability implements IPassability {
   }
 
   @Override
-  public boolean updateCanMoveDiagonally(IntVec2D pos, boolean canMoveDiagonally) {
-    return false;
-  }
+  public void updateCanMoveDiagonally(IntVec2D pos, boolean canMoveDiagonally) {}
 
   @Override
-  public boolean updateObstacle(IntVec2D pos, boolean isObstacle) {
+  public void updateObstacle(IntVec2D pos, boolean isObstacle) {
     boolean update = obstacles[pos.x][pos.y] != isObstacle;
     obstacles[pos.x][pos.y] = isObstacle;
-    return update;
   }
 
-  public boolean canEnter(IntVec2D pos, RefSupport<Integer> cost) {
+  public boolean cannotEnter(IntVec2D pos, RefSupport<Integer> cost) {
     cost.setValue(Constants.COST_ONE);
-    return !obstacles[pos.x][pos.y];
+    return obstacles[pos.x][pos.y];
   }
 
   @Override
@@ -105,10 +102,10 @@ public class FakePassability implements IPassability {
       int y = nodeId / size.width;
       if (!obstacles[x][y]) {
         if (avoidDiag) {
-          if (!conflictDiag(y, x, -1, -1, size.width, size.height)
-              && !conflictDiag(y, x, -1, +1, size.width, size.height)
-              && !conflictDiag(y, x, +1, -1, size.width, size.height)
-              && !conflictDiag(y, x, +1, +1, size.width, size.height)) {
+          if (conflictDiag(y, x, -1, -1, size.width, size.height)
+              && conflictDiag(y, x, -1, +1, size.width, size.height)
+              && conflictDiag(y, x, +1, -1, size.width, size.height)
+              && conflictDiag(y, x, +1, +1, size.width, size.height)) {
             obstacles[x][y] = true;
             ++count;
           }
@@ -138,15 +135,13 @@ public class FakePassability implements IPassability {
     //
     // that favor one grid topology over another.
     if ((row + roff < 0) || (row + roff >= height) || (col + coff < 0) || (col + coff >= width)) {
-      return false;
+      return true;
     }
 
     if (obstacles[col + coff][row + roff]) {
-      if (!obstacles[col + coff][row] && !obstacles[col][row + roff]) {
-        return true;
-      }
+      return obstacles[col + coff][row] || obstacles[col][row + roff];
     }
 
-    return false;
+    return true;
   }
 }

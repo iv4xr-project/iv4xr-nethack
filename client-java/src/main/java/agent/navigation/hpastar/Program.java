@@ -91,7 +91,7 @@ public class Program {
         }
     }
 
-    Random rnd = new Random(700);
+    final Random rnd = new Random(700);
 
     public IntVec2D getRandomFreePosition() {
       int x = rnd.nextInt(40);
@@ -103,21 +103,17 @@ public class Program {
       return new IntVec2D(x, y);
     }
 
-    private boolean[][] obstacles;
+    private final boolean[][] obstacles;
 
     @Override
-    public boolean updateCanMoveDiagonally(IntVec2D pos, boolean canMoveDiagonally) {
-      return false;
-    }
+    public void updateCanMoveDiagonally(IntVec2D pos, boolean canMoveDiagonally) {}
 
     @Override
-    public boolean updateObstacle(IntVec2D pos, boolean isObstacle) {
-      return false;
-    }
+    public void updateObstacle(IntVec2D pos, boolean isObstacle) {}
 
-    public boolean canEnter(IntVec2D pos, RefSupport<Integer> cost) {
+    public boolean cannotEnter(IntVec2D pos, RefSupport<Integer> cost) {
       cost.setValue(Constants.COST_ONE);
-      return !obstacles[pos.y][pos.x];
+      return obstacles[pos.y][pos.x];
     }
 
     @Override
@@ -194,7 +190,7 @@ public class Program {
     sb.append("Number of nodes: ")
         .append(hierarchicalSearchPath.size())
         .append(System.lineSeparator());
-    System.out.print(sb.toString());
+    System.out.print(sb);
   }
 
   public static void main2(String[] args) {
@@ -247,7 +243,7 @@ public class Program {
     sb.append("Number of nodes: ")
         .append(hierarchicalSearchPath.size())
         .append(System.lineSeparator());
-    System.out.print(sb.toString());
+    System.out.print(sb);
   }
 
   public static void main(String[] args) {
@@ -438,6 +434,6 @@ public class Program {
       }
       sb.append(System.lineSeparator());
     }
-    System.out.print(sb.toString());
+    System.out.print(sb);
   }
 }

@@ -12,7 +12,7 @@ import nethack.object.Item;
 public class ItemSelector extends Selector<Item> {
   public static final ItemSelector inventoryFood =
       new ItemSelector(SelectionType.FIRST, ItemType.FOOD);
-  ItemType itemType;
+  final ItemType itemType;
 
   public ItemSelector(SelectionType selectionType, ItemType itemType, Predicate<Item> predicate) {
     super(selectionType, predicate);

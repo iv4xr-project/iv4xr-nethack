@@ -410,14 +410,13 @@ public enum Command {
       if (i < n) {
         CommandStrs[i] =
             String.format("%3d %-2s %s", i, commands[i].stroke, commands[i].description);
-        nrValues[i / columnLength] = Math.max(CommandStrs[i].length(), nrValues[i / columnLength]);
       } else {
         CommandStrs[i] =
             String.format(
                 "--- %-2s %s",
                 additionalCommands[i - n].stroke, additionalCommands[i - n].description);
-        nrValues[i / columnLength] = Math.max(CommandStrs[i].length(), nrValues[i / columnLength]);
       }
+      nrValues[i / columnLength] = Math.max(CommandStrs[i].length(), nrValues[i / columnLength]);
     }
 
     StringBuilder sb = new StringBuilder();
@@ -438,7 +437,7 @@ public enum Command {
       }
       sb.append(System.lineSeparator());
     }
-    System.out.print(sb.toString());
+    System.out.print(sb);
   }
 
   public int getIndex(GameMode gameMode) {

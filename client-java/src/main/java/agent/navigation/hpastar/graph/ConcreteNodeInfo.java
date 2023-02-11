@@ -7,7 +7,7 @@ package agent.navigation.hpastar.graph;
 import eu.iv4xr.framework.spatial.IntVec2D;
 
 public class ConcreteNodeInfo {
-  public IntVec2D position;
+  public final IntVec2D position;
   public boolean isObstacle;
   public int cost;
 

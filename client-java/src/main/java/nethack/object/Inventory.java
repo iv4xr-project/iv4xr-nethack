@@ -23,7 +23,7 @@ public class Inventory {
       if (i == null) {
         continue;
       }
-      sb.append(i.toString());
+      sb.append(i);
       sb.append(System.lineSeparator());
     }
     return sb.toString();

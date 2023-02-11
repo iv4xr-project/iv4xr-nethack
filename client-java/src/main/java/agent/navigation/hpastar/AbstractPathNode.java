@@ -8,8 +8,8 @@ import agent.navigation.hpastar.graph.AbstractNode;
 import agent.navigation.hpastar.infrastructure.Id;
 
 public class AbstractPathNode implements IPathNode {
-  public Id<AbstractNode> id;
-  public int level;
+  public final Id<AbstractNode> id;
+  public final int level;
 
   public AbstractPathNode(Id<AbstractNode> id, int lvl) {
     this.id = id;

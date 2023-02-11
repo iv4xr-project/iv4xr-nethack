@@ -50,7 +50,7 @@ public class TileSelector extends Selector<Pair<Integer, Tile>> {
             return ((Stair) t.snd).getClimbType() == Climbable.ClimbType.Descendable;
           });
 
-  Class tileClass;
+  final Class tileClass;
 
   public TileSelector(
       SelectionType selectionType, Class tileClass, Predicate<Pair<Integer, Tile>> predicate) {

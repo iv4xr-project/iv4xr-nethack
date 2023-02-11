@@ -14,7 +14,7 @@ import org.apache.logging.log4j.Logger;
 public class NetHack {
   public static final Logger netHackLogger = NetHackLoggers.NetHackLogger;
   public static final Logger seedLogger = NetHackLoggers.SeedLogger;
-  public GameState gameState = new GameState();
+  public final GameState gameState = new GameState();
   public GameMode gameMode;
   public Seed seed;
 
@@ -177,7 +177,7 @@ public class NetHack {
     }
     gameState.player = stepState.player;
     assert gameState.player.position.z == 0
-        : "Before this the levelNr is not known, assert is isnt set already";
+        : "Before this line the levelNr is not known, assert is not already set";
     gameState.player.position.z = gameState.getLevelNr();
     gameState.done = stepState.done;
     gameState.info = stepState.info;

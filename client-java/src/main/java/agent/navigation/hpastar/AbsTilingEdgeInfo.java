@@ -6,9 +6,9 @@ package agent.navigation.hpastar;
 
 // implements edges in the abstract graph
 public class AbsTilingEdgeInfo {
-  public int cost;
-  public int level;
-  public boolean isInterEdge;
+  public final int cost;
+  public final int level;
+  public final boolean isInterEdge;
 
   public AbsTilingEdgeInfo(int cost, int level, boolean inter) {
     this.cost = cost;

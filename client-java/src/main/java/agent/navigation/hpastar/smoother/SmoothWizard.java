@@ -128,7 +128,7 @@ public class SmoothWizard {
     while (true) {
       // advance in the given direction
       nodeId = advanceNode(nodeId, direction);
-      // If in the direction we advanced there was an invalid node or we cannot enter the node,
+      // If in the direction we advanced there was an invalid node, or we cannot enter the node,
       // just return that no node was found
       if (nodeId == INVALID_ID
           || !_concreteMap.canJump(getPosition(nodeId), getPosition(lastNodeId))) return INVALID_ID;

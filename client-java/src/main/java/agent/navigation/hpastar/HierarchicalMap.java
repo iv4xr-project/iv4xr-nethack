@@ -26,11 +26,11 @@ import nethack.enums.Color;
 
 /** Abstract maps represent, as the name implies, an abstraction built over the concrete map. */
 public class HierarchicalMap implements IMap<AbstractNode> {
-  public Size size;
-  public AbstractGraph abstractGraph = new AbstractGraph();
-  public int clusterSize;
-  public int maxLevel;
-  public List<Cluster> clusters = new ArrayList<>();
+  public final Size size;
+  public final AbstractGraph abstractGraph = new AbstractGraph();
+  public final int clusterSize;
+  public final int maxLevel;
+  public final List<Cluster> clusters = new ArrayList<>();
 
   public int getNrNodes() {
     return abstractGraph.nodes.size();
@@ -336,7 +336,7 @@ public class HierarchicalMap implements IMap<AbstractNode> {
 
         Id<ConcreteNode> nodeId = cluster.subConcreteMap.getNodeIdFromPos(relX, relY);
         ConcreteNode node = cluster.subConcreteMap.graph.getNode(nodeId);
-        if (!cluster.subConcreteMap.passability.canEnter(relPos, new RefSupport<>())) {
+        if (cluster.subConcreteMap.passability.cannotEnter(relPos, new RefSupport<>())) {
           sb.append(Color.TRANSPARENT.stringCode());
         } else if (cluster.subConcreteMap.passability.canMoveDiagonal(relPos)) {
           sb.append(Color.GREEN_BRIGHT.stringCode());

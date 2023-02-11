@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public abstract class Selector<T> {
-  protected SelectionType selectionType;
+  protected final SelectionType selectionType;
   protected Predicate<T> predicate = null;
-  protected boolean onlySameLevel = true;
+  protected final boolean onlySameLevel = true;
 
   public Selector(SelectionType selectionType, Predicate<T> predicate) {
     this.selectionType = selectionType;

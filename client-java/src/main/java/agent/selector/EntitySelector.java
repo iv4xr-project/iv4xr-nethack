@@ -19,7 +19,7 @@ public class EntitySelector extends Selector<WorldEntity> {
   public static final EntitySelector money =
       new EntitySelector(SelectionType.CLOSEST, EntityType.GOLD);
 
-  EntityType entityType;
+  final EntityType entityType;
 
   public EntitySelector(
       SelectionType selectionType, EntityType entityType, Predicate<WorldEntity> predicate) {

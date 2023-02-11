@@ -45,18 +45,18 @@ public class Sandbox {
                     while (Math.abs(pos1.x - pos2.x) + Math.abs(pos1.y - pos2.y) < 2) {
                       pos2 = passability.getRandomFreePosition();
                     }
-                    return new Pair<IntVec2D, IntVec2D>(pos1, pos2);
+                    return new Pair<>(pos1, pos2);
                   })
               .collect(Collectors.toList());
     } else {
       points = new ArrayList<>();
-      points.add(new Pair<IntVec2D, IntVec2D>(new IntVec2D(3, 1), new IntVec2D(4, 9)));
+      points.add(new Pair<>(new IntVec2D(3, 1), new IntVec2D(4, 9)));
     }
 
     long t1 = System.nanoTime();
-    for (int i = 0; i < points.size(); i++) {
-      IntVec2D startPosition = points.get(i).fst;
-      IntVec2D endPosition = points.get(i).snd;
+    for (Pair<IntVec2D, IntVec2D> point : points) {
+      IntVec2D startPosition = point.fst;
+      IntVec2D endPosition = point.snd;
       List<IPathNode> regularSearchPath =
           hierarchicalSearch(absTiling, maxLevel, concreteMap, startPosition, endPosition);
       List<IntVec2D> posPath = toPositionPath(regularSearchPath, concreteMap, absTiling);
@@ -96,30 +96,17 @@ public class Sandbox {
 
   private static List<IntVec2D> toPositionPath(
       List<IPathNode> path, ConcreteMap concreteMap, HierarchicalMap absTiling) {
-    List<IntVec2D> posPath =
-        path.stream()
-            .map(
-                (p) -> {
-                  if (p instanceof ConcretePathNode) {
-                    ConcretePathNode concretePathNode = (ConcretePathNode) p;
-                    return concreteMap.graph.getNodeInfo(concretePathNode.id).position;
-                  }
+    return path.stream()
+        .map(
+            (p) -> {
+              if (p instanceof ConcretePathNode) {
+                ConcretePathNode concretePathNode = (ConcretePathNode) p;
+                return concreteMap.graph.getNodeInfo(concretePathNode.id).position;
+              }
 
-                  AbstractPathNode abstractPathNode = (AbstractPathNode) p;
-                  return absTiling.abstractGraph.getNodeInfo(abstractPathNode.id).position;
-                })
-            .collect(Collectors.toList());
-
-    if (posPath.size() <= 1) {
-      return posPath;
-    }
-    //    IntVec2D prevPos = posPath.get(0);
-    //    for (int i = 1; i < posPath.size(); i++) {
-    //      IntVec2D currentPos = posPath.get(i);
-    //      assert NavUtils.adjacent(prevPos, currentPos, true)
-    //          : String.format("Non adjacent node error at %s -> %s", prevPos, currentPos);
-    //      prevPos = currentPos;
-    //    }
-    return posPath;
+              AbstractPathNode abstractPathNode = (AbstractPathNode) p;
+              return absTiling.abstractGraph.getNodeInfo(abstractPathNode.id).position;
+            })
+        .collect(Collectors.toList());
   }
 }

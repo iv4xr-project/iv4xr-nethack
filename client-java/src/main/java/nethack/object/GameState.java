@@ -16,7 +16,7 @@ public class GameState {
   public String message;
   public boolean done;
   public Object info;
-  private List<Level> world = new ArrayList<>();
+  private final List<Level> world = new ArrayList<>();
   private int currentLevelNr;
   private Pair<Integer, Integer> currentIndex;
   private final Map<Pair<Integer, Integer>, Integer> indexes = new HashMap<>();

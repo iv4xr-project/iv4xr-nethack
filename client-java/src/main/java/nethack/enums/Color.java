@@ -1,6 +1,5 @@
 package nethack.enums;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -61,7 +60,7 @@ public enum Color {
     }
   }
 
-  public static void main(String[] args) throws IOException {
+  public static void main(String[] args) {
     colorpalette();
   }
 

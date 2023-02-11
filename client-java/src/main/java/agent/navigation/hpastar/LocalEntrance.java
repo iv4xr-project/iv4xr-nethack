@@ -7,12 +7,12 @@ package agent.navigation.hpastar;
 import eu.iv4xr.framework.spatial.IntVec2D;
 
 public class LocalEntrance {
-  public int id;
+  public final int id;
   // id of the global abstract node
-  public int absNodeId;
+  public final int absNodeId;
   // Relative position of entrance inside cluster
-  public IntVec2D relativePos;
-  public int entranceLocalIdx;
+  public final IntVec2D relativePos;
+  public final int entranceLocalIdx;
   // local id
   public LocalEntrance(int nodeId, int absNodeId, int localIdx, IntVec2D relativePosition) {
     this.id = nodeId;

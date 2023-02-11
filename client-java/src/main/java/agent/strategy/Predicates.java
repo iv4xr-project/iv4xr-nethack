@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public class Predicates {
-  public static Predicate<AgentState> inCombat_and_hpNotCritical =
+  public static final Predicate<AgentState> inCombat_and_hpNotCritical =
       S -> {
         WorldEntity player = S.worldmodel.elements.get(S.worldmodel.agentId);
         int hp = (int) player.properties.get("hp");

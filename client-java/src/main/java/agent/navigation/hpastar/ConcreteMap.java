@@ -17,12 +17,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConcreteMap implements IMap<ConcreteNode> {
-  public IPassability passability;
+  public final IPassability passability;
   public final TileType tileType;
 
-  public Size size;
-  public int maxEdges;
-  public ConcreteGraph graph;
+  public final Size size;
+  public final int maxEdges;
+  public final ConcreteGraph graph;
 
   public int getNrNodes() {
     return size.height * size.width;
@@ -153,7 +153,7 @@ public class ConcreteMap implements IMap<ConcreteNode> {
       }
       sb.append(System.lineSeparator());
     }
-    System.out.print(sb.toString());
+    System.out.print(sb);
   }
 
   public void printFormatted(List<Integer> path) {

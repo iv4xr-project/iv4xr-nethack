@@ -1,5 +1,5 @@
 # Sounds
-To quickly identify what is happening sounds are added, this way it is identifyable what happens whilst 10+ steps a second are going on.
+To quickly identify what is happening sounds are added, this way it is identifiable what happens whilst 10+ steps a second are going on.
 
 All of these samples, found on [freesound](https://freesound.org) have been trimmed, the original can be found at their respective links:
 

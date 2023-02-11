@@ -37,7 +37,7 @@ public class GridSurface
   static final Logger logger = AgentLoggers.NavLogger;
   public final Tile[][] tiles;
   public final Map<String, HashSet<IntVec2D>> tileTypes = new HashMap<>();
-  public Set<Tile> frontierCandidates = new HashSet<>();
+  public final Set<Tile> frontierCandidates = new HashSet<>();
   public final HierarchicalMap hierarchicalMap;
 
   /**
@@ -47,7 +47,7 @@ public class GridSurface
    */
   private boolean perfect_memory_pathfinding = true;
 
-  private ConcreteMap concreteMap;
+  private final ConcreteMap concreteMap;
   private final Size size;
   private final int clusterSize;
 

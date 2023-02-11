@@ -27,7 +27,7 @@ public class HierarchicalMapFactory {
 
   private int maxLevel;
 
-  Map<Id<AbstractNode>, NodeBackup> nodeBackups = new HashMap<>();
+  final Map<Id<AbstractNode>, NodeBackup> nodeBackups = new HashMap<>();
 
   public HierarchicalMap createHierarchicalMap(
       ConcreteMap concreteMap, int clusterSize, int maxLevel, EntranceStyle style, Size size) {

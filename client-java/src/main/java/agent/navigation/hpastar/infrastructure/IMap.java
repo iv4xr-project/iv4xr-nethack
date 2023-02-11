@@ -13,7 +13,7 @@ public interface IMap<TNode> {
   /**
    * Generate successor nodes for the search.
    *
-   * @param lastNodeId Can be used to prune nodes, (is set to NO_NODE in Search::checkPathExists).
+   * @param nodeId Can be used to prune nodes, (is set to NO_NODE in Search::checkPathExists).
    */
   Iterable<Connection<TNode>> getConnections(Id<TNode> nodeId);
 

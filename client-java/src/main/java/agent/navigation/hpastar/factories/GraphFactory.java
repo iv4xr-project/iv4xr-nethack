@@ -55,7 +55,7 @@ public class GraphFactory {
     for (int top = 0; top < size.height; ++top) {
       for (int left = 0; left < size.width; ++left) {
         IntVec2D currentPos = new IntVec2D(left, top);
-        if (!passability.canEnter(currentPos, new RefSupport<>())) {
+        if (passability.cannotEnter(currentPos, new RefSupport<>())) {
           continue;
         }
         Id<ConcreteNode> nodeId =
@@ -73,7 +73,7 @@ public class GraphFactory {
 
         List<IntVec2D> neighbours = NavUtils.neighbourCoordinates(currentPos, size, true);
         for (IntVec2D neighbourPos : neighbours) {
-          if (!passability.canEnter(neighbourPos, new RefSupport<>())) {
+          if (passability.cannotEnter(neighbourPos, new RefSupport<>())) {
             continue;
           }
           boolean isDiagonal = NavUtils.isDiagonal(currentPos, neighbourPos);
@@ -92,7 +92,7 @@ public class GraphFactory {
         Id<ConcreteNode> nodeId = getNodeIdFromPos(left, top, size.width);
         IntVec2D position = new IntVec2D(left, top);
         RefSupport<Integer> refVar___0 = new RefSupport<>();
-        boolean isObstacle = !passability.canEnter(position, refVar___0);
+        boolean isObstacle = passability.cannotEnter(position, refVar___0);
         int movementCost = refVar___0.getValue();
         ConcreteNodeInfo info = new ConcreteNodeInfo(isObstacle, movementCost, position);
         graph.addNode(nodeId, info);

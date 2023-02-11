@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AbstractEdgeInfo {
-  public int cost;
-  public int level;
-  public boolean isInterClusterEdge;
+  public final int cost;
+  public final int level;
+  public final boolean isInterClusterEdge;
   public List<Id<AbstractNode>> innerLowerLevelPath = new ArrayList<>();
 
   public AbstractEdgeInfo(int cost, int level, boolean interCluster) {

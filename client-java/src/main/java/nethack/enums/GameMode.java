@@ -5,7 +5,7 @@ public enum GameMode {
   NetHack("NetHack-v0"), // Allows for seeding
   ;
 
-  private String environmentName;
+  private final String environmentName;
 
   GameMode(String environmentName) {
     this.environmentName = environmentName;

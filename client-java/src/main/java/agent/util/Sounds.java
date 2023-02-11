@@ -13,7 +13,7 @@ import org.apache.logging.log4j.Logger;
 
 public class Sounds {
   static final Logger logger = AgentLoggers.SoundLogger;
-  static Map<String, Clip> clipCollection = new HashMap<>();
+  static final Map<String, Clip> clipCollection = new HashMap<>();
   private static boolean soundsEnabled = true;
 
   static final Map<String, File> soundCollection =

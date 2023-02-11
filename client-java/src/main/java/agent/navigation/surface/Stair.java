@@ -4,7 +4,7 @@ import eu.iv4xr.framework.spatial.IntVec2D;
 
 public class Stair extends Tile implements Climbable, Walkable, Printable {
   private boolean isVisible = false;
-  public ClimbType climbType;
+  public final ClimbType climbType;
 
   public Stair(IntVec2D pos, ClimbType climbType) {
     super(pos);

@@ -163,8 +163,7 @@ public class HierarchicalSearch {
   private static int localNodeId2ConcreteNodeId(int localId, Cluster cluster, int width) {
     int localX = localId % cluster.size.width;
     int localY = localId / cluster.size.width;
-    int result = (localY + cluster.origin.y) * width + (localX + cluster.origin.x);
-    return result;
+    return (localY + cluster.origin.y) * width + (localX + cluster.origin.x);
   }
 
   private static int globalId2LocalId(int globalId, Cluster cluster, int width) {

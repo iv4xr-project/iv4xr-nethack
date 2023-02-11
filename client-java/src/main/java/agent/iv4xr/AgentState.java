@@ -298,6 +298,6 @@ public class AgentState extends Iv4xrAgentState<Void> {
 
     sb.append(game[Level.SIZE.height + 1]).append(System.lineSeparator());
     sb.append(game[Level.SIZE.height + 2]).append(System.lineSeparator());
-    System.out.print(sb.toString());
+    System.out.print(sb);
   }
 }

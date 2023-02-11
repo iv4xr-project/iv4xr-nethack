@@ -8,7 +8,7 @@ import agent.navigation.hpastar.graph.ConcreteNode;
 import agent.navigation.hpastar.infrastructure.Id;
 
 public class ConcretePathNode implements IPathNode {
-  public Id<ConcreteNode> id;
+  public final Id<ConcreteNode> id;
 
   public ConcretePathNode(Id<ConcreteNode> id) {
     this.id = id;

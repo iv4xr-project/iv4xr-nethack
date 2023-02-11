@@ -11,10 +11,10 @@ import org.apache.commons.lang.NotImplementedException;
 
 // implements nodes in the abstract graph
 public class AbstractNodeInfo {
-  public Id<AbstractNode> id;
-  public IntVec2D position;
-  public Id<Cluster> clusterId;
-  public Id<ConcreteNode> concreteNodeId;
+  public final Id<AbstractNode> id;
+  public final IntVec2D position;
+  public final Id<Cluster> clusterId;
+  public final Id<ConcreteNode> concreteNodeId;
   public int level;
 
   public AbstractNodeInfo(
@@ -50,6 +50,6 @@ public class AbstractNodeInfo {
     sb.append("; col: ").append(position.x).append(System.lineSeparator());
     sb.append("; center: ").append(concreteNodeId).append(System.lineSeparator());
 
-    System.out.println(sb.toString());
+    System.out.println(sb);
   }
 }

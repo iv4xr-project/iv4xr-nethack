@@ -68,7 +68,7 @@ public class NavAction {
                 });
   }
 
-  // Construct an action that would guide the agent to to the target entity.
+  // Construct an action that would guide the agent to the target entity.
   public static Action navigateNextTo(String targetId, boolean allowDiagonally) {
     return action("move-to")
         .do2(

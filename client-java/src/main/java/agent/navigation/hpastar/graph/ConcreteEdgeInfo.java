@@ -5,7 +5,7 @@
 package agent.navigation.hpastar.graph;
 
 public class ConcreteEdgeInfo {
-  public int cost;
+  public final int cost;
 
   public ConcreteEdgeInfo(int cost) {
     this.cost = cost;

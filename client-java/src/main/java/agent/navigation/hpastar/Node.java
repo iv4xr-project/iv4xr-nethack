@@ -5,8 +5,8 @@
 package agent.navigation.hpastar;
 
 public class Node {
-  public int id;
-  public int level;
+  public final int id;
+  public final int level;
 
   public Node(int id, int lvl) {
     this.id = id;

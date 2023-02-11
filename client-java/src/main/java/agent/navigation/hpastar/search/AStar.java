@@ -67,7 +67,7 @@ public class AStar<TNode> {
       Id<TNode> neighbour = connection.target;
       if (nodeLookup.nodeIsVisited(neighbour)) {
         var targetAStarNode = nodeLookup.getNodeValue(neighbour);
-        //  If we already processed the neighbour in the past or we already found in the past
+        //  If we already processed the neighbour in the past, or was already found in the past
         //  a better path to reach this node that the current one, just skip it, else create
         //  and replace a new PathNode
         if (targetAStarNode.status == CellStatus.Closed || gCost >= targetAStarNode.g) {
@@ -118,8 +118,8 @@ public class AStar<TNode> {
    * @param <T> The type to wrap around.
    */
   static class Priotisable<T> {
-    public float priority;
-    public T item;
+    public final float priority;
+    public final T item;
 
     /**
      * Wrap around an item to add a priority on which can be sorted.

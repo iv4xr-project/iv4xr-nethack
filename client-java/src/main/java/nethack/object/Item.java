@@ -4,9 +4,9 @@ import nethack.enums.ItemType;
 
 public class Item {
   // Additional information possibly at: server-python\lib\nle\build\include\onames.h
-  public char symbol;
-  public ItemType type;
-  public String description;
+  public final char symbol;
+  public final ItemType type;
+  public final String description;
 
   public Item(char symbol, ItemType type, String description) {
     this.symbol = symbol;

@@ -14,9 +14,9 @@ import java.util.*;
 import nl.uu.cs.aplib.utils.Pair;
 
 public class Cluster {
-  public Id<Cluster> id;
-  public int clusterY;
-  public int clusterX;
+  public final Id<Cluster> id;
+  public final int clusterY;
+  public final int clusterX;
 
   /**
    * A 2D array which represents a distance between 2 entrances. This array could be represented as
@@ -29,11 +29,11 @@ public class Cluster {
   // Tells whether a path has already been calculated for 2 node ids
   private final Map<Pair<Id<AbstractNode>, Id<AbstractNode>>, Boolean> distanceCalculated =
       new HashMap<>();
-  public List<EntrancePoint> entrancePoints = new ArrayList<>();
+  public final List<EntrancePoint> entrancePoints = new ArrayList<>();
 
   // This concreteMap object contains the subregion of the main grid that this cluster contains.
   // Necessary to do local search to find paths and distances between local entrances
-  public ConcreteMap subConcreteMap;
+  public final ConcreteMap subConcreteMap;
   public Size size;
   public IntVec2D origin;
 

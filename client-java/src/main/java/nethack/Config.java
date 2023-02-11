@@ -10,7 +10,7 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.SystemConfiguration;
 
 public class Config {
-  static CompositeConfiguration config;
+  static final CompositeConfiguration config;
 
   static {
     config = new CompositeConfiguration();

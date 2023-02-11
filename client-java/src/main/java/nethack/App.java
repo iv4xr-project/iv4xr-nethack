@@ -16,13 +16,13 @@ public class App {
     client.close();
   }
 
-  private static void playGame(SocketClient client) throws IOException {
+  private static void playGame(SocketClient client) {
     NetHack nethack = new NetHack(client, Config.getSeed());
     nethack.loop();
     nethack.close();
   }
 
-  private static void goThroughGame(SocketClient client) throws IOException {
+  private static void goThroughGame(SocketClient client) {
     NetHack nethack = new NetHack(client, Config.getSeed());
 
     // Eternally go through new seeds

@@ -4,7 +4,7 @@ import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.Objects;
 
 public class Tile {
-  public IntVec2D pos;
+  public final IntVec2D pos;
   public boolean seen = false;
 
   public Tile(IntVec2D pos) {

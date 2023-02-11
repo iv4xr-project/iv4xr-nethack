@@ -21,8 +21,8 @@ import org.apache.logging.log4j.Logger;
 public class SocketClient {
   static final Logger logger = ConnectionLoggers.ConnectionLogger;
   static final Logger profileLogger = ConnectionLoggers.ProfilerLogger;
-  String host;
-  int port;
+  final String host;
+  final int port;
   Socket socket;
   DataInputStream reader;
   DataOutputStream writer;

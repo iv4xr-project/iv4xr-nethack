@@ -13,11 +13,11 @@ import eu.iv4xr.framework.spatial.IntVec2D;
  * reference to the abstract node it belongs to
  */
 public class EntrancePoint {
-  public Id<AbstractNode> abstractNodeId;
-  public IntVec2D relativePosition;
+  public final Id<AbstractNode> abstractNodeId;
+  public final IntVec2D relativePosition;
 
   public EntrancePoint(Id<AbstractNode> abstractNodeId, IntVec2D relativePosition) {
-    //    System.out.printf("ENRANCEPOINT %s%n", abstractNodeId);
+    //    System.out.printf("ENTRANCEPOINT %s%n", abstractNodeId);
 
     this.abstractNodeId = abstractNodeId;
     this.relativePosition = relativePosition;

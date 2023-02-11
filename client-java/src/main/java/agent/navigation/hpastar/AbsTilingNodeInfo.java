@@ -8,12 +8,12 @@ import eu.iv4xr.framework.spatial.IntVec2D;
 
 // implements nodes in the abstract graph
 public class AbsTilingNodeInfo {
-  public int id;
-  public IntVec2D position;
-  public int clusterId;
-  public int centerId;
-  public int level;
-  public int localIdxCluster;
+  public final int id;
+  public final IntVec2D position;
+  public final int clusterId;
+  public final int centerId;
+  public final int level;
+  public final int localIdxCluster;
 
   public AbsTilingNodeInfo(
       int id, int level, int clId, IntVec2D position, int centerId, int localIdxCluster) {
@@ -36,6 +36,6 @@ public class AbsTilingNodeInfo {
     sb.append("; center: ").append(centerId).append(System.lineSeparator());
     sb.append("; local idx: ").append(localIdxCluster).append(System.lineSeparator());
 
-    System.out.println(sb.toString());
+    System.out.println(sb);
   }
 }

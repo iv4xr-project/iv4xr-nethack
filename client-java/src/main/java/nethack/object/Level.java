@@ -12,9 +12,9 @@ import org.apache.logging.log4j.Logger;
 public class Level {
   public static final Logger logger = NetHackLoggers.NetHackLogger;
   public static final Size SIZE = new Size(79, 21);
-  public Entity[][] map;
-  public List<IntVec2D> changedCoordinates = new ArrayList<>();
-  public List<IntVec2D> visibleFloors = new ArrayList<>();
+  public final Entity[][] map;
+  public final List<IntVec2D> changedCoordinates = new ArrayList<>();
+  public final List<IntVec2D> visibleFloors = new ArrayList<>();
 
   public Level(Entity[][] entities) {
     this.map = entities;

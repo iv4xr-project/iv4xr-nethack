@@ -30,7 +30,7 @@ public class HierarchicalNavigation
     implements Navigatable<Pair<Integer, Tile>>,
         XPathfinder<Pair<Integer, Tile>>,
         CanDealWithDynamicObstacle<Pair<Integer, Tile>> {
-  public List<NetHackSurface> areas = new LinkedList<>();
+  public final List<NetHackSurface> areas = new LinkedList<>();
   boolean perfect_memory_pathfinding = false;
   final HierarchicalMapFactory factory;
 
@@ -250,7 +250,7 @@ public class HierarchicalNavigation
       IntVec2D neighbourRelativePos =
           new IntVec2D(neighbourPos.x % map().clusterSize, neighbourPos.y % map().clusterSize);
       ConcreteMap neighbourConcreteMap = neighbourCluster.subConcreteMap;
-      if (!subConcreteMap.passability.canEnter(neighbourRelativePos, new RefSupport<>())) {
+      if (subConcreteMap.passability.cannotEnter(neighbourRelativePos, new RefSupport<>())) {
         continue;
       }
       var neighBourId =

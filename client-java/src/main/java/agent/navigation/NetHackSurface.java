@@ -1,6 +1,5 @@
 package agent.navigation;
 
-import agent.navigation.hpastar.*;
 import agent.navigation.strategy.NavUtils;
 import agent.navigation.surface.*;
 import eu.iv4xr.framework.spatial.IntVec2D;
@@ -96,9 +95,9 @@ public class NetHackSurface extends GridSurface {
         // Does not have a lit floor tile next to it, so we assume we cannot see it
         if (neighbours.stream()
             .noneMatch(
-                coord ->
-                    getTile(coord) instanceof Floor
-                        && level.getEntity(coord).color != Color.TRANSPARENT)) {
+                pos ->
+                    getTile(pos) instanceof Floor
+                        && level.getEntity(pos).color != Color.TRANSPARENT)) {
           continue;
         }
       }

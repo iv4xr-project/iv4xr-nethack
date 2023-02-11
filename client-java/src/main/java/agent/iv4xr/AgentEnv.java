@@ -40,7 +40,7 @@ public class AgentEnv extends Iv4xrEnvironment {
               EntityType.STAIRS_UP,
               EntityType.STAIRS_DOWN,
               EntityType.SINK));
-  public NetHack app;
+  public final NetHack app;
 
   public AgentEnv(NetHack app) {
     this.app = app;

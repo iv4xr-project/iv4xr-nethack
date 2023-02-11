@@ -10,11 +10,11 @@ import agent.navigation.hpastar.graph.ConcreteNode;
 import agent.navigation.hpastar.infrastructure.Id;
 
 public class Entrance {
-  public Id<Entrance> id;
-  public Cluster cluster1;
-  public Cluster cluster2;
-  public ConcreteNode srcNode;
-  public ConcreteNode destNode;
+  public final Id<Entrance> id;
+  public final Cluster cluster1;
+  public final Cluster cluster2;
+  public final ConcreteNode srcNode;
+  public final ConcreteNode destNode;
   public Orientation orientation = Orientation.Horizontal;
 
   public Entrance(
