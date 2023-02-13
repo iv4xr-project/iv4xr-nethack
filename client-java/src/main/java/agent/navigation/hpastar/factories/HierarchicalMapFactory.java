@@ -355,7 +355,8 @@ public class HierarchicalMapFactory {
         entrances.add(entrance1);
         entrances.add(entrance2);
         System.out.printf(
-            "1. Entrance added between cluster %s -> %s%n", precedentCluster, currentCluster);
+            "1. Entrance added (%s -> %s) between cluster %s -> %s%n",
+            srcNode.info.position, destNode.info.position, precedentCluster, currentCluster);
       } else {
         Pair<ConcreteNode, ConcreteNode> nodes =
             getNodesInEdge.apply((entranceEnd + entranceStart) / 2);
@@ -372,7 +373,8 @@ public class HierarchicalMapFactory {
         currentEntranceId.setValue(currentEntranceId.getValue() + 1);
         entrances.add(entrance);
         System.out.printf(
-            "2. Entrance added between cluster %s -> %s%n", precedentCluster, currentCluster);
+            "2. Entrance added (%s -> %s) between cluster %s -> %s%n",
+            srcNode.info.position, destNode.info.position, precedentCluster, currentCluster);
       }
 
       entranceStart = entranceEnd;

@@ -45,13 +45,13 @@ public class NavUtils {
   public static List<Pair<Integer, Tile>> adjustedFindPath(
       AgentState state, Pair<Integer, Tile> oldLocation, Pair<Integer, Tile> newLocation) {
     HierarchicalNavigation nav = state.hierarchicalNav;
-    boolean srcOriginalBlockingState = nav.isBlocking(oldLocation);
-    boolean destOriginalBlockingState = nav.isBlocking(newLocation);
-    nav.toggleBlockingOff(oldLocation);
-    nav.toggleBlockingOff(newLocation);
+    //    boolean srcOriginalBlockingState = nav.isBlocking(oldLocation);
+    //    boolean destOriginalBlockingState = nav.isBlocking(newLocation);
+    //    nav.toggleBlockingOff(oldLocation);
+    //    nav.toggleBlockingOff(newLocation);
     List<Pair<Integer, Tile>> path = nav.findPath(oldLocation, newLocation);
-    nav.setBlockingState(oldLocation, srcOriginalBlockingState);
-    nav.setBlockingState(newLocation, destOriginalBlockingState);
+    //    nav.setBlockingState(oldLocation, srcOriginalBlockingState);
+    //    nav.setBlockingState(newLocation, destOriginalBlockingState);
     return path;
   }
 

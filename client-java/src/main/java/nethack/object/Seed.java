@@ -37,7 +37,6 @@ public class Seed {
 
   @Override
   public String toString() {
-    return String.format(
-        "%s %s %b [return new Seed(\"%s\", \"%s\", %b);]", core, disp, reseed, core, disp, reseed);
+    return String.format("%s %s %b [SEED=%s, %s]", core, disp, reseed, core, disp);
   }
 }

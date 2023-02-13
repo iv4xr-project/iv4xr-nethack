@@ -23,7 +23,7 @@ public class Tile {
 
     if (o instanceof Tile) {
       Tile t = (Tile) o;
-      return pos.x == t.pos.x && pos.y == t.pos.y;
+      return pos.equals(t.pos);
     }
     return false;
   }

@@ -4,14 +4,15 @@ import agent.AgentLoggers;
 import agent.navigation.hpastar.*;
 import agent.navigation.hpastar.factories.EntranceStyle;
 import agent.navigation.hpastar.factories.HierarchicalMapFactory;
-import agent.navigation.hpastar.graph.AbstractNode;
+import agent.navigation.hpastar.graph.*;
 import agent.navigation.hpastar.infrastructure.Id;
 import agent.navigation.hpastar.passabilities.EmptyPassability;
 import agent.navigation.hpastar.search.HierarchicalSearch;
+import agent.navigation.hpastar.smoother.Direction;
 import agent.navigation.hpastar.smoother.SmoothWizard;
+import agent.navigation.hpastar.utils.RefSupport;
 import agent.navigation.strategy.NavUtils;
 import agent.navigation.surface.*;
-import eu.iv4xr.framework.extensions.pathfinding.CanDealWithDynamicObstacle;
 import eu.iv4xr.framework.extensions.pathfinding.Navigatable;
 import eu.iv4xr.framework.extensions.pathfinding.XPathfinder;
 import eu.iv4xr.framework.spatial.IntVec2D;
@@ -32,8 +33,7 @@ import org.apache.logging.log4j.Logger;
  *
  * @author Wish
  */
-public class GridSurface
-    implements Navigatable<Tile>, XPathfinder<Tile>, CanDealWithDynamicObstacle<Tile> {
+public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
   static final Logger logger = AgentLoggers.NavLogger;
   public final Tile[][] tiles;
   public final Map<String, HashSet<IntVec2D>> tileTypes = new HashMap<>();
@@ -48,12 +48,8 @@ public class GridSurface
   private boolean perfect_memory_pathfinding = true;
 
   public final ConcreteMap concreteMap;
-  private final Size size;
-  private final int clusterSize;
 
   public GridSurface(Size size, int clusterSize) {
-    this.size = size;
-    this.clusterSize = clusterSize;
     tiles = new Tile[size.height][size.width];
     ConcreteMap emptyConcreteMap = new EmptyPassability(size).getConcreteMap();
     concreteMap = emptyConcreteMap;
@@ -64,36 +60,116 @@ public class GridSurface
   }
 
   public IntVec2D toRelativePos(IntVec2D pos) {
-    assert NavUtils.withinBounds(pos, size);
-    return new IntVec2D(pos.x % clusterSize, pos.y % clusterSize);
+    assert NavUtils.withinBounds(pos, hierarchicalMap.size);
+    return new IntVec2D(pos.x % hierarchicalMap.clusterSize, pos.y % hierarchicalMap.clusterSize);
   }
 
-  // region CanDealWithDynamicObstacle interface
-  /** Add a non-navigable tile (obstacle). */
-  @Override
-  public void addObstacle(Tile o) {
-    assert !(o instanceof StraightWalkable)
-        : "Obstacle is not actually an obstacle since it can be passed";
-    updateObstacle(o);
+  public void updateTiles(List<Tile> newTiles, List<IntVec2D> toggleOffBlocking) {
+    Map<Cluster, Set<Direction>> entrances = new HashMap<>();
+
+    for (IntVec2D pos : toggleOffBlocking) {
+      Tile tile = getTile(pos);
+      if (tile instanceof Door) {
+        Door door = (Door) tile;
+        door.setBlockingState(false);
+      }
+
+      Set<Direction> directions = GridSurfaceFactory.addEdges(this, tile);
+      addClusterEdges(entrances, tile, directions);
+    }
+
+    for (Tile tile : newTiles) {
+      boolean updated = updateTile(tile);
+      markAsSeen(tile);
+      if (!updated) {
+        continue;
+      }
+
+      boolean blocked = !(tile instanceof StraightWalkable);
+      if (blocked) {
+        GridSurfaceFactory.removeEdges(this, tile);
+        continue;
+      }
+
+      Set<Direction> directions = GridSurfaceFactory.addEdges(this, tile);
+      addClusterEdges(entrances, tile, directions);
+    }
+
+    createEntrances(entrances);
   }
 
-  /** Remove a non-navigable tile (obstacle). */
-  @Override
-  public void removeObstacle(Tile o) {
-    assert o instanceof StraightWalkable : "RemoveObstacle must insert a walkable tile";
-    updateObstacle(o);
+  private void addClusterEdges(
+      Map<Cluster, Set<Direction>> entrances, Tile tile, Set<Direction> directions) {
+    if (directions.isEmpty()) {
+      return;
+    }
+
+    Cluster cluster = hierarchicalMap.findClusterForPosition(tile.pos);
+    for (Direction direction : directions) {
+      Cluster mapCluster;
+      Direction mapDirection;
+
+      if (direction == Direction.South || direction == Direction.East) {
+        mapCluster = GridSurfaceFactory.getClusterInDirection(this, cluster, direction);
+        if (direction == Direction.South) {
+          mapDirection = Direction.North;
+        } else {
+          mapDirection = Direction.West;
+        }
+      } else {
+        mapCluster = cluster;
+        mapDirection = direction;
+      }
+      if (!entrances.containsKey(mapCluster)) {
+        entrances.put(mapCluster, new HashSet<>());
+      }
+      entrances.get(mapCluster).add(mapDirection);
+    }
   }
 
-  private void updateObstacle(Tile o) {
-    updatePassibility(o);
-    Tile oldTile = tiles[o.pos.y][o.pos.x];
-    replaceTile(oldTile, o);
-    tiles[o.pos.y][o.pos.x] = o;
+  private void createEntrances(Map<Cluster, Set<Direction>> entrances) {
+    for (Cluster cluster : entrances.keySet()) {
+      int top = cluster.origin.y;
+      int left = cluster.origin.x;
+      for (Direction direction : entrances.get(cluster)) {
+        Cluster neighbourCluster =
+            GridSurfaceFactory.getClusterInDirection(this, cluster, direction);
+        if (direction == Direction.North) {
+          GridSurfaceFactory.createEntrancesOnTop(
+              left,
+              left + cluster.size.width - 1,
+              top - 1,
+              neighbourCluster,
+              cluster,
+              new RefSupport<>(0));
+        } else if (direction == Direction.West) {
+          GridSurfaceFactory.createEntrancesOnLeft(
+              top,
+              top + cluster.size.height - 1,
+              left - 1,
+              neighbourCluster,
+              cluster,
+              new RefSupport<>(0));
+        }
+      }
+
+      cluster.createIntraClusterEdges();
+      GridSurfaceFactory.createIntraClusterEdges(this, cluster);
+    }
+  }
+
+  private boolean updateTile(Tile tile) {
+    updatePassibility(tile);
+    Tile prevTile = tiles[tile.pos.y][tile.pos.x];
+    replaceTile(prevTile, tile);
+    tiles[tile.pos.y][tile.pos.x] = tile;
+    return tile instanceof StraightWalkable != prevTile instanceof StraightWalkable
+        || tile instanceof Walkable != prevTile instanceof Walkable;
   }
 
   public void updatePassibility(Tile tile) {
     Cluster cluster = hierarchicalMap.findClusterForPosition(tile.pos);
-    IntVec2D relPos = new IntVec2D(tile.pos.x % clusterSize, tile.pos.y % clusterSize);
+    IntVec2D relPos = toRelativePos(tile.pos);
 
     // Update main concreteMap
     concreteMap.passability.updateCanMoveDiagonally(tile.pos, tile instanceof Walkable);
@@ -131,35 +207,6 @@ public class GridSurface
     return tiles[pos.y][pos.x];
   }
 
-  /**
-   * The tile is blocking (true) if it is a wall or a closed door. Else it is non-blocking (false).
-   */
-  @Override
-  public boolean isBlocking(Tile tile) {
-    return isBlocking(tile.pos);
-  }
-
-  public boolean isBlocking(IntVec2D pos) {
-    Tile t = getTile(pos);
-    return !(t instanceof StraightWalkable) || !((StraightWalkable) t).isWalkable();
-  }
-
-  /**
-   * Set the blocking state of this tile, if it is a Door, to the given blocking-state (true means
-   * blocking, false non-blocking).
-   *
-   * <p>If the tile is not a Door, this method has no effect.
-   */
-  @Override
-  public void setBlockingState(Tile tile, boolean isBlocking) {
-    Tile t = getTile(tile.pos);
-    if (t instanceof Door) {
-      Door door = (Door) t;
-      door.setBlockingState(isBlocking);
-    }
-  }
-  // endregion
-
   // region XPathfinder interface
   @Override
   public boolean hasbeenSeen(Tile tile) {
@@ -181,10 +228,18 @@ public class GridSurface
     Tile t = getTile(p.pos);
     assert t != null;
     t.seen = true;
-    // Do not mark frontiers around tiles that are blocking
-    if (!isBlocking(t)) {
+    // Add as frontier if it is walkable
+    if (isWalkable(t)) {
       frontierCandidates.add(p);
     }
+  }
+
+  public boolean isWalkable(IntVec2D pos) {
+    return isWalkable(getTile(pos));
+  }
+
+  private boolean isWalkable(Tile tile) {
+    return tile instanceof StraightWalkable && ((StraightWalkable) tile).isWalkable();
   }
 
   /**
@@ -197,7 +252,7 @@ public class GridSurface
     List<Tile> frontiers = new LinkedList<>();
     List<Tile> cannotBeFrontier = new LinkedList<>();
     for (Tile t : frontierCandidates) {
-      List<IntVec2D> pneighbors = NavUtils.neighbourCoordinates(t.pos, size, true);
+      List<IntVec2D> pneighbors = NavUtils.neighbourCoordinates(t.pos, hierarchicalMap.size, true);
       boolean isFrontier = false;
       for (IntVec2D n : pneighbors) {
         if (!hasbeenSeen(n)) {
@@ -247,6 +302,7 @@ public class GridSurface
   @Override
   public List<Tile> findPath(Tile from, Tile to) {
     HierarchicalMapFactory factory = new HierarchicalMapFactory();
+    System.out.printf("findPath: %s -> %s%n", from.pos, to.pos);
     Id<AbstractNode> startAbsNode = factory.insertAbstractNode(hierarchicalMap, from.pos);
     Id<AbstractNode> targetAbsNode = factory.insertAbstractNode(hierarchicalMap, to.pos);
     assert !startAbsNode.equals(targetAbsNode);
@@ -365,14 +421,15 @@ public class GridSurface
    */
   private List<Tile> neighbours_(IntVec2D pos) {
     boolean allowDiagonal = getTile(pos) instanceof Walkable;
-    List<IntVec2D> candidates = NavUtils.neighbourCoordinates(pos, size, allowDiagonal);
+    List<IntVec2D> candidates =
+        NavUtils.neighbourCoordinates(pos, hierarchicalMap.size, allowDiagonal);
 
     int nrResults = 0;
     boolean[] toNeighbour = new boolean[candidates.size()];
 
     for (int i = 0; i < candidates.size(); i++) {
       IntVec2D candidate = candidates.get(i);
-      toNeighbour[i] = !isBlocking(candidate);
+      toNeighbour[i] = isWalkable(getTile(candidate));
       if (!perfect_memory_pathfinding) {
         toNeighbour[i] = toNeighbour[i] && hasbeenSeen(candidate);
       }
@@ -411,8 +468,8 @@ public class GridSurface
   public String toString() {
     StringBuilder sb = new StringBuilder();
     // Add row by row to the StringBuilder
-    for (int y = 0; y < size.height; y++) {
-      for (int x = 0; x < size.width; x++) {
+    for (int y = 0; y < hierarchicalMap.size.height; y++) {
+      for (int x = 0; x < hierarchicalMap.size.width; x++) {
         // Get tile, if it doesn't know the type it is not know or void.
         Tile t = getTile(new IntVec2D(x, y));
         if (t == null) {
@@ -425,7 +482,7 @@ public class GridSurface
       }
 
       // Don't add line after last row
-      if (y != size.height - 1) {
+      if (y != hierarchicalMap.size.height - 1) {
         sb.append(System.lineSeparator());
       }
     }

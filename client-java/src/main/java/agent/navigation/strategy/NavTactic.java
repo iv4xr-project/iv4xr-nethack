@@ -98,7 +98,7 @@ public class NavTactic {
                 if (surface.nullTile(pos)) {
                   continue;
                 }
-                if (surface.isBlocking(pos)) {
+                if (!surface.isWalkable(pos)) {
                   continue;
                 }
 

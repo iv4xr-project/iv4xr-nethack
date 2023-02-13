@@ -74,4 +74,22 @@ public class EmptyPassability implements IPassability {
   public ConcreteMap getConcreteMap() {
     return new ConcreteMap(TileType.OctileUnicost, size, this);
   }
+
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    for (int y = 0; y < size.height; y++) {
+      for (int x = 0; x < size.width; x++) {
+        if (cannotEnter(new IntVec2D(x, y), new RefSupport<>())) {
+          sb.append('#');
+        } else {
+          sb.append('.');
+        }
+      }
+      if (y != size.height - 1) {
+        sb.append(System.lineSeparator());
+      }
+    }
+
+    return sb.toString();
+  }
 }

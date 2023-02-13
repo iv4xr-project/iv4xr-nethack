@@ -18,7 +18,6 @@ import nethack.object.Entity;
 import nethack.object.Level;
 import nethack.object.Player;
 import nl.uu.cs.aplib.mainConcepts.Environment;
-import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.Logger;
 
 /**
@@ -100,81 +99,83 @@ public class AgentState extends Iv4xrAgentState<Void> {
     Serializable[] changedCoordinates = (Serializable[]) aux.properties.get("changedCoordinates");
     agentLogger.debug(
         String.format("update state with %d new coordinates", changedCoordinates.length));
+    List<Tile> updatedTiles = new ArrayList<>();
+    List<IntVec2D> toggleBlockingOff = new ArrayList<>();
+
+    IntVec2D playerPos = NavUtils.loc2(worldmodel.position);
+    Set<IntVec2D> adjacentCoords =
+        new HashSet<>(NavUtils.neighbourCoordinates(playerPos, Level.SIZE, true));
 
     for (Serializable entry_ : changedCoordinates) {
       Serializable[] entry = (Serializable[]) entry_;
       IntVec2D pos = (IntVec2D) entry[0];
+      adjacentCoords.remove(pos);
+
       EntityType type = (EntityType) entry[1];
 
       switch (type) {
         case PLAYER:
           if (area().nullTile(pos)) {
-            hierarchicalNav.removeObstacle(new Pair<>(levelNr, new Unknown(pos)));
+            updatedTiles.add(new Unknown(pos));
           } else {
-            hierarchicalNav.toggleBlockingOff(new Pair<>(levelNr, new Tile(pos)));
+            toggleBlockingOff.add(pos);
           }
           break;
         case WALL:
         case BOULDER:
-          hierarchicalNav.addObstacle(new Pair<>(levelNr, new Wall(pos)));
+          updatedTiles.add(new Wall(pos));
           break;
         case CORRIDOR:
-          hierarchicalNav.removeObstacle(new Pair<>(levelNr, new Corridor(pos)));
+          updatedTiles.add(new Corridor(pos));
           break;
         case FLOOR:
-          hierarchicalNav.removeObstacle(new Pair<>(levelNr, new Floor(pos)));
+          updatedTiles.add(new Floor(pos));
           break;
         case DOOR:
           boolean isOpen = !env().app.level().getEntity(pos).closedDoor();
-          hierarchicalNav.removeObstacle(new Pair<>(levelNr, new Door(pos, isOpen)));
+          updatedTiles.add(new Door(pos, isOpen));
           break;
         case DOORWAY:
-          hierarchicalNav.removeObstacle(new Pair<>(levelNr, new Doorway(pos)));
+          updatedTiles.add(new Doorway(pos));
           break;
         case PRISON_BARS:
-          hierarchicalNav.addObstacle(new Pair<>(levelNr, new PrisonBars(pos)));
+          updatedTiles.add(new PrisonBars(pos));
           break;
         case STAIRS_DOWN:
-          hierarchicalNav.removeObstacle(
-              new Pair<>(levelNr, new Stair(pos, Climbable.ClimbType.Descendable)));
+          updatedTiles.add(new Stair(pos, Climbable.ClimbType.Descendable));
         case STAIRS_UP:
-          hierarchicalNav.removeObstacle(
-              new Pair<>(levelNr, new Stair(pos, Climbable.ClimbType.Ascendable)));
+          updatedTiles.add(new Stair(pos, Climbable.ClimbType.Ascendable));
           break;
         case SINK:
-          hierarchicalNav.removeObstacle(new Pair<>(levelNr, new Sink(pos)));
+          updatedTiles.add(new Sink(pos));
           break;
         default:
           // If the tile has been seen we switch the state to non-blocking.
           // If we don't know the type of the tile, we for now put a tile in its place
           if (area().nullTile(pos)) {
-            hierarchicalNav.removeObstacle(new Pair<>(levelNr, new Unknown(pos)));
+            updatedTiles.add(new Unknown(pos));
           } else if (area().canBeDoor(pos)) {
-            if (area().getTile(pos).getClass() == Unknown.class) {
-              hierarchicalNav.removeObstacle(new Pair<>(levelNr, new Door(pos, true)));
+            if (area().getTile(pos) instanceof Unknown) {
+              updatedTiles.add(new Door(pos, true));
             } else {
               // If the type is more specific than Tile, then don't change anything
             }
           } else {
-            hierarchicalNav.toggleBlockingOff(new Pair<>(levelNr, new Tile(pos)));
+            toggleBlockingOff.add(pos);
           }
           break;
       }
-
-      // Lastly mark it as seen
-      hierarchicalNav.markAsSeen(new Pair<>(levelNr, new Tile(pos)));
     }
 
+    // Missed adjacent coords, these are walls
     NetHackSurface navGraph = hierarchicalNav.areas.get(levelNr);
-    IntVec2D playerPos = NavUtils.loc2(worldmodel.position);
-    // Each entity that is next to the agent which is void is a wall
-    List<IntVec2D> adjacentCoords = NavUtils.neighbourCoordinates(playerPos, Level.SIZE, true);
     for (IntVec2D adjacentPos : adjacentCoords) {
       if (navGraph.nullTile(adjacentPos)) {
-        hierarchicalNav.addObstacle(new Pair<>(levelNr, new Wall(adjacentPos)));
-        hierarchicalNav.markAsSeen(new Pair<>(levelNr, new Tile(adjacentPos)));
+        updatedTiles.add(new Wall(adjacentPos));
       }
     }
+
+    hierarchicalNav.areas.get(0).updateTiles(updatedTiles, toggleBlockingOff);
 
     // Clear list of coordinates
     aux.properties.put("changedCoordinates", new Serializable[0]);

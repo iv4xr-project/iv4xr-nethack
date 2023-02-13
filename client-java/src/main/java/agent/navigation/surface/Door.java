@@ -37,6 +37,19 @@ public class Door extends Tile implements StraightWalkable, Printable {
   }
 
   @Override
+  public boolean equals(Object o) {
+    if (o == null) {
+      return false;
+    }
+
+    if (o instanceof Door) {
+      Door t = (Door) o;
+      return pos.equals(t.pos) && isOpen == t.isOpen && isLocked == t.isLocked;
+    }
+    return false;
+  }
+
+  @Override
   public boolean isSeeThrough() {
     return isOpen && !isLocked;
   }

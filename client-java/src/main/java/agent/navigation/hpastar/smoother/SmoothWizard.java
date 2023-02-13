@@ -88,13 +88,12 @@ public class SmoothWizard {
       if (seenPathNode == INVALID_ID) continue;
 
       // No node in advance in that direction, just continue
-      if (index > 0 && seenPathNode.getIdValue() == initialPath.get(index - 1).getIdValue())
-        continue;
+      if (index > 0 && seenPathNode.equals(initialPath.get(index - 1))) continue;
 
       // If the point we are advancing is the same as the previous one, we didn't
       // improve at all. Just continue looking other directions
-      if (index < initialPath.size() - 1
-          && seenPathNode.getIdValue() == initialPath.get(index + 1).getIdValue()) continue;
+      if (index < initialPath.size() - 1 && seenPathNode.equals(initialPath.get(index + 1)))
+        continue;
 
       // If the point we are advancing is the same as a next node in the path,
       // we didn't improve either. Continue next direction

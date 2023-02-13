@@ -324,14 +324,41 @@ public class HierarchicalMap implements IMap<AbstractNode> {
     for (int y = 0, clusterY = 0; y < size.height; y++, clusterY = y / clusterSize) {
       int relY = y % clusterSize;
       if (relY == 0) {
-        sb.append("-".repeat(size.width + nrClustersPerRow + 1)).append(System.lineSeparator());
+        for (int x = 0, clusterX = 0; x < size.width; x++, clusterX = x / clusterSize) {
+          int relX = x % clusterSize;
+          if (relX == 0) {
+            sb.append("-");
+          }
+
+          Cluster cluster = findClusterForPosition(new IntVec2D(x, y));
+          IntVec2D relPos = new IntVec2D(relX, relY);
+          boolean hasEntrance =
+              cluster.entrancePoints.stream()
+                  .anyMatch(entrancePoint -> entrancePoint.relativePosition.equals(relPos));
+          if (hasEntrance) {
+            sb.append(Color.RED.stringCode()).append('|').append(Color.RESET.stringCode());
+          } else {
+            sb.append('-');
+          }
+        }
+        sb.append('-').append(System.lineSeparator());
       }
       for (int x = 0, clusterX = 0; x < size.width; x++, clusterX = x / clusterSize) {
         Cluster cluster = findClusterForPosition(new IntVec2D(x, y));
         int relX = x % clusterSize;
         IntVec2D relPos = new IntVec2D(relX, relY);
         if (relX == 0) {
-          sb.append('|');
+          if (!cluster.entrancePoints.isEmpty()) {
+            System.out.println();
+          }
+          boolean hasEntrance =
+              cluster.entrancePoints.stream()
+                  .anyMatch(entrancePoint -> entrancePoint.relativePosition.equals(relPos));
+          if (hasEntrance) {
+            sb.append(Color.RED.stringCode()).append('-').append(Color.RESET.stringCode());
+          } else {
+            sb.append('|');
+          }
         }
 
         Id<ConcreteNode> nodeId = cluster.subConcreteMap.getNodeIdFromPos(relX, relY);
