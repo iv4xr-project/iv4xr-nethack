@@ -15,7 +15,7 @@ import agent.navigation.hpastar.infrastructure.Id;
 import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.ArrayList;
 import java.util.List;
-import nethack.util.ColoredStringBuilder;
+import util.ColoredStringBuilder;
 
 public class ConcreteMap implements IMap<ConcreteNode> {
   public final IPassability passability;

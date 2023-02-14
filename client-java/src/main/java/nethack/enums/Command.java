@@ -3,7 +3,7 @@ package nethack.enums;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import nethack.util.ColoredStringBuilder;
+import util.ColoredStringBuilder;
 
 // Actions listed at: /python-server/lib/nle/nle/nethack/actions.py
 public enum Command {

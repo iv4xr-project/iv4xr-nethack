@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import nethack.NetHackLoggers;
-import nethack.util.ColoredStringBuilder;
 import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.Logger;
+import util.ColoredStringBuilder;
+import util.Loggers;
 
 public class GameState {
-  public static final Logger logger = NetHackLoggers.NetHackLogger;
+  public static final Logger logger = Loggers.NetHackLogger;
 
   public Stats stats;
   public Player player;

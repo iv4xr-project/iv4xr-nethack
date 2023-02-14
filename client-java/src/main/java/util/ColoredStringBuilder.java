@@ -1,6 +1,5 @@
-package nethack.util;
+package util;
 
-import java.io.*;
 import nethack.enums.Color;
 
 public final class ColoredStringBuilder {

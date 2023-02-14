@@ -238,9 +238,10 @@ public class GridSurfaceFactory {
         currentEntranceId.setValue(currentEntranceId.getValue() + 1);
         entrances.add(entrance1);
         entrances.add(entrance2);
-        System.out.printf(
-            "1. Entrance added relPos:(%s -> %s) between cluster %s -> %s%n",
-            srcNode.info.position, destNode.info.position, precedentCluster, currentCluster);
+        //        System.out.printf(
+        //            "1. Entrance added relPos:(%s -> %s) between cluster %s -> %s%n",
+        //            srcNode.info.position, destNode.info.position, precedentCluster,
+        // currentCluster);
       } else {
         Pair<ConcreteNode, ConcreteNode> nodes =
             getNodesInEdge.apply((entranceEnd + entranceStart) / 2);
@@ -256,9 +257,10 @@ public class GridSurfaceFactory {
                 orientation);
         currentEntranceId.setValue(currentEntranceId.getValue() + 1);
         entrances.add(entrance);
-        System.out.printf(
-            "2. Entrance added relPos:(%s -> %s) between cluster %s -> %s%n",
-            srcNode.info.position, destNode.info.position, precedentCluster, currentCluster);
+        //        System.out.printf(
+        //            "2. Entrance added relPos:(%s -> %s) between cluster %s -> %s%n",
+        //            srcNode.info.position, destNode.info.position, precedentCluster,
+        // currentCluster);
       }
 
       entranceStart = entranceEnd;
@@ -295,7 +297,6 @@ public class GridSurfaceFactory {
           absNode1.removeEdge(absNode2.nodeId);
           absNode2.removeEdge(absNode1.nodeId);
 
-          System.out.printf("Remove entrance between %s x %s%n", entrance1Pos, entrance2Pos);
           if (absNode1.edges.isEmpty()) {
             staticSurface.hierarchicalMap.abstractGraph.removeNode(absNode1.nodeId);
           }

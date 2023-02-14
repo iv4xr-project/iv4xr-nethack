@@ -10,17 +10,18 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import nethack.Config;
 import nethack.object.Inventory;
 import nethack.object.Level;
 import nethack.object.Seed;
 import nethack.object.StepState;
 import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.Logger;
+import util.Config;
+import util.Loggers;
 
 public class SocketClient {
-  static final Logger logger = ConnectionLoggers.ConnectionLogger;
-  static final Logger profileLogger = ConnectionLoggers.ProfilerLogger;
+  static final Logger logger = Loggers.ConnectionLogger;
+  static final Logger profileLogger = Loggers.ProfilerLogger;
   final String host;
   final int port;
   Socket socket;
@@ -37,9 +38,8 @@ public class SocketClient {
     this.port = info.snd;
     int maxWaitTime = 20000;
     logger.info(
-        String.format(
-            "Trying to connect with a host on %s:%s (will time-out after %s seconds)",
-            host, port, maxWaitTime / 1000));
+        "Trying to connect with a host on %s:%d (will time-out after %d seconds)",
+        host, port, maxWaitTime / 1000);
 
     long startTime = System.nanoTime();
 
@@ -51,9 +51,10 @@ public class SocketClient {
       } catch (IOException ignored) {
       }
     }
+
     assert socketReady()
         : String.format("Could NOT establish a connection with the host %s:%s.", host, port);
-    logger.info(String.format("CONNECTED with %s:%s", host, port));
+    logger.info("CONNECTED with %s:%d", host, port);
   }
 
   /**
@@ -109,7 +110,7 @@ public class SocketClient {
     }
     flush();
     long now1 = System.nanoTime();
-    profileLogger.trace(String.format("SENDING COMMAND TOOK: %d%n", now1 - now));
+    profileLogger.trace("SENDING COMMAND TOOK: %d%n", now1 - now);
     return readStepState();
   }
 
@@ -139,7 +140,7 @@ public class SocketClient {
     ObservationMessage obsMessage = readObservationMessage();
     StepMessage stepMessage = StepMessageDecoder.decode(reader);
     long now1 = System.nanoTime();
-    profileLogger.trace(String.format("READ OBSMESSAGE TOOK: %d%n%n", now1 - now));
+    profileLogger.trace("READ OBS MESSAGE TOOK: %d%n%n", now1 - now);
 
     StepState stepState = new StepState();
     stepState.player = obsMessage.player;
@@ -152,7 +153,7 @@ public class SocketClient {
     stepState.level = new Level(obsMessage.entities);
     stepState.message = obsMessage.message;
     long now2 = System.nanoTime();
-    profileLogger.trace(String.format("EXIT TOOK: %d%n", now2 - now1));
+    profileLogger.trace("EXIT TOOK: %d%n", now2 - now1);
     return stepState;
   }
 

@@ -10,10 +10,11 @@ import nethack.object.Level;
 import nethack.object.Seed;
 import nethack.object.StepState;
 import org.apache.logging.log4j.Logger;
+import util.Loggers;
 
 public class NetHack {
-  public static final Logger netHackLogger = NetHackLoggers.NetHackLogger;
-  public static final Logger seedLogger = NetHackLoggers.SeedLogger;
+  public static final Logger netHackLogger = Loggers.NetHackLogger;
+  public static final Logger seedLogger = Loggers.SeedLogger;
   public final GameState gameState = new GameState();
   public GameMode gameMode;
   public Seed seed;
@@ -136,8 +137,7 @@ public class NetHack {
 
     int index = command.getIndex(gameMode);
     if (index < 0) {
-      netHackLogger.warn(
-          String.format("Command: %s not available in GameMode: %s", command, gameMode));
+      netHackLogger.warn("Command: %s not available in GameMode: %s", command, gameMode);
       return StepType.Invalid;
     }
 
@@ -145,14 +145,14 @@ public class NetHack {
   }
 
   private StepType step(Command command, int index) {
-    netHackLogger.info("Command: " + command);
+    netHackLogger.info("Command: %s", command);
     StepState stepState = client.sendStep(index);
     updateGameState(stepState);
     return StepType.Valid;
   }
 
   private StepType step(Command command, char character) {
-    netHackLogger.info(String.format("Command: %s %s", command, character));
+    netHackLogger.info("Command: %s %c", command, character);
     StepState stepState = client.sendStepStroke(character);
     updateGameState(stepState);
     return StepType.Valid;

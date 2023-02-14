@@ -3,8 +3,7 @@
 //
 
 package agent.navigation.hpastar.graph;
-
-import agent.AgentLoggers;
+;
 import agent.navigation.hpastar.infrastructure.Id;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,6 +12,7 @@ import java.util.Map;
 import java.util.function.Function;
 import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.Logger;
+import util.Loggers;
 
 /**
  * A graph is a set of nodes connected with edges. Each node and edge can hold a certain amount of
@@ -23,7 +23,7 @@ public class Graph<
     TNodeInfo,
     TEdge extends IEdge<TNode, TEdgeInfo>,
     TEdgeInfo> {
-  static final Logger hpaLogger = AgentLoggers.HPALogger;
+  static final Logger hpaLogger = Loggers.HPALogger;
   // We store the nodes in a list because the main operations we use
   // in this list are additions, random accesses and very few removals (only when
   // adding or removing nodes to perform specific searches).
@@ -54,7 +54,7 @@ public class Graph<
   }
 
   public void addEdge(Id<TNode> sourceNodeId, Id<TNode> targetNodeId, TEdgeInfo info) {
-    hpaLogger.trace(String.format("AddEdge: %s %s", sourceNodeId, targetNodeId));
+    hpaLogger.trace("AddEdge: %s %s", sourceNodeId, targetNodeId);
     TNode node = nodes.get(sourceNodeId);
     node.addEdge(edgeCreator.apply(new Pair<>(targetNodeId, info)));
   }

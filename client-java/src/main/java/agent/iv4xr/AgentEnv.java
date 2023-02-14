@@ -1,6 +1,5 @@
 package agent.iv4xr;
-
-import agent.AgentLoggers;
+;
 import eu.iv4xr.framework.mainConcepts.Iv4xrEnvironment;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
@@ -18,6 +17,7 @@ import nethack.object.Entity;
 import nethack.object.Level;
 import nethack.object.Player;
 import org.apache.logging.log4j.Logger;
+import util.Loggers;
 
 /**
  * Provides an implementation of {@link nl.uu.cs.aplib.mainConcepts.Environment} to connect
@@ -26,7 +26,7 @@ import org.apache.logging.log4j.Logger;
  * @author wish
  */
 public class AgentEnv extends Iv4xrEnvironment {
-  static final Logger logger = AgentLoggers.WOMLogger;
+  static final Logger logger = Loggers.WOMLogger;
   private static final Set<EntityType> ignoredTypes =
       new HashSet<>(
           Arrays.asList(
@@ -70,7 +70,7 @@ public class AgentEnv extends Iv4xrEnvironment {
       }
 
       String id = e.createId(pos);
-      logger.debug(String.format("%s %s Added", id, pos));
+      logger.debug("%s %s Added", id, pos);
       wom.elements.put(id, toWorldEntity(e, pos));
     }
 

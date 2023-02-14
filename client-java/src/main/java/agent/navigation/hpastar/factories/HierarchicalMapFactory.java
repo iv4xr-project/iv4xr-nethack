@@ -1,6 +1,5 @@
 package agent.navigation.hpastar.factories;
-
-import agent.AgentLoggers;
+;
 import agent.navigation.hpastar.*;
 import agent.navigation.hpastar.graph.*;
 import agent.navigation.hpastar.infrastructure.Constants;
@@ -12,9 +11,10 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.Logger;
+import util.Loggers;
 
 public class HierarchicalMapFactory {
-  static final Logger hpaLogger = AgentLoggers.HPALogger;
+  static final Logger hpaLogger = Loggers.HPALogger;
   private final int MAX_ENTRANCE_WIDTH = 6;
 
   public HierarchicalMap hierarchicalMap;
@@ -191,8 +191,7 @@ public class HierarchicalMapFactory {
         cost = unitCost;
         break;
     }
-    hpaLogger.trace(
-        String.format("InterCluster AddEdge: %s -> %s", srcAbstractNodeId, destAbstractNodeId));
+    hpaLogger.trace("InterCluster AddEdge: %s -> %s", srcAbstractNodeId, destAbstractNodeId);
     hierarchicalMap.abstractGraph.addEdge(
         srcAbstractNodeId, destAbstractNodeId, new AbstractEdgeInfo(cost, level, true));
     hierarchicalMap.abstractGraph.addEdge(

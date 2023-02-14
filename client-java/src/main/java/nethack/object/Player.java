@@ -4,7 +4,7 @@ import eu.iv4xr.framework.spatial.IntVec2D;
 import eu.iv4xr.framework.spatial.Vec3;
 import nethack.enums.Alignment;
 import nethack.enums.HungerState;
-import nethack.util.ColoredStringBuilder;
+import util.ColoredStringBuilder;
 
 public class Player {
   public static final String ID = "player";

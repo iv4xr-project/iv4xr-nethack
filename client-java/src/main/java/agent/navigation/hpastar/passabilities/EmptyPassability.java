@@ -11,7 +11,7 @@ import agent.navigation.hpastar.TileType;
 import agent.navigation.hpastar.infrastructure.Constants;
 import agent.navigation.hpastar.utils.RefSupport;
 import eu.iv4xr.framework.spatial.IntVec2D;
-import nethack.util.ColoredStringBuilder;
+import util.ColoredStringBuilder;
 
 public class EmptyPassability implements IPassability {
   final Size size;

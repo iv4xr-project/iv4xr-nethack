@@ -26,8 +26,8 @@ import java.util.Random;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import nethack.util.ColoredStringBuilder;
 import nl.uu.cs.aplib.utils.Pair;
+import util.ColoredStringBuilder;
 
 public class Program {
 

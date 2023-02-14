@@ -1,6 +1,6 @@
 package nethack.object;
 
-import nethack.util.ColoredStringBuilder;
+import util.ColoredStringBuilder;
 
 public class Stats {
   public int score;

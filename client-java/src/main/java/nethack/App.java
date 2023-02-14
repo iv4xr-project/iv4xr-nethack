@@ -5,9 +5,11 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import nethack.object.Seed;
 import org.apache.logging.log4j.Logger;
+import util.Config;
+import util.Loggers;
 
 public class App {
-  static final Logger seedLogger = NetHackLoggers.SeedLogger;
+  static final Logger seedLogger = Loggers.SeedLogger;
 
   public static void main(String[] args) throws IOException {
     // Initialize socket connection

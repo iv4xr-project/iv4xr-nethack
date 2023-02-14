@@ -2,8 +2,9 @@
 <Configuration status="INFO">
     <!-- Source: https://mkyong.com/logging/apache-log4j-2-tutorials/ -->
     <Appenders>
-        <Console name="LogToConsole" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        <!-- Source: https://stackoverflow.com/questions/21979699/log4j-2-adding-multiple-colors-to-console-appender-->
+        <Console name="LogToConsole" target="SYSTEM_OUT" follow="true">
+            <PatternLayout disableAnsi="false" pattern="%d{HH:mm:ss.SSS} [%t] %highlight{${LOG_LEVEL_PATTERN:-%-5p}}{FATAL=magenta bright, ERROR=red bright, WARN=yellow bright, INFO=green bright, DEBUG=white bright, TRACE=blue bright} %logger{36} %msg%n"/>
         </Console>
         <File name="LogToFile" fileName="logs/app.log" append="false">
             <PatternLayout>

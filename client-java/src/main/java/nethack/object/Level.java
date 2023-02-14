@@ -4,14 +4,14 @@ import agent.navigation.hpastar.Size;
 import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.ArrayList;
 import java.util.List;
-import nethack.NetHackLoggers;
 import nethack.enums.Color;
 import nethack.enums.EntityType;
-import nethack.util.ColoredStringBuilder;
 import org.apache.logging.log4j.Logger;
+import util.ColoredStringBuilder;
+import util.Loggers;
 
 public class Level {
-  public static final Logger logger = NetHackLoggers.NetHackLogger;
+  public static final Logger logger = Loggers.NetHackLogger;
   public static final Size SIZE = new Size(79, 21);
   public final Entity[][] map;
   public final List<IntVec2D> changedCoordinates = new ArrayList<>();
@@ -39,9 +39,7 @@ public class Level {
     // This is the first observation of the level, returns all relevant coordinates
     if (oldLevel == null) {
       setWithAllCoordinates();
-      logger.debug(
-          String.format(
-              "Has set all coordinates of entities (%d entities)", changedCoordinates.size()));
+      logger.debug("Has set all coordinates of entities (%d entities)", changedCoordinates.size());
       return;
     }
 

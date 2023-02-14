@@ -1,6 +1,5 @@
 package agent.navigation.strategy;
-
-import agent.AgentLoggers;
+;
 import agent.iv4xr.AgentState;
 import agent.navigation.HierarchicalNavigation;
 import agent.navigation.hpastar.Size;
@@ -15,9 +14,10 @@ import nethack.enums.Command;
 import nethack.object.Player;
 import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.Logger;
+import util.Loggers;
 
 public class NavUtils {
-  static final Logger logger = AgentLoggers.NavLogger;
+  static final Logger logger = Loggers.NavLogger;
 
   /**
    * Distance in terms of path-length from the agent that owns S to the entity e. It uses
@@ -201,7 +201,7 @@ public class NavUtils {
       logger.debug("Path not found");
       return null;
     } else if (path.size() <= 1) {
-      logger.debug(String.format("Already on location, path is length %s", path.size()));
+      logger.debug("Already on location, path is length %s", path.size());
       return null;
     } else {
       // The first element is the src itself, so we need to pick the next one:

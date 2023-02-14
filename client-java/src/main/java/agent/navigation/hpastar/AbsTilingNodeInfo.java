@@ -5,7 +5,7 @@
 package agent.navigation.hpastar;
 
 import eu.iv4xr.framework.spatial.IntVec2D;
-import nethack.util.ColoredStringBuilder;
+import util.ColoredStringBuilder;
 
 // implements nodes in the abstract graph
 public class AbsTilingNodeInfo {

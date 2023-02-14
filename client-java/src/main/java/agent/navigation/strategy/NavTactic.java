@@ -1,6 +1,5 @@
 package agent.navigation.strategy;
-
-import agent.AgentLoggers;
+;
 import agent.iv4xr.AgentState;
 import agent.navigation.NetHackSurface;
 import agent.navigation.surface.Tile;
@@ -16,9 +15,10 @@ import nl.uu.cs.aplib.mainConcepts.SimpleState;
 import nl.uu.cs.aplib.mainConcepts.Tactic;
 import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.Logger;
+import util.Loggers;
 
 public class NavTactic {
-  static final Logger logger = AgentLoggers.NavLogger;
+  static final Logger logger = Loggers.NavLogger;
 
   public static Tactic navigateTo(Pair<Integer, Tile> location) {
     return NavAction.navigateTo(location.fst, location.snd.pos.x, location.snd.pos.y).lift();
@@ -72,7 +72,7 @@ public class NavTactic {
               if (nextTile == null) {
                 return null;
               }
-              logger.debug(String.format("navigateToTile (%s) via %s", tileSelector, nextTile));
+              logger.debug("navigateToTile (%s) via %s", tileSelector, nextTile);
               return nextTile;
             })
         .lift();
@@ -118,9 +118,8 @@ public class NavTactic {
                 return null;
               }
               logger.debug(
-                  String.format(
-                      "navigateNextToTile (%s) via %s (allowDiagonal=%b)",
-                      tileSelector, nextTile, allowDiagonal));
+                  "navigateNextToTile (%s) via %s (allowDiagonal=%b)",
+                  tileSelector, nextTile, allowDiagonal);
               return nextTile;
             })
         .lift();

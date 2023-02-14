@@ -1,6 +1,5 @@
-package agent.util;
-
-import agent.AgentLoggers;
+package util;
+;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -12,7 +11,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import org.apache.logging.log4j.Logger;
 
 public class Sounds {
-  static final Logger logger = AgentLoggers.SoundLogger;
+  static final Logger logger = Loggers.SoundLogger;
   static final Map<String, Clip> clipCollection = new HashMap<>();
   private static boolean soundsEnabled = true;
 

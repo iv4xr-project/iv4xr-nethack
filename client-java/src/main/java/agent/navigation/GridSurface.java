@@ -1,6 +1,5 @@
 package agent.navigation;
-
-import agent.AgentLoggers;
+;
 import agent.navigation.hpastar.*;
 import agent.navigation.hpastar.factories.EntranceStyle;
 import agent.navigation.hpastar.factories.HierarchicalMapFactory;
@@ -19,8 +18,9 @@ import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.*;
 import java.util.stream.Collectors;
 import nethack.enums.Color;
-import nethack.util.ColoredStringBuilder;
 import org.apache.logging.log4j.Logger;
+import util.ColoredStringBuilder;
+import util.Loggers;
 
 /**
  * Representing a navigation graph over a 2D tiled-world. The world is assumed to be made of
@@ -36,7 +36,7 @@ import org.apache.logging.log4j.Logger;
  * @author Wish
  */
 public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
-  static final Logger logger = AgentLoggers.NavLogger;
+  static final Logger logger = Loggers.NavLogger;
   public final Tile[][] tiles;
   public final Map<String, HashSet<IntVec2D>> tileTypes = new HashMap<>();
   public final Set<Tile> frontierCandidates = new HashSet<>();
@@ -319,7 +319,7 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
     factory.removeAbstractNode(hierarchicalMap, startAbsNode);
 
     List<IntVec2D> posPath = toPositionPath(path, concreteMap);
-    System.out.printf("findPath: %s -> %s (%s)%n", from, to, posPath);
+    //    System.out.printf("findPath: %s -> %s (%s)%n", from, to, posPath);
     verifyPath(from.pos, to.pos, posPath);
     return posPath.stream().map(Tile::new).collect(Collectors.toList());
   }

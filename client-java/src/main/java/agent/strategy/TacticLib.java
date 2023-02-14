@@ -2,12 +2,12 @@ package agent.strategy;
 
 import static nl.uu.cs.aplib.AplibEDSL.ABORT;
 
-import agent.AgentLoggers;
 import agent.iv4xr.AgentState;
 import agent.navigation.strategy.NavUtils;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import nl.uu.cs.aplib.mainConcepts.Tactic;
 import org.apache.logging.log4j.Logger;
+import util.Loggers;
 
 /**
  * Provide several basic actions and tactics.
@@ -20,7 +20,7 @@ import org.apache.logging.log4j.Logger;
  * @author wish
  */
 public class TacticLib {
-  static final Logger logger = AgentLoggers.AgentLogger;
+  static final Logger logger = Loggers.AgentLogger;
 
   public static Tactic abortOnDeath() {
     return ABORT()

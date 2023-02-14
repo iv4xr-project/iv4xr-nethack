@@ -23,7 +23,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import nethack.enums.Color;
-import nethack.util.ColoredStringBuilder;
+import util.ColoredStringBuilder;
 
 /** Abstract maps represent, as the name implies, an abstraction built over the concrete map. */
 public class HierarchicalMap implements IMap<AbstractNode> {

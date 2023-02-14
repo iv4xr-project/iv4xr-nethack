@@ -1,4 +1,4 @@
-package nethack;
+package util;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -2,7 +2,6 @@ package agent.strategy;
 
 import static nl.uu.cs.aplib.AplibEDSL.action;
 
-import agent.AgentLoggers;
 import agent.iv4xr.AgentState;
 import agent.navigation.NetHackSurface;
 import agent.navigation.strategy.NavUtils;
@@ -10,7 +9,6 @@ import agent.navigation.surface.Door;
 import agent.navigation.surface.Tile;
 import agent.navigation.surface.Wall;
 import agent.selector.ItemSelector;
-import agent.util.Sounds;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import eu.iv4xr.framework.spatial.IntVec2D;
@@ -28,9 +26,11 @@ import nethack.object.Player;
 import nl.uu.cs.aplib.mainConcepts.Action;
 import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.Logger;
+import util.Loggers;
+import util.Sounds;
 
 public class Actions {
-  static final Logger logger = AgentLoggers.GoalLogger;
+  static final Logger logger = Loggers.GoalLogger;
 
   /**
    * Construct an action that would interact with an entity of the given id. The action's guard is
@@ -43,7 +43,7 @@ public class Actions {
             (AgentState S) ->
                 (Pair<Integer, Tile> nextTile) -> {
                   WorldModel newwom = NavUtils.moveTo(S, nextTile);
-                  logger.info(String.format(">>> interact %s", nextTile));
+                  logger.info(">>> interact %s", nextTile);
                   return new Pair<>(S, newwom);
                 });
   }
@@ -57,7 +57,7 @@ public class Actions {
               List<WorldEntity> ms = S.adjacentEntities(EntityType.MONSTER, true);
               // just choose the first one:
               Vec3 position = ms.get(0).position;
-              logger.info(String.format(">>> attackMonster %s", position));
+              logger.info(">>> attackMonster %s", position);
               WorldModel newwom = NavUtils.moveTo(S, position);
               return new Pair<>(S, newwom);
             });
@@ -70,7 +70,7 @@ public class Actions {
             (AgentState S) ->
                 (Pair<Integer, Tile> door) -> {
                   Sounds.door_kick();
-                  logger.info(String.format("kickDoor @%s", door));
+                  logger.info("kickDoor @%s", door);
                   WorldModel newwom = WorldModels.kickDoor(S, door);
                   return new Pair<>(S, newwom);
                 });
@@ -83,7 +83,7 @@ public class Actions {
             (AgentState S) ->
                 (Pair<Integer, Tile> doorTile) -> {
                   Sounds.door();
-                  logger.info(String.format("open door @%s", doorTile));
+                  logger.info("open door @%s", doorTile);
                   WorldModel newwom = NavUtils.moveTo(S, doorTile);
                   if (Objects.equals(S.app().gameState.message, "This door is locked.")) {
                     Door d = (Door) doorTile.snd;
@@ -97,7 +97,7 @@ public class Actions {
     return action(String.format("perform command: %s", command))
         .do1(
             (AgentState S) -> {
-              logger.info(String.format("command: %s", command));
+              logger.info("command: %s", command);
               WorldModel newwom = WorldModels.performCommand(S, command);
               return new Pair<>(S, newwom);
             });
@@ -143,7 +143,7 @@ public class Actions {
             (AgentState S) ->
                 (Item item) -> {
                   Sounds.eat();
-                  logger.info(String.format(">>> eatFood: %s", item));
+                  logger.info(">>> eatFood: %s", item);
                   WorldModel newwom = WorldModels.eatFood(S, item.symbol);
                   return new Pair<>(S, newwom);
                 })

@@ -9,26 +9,26 @@ import agent.navigation.hpastar.infrastructure.Id;
 import agent.navigation.strategy.NavUtils;
 import agent.navigation.surface.Tile;
 import agent.strategy.GoalLib;
-import agent.util.ProgressBar;
-import agent.util.Sounds;
-import connection.ConnectionLoggers;
 import connection.SocketClient;
 import eu.iv4xr.framework.mainConcepts.TestAgent;
 import eu.iv4xr.framework.spatial.Vec3;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import nethack.Config;
 import nethack.NetHack;
 import nethack.enums.Command;
 import nethack.object.Player;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
 import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.Logger;
+import util.Config;
+import util.Loggers;
+import util.ProgressBar;
+import util.Sounds;
 
 public class App {
-  static final Logger connectionLogger = ConnectionLoggers.ConnectionLogger;
-  static final Logger agentLogger = AgentLoggers.AgentLogger;
+  static final Logger connectionLogger = Loggers.ConnectionLogger;
+  static final Logger agentLogger = Loggers.AgentLogger;
 
   public static void main(String[] args) throws Exception {
     // Initialize socket connection
@@ -95,7 +95,7 @@ public class App {
         }
       } else {
         agent.update();
-        agentLogger.debug(String.format("agent @%s", state.worldmodel.position));
+        agentLogger.debug("agent @%s", state.worldmodel.position);
       }
 
       // Need to update state for render

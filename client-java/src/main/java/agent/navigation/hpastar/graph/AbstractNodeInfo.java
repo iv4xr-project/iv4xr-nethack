@@ -7,8 +7,8 @@ package agent.navigation.hpastar.graph;
 import agent.navigation.hpastar.Cluster;
 import agent.navigation.hpastar.infrastructure.Id;
 import eu.iv4xr.framework.spatial.IntVec2D;
-import nethack.util.ColoredStringBuilder;
 import org.apache.commons.lang.NotImplementedException;
+import util.ColoredStringBuilder;
 
 // implements nodes in the abstract graph
 public class AbstractNodeInfo {

@@ -2,19 +2,19 @@ package agent.navigation.strategy;
 
 import static nl.uu.cs.aplib.AplibEDSL.action;
 
-import agent.AgentLoggers;
 import agent.iv4xr.AgentState;
 import agent.navigation.surface.Tile;
-import agent.util.Sounds;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import eu.iv4xr.framework.spatial.Vec3;
 import nl.uu.cs.aplib.mainConcepts.Action;
 import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.Logger;
+import util.Loggers;
+import util.Sounds;
 
 public class NavAction {
-  static final Logger logger = AgentLoggers.NavLogger;
+  static final Logger logger = Loggers.NavLogger;
 
   /** Construct an action that would guide the agent to the given location. */
   public static Action navigateTo(int levelNr, int x, int y) {
@@ -22,8 +22,7 @@ public class NavAction {
         .do2(
             (AgentState S) ->
                 (Pair<Integer, Tile> nextTile) -> {
-                  logger.info(
-                      String.format("navigateTo %d (%d, %d) via %s", levelNr, x, y, nextTile));
+                  logger.info("navigateTo %d (%d, %d) via %s", levelNr, x, y, nextTile);
                   WorldModel newwom = NavUtils.moveTo(S, nextTile);
                   return new Pair<>(S, newwom);
                 })
@@ -40,7 +39,7 @@ public class NavAction {
         .do2(
             (AgentState S) ->
                 (Pair<Integer, Tile> nextTile) -> {
-                  logger.info(String.format("navigateTo %s via %s", targetId, nextTile));
+                  logger.info("navigateTo %s via %s", targetId, nextTile);
                   WorldModel newwom = NavUtils.moveTo(S, nextTile);
                   return new Pair<>(S, newwom);
                 })
@@ -62,7 +61,7 @@ public class NavAction {
         .do2(
             (AgentState S) ->
                 (Pair<Integer, Tile> nextTile) -> {
-                  logger.info(String.format("navigateTo ? via %s", nextTile));
+                  logger.info("navigateTo ? via %s", nextTile);
                   WorldModel newwom = NavUtils.moveTo(S, nextTile);
                   return new Pair<>(S, newwom);
                 });
@@ -74,7 +73,7 @@ public class NavAction {
         .do2(
             (AgentState S) ->
                 (Pair<Integer, Tile> nextTile) -> {
-                  logger.info(String.format("navigateNextTo %s via %s", targetId, nextTile));
+                  logger.info("navigateNextTo %s via %s", targetId, nextTile);
                   WorldModel newwom = NavUtils.moveTo(S, nextTile);
                   return new Pair<>(S, newwom);
                 })
@@ -86,7 +85,7 @@ public class NavAction {
                 return null;
               }
               if (S.nextToEntity(targetId, allowDiagonally)) {
-                logger.debug(String.format("Next to item id:%s", targetId));
+                logger.debug("Next to item id:%s", targetId);
                 return null;
               }
               return NavUtils.nextTile(
@@ -102,7 +101,7 @@ public class NavAction {
             (AgentState S) ->
                 (Pair<Integer, Tile> nextTile) -> {
                   Sounds.explore();
-                  logger.info(String.format("explore to %s via %s", heuristicLocation, nextTile));
+                  logger.info("explore to %s via %s", heuristicLocation, nextTile);
                   WorldModel newwom = NavUtils.moveTo(S, nextTile);
                   return new Pair<>(S, newwom);
                 })
