@@ -26,9 +26,8 @@ public class GraphFactory {
     return graph;
   }
 
-  // We hardcode OCTILE for the time being
-  public static ConcreteNode getNodeByPos(ConcreteGraph graph, int x, int y, int width) {
-    return graph.getNode(getNodeIdFromPos(x, y, width));
+  public static ConcreteNode getNodeByPos(ConcreteGraph graph, IntVec2D pos, int width) {
+    return graph.getNode(getNodeIdFromPos(pos.x, pos.y, width));
   }
 
   public static Id<ConcreteNode> getNodeIdFromPos(int left, int top, int width) {
@@ -42,9 +41,10 @@ public class GraphFactory {
 
   public static void addEdge(
       ConcreteGraph graph, Id<ConcreteNode> nodeId, int x, int y, Size size, boolean isDiag) {
-    if (y < 0 || y >= size.height || x < 0 || x >= size.width) return;
+    IntVec2D pos = new IntVec2D(x, y);
+    assert NavUtils.withinBounds(pos, size);
 
-    ConcreteNode targetNode = getNodeByPos(graph, x, y, size.width);
+    ConcreteNode targetNode = getNodeByPos(graph, pos, size.width);
     int cost = targetNode.info.cost;
     cost = isDiag ? (cost * 34) / 24 : cost;
     graph.addEdge(nodeId, targetNode.nodeId, new ConcreteEdgeInfo(cost));
@@ -58,8 +58,7 @@ public class GraphFactory {
         if (passability.cannotEnter(currentPos, new RefSupport<>())) {
           continue;
         }
-        Id<ConcreteNode> nodeId =
-            getNodeByPos(graph, currentPos.x, currentPos.y, size.width).nodeId;
+        Id<ConcreteNode> nodeId = getNodeByPos(graph, currentPos, size.width).nodeId;
         if (tileType == TileType.Hex) {
           if (left % 2 == 0) {
             addEdge(graph, nodeId, left + 1, top - 1, size, false);

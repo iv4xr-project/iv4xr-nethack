@@ -100,7 +100,7 @@ public class App {
 
       // Need to update state for render
       state.updateState(Player.ID);
-      printAbsNodes(state);
+      //      printAbsNodes(state);
       state.render();
       commander.sendRender();
     }
@@ -136,10 +136,10 @@ public class App {
         assert neighbour.edges.containsKey(nodeId) : "Not bidirectional absedge";
       }
     }
-    System.out.println(
-        "ABS NODES "
-            + surface.hierarchicalMap.abstractGraph.nodes.values().stream()
-                .map(abstractNode -> new Pair<>(abstractNode.nodeId, abstractNode.info.position))
-                .collect(Collectors.toList()));
+    System.out.printf("ABS NODES (%d) [", nodesIds.size());
+    for (AbstractNode node : surface.hierarchicalMap.abstractGraph.nodes.values()) {
+      System.out.printf(" {%s: %s nrEdges:%s}", node.nodeId, node.info.position, node.edges.size());
+    }
+    System.out.println("]");
   }
 }

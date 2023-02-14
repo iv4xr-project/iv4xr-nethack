@@ -318,68 +318,124 @@ public class HierarchicalMap implements IMap<AbstractNode> {
   public String toString() {
     int nrClustersPerRow =
         size.width % clusterSize == 0 ? size.width / clusterSize : size.width / clusterSize + 1;
-    int nrClustersPerColumn =
-        size.height % clusterSize == 0 ? size.height / clusterSize : size.height / clusterSize + 1;
     ColoredStringBuilder csb = new ColoredStringBuilder();
 
-    for (int y = 0, clusterY = 0; y < size.height; y++, clusterY = y / clusterSize) {
+    for (int y = 0; y < size.height; y++) {
       int relY = y % clusterSize;
       if (relY == 0) {
-        for (int x = 0, clusterX = 0; x < size.width; x++, clusterX = x / clusterSize) {
-          int relX = x % clusterSize;
-          Cluster cluster = findClusterForPosition(new IntVec2D(x, y));
-          if (relX == 0) {
-            csb.append(Color.MAGENTA_BRIGHT, cluster.entrancePoints.size());
-          }
-
-          IntVec2D absPos = new IntVec2D(x, y);
-          boolean hasEntrance =
-              cluster.entrancePoints.stream()
-                  .anyMatch(
-                      entrancePoint ->
-                          abstractGraph
-                              .getNode(entrancePoint.abstractNodeId)
-                              .info
-                              .position
-                              .equals(absPos));
-          if (hasEntrance) {
-            csb.append(Color.RED, '|');
-          } else {
-            csb.append('-');
-          }
-        }
-        csb.append('-').newLine();
+        horizontalClusterBorder(csb, y);
+        csb.newLine();
       }
-      for (int x = 0, clusterX = 0; x < size.width; x++, clusterX = x / clusterSize) {
-        Cluster cluster = findClusterForPosition(new IntVec2D(x, y));
+      for (int x = 0; x < size.width; x++) {
+        IntVec2D pos = new IntVec2D(x, y);
         int relX = x % clusterSize;
         IntVec2D relPos = new IntVec2D(relX, relY);
         if (relX == 0) {
-          boolean hasEntrance =
-              cluster.entrancePoints.stream()
-                  .anyMatch(entrancePoint -> entrancePoint.relativePosition.equals(relPos));
-          if (hasEntrance) {
-            csb.append(Color.RED, '-');
-          } else {
-            csb.append('|');
-          }
+          verticalClusterBorderEdge(csb, pos, relPos);
         }
 
-        Id<ConcreteNode> nodeId = cluster.subConcreteMap.getNodeIdFromPos(relX, relY);
-        ConcreteNode node = cluster.subConcreteMap.graph.getNode(nodeId);
-        Color color;
-        if (cluster.subConcreteMap.passability.cannotEnter(relPos, new RefSupport<>())) {
-          color = Color.TRANSPARENT;
-        } else if (cluster.subConcreteMap.passability.canMoveDiagonal(relPos)) {
-          color = Color.GREEN_BRIGHT;
-        } else {
-          color = Color.CYAN_BRIGHT;
-        }
-        csb.append(color, node.edges.size());
+        nodeToString(csb, pos, relPos);
       }
       csb.append('|').newLine();
     }
     csb.append("-".repeat(size.width + nrClustersPerRow + 1));
     return csb.toString();
+  }
+
+  private void nodeToString(ColoredStringBuilder csb, IntVec2D pos, IntVec2D relPos) {
+    Cluster cluster = findClusterForPosition(pos);
+    Id<ConcreteNode> nodeId = cluster.subConcreteMap.getNodeIdFromPos(relPos);
+    ConcreteNode node = cluster.subConcreteMap.graph.getNode(nodeId);
+    Color color;
+    if (cluster.subConcreteMap.passability.cannotEnter(relPos, new RefSupport<>())) {
+      color = Color.TRANSPARENT;
+    } else if (cluster.subConcreteMap.passability.canMoveDiagonal(relPos)) {
+      color = Color.GREEN_BRIGHT;
+    } else {
+      color = Color.CYAN_BRIGHT;
+    }
+    csb.append(color, node.edges.size());
+  }
+
+  private void verticalClusterBorderEdge(ColoredStringBuilder csb, IntVec2D pos, IntVec2D relPos) {
+    Cluster cluster = findClusterForPosition(pos);
+    IntVec2D posLeft = new IntVec2D(pos.x - 1, pos.y);
+
+    List<AbstractNode> absNodes =
+        cluster.entrancePoints.stream()
+            .filter(entrancePoint -> entrancePoint.relativePosition.equals(relPos))
+            .map(entrancePoint -> abstractGraph.nodes.get(entrancePoint.abstractNodeId))
+            .collect(Collectors.toList());
+    for (AbstractNode absNode : absNodes) {
+      for (Id<AbstractNode> neighbourNodeId : absNode.edges.keySet()) {
+        IntVec2D neighbourPos = abstractGraph.getNodeInfo(neighbourNodeId).position;
+        if (neighbourPos.x != pos.x - 1) {
+          continue;
+        }
+
+        if (neighbourPos.y == pos.y) {
+          csb.append(Color.RED, '-');
+          return;
+        } else if (neighbourPos.y == pos.y - 1) {
+          csb.append(Color.RED, '/');
+          return;
+        } else if (neighbourPos.y == pos.y + 1) {
+          csb.append(Color.RED, '\\');
+          return;
+        }
+      }
+    }
+
+    csb.append('|');
+  }
+
+  private void horizontalClusterBorder(ColoredStringBuilder csb, int y) {
+    int relY = y % clusterSize;
+
+    outerloop:
+    for (int x = 0; x < size.width; x++) {
+      int relX = x % clusterSize;
+      IntVec2D absPos = new IntVec2D(x, y);
+      Cluster cluster = findClusterForPosition(absPos);
+      if (relX == 0) {
+        csb.append(Color.MAGENTA_BRIGHT, cluster.entrancePoints.size());
+      }
+
+      if (y - 1 < 0) {
+        csb.append('-');
+      } else {
+        IntVec2D posAbove = new IntVec2D(x, y - 1);
+        IntVec2D relPos = new IntVec2D(relX, relY);
+        Cluster clusterAbove = findClusterForPosition(posAbove);
+
+        List<AbstractNode> absNodes =
+            cluster.entrancePoints.stream()
+                .filter(entrancePoint -> entrancePoint.relativePosition.equals(relPos))
+                .map(entrancePoint -> abstractGraph.nodes.get(entrancePoint.abstractNodeId))
+                .collect(Collectors.toList());
+        for (AbstractNode absNode : absNodes) {
+          for (Id<AbstractNode> neighbourNodeId : absNode.edges.keySet()) {
+            IntVec2D neighbourPos = abstractGraph.getNodeInfo(neighbourNodeId).position;
+            if (neighbourPos.y != y - 1) {
+              continue;
+            }
+
+            if (neighbourPos.x == x) {
+              csb.append(Color.RED, '|');
+              continue outerloop;
+            } else if (neighbourPos.x == x - 1) {
+              csb.append(Color.RED, '\\');
+              continue outerloop;
+            } else if (neighbourPos.x == x + 1) {
+              csb.append(Color.RED, '/');
+              continue outerloop;
+            }
+          }
+        }
+
+        csb.append('-');
+      }
+    }
+    csb.append('-');
   }
 }

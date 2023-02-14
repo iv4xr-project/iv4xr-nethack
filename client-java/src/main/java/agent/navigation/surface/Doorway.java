@@ -11,7 +11,7 @@ public class Doorway extends Tile implements Walkable, Printable {
 
   @Override
   public char toChar() {
-    return '~';
+    return '.';
   }
 
   @Override

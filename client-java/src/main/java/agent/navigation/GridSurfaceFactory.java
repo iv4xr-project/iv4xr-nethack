@@ -35,10 +35,7 @@ public class GridSurfaceFactory {
 
     Id<ConcreteNode> nodeId =
         GraphFactory.getNodeByPos(
-                subConcreteMap.graph,
-                relativePos.x,
-                relativePos.y,
-                staticSurface.hierarchicalMap.clusterSize)
+                subConcreteMap.graph, relativePos, staticSurface.hierarchicalMap.clusterSize)
             .nodeId;
     ConcreteNode node = subConcreteMap.graph.getNode(nodeId);
     node.info.isObstacle = true;
@@ -57,10 +54,7 @@ public class GridSurfaceFactory {
 
     Id<ConcreteNode> nodeId =
         GraphFactory.getNodeByPos(
-                subConcreteMap.graph,
-                relativePos.x,
-                relativePos.y,
-                staticSurface.hierarchicalMap.clusterSize)
+                subConcreteMap.graph, relativePos, staticSurface.hierarchicalMap.clusterSize)
             .nodeId;
     ConcreteNode node = subConcreteMap.graph.getNode(nodeId);
     node.info.isObstacle = false;
@@ -73,7 +67,16 @@ public class GridSurfaceFactory {
       ConcreteMap neighbourConcreteMap = neighbourCluster.subConcreteMap;
       if (neighbourConcreteMap.passability.cannotEnter(neighbourRelativePos, new RefSupport<>())) {
         continue; // Do not add edge if it is not passable
-      } else if (!originalCluster.id.equals(neighbourCluster.id)) {
+      }
+
+      if (NavUtils.isDiagonal(t.pos, neighbourPos)) {
+        // Cannot move diagonal
+        if (!subConcreteMap.passability.canMoveDiagonal(relativePos)
+            || !neighbourConcreteMap.passability.canMoveDiagonal(neighbourRelativePos)) {
+          continue;
+        }
+      }
+      if (!originalCluster.id.equals(neighbourCluster.id)) {
         if (originalCluster.clusterX < neighbourCluster.clusterX) {
           updateClusterEdges.add(Direction.East);
         } else if (originalCluster.clusterX > neighbourCluster.clusterX) {
@@ -87,8 +90,7 @@ public class GridSurfaceFactory {
         Id<ConcreteNode> neighBourId =
             GraphFactory.getNodeByPos(
                     neighbourConcreteMap.graph,
-                    neighbourRelativePos.x,
-                    neighbourRelativePos.y,
+                    neighbourRelativePos,
                     staticSurface.hierarchicalMap.clusterSize)
                 .nodeId;
         subConcreteMap.graph.addEdge(nodeId, neighBourId, new ConcreteEdgeInfo(Constants.COST_ONE));
@@ -272,11 +274,17 @@ public class GridSurfaceFactory {
   private static void removeEntrancesBetweenClusters(Cluster cluster1, Cluster cluster2) {
     List<EntrancePoint> removeFromCluster = new ArrayList<>();
     for (EntrancePoint entrance1 : cluster1.entrancePoints) {
+      AbstractNode absNode1 =
+          staticSurface.hierarchicalMap.abstractGraph.getNode(entrance1.abstractNodeId);
+      if (absNode1 == null) {
+        continue;
+      }
       for (EntrancePoint entrance2 : cluster2.entrancePoints) {
-        AbstractNode absNode1 =
-            staticSurface.hierarchicalMap.abstractGraph.getNode(entrance1.abstractNodeId);
         AbstractNode absNode2 =
             staticSurface.hierarchicalMap.abstractGraph.getNode(entrance2.abstractNodeId);
+        if (absNode2 == null) {
+          continue;
+        }
 
         IntVec2D entrance1Pos = absNode1.info.position;
         IntVec2D entrance2Pos = absNode2.info.position;
@@ -288,17 +296,14 @@ public class GridSurfaceFactory {
           absNode2.removeEdge(absNode1.nodeId);
 
           System.out.printf("Remove entrance between %s x %s%n", entrance1Pos, entrance2Pos);
-          //          if (absNode1.edges.isEmpty()) {
-          //            staticSurface.hierarchicalMap.abstractGraph.removeNode(absNode1.nodeId);
-          //          }
-          //          if (absNode2.edges.isEmpty()) {
-          //            staticSurface.hierarchicalMap.abstractGraph.removeNode(absNode2.nodeId);
-          //          }
+          if (absNode1.edges.isEmpty()) {
+            staticSurface.hierarchicalMap.abstractGraph.removeNode(absNode1.nodeId);
+          }
+          if (absNode2.edges.isEmpty()) {
+            staticSurface.hierarchicalMap.abstractGraph.removeNode(absNode2.nodeId);
+          }
         }
       }
-    }
-    for (EntrancePoint entrancePoint : removeFromCluster) {
-      staticSurface.hierarchicalMap.removeAbstractNode(entrancePoint.abstractNodeId);
     }
 
     cluster1.entrancePoints.removeAll(removeFromCluster);
