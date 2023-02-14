@@ -302,7 +302,6 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
   @Override
   public List<Tile> findPath(Tile from, Tile to) {
     HierarchicalMapFactory factory = new HierarchicalMapFactory();
-    System.out.printf("findPath: %s -> %s%n", from.pos, to.pos);
     Id<AbstractNode> startAbsNode = factory.insertAbstractNode(hierarchicalMap, from.pos);
     Id<AbstractNode> targetAbsNode = factory.insertAbstractNode(hierarchicalMap, to.pos);
     assert !startAbsNode.equals(targetAbsNode);
@@ -321,7 +320,7 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
     factory.removeAbstractNode(hierarchicalMap, startAbsNode);
 
     List<IntVec2D> posPath = toPositionPath(path, concreteMap);
-    System.out.printf("%s -> %s (%s)%n", from, to, posPath);
+    System.out.printf("findPath: %s -> %s (%s)%n", from, to, posPath);
     verifyPath(from.pos, to.pos, posPath);
     return posPath.stream().map(Tile::new).collect(Collectors.toList());
   }

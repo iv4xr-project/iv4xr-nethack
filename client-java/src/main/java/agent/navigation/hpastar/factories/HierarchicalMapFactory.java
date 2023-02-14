@@ -115,7 +115,7 @@ public class HierarchicalMapFactory {
     nodeInfo.level = nodeBackup.level;
     abstractGraph.removeEdgesFromAndToNode(nodeId);
 
-    //    System.out.printf("Abs AddNode: %s%n", nodeId);
+    // Updates node
     abstractGraph.addNode(nodeId, nodeInfo);
     for (AbstractEdge edge : nodeBackup.edges) {
       var targetNodeId = edge.targetNodeId;

@@ -111,8 +111,8 @@ public class HierarchicalNavigation
     } else {
       List<Pair<Pair<Integer, Tile>, List<Pair<Integer, Tile>>>> candidates2 =
           candidates.stream()
-              .map((c) -> new Pair<>(c, this.findPath(startNode, c)))
-              .filter((d) -> d.snd != null)
+              .map(c -> new Pair<>(c, this.findPath(startNode, c)))
+              .filter(d -> d.snd != null)
               .collect(Collectors.toList());
       if (candidates2.size() == 0) {
         return null;

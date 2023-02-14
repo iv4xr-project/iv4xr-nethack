@@ -20,7 +20,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import nl.uu.cs.aplib.utils.Pair;
 
 public class GridSurfaceFactory {
@@ -121,17 +120,20 @@ public class GridSurfaceFactory {
   }
 
   private static void addInterClusterEdge(Entrance entrance) {
-    Id<AbstractNode> startAbsNodeId =
-        addAbstractNode(entrance.cluster1, entrance.srcNode.info.position);
-    Id<AbstractNode> targetAbsNodeId =
-        addAbstractNode(entrance.cluster2, entrance.destNode.info.position);
+    IntVec2D srcPos =
+        new IntVec2D(
+            entrance.cluster1.origin.x + entrance.srcNode.info.position.x,
+            entrance.cluster1.origin.y + entrance.srcNode.info.position.y);
+    IntVec2D destPos =
+        new IntVec2D(
+            entrance.cluster2.origin.x + entrance.destNode.info.position.x,
+            entrance.cluster2.origin.y + entrance.destNode.info.position.y);
+    Id<AbstractNode> startAbsNodeId = addAbstractNode(entrance.cluster1, srcPos);
+    Id<AbstractNode> targetAbsNodeId = addAbstractNode(entrance.cluster2, destPos);
 
     System.out.printf(
         "InterCluster AddEdge: %s (%s) -> %s (%s)%n",
-        startAbsNodeId,
-        entrance.srcNode.info.position,
-        targetAbsNodeId,
-        entrance.destNode.info.position);
+        startAbsNodeId, srcPos, targetAbsNodeId, destPos);
     staticSurface.hierarchicalMap.abstractGraph.addEdge(
         startAbsNodeId, targetAbsNodeId, new AbstractEdgeInfo(Constants.COST_ONE, 1, true));
     staticSurface.hierarchicalMap.abstractGraph.addEdge(
@@ -140,7 +142,7 @@ public class GridSurfaceFactory {
 
   private static Id<AbstractNode> addAbstractNode(Cluster cluster, IntVec2D pos) {
     Id<AbstractNode> absNodeId =
-        new Id<AbstractNode>().from(staticSurface.hierarchicalMap.abstractGraph.nodes.size());
+        new Id<AbstractNode>().from(staticSurface.hierarchicalMap.abstractGraph.nextId);
     cluster.addEntrance(absNodeId, staticSurface.toRelativePos(pos));
     var nodeId = staticSurface.concreteMap.getNodeIdFromPos(pos);
     AbstractNodeInfo nodeInfo = new AbstractNodeInfo(absNodeId, 1, cluster.id, pos, nodeId);
@@ -159,12 +161,22 @@ public class GridSurfaceFactory {
     Function<Integer, Pair<ConcreteNode, ConcreteNode>> getNodesForRow =
         row -> new Pair<>(getNode(column, row), getNode(column + 1, row));
 
-    List<EntrancePoint> existing =
-        cluster.entrancePoints.stream()
-            .filter(entrancePoint -> entrancePoint.relativePosition.x == 0)
-            .collect(Collectors.toList());
-    cluster.entrancePoints.removeAll(existing);
-    clusterOnLeft.entrancePoints.removeAll(existing);
+    System.out.println("Left cluster: " + clusterOnLeft);
+    if (clusterOnLeft.origin.y == 16) {
+      System.out.print("");
+    }
+
+    List<EntrancePoint> entrancesToRemove = new ArrayList<>();
+    for (EntrancePoint entrancePoint : cluster.entrancePoints) {
+      var abstractNode =
+          staticSurface.hierarchicalMap.abstractGraph.nodes.get(
+              entrancePoint.abstractNodeId.getIdValue());
+      if (abstractNode.info.position.x == 7 && entrancePoint.relativePosition.x == 0) {
+        entrancesToRemove.add(entrancePoint);
+      }
+    }
+    cluster.entrancePoints.removeAll(entrancesToRemove);
+    clusterOnLeft.entrancePoints.removeAll(entrancesToRemove);
     return createEntrancesAlongEdge(
         rowStart,
         rowEnd,
@@ -183,15 +195,39 @@ public class GridSurfaceFactory {
       Cluster cluster,
       RefSupport<Integer> currentEntranceId) {
     Function<Integer, Pair<ConcreteNode, ConcreteNode>> getNodesForColumn =
-        (column) -> new Pair<>(getNode(column, row), getNode(column, row + 1));
+        column -> new Pair<>(getNode(column, row), getNode(column, row + 1));
 
-    List<EntrancePoint> existing =
-        cluster.entrancePoints.stream()
-            .filter(entrancePoint -> entrancePoint.relativePosition.y == 0)
-            .collect(Collectors.toList());
+    List<EntrancePoint> entrancesToRemove = new ArrayList<>();
+    for (EntrancePoint entrancePoint : cluster.entrancePoints) {
+      Id<AbstractNode> abstractNodeId = entrancePoint.abstractNodeId;
+      AbstractNode abstractNode =
+          staticSurface.hierarchicalMap.abstractGraph.nodes.get(abstractNodeId);
+      if (abstractNode.info.position.y % staticSurface.hierarchicalMap.clusterSize != 0) {
+        continue;
+      }
+      Set<Id<AbstractNode>> neighbourIds = abstractNode.edges.keySet();
+      for (Id<AbstractNode> neighbourId : neighbourIds) {
+        AbstractNode neighbourNode =
+            staticSurface.hierarchicalMap.abstractGraph.nodes.get(neighbourId);
+        if (neighbourNode.info.position.y % staticSurface.hierarchicalMap.clusterSize
+            == staticSurface.hierarchicalMap.clusterSize - 1) {
+          abstractNode.removeEdge(neighbourId);
+          neighbourNode.removeEdge(abstractNodeId);
+        }
+        if (neighbourNode.edges.isEmpty()) {
+          staticSurface.hierarchicalMap.abstractGraph.nodes.remove(neighbourId);
+        }
+      }
 
-    cluster.entrancePoints.removeAll(existing);
-    clusterOnTop.entrancePoints.removeAll(existing);
+      if (abstractNode.edges.isEmpty()) {
+        staticSurface.hierarchicalMap.abstractGraph.nodes.remove(abstractNodeId);
+      }
+
+      System.out.printf("Abs Node Pos: %s%n", abstractNode.info.position);
+    }
+    cluster.entrancePoints.removeAll(entrancesToRemove);
+    clusterOnTop.entrancePoints.removeAll(entrancesToRemove);
+
     return createEntrancesAlongEdge(
         colStart,
         colEnd,
@@ -213,7 +249,7 @@ public class GridSurfaceFactory {
     List<Entrance> entrances = new ArrayList<>();
     for (int entranceStart = startPoint; entranceStart <= endPoint; entranceStart++) {
       int size = getEntranceSize(entranceStart, endPoint, getNodesInEdge);
-      int entranceEnd = entranceStart + (size - 1);
+      int entranceEnd = entranceStart + size - 1;
       if (size == 0) {
         continue;
       }
@@ -246,7 +282,7 @@ public class GridSurfaceFactory {
         entrances.add(entrance1);
         entrances.add(entrance2);
         System.out.printf(
-            "1. Entrance added (%s -> %s) between cluster %s -> %s%n",
+            "1. Entrance added relPos:(%s -> %s) between cluster %s -> %s%n",
             srcNode.info.position, destNode.info.position, precedentCluster, currentCluster);
       } else {
         Pair<ConcreteNode, ConcreteNode> nodes =
@@ -264,7 +300,7 @@ public class GridSurfaceFactory {
         currentEntranceId.setValue(currentEntranceId.getValue() + 1);
         entrances.add(entrance);
         System.out.printf(
-            "2. Entrance added (%s -> %s) between cluster %s -> %s%n",
+            "2. Entrance added relPos:(%s -> %s) between cluster %s -> %s%n",
             srcNode.info.position, destNode.info.position, precedentCluster, currentCluster);
       }
 
@@ -318,7 +354,8 @@ public class GridSurfaceFactory {
     Cluster cluster = staticSurface.hierarchicalMap.findClusterForPosition(pos);
     IntVec2D relPos = staticSurface.toRelativePos(pos);
     var nodeId = cluster.subConcreteMap.getNodeIdFromPos(relPos);
-    return cluster.subConcreteMap.graph.getNode(nodeId);
+    var node = cluster.subConcreteMap.graph.getNode(nodeId);
+    return node;
   }
 
   private static boolean entranceIsBlocked(

@@ -7,6 +7,7 @@ package agent.navigation.hpastar.graph;
 import agent.AgentLoggers;
 import agent.navigation.hpastar.infrastructure.Id;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -29,15 +30,16 @@ public class Graph<
   // This list is implicitly indexed by the nodeId, which makes removing a random
   // Node in the list quite of a mess. We could use a dictionary to ease removals,
   // but lists and arrays are faster for random accesses, and we need performance.
-  public final List<TNode> nodes = new ArrayList<>();
-  private final Function<Pair<Id<TNode>, TNodeInfo>, TNode> _nodeCreator;
-  private final Function<Pair<Id<TNode>, TEdgeInfo>, TEdge> _edgeCreator;
+  public final Map<Id<TNode>, TNode> nodes = new HashMap<>();
+  public int nextId = 0;
+  private final Function<Pair<Id<TNode>, TNodeInfo>, TNode> nodeCreator;
+  private final Function<Pair<Id<TNode>, TEdgeInfo>, TEdge> edgeCreator;
 
   public Graph(
       Function<Pair<Id<TNode>, TNodeInfo>, TNode> nodeCreator,
       Function<Pair<Id<TNode>, TEdgeInfo>, TEdge> edgeCreator) {
-    _nodeCreator = nodeCreator;
-    _edgeCreator = edgeCreator;
+    this.nodeCreator = nodeCreator;
+    this.edgeCreator = edgeCreator;
   }
 
   /**
@@ -45,26 +47,24 @@ public class Graph<
    * previously existed.
    */
   public void addNode(Id<TNode> nodeId, TNodeInfo info) {
-    int size = nodeId.getIdValue() + 1;
-    if (nodes.size() < size) {
-      nodes.add(_nodeCreator.apply(new Pair<>(nodeId, info)));
-    } else {
-      nodes.set(nodeId.getIdValue(), _nodeCreator.apply(new Pair<>(nodeId, info)));
+    if (!nodes.containsKey(nodeId)) {
+      nextId++;
     }
+    nodes.put(nodeId, nodeCreator.apply(new Pair<>(nodeId, info)));
   }
 
   public void addEdge(Id<TNode> sourceNodeId, Id<TNode> targetNodeId, TEdgeInfo info) {
     hpaLogger.trace(String.format("AddEdge: %s %s", sourceNodeId, targetNodeId));
-    var node = nodes.get(sourceNodeId.getIdValue());
-    node.addEdge(_edgeCreator.apply(new Pair<>(targetNodeId, info)));
+    var node = nodes.get(sourceNodeId);
+    node.addEdge(edgeCreator.apply(new Pair<>(targetNodeId, info)));
   }
 
   public void removeEdgesFromAndToNode(Id<TNode> nodeId) {
-    List<Id<TNode>> keys = new ArrayList<>(nodes.get(nodeId.getIdValue()).edges.keySet());
+    List<Id<TNode>> keys = new ArrayList<>(nodes.get(nodeId).edges.keySet());
     for (Id<TNode> targetNodeId : keys) {
-      nodes.get(targetNodeId.getIdValue()).removeEdge(nodeId);
+      nodes.get(targetNodeId).removeEdge(nodeId);
     }
-    nodes.get(nodeId.getIdValue()).edges.clear();
+    nodes.get(nodeId).edges.clear();
   }
 
   public void removeLastNode() {
@@ -72,7 +72,7 @@ public class Graph<
   }
 
   public TNode getNode(Id<TNode> nodeId) {
-    return nodes.get(nodeId.getIdValue());
+    return nodes.get(nodeId);
   }
 
   public TNodeInfo getNodeInfo(Id<TNode> nodeId) {
@@ -80,6 +80,6 @@ public class Graph<
   }
 
   public Map<Id<TNode>, TEdge> getEdges(Id<TNode> nodeId) {
-    return nodes.get(nodeId.getIdValue()).edges;
+    return nodes.get(nodeId).edges;
   }
 }

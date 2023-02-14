@@ -2,6 +2,7 @@ package agent;
 
 import agent.iv4xr.AgentEnv;
 import agent.iv4xr.AgentState;
+import agent.navigation.hpastar.graph.AbstractNode;
 import agent.navigation.strategy.NavUtils;
 import agent.navigation.surface.Tile;
 import agent.strategy.GoalLib;
@@ -11,6 +12,9 @@ import connection.ConnectionLoggers;
 import connection.SocketClient;
 import eu.iv4xr.framework.mainConcepts.TestAgent;
 import eu.iv4xr.framework.spatial.Vec3;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 import nethack.Config;
 import nethack.NetHack;
 import nethack.enums.Command;
@@ -91,6 +95,14 @@ public class App {
         agentLogger.debug(String.format("agent @%s", state.worldmodel.position));
       }
 
+      List<AbstractNode> nodes =
+          new ArrayList<>(
+              state.hierarchicalNav.areas.get(0).hierarchicalMap.abstractGraph.nodes.values());
+      System.out.println(
+          "ABS NODES"
+              + nodes.stream()
+                  .map(abstractNode -> new Pair<>(abstractNode.nodeId, abstractNode.info.position))
+                  .collect(Collectors.toList()));
       // Need to update state for render
       state.updateState(Player.ID);
       state.render();

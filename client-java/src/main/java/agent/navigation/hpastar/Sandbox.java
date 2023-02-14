@@ -23,9 +23,9 @@ public class Sandbox {
   public static void main(String[] args) {
     int clusterSize = 8;
     int maxLevel = 1;
-    Size size = new Size(8, 16);
+    Size size = new Size(16, 16);
 
-    FakePassability passability = new FakePassability(size, false);
+    FakePassability passability = new FakePassability(size, true);
     ConcreteMap concreteMap =
         ConcreteMapFactory.createConcreteMap(size, passability, TileType.Octile);
     HierarchicalMap absTiling =
@@ -33,6 +33,11 @@ public class Sandbox {
             .createHierarchicalMap(
                 concreteMap, clusterSize, maxLevel, EntranceStyle.EndEntrance, size);
     concreteMap.printFormatted();
+    System.out.println(
+        absTiling.abstractGraph.nodes.values().stream()
+            .map(abstractNode -> abstractNode.info.position)
+            .collect(Collectors.toList()));
+    System.out.println(absTiling);
 
     List<Pair<IntVec2D, IntVec2D>> points;
     if (false) {

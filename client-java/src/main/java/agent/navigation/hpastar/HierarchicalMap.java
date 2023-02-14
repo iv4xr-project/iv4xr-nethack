@@ -33,7 +33,7 @@ public class HierarchicalMap implements IMap<AbstractNode> {
   public final List<Cluster> clusters = new ArrayList<>();
 
   public int getNrNodes() {
-    return abstractGraph.nodes.size();
+    return abstractGraph.nextId;
   }
 
   // This list, indexed by a node id from the low level,
@@ -348,9 +348,6 @@ public class HierarchicalMap implements IMap<AbstractNode> {
         int relX = x % clusterSize;
         IntVec2D relPos = new IntVec2D(relX, relY);
         if (relX == 0) {
-          if (!cluster.entrancePoints.isEmpty()) {
-            System.out.println();
-          }
           boolean hasEntrance =
               cluster.entrancePoints.stream()
                   .anyMatch(entrancePoint -> entrancePoint.relativePosition.equals(relPos));

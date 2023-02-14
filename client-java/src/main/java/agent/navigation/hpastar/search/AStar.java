@@ -41,8 +41,10 @@ public class AStar<TNode> {
   public final Path<TNode> findPath() {
     while (canExpand()) {
       Id<TNode> nodeId = expand();
+      //      System.out.printf("Expand %s%n", nodeId.getIdValue());
       hpaLogger.trace(String.format("Expand %s", nodeId.getIdValue()));
       if (isGoal.apply(nodeId)) {
+        //        System.out.println("Found path");
         hpaLogger.trace("Found path");
         return reconstructPathFrom(nodeId);
       }
