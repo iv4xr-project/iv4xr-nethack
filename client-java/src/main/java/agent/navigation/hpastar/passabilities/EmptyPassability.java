@@ -11,6 +11,7 @@ import agent.navigation.hpastar.TileType;
 import agent.navigation.hpastar.infrastructure.Constants;
 import agent.navigation.hpastar.utils.RefSupport;
 import eu.iv4xr.framework.spatial.IntVec2D;
+import nethack.util.ColoredStringBuilder;
 
 public class EmptyPassability implements IPassability {
   final Size size;
@@ -76,20 +77,20 @@ public class EmptyPassability implements IPassability {
   }
 
   public String toString() {
-    StringBuilder sb = new StringBuilder();
+    ColoredStringBuilder csb = new ColoredStringBuilder();
     for (int y = 0; y < size.height; y++) {
       for (int x = 0; x < size.width; x++) {
         if (cannotEnter(new IntVec2D(x, y), new RefSupport<>())) {
-          sb.append('#');
+          csb.append('#');
         } else {
-          sb.append('.');
+          csb.append('.');
         }
       }
       if (y != size.height - 1) {
-        sb.append(System.lineSeparator());
+        csb.newLine();
       }
     }
 
-    return sb.toString();
+    return csb.toString();
   }
 }

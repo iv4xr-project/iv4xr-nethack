@@ -7,6 +7,7 @@ import java.util.List;
 import nethack.NetHackLoggers;
 import nethack.enums.Color;
 import nethack.enums.EntityType;
+import nethack.util.ColoredStringBuilder;
 import org.apache.logging.log4j.Logger;
 
 public class Level {
@@ -87,22 +88,17 @@ public class Level {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
+    ColoredStringBuilder csb = new ColoredStringBuilder();
     for (int y = 0; y < SIZE.height; y++) {
-      Color currentColor = null;
       for (int x = 0; x < SIZE.width; x++) {
-        // Color changed so add it to the line
-        if (currentColor != map[y][x].color) {
-          currentColor = map[y][x].color;
-          sb.append(map[y][x].color.stringCode());
-        }
-        sb.append(map[y][x].symbol);
+        csb.setColor(map[y][x].color);
+        csb.append(map[y][x].symbol);
       }
-      sb.append(Color.RESET.stringCode());
+      csb.resetColor();
       if (y != map.length - 1) {
-        sb.append(System.lineSeparator());
+        csb.newLine();
       }
     }
-    return sb.toString();
+    return csb.toString();
   }
 }

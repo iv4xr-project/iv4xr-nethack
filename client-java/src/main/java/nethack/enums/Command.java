@@ -3,6 +3,7 @@ package nethack.enums;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import nethack.util.ColoredStringBuilder;
 
 // Actions listed at: /python-server/lib/nle/nle/nethack/actions.py
 public enum Command {
@@ -419,7 +420,7 @@ public enum Command {
       nrValues[i / columnLength] = Math.max(CommandStrs[i].length(), nrValues[i / columnLength]);
     }
 
-    StringBuilder sb = new StringBuilder();
+    ColoredStringBuilder csb = new ColoredStringBuilder();
     // Print each row of command with descriptions
     for (int i = 0; i < columnLength; i++) {
       for (int j = 0; j < (n / columnLength) + 1; j++) {
@@ -429,15 +430,15 @@ public enum Command {
         }
 
         if (j != 0) {
-          sb.append('|');
+          csb.append('|');
         }
         String s = CommandStrs[index];
-        sb.append(s);
-        sb.append(" ".repeat(nrValues[j] - s.length()));
+        csb.append(s);
+        csb.append(" ".repeat(nrValues[j] - s.length()));
       }
-      sb.append(System.lineSeparator());
+      csb.newLine();
     }
-    System.out.print(sb);
+    System.out.print(csb);
   }
 
   public int getIndex(GameMode gameMode) {

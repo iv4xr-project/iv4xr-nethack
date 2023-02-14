@@ -26,6 +26,7 @@ import java.util.Random;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import nethack.util.ColoredStringBuilder;
 import nl.uu.cs.aplib.utils.Pair;
 
 public class Program {
@@ -177,20 +178,12 @@ public class Program {
                 })
             .collect(Collectors.toList());
 
-    StringBuilder sb = new StringBuilder();
-    sb.append("Regular search: ")
-        .append(regularSearchTime)
-        .append(" ms")
-        .append(System.lineSeparator());
-    sb.append("Number of nodes: ").append(regularSearchPath.size()).append(System.lineSeparator());
-    sb.append("Hierachical search: ")
-        .append(hierarchicalSearchTime)
-        .append(" ms")
-        .append(System.lineSeparator());
-    sb.append("Number of nodes: ")
-        .append(hierarchicalSearchPath.size())
-        .append(System.lineSeparator());
-    System.out.print(sb);
+    ColoredStringBuilder csb = new ColoredStringBuilder();
+    csb.appendf("Regular search: %d ms%n", regularSearchTime);
+    csb.appendf("Number of nodes: %d%n", regularSearchPath.size());
+    csb.appendf("Hierarchical search: %d ms%n", hierarchicalSearchTime);
+    csb.appendf("Number of nodes: %d%n", hierarchicalSearchPath.size());
+    System.out.print(csb);
   }
 
   public static void main2(String[] args) {
@@ -230,20 +223,12 @@ public class Program {
                 })
             .collect(Collectors.toList());
 
-    StringBuilder sb = new StringBuilder();
-    sb.append("Regular search: ")
-        .append(regularSearchTime)
-        .append(" ms")
-        .append(System.lineSeparator());
-    sb.append("Number of nodes: ").append(regularSearchPath.size()).append(System.lineSeparator());
-    sb.append("Hierachical search: ")
-        .append(hierarchicalSearchTime)
-        .append(" ms")
-        .append(System.lineSeparator());
-    sb.append("Number of nodes: ")
-        .append(hierarchicalSearchPath.size())
-        .append(System.lineSeparator());
-    System.out.print(sb);
+    ColoredStringBuilder csb = new ColoredStringBuilder();
+    csb.appendf("Regular search: %d ms%n", regularSearchTime);
+    csb.appendf("Number of nodes: %d%n", regularSearchPath.size());
+    csb.appendf("Hierarchical search: %d ms%n", hierarchicalSearchTime);
+    csb.appendf("Number of nodes: %d%n", hierarchicalSearchPath.size());
+    System.out.print(csb);
   }
 
   public static void main(String[] args) {
@@ -300,8 +285,7 @@ public class Program {
                 })
             .collect(Collectors.toList());
 
-    List<Function<Pair<IntVec2D, IntVec2D>, List<IPathNode>>> searchStrategies =
-        new ArrayList<Function<Pair<IntVec2D, IntVec2D>, List<IPathNode>>>(2);
+    List<Function<Pair<IntVec2D, IntVec2D>, List<IPathNode>>> searchStrategies = new ArrayList<>(2);
     searchStrategies.add(doRegularSearch);
     searchStrategies.add(doHierarchicalSearch);
 
@@ -388,17 +372,16 @@ public class Program {
       HierarchicalMap hierarchicalGraph,
       int clusterSize,
       List<IntVec2D> path) {
-    StringBuilder sb = new StringBuilder();
+    ColoredStringBuilder csb = new ColoredStringBuilder();
     for (int y = 0; y < concreteMap.size.height; y++) {
       if (y % clusterSize == 0) {
-        sb.append("---------------------------------------------------------")
-            .append(System.lineSeparator());
+        csb.append("---------------------------------------------------------").newLine();
       }
 
       for (int x = 0; x < concreteMap.size.width; x++) {
         //                Console.ForegroundColor = ConsoleColor.White;
         if (x % clusterSize == 0) {
-          sb.append('|');
+          csb.append('|');
         }
 
         Id<ConcreteNode> nodeId = concreteMap.getNodeIdFromPos(x, y);
@@ -423,7 +406,7 @@ public class Program {
 
         int x0 = x;
         int y0 = y;
-        sb.append(
+        csb.append(
             path.stream()
                     .anyMatch(
                         (node) -> {
@@ -432,8 +415,8 @@ public class Program {
                 ? 'X'
                 : chars.get(nodeId.getIdValue()));
       }
-      sb.append(System.lineSeparator());
+      csb.newLine();
     }
-    System.out.print(sb);
+    System.out.print(csb);
   }
 }

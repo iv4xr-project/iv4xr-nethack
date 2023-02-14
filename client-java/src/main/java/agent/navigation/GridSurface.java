@@ -18,6 +18,8 @@ import eu.iv4xr.framework.extensions.pathfinding.XPathfinder;
 import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.*;
 import java.util.stream.Collectors;
+import nethack.enums.Color;
+import nethack.util.ColoredStringBuilder;
 import org.apache.logging.log4j.Logger;
 
 /**
@@ -462,26 +464,33 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
+    ColoredStringBuilder csb = new ColoredStringBuilder();
     // Add row by row to the StringBuilder
     for (int y = 0; y < hierarchicalMap.size.height; y++) {
       for (int x = 0; x < hierarchicalMap.size.width; x++) {
         // Get tile, if it doesn't know the type it is not know or void.
         Tile t = getTile(new IntVec2D(x, y));
-        if (t == null) {
-          sb.append(' ');
-        } else if (!(t instanceof Printable)) {
-          sb.append('?');
+
+        if (t instanceof Printable) {
+          Printable p = (Printable) t;
+          char c = p.toChar();
+          if (p.isVisible()) {
+            csb.append(Color.GREEN_BRIGHT, c);
+          } else {
+            csb.append(c);
+          }
+        } else if (t == null) {
+          csb.append(' ');
         } else {
-          sb.append(((Printable) t).toColoredString());
+          csb.append('?');
         }
       }
 
       // Don't add line after last row
       if (y != hierarchicalMap.size.height - 1) {
-        sb.append(System.lineSeparator());
+        csb.newLine();
       }
     }
-    return sb.toString();
+    return csb.toString();
   }
 }

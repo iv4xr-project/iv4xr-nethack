@@ -7,6 +7,7 @@ package agent.navigation.hpastar.graph;
 import agent.navigation.hpastar.Cluster;
 import agent.navigation.hpastar.infrastructure.Id;
 import eu.iv4xr.framework.spatial.IntVec2D;
+import nethack.util.ColoredStringBuilder;
 import org.apache.commons.lang.NotImplementedException;
 
 // implements nodes in the abstract graph
@@ -41,15 +42,15 @@ public class AbstractNodeInfo {
   }
 
   public void printInfo() {
-    StringBuilder sb = new StringBuilder();
+    ColoredStringBuilder csb = new ColoredStringBuilder();
 
-    sb.append("id: ").append(id).append(System.lineSeparator());
-    sb.append("; level: ").append(level).append(System.lineSeparator());
-    sb.append("; cluster: ").append(clusterId).append(System.lineSeparator());
-    sb.append("; row: ").append(position.y).append(System.lineSeparator());
-    sb.append("; col: ").append(position.x).append(System.lineSeparator());
-    sb.append("; center: ").append(concreteNodeId).append(System.lineSeparator());
+    csb.appendf("id: %d%n", id);
+    csb.appendf("; level: %d%n", level);
+    csb.appendf("; cluster: %d%n", clusterId);
+    csb.appendf("; row: %d%n", position.y);
+    csb.appendf("; col: %d%n", position.x);
+    csb.appendf("; center: %d%n", concreteNodeId);
 
-    System.out.println(sb);
+    System.out.println(csb);
   }
 }

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import nethack.NetHackLoggers;
+import nethack.util.ColoredStringBuilder;
 import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.Logger;
 
@@ -62,50 +63,45 @@ public class GameState {
   }
 
   public String verbose() {
-    StringBuilder sb = new StringBuilder();
-    sb.append(message).append(System.lineSeparator());
-    sb.append(getLevel()).append(System.lineSeparator());
-    sb.append(stats.verbose()).append(System.lineSeparator());
-    sb.append(player.verbose()).append(System.lineSeparator());
-    return sb.toString();
+    ColoredStringBuilder csb = new ColoredStringBuilder();
+    csb.append(message).newLine();
+    csb.append(getLevel()).newLine();
+    csb.append(stats.verbose()).newLine();
+    csb.append(player.verbose()).newLine();
+    return csb.toString();
   }
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append(message).append(System.lineSeparator());
-    sb.append(getLevel()).append(System.lineSeparator());
+    ColoredStringBuilder csb = new ColoredStringBuilder();
+    csb.append(message).newLine();
+    csb.append(getLevel()).newLine();
+    csb.appendf(
+        "Pos:(%d, %d) St:%d Dx:%d Co:%d In:%d Wi:%d Ch:%d %s S:%d%n",
+        player.position2D.x,
+        player.position2D.y,
+        player.strength,
+        player.dexterity,
+        player.constitution,
+        player.intelligence,
+        player.wisdom,
+        player.charisma,
+        player.alignment.name(),
+        stats.score);
+    csb.appendf(
+        "Dlvl:%d $:%d HP:%d(%d) Pw:%d(%d) AC:%d Xp:%d/%d T:%d %s%n",
+        stats.depth,
+        player.gold,
+        player.hp,
+        player.hpMax,
+        player.energy,
+        player.energyMax,
+        player.armorClass,
+        player.experienceLevel,
+        player.experiencePoints,
+        stats.time,
+        player.hungerState);
 
-    String firstStatsLine =
-        String.format(
-            "Pos:(%d, %d) St:%d Dx:%d Co:%d In:%d Wi:%d Ch:%d %s S:%d",
-            player.position2D.x,
-            player.position2D.y,
-            player.strength,
-            player.dexterity,
-            player.constitution,
-            player.intelligence,
-            player.wisdom,
-            player.charisma,
-            player.alignment.name(),
-            stats.score);
-    String secondStatsLine =
-        String.format(
-            "Dlvl:%d $:%d HP:%d(%d) Pw:%d(%d) AC:%d Xp:%d/%d T:%d %s",
-            stats.depth,
-            player.gold,
-            player.hp,
-            player.hpMax,
-            player.energy,
-            player.energyMax,
-            player.armorClass,
-            player.experienceLevel,
-            player.experiencePoints,
-            stats.time,
-            player.hungerState);
-    sb.append(firstStatsLine).append(System.lineSeparator());
-    sb.append(secondStatsLine).append(System.lineSeparator());
-
-    return sb.toString();
+    return csb.toString();
   }
 }

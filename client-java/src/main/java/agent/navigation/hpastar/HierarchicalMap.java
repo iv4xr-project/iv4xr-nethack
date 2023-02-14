@@ -23,6 +23,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import nethack.enums.Color;
+import nethack.util.ColoredStringBuilder;
 
 /** Abstract maps represent, as the name implies, an abstraction built over the concrete map. */
 public class HierarchicalMap implements IMap<AbstractNode> {
@@ -319,7 +320,7 @@ public class HierarchicalMap implements IMap<AbstractNode> {
         size.width % clusterSize == 0 ? size.width / clusterSize : size.width / clusterSize + 1;
     int nrClustersPerColumn =
         size.height % clusterSize == 0 ? size.height / clusterSize : size.height / clusterSize + 1;
-    StringBuilder sb = new StringBuilder();
+    ColoredStringBuilder csb = new ColoredStringBuilder();
 
     for (int y = 0, clusterY = 0; y < size.height; y++, clusterY = y / clusterSize) {
       int relY = y % clusterSize;
@@ -328,22 +329,26 @@ public class HierarchicalMap implements IMap<AbstractNode> {
           int relX = x % clusterSize;
           Cluster cluster = findClusterForPosition(new IntVec2D(x, y));
           if (relX == 0) {
-            sb.append(Color.MAGENTA_BRIGHT.stringCode())
-                .append(cluster.entrancePoints.size())
-                .append(Color.RESET.stringCode());
+            csb.append(Color.MAGENTA_BRIGHT, cluster.entrancePoints.size());
           }
 
-          IntVec2D relPos = new IntVec2D(relX, relY);
+          IntVec2D absPos = new IntVec2D(x, y);
           boolean hasEntrance =
               cluster.entrancePoints.stream()
-                  .anyMatch(entrancePoint -> entrancePoint.relativePosition.equals(relPos));
+                  .anyMatch(
+                      entrancePoint ->
+                          abstractGraph
+                              .getNode(entrancePoint.abstractNodeId)
+                              .info
+                              .position
+                              .equals(absPos));
           if (hasEntrance) {
-            sb.append(Color.RED.stringCode()).append('|').append(Color.RESET.stringCode());
+            csb.append(Color.RED, '|');
           } else {
-            sb.append('-');
+            csb.append('-');
           }
         }
-        sb.append('-').append(System.lineSeparator());
+        csb.append('-').newLine();
       }
       for (int x = 0, clusterX = 0; x < size.width; x++, clusterX = x / clusterSize) {
         Cluster cluster = findClusterForPosition(new IntVec2D(x, y));
@@ -354,27 +359,27 @@ public class HierarchicalMap implements IMap<AbstractNode> {
               cluster.entrancePoints.stream()
                   .anyMatch(entrancePoint -> entrancePoint.relativePosition.equals(relPos));
           if (hasEntrance) {
-            sb.append(Color.RED.stringCode()).append('-').append(Color.RESET.stringCode());
+            csb.append(Color.RED, '-');
           } else {
-            sb.append('|');
+            csb.append('|');
           }
         }
 
         Id<ConcreteNode> nodeId = cluster.subConcreteMap.getNodeIdFromPos(relX, relY);
         ConcreteNode node = cluster.subConcreteMap.graph.getNode(nodeId);
+        Color color;
         if (cluster.subConcreteMap.passability.cannotEnter(relPos, new RefSupport<>())) {
-          sb.append(Color.TRANSPARENT.stringCode());
+          color = Color.TRANSPARENT;
         } else if (cluster.subConcreteMap.passability.canMoveDiagonal(relPos)) {
-          sb.append(Color.GREEN_BRIGHT.stringCode());
+          color = Color.GREEN_BRIGHT;
         } else {
-          sb.append(Color.CYAN_BRIGHT.stringCode());
+          color = Color.CYAN_BRIGHT;
         }
-        sb.append(node.edges.size());
-        sb.append(Color.RESET.stringCode());
+        csb.append(color, node.edges.size());
       }
-      sb.append('|').append(System.lineSeparator());
+      csb.append('|').newLine();
     }
-    sb.append("-".repeat(size.width + nrClustersPerRow + 1));
-    return sb.toString();
+    csb.append("-".repeat(size.width + nrClustersPerRow + 1));
+    return csb.toString();
   }
 }

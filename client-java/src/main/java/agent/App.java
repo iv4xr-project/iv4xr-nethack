@@ -2,7 +2,10 @@ package agent;
 
 import agent.iv4xr.AgentEnv;
 import agent.iv4xr.AgentState;
+import agent.navigation.NetHackSurface;
+import agent.navigation.hpastar.Cluster;
 import agent.navigation.hpastar.graph.AbstractNode;
+import agent.navigation.hpastar.infrastructure.Id;
 import agent.navigation.strategy.NavUtils;
 import agent.navigation.surface.Tile;
 import agent.strategy.GoalLib;
@@ -95,21 +98,48 @@ public class App {
         agentLogger.debug(String.format("agent @%s", state.worldmodel.position));
       }
 
-      List<AbstractNode> nodes =
-          new ArrayList<>(
-              state.hierarchicalNav.areas.get(0).hierarchicalMap.abstractGraph.nodes.values());
-      System.out.println(
-          "ABS NODES"
-              + nodes.stream()
-                  .map(abstractNode -> new Pair<>(abstractNode.nodeId, abstractNode.info.position))
-                  .collect(Collectors.toList()));
       // Need to update state for render
       state.updateState(Player.ID);
+      printAbsNodes(state);
       state.render();
       commander.sendRender();
     }
 
     state.render();
     commander.sendRender();
+  }
+
+  private static void printAbsNodes(AgentState state) {
+    NetHackSurface surface = state.hierarchicalNav.areas.get(0);
+    for (Cluster cluster : surface.hierarchicalMap.clusters) {
+      if (cluster.entrancePoints.isEmpty()) {
+        continue;
+      }
+      System.out.printf(
+          "%s: %s%n",
+          cluster.id,
+          cluster.entrancePoints.stream()
+              .map(
+                  entrancePoint ->
+                      surface.hierarchicalMap.abstractGraph.getNode(entrancePoint.abstractNodeId)
+                          .info
+                          .position)
+              .collect(Collectors.toList()));
+    }
+
+    List<Id<AbstractNode>> nodesIds =
+        new ArrayList<>(surface.hierarchicalMap.abstractGraph.nodes.keySet());
+    for (Id<AbstractNode> nodeId : nodesIds) {
+      AbstractNode node = surface.hierarchicalMap.abstractGraph.getNode(nodeId);
+      for (Id<AbstractNode> neighbourId : node.edges.keySet()) {
+        AbstractNode neighbour = surface.hierarchicalMap.abstractGraph.getNode(neighbourId);
+        assert neighbour.edges.containsKey(nodeId) : "Not bidirectional absedge";
+      }
+    }
+    System.out.println(
+        "ABS NODES "
+            + surface.hierarchicalMap.abstractGraph.nodes.values().stream()
+                .map(abstractNode -> new Pair<>(abstractNode.nodeId, abstractNode.info.position))
+                .collect(Collectors.toList()));
   }
 }

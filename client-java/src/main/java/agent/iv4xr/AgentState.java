@@ -17,6 +17,7 @@ import nethack.enums.EntityType;
 import nethack.object.Entity;
 import nethack.object.Level;
 import nethack.object.Player;
+import nethack.util.ColoredStringBuilder;
 import nl.uu.cs.aplib.mainConcepts.Environment;
 import org.apache.logging.log4j.Logger;
 
@@ -284,7 +285,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
   }
 
   public void render() {
-    StringBuilder sb = new StringBuilder();
+    ColoredStringBuilder csb = new ColoredStringBuilder();
     String[] navigation = area().toString().split(System.lineSeparator());
     String[] game = env().app.gameState.toString().split(System.lineSeparator());
     String[] hierarchicalMap = area().hierarchicalMap.toString().split(System.lineSeparator());
@@ -294,15 +295,15 @@ public class AgentState extends Iv4xrAgentState<Void> {
             "%%-%ds %%-%ds %%-%ds%n", Level.SIZE.width, Level.SIZE.width, Level.SIZE.width);
     int n = Level.SIZE.height;
 
-    sb.append(String.format(formatString, game[0], "", hierarchicalMap[0]));
+    csb.appendf(formatString, game[0], "", hierarchicalMap[0]);
 
     for (int i = 0; i < n; i++) {
-      sb.append(String.format(formatString, game[i + 1], navigation[i], hierarchicalMap[i + 1]));
+      csb.appendf(formatString, game[i + 1], navigation[i], hierarchicalMap[i + 1]);
     }
 
-    sb.append(String.format(formatString, game[n + 1], "", hierarchicalMap[n + 1]));
-    sb.append(String.format(formatString, game[n + 2], "", hierarchicalMap[n + 2]));
-    sb.append(String.format(formatString, "", "", hierarchicalMap[n + 3]));
-    System.out.print(sb);
+    csb.appendf(formatString, game[n + 1], "", hierarchicalMap[n + 1]);
+    csb.appendf(formatString, game[n + 2], "", hierarchicalMap[n + 2]);
+    csb.appendf(formatString, "", "", hierarchicalMap[n + 3]);
+    System.out.print(csb);
   }
 }

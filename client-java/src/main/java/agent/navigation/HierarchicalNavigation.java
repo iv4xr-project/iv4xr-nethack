@@ -159,22 +159,6 @@ public class HierarchicalNavigation
   //    return area.isBlocking(o.snd);
   //  }
 
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-
-    for (int a = 0; a < this.areas.size(); ++a) {
-      if (a > 0) {
-        sb.append("\n");
-      }
-
-      NetHackSurface area = areas.get(a);
-      sb.append("=== Area ").append(a);
-      sb.append(System.lineSeparator()).append(String.valueOf(area));
-    }
-
-    return sb.toString();
-  }
-
   @Override
   public Iterable<Pair<Integer, Tile>> neighbours(Pair<Integer, Tile> integerTilePair) {
     return null;

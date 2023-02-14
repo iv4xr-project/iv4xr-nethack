@@ -1,5 +1,7 @@
 package nethack.object;
 
+import nethack.util.ColoredStringBuilder;
+
 public class Inventory {
   public static final int MAX_SIZE = 55;
   public Item[] items;
@@ -17,15 +19,14 @@ public class Inventory {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append(String.format("Inventory:%n"));
+    ColoredStringBuilder csb = new ColoredStringBuilder();
+    csb.append("Inventory:").newLine();
     for (Item i : items) {
       if (i == null) {
         continue;
       }
-      sb.append(i);
-      sb.append(System.lineSeparator());
+      csb.append(i).newLine();
     }
-    return sb.toString();
+    return csb.toString();
   }
 }

@@ -5,6 +5,7 @@
 package agent.navigation.hpastar;
 
 import eu.iv4xr.framework.spatial.IntVec2D;
+import nethack.util.ColoredStringBuilder;
 
 // implements nodes in the abstract graph
 public class AbsTilingNodeInfo {
@@ -26,16 +27,16 @@ public class AbsTilingNodeInfo {
   }
 
   public void printInfo() {
-    StringBuilder sb = new StringBuilder();
+    ColoredStringBuilder csb = new ColoredStringBuilder();
 
-    sb.append("id: ").append(id).append(System.lineSeparator());
-    sb.append("; level: ").append(level).append(System.lineSeparator());
-    sb.append("; cluster: ").append(clusterId).append(System.lineSeparator());
-    sb.append("; row: ").append(position.y).append(System.lineSeparator());
-    sb.append("; col: ").append(position.x).append(System.lineSeparator());
-    sb.append("; center: ").append(centerId).append(System.lineSeparator());
-    sb.append("; local idx: ").append(localIdxCluster).append(System.lineSeparator());
+    csb.appendf("id: %d%n", id);
+    csb.appendf("; level: %d%n", level);
+    csb.appendf("; cluster: %d%n", clusterId);
+    csb.appendf("; row: %d%n", position.y);
+    csb.appendf("; col: %d%n", position.x);
+    csb.appendf("; center: %d%n", centerId);
+    csb.appendf("; local idx: %d%n", localIdxCluster);
 
-    System.out.println(sb);
+    System.out.println(csb);
   }
 }

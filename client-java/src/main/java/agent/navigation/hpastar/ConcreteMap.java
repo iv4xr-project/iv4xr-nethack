@@ -15,6 +15,7 @@ import agent.navigation.hpastar.infrastructure.Id;
 import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.ArrayList;
 import java.util.List;
+import nethack.util.ColoredStringBuilder;
 
 public class ConcreteMap implements IMap<ConcreteNode> {
   public final IPassability passability;
@@ -149,15 +150,15 @@ public class ConcreteMap implements IMap<ConcreteNode> {
   }
 
   private void printFormattedChars(List<Character> chars) {
-    StringBuilder sb = new StringBuilder();
+    ColoredStringBuilder csb = new ColoredStringBuilder();
     for (int y = 0; y < size.height; ++y) {
       for (int x = 0; x < size.width; ++x) {
         Id<ConcreteNode> nodeId = this.getNodeIdFromPos(x, y);
-        sb.append(chars.get(nodeId.getIdValue()));
+        csb.append(chars.get(nodeId.getIdValue()));
       }
-      sb.append(System.lineSeparator());
+      csb.newLine();
     }
-    System.out.print(sb);
+    System.out.print(csb);
   }
 
   public void printFormatted(List<Integer> path) {

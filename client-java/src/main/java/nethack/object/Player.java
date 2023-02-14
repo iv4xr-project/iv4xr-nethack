@@ -4,6 +4,7 @@ import eu.iv4xr.framework.spatial.IntVec2D;
 import eu.iv4xr.framework.spatial.Vec3;
 import nethack.enums.Alignment;
 import nethack.enums.HungerState;
+import nethack.util.ColoredStringBuilder;
 
 public class Player {
   public static final String ID = "player";
@@ -34,29 +35,29 @@ public class Player {
   public Player() {}
 
   public String verbose() {
-    StringBuilder sb = new StringBuilder();
-    sb.append(String.format("PlayerInfo:%n"));
-    sb.append(String.format("Position:%s%n", position));
-    sb.append(String.format("Strength:%d%n", strength));
-    sb.append(String.format("dexterity:%d%n", dexterity));
-    sb.append(String.format("constitution:%d%n", constitution));
-    sb.append(String.format("intelligence:%d%n", intelligence));
-    sb.append(String.format("wisdom:%d%n", wisdom));
-    sb.append(String.format("charisma:%d%n", charisma));
-    sb.append(String.format("hp:%d%n", hp));
-    sb.append(String.format("hpMax:%d%n", hpMax));
-    sb.append(String.format("gold:%d%n", gold));
-    sb.append(String.format("energy:%d%n", energy));
-    sb.append(String.format("energyMax:%d%n", energyMax));
-    sb.append(String.format("armorClass:%d%n", armorClass));
-    sb.append(String.format("experienceLevel:%d%n", experienceLevel));
-    sb.append(String.format("experiencePoints:%d%n", experiencePoints));
-    sb.append(String.format("hungerState:%s%n", hungerState));
-    sb.append(String.format("carryingCapacity:%d%n", carryingCapacity));
-    sb.append(String.format("condition:%d%n", condition));
-    sb.append(String.format("alignment:%s%n", alignment));
-    sb.append(System.lineSeparator());
-    sb.append(inventory);
-    return sb.toString();
+    ColoredStringBuilder csb = new ColoredStringBuilder();
+    csb.appendf("PlayerInfo:%n");
+    csb.appendf("Position:%s%n", position);
+    csb.appendf("Strength:%d%n", strength);
+    csb.appendf("dexterity:%d%n", dexterity);
+    csb.appendf("constitution:%d%n", constitution);
+    csb.appendf("intelligence:%d%n", intelligence);
+    csb.appendf("wisdom:%d%n", wisdom);
+    csb.appendf("charisma:%d%n", charisma);
+    csb.appendf("hp:%d%n", hp);
+    csb.appendf("hpMax:%d%n", hpMax);
+    csb.appendf("gold:%d%n", gold);
+    csb.appendf("energy:%d%n", energy);
+    csb.appendf("energyMax:%d%n", energyMax);
+    csb.appendf("armorClass:%d%n", armorClass);
+    csb.appendf("experienceLevel:%d%n", experienceLevel);
+    csb.appendf("experiencePoints:%d%n", experiencePoints);
+    csb.appendf("hungerState:%s%n", hungerState);
+    csb.appendf("carryingCapacity:%d%n", carryingCapacity);
+    csb.appendf("condition:%d%n", condition);
+    csb.appendf("alignment:%s%n", alignment);
+    csb.newLine();
+    csb.append(inventory);
+    return csb.toString();
   }
 }
