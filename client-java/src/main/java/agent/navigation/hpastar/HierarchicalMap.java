@@ -149,7 +149,7 @@ public class HierarchicalMap implements IMap<AbstractNode> {
     cluster.removeLastEntranceRecord();
     concreteNodeIdToAbstractNodeIdMap.remove(abstractNodeInfo.concreteNodeId);
     abstractGraph.removeEdgesFromAndToNode(abstractNodeId);
-    abstractGraph.removeLastNode();
+    abstractGraph.nodes.remove(abstractNodeId);
   }
 
   private static boolean isValidEdgeForLevel(AbstractEdgeInfo edgeInfo, int level) {
@@ -326,11 +326,13 @@ public class HierarchicalMap implements IMap<AbstractNode> {
       if (relY == 0) {
         for (int x = 0, clusterX = 0; x < size.width; x++, clusterX = x / clusterSize) {
           int relX = x % clusterSize;
+          Cluster cluster = findClusterForPosition(new IntVec2D(x, y));
           if (relX == 0) {
-            sb.append("-");
+            sb.append(Color.MAGENTA_BRIGHT.stringCode())
+                .append(cluster.entrancePoints.size())
+                .append(Color.RESET.stringCode());
           }
 
-          Cluster cluster = findClusterForPosition(new IntVec2D(x, y));
           IntVec2D relPos = new IntVec2D(relX, relY);
           boolean hasEntrance =
               cluster.entrancePoints.stream()

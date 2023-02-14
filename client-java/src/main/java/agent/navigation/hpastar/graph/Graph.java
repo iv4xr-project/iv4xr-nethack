@@ -55,8 +55,12 @@ public class Graph<
 
   public void addEdge(Id<TNode> sourceNodeId, Id<TNode> targetNodeId, TEdgeInfo info) {
     hpaLogger.trace(String.format("AddEdge: %s %s", sourceNodeId, targetNodeId));
-    var node = nodes.get(sourceNodeId);
+    TNode node = nodes.get(sourceNodeId);
     node.addEdge(edgeCreator.apply(new Pair<>(targetNodeId, info)));
+  }
+
+  public void removeNode(Id<TNode> nodeId) {
+    nodes.remove(nodeId);
   }
 
   public void removeEdgesFromAndToNode(Id<TNode> nodeId) {
@@ -65,10 +69,6 @@ public class Graph<
       nodes.get(targetNodeId).removeEdge(nodeId);
     }
     nodes.get(nodeId).edges.clear();
-  }
-
-  public void removeLastNode() {
-    nodes.remove(nodes.size() - 1);
   }
 
   public TNode getNode(Id<TNode> nodeId) {

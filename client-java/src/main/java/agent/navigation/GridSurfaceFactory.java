@@ -161,22 +161,6 @@ public class GridSurfaceFactory {
     Function<Integer, Pair<ConcreteNode, ConcreteNode>> getNodesForRow =
         row -> new Pair<>(getNode(column, row), getNode(column + 1, row));
 
-    System.out.println("Left cluster: " + clusterOnLeft);
-    if (clusterOnLeft.origin.y == 16) {
-      System.out.print("");
-    }
-
-    List<EntrancePoint> entrancesToRemove = new ArrayList<>();
-    for (EntrancePoint entrancePoint : cluster.entrancePoints) {
-      var abstractNode =
-          staticSurface.hierarchicalMap.abstractGraph.nodes.get(
-              entrancePoint.abstractNodeId.getIdValue());
-      if (abstractNode.info.position.x == 7 && entrancePoint.relativePosition.x == 0) {
-        entrancesToRemove.add(entrancePoint);
-      }
-    }
-    cluster.entrancePoints.removeAll(entrancesToRemove);
-    clusterOnLeft.entrancePoints.removeAll(entrancesToRemove);
     return createEntrancesAlongEdge(
         rowStart,
         rowEnd,
@@ -197,37 +181,6 @@ public class GridSurfaceFactory {
     Function<Integer, Pair<ConcreteNode, ConcreteNode>> getNodesForColumn =
         column -> new Pair<>(getNode(column, row), getNode(column, row + 1));
 
-    List<EntrancePoint> entrancesToRemove = new ArrayList<>();
-    for (EntrancePoint entrancePoint : cluster.entrancePoints) {
-      Id<AbstractNode> abstractNodeId = entrancePoint.abstractNodeId;
-      AbstractNode abstractNode =
-          staticSurface.hierarchicalMap.abstractGraph.nodes.get(abstractNodeId);
-      if (abstractNode.info.position.y % staticSurface.hierarchicalMap.clusterSize != 0) {
-        continue;
-      }
-      Set<Id<AbstractNode>> neighbourIds = abstractNode.edges.keySet();
-      for (Id<AbstractNode> neighbourId : neighbourIds) {
-        AbstractNode neighbourNode =
-            staticSurface.hierarchicalMap.abstractGraph.nodes.get(neighbourId);
-        if (neighbourNode.info.position.y % staticSurface.hierarchicalMap.clusterSize
-            == staticSurface.hierarchicalMap.clusterSize - 1) {
-          abstractNode.removeEdge(neighbourId);
-          neighbourNode.removeEdge(abstractNodeId);
-        }
-        if (neighbourNode.edges.isEmpty()) {
-          staticSurface.hierarchicalMap.abstractGraph.nodes.remove(neighbourId);
-        }
-      }
-
-      if (abstractNode.edges.isEmpty()) {
-        staticSurface.hierarchicalMap.abstractGraph.nodes.remove(abstractNodeId);
-      }
-
-      System.out.printf("Abs Node Pos: %s%n", abstractNode.info.position);
-    }
-    cluster.entrancePoints.removeAll(entrancesToRemove);
-    clusterOnTop.entrancePoints.removeAll(entrancesToRemove);
-
     return createEntrancesAlongEdge(
         colStart,
         colEnd,
@@ -247,6 +200,8 @@ public class GridSurfaceFactory {
       Function<Integer, Pair<ConcreteNode, ConcreteNode>> getNodesInEdge,
       Orientation orientation) {
     List<Entrance> entrances = new ArrayList<>();
+    removeEntrancesBetweenClusters(precedentCluster, currentCluster);
+
     for (int entranceStart = startPoint; entranceStart <= endPoint; entranceStart++) {
       int size = getEntranceSize(entranceStart, endPoint, getNodesInEdge);
       int entranceEnd = entranceStart + size - 1;
@@ -312,6 +267,42 @@ public class GridSurfaceFactory {
     }
 
     return entrances;
+  }
+
+  private static void removeEntrancesBetweenClusters(Cluster cluster1, Cluster cluster2) {
+    List<EntrancePoint> removeFromCluster = new ArrayList<>();
+    for (EntrancePoint entrance1 : cluster1.entrancePoints) {
+      for (EntrancePoint entrance2 : cluster2.entrancePoints) {
+        AbstractNode absNode1 =
+            staticSurface.hierarchicalMap.abstractGraph.getNode(entrance1.abstractNodeId);
+        AbstractNode absNode2 =
+            staticSurface.hierarchicalMap.abstractGraph.getNode(entrance2.abstractNodeId);
+
+        IntVec2D entrance1Pos = absNode1.info.position;
+        IntVec2D entrance2Pos = absNode2.info.position;
+        if (NavUtils.adjacent(entrance1Pos, entrance2Pos, true)
+            && absNode1.edges.containsKey(absNode2.nodeId)) {
+          removeFromCluster.add(entrance1);
+          removeFromCluster.add(entrance2);
+          absNode1.removeEdge(absNode2.nodeId);
+          absNode2.removeEdge(absNode1.nodeId);
+
+          System.out.printf("Remove entrance between %s x %s%n", entrance1Pos, entrance2Pos);
+          //          if (absNode1.edges.isEmpty()) {
+          //            staticSurface.hierarchicalMap.abstractGraph.removeNode(absNode1.nodeId);
+          //          }
+          //          if (absNode2.edges.isEmpty()) {
+          //            staticSurface.hierarchicalMap.abstractGraph.removeNode(absNode2.nodeId);
+          //          }
+        }
+      }
+    }
+    for (EntrancePoint entrancePoint : removeFromCluster) {
+      staticSurface.hierarchicalMap.removeAbstractNode(entrancePoint.abstractNodeId);
+    }
+
+    cluster1.entrancePoints.removeAll(removeFromCluster);
+    cluster2.entrancePoints.removeAll(removeFromCluster);
   }
 
   public static Cluster getClusterInDirection(

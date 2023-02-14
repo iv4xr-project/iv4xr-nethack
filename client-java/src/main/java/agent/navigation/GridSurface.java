@@ -73,9 +73,6 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
         Door door = (Door) tile;
         door.setBlockingState(false);
       }
-
-      Set<Direction> directions = GridSurfaceFactory.addEdges(this, tile);
-      addClusterEdges(entrances, tile, directions);
     }
 
     for (Tile tile : newTiles) {
