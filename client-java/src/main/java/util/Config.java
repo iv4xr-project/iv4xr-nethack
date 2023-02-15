@@ -3,6 +3,7 @@ package util;
 import java.util.ArrayList;
 import java.util.List;
 import nethack.object.Seed;
+import nethack.object.Turn;
 import nl.uu.cs.aplib.utils.Pair;
 import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.commons.configuration.ConfigurationException;
@@ -30,20 +31,34 @@ public class Config {
 
   public static Seed getSeed() {
     List<Object> seed = config.getList("SEED", new ArrayList<Object>());
-    assert seed.size() == 2 || seed.isEmpty()
+    assert seed.isEmpty() || seed.size() == 2
         : String.format("There must be 0 or 2 strings as seed, but was of length %d", seed.size());
     if (seed.isEmpty()) {
       return Seed.randomSeed();
     }
 
     // Create seed from the two strings
-    String core = (String) seed.get(0);
-    String disp = (String) seed.get(1);
+    String core = seed.get(0).toString();
+    String disp = seed.get(1).toString();
     return new Seed(core, disp, false);
   }
 
-  public static int getStartTurn() {
-    return config.getInt("START_TURN", 1);
+  public static Turn getStartTurn() {
+    List<Object> startTurn = config.getList("START_TURN", new ArrayList<Object>());
+    assert startTurn.isEmpty() || startTurn.size() == 2
+        : String.format(
+            "There must be 0 or 2 ints as start turn, but was of length %d", startTurn.size());
+
+    if (startTurn.isEmpty()) {
+      return Turn.startTurn;
+    }
+
+    // Create turn from the two ints
+    int time = Integer.parseInt(startTurn.get(0).toString());
+    int step = Integer.parseInt(startTurn.get(1).toString());
+    Turn turn = new Turn(time);
+    turn.step = step;
+    return turn;
   }
 
   public static boolean getSoundState() {

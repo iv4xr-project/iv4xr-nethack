@@ -18,6 +18,7 @@ import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.Logger;
 import util.Config;
 import util.Loggers;
+import util.Stopwatch;
 
 public class SocketClient {
   static final Logger logger = Loggers.ConnectionLogger;
@@ -102,15 +103,15 @@ public class SocketClient {
   }
 
   public StepState sendStep(int index) {
-    long now = System.nanoTime();
+    Stopwatch stopwatch = new Stopwatch();
+    stopwatch.start();
     try {
       writer.write(new byte[] {Encoder.EncoderBit.StepBit.value, (byte) index});
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
     flush();
-    long now1 = System.nanoTime();
-    profileLogger.trace("SENDING COMMAND TOOK: %d%n", now1 - now);
+    profileLogger.trace("SENDING COMMAND TOOK: %d%n", stopwatch.total());
     return readStepState();
   }
 
@@ -136,11 +137,11 @@ public class SocketClient {
 
   public StepState readStepState() {
     logger.info("Waiting for StepState...");
-    long now = System.nanoTime();
     ObservationMessage obsMessage = readObservationMessage();
     StepMessage stepMessage = StepMessageDecoder.decode(reader);
-    long now1 = System.nanoTime();
-    profileLogger.trace("READ OBS MESSAGE TOOK: %d%n%n", now1 - now);
+    Stopwatch stopwatch = new Stopwatch();
+    stopwatch.start();
+    profileLogger.trace("READ OBS MESSAGE TOOK: %d%n%n", stopwatch.split());
 
     StepState stepState = new StepState();
     stepState.player = obsMessage.player;
@@ -152,8 +153,7 @@ public class SocketClient {
     stepState.info = null;
     stepState.level = new Level(obsMessage.entities);
     stepState.message = obsMessage.message;
-    long now2 = System.nanoTime();
-    profileLogger.trace("EXIT TOOK: %d%n", now2 - now1);
+    profileLogger.trace("EXIT TOOK: %d%n", stopwatch.split());
     return stepState;
   }
 

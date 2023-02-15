@@ -10,6 +10,7 @@ import nethack.enums.Alignment;
 import nethack.enums.HungerState;
 import nethack.object.Player;
 import nethack.object.Stats;
+import nethack.object.Turn;
 import nl.uu.cs.aplib.utils.Pair;
 
 // Source: https://studytrails.com/2016/09/12/java-google-json-type-adapter/
@@ -54,7 +55,7 @@ public class StatsDecoder extends Decoder {
     stats.monsterLevel = values[17];
     player.experienceLevel = values[18];
     player.experiencePoints = values[19];
-    stats.time = values[20];
+    stats.turn = new Turn(values[20]);
     player.hungerState = HungerState.fromValue(values[21]);
     player.carryingCapacity = values[22];
     stats.dungeonNumber = values[23];

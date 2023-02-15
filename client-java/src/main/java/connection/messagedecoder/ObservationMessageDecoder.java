@@ -8,6 +8,7 @@ import nethack.object.*;
 import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.Logger;
 import util.Loggers;
+import util.Stopwatch;
 
 // Source: https://studytrails.com/2016/09/12/java-google-json-type-adapter/
 public class ObservationMessageDecoder extends Decoder {
@@ -16,44 +17,40 @@ public class ObservationMessageDecoder extends Decoder {
   public static ObservationMessage decode(DataInputStream input) {
     try {
       ObservationMessage observationMessage = new ObservationMessage();
-      boolean verbose = false;
 
-      long now = System.nanoTime();
+      Stopwatch stopwatch = new Stopwatch();
+      stopwatch.start();
 
       int inputByte = input.readByte();
       assert inputByte == DecoderBit.ObservationBit.value;
-      long now_bit = System.nanoTime();
-      logger.trace("READ BIT TOOK: %d", now_bit - now);
+      logger.trace("READ BIT TOOK: %d", stopwatch.split());
 
       Pair<Stats, Player> pair = StatsDecoder.decode(input);
       observationMessage.stats = pair.fst;
       observationMessage.player = pair.snd;
 
-      long now_blstats = System.nanoTime();
-      logger.trace("READ BLSTATS TOOK: %d", now_blstats - now_bit);
+      logger.trace("READ STATS TOOK: %d", stopwatch.split());
 
       byte[] chars = input.readNBytes(256);
       observationMessage.message = new String(chars, StandardCharsets.UTF_8);
       observationMessage.message = observationMessage.message.replaceAll("\0", "");
 
       long now_1 = System.nanoTime();
-      logger.trace("READ MESSAGE TOOK: %s", now_1 - now_blstats);
+      logger.trace("READ MESSAGE TOOK: %d", stopwatch.split());
 
       long total = 0;
+      byte[] entities = input.readNBytes(4 * Level.SIZE.width * Level.SIZE.height);
       for (int y = 0; y < Level.SIZE.height; y++) {
-        byte[] entities = input.readNBytes(4 * Level.SIZE.width);
+        int rowOffset = 4 * Level.SIZE.width * y;
         for (int x = 0; x < Level.SIZE.width; x++) {
-          long inbetween = System.nanoTime();
-          char symbol = (char) entities[x * 4];
-          int colorCode = entities[x * 4 + 1];
-          int glyph = (entities[x * 4 + 2] << 8) + entities[x * 4 + 3];
+          int offset = rowOffset + x * 4;
+          char symbol = (char) entities[offset];
+          int colorCode = entities[offset + 1];
+          int glyph = (entities[offset + 2] << 8) + entities[offset + 3];
           observationMessage.entities[y][x] = EntityDecoder.decode(input, symbol, colorCode, glyph);
-          long time = System.nanoTime();
-          total += time - inbetween;
         }
       }
-      long now_2 = System.nanoTime();
-      logger.trace("READ MAP TOOK: %d", now_2 - now_1);
+      logger.trace("READ MAP TOOK: %d", stopwatch.split());
 
       int nr_items = input.readByte();
       observationMessage.items = new Item[nr_items];
@@ -61,8 +58,7 @@ public class ObservationMessageDecoder extends Decoder {
       for (int i = 0; i < nr_items; i++) {
         observationMessage.items[i] = ItemDecoder.decode(input);
       }
-      long now_3 = System.nanoTime();
-      logger.trace("READ ITEMS TOOK: %d", now_3 - now_2);
+      logger.trace("READ ITEMS TOOK: %d", stopwatch.split());
 
       return observationMessage;
     } catch (IOException e) {

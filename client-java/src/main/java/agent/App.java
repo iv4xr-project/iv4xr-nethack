@@ -18,13 +18,11 @@ import java.util.stream.Collectors;
 import nethack.NetHack;
 import nethack.enums.Command;
 import nethack.object.Player;
+import nethack.object.Turn;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
 import nl.uu.cs.aplib.utils.Pair;
 import org.apache.logging.log4j.Logger;
-import util.Config;
-import util.Loggers;
-import util.ProgressBar;
-import util.Sounds;
+import util.*;
 
 public class App {
   static final Logger connectionLogger = Loggers.ConnectionLogger;
@@ -63,20 +61,21 @@ public class App {
     nethack.close();
   }
 
-  private static void fastForwardToTurn(int desiredTurnNr, TestAgent agent, AgentState state) {
-    assert desiredTurnNr > 0 : "Cannot fast forward to a 0 or negative turn";
-
-    if (desiredTurnNr == 1) {
+  private static void fastForwardToTurn(Turn desiredTurn, TestAgent agent, AgentState state) {
+    if (state.app().gameState.stats.turn.equals(desiredTurn)) {
       return;
     }
 
     agentLogger.info("Start automatic agent loop...");
     Sounds.disableSound();
     ProgressBar bar = new ProgressBar();
-    while (state.app().gameState.stats.time < desiredTurnNr) {
-      bar.update(state.app().gameState.stats.time, desiredTurnNr);
+    Stopwatch stopwatch = new Stopwatch();
+    stopwatch.start();
+    while (state.app().gameState.stats.turn.compareTo(desiredTurn) < 0) {
+      bar.update(state.app().gameState.stats.turn.time, desiredTurn.time);
       agent.update();
     }
+    stopwatch.printTotal("Running automatic loop");
     Sounds.setSound(Config.getSoundState());
     state.updateState(Player.ID);
     state.render();
@@ -133,7 +132,7 @@ public class App {
       AbstractNode node = surface.hierarchicalMap.abstractGraph.getNode(nodeId);
       for (Id<AbstractNode> neighbourId : node.edges.keySet()) {
         AbstractNode neighbour = surface.hierarchicalMap.abstractGraph.getNode(neighbourId);
-        assert neighbour.edges.containsKey(nodeId) : "Not bidirectional absedge";
+        assert neighbour.edges.containsKey(nodeId) : "Not bidirectional abs edge";
       }
     }
     System.out.printf("ABS NODES (%d) [", nodesIds.size());

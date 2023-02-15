@@ -112,8 +112,9 @@ public class GridSurfaceFactory {
           AbstractEdgeInfo abstractEdgeInfo =
               new AbstractEdgeInfo(
                   cluster.getDistance(point1.abstractNodeId, point2.abstractNodeId), 1, false);
-          System.out.printf(
-              "IntraCluster AddEdge: %s -> %s%n", point1.abstractNodeId, point2.abstractNodeId);
+          //          System.out.printf(
+          //              "IntraCluster AddEdge: %s -> %s%n", point1.abstractNodeId,
+          // point2.abstractNodeId);
           staticSurface.hierarchicalMap.abstractGraph.addEdge(
               point1.abstractNodeId, point2.abstractNodeId, abstractEdgeInfo);
         }
@@ -133,9 +134,9 @@ public class GridSurfaceFactory {
     Id<AbstractNode> startAbsNodeId = addAbstractNode(entrance.cluster1, srcPos);
     Id<AbstractNode> targetAbsNodeId = addAbstractNode(entrance.cluster2, destPos);
 
-    System.out.printf(
-        "InterCluster AddEdge: %s (%s) -> %s (%s)%n",
-        startAbsNodeId, srcPos, targetAbsNodeId, destPos);
+    //    System.out.printf(
+    //        "InterCluster AddEdge: %s (%s) -> %s (%s)%n",
+    //        startAbsNodeId, srcPos, targetAbsNodeId, destPos);
     staticSurface.hierarchicalMap.abstractGraph.addEdge(
         startAbsNodeId, targetAbsNodeId, new AbstractEdgeInfo(Constants.COST_ONE, 1, true));
     staticSurface.hierarchicalMap.abstractGraph.addEdge(

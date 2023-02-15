@@ -164,6 +164,11 @@ public class NetHack {
       return;
     }
 
+    // Update turn before overriding stats
+    if (gameState.stats != null) {
+      stepState.stats.turn.updateTurn(gameState.stats.turn);
+    }
+
     // Need to set new stats before setting the level
     gameState.stats = stepState.stats;
     gameState.setLevel(stepState.level);

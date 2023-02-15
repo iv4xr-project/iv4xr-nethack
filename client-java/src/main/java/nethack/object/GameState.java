@@ -89,7 +89,7 @@ public class GameState {
         player.alignment.name(),
         stats.score);
     csb.appendf(
-        "Dlvl:%d $:%d HP:%d(%d) Pw:%d(%d) AC:%d Xp:%d/%d T:%d %s%n",
+        "Dlvl:%d $:%d HP:%d(%d) Pw:%d(%d) AC:%d Xp:%d/%d T:%d(%d) %s%n",
         stats.depth,
         player.gold,
         player.hp,
@@ -99,7 +99,8 @@ public class GameState {
         player.armorClass,
         player.experienceLevel,
         player.experiencePoints,
-        stats.time,
+        stats.turn.time,
+        stats.turn.step,
         player.hungerState);
 
     return csb.toString();

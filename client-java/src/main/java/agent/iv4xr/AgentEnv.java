@@ -53,7 +53,7 @@ public class AgentEnv extends Iv4xrEnvironment {
 
     wom.agentId = agentId;
     wom.position = app.gameState.player.position;
-    wom.timestamp = app.gameState.stats.time;
+    wom.timestamp = app.gameState.stats.turn.time;
 
     WorldEntity aux = mkGameAuxState();
     wom.elements.put(aux.id, aux);
@@ -104,7 +104,7 @@ public class AgentEnv extends Iv4xrEnvironment {
 
   WorldEntity mkGameAuxState() {
     WorldEntity aux = new WorldEntity("aux", "aux", true);
-    aux.properties.put("time", app.gameState.stats.time);
+    aux.properties.put("time", app.gameState.stats.turn.time);
     aux.properties.put("status", app.gameState.done);
     aux.properties.put("levelNr", app.gameState.getLevelNr());
 
