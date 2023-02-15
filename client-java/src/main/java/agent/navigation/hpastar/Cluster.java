@@ -125,13 +125,11 @@ public class Cluster {
     return entrancePoint;
   }
 
-  public void removeLastEntranceRecord() {
-    EntrancePoint entrancePoint = entrancePoints.get(entrancePoints.size() - 1);
-    Id<AbstractNode> abstractNodeToRemove = entrancePoint.abstractNodeId;
-    entrancePoints.remove(entrancePoints.size() - 1);
+  public void removeRelevantEntranceRecord(Id<AbstractNode> nodeId) {
+    entrancePoints.removeIf(entrancePoint -> entrancePoint.abstractNodeId.equals(nodeId));
     List<Pair<Id<AbstractNode>, Id<AbstractNode>>> keysToRemove = new ArrayList<>();
     for (Pair<Id<AbstractNode>, Id<AbstractNode>> key : distanceCalculated.keySet()) {
-      if (key.fst == abstractNodeToRemove || key.snd == abstractNodeToRemove) {
+      if (key.fst == nodeId || key.snd == nodeId) {
         keysToRemove.add(key);
       }
     }

@@ -275,27 +275,26 @@ public class GridSurfaceFactory {
   }
 
   private static void removeEntrancesBetweenClusters(Cluster cluster1, Cluster cluster2) {
-    List<EntrancePoint> removeFromCluster = new ArrayList<>();
+    List<EntrancePoint> removeFromCluster1 = new ArrayList<>();
+    List<EntrancePoint> removeFromCluster2 = new ArrayList<>();
     List<Id<AbstractNode>> removeAbstractNodes = new ArrayList<>();
     for (EntrancePoint entrance1 : cluster1.entrancePoints) {
       AbstractNode absNode1 =
           staticSurface.hierarchicalMap.abstractGraph.getNode(entrance1.abstractNodeId);
-      if (absNode1 == null) {
-        continue;
-      }
       for (EntrancePoint entrance2 : cluster2.entrancePoints) {
         AbstractNode absNode2 =
             staticSurface.hierarchicalMap.abstractGraph.getNode(entrance2.abstractNodeId);
-        if (absNode2 == null) {
-          continue;
-        }
 
         IntVec2D entrance1Pos = absNode1.info.position;
         IntVec2D entrance2Pos = absNode2.info.position;
+        System.out.println(absNode1.nodeId + " " + absNode2.nodeId);
         if (NavUtils.adjacent(entrance1Pos, entrance2Pos, true)
-            && absNode1.edges.containsKey(absNode2.nodeId)) {
-          removeFromCluster.add(entrance1);
-          removeFromCluster.add(entrance2);
+            && absNode1.edges.containsKey(absNode2.nodeId)
+            && absNode2.edges.containsKey(absNode1.nodeId)) {
+          Loggers.HPALogger.debug("Remove entrance: %s -> %s", entrance1Pos, entrance2Pos);
+
+          removeFromCluster1.add(entrance1);
+          removeFromCluster2.add(entrance2);
           absNode1.removeEdge(absNode2.nodeId);
           absNode2.removeEdge(absNode1.nodeId);
 
@@ -313,8 +312,8 @@ public class GridSurfaceFactory {
       staticSurface.hierarchicalMap.removeAbstractNode(abstractNodeId);
     }
 
-    cluster1.entrancePoints.removeAll(removeFromCluster);
-    cluster2.entrancePoints.removeAll(removeFromCluster);
+    cluster1.entrancePoints.removeAll(removeFromCluster1);
+    cluster2.entrancePoints.removeAll(removeFromCluster2);
   }
 
   public static Cluster getClusterInDirection(
@@ -326,14 +325,15 @@ public class GridSurfaceFactory {
       clustersW++;
     }
 
+    int clusterId = cluster.id.getIdValue();
     if (direction == Direction.North) {
-      return staticSurface.hierarchicalMap.clusters.get(cluster.id.getIdValue() - clustersW);
+      return staticSurface.hierarchicalMap.clusters.get(clusterId - clustersW);
     } else if (direction == Direction.West) {
-      return staticSurface.hierarchicalMap.clusters.get(cluster.id.getIdValue() - 1);
+      return staticSurface.hierarchicalMap.clusters.get(clusterId - 1);
     } else if (direction == Direction.South) {
-      return staticSurface.hierarchicalMap.clusters.get(cluster.id.getIdValue() + clustersW);
+      return staticSurface.hierarchicalMap.clusters.get(clusterId + clustersW);
     } else if (direction == Direction.East) {
-      return staticSurface.hierarchicalMap.clusters.get(cluster.id.getIdValue() + 1);
+      return staticSurface.hierarchicalMap.clusters.get(clusterId + 1);
     } else {
       throw new RuntimeException("Cluster direction is invalid");
     }

@@ -94,6 +94,10 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
       addClusterEdges(entrances, tile, directions);
     }
 
+    for (Cluster cluster : entrances.keySet()) {
+      System.out.printf("Cluster directions: %s %s%n", cluster.id, entrances.get(cluster));
+    }
+
     createEntrances(entrances);
   }
 
@@ -319,7 +323,7 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
     factory.removeAbstractNode(hierarchicalMap, startAbsNode);
 
     List<IntVec2D> posPath = toPositionPath(path, concreteMap);
-    Loggers.HPALogger.trace("FindPath: %s -> %s (%s)", from, to, posPath);
+    Loggers.HPALogger.info("FindPath: %s -> %s (%s)", from, to, posPath);
     verifyPath(from.pos, to.pos, posPath);
     return posPath.stream().map(Tile::new).collect(Collectors.toList());
   }

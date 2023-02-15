@@ -115,10 +115,6 @@ public class NavUtils {
     return allowDiagonally || dx == 0 || dy == 0;
   }
 
-  public static int manhattanDist(Tile t1, Tile t2) {
-    return Math.abs(t1.pos.x - t2.pos.x) + Math.abs(t1.pos.y - t2.pos.y);
-  }
-
   public static int levelNr(Vec3 pos) {
     return (int) pos.z;
   }

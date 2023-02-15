@@ -33,4 +33,9 @@ public class EntrancePoint {
     return abstractNodeId.equals(otherEntrance.abstractNodeId)
         && relativePosition.equals(otherEntrance.relativePosition);
   }
+
+  @Override
+  public String toString() {
+    return String.format("EntrancePoint %s: %s", abstractNodeId, relativePosition);
+  }
 }
