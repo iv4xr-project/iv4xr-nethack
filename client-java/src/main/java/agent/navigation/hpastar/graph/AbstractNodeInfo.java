@@ -53,4 +53,9 @@ public class AbstractNodeInfo {
 
     System.out.println(csb);
   }
+
+  @Override
+  public String toString() {
+    return String.format("AbsNodeInfo (%s): %s (clusterId=%s)", id, position, clusterId);
+  }
 }

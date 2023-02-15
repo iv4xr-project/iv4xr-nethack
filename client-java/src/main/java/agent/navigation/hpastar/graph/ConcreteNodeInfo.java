@@ -16,4 +16,10 @@ public class ConcreteNodeInfo {
     this.position = position;
     this.cost = cost;
   }
+
+  @Override
+  public String toString() {
+    return String.format(
+        "ConcreteNodeInfo: %s (isObstacle=%b, cost=%d)", position, isObstacle, cost);
+  }
 }

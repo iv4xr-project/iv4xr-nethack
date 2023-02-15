@@ -3,7 +3,7 @@ package util;
 import nethack.enums.Color;
 
 public final class ColoredStringBuilder {
-  StringBuilder sb;
+  final StringBuilder sb;
   Color currentColor = Color.RESET;
   /**
    * Constructs a string builder with no characters in it and an initial capacity of 16 characters.

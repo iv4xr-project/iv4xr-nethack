@@ -24,14 +24,14 @@ public class Graph<
     TEdge extends IEdge<TNode, TEdgeInfo>,
     TEdgeInfo> {
   static final Logger hpaLogger = Loggers.HPALogger;
+  public int nextId = 0;
   // We store the nodes in a list because the main operations we use
   // in this list are additions, random accesses and very few removals (only when
   // adding or removing nodes to perform specific searches).
   // This list is implicitly indexed by the nodeId, which makes removing a random
   // Node in the list quite of a mess. We could use a dictionary to ease removals,
   // but lists and arrays are faster for random accesses, and we need performance.
-  public final Map<Id<TNode>, TNode> nodes = new HashMap<>();
-  public int nextId = 0;
+  private final Map<Id<TNode>, TNode> nodes = new HashMap<>();
   private final Function<Pair<Id<TNode>, TNodeInfo>, TNode> nodeCreator;
   private final Function<Pair<Id<TNode>, TEdgeInfo>, TEdge> edgeCreator;
 
@@ -54,12 +54,16 @@ public class Graph<
   }
 
   public void addEdge(Id<TNode> sourceNodeId, Id<TNode> targetNodeId, TEdgeInfo info) {
-    hpaLogger.trace("AddEdge: %s %s", sourceNodeId, targetNodeId);
+    hpaLogger.trace("AddEdge: %s -> %s", getNodeInfo(sourceNodeId), getNodeInfo(targetNodeId));
     TNode node = nodes.get(sourceNodeId);
     node.addEdge(edgeCreator.apply(new Pair<>(targetNodeId, info)));
   }
 
   public void removeNode(Id<TNode> nodeId) {
+    hpaLogger.trace("RemoveNode: %s", nodeId);
+    if (nodeId.getIdValue() == 54) {
+      System.out.println();
+    }
     nodes.remove(nodeId);
   }
 
@@ -76,7 +80,9 @@ public class Graph<
   }
 
   public TNodeInfo getNodeInfo(Id<TNode> nodeId) {
-    return getNode(nodeId).info;
+    TNode node = getNode(nodeId);
+    assert node != null : "Cannot request node that is null";
+    return node.info;
   }
 
   public Map<Id<TNode>, TEdge> getEdges(Id<TNode> nodeId) {

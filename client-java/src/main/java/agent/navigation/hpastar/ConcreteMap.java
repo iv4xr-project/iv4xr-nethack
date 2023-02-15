@@ -40,14 +40,14 @@ public class ConcreteMap implements IMap<ConcreteNode> {
   // Create a new concreteMap as a copy of another concreteMap (just copying obstacles)
   public ConcreteMap slice(int horizOrigin, int vertOrigin, Size size, IPassability passability) {
     ConcreteMap slicedConcreteMap = passability.slice(horizOrigin, vertOrigin, size);
-    for (ConcreteNode slicedMapNode : slicedConcreteMap.graph.nodes.values()) {
-      ConcreteNode globalConcreteNode =
-          graph.getNode(
-              getNodeIdFromPos(
-                  horizOrigin + slicedMapNode.info.position.x,
-                  vertOrigin + slicedMapNode.info.position.y));
-      slicedMapNode.info.isObstacle = globalConcreteNode.info.isObstacle;
-      slicedMapNode.info.cost = globalConcreteNode.info.cost;
+    for (int y = 0; y < size.height; y++) {
+      for (int x = 0; x < size.width; x++) {
+        IntVec2D pos = new IntVec2D(horizOrigin + x, vertOrigin + y);
+        ConcreteNode globalConcreteNode = graph.getNode(getNodeIdFromPos(pos));
+        ConcreteNode subConcreteNode = graph.getNode(getNodeIdFromPos(new IntVec2D(x, y)));
+        subConcreteNode.info.isObstacle = globalConcreteNode.info.isObstacle;
+        subConcreteNode.info.cost = globalConcreteNode.info.cost;
+      }
     }
     return slicedConcreteMap;
   }
@@ -132,9 +132,9 @@ public class ConcreteMap implements IMap<ConcreteNode> {
     // It basically checks that you do not forcefully cross a blocked diagonal.
     // Honestly, this is weird, bad designed and supposes that each position is adjacent to each
     // other.
-    ConcreteNodeInfo nodeInfo12 = graph.getNode(getNodeIdFromPos(p2.x, p1.y)).info;
-    ConcreteNodeInfo nodeInfo21 = graph.getNode(getNodeIdFromPos(p1.x, p2.y)).info;
-    return !(nodeInfo12.isObstacle && nodeInfo21.isObstacle);
+    ConcreteNodeInfo nodeInfo12 = graph.getNode(getNodeIdFromPos(p1)).info;
+    ConcreteNodeInfo nodeInfo21 = graph.getNode(getNodeIdFromPos(p2)).info;
+    return !nodeInfo12.isObstacle && !nodeInfo21.isObstacle;
   }
 
   private List<Character> getCharVector() {

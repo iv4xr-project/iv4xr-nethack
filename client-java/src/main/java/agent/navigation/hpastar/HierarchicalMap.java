@@ -148,9 +148,14 @@ public class HierarchicalMap implements IMap<AbstractNode> {
     AbstractNodeInfo abstractNodeInfo = abstractGraph.getNodeInfo(abstractNodeId);
     Cluster cluster = clusters.get(abstractNodeInfo.clusterId.getIdValue());
     cluster.removeLastEntranceRecord();
+    System.out.printf(
+        "Remove abstract node from map %s (AbstractId=%s)%n",
+        abstractNodeInfo.concreteNodeId, abstractNodeId);
+    assert concreteNodeIdToAbstractNodeIdMap.containsKey(abstractNodeInfo.concreteNodeId)
+        : "Concrete node id must be present";
     concreteNodeIdToAbstractNodeIdMap.remove(abstractNodeInfo.concreteNodeId);
     abstractGraph.removeEdgesFromAndToNode(abstractNodeId);
-    abstractGraph.nodes.remove(abstractNodeId);
+    abstractGraph.removeNode(abstractNodeId);
   }
 
   private static boolean isValidEdgeForLevel(AbstractEdgeInfo edgeInfo, int level) {
@@ -364,7 +369,7 @@ public class HierarchicalMap implements IMap<AbstractNode> {
     List<AbstractNode> absNodes =
         cluster.entrancePoints.stream()
             .filter(entrancePoint -> entrancePoint.relativePosition.equals(relPos))
-            .map(entrancePoint -> abstractGraph.nodes.get(entrancePoint.abstractNodeId))
+            .map(entrancePoint -> abstractGraph.getNode(entrancePoint.abstractNodeId))
             .collect(Collectors.toList());
     for (AbstractNode absNode : absNodes) {
       for (Id<AbstractNode> neighbourNodeId : absNode.edges.keySet()) {
@@ -411,7 +416,7 @@ public class HierarchicalMap implements IMap<AbstractNode> {
         List<AbstractNode> absNodes =
             cluster.entrancePoints.stream()
                 .filter(entrancePoint -> entrancePoint.relativePosition.equals(relPos))
-                .map(entrancePoint -> abstractGraph.nodes.get(entrancePoint.abstractNodeId))
+                .map(entrancePoint -> abstractGraph.getNode(entrancePoint.abstractNodeId))
                 .collect(Collectors.toList());
         for (AbstractNode absNode : absNodes) {
           for (Id<AbstractNode> neighbourNodeId : absNode.edges.keySet()) {

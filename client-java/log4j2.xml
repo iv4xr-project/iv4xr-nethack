@@ -18,56 +18,55 @@
         </File>
     </Appenders>
     <Loggers>
-<!--        <Logger name="📡" level="debug" additivity="false">-->
-<!--            <AppenderRef ref="LogToFile" level="info"/>-->
-<!--            <AppenderRef ref="LogToConsole" level="info"/>-->
-<!--        </Logger>-->
-<!--        <Logger name="📬" level="debug" additivity="false">-->
-<!--            <AppenderRef ref="LogToFile" level="info"/>-->
-<!--            <AppenderRef ref="LogToConsole" level="info"/>-->
-<!--        </Logger>-->
-<!--        <Logger name="📦" level="debug" additivity="false">-->
-<!--            <AppenderRef ref="LogToFile" level="info"/>-->
-<!--            <AppenderRef ref="LogToConsole" level="info"/>-->
-<!--        </Logger>-->
+        <Logger name="📡" level="debug" additivity="false">
+            <AppenderRef ref="LogToFile" level="info"/>
+            <AppenderRef ref="LogToConsole" level="info"/>
+        </Logger>
+        <Logger name="📬" level="debug" additivity="false">
+            <AppenderRef ref="LogToFile" level="info"/>
+            <AppenderRef ref="LogToConsole" level="info"/>
+        </Logger>
+        <Logger name="📦" level="debug" additivity="false">
+            <AppenderRef ref="LogToFile" level="info"/>
+            <AppenderRef ref="LogToConsole" level="info"/>
+        </Logger>
 
-<!--        <Logger name="⚔️" level="debug" additivity="false">-->
-<!--            <AppenderRef ref="LogToFile" level="debug"/>-->
-<!--            <AppenderRef ref="LogToConsole" level="info"/>-->
-<!--        </Logger>-->
-<!--        <Logger name="🌱" level="debug" additivity="false">-->
-<!--            <AppenderRef ref="LogToFile" level="info"/>-->
-<!--            <AppenderRef ref="LogToSeedFile" level="info"/>-->
-<!--            <AppenderRef ref="LogToConsole" level="info"/>-->
-<!--        </Logger>-->
+        <Logger name="⚔️" level="debug" additivity="false">
+            <AppenderRef ref="LogToFile" level="debug"/>
+            <AppenderRef ref="LogToConsole" level="info"/>
+        </Logger>
+        <Logger name="🌱" level="debug" additivity="false">
+            <AppenderRef ref="LogToFile" level="info"/>
+            <AppenderRef ref="LogToSeedFile" level="info"/>
+            <AppenderRef ref="LogToConsole" level="info"/>
+        </Logger>
 
-<!--        <Logger name="🧭" level="debug" additivity="false">-->
-<!--            <AppenderRef ref="LogToFile" level="debug"/>-->
-<!--            <AppenderRef ref="LogToConsole" level="debug"/>-->
-<!--        </Logger>-->
-<!--        <Logger name="💡" level="debug" additivity="false">-->
-<!--            <AppenderRef ref="LogToFile" level="debug"/>-->
-<!--            <AppenderRef ref="LogToConsole" level="info"/>-->
-<!--        </Logger>-->
-<!--        <Logger name="🕵️" level="debug" additivity="false">-->
-<!--            <AppenderRef ref="LogToFile" level="debug"/>-->
-<!--            <AppenderRef ref="LogToConsole" level="info"/>-->
-<!--        </Logger>-->
-<!--        <Logger name="🌎" level="debug" additivity="false">-->
-<!--            <AppenderRef ref="LogToFile" level="info"/>-->
-<!--            <AppenderRef ref="LogToConsole" level="info"/>-->
-<!--        </Logger>-->
-<!--        <Logger name="🎵" level="debug" additivity="false">-->
-<!--            <AppenderRef ref="LogToConsole" level="debug"/>-->
-<!--        </Logger>-->
+        <Logger name="🧭" level="debug" additivity="false">
+            <AppenderRef ref="LogToFile" level="debug"/>
+            <AppenderRef ref="LogToConsole" level="debug"/>
+        </Logger>
+        <Logger name="💡" level="debug" additivity="false">
+            <AppenderRef ref="LogToFile" level="debug"/>
+            <AppenderRef ref="LogToConsole" level="info"/>
+        </Logger>
+        <Logger name="🕵️" level="debug" additivity="false">
+            <AppenderRef ref="LogToFile" level="debug"/>
+            <AppenderRef ref="LogToConsole" level="info"/>
+        </Logger>
+        <Logger name="🌎" level="debug" additivity="false">
+            <AppenderRef ref="LogToFile" level="info"/>
+            <AppenderRef ref="LogToConsole" level="info"/>
+        </Logger>
+        <Logger name="🎵" level="debug" additivity="false">
+            <AppenderRef ref="LogToConsole" level="debug"/>
+        </Logger>
+        <Logger name="HPA" level="trace" additivity="false">
+            <AppenderRef ref="LogToConsole"/>
+        </Logger>
 
-<!--        <Root level="debug" additivity="false">-->
-<!--            <AppenderRef ref="LogToFile" level="debug"/>-->
-<!--            <AppenderRef ref="LogToConsole" level="trace"/>-->
-<!--        </Root>-->
-        <Root level="fatal" additivity="false">
-            <AppenderRef ref="LogToFile" level="fatal"/>
-            <AppenderRef ref="LogToConsole" level="fatal"/>
+        <Root level="debug" additivity="false">
+            <AppenderRef ref="LogToFile" level="debug"/>
+            <AppenderRef ref="LogToConsole" level="trace"/>
         </Root>
     </Loggers>
 </Configuration>

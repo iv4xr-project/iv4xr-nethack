@@ -44,6 +44,7 @@ public class GoalLib {
                     //                    Actions.searchWalls().lift(),
                     ABORT()));
 
-    return REPEAT(G.lift());
+    return G.lift();
+    //    return REPEAT(G.lift());
   }
 }

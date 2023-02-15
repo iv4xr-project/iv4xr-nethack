@@ -6,6 +6,7 @@ import agent.navigation.hpastar.infrastructure.Id;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import nethack.object.Level;
 import org.apache.logging.log4j.Logger;
 import util.Loggers;
 
@@ -42,11 +43,10 @@ public class AStar<TNode> {
     while (canExpand()) {
       Id<TNode> nodeId = expand();
       int id = nodeId.getIdValue();
-      //      System.out.printf("Expand <%d,%d> %d%n", id % Level.SIZE.width, id / Level.SIZE.width,
-      // id);
-      hpaLogger.trace("Expand %s", nodeId);
+      hpaLogger.trace(
+          "Expand <%d,%d> (relPos:<%d,%d>) %d",
+          id % Level.SIZE.width, id / Level.SIZE.width, id % 8, id / 8, id);
       if (isGoal.apply(nodeId)) {
-        //        System.out.println("Found path");
         hpaLogger.trace("Found path");
         return reconstructPathFrom(nodeId);
       }
@@ -55,7 +55,7 @@ public class AStar<TNode> {
     return new Path<TNode>(new ArrayList<>(), -1);
   }
 
-  private final Id<TNode> expand() {
+  private Id<TNode> expand() {
     var nodeId = openQueue.remove();
     var node = nodeLookup.getNodeValue(nodeId.item);
     processNeighbours(nodeId.item, node);
@@ -64,7 +64,7 @@ public class AStar<TNode> {
     return nodeId.item;
   }
 
-  private final void processNeighbours(Id<TNode> nodeId, AStarNode<TNode> node) {
+  private void processNeighbours(Id<TNode> nodeId, AStarNode<TNode> node) {
     Iterable<Connection<TNode>> connections = map.getConnections(nodeId);
     for (Connection<TNode> connection : connections) {
       int gCost = node.g + connection.cost;
@@ -102,7 +102,7 @@ public class AStar<TNode> {
   ///  TODO: Maybe I should guard this with some kind of safetyGuard to prevent
   ///  possible infinite loops in case of bugs, but meh...
   ///  </summary>
-  private final Path<TNode> reconstructPathFrom(Id<TNode> destination) {
+  private Path<TNode> reconstructPathFrom(Id<TNode> destination) {
     List<Id<TNode>> pathNodes = new ArrayList<>();
     int pathCost = nodeLookup.getNodeValue(destination).f;
     Id<TNode> currentNode = destination;

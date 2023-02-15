@@ -1,5 +1,5 @@
 package agent.navigation.strategy;
-;
+
 import agent.iv4xr.AgentState;
 import agent.navigation.HierarchicalNavigation;
 import agent.navigation.hpastar.Size;

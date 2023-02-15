@@ -6,11 +6,15 @@ public class Stopwatch {
   private long previousTime;
   private boolean running = false;
 
-  public Stopwatch() {}
+  public Stopwatch(boolean start) {
+    if (start) {
+      start();
+    }
+  }
 
   public void start() {
     running = true;
-    startTime = System.nanoTime();
+    startTime = time();
     previousTime = startTime;
   }
 

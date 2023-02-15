@@ -17,9 +17,7 @@ public class ObservationMessageDecoder extends Decoder {
   public static ObservationMessage decode(DataInputStream input) {
     try {
       ObservationMessage observationMessage = new ObservationMessage();
-
-      Stopwatch stopwatch = new Stopwatch();
-      stopwatch.start();
+      Stopwatch stopwatch = new Stopwatch(true);
 
       int inputByte = input.readByte();
       assert inputByte == DecoderBit.ObservationBit.value;
@@ -28,14 +26,11 @@ public class ObservationMessageDecoder extends Decoder {
       Pair<Stats, Player> pair = StatsDecoder.decode(input);
       observationMessage.stats = pair.fst;
       observationMessage.player = pair.snd;
-
       logger.trace("READ STATS TOOK: %d", stopwatch.split());
 
       byte[] chars = input.readNBytes(256);
       observationMessage.message = new String(chars, StandardCharsets.UTF_8);
       observationMessage.message = observationMessage.message.replaceAll("\0", "");
-
-      long now_1 = System.nanoTime();
       logger.trace("READ MESSAGE TOOK: %d", stopwatch.split());
 
       long total = 0;

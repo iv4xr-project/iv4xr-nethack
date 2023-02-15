@@ -15,7 +15,6 @@ import util.Loggers;
 
 public class HierarchicalMapFactory {
   static final Logger hpaLogger = Loggers.HPALogger;
-  private final int MAX_ENTRANCE_WIDTH = 6;
 
   public HierarchicalMap hierarchicalMap;
 
@@ -53,6 +52,7 @@ public class HierarchicalMapFactory {
 
   public Id<AbstractNode> insertAbstractNode(HierarchicalMap map, IntVec2D pos) {
     Id<ConcreteNode> nodeId = new Id<ConcreteNode>().from(pos.y * map.size.width + pos.x);
+    System.out.printf("Insert abstract node into map %s %s%n", nodeId, pos);
     Id<AbstractNode> abstractNodeId = insertNodeIntoHierarchicalMap(map, nodeId, pos);
     map.addHierarchicalEdgesForAbstractNode(abstractNodeId);
     return abstractNodeId;
@@ -65,7 +65,10 @@ public class HierarchicalMapFactory {
       HierarchicalMap map, Id<ConcreteNode> concreteNodeId, IntVec2D pos) {
     //  If the node already existed (for instance, it was an entrance point already
     //  existing in the graph, we need to keep track of the previous status in order
-    //  to be able to restore it once we delete this STAL
+    //  to be able to restore it once we delete this STALL
+    for (Id<AbstractNode> nodeId : map.concreteNodeIdToAbstractNodeIdMap.values()) {
+      assert map.abstractGraph.getNode(nodeId) != null : "Must contain nodeId";
+    }
     if (map.concreteNodeIdToAbstractNodeIdMap.containsKey(concreteNodeId)) {
       Id<AbstractNode> existingAbstractNodeId =
           map.concreteNodeIdToAbstractNodeIdMap.get(concreteNodeId);
@@ -80,9 +83,8 @@ public class HierarchicalMapFactory {
     Cluster cluster = map.findClusterForPosition(pos);
     //  create global entrance
     Id<AbstractNode> abstractNodeId = new Id<AbstractNode>().from(map.getNrNodes());
-    var entrance =
-        cluster.addEntrance(
-            abstractNodeId, new IntVec2D(pos.x - cluster.origin.x, pos.y - cluster.origin.y));
+    IntVec2D relPos = new IntVec2D(pos.x - cluster.origin.x, pos.y - cluster.origin.y);
+    EntrancePoint entrance = cluster.addEntrance(abstractNodeId, relPos);
     cluster.updatePathsForLocalEntrance(entrance);
     map.concreteNodeIdToAbstractNodeIdMap.put(concreteNodeId, abstractNodeId);
     AbstractNodeInfo info =
@@ -109,16 +111,16 @@ public class HierarchicalMapFactory {
   }
 
   private void restoreNodeBackup(HierarchicalMap map, Id<AbstractNode> nodeId) {
-    var abstractGraph = map.abstractGraph;
-    var nodeBackup = nodeBackups.get(nodeId);
-    var nodeInfo = abstractGraph.getNodeInfo(nodeId);
+    AbstractGraph abstractGraph = map.abstractGraph;
+    NodeBackup nodeBackup = nodeBackups.get(nodeId);
+    AbstractNodeInfo nodeInfo = abstractGraph.getNodeInfo(nodeId);
     nodeInfo.level = nodeBackup.level;
     abstractGraph.removeEdgesFromAndToNode(nodeId);
 
     // Updates node
     abstractGraph.addNode(nodeId, nodeInfo);
     for (AbstractEdge edge : nodeBackup.edges) {
-      var targetNodeId = edge.targetNodeId;
+      Id<AbstractNode> targetNodeId = edge.targetNodeId;
       map.addEdge(
           nodeId,
           targetNodeId,
@@ -326,6 +328,7 @@ public class HierarchicalMapFactory {
         continue;
       }
 
+      int MAX_ENTRANCE_WIDTH = 6;
       if (entranceStyle == EntranceStyle.EndEntrance && size > MAX_ENTRANCE_WIDTH) {
         Pair<ConcreteNode, ConcreteNode> nodes = getNodesInEdge.apply(entranceStart);
         ConcreteNode srcNode = nodes.fst;

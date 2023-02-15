@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import nl.uu.cs.aplib.utils.Pair;
+import util.Stopwatch;
 
 public class Sandbox {
   public static void main(String[] args) {
@@ -33,10 +34,10 @@ public class Sandbox {
             .createHierarchicalMap(
                 concreteMap, clusterSize, maxLevel, EntranceStyle.EndEntrance, size);
     concreteMap.printFormatted();
-    System.out.println(
-        absTiling.abstractGraph.nodes.values().stream()
-            .map(abstractNode -> abstractNode.info.position)
-            .collect(Collectors.toList()));
+    //    System.out.println(
+    //        absTiling.abstractGraph.nodes.values().stream()
+    //            .map(abstractNode -> abstractNode.info.position)
+    //            .collect(Collectors.toList()));
     System.out.println(absTiling);
 
     List<Pair<IntVec2D, IntVec2D>> points;
@@ -58,7 +59,7 @@ public class Sandbox {
       points.add(new Pair<>(new IntVec2D(3, 1), new IntVec2D(4, 9)));
     }
 
-    long t1 = System.nanoTime();
+    Stopwatch stopwatch = new Stopwatch(true);
     for (Pair<IntVec2D, IntVec2D> point : points) {
       IntVec2D startPosition = point.fst;
       IntVec2D endPosition = point.snd;
@@ -67,8 +68,7 @@ public class Sandbox {
       List<IntVec2D> posPath = toPositionPath(regularSearchPath, concreteMap, absTiling);
       System.out.printf("%s -> %s %s%n", startPosition, endPosition, posPath);
     }
-    long t2 = System.nanoTime();
-    long regularSearchTime = t2 - t1;
+    float regularSearchTime = stopwatch.split();
     System.out.printf(
         "Searching %d paths took: %.2fs%n", points.size(), regularSearchTime / 1000000000.0f);
   }

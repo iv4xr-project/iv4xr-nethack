@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import nl.uu.cs.aplib.utils.Pair;
 import util.ColoredStringBuilder;
+import util.Stopwatch;
 
 public class Program {
 
@@ -156,14 +157,12 @@ public class Program {
     // var edges = absTiling.AbstractGraph.Nodes.SelectMany(x => x.Edges.Values)
     //    .GroupBy(x => x.Info.Level)
     //    .ToDictionary(x => x.Key, x => x.Count());
-    long t1 = System.nanoTime();
+    Stopwatch stopwatch = new Stopwatch(true);
     List<IPathNode> regularSearchPath = regularSearch(concreteMap, startPosition, endPosition);
-    long t2 = System.nanoTime();
-    long regularSearchTime = t2 - t1;
+    float regularSearchTime = stopwatch.split();
     List<IPathNode> hierarchicalSearchPath =
         hierarchicalSearch(absTiling, maxLevel, concreteMap, startPosition, endPosition);
-    long t3 = System.nanoTime();
-    long hierarchicalSearchTime = t3 - t2;
+    float hierarchicalSearchTime = stopwatch.split();
     List<IntVec2D> pospath =
         hierarchicalSearchPath.stream()
             .map(
@@ -201,14 +200,12 @@ public class Program {
     HierarchicalMap absTiling =
         abstractMapFactory.createHierarchicalMap(
             concreteMap, clusterSize, maxLevel, EntranceStyle.EndEntrance, size);
-    long t1 = System.nanoTime();
+    Stopwatch stopwatch = new Stopwatch(true);
     List<IPathNode> regularSearchPath = regularSearch(concreteMap, startPosition, endPosition);
-    long t2 = System.nanoTime();
-    long regularSearchTime = t2 - t1;
+    float regularSearchTime = stopwatch.split();
     List<IPathNode> hierarchicalSearchPath =
         hierarchicalSearch(absTiling, maxLevel, concreteMap, startPosition, endPosition);
-    long t3 = System.nanoTime();
-    long hierarchicalSearchTime = t3 - t2;
+    float hierarchicalSearchTime = stopwatch.split();
     List<IntVec2D> pospath =
         hierarchicalSearchPath.stream()
             .map(
@@ -290,7 +287,7 @@ public class Program {
     searchStrategies.add(doHierarchicalSearch);
 
     for (Function<Pair<IntVec2D, IntVec2D>, List<IPathNode>> searchStrategy : searchStrategies) {
-      long t1 = System.nanoTime();
+      Stopwatch stopwatch = new Stopwatch(true);
       for (Pair<IntVec2D, IntVec2D> point : points) {
         IntVec2D startPosition2 = point.fst;
         IntVec2D endPosition2 = point.snd;
@@ -299,8 +296,7 @@ public class Program {
         List<IntVec2D> posPath1 = toPositionPath.apply(regularSearchPath);
         System.out.println(posPath1);
       }
-      long t2 = System.nanoTime();
-      long regularSearchTime = t2 - t1;
+      float regularSearchTime = stopwatch.split();
       System.out.println(regularSearchTime);
     }
   }

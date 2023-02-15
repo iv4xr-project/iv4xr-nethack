@@ -4,16 +4,12 @@ import agent.iv4xr.AgentEnv;
 import agent.iv4xr.AgentState;
 import agent.navigation.NetHackSurface;
 import agent.navigation.hpastar.Cluster;
-import agent.navigation.hpastar.graph.AbstractNode;
-import agent.navigation.hpastar.infrastructure.Id;
 import agent.navigation.strategy.NavUtils;
 import agent.navigation.surface.Tile;
 import agent.strategy.GoalLib;
 import connection.SocketClient;
 import eu.iv4xr.framework.mainConcepts.TestAgent;
 import eu.iv4xr.framework.spatial.Vec3;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 import nethack.NetHack;
 import nethack.enums.Command;
@@ -69,8 +65,7 @@ public class App {
     agentLogger.info("Start automatic agent loop...");
     Sounds.disableSound();
     ProgressBar bar = new ProgressBar();
-    Stopwatch stopwatch = new Stopwatch();
-    stopwatch.start();
+    Stopwatch stopwatch = new Stopwatch(true);
     while (state.app().gameState.stats.turn.compareTo(desiredTurn) < 0) {
       bar.update(state.app().gameState.stats.turn.time, desiredTurn.time);
       agent.update();
@@ -125,20 +120,21 @@ public class App {
                           .position)
               .collect(Collectors.toList()));
     }
-
-    List<Id<AbstractNode>> nodesIds =
-        new ArrayList<>(surface.hierarchicalMap.abstractGraph.nodes.keySet());
-    for (Id<AbstractNode> nodeId : nodesIds) {
-      AbstractNode node = surface.hierarchicalMap.abstractGraph.getNode(nodeId);
-      for (Id<AbstractNode> neighbourId : node.edges.keySet()) {
-        AbstractNode neighbour = surface.hierarchicalMap.abstractGraph.getNode(neighbourId);
-        assert neighbour.edges.containsKey(nodeId) : "Not bidirectional abs edge";
-      }
-    }
-    System.out.printf("ABS NODES (%d) [", nodesIds.size());
-    for (AbstractNode node : surface.hierarchicalMap.abstractGraph.nodes.values()) {
-      System.out.printf(" {%s: %s nrEdges:%s}", node.nodeId, node.info.position, node.edges.size());
-    }
-    System.out.println("]");
+    //
+    //    List<Id<AbstractNode>> nodesIds =
+    //        new ArrayList<>(surface.hierarchicalMap.abstractGraph.nodes.keySet());
+    //    for (Id<AbstractNode> nodeId : nodesIds) {
+    //      AbstractNode node = surface.hierarchicalMap.abstractGraph.getNode(nodeId);
+    //      for (Id<AbstractNode> neighbourId : node.edges.keySet()) {
+    //        AbstractNode neighbour = surface.hierarchicalMap.abstractGraph.getNode(neighbourId);
+    //        assert neighbour.edges.containsKey(nodeId) : "Not bidirectional abs edge";
+    //      }
+    //    }
+    //    System.out.printf("ABS NODES (%d) [", nodesIds.size());
+    //    for (AbstractNode node : surface.hierarchicalMap.abstractGraph.nodes.values()) {
+    //      System.out.printf(" {%s: %s nrEdges:%s}", node.nodeId, node.info.position,
+    // node.edges.size());
+    //    }
+    //    System.out.println("]");
   }
 }

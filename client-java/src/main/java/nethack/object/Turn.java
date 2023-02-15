@@ -12,7 +12,7 @@ public class Turn implements Comparable<Turn> {
     this.time = time;
   }
 
-  public static Turn startTurn = new Turn(1);
+  public static final Turn startTurn = new Turn(1);
 
   public void updateTurn(Turn previousTurn) {
     if (previousTurn.time == time) {

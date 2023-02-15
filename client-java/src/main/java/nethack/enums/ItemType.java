@@ -22,7 +22,7 @@ public enum ItemType {
   VENOM,
   NONE;
 
-  public static final int maxLength() {
+  public static int maxLength() {
     int maxLength = 0;
     for (ItemType type : ItemType.values()) {
       maxLength = Math.max(maxLength, type.name().length());

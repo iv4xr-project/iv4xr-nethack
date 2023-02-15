@@ -319,7 +319,7 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
     factory.removeAbstractNode(hierarchicalMap, startAbsNode);
 
     List<IntVec2D> posPath = toPositionPath(path, concreteMap);
-    //    System.out.printf("findPath: %s -> %s (%s)%n", from, to, posPath);
+    Loggers.HPALogger.trace("FindPath: %s -> %s (%s)", from, to, posPath);
     verifyPath(from.pos, to.pos, posPath);
     return posPath.stream().map(Tile::new).collect(Collectors.toList());
   }

@@ -103,8 +103,7 @@ public class SocketClient {
   }
 
   public StepState sendStep(int index) {
-    Stopwatch stopwatch = new Stopwatch();
-    stopwatch.start();
+    Stopwatch stopwatch = new Stopwatch(true);
     try {
       writer.write(new byte[] {Encoder.EncoderBit.StepBit.value, (byte) index});
     } catch (IOException e) {
@@ -139,8 +138,7 @@ public class SocketClient {
     logger.info("Waiting for StepState...");
     ObservationMessage obsMessage = readObservationMessage();
     StepMessage stepMessage = StepMessageDecoder.decode(reader);
-    Stopwatch stopwatch = new Stopwatch();
-    stopwatch.start();
+    Stopwatch stopwatch = new Stopwatch(true);
     profileLogger.trace("READ OBS MESSAGE TOOK: %d%n%n", stopwatch.split());
 
     StepState stepState = new StepState();
