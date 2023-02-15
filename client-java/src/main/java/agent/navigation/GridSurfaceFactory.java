@@ -287,7 +287,6 @@ public class GridSurfaceFactory {
 
         IntVec2D entrance1Pos = absNode1.info.position;
         IntVec2D entrance2Pos = absNode2.info.position;
-        System.out.println(absNode1.nodeId + " " + absNode2.nodeId);
         if (NavUtils.adjacent(entrance1Pos, entrance2Pos, true)
             && absNode1.edges.containsKey(absNode2.nodeId)
             && absNode2.edges.containsKey(absNode1.nodeId)) {

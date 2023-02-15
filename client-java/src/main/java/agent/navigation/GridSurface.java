@@ -94,10 +94,6 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
       addClusterEdges(entrances, tile, directions);
     }
 
-    for (Cluster cluster : entrances.keySet()) {
-      System.out.printf("Cluster directions: %s %s%n", cluster.id, entrances.get(cluster));
-    }
-
     createEntrances(entrances);
   }
 

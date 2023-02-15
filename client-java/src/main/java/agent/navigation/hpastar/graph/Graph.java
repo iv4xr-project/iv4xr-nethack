@@ -54,16 +54,14 @@ public class Graph<
   }
 
   public void addEdge(Id<TNode> sourceNodeId, Id<TNode> targetNodeId, TEdgeInfo info) {
-    hpaLogger.debug("AddEdge: %s -> %s", getNodeInfo(sourceNodeId), getNodeInfo(targetNodeId));
+    hpaLogger.debug(
+        "AddEdge: %s -> %s (%s)", getNodeInfo(sourceNodeId), getNodeInfo(targetNodeId), info);
     TNode node = nodes.get(sourceNodeId);
     node.addEdge(edgeCreator.apply(new Pair<>(targetNodeId, info)));
   }
 
   public void removeNode(Id<TNode> nodeId) {
     hpaLogger.trace("RemoveNode: %s", nodeId);
-    if (nodeId.getIdValue() == 54) {
-      System.out.println();
-    }
     nodes.remove(nodeId);
   }
 

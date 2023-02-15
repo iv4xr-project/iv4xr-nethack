@@ -10,4 +10,9 @@ public class ConcreteEdgeInfo {
   public ConcreteEdgeInfo(int cost) {
     this.cost = cost;
   }
+
+  @Override
+  public String toString() {
+    return String.format("ConcreteEdgeInfo (cost=%d)", cost);
+  }
 }

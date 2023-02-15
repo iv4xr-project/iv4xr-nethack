@@ -148,11 +148,6 @@ public class HierarchicalMap implements IMap<AbstractNode> {
     AbstractNodeInfo abstractNodeInfo = abstractGraph.getNodeInfo(abstractNodeId);
     Cluster cluster = clusters.get(abstractNodeInfo.clusterId.getIdValue());
     cluster.removeRelevantEntranceRecord(abstractNodeId);
-    System.out.printf(
-        "Remove abstract node from map %s (AbstractId=%s)%n",
-        abstractNodeInfo.concreteNodeId, abstractNodeId);
-    //    assert concreteNodeIdToAbstractNodeIdMap.containsKey(abstractNodeInfo.concreteNodeId)
-    //        : "Concrete node id must be present";
     concreteNodeIdToAbstractNodeIdMap.remove(abstractNodeInfo.concreteNodeId);
     abstractGraph.removeEdgesFromAndToNode(abstractNodeId);
     abstractGraph.removeNode(abstractNodeId);

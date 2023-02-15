@@ -52,7 +52,6 @@ public class HierarchicalMapFactory {
 
   public Id<AbstractNode> insertAbstractNode(HierarchicalMap map, IntVec2D pos) {
     Id<ConcreteNode> nodeId = new Id<ConcreteNode>().from(pos.y * map.size.width + pos.x);
-    System.out.printf("Insert abstract node into map %s %s%n", nodeId, pos);
     Id<AbstractNode> abstractNodeId = insertNodeIntoHierarchicalMap(map, nodeId, pos);
     map.addHierarchicalEdgesForAbstractNode(abstractNodeId);
     return abstractNodeId;
@@ -89,7 +88,6 @@ public class HierarchicalMapFactory {
     map.concreteNodeIdToAbstractNodeIdMap.put(concreteNodeId, abstractNodeId);
     AbstractNodeInfo info =
         new AbstractNodeInfo(abstractNodeId, 1, cluster.id, pos, concreteNodeId);
-    //    System.out.printf("AbsGraph AddNode: %s%n", abstractNodeId);
     boolean edgeAdded = false;
     map.abstractGraph.addNode(abstractNodeId, info);
     for (EntrancePoint entrancePoint : cluster.entrancePoints) {

@@ -32,6 +32,7 @@ public class NetHack {
       reset();
     } else {
       init(client, GameMode.NetHack);
+      System.out.printf("Init game with seed: %s%n", seed);
       setSeed(seed);
     }
   }

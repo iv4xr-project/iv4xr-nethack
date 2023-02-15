@@ -52,6 +52,12 @@ public class HierarchicalSearch {
     } else {
       map.setAllMapAsCurrentCluster();
       AStar<AbstractNode> search = new AStar<>(map, startNodeId, targetNodeId);
+      System.out.printf(
+          "Search: %s -> %s, %s %s%n",
+          startNodeId,
+          targetNodeId,
+          map.abstractGraph.getNodeInfo(startNodeId),
+          map.abstractGraph.getNodeInfo(targetNodeId));
       path = search.findPath();
     }
     if (path.pathCost == -1) {
