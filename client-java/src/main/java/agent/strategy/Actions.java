@@ -25,13 +25,10 @@ import nethack.object.Level;
 import nethack.object.Player;
 import nl.uu.cs.aplib.mainConcepts.Action;
 import nl.uu.cs.aplib.utils.Pair;
-import org.apache.logging.log4j.Logger;
 import util.Loggers;
 import util.Sounds;
 
 public class Actions {
-  static final Logger logger = Loggers.GoalLogger;
-
   /**
    * Construct an action that would interact with an entity of the given id. The action's guard is
    * left unconstrained (so the action would always be enabled). You can use the "on" method to add
@@ -43,7 +40,7 @@ public class Actions {
             (AgentState S) ->
                 (Pair<Integer, Tile> nextTile) -> {
                   WorldModel newwom = NavUtils.moveTo(S, nextTile);
-                  logger.info(">>> interact %s", nextTile);
+                  Loggers.GoalLogger.info(">>> interact %s", nextTile);
                   return new Pair<>(S, newwom);
                 });
   }
@@ -57,7 +54,7 @@ public class Actions {
               List<WorldEntity> ms = S.adjacentEntities(EntityType.MONSTER, true);
               // just choose the first one:
               Vec3 position = ms.get(0).position;
-              logger.info(">>> attackMonster %s", position);
+              Loggers.GoalLogger.info(">>> attackMonster %s", position);
               WorldModel newwom = NavUtils.moveTo(S, position);
               return new Pair<>(S, newwom);
             });
@@ -70,7 +67,7 @@ public class Actions {
             (AgentState S) ->
                 (Pair<Integer, Tile> door) -> {
                   Sounds.door_kick();
-                  logger.info("kickDoor @%s", door);
+                  Loggers.GoalLogger.info("kickDoor @%s", door);
                   WorldModel newwom = WorldModels.kickDoor(S, door);
                   return new Pair<>(S, newwom);
                 });
@@ -83,7 +80,7 @@ public class Actions {
             (AgentState S) ->
                 (Pair<Integer, Tile> doorTile) -> {
                   Sounds.door();
-                  logger.info("open door @%s", doorTile);
+                  Loggers.GoalLogger.info("open door @%s", doorTile);
                   WorldModel newwom = NavUtils.moveTo(S, doorTile);
                   if (Objects.equals(S.app().gameState.message, "This door is locked.")) {
                     Door d = (Door) doorTile.snd;
@@ -97,7 +94,7 @@ public class Actions {
     return action(String.format("perform command: %s", command))
         .do1(
             (AgentState S) -> {
-              logger.info("command: %s", command);
+              Loggers.GoalLogger.info("command: %s", command);
               WorldModel newwom = WorldModels.performCommand(S, command);
               return new Pair<>(S, newwom);
             });
@@ -108,7 +105,7 @@ public class Actions {
         .do2(
             (AgentState S) ->
                 (List<Wall> walls) -> {
-                  logger.info("searchWalls");
+                  Loggers.GoalLogger.info("searchWalls");
                   Sounds.search();
                   WorldModel newwom = WorldModels.performCommand(S, Command.COMMAND_SEARCH);
                   for (Wall wall : walls) {
@@ -143,7 +140,7 @@ public class Actions {
             (AgentState S) ->
                 (Item item) -> {
                   Sounds.eat();
-                  logger.info(">>> eatFood: %s", item);
+                  Loggers.GoalLogger.info(">>> eatFood: %s", item);
                   WorldModel newwom = WorldModels.eatFood(S, item.symbol);
                   return new Pair<>(S, newwom);
                 })

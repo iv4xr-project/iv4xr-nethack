@@ -7,8 +7,9 @@ import org.apache.logging.log4j.core.config.Configurator;
 
 public class Loggers {
   static {
-    // Set config file
-    System.setProperty("log4j2.configurationFile", "nolog4j2.xml");
+    // Set config file for logging
+    String logfile = Config.getLogConfig();
+    System.setProperty("log4j2.configurationFile", logfile);
   }
 
   // Connection loggers

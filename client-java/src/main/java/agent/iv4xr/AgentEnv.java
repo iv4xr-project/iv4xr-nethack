@@ -16,7 +16,6 @@ import nethack.enums.EntityType;
 import nethack.object.Entity;
 import nethack.object.Level;
 import nethack.object.Player;
-import org.apache.logging.log4j.Logger;
 import util.Loggers;
 
 /**
@@ -26,7 +25,6 @@ import util.Loggers;
  * @author wish
  */
 public class AgentEnv extends Iv4xrEnvironment {
-  static final Logger logger = Loggers.WOMLogger;
   private static final Set<EntityType> ignoredTypes =
       new HashSet<>(
           Arrays.asList(
@@ -70,7 +68,7 @@ public class AgentEnv extends Iv4xrEnvironment {
       }
 
       String id = e.createId(pos);
-      logger.debug("%s %s Added", id, pos);
+      Loggers.WOMLogger.debug("%s %s Added", id, pos);
       wom.elements.put(id, toWorldEntity(e, pos));
     }
 

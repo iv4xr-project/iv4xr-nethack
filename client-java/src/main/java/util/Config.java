@@ -29,6 +29,10 @@ public class Config {
     return new Pair<>(ip, port);
   }
 
+  public static String getLogConfig() {
+    return config.getString("LOG_CONFIG", "log4j2.xml");
+  }
+
   public static Seed getSeed() {
     List<Object> seed = config.getList("SEED", new ArrayList<Object>());
     assert seed.isEmpty() || seed.size() == 2

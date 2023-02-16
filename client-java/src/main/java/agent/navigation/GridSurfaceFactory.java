@@ -21,11 +21,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 import nl.uu.cs.aplib.utils.Pair;
-import org.apache.logging.log4j.Logger;
 import util.Loggers;
 
 public class GridSurfaceFactory {
-  static final Logger logger = Loggers.HPALogger;
   static GridSurface staticSurface;
   static final int MAX_ENTRANCE_WIDTH = 6;
   static final EntranceStyle entranceStyle = EntranceStyle.EndEntrance;
@@ -115,7 +113,7 @@ public class GridSurfaceFactory {
           AbstractEdgeInfo abstractEdgeInfo =
               new AbstractEdgeInfo(
                   cluster.getDistance(point1.abstractNodeId, point2.abstractNodeId), 1, false);
-          logger.debug(
+          Loggers.HPALogger.debug(
               "IntraCluster AddEdge: %s -> %s", point1.abstractNodeId, point2.abstractNodeId);
           staticSurface.hierarchicalMap.abstractGraph.addEdge(
               point1.abstractNodeId, point2.abstractNodeId, abstractEdgeInfo);
@@ -136,7 +134,7 @@ public class GridSurfaceFactory {
     Id<AbstractNode> startAbsNodeId = addAbstractNode(entrance.cluster1, srcPos);
     Id<AbstractNode> targetAbsNodeId = addAbstractNode(entrance.cluster2, destPos);
 
-    logger.debug(
+    Loggers.HPALogger.debug(
         "InterCluster AddEdge: %s (%s) -> %s (%s)",
         startAbsNodeId, srcPos, targetAbsNodeId, destPos);
     staticSurface.hierarchicalMap.abstractGraph.addEdge(
@@ -241,7 +239,7 @@ public class GridSurfaceFactory {
         currentEntranceId.setValue(currentEntranceId.getValue() + 1);
         entrances.add(entrance1);
         entrances.add(entrance2);
-        logger.debug(
+        Loggers.HPALogger.debug(
             "1. Entrance added relPos:(%s -> %s) between cluster %s -> %s",
             srcNode.info.position, destNode.info.position, precedentCluster, currentCluster);
       } else {
@@ -259,7 +257,7 @@ public class GridSurfaceFactory {
                 orientation);
         currentEntranceId.setValue(currentEntranceId.getValue() + 1);
         entrances.add(entrance);
-        logger.debug(
+        Loggers.HPALogger.debug(
             "2. Entrance added relPos:(%s -> %s) between cluster %s -> %s",
             srcNode.info.position, destNode.info.position, precedentCluster, currentCluster);
       }

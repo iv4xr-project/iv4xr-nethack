@@ -13,12 +13,9 @@ import java.util.List;
 import nethack.enums.Command;
 import nethack.object.Player;
 import nl.uu.cs.aplib.utils.Pair;
-import org.apache.logging.log4j.Logger;
 import util.Loggers;
 
 public class NavUtils {
-  static final Logger logger = Loggers.NavLogger;
-
   /**
    * Distance in terms of path-length from the agent that owns S to the entity e. It uses
    * adjustedFindPath to calculate the path.
@@ -194,10 +191,10 @@ public class NavUtils {
 
   public static Pair<Integer, Tile> nextTile(List<Pair<Integer, Tile>> path) {
     if (path == null) {
-      logger.debug("Path not found");
+      Loggers.NavLogger.debug("Path not found");
       return null;
     } else if (path.size() <= 1) {
-      logger.debug("Already on location, path is length %s", path.size());
+      Loggers.NavLogger.debug("Already on location, path is length %s", path.size());
       return null;
     } else {
       // The first element is the src itself, so we need to pick the next one:

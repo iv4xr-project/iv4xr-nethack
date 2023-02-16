@@ -2,12 +2,8 @@ package connection.messagedecoder;
 
 import java.io.DataInputStream;
 import java.io.IOException;
-import org.apache.logging.log4j.Logger;
-import util.Loggers;
 
 public abstract class Decoder {
-  protected static final Logger logger = Loggers.DecoderLogger;
-
   protected enum DecoderBit {
     ObservationBit(1),
     StepBit(2),

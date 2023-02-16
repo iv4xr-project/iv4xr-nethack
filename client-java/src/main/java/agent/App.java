@@ -17,13 +17,9 @@ import nethack.object.Player;
 import nethack.object.Turn;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
 import nl.uu.cs.aplib.utils.Pair;
-import org.apache.logging.log4j.Logger;
 import util.*;
 
 public class App {
-  static final Logger connectionLogger = Loggers.ConnectionLogger;
-  static final Logger agentLogger = Loggers.AgentLogger;
-
   public static void main(String[] args) throws Exception {
     // Initialize socket connection
     SocketClient client = new SocketClient();
@@ -53,7 +49,7 @@ public class App {
       System.out.println(path);
     }
 
-    agentLogger.info("Closing NetHack since the loop in agent has terminated");
+    Loggers.AgentLogger.info("Closing NetHack since the loop in agent has terminated");
     nethack.close();
   }
 
@@ -62,7 +58,7 @@ public class App {
       return;
     }
 
-    agentLogger.info("Start automatic agent loop...");
+    Loggers.AgentLogger.info("Start automatic agent loop...");
     Sounds.disableSound();
     ProgressBar bar = new ProgressBar();
     Stopwatch stopwatch = new Stopwatch(true);
@@ -78,7 +74,7 @@ public class App {
 
   private static void mainAgentLoop(
       SocketClient commander, TestAgent agent, AgentState state, GoalStructure G, NetHack netHack) {
-    agentLogger.info("Start agent loop...");
+    Loggers.AgentLogger.info("Start agent loop...");
     // Now we run the agent:
     while (G.getStatus().inProgress()) {
       Command command = netHack.waitCommand(true);
@@ -89,7 +85,7 @@ public class App {
         }
       } else {
         agent.update();
-        agentLogger.debug("agent @%s", state.worldmodel.position);
+        Loggers.AgentLogger.debug("agent @%s", state.worldmodel.position);
       }
 
       // Need to update state for render

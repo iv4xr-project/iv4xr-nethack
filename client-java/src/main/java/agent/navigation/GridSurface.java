@@ -18,7 +18,6 @@ import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.*;
 import java.util.stream.Collectors;
 import nethack.enums.Color;
-import org.apache.logging.log4j.Logger;
 import util.ColoredStringBuilder;
 import util.Loggers;
 
@@ -36,7 +35,6 @@ import util.Loggers;
  * @author Wish
  */
 public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
-  static final Logger logger = Loggers.NavLogger;
   public final Tile[][] tiles;
   public final Map<String, HashSet<IntVec2D>> tileTypes = new HashMap<>();
   public final Set<Tile> frontierCandidates = new HashSet<>();

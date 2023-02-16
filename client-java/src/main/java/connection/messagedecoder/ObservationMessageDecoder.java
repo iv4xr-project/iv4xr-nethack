@@ -6,14 +6,11 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import nethack.object.*;
 import nl.uu.cs.aplib.utils.Pair;
-import org.apache.logging.log4j.Logger;
 import util.Loggers;
 import util.Stopwatch;
 
 // Source: https://studytrails.com/2016/09/12/java-google-json-type-adapter/
 public class ObservationMessageDecoder extends Decoder {
-  private static final Logger logger = Loggers.ProfilerLogger;
-
   public static ObservationMessage decode(DataInputStream input) {
     try {
       ObservationMessage observationMessage = new ObservationMessage();
@@ -21,17 +18,17 @@ public class ObservationMessageDecoder extends Decoder {
 
       int inputByte = input.readByte();
       assert inputByte == DecoderBit.ObservationBit.value;
-      logger.trace("READ BIT TOOK: %d", stopwatch.split());
+      Loggers.ProfilerLogger.trace("READ BIT TOOK: %d", stopwatch.split());
 
       Pair<Stats, Player> pair = StatsDecoder.decode(input);
       observationMessage.stats = pair.fst;
       observationMessage.player = pair.snd;
-      logger.trace("READ STATS TOOK: %d", stopwatch.split());
+      Loggers.ProfilerLogger.trace("READ STATS TOOK: %d", stopwatch.split());
 
       byte[] chars = input.readNBytes(256);
       observationMessage.message = new String(chars, StandardCharsets.UTF_8);
       observationMessage.message = observationMessage.message.replaceAll("\0", "");
-      logger.trace("READ MESSAGE TOOK: %d", stopwatch.split());
+      Loggers.ProfilerLogger.trace("READ MESSAGE TOOK: %d", stopwatch.split());
 
       long total = 0;
       byte[] entities = input.readNBytes(4 * Level.SIZE.width * Level.SIZE.height);
@@ -45,7 +42,7 @@ public class ObservationMessageDecoder extends Decoder {
           observationMessage.entities[y][x] = EntityDecoder.decode(input, symbol, colorCode, glyph);
         }
       }
-      logger.trace("READ MAP TOOK: %d", stopwatch.split());
+      Loggers.ProfilerLogger.trace("READ MAP TOOK: %d", stopwatch.split());
 
       int nr_items = input.readByte();
       observationMessage.items = new Item[nr_items];
@@ -53,7 +50,7 @@ public class ObservationMessageDecoder extends Decoder {
       for (int i = 0; i < nr_items; i++) {
         observationMessage.items[i] = ItemDecoder.decode(input);
       }
-      logger.trace("READ ITEMS TOOK: %d", stopwatch.split());
+      Loggers.ProfilerLogger.trace("READ ITEMS TOOK: %d", stopwatch.split());
 
       return observationMessage;
     } catch (IOException e) {

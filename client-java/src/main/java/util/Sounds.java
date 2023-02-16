@@ -8,10 +8,8 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
-import org.apache.logging.log4j.Logger;
 
 public class Sounds {
-  static final Logger logger = Loggers.SoundLogger;
   static final Map<String, Clip> clipCollection = new HashMap<>();
   private static boolean soundsEnabled = true;
 
@@ -83,7 +81,7 @@ public class Sounds {
       return;
     }
 
-    logger.debug(soundName);
+    Loggers.SoundLogger.debug(soundName);
     Clip clip = clipCollection.get(soundName);
     // To prevent having to reset the audio resource, just set the start time at 0
     clip.setMicrosecondPosition(0);

@@ -2,12 +2,8 @@ package connection.messageencoder;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import org.apache.logging.log4j.Logger;
-import util.Loggers;
 
 public abstract class Encoder {
-  protected static final Logger logger = Loggers.EncoderLogger;
-
   public static void sendString(DataOutputStream output, String msg) {
     try {
       output.writeShort(msg.length());

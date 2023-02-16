@@ -5,17 +5,13 @@ import static nl.uu.cs.aplib.AplibEDSL.action;
 import agent.iv4xr.AgentState;
 import agent.navigation.surface.Tile;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
-import eu.iv4xr.framework.mainConcepts.WorldModel;
 import eu.iv4xr.framework.spatial.Vec3;
 import nl.uu.cs.aplib.mainConcepts.Action;
 import nl.uu.cs.aplib.utils.Pair;
-import org.apache.logging.log4j.Logger;
 import util.Loggers;
 import util.Sounds;
 
 public class NavAction {
-  static final Logger logger = Loggers.NavLogger;
-
   /** Construct an action that would guide the agent to the given location. */
   public static Action navigateTo(int levelNr, int x, int y) {
     return action("move-to")
@@ -23,8 +19,7 @@ public class NavAction {
             (AgentState S) ->
                 (Pair<Integer, Tile> nextTile) -> {
                   logger.info("navigateTo %d (%d, %d) via %s", levelNr, x, y, nextTile);
-                  WorldModel newwom = NavUtils.moveTo(S, nextTile);
-                  return new Pair<>(S, newwom);
+                  return new Pair<>(S, NavUtils.moveTo(S, nextTile));
                 })
         .on(
             (AgentState S) ->
@@ -39,15 +34,14 @@ public class NavAction {
         .do2(
             (AgentState S) ->
                 (Pair<Integer, Tile> nextTile) -> {
-                  logger.info("navigateTo %s via %s", targetId, nextTile);
-                  WorldModel newwom = NavUtils.moveTo(S, nextTile);
-                  return new Pair<>(S, newwom);
+                  Loggers.NavLogger.info("navigateTo %s via %s", targetId, nextTile);
+                  return new Pair<>(S, NavUtils.moveTo(S, nextTile));
                 })
         .on(
             (AgentState S) -> {
               WorldEntity e = S.worldmodel.elements.get(targetId);
               if (e == null) {
-                logger.debug("Entity does not exist");
+                Loggers.NavLogger.debug("Entity does not exist");
                 return null;
               }
               return NavUtils.nextTile(
@@ -61,9 +55,8 @@ public class NavAction {
         .do2(
             (AgentState S) ->
                 (Pair<Integer, Tile> nextTile) -> {
-                  logger.info("navigateTo ? via %s", nextTile);
-                  WorldModel newwom = NavUtils.moveTo(S, nextTile);
-                  return new Pair<>(S, newwom);
+                  Loggers.NavLogger.info("navigateTo ? via %s", nextTile);
+                  return new Pair<>(S, NavUtils.moveTo(S, nextTile));
                 });
   }
 
@@ -73,19 +66,18 @@ public class NavAction {
         .do2(
             (AgentState S) ->
                 (Pair<Integer, Tile> nextTile) -> {
-                  logger.info("navigateNextTo %s via %s", targetId, nextTile);
-                  WorldModel newwom = NavUtils.moveTo(S, nextTile);
-                  return new Pair<>(S, newwom);
+                  Loggers.NavLogger.info("navigateNextTo %s via %s", targetId, nextTile);
+                  return new Pair<>(S, NavUtils.moveTo(S, nextTile));
                 })
         .on(
             (AgentState S) -> {
               WorldEntity e = S.worldmodel.elements.get(targetId);
               if (e == null) {
-                logger.debug("Element not found");
+                Loggers.NavLogger.debug("Element not found");
                 return null;
               }
               if (S.nextToEntity(targetId, allowDiagonally)) {
-                logger.debug("Next to item id:%s", targetId);
+                Loggers.NavLogger.debug("Next to item id:%s", targetId);
                 return null;
               }
               return NavUtils.nextTile(
@@ -101,9 +93,8 @@ public class NavAction {
             (AgentState S) ->
                 (Pair<Integer, Tile> nextTile) -> {
                   Sounds.explore();
-                  logger.info("explore to %s via %s", heuristicLocation, nextTile);
-                  WorldModel newwom = NavUtils.moveTo(S, nextTile);
-                  return new Pair<>(S, newwom);
+                  Loggers.NavLogger.info("explore to %s via %s", heuristicLocation, nextTile);
+                  return new Pair<>(S, NavUtils.moveTo(S, nextTile));
                 })
         .on(
             (AgentState S) -> {

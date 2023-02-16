@@ -9,12 +9,9 @@ import nethack.object.GameState;
 import nethack.object.Level;
 import nethack.object.Seed;
 import nethack.object.StepState;
-import org.apache.logging.log4j.Logger;
 import util.Loggers;
 
 public class NetHack {
-  public static final Logger netHackLogger = Loggers.NetHackLogger;
-  public static final Logger seedLogger = Loggers.SeedLogger;
   public final GameState gameState = new GameState();
   public GameMode gameMode;
   public Seed seed;
@@ -40,19 +37,19 @@ public class NetHack {
   private void init(SocketClient client, GameMode gameMode) {
     this.client = client;
     this.gameMode = gameMode;
-    netHackLogger.info("Initialize game");
+    Loggers.NetHackLogger.info("Initialize game");
     client.readObservationMessage();
   }
 
   public Seed getSeed() {
     Seed seed = client.sendGetSeed();
-    seedLogger.info("Current seed: " + seed);
+    Loggers.SeedLogger.info("Current seed: " + seed);
     return seed;
   }
 
   public void setSeed(Seed seed) {
     gameMode = GameMode.NetHack;
-    seedLogger.info("New seed is:" + seed);
+    Loggers.SeedLogger.info("New seed is:" + seed);
     client.sendSetSeed(seed);
     reset();
   }
@@ -71,11 +68,11 @@ public class NetHack {
         render();
       }
     }
-    netHackLogger.info("GameState indicates it is done, loop stopped");
+    Loggers.NetHackLogger.info("GameState indicates it is done, loop stopped");
   }
 
   public void close() {
-    netHackLogger.info("Close game");
+    Loggers.NetHackLogger.info("Close game");
     client.sendClose();
   }
 
@@ -123,7 +120,7 @@ public class NetHack {
         return StepType.Special;
       case ADDITIONAL_SHOW_SEED:
         Seed seed = client.sendGetSeed();
-        seedLogger.info(seed);
+        Loggers.SeedLogger.info(seed);
         return StepType.Special;
       case ADDITIONAL_ASCII:
         char character = command.stroke.charAt(1);
@@ -138,7 +135,7 @@ public class NetHack {
 
     int index = command.getIndex(gameMode);
     if (index < 0) {
-      netHackLogger.warn("Command: %s not available in GameMode: %s", command, gameMode);
+      Loggers.NetHackLogger.warn("Command: %s not available in GameMode: %s", command, gameMode);
       return StepType.Invalid;
     }
 
@@ -146,14 +143,14 @@ public class NetHack {
   }
 
   private StepType step(Command command, int index) {
-    netHackLogger.info("Command: %s", command);
+    Loggers.NetHackLogger.info("Command: %s", command);
     StepState stepState = client.sendStep(index);
     updateGameState(stepState);
     return StepType.Valid;
   }
 
   private StepType step(Command command, char character) {
-    netHackLogger.info("Command: %s %c", command, character);
+    Loggers.NetHackLogger.info("Command: %s %c", command, character);
     StepState stepState = client.sendStepStroke(character);
     updateGameState(stepState);
     return StepType.Valid;
@@ -161,7 +158,7 @@ public class NetHack {
 
   private void updateGameState(StepState stepState) {
     if (stepState.done) {
-      netHackLogger.info("Game run terminated, step indicated: done");
+      Loggers.NetHackLogger.info("Game run terminated, step indicated: done");
       return;
     }
 

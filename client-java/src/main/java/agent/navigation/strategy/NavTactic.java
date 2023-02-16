@@ -14,12 +14,9 @@ import nethack.object.Level;
 import nl.uu.cs.aplib.mainConcepts.SimpleState;
 import nl.uu.cs.aplib.mainConcepts.Tactic;
 import nl.uu.cs.aplib.utils.Pair;
-import org.apache.logging.log4j.Logger;
 import util.Loggers;
 
 public class NavTactic {
-  static final Logger logger = Loggers.NavLogger;
-
   public static Tactic navigateTo(Pair<Integer, Tile> location) {
     return NavAction.navigateTo(location.fst, location.snd.pos.x, location.snd.pos.y).lift();
   }
@@ -48,7 +45,7 @@ public class NavTactic {
               if (nextTile == null) {
                 return null;
               }
-              logger.debug(
+              Loggers.NavLogger.debug(
                   String.format("navigateToWorldEntity (%s) via %s", entitySelector, nextTile));
               return nextTile;
             })
@@ -61,7 +58,7 @@ public class NavTactic {
             (AgentState S) -> {
               Pair<Integer, Tile> t = tileSelector.apply(S);
               if (t == null) {
-                logger.debug("Tile does not exist in level");
+                Loggers.NavLogger.debug("Tile does not exist in level");
                 return null;
               }
               Vec3 agentPos = S.worldmodel.position;
@@ -72,7 +69,7 @@ public class NavTactic {
               if (nextTile == null) {
                 return null;
               }
-              logger.debug("navigateToTile (%s) via %s", tileSelector, nextTile);
+              Loggers.NavLogger.debug("navigateToTile (%s) via %s", tileSelector, nextTile);
               return nextTile;
             })
         .lift();
@@ -84,7 +81,7 @@ public class NavTactic {
             (AgentState S) -> {
               Pair<Integer, Tile> t = tileSelector.apply(S);
               if (t == null) {
-                logger.debug("Tile does not exist in level");
+                Loggers.NavLogger.debug("Tile does not exist in level");
                 return null;
               }
               Vec3 agentPos = S.worldmodel.position;
@@ -117,7 +114,7 @@ public class NavTactic {
               if (nextTile == null) {
                 return null;
               }
-              logger.debug(
+              Loggers.NavLogger.debug(
                   "navigateNextToTile (%s) via %s (allowDiagonal=%b)",
                   tileSelector, nextTile, allowDiagonal);
               return nextTile;

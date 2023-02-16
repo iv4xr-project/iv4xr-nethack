@@ -7,12 +7,9 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import nethack.object.Level;
-import org.apache.logging.log4j.Logger;
 import util.Loggers;
 
 public class AStar<TNode> {
-  private final Logger hpaLogger = Loggers.HPALogger;
-
   private final Function<Id<TNode>, Boolean> isGoal;
 
   private final Function<Id<TNode>, Integer> calculateHeuristic;
@@ -43,11 +40,11 @@ public class AStar<TNode> {
     while (canExpand()) {
       Id<TNode> nodeId = expand();
       int id = nodeId.getIdValue();
-      hpaLogger.trace(
+      Loggers.HPALogger.trace(
           "Expand <%d,%d> (relPos:<%d,%d>) %d",
           id % Level.SIZE.width, id / Level.SIZE.width, id % 8, id / 8, id);
       if (isGoal.apply(nodeId)) {
-        hpaLogger.trace("Found path");
+        Loggers.HPALogger.trace("Found path");
         return reconstructPathFrom(nodeId);
       }
     }

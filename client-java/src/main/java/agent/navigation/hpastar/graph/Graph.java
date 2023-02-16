@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import nl.uu.cs.aplib.utils.Pair;
-import org.apache.logging.log4j.Logger;
 import util.Loggers;
 
 /**
@@ -23,7 +22,6 @@ public class Graph<
     TNodeInfo,
     TEdge extends IEdge<TNode, TEdgeInfo>,
     TEdgeInfo> {
-  static final Logger hpaLogger = Loggers.HPALogger;
   public int nextId = 0;
   // We store the nodes in a list because the main operations we use
   // in this list are additions, random accesses and very few removals (only when
@@ -54,14 +52,14 @@ public class Graph<
   }
 
   public void addEdge(Id<TNode> sourceNodeId, Id<TNode> targetNodeId, TEdgeInfo info) {
-    hpaLogger.debug(
+    Loggers.HPALogger.debug(
         "AddEdge: %s -> %s (%s)", getNodeInfo(sourceNodeId), getNodeInfo(targetNodeId), info);
     TNode node = nodes.get(sourceNodeId);
     node.addEdge(edgeCreator.apply(new Pair<>(targetNodeId, info)));
   }
 
   public void removeNode(Id<TNode> nodeId) {
-    hpaLogger.trace("RemoveNode: %s", nodeId);
+    Loggers.HPALogger.trace("RemoveNode: %s", nodeId);
     nodes.remove(nodeId);
   }
 

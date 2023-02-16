@@ -17,7 +17,6 @@ import nethack.object.Entity;
 import nethack.object.Level;
 import nethack.object.Player;
 import nl.uu.cs.aplib.mainConcepts.Environment;
-import org.apache.logging.log4j.Logger;
 import util.ColoredStringBuilder;
 import util.Loggers;
 
@@ -29,8 +28,6 @@ import util.Loggers;
  * @author wish
  */
 public class AgentState extends Iv4xrAgentState<Void> {
-  static final Logger agentLogger = Loggers.AgentLogger;
-  static final Logger WOMLogger = Loggers.WOMLogger;
   public HierarchicalNavigation hierarchicalNav;
 
   @Override
@@ -90,7 +87,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
     int levelNr = (int) aux.properties.get("levelNr");
     // If detecting a new maze, need to allocate a nav-graph for this maze:
     if (levelNr >= hierarchicalNav.areas.size()) {
-      agentLogger.info("Adding a new level: %d", levelNr);
+      Loggers.AgentLogger.info("Adding a new level: %d", levelNr);
       hierarchicalNav.addNextArea(new NetHackSurface());
       var previousLocation =
           NavUtils.loc3(worldmodel.elements.get(Player.ID).getPreviousState().position);
@@ -98,7 +95,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
     }
 
     Serializable[] changedCoordinates = (Serializable[]) aux.properties.get("changedCoordinates");
-    agentLogger.debug("update state with %d new coordinates", changedCoordinates.length);
+    Loggers.AgentLogger.debug("update state with %d new coordinates", changedCoordinates.length);
     List<Tile> updatedTiles = new ArrayList<>();
     List<IntVec2D> toggleBlockingOff = new ArrayList<>();
 
@@ -190,13 +187,13 @@ public class AgentState extends Iv4xrAgentState<Void> {
 
     // Remove all entities that are in vision range but can't be seen.
     List<String> idsToRemove = new ArrayList<>();
-    WOMLogger.info("WOM contains %d elements", worldmodel.elements.size());
+    Loggers.WOMLogger.info("WOM contains %d elements", worldmodel.elements.size());
     for (WorldEntity we : worldmodel.elements.values()) {
       if (we.position == null) {
-        WOMLogger.debug("%s [%s]", we.id, we.type);
+        Loggers.WOMLogger.debug("%s [%s]", we.id, we.type);
         continue;
       } else {
-        WOMLogger.debug(
+        Loggers.WOMLogger.debug(
             "%d <%d,%d> %s [%s]",
             (int) we.position.z, (int) we.position.x, (int) we.position.y, we.id, we.type);
       }
@@ -213,7 +210,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
       Entity e = level.getEntity(entityPosition);
       String id = e.createId(entityPosition);
       if (!id.equals(we.id)) {
-        WOMLogger.debug("REMOVE: %s [%s]", we.id, we.type);
+        Loggers.WOMLogger.debug("REMOVE: %s [%s]", we.id, we.type);
         idsToRemove.add(we.id);
       }
     }
@@ -257,7 +254,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
             .collect(Collectors.toList());
 
     if (!ms.isEmpty()) {
-      agentLogger.debug(
+      Loggers.AgentLogger.debug(
           "Found %d %s nearby (diagonal=%b)", ms.size(), type.name(), allowDiagonally);
     }
 

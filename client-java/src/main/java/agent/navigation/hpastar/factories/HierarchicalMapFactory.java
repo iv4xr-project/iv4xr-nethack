@@ -10,12 +10,9 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import nl.uu.cs.aplib.utils.Pair;
-import org.apache.logging.log4j.Logger;
 import util.Loggers;
 
 public class HierarchicalMapFactory {
-  static final Logger hpaLogger = Loggers.HPALogger;
-
   public HierarchicalMap hierarchicalMap;
 
   public ConcreteMap concreteMap;
@@ -191,7 +188,8 @@ public class HierarchicalMapFactory {
         cost = unitCost;
         break;
     }
-    hpaLogger.trace("InterCluster AddEdge: %s -> %s", srcAbstractNodeId, destAbstractNodeId);
+    Loggers.HPALogger.trace(
+        "InterCluster AddEdge: %s -> %s", srcAbstractNodeId, destAbstractNodeId);
     hierarchicalMap.abstractGraph.addEdge(
         srcAbstractNodeId, destAbstractNodeId, new AbstractEdgeInfo(cost, level, true));
     hierarchicalMap.abstractGraph.addEdge(

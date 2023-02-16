@@ -6,12 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 import nethack.enums.Color;
 import nethack.enums.EntityType;
-import org.apache.logging.log4j.Logger;
 import util.ColoredStringBuilder;
 import util.Loggers;
 
 public class Level {
-  public static final Logger logger = Loggers.NetHackLogger;
   public static final Size SIZE = new Size(79, 21);
   public final Entity[][] map;
   public final List<IntVec2D> changedCoordinates = new ArrayList<>();
@@ -39,7 +37,8 @@ public class Level {
     // This is the first observation of the level, returns all relevant coordinates
     if (oldLevel == null) {
       setWithAllCoordinates();
-      logger.debug("Has set all coordinates of entities (%d entities)", changedCoordinates.size());
+      Loggers.NetHackLogger.debug(
+          "Has set all coordinates of entities (%d entities)", changedCoordinates.size());
       return;
     }
 
@@ -51,7 +50,7 @@ public class Level {
         }
       }
     }
-    logger.debug(
+    Loggers.NetHackLogger.debug(
         String.format(
             "Set only the changes in the level (%d entities)", changedCoordinates.size()));
   }

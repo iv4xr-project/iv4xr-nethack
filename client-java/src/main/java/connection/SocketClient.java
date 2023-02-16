@@ -15,14 +15,11 @@ import nethack.object.Level;
 import nethack.object.Seed;
 import nethack.object.StepState;
 import nl.uu.cs.aplib.utils.Pair;
-import org.apache.logging.log4j.Logger;
 import util.Config;
 import util.Loggers;
 import util.Stopwatch;
 
 public class SocketClient {
-  static final Logger logger = Loggers.ConnectionLogger;
-  static final Logger profileLogger = Loggers.ProfilerLogger;
   final String host;
   final int port;
   Socket socket;
@@ -38,7 +35,7 @@ public class SocketClient {
     this.host = info.fst;
     this.port = info.snd;
     int maxWaitTime = 20000;
-    logger.info(
+    Loggers.ConnectionLogger.info(
         "Trying to connect with a host on %s:%d (will time-out after %d seconds)",
         host, port, maxWaitTime / 1000);
 
@@ -55,7 +52,7 @@ public class SocketClient {
 
     assert socketReady()
         : String.format("Could NOT establish a connection with the host %s:%s.", host, port);
-    logger.info("CONNECTED with %s:%d", host, port);
+    Loggers.ConnectionLogger.info("CONNECTED with %s:%d", host, port);
   }
 
   /**
@@ -110,7 +107,7 @@ public class SocketClient {
       throw new RuntimeException(e);
     }
     flush();
-    profileLogger.trace("SENDING COMMAND TOOK: %d%n", stopwatch.total());
+    Loggers.ProfilerLogger.trace("SENDING COMMAND TOOK: %d%n", stopwatch.total());
     return readStepState();
   }
 
@@ -126,7 +123,7 @@ public class SocketClient {
   }
 
   public Seed readSeed() {
-    logger.info("** read....");
+    Loggers.ConnectionLogger.info("** read....");
     return SeedDecoder.decode(reader);
   }
 
@@ -135,11 +132,11 @@ public class SocketClient {
   }
 
   public StepState readStepState() {
-    logger.info("Waiting for StepState...");
+    Loggers.ConnectionLogger.info("Waiting for StepState...");
     ObservationMessage obsMessage = readObservationMessage();
     StepMessage stepMessage = StepMessageDecoder.decode(reader);
     Stopwatch stopwatch = new Stopwatch(true);
-    profileLogger.trace("READ OBS MESSAGE TOOK: %d%n%n", stopwatch.split());
+    Loggers.ProfilerLogger.trace("READ OBS MESSAGE TOOK: %d%n%n", stopwatch.split());
 
     StepState stepState = new StepState();
     stepState.player = obsMessage.player;
@@ -151,7 +148,7 @@ public class SocketClient {
     stepState.info = null;
     stepState.level = new Level(obsMessage.entities);
     stepState.message = obsMessage.message;
-    profileLogger.trace("EXIT TOOK: %d%n", stopwatch.split());
+    Loggers.ProfilerLogger.trace("EXIT TOOK: %d%n", stopwatch.split());
     return stepState;
   }
 
@@ -164,7 +161,7 @@ public class SocketClient {
   }
 
   public void close() throws IOException {
-    logger.info("Closing socket connection");
+    Loggers.ConnectionLogger.info("Closing socket connection");
     if (reader != null) reader.close();
     if (writer != null) writer.close();
     socket.close();
