@@ -32,7 +32,7 @@ public class GridSurfaceFactory {
     staticSurface = surface;
     Cluster originalCluster = staticSurface.hierarchicalMap.findClusterForPosition(tile.pos);
     ConcreteMap subConcreteMap = originalCluster.subConcreteMap;
-    IntVec2D relativePos = staticSurface.toRelativePos(tile.pos);
+    IntVec2D relativePos = originalCluster.toRelativePos(tile.pos);
 
     Id<ConcreteNode> nodeId =
         GraphFactory.getNodeByPos(
@@ -51,11 +51,10 @@ public class GridSurfaceFactory {
 
     Cluster originalCluster = staticSurface.hierarchicalMap.findClusterForPosition(t.pos);
     ConcreteMap subConcreteMap = originalCluster.subConcreteMap;
-    IntVec2D relativePos = staticSurface.toRelativePos(t.pos);
+    IntVec2D relativePos = originalCluster.toRelativePos(t.pos);
 
     Id<ConcreteNode> nodeId =
-        GraphFactory.getNodeByPos(
-                subConcreteMap.graph, relativePos, staticSurface.hierarchicalMap.clusterSize)
+        GraphFactory.getNodeByPos(subConcreteMap.graph, relativePos, originalCluster.size.width)
             .nodeId;
     ConcreteNode node = subConcreteMap.graph.getNode(nodeId);
     node.info.isObstacle = false;
@@ -64,7 +63,7 @@ public class GridSurfaceFactory {
         NavUtils.neighbourCoordinates(t.pos, staticSurface.hierarchicalMap.size, true);
     for (IntVec2D neighbourPos : neighbours) {
       Cluster neighbourCluster = staticSurface.hierarchicalMap.findClusterForPosition(neighbourPos);
-      IntVec2D neighbourRelativePos = staticSurface.toRelativePos(neighbourPos);
+      IntVec2D neighbourRelativePos = neighbourCluster.toRelativePos(neighbourPos);
       ConcreteMap neighbourConcreteMap = neighbourCluster.subConcreteMap;
       if (neighbourConcreteMap.passability.cannotEnter(neighbourRelativePos, new RefSupport<>())) {
         continue; // Do not add edge if it is not passable
@@ -90,9 +89,7 @@ public class GridSurfaceFactory {
       } else {
         Id<ConcreteNode> neighBourId =
             GraphFactory.getNodeByPos(
-                    neighbourConcreteMap.graph,
-                    neighbourRelativePos,
-                    staticSurface.hierarchicalMap.clusterSize)
+                    neighbourConcreteMap.graph, neighbourRelativePos, neighbourCluster.size.width)
                 .nodeId;
         subConcreteMap.graph.addEdge(nodeId, neighBourId, new ConcreteEdgeInfo(Constants.COST_ONE));
         subConcreteMap.graph.addEdge(neighBourId, nodeId, new ConcreteEdgeInfo(Constants.COST_ONE));
@@ -146,7 +143,7 @@ public class GridSurfaceFactory {
   private static Id<AbstractNode> addAbstractNode(Cluster cluster, IntVec2D pos) {
     Id<AbstractNode> absNodeId =
         new Id<AbstractNode>().from(staticSurface.hierarchicalMap.abstractGraph.nextId);
-    cluster.addEntrance(absNodeId, staticSurface.toRelativePos(pos));
+    cluster.addEntrance(absNodeId, cluster.toRelativePos(pos));
     Id<ConcreteNode> nodeId = staticSurface.concreteMap.getNodeIdFromPos(pos);
     AbstractNodeInfo nodeInfo = new AbstractNodeInfo(absNodeId, 1, cluster.id, pos, nodeId);
     staticSurface.hierarchicalMap.concreteNodeIdToAbstractNodeIdMap.put(nodeId, nodeInfo.id);
@@ -352,7 +349,7 @@ public class GridSurfaceFactory {
   private static ConcreteNode getNode(int left, int top) {
     IntVec2D pos = new IntVec2D(left, top);
     Cluster cluster = staticSurface.hierarchicalMap.findClusterForPosition(pos);
-    IntVec2D relPos = staticSurface.toRelativePos(pos);
+    IntVec2D relPos = cluster.toRelativePos(pos);
     var nodeId = cluster.subConcreteMap.getNodeIdFromPos(relPos);
     return cluster.subConcreteMap.graph.getNode(nodeId);
   }

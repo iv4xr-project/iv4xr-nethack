@@ -111,7 +111,7 @@ public class ConcreteMap implements IMap<ConcreteNode> {
     for (ConcreteEdge edge : node.edges.values()) {
       Id<ConcreteNode> targetNodeId = edge.targetNodeId;
       ConcreteNodeInfo targetNodeInfo = graph.getNodeInfo(targetNodeId);
-      if (canJump(targetNodeInfo.position, nodeInfo.position) && !targetNodeInfo.isObstacle) {
+      if (canJump(targetNodeInfo.position, nodeInfo.position) /*&& !targetNodeInfo.isObstacle*/) {
         result.add(new Connection<ConcreteNode>(targetNodeId, edge.info.cost));
       }
     }

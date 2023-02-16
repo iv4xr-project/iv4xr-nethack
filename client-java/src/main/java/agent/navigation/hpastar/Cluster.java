@@ -61,6 +61,14 @@ public class Cluster {
     }
   }
 
+  public IntVec2D toRelativePos(IntVec2D pos) {
+    assert pos.x >= origin.x
+        && pos.x < origin.x + size.width
+        && pos.y >= origin.y
+        && pos.y < origin.y + size.height;
+    return new IntVec2D(pos.x - origin.x, pos.y - origin.y);
+  }
+
   /** Gets the index of the entrance point inside this cluster */
   private int getEntrancePositionIndex(EntrancePoint entrancePoint) {
     return entrancePoint.relativePosition.y * size.width + entrancePoint.relativePosition.x;

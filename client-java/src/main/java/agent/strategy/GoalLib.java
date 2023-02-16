@@ -4,6 +4,7 @@ import static nl.uu.cs.aplib.AplibEDSL.*;
 
 import agent.iv4xr.AgentState;
 import agent.navigation.strategy.NavTactic;
+import agent.selector.EntitySelector;
 import agent.selector.TileSelector;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import nethack.enums.Command;
@@ -26,7 +27,7 @@ public class GoalLib {
                     // Survival
                     Actions.attackMonster().on_(Predicates.inCombat_and_hpNotCritical).lift(),
                     Actions.eatFood().lift(),
-                    //                    NavTactic.navigateToWorldEntity(EntitySelector.money),
+                    NavTactic.navigateToWorldEntity(EntitySelector.money),
 
                     // Navigation
                     Actions.kickDoor().on(Predicates.get_lockedDoor()).lift(),

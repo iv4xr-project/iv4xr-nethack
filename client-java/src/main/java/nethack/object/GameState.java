@@ -85,8 +85,9 @@ public class GameState {
         player.alignment.name(),
         stats.score);
     csb.appendf(
-        "Dlvl:%d $:%d HP:%d(%d) Pw:%d(%d) AC:%d Xp:%d/%d T:%d(%d) %s%n",
+        "Dlvl:%d(%d) $:%d HP:%d(%d) Pw:%d(%d) AC:%d Xp:%d/%d T:%d(%d) %s%n",
         stats.depth,
+        stats.dungeonNumber,
         player.gold,
         player.hp,
         player.hpMax,

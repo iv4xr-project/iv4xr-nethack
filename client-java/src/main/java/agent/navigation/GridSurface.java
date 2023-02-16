@@ -59,11 +59,6 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
                 emptyConcreteMap, clusterSize, 1, EntranceStyle.EndEntrance, size);
   }
 
-  public IntVec2D toRelativePos(IntVec2D pos) {
-    assert NavUtils.withinBounds(pos, hierarchicalMap.size);
-    return new IntVec2D(pos.x % hierarchicalMap.clusterSize, pos.y % hierarchicalMap.clusterSize);
-  }
-
   public void updateTiles(List<Tile> newTiles, List<IntVec2D> toggleOffBlocking) {
     Map<Id<Cluster>, Set<Direction>> entrances = new HashMap<>();
 
@@ -176,7 +171,7 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
 
   public void updatePassibility(Tile tile) {
     Cluster cluster = hierarchicalMap.findClusterForPosition(tile.pos);
-    IntVec2D relPos = toRelativePos(tile.pos);
+    IntVec2D relPos = cluster.toRelativePos(tile.pos);
 
     // Update main concreteMap
     concreteMap.passability.updateCanMoveDiagonally(tile.pos, tile instanceof Walkable);
@@ -311,7 +306,9 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
     HierarchicalMapFactory factory = new HierarchicalMapFactory();
     Id<AbstractNode> startAbsNode = factory.insertAbstractNode(hierarchicalMap, from.pos);
     Id<AbstractNode> targetAbsNode = factory.insertAbstractNode(hierarchicalMap, to.pos);
-    assert !startAbsNode.equals(targetAbsNode);
+    if (startAbsNode.equals(targetAbsNode)) {
+      return new ArrayList<>();
+    }
     int maxPathsToRefine = Integer.MAX_VALUE;
     HierarchicalSearch hierarchicalSearch = new HierarchicalSearch();
     List<AbstractPathNode> abstractPath =
@@ -473,17 +470,23 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
   @Override
   public String toString() {
     ColoredStringBuilder csb = new ColoredStringBuilder();
+    Set<IntVec2D> frontiers =
+        frontierCandidates.stream().map(frontier -> frontier.pos).collect(Collectors.toSet());
+
     // Add row by row to the StringBuilder
     for (int y = 0; y < hierarchicalMap.size.height; y++) {
       for (int x = 0; x < hierarchicalMap.size.width; x++) {
         // Get tile, if it doesn't know the type it is not know or void.
-        Tile t = getTile(new IntVec2D(x, y));
+        IntVec2D pos = new IntVec2D(x, y);
+        Tile t = getTile(pos);
 
         if (t instanceof Printable) {
           Printable p = (Printable) t;
           char c = p.toChar();
           if (p.isVisible()) {
             csb.append(Color.GREEN_BRIGHT, c);
+          } else if (frontiers.contains(pos)) {
+            csb.append(Color.CYAN_BRIGHT, c);
           } else {
             csb.append(c);
           }

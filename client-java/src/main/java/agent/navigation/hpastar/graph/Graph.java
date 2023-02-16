@@ -53,7 +53,8 @@ public class Graph<
 
   public void addEdge(Id<TNode> sourceNodeId, Id<TNode> targetNodeId, TEdgeInfo info) {
     Loggers.HPALogger.debug(
-        "AddEdge: %s -> %s (%s)", getNodeInfo(sourceNodeId), getNodeInfo(targetNodeId), info);
+        "AddEdge: %s -> %s (%s, %s, %s)",
+        sourceNodeId, targetNodeId, getNodeInfo(sourceNodeId), getNodeInfo(targetNodeId), info);
     TNode node = nodes.get(sourceNodeId);
     node.addEdge(edgeCreator.apply(new Pair<>(targetNodeId, info)));
   }

@@ -36,7 +36,7 @@ public class GraphFactory {
 
   public static Id<Cluster> getClusterIdFromPos(int left, int top, int width, int clusterSize) {
     int nrClustersPerRow = width % clusterSize == 0 ? width / clusterSize : width / clusterSize + 1;
-    return new Id<Cluster>().from((top / clusterSize) * nrClustersPerRow + left / clusterSize);
+    return new Id<Cluster>().from(top / clusterSize * nrClustersPerRow + left / clusterSize);
   }
 
   public static void addEdge(

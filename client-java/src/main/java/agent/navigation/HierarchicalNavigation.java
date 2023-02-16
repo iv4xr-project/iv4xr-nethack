@@ -7,11 +7,9 @@ package agent.navigation;
 import agent.navigation.hpastar.*;
 import agent.navigation.hpastar.factories.HierarchicalMapFactory;
 import agent.navigation.hpastar.graph.*;
-import agent.navigation.hpastar.infrastructure.Id;
 import agent.navigation.surface.Tile;
 import eu.iv4xr.framework.extensions.pathfinding.Navigatable;
 import eu.iv4xr.framework.extensions.pathfinding.XPathfinder;
-import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,7 +18,7 @@ import nl.uu.cs.aplib.utils.Pair;
 public class HierarchicalNavigation
     implements Navigatable<Pair<Integer, Tile>>, XPathfinder<Pair<Integer, Tile>> {
   public final List<NetHackSurface> areas = new LinkedList<>();
-  boolean perfect_memory_pathfinding = false;
+  boolean perfect_memory_pathfinding = true;
   final HierarchicalMapFactory factory;
 
   public HierarchicalNavigation(NetHackSurface surface) {
@@ -29,10 +27,8 @@ public class HierarchicalNavigation
   }
 
   public void addNextArea(NetHackSurface area) {
+    area.setPerfectMemoryPathfinding(perfect_memory_pathfinding);
     areas.add(area);
-    if (areas.size() != 1) {
-      area.setPerfectMemoryPathfinding(perfect_memory_pathfinding);
-    }
   }
 
   public NetHackSurface level(Pair<Integer, Tile> level) {
@@ -43,42 +39,13 @@ public class HierarchicalNavigation
     int area1_id = (Integer) from.fst;
     int areaN_id = (Integer) to.fst;
 
-    assert area1_id == areaN_id : "No navigation between levels as of now";
+    assert area1_id == areaN_id
+        : "No navigation between levels as of now, all pairs have the same area_id";
     var posPath = areas.get(area1_id).findPath(from.snd, to.snd);
     if (posPath.isEmpty()) {
       return null;
     }
-    return posPath.stream().map(tile -> new Pair<>(0, tile)).collect(Collectors.toList());
-  }
-
-  private HierarchicalMap map() {
-    return areas.get(0).hierarchicalMap;
-  }
-
-  private ConcreteMap concreteMap() {
-    return factory.concreteMap;
-  }
-
-  private Id<AbstractNode> insertAbstractNode(IntVec2D pos) {
-    Id<ConcreteNode> nodeId = new Id<ConcreteNode>().from(pos.y * map().size.width + pos.x);
-    Id<AbstractNode> abstractNodeId = factory.insertNodeIntoHierarchicalMap(map(), nodeId, pos);
-    map().addHierarchicalEdgesForAbstractNode(abstractNodeId);
-    return abstractNodeId;
-  }
-
-  private List<IntVec2D> toPositionPath(List<IPathNode> path, ConcreteMap concreteMap) {
-    return path.stream()
-        .map(
-            (p) -> {
-              if (p instanceof ConcretePathNode) {
-                ConcretePathNode concretePathNode = (ConcretePathNode) p;
-                return concreteMap.graph.getNodeInfo(concretePathNode.id).position;
-              }
-
-              AbstractPathNode abstractPathNode = (AbstractPathNode) p;
-              return map().abstractGraph.getNodeInfo(abstractPathNode.id).position;
-            })
-        .collect(Collectors.toList());
+    return posPath.stream().map(tile -> new Pair<>(area1_id, tile)).collect(Collectors.toList());
   }
 
   public void markAsSeen(Pair<Integer, Tile> ndx) {
@@ -107,7 +74,7 @@ public class HierarchicalNavigation
 
   public List<Pair<Integer, Tile>> explore(
       Pair<Integer, Tile> startNode, Pair<Integer, Tile> heuristicNode) {
-    List<Pair<Integer, Tile>> candidates = this.getFrontier();
+    List<Pair<Integer, Tile>> candidates = getFrontier();
     if (candidates.isEmpty()) {
       return null;
     } else {
@@ -155,11 +122,6 @@ public class HierarchicalNavigation
       area.setPerfectMemoryPathfinding(flag);
     }
   }
-
-  //  public boolean isBlocking(Pair<Integer, Tile> o) {
-  //    NetHackSurface area = areas.get(o.fst);
-  //    return area.isBlocking(o.snd);
-  //  }
 
   @Override
   public Iterable<Pair<Integer, Tile>> neighbours(Pair<Integer, Tile> integerTilePair) {

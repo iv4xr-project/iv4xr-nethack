@@ -71,7 +71,7 @@ public class TileSelector extends Selector<Pair<Integer, Tile>> {
             new Pair<Integer, Tile>(NavUtils.levelNr(S.worldmodel.position), surface.getTile(pos)));
       }
     } else {
-      for (Tile[] row : S.area().tiles) {
+      for (Tile[] row : surface.tiles) {
         for (Tile tile : row) {
           if (tile != null) {
             tiles.add(new Pair<>(NavUtils.levelNr(S.worldmodel.position), tile));
@@ -84,7 +84,8 @@ public class TileSelector extends Selector<Pair<Integer, Tile>> {
 
   @Override
   public Pair<Integer, Tile> apply(List<Pair<Integer, Tile>> tiles, AgentState S) {
-    return select(filter(tiles), S);
+    List<Pair<Integer, Tile>> filteredTiles = filter(tiles);
+    return select(filteredTiles, S);
   }
 
   @Override

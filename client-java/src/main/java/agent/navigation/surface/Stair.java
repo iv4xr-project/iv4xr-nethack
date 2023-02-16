@@ -43,7 +43,7 @@ public class Stair extends Tile implements Climbable, Walkable, Printable {
 
   @Override
   public ClimbType getClimbType() {
-    return null;
+    return climbType;
   }
 
   @Override

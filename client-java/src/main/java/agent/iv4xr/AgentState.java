@@ -54,7 +54,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
   @Override
   public AgentState setEnvironment(Environment env) {
     super.setEnvironment(env);
-    addNewNavGraph(0);
+    setNavGraph();
     return this;
   }
 
@@ -62,13 +62,10 @@ public class AgentState extends Iv4xrAgentState<Void> {
     return worldmodel.elements.get("aux");
   }
 
-  private void addNewNavGraph(int levelNr) {
+  private void setNavGraph() {
     NetHackSurface newNav = new NetHackSurface();
-    if (hierarchicalNav == null) {
-      hierarchicalNav = new HierarchicalNavigation(newNav);
-    } else {
-      hierarchicalNav.addNextArea(newNav);
-    }
+    assert hierarchicalNav == null;
+    hierarchicalNav = new HierarchicalNavigation(newNav);
   }
 
   @Override
@@ -87,12 +84,16 @@ public class AgentState extends Iv4xrAgentState<Void> {
     int levelNr = (int) aux.properties.get("levelNr");
     // If detecting a new maze, need to allocate a nav-graph for this maze:
     if (levelNr >= hierarchicalNav.areas.size()) {
-      Loggers.AgentLogger.info("Adding a new level: %d", levelNr);
+      Loggers.AgentLogger.info("Adding a new level at index: %d", levelNr);
       hierarchicalNav.addNextArea(new NetHackSurface());
       var previousLocation =
           NavUtils.loc3(worldmodel.elements.get(Player.ID).getPreviousState().position);
       var currentLocation = NavUtils.loc3(worldmodel.position);
+
+      // TODO: Add edge between surface
     }
+
+    NetHackSurface surface = area();
 
     Serializable[] changedCoordinates = (Serializable[]) aux.properties.get("changedCoordinates");
     Loggers.AgentLogger.debug("update state with %d new coordinates", changedCoordinates.length);
@@ -140,6 +141,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
           break;
         case STAIRS_DOWN:
           updatedTiles.add(new Stair(pos, Climbable.ClimbType.Descendable));
+          break;
         case STAIRS_UP:
           updatedTiles.add(new Stair(pos, Climbable.ClimbType.Ascendable));
           break;
@@ -164,14 +166,13 @@ public class AgentState extends Iv4xrAgentState<Void> {
     }
 
     // Missed adjacent coords, these are walls
-    NetHackSurface navGraph = hierarchicalNav.areas.get(levelNr);
     for (IntVec2D adjacentPos : adjacentCoords) {
-      if (navGraph.nullTile(adjacentPos)) {
+      if (surface.nullTile(adjacentPos)) {
         updatedTiles.add(new Wall(adjacentPos));
       }
     }
 
-    hierarchicalNav.areas.get(0).updateTiles(updatedTiles, toggleBlockingOff);
+    surface.updateTiles(updatedTiles, toggleBlockingOff);
 
     // Clear list of coordinates
     aux.properties.put("changedCoordinates", new Serializable[0]);
