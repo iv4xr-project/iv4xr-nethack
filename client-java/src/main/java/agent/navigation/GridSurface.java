@@ -65,7 +65,7 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
   }
 
   public void updateTiles(List<Tile> newTiles, List<IntVec2D> toggleOffBlocking) {
-    Map<Cluster, Set<Direction>> entrances = new HashMap<>();
+    Map<Id<Cluster>, Set<Direction>> entrances = new HashMap<>();
 
     for (IntVec2D pos : toggleOffBlocking) {
       Tile tile = getTile(pos);
@@ -96,7 +96,7 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
   }
 
   private void addClusterEdges(
-      Map<Cluster, Set<Direction>> entrances, Tile tile, Set<Direction> directions) {
+      Map<Id<Cluster>, Set<Direction>> entrances, Tile tile, Set<Direction> directions) {
     if (directions.isEmpty()) {
       return;
     }
@@ -117,20 +117,26 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
         mapCluster = cluster;
         mapDirection = direction;
       }
-      if (!entrances.containsKey(mapCluster)) {
-        entrances.put(mapCluster, new HashSet<>());
+      Id<Cluster> mapClusterId = mapCluster.id;
+      if (!entrances.containsKey(mapClusterId)) {
+        entrances.put(mapClusterId, new HashSet<>());
       }
-      entrances.get(mapCluster).add(mapDirection);
+      entrances.get(mapClusterId).add(mapDirection);
     }
   }
 
-  private void createEntrances(Map<Cluster, Set<Direction>> entrances) {
-    for (Cluster cluster : entrances.keySet()) {
+  private void createEntrances(Map<Id<Cluster>, Set<Direction>> entrances) {
+    Set<Id<Cluster>> updateIntraClusterEdges = new HashSet<>();
+
+    for (Id<Cluster> clusterId : entrances.keySet()) {
+      Cluster cluster = hierarchicalMap.getCluster(clusterId);
+      updateIntraClusterEdges.add(clusterId);
       int top = cluster.origin.y;
       int left = cluster.origin.x;
-      for (Direction direction : entrances.get(cluster)) {
+      for (Direction direction : entrances.get(clusterId)) {
         Cluster neighbourCluster =
             GridSurfaceFactory.getClusterInDirection(this, cluster, direction);
+        updateIntraClusterEdges.add(neighbourCluster.id);
         if (direction == Direction.North) {
           GridSurfaceFactory.createEntrancesOnTop(
               left,
@@ -149,7 +155,11 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
               new RefSupport<>(0));
         }
       }
+    }
 
+    // Update intra-cluster edges
+    for (Id<Cluster> clusterId : updateIntraClusterEdges) {
+      Cluster cluster = hierarchicalMap.getCluster(clusterId);
       cluster.createIntraClusterEdges();
       GridSurfaceFactory.createIntraClusterEdges(this, cluster);
     }

@@ -45,6 +45,7 @@ public class AStar<TNode> {
           id % Level.SIZE.width, id / Level.SIZE.width, id % 8, id / 8, id);
       if (isGoal.apply(nodeId)) {
         Loggers.HPALogger.trace("Found path");
+        openQueue.clear();
         return reconstructPathFrom(nodeId);
       }
     }

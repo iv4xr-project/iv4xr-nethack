@@ -90,17 +90,19 @@ public class HierarchicalNavigation
   }
 
   public List<Pair<Integer, Tile>> getFrontier() {
-    List<Pair<Integer, Tile>> frontiers = new LinkedList<>();
+    List<Pair<Integer, Tile>> allFrontiers = new LinkedList<>();
 
-    for (int a = 0; a < areas.size(); ++a) {
-      NetHackSurface area = areas.get(a);
-      Integer a_ = a;
-      List<Pair<Integer, Tile>> fr =
-          area.getFrontier().stream().map(nd -> new Pair<>(a_, nd)).collect(Collectors.toList());
-      frontiers.addAll(fr);
+    for (int i = 0; i < areas.size(); ++i) {
+      NetHackSurface area = areas.get(i);
+      Integer levelNr = i;
+      List<Pair<Integer, Tile>> frontiers =
+          area.getFrontier().stream()
+              .map(nd -> new Pair<>(levelNr, nd))
+              .collect(Collectors.toList());
+      allFrontiers.addAll(frontiers);
     }
 
-    return frontiers;
+    return allFrontiers;
   }
 
   public List<Pair<Integer, Tile>> explore(

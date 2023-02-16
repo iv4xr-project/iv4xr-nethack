@@ -154,9 +154,8 @@ public class AgentState extends Iv4xrAgentState<Void> {
           } else if (area().canBeDoor(pos)) {
             if (area().getTile(pos) instanceof Unknown) {
               updatedTiles.add(new Door(pos, true));
-            } else {
-              // If the type is more specific than Tile, then don't change anything
             }
+            // If the type is more specific than Tile, then don't change anything
           } else {
             toggleBlockingOff.add(pos);
           }

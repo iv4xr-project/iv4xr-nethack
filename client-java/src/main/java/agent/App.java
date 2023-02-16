@@ -4,19 +4,15 @@ import agent.iv4xr.AgentEnv;
 import agent.iv4xr.AgentState;
 import agent.navigation.NetHackSurface;
 import agent.navigation.hpastar.Cluster;
-import agent.navigation.strategy.NavUtils;
-import agent.navigation.surface.Tile;
 import agent.strategy.GoalLib;
 import connection.SocketClient;
 import eu.iv4xr.framework.mainConcepts.TestAgent;
-import eu.iv4xr.framework.spatial.Vec3;
 import java.util.stream.Collectors;
 import nethack.NetHack;
 import nethack.enums.Command;
 import nethack.object.Player;
 import nethack.object.Turn;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
-import nl.uu.cs.aplib.utils.Pair;
 import util.*;
 
 public class App {
@@ -38,16 +34,8 @@ public class App {
         new TestAgent(Player.ID, "player").attachState(state).attachEnvironment(env).setGoal(G);
     state.updateState(Player.ID);
 
-    if (true) {
-      fastForwardToTurn(Config.getStartTurn(), agent, state);
-      mainAgentLoop(commander, agent, state, G, nethack);
-    } else {
-      Pair<Integer, Tile> from = NavUtils.loc3(new Vec3(6, 3, 0));
-      Pair<Integer, Tile> to = NavUtils.loc3(new Vec3(6, 7, 0));
-      System.out.println(state.area().hierarchicalMap);
-      var path = state.hierarchicalNav.findPath(from, to);
-      System.out.println(path);
-    }
+    fastForwardToTurn(Config.getStartTurn(), agent, state);
+    mainAgentLoop(commander, agent, state, G, nethack);
 
     Loggers.AgentLogger.info("Closing NetHack since the loop in agent has terminated");
     nethack.close();
@@ -63,8 +51,8 @@ public class App {
     ProgressBar bar = new ProgressBar();
     Stopwatch stopwatch = new Stopwatch(true);
     while (state.app().gameState.stats.turn.compareTo(desiredTurn) < 0) {
-      bar.update(state.app().gameState.stats.turn.time, desiredTurn.time);
       agent.update();
+      bar.updateTurn(state.app().gameState.stats.turn, desiredTurn);
     }
     stopwatch.printTotal("Running automatic loop");
     Sounds.setSound(Config.getSoundState());

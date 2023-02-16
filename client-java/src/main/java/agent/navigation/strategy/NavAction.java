@@ -18,7 +18,7 @@ public class NavAction {
         .do2(
             (AgentState S) ->
                 (Pair<Integer, Tile> nextTile) -> {
-                  logger.info("navigateTo %d (%d, %d) via %s", levelNr, x, y, nextTile);
+                  Loggers.NavLogger.info("navigateTo %d (%d, %d) via %s", levelNr, x, y, nextTile);
                   return new Pair<>(S, NavUtils.moveTo(S, nextTile));
                 })
         .on(

@@ -16,6 +16,7 @@ import agent.navigation.hpastar.graph.ConcreteNode;
 import agent.navigation.hpastar.infrastructure.Id;
 import java.util.ArrayList;
 import java.util.List;
+import util.Loggers;
 
 public class HierarchicalSearch {
   public List<AbstractPathNode> doHierarchicalSearch(
@@ -52,8 +53,8 @@ public class HierarchicalSearch {
     } else {
       map.setAllMapAsCurrentCluster();
       AStar<AbstractNode> search = new AStar<>(map, startNodeId, targetNodeId);
-      System.out.printf(
-          "Search: %s -> %s, %s %s%n",
+      Loggers.HPALogger.info(
+          "Search: %s -> %s, %s %s",
           startNodeId,
           targetNodeId,
           map.abstractGraph.getNodeInfo(startNodeId),

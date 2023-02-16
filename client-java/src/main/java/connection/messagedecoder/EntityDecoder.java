@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import nethack.enums.Color;
 import nethack.enums.EntityType;
 import nethack.object.Entity;
+import util.Loggers;
 
 // Source: https://studytrails.com/2016/09/12/java-google-json-type-adapter/
 public class EntityDecoder extends Decoder {
@@ -24,7 +25,8 @@ public class EntityDecoder extends Decoder {
       return type;
     }
 
-    logger.warn("%s%s%s: %d UNKNOWN", color.stringCode(), symbol, Color.RESET.stringCode(), glyph);
+    Loggers.EncoderLogger.warn(
+        "%s%s%s: %d UNKNOWN", color.stringCode(), symbol, Color.RESET.stringCode(), glyph);
     return EntityType.UNKNOWN;
   }
 
