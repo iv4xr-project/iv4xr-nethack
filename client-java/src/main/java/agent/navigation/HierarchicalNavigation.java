@@ -7,9 +7,11 @@ package agent.navigation;
 import agent.navigation.hpastar.*;
 import agent.navigation.hpastar.factories.HierarchicalMapFactory;
 import agent.navigation.hpastar.graph.*;
+import agent.navigation.hpastar.infrastructure.Id;
 import agent.navigation.surface.Tile;
 import eu.iv4xr.framework.extensions.pathfinding.Navigatable;
 import eu.iv4xr.framework.extensions.pathfinding.XPathfinder;
+import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,11 +21,11 @@ public class HierarchicalNavigation
     implements Navigatable<Pair<Integer, Tile>>, XPathfinder<Pair<Integer, Tile>> {
   public final List<NetHackSurface> areas = new LinkedList<>();
   boolean perfect_memory_pathfinding = true;
-  final HierarchicalMapFactory factory;
+  final HierarchicalMapFactory factory = new HierarchicalMapFactory();
+  public final HierarchicalGraph hierarchicalGraph = new HierarchicalGraph();
 
   public HierarchicalNavigation(NetHackSurface surface) {
     areas.add(surface);
-    factory = new HierarchicalMapFactory();
   }
 
   public void addNextArea(NetHackSurface area) {
@@ -39,21 +41,47 @@ public class HierarchicalNavigation
     int area1_id = (Integer) from.fst;
     int areaN_id = (Integer) to.fst;
 
-    assert area1_id == areaN_id
-        : "No navigation between levels as of now, all pairs have the same area_id";
-    var posPath = areas.get(area1_id).findPath(from.snd, to.snd);
-    if (posPath.isEmpty()) {
-      return null;
+    if (area1_id == areaN_id) {
+      var path = getPathInLevel(area1_id, from.snd, to.snd);
+      if (path.isEmpty()) {
+        return null;
+      }
+      return path;
     }
-    return posPath.stream().map(tile -> new Pair<>(area1_id, tile)).collect(Collectors.toList());
+
+    List<IntVec2D> fromStairs = hierarchicalGraph.levelToEntrancesMap.get(from.fst);
+    List<IntVec2D> toStairs = hierarchicalGraph.levelToEntrancesMap.get(to.fst);
+    for (IntVec2D fromStairPos : fromStairs) {
+      Id<AbstractNode> fromId = hierarchicalGraph.getAbsNodeId(from.fst, fromStairPos);
+      List<Pair<Integer, Tile>> fstPath =
+          getPathInLevel(from.fst, from.snd, new Tile(fromStairPos));
+      if (fstPath.isEmpty() && !from.snd.pos.equals(fromStairPos)) {
+        continue;
+      }
+      for (IntVec2D toStairPos : toStairs) {
+        Id<AbstractNode> toId = hierarchicalGraph.getAbsNodeId(to.fst, toStairPos);
+        List<Pair<Integer, Tile>> sndPath = getPathInLevel(to.fst, to.snd, new Tile(toStairPos));
+        if (sndPath.isEmpty() && to.snd.pos.equals(toStairPos)) {
+          continue;
+        }
+        System.out.println("DID FIND PATH");
+      }
+    }
+
+    throw new RuntimeException("Not yet implemented");
+  }
+
+  private List<Pair<Integer, Tile>> getPathInLevel(int level, Tile from, Tile to) {
+    List<Tile> posPath = areas.get(level).findPath(from, to);
+    return posPath.stream().map(tile -> new Pair<>(level, tile)).collect(Collectors.toList());
   }
 
   public void markAsSeen(Pair<Integer, Tile> ndx) {
-    areas.get((Integer) ndx.fst).markAsSeen(ndx.snd);
+    areas.get(ndx.fst).markAsSeen(ndx.snd);
   }
 
   public boolean hasbeenSeen(Pair<Integer, Tile> ndx) {
-    return areas.get((Integer) ndx.fst).hasbeenSeen(ndx.snd);
+    return areas.get(ndx.fst).hasbeenSeen(ndx.snd);
   }
 
   public List<Pair<Integer, Tile>> getFrontier() {

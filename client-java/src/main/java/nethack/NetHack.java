@@ -15,7 +15,6 @@ public class NetHack {
   public final GameState gameState = new GameState();
   public GameMode gameMode;
   public Seed seed;
-
   SocketClient client;
 
   public NetHack(SocketClient commander) {

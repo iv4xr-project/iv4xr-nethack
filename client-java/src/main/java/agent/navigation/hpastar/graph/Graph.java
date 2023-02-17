@@ -29,7 +29,7 @@ public class Graph<
   // This list is implicitly indexed by the nodeId, which makes removing a random
   // Node in the list quite of a mess. We could use a dictionary to ease removals,
   // but lists and arrays are faster for random accesses, and we need performance.
-  private final Map<Id<TNode>, TNode> nodes = new HashMap<>();
+  public final Map<Id<TNode>, TNode> nodes = new HashMap<>();
   private final Function<Pair<Id<TNode>, TNodeInfo>, TNode> nodeCreator;
   private final Function<Pair<Id<TNode>, TEdgeInfo>, TEdge> edgeCreator;
 

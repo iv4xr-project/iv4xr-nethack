@@ -43,10 +43,10 @@ public class HierarchicalSearch {
       int level,
       boolean mainSearch) {
     map.setCurrentLevelForSearches(level);
-    AbstractNodeInfo nodeInfo = map.abstractGraph.getNodeInfo(startNodeId);
     // TODO: This could be perfectly replaced by cached paths in the clusters!
     Path<AbstractNode> path;
     if (!mainSearch) {
+      AbstractNodeInfo nodeInfo = map.abstractGraph.getNodeInfo(startNodeId);
       map.setCurrentClusterByPositionAndLevel(nodeInfo.position, level + 1);
       AbstractEdgeInfo edgeInfo = map.abstractGraph.getEdges(startNodeId).get(targetNodeId).info;
       path = new Path<AbstractNode>(edgeInfo.innerLowerLevelPath, edgeInfo.cost);

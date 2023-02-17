@@ -8,6 +8,7 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 import nethack.enums.Alignment;
 import nethack.enums.HungerState;
+import nethack.object.Dlvl;
 import nethack.object.Player;
 import nethack.object.Stats;
 import nethack.object.Turn;
@@ -36,7 +37,7 @@ public class StatsDecoder extends Decoder {
     Player player = new Player();
     Stats stats = new Stats();
 
-    stats.depth = values[12];
+    stats.dlvl = new Dlvl(values[12], values[23]);
     player.position = new Vec3(values[0], values[1], 0);
     player.position2D = new IntVec2D(values[0], values[1]);
     player.strength = values[2];
@@ -58,7 +59,6 @@ public class StatsDecoder extends Decoder {
     stats.turn = new Turn(values[20]);
     player.hungerState = HungerState.fromValue(values[21]);
     player.carryingCapacity = values[22];
-    stats.dungeonNumber = values[23];
     stats.levelNumber = values[24];
     player.condition = values[25];
     player.alignment = Alignment.fromValue(values[26]);

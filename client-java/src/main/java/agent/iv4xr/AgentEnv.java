@@ -96,7 +96,7 @@ public class AgentEnv extends Iv4xrEnvironment {
   WorldEntity toWorldEntity(Entity e, IntVec2D pos) {
     String id = e.createId(pos);
     WorldEntity we = new WorldEntity(id, e.type.name(), true);
-    we.position = new Vec3(pos.x, pos.y, app.gameState.stats.depth);
+    we.position = new Vec3(pos.x, pos.y, app.gameState.stats.dlvl.depth);
     return we;
   }
 

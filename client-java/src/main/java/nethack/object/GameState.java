@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import nl.uu.cs.aplib.utils.Pair;
 import util.ColoredStringBuilder;
 
 public class GameState {
@@ -14,48 +13,29 @@ public class GameState {
   public boolean done;
   public Object info;
   private final List<Level> world = new ArrayList<>();
-  private int currentLevelNr;
-  private Pair<Integer, Integer> currentIndex;
-  private final Map<Pair<Integer, Integer>, Integer> indexes = new HashMap<>();
+  private final Map<Dlvl, Integer> indexes = new HashMap<>();
 
   public Level getLevel() {
     assert stats != null : "Cannot retrieve level from GameState without stats";
-    Pair<Integer, Integer> index = createIndex();
-    if (!index.equals(currentIndex)) {
-      if (!indexes.containsKey(index)) {
-        return null;
-      }
-      currentIndex = index;
-      currentLevelNr = indexes.get(currentIndex);
+    if (!indexes.containsKey(stats.dlvl)) {
+      return null;
     }
-
-    return world.get(currentLevelNr);
+    return world.get(getLevelNr());
   }
 
   // Assumes the stats are already updated
   public void setLevel(Level level) {
     Level previousLevel = getLevel();
-    Pair<Integer, Integer> index = createIndex();
-    if (!index.equals(currentIndex)) {
-      if (!indexes.containsKey(index)) {
-        indexes.put(index, world.size());
-        world.add(null);
-      }
-
-      currentIndex = index;
-      currentLevelNr = indexes.get(currentIndex);
+    if (!indexes.containsKey(stats.dlvl)) {
+      indexes.put(stats.dlvl, world.size());
+      world.add(null);
     }
-
     level.setChangedCoordinates(previousLevel);
-    world.set(currentLevelNr, level);
+    world.set(getLevelNr(), level);
   }
 
   public int getLevelNr() {
-    return indexes.get(createIndex());
-  }
-
-  private Pair<Integer, Integer> createIndex() {
-    return new Pair<>(stats.depth, stats.dungeonNumber);
+    return indexes.get(stats.dlvl);
   }
 
   public String verbose() {
@@ -85,9 +65,10 @@ public class GameState {
         player.alignment.name(),
         stats.score);
     csb.appendf(
-        "Dlvl:%d(%d) $:%d HP:%d(%d) Pw:%d(%d) AC:%d Xp:%d/%d T:%d(%d) %s%n",
-        stats.depth,
-        stats.dungeonNumber,
+        "Dlvl:%d(%d)[%d??] $:%d HP:%d(%d) Pw:%d(%d) AC:%d Xp:%d/%d T:%d(%d) %s%n",
+        stats.dlvl.depth,
+        stats.dlvl.dungeonNumber,
+        stats.levelNumber,
         player.gold,
         player.hp,
         player.hpMax,

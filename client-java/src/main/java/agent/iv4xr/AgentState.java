@@ -2,6 +2,9 @@ package agent.iv4xr;
 
 import agent.navigation.HierarchicalNavigation;
 import agent.navigation.NetHackSurface;
+import agent.navigation.hpastar.graph.AbstractNode;
+import agent.navigation.hpastar.infrastructure.Constants;
+import agent.navigation.hpastar.infrastructure.Id;
 import agent.navigation.strategy.NavUtils;
 import agent.navigation.surface.*;
 import eu.iv4xr.framework.extensions.pathfinding.Navigatable;
@@ -71,6 +74,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
   @Override
   public void updateState(String agentId) {
     super.updateState(agentId);
+    addMapIfNew();
     updateMap();
     updateEntities();
   }
@@ -79,20 +83,47 @@ public class AgentState extends Iv4xrAgentState<Void> {
     return hierarchicalNav.areas.get(NavUtils.levelNr(worldmodel.position));
   }
 
-  private void updateMap() {
+  private void addMapIfNew() {
     WorldEntity aux = auxState();
     int levelNr = (int) aux.properties.get("levelNr");
     // If detecting a new maze, need to allocate a nav-graph for this maze:
     if (levelNr >= hierarchicalNav.areas.size()) {
       Loggers.AgentLogger.info("Adding a new level at index: %d", levelNr);
       hierarchicalNav.addNextArea(new NetHackSurface());
-      var previousLocation =
-          NavUtils.loc3(worldmodel.elements.get(Player.ID).getPreviousState().position);
-      var currentLocation = NavUtils.loc3(worldmodel.position);
-
-      // TODO: Add edge between surface
     }
 
+    WorldEntity previousState = worldmodel.elements.get(Player.ID).getPreviousState();
+    var currentLocation = NavUtils.loc3(worldmodel.position);
+
+    // The level number changed, an edge between the
+    if (previousState != null
+        && !currentLocation.fst.equals(NavUtils.levelNr(previousState.position))) {
+      var previousLocation = NavUtils.loc3(previousState.position);
+      Id<AbstractNode> previousNodeId =
+          hierarchicalNav.hierarchicalGraph.addAbstractNode(
+              previousLocation.fst, previousLocation.snd.pos);
+      Id<AbstractNode> currentNodeId =
+          hierarchicalNav.hierarchicalGraph.addAbstractNode(
+              currentLocation.fst, currentLocation.snd.pos);
+
+      AbstractNode previousNode =
+          hierarchicalNav.hierarchicalGraph.abstractGraph.getNode(previousNodeId);
+      AbstractNode currentNode =
+          hierarchicalNav.hierarchicalGraph.abstractGraph.getNode(currentNodeId);
+      if (!previousNode.edges.containsKey(currentNodeId)) {
+        hierarchicalNav.hierarchicalGraph.addEdge(
+            previousNodeId, currentNodeId, Constants.COST_ONE);
+      }
+      if (!currentNode.edges.containsKey(previousNodeId)) {
+        hierarchicalNav.hierarchicalGraph.addEdge(
+            currentNodeId, previousNodeId, Constants.COST_ONE);
+      }
+    }
+  }
+
+  private void updateMap() {
+    WorldEntity aux = auxState();
+    int levelNr = (int) aux.properties.get("levelNr");
     NetHackSurface surface = area();
 
     Serializable[] changedCoordinates = (Serializable[]) aux.properties.get("changedCoordinates");
@@ -173,6 +204,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
     }
 
     surface.updateTiles(updatedTiles, toggleBlockingOff);
+    hierarchicalNav.hierarchicalGraph.createEdgesWithinLevel(levelNr, surface);
 
     // Clear list of coordinates
     aux.properties.put("changedCoordinates", new Serializable[0]);
