@@ -10,7 +10,8 @@ public enum HungerState {
   HUNGRY(2),
   WEAK(3),
   FAINTING(4),
-  STARVED(5);
+  FAINTED(5),
+  STARVED(6);
 
   private static final Map<Integer, HungerState> BY_VALUE = new HashMap<>();
 

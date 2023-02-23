@@ -53,9 +53,8 @@ public class GameState {
     csb.append(message).newLine();
     csb.append(getLevel()).newLine();
     csb.appendf(
-        "Pos:(%d, %d) St:%d Dx:%d Co:%d In:%d Wi:%d Ch:%d %s S:%d%n",
-        player.position2D.x,
-        player.position2D.y,
+        "@%s St:%d Dx:%d Co:%d In:%d Wi:%d Ch:%d %s S:%d%n",
+        player.position2D,
         player.strength,
         player.dexterity,
         player.constitution,
@@ -65,7 +64,8 @@ public class GameState {
         player.alignment.name(),
         stats.score);
     csb.appendf(
-        "Dlvl:%d(%d)[%d??] $:%d HP:%d(%d) Pw:%d(%d) AC:%d Xp:%d/%d T:%d(%d) %s%n",
+        "Dlvl:%d(%d)[%d??] $:%d HP:%d(%d) Pw:%d(%d) AC:%d Xp:%d/%d T:%d(%d) \uD83C\uDF54:%s"
+            + " \uD83D\uDCAA:%s \uD83D\uDE03:%s%n",
         stats.dlvl.depth,
         stats.dlvl.dungeonNumber,
         stats.levelNumber,
@@ -79,7 +79,9 @@ public class GameState {
         player.experiencePoints,
         stats.turn.time,
         stats.turn.step,
-        player.hungerState);
+        player.hungerState,
+        player.encumbrance,
+        player.condition);
 
     return csb.toString();
   }

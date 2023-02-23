@@ -76,7 +76,7 @@ public enum Command {
   COMMAND_PAY("p", "Pay shopkeeper"),
   COMMAND_PICKUP(",", "Pickup item"),
   COMMAND_PRAY("#p", "Pray gods"),
-  COMMAND_PUTON("P", "Wear accesory"),
+  COMMAND_PUTON("P", "Wear accessory"),
   COMMAND_QUAFF("q", "Drink"),
   COMMAND_QUIT("#q", "Exit unsaved"),
   COMMAND_QUIVER("Q", "Select quiver ammo"),
@@ -96,7 +96,7 @@ public enum Command {
   COMMAND_SEERINGS("=", "Show rings"),
   COMMAND_SEESPELLS("+", "Show spells"),
   COMMAND_SEETOOLS("(", "Show tools"),
-  COMMAND_SEETRAP("#^", "Show traptype"),
+  COMMAND_SEETRAP("#^", "Show trap type"),
   COMMAND_SEEWEAPON(")", "Show weapon"),
   COMMAND_SHELL("!", ""),
   COMMAND_SIT("#s", "Sit"),
@@ -123,7 +123,7 @@ public enum Command {
   TEXT_CHARACTER_PLUS("%+", "Show spells"),
   TEXT_CHARACTER_MINUS("%-", ""),
   TEXT_CHARACTER_SPACE("% ", ""),
-  TEXT_CHARACTER_APOS("%\'", ""),
+  TEXT_CHARACTER_APOS("%'", ""),
   TEXT_CHARACTER_QUOTE("%\"", ""),
   TEXT_CHARACTER_NUM_0("%0", ""),
   TEXT_CHARACTER_NUM_1("%1", ""),
@@ -263,7 +263,7 @@ public enum Command {
         TEXT_CHARACTER_NUM_7,
         TEXT_CHARACTER_NUM_8,
         TEXT_CHARACTER_NUM_9,
-        TEXT_CHARACTER_DOLLAR
+        TEXT_CHARACTER_DOLLAR,
       };
   static final Command[] nethackCommands =
       new Command[] {
@@ -354,7 +354,8 @@ public enum Command {
         TEXT_CHARACTER_DOLLAR,
         TEXT_CHARACTER_SPACE
       };
-  static final Command[] additionalCommands = new Command[] {ADDITIONAL_SHOW_SEED};
+  static final Command[] additionalCommands =
+      new Command[] {ADDITIONAL_SHOW_SEED, ADDITIONAL_SHOW_VERBOSE, ADDITIONAL_ASCII};
   private static final Map<String, Command> BY_STROKE = new HashMap<>();
   private static final Map<Command, Integer> COMMAND_TO_NETHACK_CHALLENGE_INDEX = new HashMap<>();
   private static final Map<Command, Integer> COMMAND_TO_NETHACK_INDEX = new HashMap<>();
@@ -404,7 +405,7 @@ public enum Command {
     int columnLength = 21;
 
     String[] CommandStrs = new String[N];
-    int[] nrValues = new int[(N / columnLength) + 1];
+    int[] nrValues = new int[N / columnLength + 1];
 
     // Convert array of commands to array of strings
     for (int i = 0; i < N; i++) {

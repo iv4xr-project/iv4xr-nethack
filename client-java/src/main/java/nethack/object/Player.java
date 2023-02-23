@@ -3,6 +3,8 @@ package nethack.object;
 import eu.iv4xr.framework.spatial.IntVec2D;
 import eu.iv4xr.framework.spatial.Vec3;
 import nethack.enums.Alignment;
+import nethack.enums.Condition;
+import nethack.enums.Encumbrance;
 import nethack.enums.HungerState;
 import util.ColoredStringBuilder;
 
@@ -28,8 +30,8 @@ public class Player {
   public int experienceLevel;
   public int experiencePoints;
   public HungerState hungerState;
-  public int carryingCapacity;
-  public int condition;
+  public Encumbrance encumbrance;
+  public Condition condition;
   public Alignment alignment;
 
   public Player() {}
@@ -53,7 +55,7 @@ public class Player {
     csb.appendf("experienceLevel:%d%n", experienceLevel);
     csb.appendf("experiencePoints:%d%n", experiencePoints);
     csb.appendf("hungerState:%s%n", hungerState);
-    csb.appendf("carryingCapacity:%d%n", carryingCapacity);
+    csb.appendf("encumbrance:%d%n", encumbrance);
     csb.appendf("condition:%d%n", condition);
     csb.appendf("alignment:%s%n", alignment);
     csb.newLine();

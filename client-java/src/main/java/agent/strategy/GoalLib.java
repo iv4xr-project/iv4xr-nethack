@@ -23,7 +23,6 @@ public class GoalLib {
                 })
             .withTactic(
                 FIRSTof(
-                    //                    TacticLib.abortOnDeath(),
                     // Survival
                     Actions.attackMonster().on_(Predicates.inCombat_and_hpNotCritical).lift(),
                     Actions.eatFood().lift(),
@@ -38,11 +37,10 @@ public class GoalLib {
                     // Go to next level
                     NavTactic.navigateToTile(TileSelector.stairDown),
                     Actions.singleAction(Command.MISC_DOWN).on_(Predicates.on_stairs_down).lift(),
-                    //
-                    //                    // Explore walls for hidden doors
-                    //                    NavTactic.navigateNextToTile(TileSelector.wallSelector,
-                    // true),
-                    //                    Actions.searchWalls().lift(),
+
+                    // Explore walls for hidden doors
+                    NavTactic.navigateNextToTile(TileSelector.wallSelector, true),
+                    Actions.searchWalls().lift(),
                     ABORT()));
 
     return G.lift(); // REPEAT(G.lift());

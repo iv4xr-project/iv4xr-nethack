@@ -7,13 +7,15 @@ package agent.navigation;
 import agent.navigation.hpastar.*;
 import agent.navigation.hpastar.factories.HierarchicalMapFactory;
 import agent.navigation.hpastar.graph.*;
+import agent.navigation.hpastar.infrastructure.Constants;
 import agent.navigation.hpastar.infrastructure.Id;
+import agent.navigation.hpastar.search.AStar;
+import agent.navigation.hpastar.search.Path;
 import agent.navigation.surface.Tile;
 import eu.iv4xr.framework.extensions.pathfinding.Navigatable;
 import eu.iv4xr.framework.extensions.pathfinding.XPathfinder;
 import eu.iv4xr.framework.spatial.IntVec2D;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import nl.uu.cs.aplib.utils.Pair;
 
@@ -39,9 +41,9 @@ public class HierarchicalNavigation
 
   public List<Pair<Integer, Tile>> findPath(Pair<Integer, Tile> from, Pair<Integer, Tile> to) {
     int area1_id = (Integer) from.fst;
-    int areaN_id = (Integer) to.fst;
+    int area2_id = (Integer) to.fst;
 
-    if (area1_id == areaN_id) {
+    if (area1_id == area2_id) {
       var path = getPathInLevel(area1_id, from.snd, to.snd);
       if (path.isEmpty()) {
         return null;
@@ -49,26 +51,62 @@ public class HierarchicalNavigation
       return path;
     }
 
-    List<IntVec2D> fromStairs = hierarchicalGraph.levelToEntrancesMap.get(from.fst);
-    List<IntVec2D> toStairs = hierarchicalGraph.levelToEntrancesMap.get(to.fst);
-    for (IntVec2D fromStairPos : fromStairs) {
-      Id<AbstractNode> fromId = hierarchicalGraph.getAbsNodeId(from.fst, fromStairPos);
-      List<Pair<Integer, Tile>> fstPath =
-          getPathInLevel(from.fst, from.snd, new Tile(fromStairPos));
-      if (fstPath.isEmpty() && !from.snd.pos.equals(fromStairPos)) {
-        continue;
-      }
-      for (IntVec2D toStairPos : toStairs) {
-        Id<AbstractNode> toId = hierarchicalGraph.getAbsNodeId(to.fst, toStairPos);
-        List<Pair<Integer, Tile>> sndPath = getPathInLevel(to.fst, to.snd, new Tile(toStairPos));
-        if (sndPath.isEmpty() && to.snd.pos.equals(toStairPos)) {
+    Map<IntVec2D, List<Tile>> pathsToArea1Stairs =
+        pathsToStairs(from.fst, from.snd.pos, hierarchicalGraph.levelToEntrancesMap.get(from.fst));
+    Map<IntVec2D, List<Tile>> pathsToArea2Stairs =
+        pathsToStairs(to.fst, to.snd.pos, hierarchicalGraph.levelToEntrancesMap.get(to.fst));
+
+    for (IntVec2D stairPosArea1 : pathsToArea1Stairs.keySet()) {
+      Id<AbstractNode> stair1Id = hierarchicalGraph.getAbsNodeId(from.fst, stairPosArea1);
+      for (IntVec2D stairPosArea2 : pathsToArea2Stairs.keySet()) {
+        Id<AbstractNode> stair2Id = hierarchicalGraph.getAbsNodeId(to.fst, stairPosArea2);
+        AStar<AbstractNode> search = new AStar<>(hierarchicalGraph, stair1Id, stair2Id);
+        Path<AbstractNode> path = search.findPath();
+        if (path.pathNodes.isEmpty()) {
           continue;
         }
-        System.out.println("DID FIND PATH");
+        System.out.printf(
+            "Found path: %s -> %s. PathToStair1 (%s): %s PathFromStair2(%s): %s%n",
+            from,
+            to,
+            stair1Id,
+            pathsToArea1Stairs.get(stairPosArea1),
+            stair2Id,
+            pathsToArea2Stairs.get(stairPosArea2));
+        int costToStair1 = pathsToArea1Stairs.get(stairPosArea1).size() * Constants.COST_ONE;
+        int costToStair2 = pathsToArea2Stairs.get(stairPosArea2).size() * Constants.COST_ONE;
+        int costBetweenStairs = path.pathCost;
+        System.out.printf(
+            "Cost of path %d: %d > %d < %d%n",
+            costBetweenStairs + costToStair1 + costToStair2,
+            costToStair1,
+            costBetweenStairs,
+            costToStair2);
       }
     }
 
     throw new RuntimeException("Not yet implemented");
+  }
+
+  private Map<IntVec2D, List<Tile>> pathsToStairs(
+      int level, IntVec2D startPos, List<IntVec2D> stairPositions) {
+    GridSurface surface = areas.get(level);
+    Tile startTile = new Tile(startPos);
+    Map<IntVec2D, List<Tile>> paths = new HashMap<>();
+    for (IntVec2D targetPos : stairPositions) {
+      if (startPos.equals(targetPos)) {
+        paths.put(targetPos, new ArrayList<>());
+      } else {
+        List<Tile> tilePath = surface.findPath(startTile, new Tile(targetPos));
+        if (tilePath == null) {
+          continue;
+        }
+
+        paths.put(targetPos, tilePath);
+      }
+    }
+
+    return paths;
   }
 
   private List<Pair<Integer, Tile>> getPathInLevel(int level, Tile from, Tile to) {

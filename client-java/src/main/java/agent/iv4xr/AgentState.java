@@ -316,20 +316,25 @@ public class AgentState extends Iv4xrAgentState<Void> {
     String[] game = env().app.gameState.toString().split(System.lineSeparator());
     String[] hierarchicalMap = area().hierarchicalMap.toString().split(System.lineSeparator());
 
-    String formatString =
+    String tripleFormatString =
         String.format(
             "%%-%ds %%-%ds %%-%ds%n", Level.SIZE.width, Level.SIZE.width, Level.SIZE.width);
+    String doubleFormatString =
+        String.format("%%-%ds %%-%ds%n", 2 * Level.SIZE.width + 1, Level.SIZE.width);
     int n = Level.SIZE.height;
 
-    csb.appendf(formatString, game[0], "", hierarchicalMap[0]);
+    csb.appendf(doubleFormatString, game[0], hierarchicalMap[0]);
 
     for (int i = 0; i < n; i++) {
-      csb.appendf(formatString, game[i + 1], navigation[i], hierarchicalMap[i + 1]);
+      csb.appendf(tripleFormatString, game[i + 1], navigation[i], hierarchicalMap[i + 1]);
     }
 
-    csb.appendf(formatString, game[n + 1], "", hierarchicalMap[n + 1]);
-    csb.appendf(formatString, game[n + 2], "", hierarchicalMap[n + 2]);
-    csb.appendf(formatString, "", "", hierarchicalMap[n + 3]);
+    csb.appendf(doubleFormatString, game[n + 1], hierarchicalMap[n + 1]);
+    csb.appendf(
+        String.format("%%-%ds %%-%ds%n", Level.SIZE.width * 2, Level.SIZE.width),
+        game[n + 2],
+        hierarchicalMap[n + 2]);
+    csb.appendf(tripleFormatString, "", "", hierarchicalMap[n + 3]);
     System.out.print(csb);
   }
 }

@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import nethack.enums.Alignment;
+import nethack.enums.Condition;
+import nethack.enums.Encumbrance;
 import nethack.enums.HungerState;
 import nethack.object.Dlvl;
 import nethack.object.Player;
@@ -58,9 +60,9 @@ public class StatsDecoder extends Decoder {
     player.experiencePoints = values[19];
     stats.turn = new Turn(values[20]);
     player.hungerState = HungerState.fromValue(values[21]);
-    player.carryingCapacity = values[22];
+    player.encumbrance = Encumbrance.fromValue(values[22]);
     stats.levelNumber = values[24];
-    player.condition = values[25];
+    player.condition = Condition.fromValue(values[25]);
     player.alignment = Alignment.fromValue(values[26]);
 
     return new Pair<Stats, Player>(stats, player);
