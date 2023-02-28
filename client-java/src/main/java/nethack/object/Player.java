@@ -55,8 +55,8 @@ public class Player {
     csb.appendf("experienceLevel:%d%n", experienceLevel);
     csb.appendf("experiencePoints:%d%n", experiencePoints);
     csb.appendf("hungerState:%s%n", hungerState);
-    csb.appendf("encumbrance:%d%n", encumbrance);
-    csb.appendf("condition:%d%n", condition);
+    csb.appendf("encumbrance:%s%n", encumbrance);
+    csb.appendf("condition:%s%n", condition);
     csb.appendf("alignment:%s%n", alignment);
     csb.newLine();
     csb.append(inventory);

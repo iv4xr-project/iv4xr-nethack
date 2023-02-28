@@ -54,7 +54,7 @@ def string_to_bytes(ints: np.array, trim=False):
 def write_str(sock, string: str):
     sock.write(to_2byte(len(string)))
     chars = np.array(list(map(lambda c: ord(c), string)))
-    sock.write(sock, to_2byte(chars))
+    sock.write(to_2byte(chars))
 
 
 def write_obs(sock, env, obs):

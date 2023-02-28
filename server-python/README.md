@@ -2,11 +2,11 @@
 
 *Note: For general information about the repository please refer to the top level [README.md](../README.md)*
 
-The purpose of this directory is to create a socket server which can send the gamestate to the java iv4xr agent.
+The purpose of this directory is to create a socket server which can send the GameState to the java iv4XR agent.
 
 This repository contains an adapted version of [NLE package](https://github.com/facebookresearch/nle). NLE puts NetHack into a [gym environment](https://github.com/openai/gym). The entire sourcecode of NetHack and it's [LICENSE](lib/nle/LICENSE) are included in NLE.
 
-The entrypoint [main.py](src/main.py) starts up a socket server on `127.0.0.1:5001`. On connection, it creates a NetHack game instance and will send the gamestate and observations through the socket connection in [JSON](https://www.json.org/json-en.html) format as it receives commands from the client to execute. The JSON messages also allows to render the NetHack in the server terminal.
+The entrypoint [main.py](src/main.py) starts up a socket server on `127.0.0.1:5001`. On connection, it creates a NetHack game instance and will send the GameState and observations through the socket connection in [JSON](https://www.json.org/json-en.html) format as it receives commands from the client to execute. The JSON messages also allows to render the NetHack in the server terminal.
 
 NLE adaptations:
 

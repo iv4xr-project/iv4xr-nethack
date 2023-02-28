@@ -2,9 +2,9 @@
 
 *Note: For general information about the repository please refer to the top level [README.md](../README.md).*
 
-The purpose of this directory is to interpret the GameState sent by the [server](../server-python) via `127.0.0.1:5001` and convert it to an iv4xr environment. Goals can be created using the iv4xr environment and can be resolved using self defined tactics. For specific information on iv4xr/aplib please refer to [their GitHub](https://github.com/iv4xr-project/aplib).
+The purpose of this directory is to interpret the GameState sent by the [server](../server-python) via `127.0.0.1:5001` and convert it to an iv4XR environment. Goals can be created using the iv4XR environment and can be resolved using self defined tactics. For specific information on iv4XR/aplib please refer to [their GitHub](https://github.com/iv4xr-project/aplib).
 
-*Note: Code in iv4xr, especially MiniDungeon, is used as an inspiration source.*
+*Note: Code in iv4XR, especially MiniDungeon, is used as an inspiration source.*
 
 ## Platform
 
