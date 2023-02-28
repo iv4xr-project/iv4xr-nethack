@@ -24,6 +24,8 @@ public class App {
   }
 
   private static void runAgent(SocketClient commander) {
+    commander.sendResetCoverage();
+
     NetHack nethack = new NetHack(commander, Config.getSeed());
     AgentEnv env = new AgentEnv(nethack);
     AgentState state = new AgentState();
@@ -39,6 +41,7 @@ public class App {
 
     Loggers.AgentLogger.info("Closing NetHack since the loop in agent has terminated");
     nethack.close();
+    commander.sendSaveCoverage();
   }
 
   private static void fastForwardToTurn(Turn desiredTurn, TestAgent agent, AgentState state) {
@@ -78,7 +81,6 @@ public class App {
 
       // Need to update state for render
       state.updateState(Player.ID);
-      //      printAbsNodes(state);
       state.render();
       commander.sendRender();
     }

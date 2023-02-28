@@ -10,6 +10,11 @@ import io
 import sys
 import logging
 import time
+import subprocess
+import gym
+import nle
+from gym import Env
+import universe_plugin
 
 # Add path to run from commandline
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
@@ -17,11 +22,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 import src.socket_code.protocol.write as write
 import src.socket_code.protocol.read as read
 import src.socket_code.protocol.util as util
-import gym
-import nle
 import src.logger as logger
-from gym import Env
-import universe_plugin
 
 
 def main():
@@ -117,6 +118,12 @@ def loop(sock, uni, env: Env):
             case read.STEP_STROKE_BYTE:
                 logging.debug("Step stroke")
                 handle_step_stroke(sock, env)
+            case read.SAVE_COVERAGE_BYTE:
+                logging.debug("Save coverage")
+                handle_save_coverage()
+            case read.RESET_COVERAGE_BYTE:
+                logging.debug("Reset coverage")
+                handle_reset_coverage()
             case unknown:
                 logging.warning(f'Action "{unknown}" not known')
 
@@ -189,6 +196,14 @@ def handle_step_stroke(sock, env):
     write.write_obs(sock, env, obs)
     write.write_step(sock, done, None)
     sock.flush()
+
+
+def handle_save_coverage():
+    subprocess.call(['sh', 'coverage.sh'])
+
+
+def handle_reset_coverage():
+    subprocess.call(['sh', 'reset-coverage.sh'])
 
 
 if __name__ == '__main__':

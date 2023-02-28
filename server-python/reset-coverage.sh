@@ -10,10 +10,8 @@ trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
 BASEDIR=$(dirname "$0")
 cd "$BASEDIR"
 
-# Remove old directory
-rm -rf htmlcov/*
-mkdir htmlcov -p
-gcovr -r lib/nle --exclude lib/nle/win/rl/. --exclude lib/nle/third_party/. --exclude lib/nle/sys/unix/nledl.c --exclude lib/nle/sys/unix/rlmain.cc --exclude lib/nle/src/nle.c --html-details -o htmlcov/example.html
+# Remove previous coverage information
+find lib/nle -type f -name "*.gcda" -delete
 
 # Remove trap
 trap - EXIT

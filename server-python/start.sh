@@ -10,7 +10,6 @@ trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
 BASEDIR=$(dirname "$0")
 cd "$BASEDIR"
 
-find . -type f -name "*.gcda" -delete
 # shellcheck disable=SC1091
 source nethack-server-env/bin/activate
 python3 src/main.py

@@ -99,6 +99,16 @@ public class SocketClient {
     flush();
   }
 
+  public void sendSaveCoverage() {
+    writeBit(Encoder.EncoderBit.SaveCoverage);
+    flush();
+  }
+
+  public void sendResetCoverage() {
+    writeBit(Encoder.EncoderBit.ResetCoverage);
+    flush();
+  }
+
   public StepState sendStep(int index) {
     Stopwatch stopwatch = new Stopwatch(true);
     try {
