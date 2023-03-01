@@ -16,6 +16,7 @@ import nethack.enums.EntityType;
 import nethack.object.Entity;
 import nethack.object.Level;
 import nethack.object.Player;
+import nl.uu.cs.aplib.utils.Pair;
 import util.Loggers;
 
 /**
@@ -68,8 +69,9 @@ public class AgentEnv extends Iv4xrEnvironment {
       }
 
       String id = e.createId(pos);
+      int levelNr = app.gameState.getLevelNr();
       Loggers.WOMLogger.debug("%s %s Added", id, pos);
-      wom.elements.put(id, toWorldEntity(e, pos));
+      wom.elements.put(id, toWorldEntity(e, new Pair<>(levelNr, pos)));
     }
 
     // Time-stamp the elements:
@@ -93,10 +95,10 @@ public class AgentEnv extends Iv4xrEnvironment {
     return we;
   }
 
-  WorldEntity toWorldEntity(Entity e, IntVec2D pos) {
-    String id = e.createId(pos);
+  WorldEntity toWorldEntity(Entity e, Pair<Integer, IntVec2D> pos) {
+    String id = e.createId(pos.snd);
     WorldEntity we = new WorldEntity(id, e.type.name(), true);
-    we.position = new Vec3(pos.x, pos.y, app.gameState.stats.dlvl.depth);
+    we.position = new Vec3(pos.snd.x, pos.snd.y, pos.fst);
     return we;
   }
 

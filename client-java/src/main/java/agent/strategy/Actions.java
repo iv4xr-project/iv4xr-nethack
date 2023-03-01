@@ -115,8 +115,7 @@ public class Actions {
                 })
         .on(
             (AgentState S) -> {
-              NetHackSurface surface =
-                  S.hierarchicalNav.areas.get(NavUtils.levelNr(S.worldmodel.position));
+              NetHackSurface surface = S.area();
               List<IntVec2D> neighbours =
                   NavUtils.neighbourCoordinates(
                       NavUtils.loc2(S.worldmodel.position), Level.SIZE, true);

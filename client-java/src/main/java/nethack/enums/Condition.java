@@ -22,14 +22,14 @@ public enum Condition {
 
   static {
     for (Condition condition : values()) {
-      BY_VALUE.put(condition.value, condition);
+      BY_VALUE.put(condition.flagIndex, condition);
     }
   }
 
-  final int value;
+  final int flagIndex;
 
-  Condition(int value) {
-    this.value = value;
+  Condition(int flagIndex) {
+    this.flagIndex = flagIndex;
   }
 
   public static Condition fromValue(int value) {

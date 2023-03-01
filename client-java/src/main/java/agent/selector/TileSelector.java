@@ -116,6 +116,9 @@ public class TileSelector extends Selector<Pair<Integer, Tile>> {
     }
 
     if (selectionType == SelectionType.CLOSEST) {
+      System.out.printf(
+          "Closest is at %s with distance %s. Current position is %s%n",
+          tiles.get(minIndex), min, S.worldmodel.position);
       return tiles.get(minIndex);
     } else if (selectionType == SelectionType.FARTHEST) {
       return tiles.get(maxIndex);

@@ -38,6 +38,7 @@ public abstract class Selector<T> {
     FIRST,
     LAST,
     CLOSEST,
-    FARTHEST
+    FARTHEST,
+    ADJACENT
   }
 }

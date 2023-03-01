@@ -64,11 +64,10 @@ public class GameState {
         player.alignment.name(),
         stats.score);
     csb.appendf(
-        "Dlvl:%d(%d)[%d??] $:%d HP:%d(%d) Pw:%d(%d) AC:%d Xp:%d/%d T:%d(%d) \uD83C\uDF54:%s"
+        "Dlvl:%d(%d) $:%d HP:%d(%d) Pw:%d(%d) AC:%d Xp:%d/%d T:%d(%d) \uD83C\uDF54:%s"
             + " \uD83D\uDCAA:%s \uD83D\uDE03:%s%n",
         stats.dlvl.depth,
         stats.dlvl.dungeonNumber,
-        stats.levelNumber,
         player.gold,
         player.hp,
         player.hpMax,
@@ -81,7 +80,7 @@ public class GameState {
         stats.turn.step,
         player.hungerState,
         player.encumbrance,
-        player.condition);
+        player.conditions);
 
     return csb.toString();
   }

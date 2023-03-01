@@ -19,6 +19,9 @@ public class EntitySelector extends Selector<WorldEntity> {
   public static final EntitySelector money =
       new EntitySelector(SelectionType.CLOSEST, EntityType.GOLD);
 
+  public static final EntitySelector adjacentMonster =
+      new EntitySelector(SelectionType.ADJACENT, EntityType.MONSTER);
+
   final EntityType entityType;
 
   public EntitySelector(
@@ -34,13 +37,22 @@ public class EntitySelector extends Selector<WorldEntity> {
 
   @Override
   public WorldEntity apply(List<WorldEntity> entities, AgentState S) {
-    return select(filter(entities, S), S);
+    List<WorldEntity> filteredEntities = filter(entities, S);
+    return select(filteredEntities, S);
   }
 
   @Override
   protected WorldEntity select(List<WorldEntity> entities, AgentState S) {
     if (entities.isEmpty()) {
       return null;
+    }
+
+    if (selectionType == SelectionType.ADJACENT) {
+      var entity =
+          entities.stream()
+              .filter(e -> NavUtils.adjacent(e.position, S.worldmodel.position, true))
+              .findFirst();
+      return entity.orElse(null);
     }
 
     if (selectionType == SelectionType.FIRST || selectionType == SelectionType.LAST) {

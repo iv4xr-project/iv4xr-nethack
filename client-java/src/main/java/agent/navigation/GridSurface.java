@@ -37,7 +37,7 @@ import util.Loggers;
 public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
   public final Tile[][] tiles;
   public final Map<String, HashSet<IntVec2D>> tileTypes = new HashMap<>();
-  public final Set<Tile> frontierCandidates = new HashSet<>();
+  public final Set<IntVec2D> frontierCandidates = new HashSet<>();
   public final HierarchicalMap hierarchicalMap;
 
   /**
@@ -231,8 +231,8 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
     assert t != null;
     t.seen = true;
     // Add as frontier if it is walkable
-    if (isWalkable(t)) {
-      frontierCandidates.add(p);
+    if (t instanceof StraightWalkable) {
+      frontierCandidates.add(p.pos);
     }
   }
 
@@ -253,21 +253,23 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
   public List<Tile> getFrontier() {
     List<Tile> frontiers = new LinkedList<>();
     List<Tile> cannotBeFrontier = new LinkedList<>();
-    for (Tile t : frontierCandidates) {
-      List<IntVec2D> pneighbors = NavUtils.neighbourCoordinates(t.pos, hierarchicalMap.size, true);
+    for (IntVec2D frontierPosition : frontierCandidates) {
+      List<IntVec2D> pNeighbors =
+          NavUtils.neighbourCoordinates(frontierPosition, hierarchicalMap.size, true);
       boolean isFrontier = false;
-      for (IntVec2D n : pneighbors) {
+      for (IntVec2D n : pNeighbors) {
         if (!hasbeenSeen(n)) {
-          frontiers.add(t);
+          frontiers.add(new Tile(frontierPosition));
           isFrontier = true;
           break;
         }
       }
       if (!isFrontier) {
-        cannotBeFrontier.add(t);
+        cannotBeFrontier.add(new Tile(frontierPosition));
       }
     }
     cannotBeFrontier.forEach(frontierCandidates::remove);
+    System.out.printf("Frontiers: %s%n", frontiers);
     return frontiers;
   }
 
@@ -280,12 +282,13 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
   }
 
   private List<Tile> explore(int x, int y, int heuristicX, int heuristicY) {
+    IntVec2D startPos = new IntVec2D(x, y);
     List<Tile> frontiers = getFrontier();
+    frontiers.removeIf(tile -> tile.pos.equals(startPos));
     if (frontiers.isEmpty()) {
       return null;
     }
 
-    IntVec2D startPos = new IntVec2D(x, y);
     IntVec2D heuristicPos = new IntVec2D(heuristicX, heuristicY);
 
     // sort the frontiers in ascending order, by their geometric distance to (x,y):
@@ -458,7 +461,7 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
   public static float heuristic(IntVec2D from, IntVec2D to) {
     int dx = Math.abs(from.x - to.x);
     int dy = Math.abs(from.y - to.y);
-    return Math.max(dx, dy);
+    return dx * dx + dy * dy;
   }
 
   /** The distance between two neighboring tiles. */
@@ -471,7 +474,9 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
   public String toString() {
     ColoredStringBuilder csb = new ColoredStringBuilder();
     Set<IntVec2D> frontiers =
-        frontierCandidates.stream().map(frontier -> frontier.pos).collect(Collectors.toSet());
+        frontierCandidates.stream()
+            .map(frontierPosition -> frontierPosition)
+            .collect(Collectors.toSet());
 
     // Add row by row to the StringBuilder
     for (int y = 0; y < hierarchicalMap.size.height; y++) {
@@ -485,8 +490,6 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
           char c = p.toChar();
           if (p.isVisible()) {
             csb.append(Color.GREEN_BRIGHT, c);
-          } else if (frontiers.contains(pos)) {
-            csb.append(Color.CYAN_BRIGHT, c);
           } else {
             csb.append(c);
           }

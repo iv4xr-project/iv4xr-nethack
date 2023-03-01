@@ -85,7 +85,9 @@ public class HierarchicalNavigation
       }
     }
 
-    throw new RuntimeException("Not yet implemented");
+    // TODO: Implement shortest path method for multi-level
+    return null;
+    //    throw new RuntimeException("Not yet implemented");
   }
 
   private Map<IntVec2D, List<Tile>> pathsToStairs(
@@ -98,7 +100,7 @@ public class HierarchicalNavigation
         paths.put(targetPos, new ArrayList<>());
       } else {
         List<Tile> tilePath = surface.findPath(startTile, new Tile(targetPos));
-        if (tilePath == null) {
+        if (tilePath == null || tilePath.isEmpty()) {
           continue;
         }
 

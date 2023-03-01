@@ -24,8 +24,10 @@ public class GoalLib {
             .withTactic(
                 FIRSTof(
                     // Survival
-                    Actions.attackMonster().on_(Predicates.inCombat_and_hpNotCritical).lift(),
+                    NavTactic.navigateToWorldEntity(EntitySelector.adjacentMonster),
                     Actions.eatFood().lift(),
+
+                    // Collect money
                     NavTactic.navigateToWorldEntity(EntitySelector.money),
 
                     // Navigation

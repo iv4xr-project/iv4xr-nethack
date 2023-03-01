@@ -41,6 +41,9 @@ public class EntityDecoder extends Decoder {
       case 2379:
       case 2378:
         return EntityType.FLOOR;
+      case 2374: // Unlocked door
+      case 2375: // Locked door
+        return EntityType.DOOR;
       case 2371:
         return EntityType.DOORWAY;
       case 2359:
@@ -70,7 +73,7 @@ public class EntityDecoder extends Decoder {
       case '#':
         return color == Color.CYAN ? EntityType.PRISON_BARS : EntityType.UNKNOWN;
       case '+':
-        return color == Color.BROWN ? EntityType.DOOR : EntityType.SPELLBOOK;
+        return EntityType.SPELLBOOK;
         // DOORWAY;
       case '%':
         return EntityType.EDIBLE;

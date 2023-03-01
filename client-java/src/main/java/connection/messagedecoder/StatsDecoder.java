@@ -7,13 +7,9 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import nethack.enums.Alignment;
-import nethack.enums.Condition;
 import nethack.enums.Encumbrance;
 import nethack.enums.HungerState;
-import nethack.object.Dlvl;
-import nethack.object.Player;
-import nethack.object.Stats;
-import nethack.object.Turn;
+import nethack.object.*;
 import nl.uu.cs.aplib.utils.Pair;
 
 // Source: https://studytrails.com/2016/09/12/java-google-json-type-adapter/
@@ -62,7 +58,7 @@ public class StatsDecoder extends Decoder {
     player.hungerState = HungerState.fromValue(values[21]);
     player.encumbrance = Encumbrance.fromValue(values[22]);
     stats.levelNumber = values[24];
-    player.condition = Condition.fromValue(values[25]);
+    player.conditions = Conditions.fromValue(values[25]);
     player.alignment = Alignment.fromValue(values[26]);
 
     return new Pair<Stats, Player>(stats, player);
