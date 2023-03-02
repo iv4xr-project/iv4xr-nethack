@@ -199,11 +199,11 @@ def handle_step_stroke(sock, env):
 
 
 def handle_save_coverage():
-    subprocess.call(['sh', 'coverage.sh'])
+    subprocess.call(['bash', 'coverage.sh', 'json'])
 
 
 def handle_reset_coverage():
-    subprocess.call(['sh', 'reset-coverage.sh'])
+    subprocess.call(['bash', 'reset-coverage.sh'])
 
 
 if __name__ == '__main__':

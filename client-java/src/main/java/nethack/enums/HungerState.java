@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum HungerState {
-  OVERSATIATED(-1),
+  //  OVERSATIATED(-1),
   SATIATED(0),
   NORMAL(1),
   HUNGRY(2),
@@ -30,5 +30,9 @@ public enum HungerState {
   public static HungerState fromValue(int value) {
     assert BY_VALUE.containsKey(value) : String.format("HungerState value '%d' not known", value);
     return BY_VALUE.get(value);
+  }
+
+  public boolean wantsFood() {
+    return value >= 2;
   }
 }

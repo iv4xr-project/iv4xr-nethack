@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Objects;
 import nethack.enums.Command;
 import nethack.enums.EntityType;
-import nethack.enums.HungerState;
 import nethack.object.Item;
 import nethack.object.Level;
 import nethack.object.Player;
@@ -147,9 +146,7 @@ public class Actions {
             (AgentState S) -> {
               Player player = S.app().gameState.player;
               // Player stomach full enough
-              if (player.hungerState == HungerState.NORMAL
-                  || player.hungerState == HungerState.SATIATED
-                  || player.hungerState == HungerState.OVERSATIATED) {
+              if (!player.hungerState.wantsFood()) {
                 return null;
               }
               return ItemSelector.inventoryFood.apply(Arrays.asList(player.inventory.items), S);

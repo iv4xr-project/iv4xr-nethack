@@ -23,6 +23,7 @@ python3 -m venv nethack-server-env
 # shellcheck disable=SC1091
 source nethack-server-env/bin/activate
 pip install -e ./lib/nle
+pip install -r requirements.txt
 
 # Remove trap
 trap - EXIT
