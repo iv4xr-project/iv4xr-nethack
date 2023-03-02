@@ -268,7 +268,7 @@ public final class ColoredStringBuilder {
     if (currentColor == color) {
       return this;
     }
-    sb.append(color.stringCode());
+    sb.append(color);
     currentColor = color;
     return this;
   }

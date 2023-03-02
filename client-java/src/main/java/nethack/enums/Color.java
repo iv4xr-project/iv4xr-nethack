@@ -56,7 +56,7 @@ public enum Color {
 
   private static void colorpalette() {
     for (Color color : Color.values()) {
-      System.out.println("\033[" + color.colorCode + "m " + color.name());
+      System.out.printf("%s %s%n", color, color.name());
     }
   }
 
@@ -64,7 +64,7 @@ public enum Color {
     colorpalette();
   }
 
-  public String stringCode() {
+  public String toString() {
     return String.format("\033[%sm", colorCode);
   }
 }

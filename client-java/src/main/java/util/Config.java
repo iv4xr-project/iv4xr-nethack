@@ -11,13 +11,13 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.SystemConfiguration;
 
 public class Config {
-  static final CompositeConfiguration config;
+  static CompositeConfiguration config;
 
   static {
     config = new CompositeConfiguration();
     config.addConfiguration(new SystemConfiguration());
     try {
-      config.addConfiguration(new PropertiesConfiguration("config.properties"));
+      config.addConfiguration(new PropertiesConfiguration("src/main/resources/config.properties"));
     } catch (ConfigurationException e) {
       throw new RuntimeException(e);
     }
@@ -30,7 +30,7 @@ public class Config {
   }
 
   public static String getLogConfig() {
-    return config.getString("LOG_CONFIG", "log4j2.xml");
+    return config.getString("LOG_CONFIG", "src/main/resources/log4j2.xml");
   }
 
   public static Seed getSeed() {

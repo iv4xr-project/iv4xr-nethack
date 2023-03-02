@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+    <Appenders>
+        <!-- Source: https://stackoverflow.com/questions/21979699/log4j-2-adding-multiple-colors-to-console-appender-->
+        <Console name="LogToConsole" target="SYSTEM_OUT" follow="true">
+            <PatternLayout disableAnsi="false" pattern="%d{HH:mm:ss.SSS} [%t] %highlight{${LOG_LEVEL_PATTERN:-%-5p}}{FATAL=magenta bright, ERROR=red bright, WARN=yellow bright, INFO=green bright, DEBUG=white bright, TRACE=blue bright} %logger{36} %msg%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Root level="debug">
+            <AppenderRef ref="LogToConsole" level="warning"/>
+        </Root>
+    </Loggers>
+</Configuration>

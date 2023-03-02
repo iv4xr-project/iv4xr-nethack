@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import nethack.enums.Color;
 import util.ColoredStringBuilder;
 
 public class GameState {
@@ -64,15 +65,23 @@ public class GameState {
         player.alignment.name(),
         stats.score);
     csb.appendf(
-        "Dlvl:%d(%d) $:%d HP:%d(%d) Pw:%d(%d) AC:%d Xp:%d/%d T:%d(%d) \uD83C\uDF54:%s"
-            + " \uD83D\uDCAA:%s \uD83D\uDE03:%s%n",
+        "Dlvl:%d(%d) %s$:%s%d %sHP:%s%d(%d) %sPw:%s%d(%d) %sAC:%s%d Xp:%d/%d T:%d(%d)"
+            + " \uD83C\uDF54:%s \uD83D\uDCAA:%s \uD83D\uDE03:%s%n",
         stats.dlvl.depth,
         stats.dlvl.dungeonNumber,
+        Color.YELLOW,
+        Color.RESET,
         player.gold,
+        Color.RED,
+        Color.RESET,
         player.hp,
         player.hpMax,
+        Color.BLUE,
+        Color.RESET,
         player.energy,
         player.energyMax,
+        Color.WHITE,
+        Color.RESET,
         player.armorClass,
         player.experienceLevel,
         player.experiencePoints,

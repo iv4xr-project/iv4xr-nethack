@@ -1,8 +1,10 @@
-package com.github.iv4xr_project.iv4xr_nethack;
+package agent;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import util.Config;
+import util.TestConfig;
 
 /** Unit test for simple nethack.App. */
 public class AppTest extends TestCase {
@@ -22,8 +24,11 @@ public class AppTest extends TestCase {
     return new TestSuite(AppTest.class);
   }
 
-  /** Rigourous Test :-) */
+  /** Rigorous Test :-) */
   public void testApp() {
+    TestConfig.setConfigFile("testConfig.properties");
+    System.out.println(Config.getLogConfig());
     assertTrue(true);
+    assertFalse(true);
   }
 }

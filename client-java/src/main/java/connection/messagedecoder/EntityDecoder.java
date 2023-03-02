@@ -25,8 +25,7 @@ public class EntityDecoder extends Decoder {
       return type;
     }
 
-    Loggers.EncoderLogger.warn(
-        "%s%s%s: %d UNKNOWN", color.stringCode(), symbol, Color.RESET.stringCode(), glyph);
+    Loggers.EncoderLogger.warn("%s%s%s: %d UNKNOWN", color, symbol, Color.RESET, glyph);
     return EntityType.UNKNOWN;
   }
 
