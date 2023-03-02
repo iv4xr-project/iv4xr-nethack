@@ -42,3 +42,11 @@ Run coverage via [gcovr](https://gcovr.com/en/stable/):
 ```commandline
 bash <path-to>/coverage.sh
 ```
+
+## Plotting
+
+A first plot on coverage can be created using the [plotter.py](./src/plotter.py) script.
+
+```commandline
+python3 src/plotter.py
+```

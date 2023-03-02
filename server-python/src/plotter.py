@@ -4,7 +4,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Load the JSON data
-with open('coverage/report_2023-03-02_11-21-14.json', 'r') as f:
+filename = 'coverage/report_2023-03-02_11-21-14.json'
+assert os.path.exists(filename)
+with open(filename, 'r') as f:
     data = json.load(f)
 
 # Get the data for the two types of coverage
@@ -20,7 +22,7 @@ branch_labels, branch_percentages = zip(*branch_data)
 line_labels, line_percentages = zip(*line_data)
 
 # Set up the bar chart
-fig, (ax1, ax2) = plt.subplots(nrows=2, sharex=True, figsize=(8, 8))
+fig, (ax1, ax2) = plt.subplots(nrows=2, sharex=True, figsize=(25, 8))
 index = np.arange(len(branch_labels))
 bar_width = 0.35
 
@@ -36,9 +38,14 @@ ax2.set_ylabel('Line Coverage')
 ax2.set_xlabel('Files')
 ax1.set_title('Coverage by File')
 ax1.set_xticks(index)
-ax1.set_xticklabels(branch_labels, rotation=90)
+ax1.set_xticklabels(branch_labels, horizontalalignment='right', rotation=45)
+ax2.set_xticks(index)
+ax2.set_xticklabels(line_labels, horizontalalignment='right', rotation=45)
 ax1.legend()
 ax2.legend()
 
 os.makedirs("plots", exist_ok=True)
+
+fig.tight_layout()
+fig.align_labels()
 fig.savefig("plots/coverage.png")
