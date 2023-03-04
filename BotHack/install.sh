@@ -27,7 +27,10 @@ cd "$BASEDIR"
 cd nh343-nao
 make
 sudo make install
-sudo mv /opt/nethack/nethack.alt.org/nh343/ /nh343
+
+# Clear directory
+sudo rm -rf /nh343
+sudo mv /opt/nethack/nethack.alt.org/nh343 /nh343
 sudo chmod -R 777 /nh343
 
 # Remove trap

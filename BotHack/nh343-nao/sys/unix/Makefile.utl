@@ -89,8 +89,14 @@
 # flags for debugging:
 # CFLAGS = -g -I../include
 
-CFLAGS = -O -I../include
-LFLAGS =
+CFLAGS = -g -O -I../include -fcommon
+LFLAGS = -lgcov --coverage
+LDFLAGS = -lgcov --coverage
+
+# The Qt and Be window systems are written in C++, while the rest of
+# NetHack is standard C.  If using Qt, uncomment the LINK line here to get
+# the C++ libraries linked in.
+CPPFLAGS = $(CFLAGS) -I. -I$(QTDIR)/include -fprofile-arcs -ftest-coverage
 
 LIBS =
  
