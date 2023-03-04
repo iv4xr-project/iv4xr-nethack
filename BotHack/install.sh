@@ -13,7 +13,7 @@ cd "$BASEDIR"
 sudo apt update && sudo apt update -y
 sudo apt install -y gcovr lcov ant leiningen openjdk-8-jdk libncurses5-dev libncursesw5-dev
 
-echo "PLEASE SELECT openjdk-8-jdk!!!\nOtherwise perform an ant clean in the jta26 directory"
+printf "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\nPLEASE SELECT openjdk-8-jdk\nOtherwise perform an ant clean in the jta26 directory\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n"
 sudo update-alternatives --config java
 
 cd jta26
