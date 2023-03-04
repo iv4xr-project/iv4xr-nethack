@@ -1,0 +1,6 @@
+{
+ :javabot "bothack.javabots.javabot.JavaBot"
+ :ttyrec true
+ :interface :shell
+ :nh-command "/nh343/nethack.343-nao"
+}
