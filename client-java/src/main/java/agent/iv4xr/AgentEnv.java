@@ -11,8 +11,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import nethack.NetHack;
-import nethack.enums.Command;
 import nethack.enums.EntityType;
+import nethack.object.Command;
 import nethack.object.Entity;
 import nethack.object.Level;
 import nethack.object.Player;
@@ -82,8 +82,8 @@ public class AgentEnv extends Iv4xrEnvironment {
     return wom;
   }
 
-  public WorldModel action(Command action) {
-    app.step(action);
+  public WorldModel command(Command command) {
+    app.step(command);
     return observe(Player.ID);
   }
 

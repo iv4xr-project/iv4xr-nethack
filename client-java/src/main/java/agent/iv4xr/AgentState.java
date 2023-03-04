@@ -161,8 +161,8 @@ public class AgentState extends Iv4xrAgentState<Void> {
           updatedTiles.add(new Floor(pos));
           break;
         case DOOR:
-          boolean isOpen = !env().app.level().getEntity(pos).closedDoor();
-          updatedTiles.add(new Door(pos, isOpen));
+          Entity entity = env().app.level().getEntity(pos);
+          updatedTiles.add(new Door(pos, !entity.closedDoor()));
           break;
         case DOORWAY:
           updatedTiles.add(new Doorway(pos));
@@ -331,7 +331,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
 
     csb.appendf(doubleFormatString, game[n + 1], hierarchicalMap[n + 1]);
     csb.appendf(
-        String.format("%%-%ds %%-%ds%n", Level.SIZE.width * 2, Level.SIZE.width),
+        String.format("%%-%ds %%-%ds%n", Level.SIZE.width * 2 + 40, Level.SIZE.width),
         game[n + 2],
         hierarchicalMap[n + 2]);
     csb.appendf(tripleFormatString, "", "", hierarchicalMap[n + 3]);

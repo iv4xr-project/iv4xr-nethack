@@ -7,7 +7,8 @@ import agent.navigation.strategy.NavTactic;
 import agent.selector.EntitySelector;
 import agent.selector.TileSelector;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
-import nethack.enums.Command;
+import nethack.enums.CommandEnum;
+import nethack.object.Command;
 import nl.uu.cs.aplib.mainConcepts.Goal;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
 import nl.uu.cs.aplib.utils.Pair;
@@ -25,20 +26,22 @@ public class GoalLib {
                 FIRSTof(
                     // Survival
                     NavTactic.navigateToWorldEntity(EntitySelector.adjacentMonster),
-                    Actions.eatFood().lift(),
+                    TacticLib.resolveHungerState(900),
 
                     // Collect money
                     NavTactic.navigateToWorldEntity(EntitySelector.money),
 
                     // Navigation
-                    Actions.kickDoor().on(Predicates.get_lockedDoor()).lift(),
+                    Actions.kick().on(Predicates.get_lockedDoor()).lift(),
                     Actions.openDoor().on(Predicates.get_closedDoor()).lift(),
                     NavTactic.navigateNextToTile(TileSelector.closedDoorSelector, false),
                     NavTactic.explore(),
 
                     // Go to next level
                     NavTactic.navigateToTile(TileSelector.stairDown),
-                    Actions.singleAction(Command.MISC_DOWN).on_(Predicates.on_stairs_down).lift(),
+                    Actions.singleCommand(new Command(CommandEnum.MISC_DOWN))
+                        .on_(Predicates.on_stairs_down)
+                        .lift(),
 
                     // Explore walls for hidden doors
                     NavTactic.navigateNextToTile(TileSelector.wallSelector, true),

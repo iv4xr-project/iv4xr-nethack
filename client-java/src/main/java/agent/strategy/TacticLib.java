@@ -1,10 +1,14 @@
 package agent.strategy;
 
-import static nl.uu.cs.aplib.AplibEDSL.ABORT;
+import static nl.uu.cs.aplib.AplibEDSL.*;
 
 import agent.iv4xr.AgentState;
 import agent.navigation.strategy.NavUtils;
+import agent.selector.ItemSelector;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
+import java.util.Arrays;
+import java.util.Optional;
+import nethack.object.Player;
 import nl.uu.cs.aplib.mainConcepts.Tactic;
 import util.Loggers;
 
@@ -52,5 +56,37 @@ public class TacticLib {
               return null;
             })
         .lift();
+  }
+
+  public static Tactic resolveHungerState(int prayerTimeOut) {
+    return FIRSTof(
+        //      NavTactic.navigateToWorldEntity(new EntitySelector(Selector.SelectionType.CLOSEST,
+        // EntityType.EDIBLE)),
+        Actions.pray()
+            .on(
+                (AgentState S) -> {
+                  Player player = S.app().gameState.player;
+                  if (!player.hungerState.wantsFood()) {
+                    return null;
+                  }
+                  Optional<Integer> lastPrayerTurn = player.lastPrayerTurn;
+                  if (lastPrayerTurn.isEmpty()
+                      || lastPrayerTurn.get() - S.app().gameState.stats.turn.time > prayerTimeOut) {
+                    return true;
+                  }
+                  return null;
+                })
+            .lift(),
+        Actions.eatItem()
+            .on(
+                (AgentState S) -> {
+                  Player player = S.app().gameState.player;
+                  // Player stomach full enough
+                  if (!player.hungerState.wantsFood()) {
+                    return null;
+                  }
+                  return ItemSelector.inventoryFood.apply(Arrays.asList(player.inventory.items), S);
+                })
+            .lift());
   }
 }

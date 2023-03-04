@@ -2,6 +2,7 @@ package nethack.object;
 
 import eu.iv4xr.framework.spatial.IntVec2D;
 import eu.iv4xr.framework.spatial.Vec3;
+import java.util.Optional;
 import nethack.enums.Alignment;
 import nethack.enums.Encumbrance;
 import nethack.enums.HungerState;
@@ -32,6 +33,7 @@ public class Player {
   public Encumbrance encumbrance;
   public Conditions conditions;
   public Alignment alignment;
+  public Optional<Integer> lastPrayerTurn = Optional.empty();
 
   public Player() {}
 

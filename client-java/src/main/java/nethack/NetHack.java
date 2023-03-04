@@ -3,12 +3,9 @@ package nethack;
 import connection.SocketClient;
 import java.util.Objects;
 import java.util.Scanner;
-import nethack.enums.Command;
+import nethack.enums.CommandEnum;
 import nethack.enums.GameMode;
-import nethack.object.GameState;
-import nethack.object.Level;
-import nethack.object.Seed;
-import nethack.object.StepState;
+import nethack.object.*;
 import util.Loggers;
 
 public class NetHack {
@@ -55,7 +52,7 @@ public class NetHack {
 
   public void reset() {
     client.sendReset(gameMode.toString());
-    step(Command.MISC_MORE);
+    step(new Command(CommandEnum.MISC_MORE));
     render();
   }
 
@@ -96,7 +93,7 @@ public class NetHack {
 
     while (true) {
       String input = scanner.nextLine();
-      Command command = Command.fromValue(input);
+      Command command = Command.fromStroke(input);
       if (command != null) {
         return command;
       } else if (Objects.equals(input, "") && acceptNoCommand) {
@@ -107,9 +104,9 @@ public class NetHack {
   }
 
   public StepType step(Command command) {
-    switch (command) {
+    switch (command.commandEnum) {
       case COMMAND_EXTLIST:
-        Command.prettyPrintActions(gameMode);
+        CommandEnum.prettyPrintCommands(gameMode);
         return StepType.Special;
       case COMMAND_REDRAW:
         System.out.println(gameState);
@@ -122,8 +119,8 @@ public class NetHack {
         Loggers.SeedLogger.info(seed);
         return StepType.Special;
       case ADDITIONAL_ASCII:
-        char character = command.stroke.charAt(1);
-        return step(Command.ADDITIONAL_ASCII, character);
+        char character = command.stroke.charAt(0);
+        return step(command, character);
       case COMMAND_INVENTORY:
       case COMMAND_INVENTTYPE: // Should do something differently
         System.out.println(gameState.player.inventory);
@@ -132,7 +129,7 @@ public class NetHack {
         break;
     }
 
-    int index = command.getIndex(gameMode);
+    int index = command.commandEnum.getIndex(gameMode);
     if (index < 0) {
       Loggers.NetHackLogger.warn("Command: %s not available in GameMode: %s", command, gameMode);
       return StepType.Invalid;
@@ -176,6 +173,7 @@ public class NetHack {
     if (gameState.player != null) {
       stepState.player.previousPosition = gameState.player.position;
       stepState.player.previousPosition2D = gameState.player.position2D;
+      stepState.player.lastPrayerTurn = gameState.player.lastPrayerTurn;
     }
     gameState.player = stepState.player;
     assert gameState.player.position.z == 0

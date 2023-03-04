@@ -3,6 +3,7 @@ package agent.navigation.strategy;
 import agent.iv4xr.AgentState;
 import agent.navigation.HierarchicalNavigation;
 import agent.navigation.hpastar.Size;
+import agent.navigation.hpastar.smoother.Direction;
 import agent.navigation.surface.Tile;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
@@ -10,7 +11,7 @@ import eu.iv4xr.framework.spatial.IntVec2D;
 import eu.iv4xr.framework.spatial.Vec3;
 import java.util.ArrayList;
 import java.util.List;
-import nethack.enums.Command;
+import nethack.object.Command;
 import nethack.object.Player;
 import nl.uu.cs.aplib.utils.Pair;
 import util.Loggers;
@@ -62,6 +63,29 @@ public class NavUtils {
 
   public static Tile toTile(IntVec2D pos) {
     return new Tile(pos);
+  }
+
+  public static IntVec2D posInDirection(IntVec2D pos, Direction direction) {
+    switch (direction) {
+      case North:
+        return new IntVec2D(pos.x, pos.y - 1);
+      case South:
+        return new IntVec2D(pos.x, pos.y + 1);
+      case East:
+        return new IntVec2D(pos.x + 1, pos.y);
+      case West:
+        return new IntVec2D(pos.x - 1, pos.y);
+      case NorthEast:
+        return new IntVec2D(pos.x + 1, pos.y - 1);
+      case NorthWest:
+        return new IntVec2D(pos.x - 1, pos.y - 1);
+      case SouthEast:
+        return new IntVec2D(pos.x + 1, pos.y + 1);
+      case SouthWest:
+        return new IntVec2D(pos.x - 1, pos.y + 1);
+      default:
+        throw new IllegalArgumentException("Direction does not exist");
+    }
   }
 
   public static IntVec2D loc2(int x, int y) {
@@ -144,48 +168,41 @@ public class NavUtils {
   }
 
   public static WorldModel moveTo(AgentState state, Pair<Integer, Tile> targetTile) {
-    Command command = stepToCommand(state, targetTile);
-    return state.env().action(command);
+    Command command = Direction.getCommand(toDirection(state, targetTile));
+    return state.env().command(command);
   }
 
   public static WorldModel moveTo(AgentState state, Vec3 targetPosition) {
     return moveTo(state, loc3(targetPosition));
   }
 
-  public static Command stepToCommand(AgentState state, Pair<Integer, Tile> targetTile) {
-    int agentLevel = NavUtils.levelNr(state.worldmodel.position);
-    if (targetTile.fst != agentLevel) {
-      if (targetTile.fst > agentLevel) {
-        return Command.MISC_DOWN;
-      } else {
-        return Command.MISC_UP;
-      }
-    }
-
-    IntVec2D agentPos = NavUtils.loc2(state.worldmodel.position);
+  public static Direction toDirection(AgentState state, Pair<Integer, Tile> targetTile) {
+    Pair<Integer, Tile> agentTile = NavUtils.loc3(state.worldmodel.position);
+    assert agentTile.fst.equals(targetTile.fst) : "Direction must be on same level";
     IntVec2D targetPos = targetTile.snd.pos;
+    IntVec2D agentPos = agentTile.snd.pos;
     assert adjacent(agentPos, targetPos, true);
 
     if (targetPos.y > agentPos.y) {
       if (targetPos.x > agentPos.x) {
-        return Command.DIRECTION_SE;
+        return Direction.SouthEast;
       } else if (targetPos.x < agentPos.x) {
-        return Command.DIRECTION_SW;
+        return Direction.SouthWest;
       } else {
-        return Command.DIRECTION_S;
+        return Direction.South;
       }
     } else if (targetPos.y < agentPos.y) {
       if (targetPos.x > agentPos.x) {
-        return Command.DIRECTION_NE;
+        return Direction.NorthEast;
       } else if (targetPos.x < agentPos.x) {
-        return Command.DIRECTION_NW;
+        return Direction.NorthWest;
       } else {
-        return Command.DIRECTION_N;
+        return Direction.North;
       }
     } else if (targetPos.x > agentPos.x) {
-      return Command.DIRECTION_E;
+      return Direction.East;
     } else {
-      return Command.DIRECTION_W;
+      return Direction.West;
     }
   }
 

@@ -1,33 +1,42 @@
 package agent.strategy;
 
+import static nethack.enums.CommandEnum.*;
+
 import agent.iv4xr.AgentState;
-import agent.navigation.strategy.NavUtils;
-import agent.navigation.surface.Tile;
+import agent.navigation.hpastar.smoother.Direction;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
-import nethack.enums.Command;
-import nl.uu.cs.aplib.utils.Pair;
+import nethack.object.Command;
 
 public class WorldModels {
-  static WorldModel kickDoor(AgentState state, Pair<Integer, Tile> targetTile) {
-    Tile t0 = NavUtils.toTile(state.worldmodel.position);
-    assert NavUtils.adjacent(t0, targetTile.snd, false);
-    state.env().action(Command.COMMAND_KICK);
-    return NavUtils.moveTo(state, targetTile);
+  static WorldModel kick(AgentState state, Direction direction) {
+    Command command = Direction.getCommand(direction);
+    return performCommands(state, new Command(COMMAND_KICK), command);
   }
 
-  static WorldModel eatFood(AgentState state, char itemSlot) {
-    performCommand(state, Command.COMMAND_EAT);
-    Command eatCommand = Command.ADDITIONAL_ASCII;
-    eatCommand.stroke = String.format("-%s", itemSlot);
-    performCommand(state, eatCommand);
-    return performCommand(state, Command.MISC_MORE);
+  static WorldModel eatItem(AgentState state, char itemSlot) {
+    Command itemCommand = Command.fromStroke(String.valueOf(itemSlot));
+    return performCommands(state, new Command(COMMAND_EAT), itemCommand, new Command(MISC_MORE));
   }
 
-  static WorldModel performCommand(AgentState state, Command command) {
-    return state.env().action(command);
+  static WorldModel quaffItem(AgentState state, char itemSlot) {
+    Command itemCommand = Command.fromStroke(String.valueOf(itemSlot));
+    return performCommands(state, new Command(COMMAND_QUAFF), itemCommand, new Command(MISC_MORE));
+  }
+
+  static WorldModel zapWand(AgentState state, char itemSlot) {
+    Command itemCommand = Command.fromStroke(String.valueOf(itemSlot));
+    return performCommands(state, new Command(COMMAND_ZAP), itemCommand);
+  }
+
+  static WorldModel performCommands(AgentState state, Command... commands) {
+    assert commands.length != 0;
+    for (int i = 0; i < commands.length - 1; i++) {
+      state.env().command(commands[i]);
+    }
+    return state.env().command(commands[commands.length - 1]);
   }
 
   static WorldModel doNothing(AgentState state) {
-    return performCommand(state, Command.MISC_MORE);
+    return performCommands(state, new Command(MISC_MORE));
   }
 }

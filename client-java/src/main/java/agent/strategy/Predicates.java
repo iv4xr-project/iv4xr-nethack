@@ -1,6 +1,7 @@
 package agent.strategy;
 
 import agent.iv4xr.AgentState;
+import agent.navigation.hpastar.smoother.Direction;
 import agent.navigation.strategy.NavUtils;
 import agent.navigation.surface.Climbable;
 import agent.navigation.surface.Stair;
@@ -42,7 +43,7 @@ public class Predicates {
   }
 
   @Contract(pure = true)
-  public static @NotNull Function<AgentState, Pair<Integer, Tile>> get_lockedDoor() {
+  public static @NotNull Function<AgentState, Direction> get_lockedDoor() {
     return S -> {
       Pair<Integer, Tile> t = TileSelector.lockedDoorSelector.apply(S);
       if (t == null) {
@@ -51,7 +52,7 @@ public class Predicates {
       if (!NavUtils.adjacent(t.snd.pos, NavUtils.loc2(S.worldmodel.position), false)) {
         return null;
       }
-      return t;
+      return NavUtils.toDirection(S, t);
     };
   }
 

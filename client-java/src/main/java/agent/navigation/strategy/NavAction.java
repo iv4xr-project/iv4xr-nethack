@@ -6,6 +6,7 @@ import agent.iv4xr.AgentState;
 import agent.navigation.surface.Tile;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.spatial.Vec3;
+import java.util.List;
 import nl.uu.cs.aplib.mainConcepts.Action;
 import nl.uu.cs.aplib.utils.Pair;
 import util.Loggers;
@@ -93,18 +94,23 @@ public class NavAction {
             (AgentState S) ->
                 (Pair<Integer, Tile> nextTile) -> {
                   Sounds.explore();
-                  Loggers.NavLogger.info("explore to %s via %s", heuristicLocation, nextTile);
                   return new Pair<>(S, NavUtils.moveTo(S, nextTile));
                 })
         .on(
             (AgentState S) -> {
               Vec3 agentPos = S.worldmodel.position;
+              List<Pair<Integer, Tile>> path;
               if (heuristicLocation == null) {
-                return NavUtils.nextTile(S.hierarchicalNav.explore(NavUtils.loc3(agentPos)));
+                path = S.hierarchicalNav.explore(NavUtils.loc3(agentPos));
               } else {
-                return NavUtils.nextTile(
-                    S.hierarchicalNav.explore(NavUtils.loc3(agentPos), heuristicLocation));
+                path = S.hierarchicalNav.explore(NavUtils.loc3(agentPos), heuristicLocation);
               }
+              Pair<Integer, Tile> nextTile = NavUtils.nextTile(path);
+              if (nextTile == null) {
+                return null;
+              }
+              Loggers.NavLogger.info("explore to %s via %s", heuristicLocation, nextTile, path);
+              return nextTile;
             });
   }
 }

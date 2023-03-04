@@ -40,8 +40,8 @@ public class EntityDecoder extends Decoder {
       case 2379:
       case 2378:
         return EntityType.FLOOR;
-      case 2374: // Unlocked door
-      case 2375: // Locked door
+      case 2374: // Door in vertical wall
+      case 2375: // Door in horizontal wall
         return EntityType.DOOR;
       case 2371:
         return EntityType.DOORWAY;

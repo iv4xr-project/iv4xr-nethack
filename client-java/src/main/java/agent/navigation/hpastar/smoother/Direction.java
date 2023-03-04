@@ -4,6 +4,9 @@
 
 package agent.navigation.hpastar.smoother;
 
+import nethack.enums.CommandEnum;
+import nethack.object.Command;
+
 public enum Direction {
   North,
   East,
@@ -12,5 +15,28 @@ public enum Direction {
   NorthEast,
   SouthEast,
   SouthWest,
-  NorthWest
+  NorthWest;
+
+  public static Command getCommand(Direction direction) {
+    switch (direction) {
+      case North:
+        return new Command(CommandEnum.DIRECTION_N);
+      case South:
+        return new Command(CommandEnum.DIRECTION_S);
+      case West:
+        return new Command(CommandEnum.DIRECTION_W);
+      case East:
+        return new Command(CommandEnum.DIRECTION_E);
+      case NorthEast:
+        return new Command(CommandEnum.DIRECTION_NE);
+      case NorthWest:
+        return new Command(CommandEnum.DIRECTION_NW);
+      case SouthEast:
+        return new Command(CommandEnum.DIRECTION_SE);
+      case SouthWest:
+        return new Command(CommandEnum.DIRECTION_SW);
+      default:
+        throw new IllegalArgumentException("Direction not known");
+    }
+  }
 }

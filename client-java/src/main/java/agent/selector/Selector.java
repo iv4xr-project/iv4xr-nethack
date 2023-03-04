@@ -34,7 +34,7 @@ public abstract class Selector<T> {
     }
   }
 
-  protected enum SelectionType {
+  public enum SelectionType {
     FIRST,
     LAST,
     CLOSEST,

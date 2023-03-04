@@ -58,6 +58,8 @@ def handle(sock_file, info):
         env = handshake(sock_file)
         try:
             loop(sock_file, uni, env)
+        except Exception:
+            env.render()
         finally:
             if env:
                 env.close()

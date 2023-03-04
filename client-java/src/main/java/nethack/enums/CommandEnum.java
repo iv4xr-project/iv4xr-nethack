@@ -6,7 +6,7 @@ import java.util.Objects;
 import util.ColoredStringBuilder;
 
 // Actions listed at: /python-server/lib/nle/nle/nethack/actions.py
-public enum Command {
+public enum CommandEnum {
   // Direction
   DIRECTION_N("k", "Move N"),
   DIRECTION_E("l", "Move E"),
@@ -141,8 +141,8 @@ public enum Command {
   ADDITIONAL_SHOW_VERBOSE("@v", "Show all information"),
   ADDITIONAL_ASCII("-▉", "Perform literal action");
 
-  static final Command[] nethackChallengeCommands =
-      new Command[] {
+  static final CommandEnum[] nethackChallengeCommands =
+      new CommandEnum[] {
         DIRECTION_N,
         DIRECTION_E,
         DIRECTION_S,
@@ -265,8 +265,8 @@ public enum Command {
         TEXT_CHARACTER_NUM_9,
         TEXT_CHARACTER_DOLLAR,
       };
-  static final Command[] nethackCommands =
-      new Command[] {
+  static final CommandEnum[] nethackCommands =
+      new CommandEnum[] {
         DIRECTION_N,
         DIRECTION_E,
         DIRECTION_S,
@@ -354,25 +354,26 @@ public enum Command {
         TEXT_CHARACTER_DOLLAR,
         TEXT_CHARACTER_SPACE
       };
-  static final Command[] additionalCommands =
-      new Command[] {ADDITIONAL_SHOW_SEED, ADDITIONAL_SHOW_VERBOSE, ADDITIONAL_ASCII};
-  private static final Map<String, Command> BY_STROKE = new HashMap<>();
-  private static final Map<Command, Integer> COMMAND_TO_NETHACK_CHALLENGE_INDEX = new HashMap<>();
-  private static final Map<Command, Integer> COMMAND_TO_NETHACK_INDEX = new HashMap<>();
+  static final CommandEnum[] additionalCommands =
+      new CommandEnum[] {ADDITIONAL_SHOW_SEED, ADDITIONAL_SHOW_VERBOSE, ADDITIONAL_ASCII};
+  private static final Map<String, CommandEnum> BY_STROKE = new HashMap<>();
+  private static final Map<CommandEnum, Integer> COMMAND_TO_NETHACK_CHALLENGE_INDEX =
+      new HashMap<>();
+  private static final Map<CommandEnum, Integer> COMMAND_TO_NETHACK_INDEX = new HashMap<>();
 
   static {
-    for (Command c : values()) {
+    for (CommandEnum c : values()) {
       BY_STROKE.put(c.stroke, c);
     }
-    for (Command c : additionalCommands) {
+    for (CommandEnum c : additionalCommands) {
       BY_STROKE.put(c.stroke, c);
     }
     int i = 0;
-    for (Command c : nethackChallengeCommands) {
+    for (CommandEnum c : nethackChallengeCommands) {
       COMMAND_TO_NETHACK_CHALLENGE_INDEX.put(c, i++);
     }
     i = 0;
-    for (Command c : nethackCommands) {
+    for (CommandEnum c : nethackCommands) {
       COMMAND_TO_NETHACK_INDEX.put(c, i++);
     }
   }
@@ -380,25 +381,21 @@ public enum Command {
   private final String description;
   public String stroke;
 
-  Command(String stroke, String description) {
+  CommandEnum(String stroke, String description) {
     this.stroke = stroke;
     this.description = description;
   }
 
-  public static Command fromValue(String stroke) {
+  public static CommandEnum fromValue(String stroke) {
     if (BY_STROKE.containsKey(stroke)) {
       return BY_STROKE.get(stroke);
-    } else if (stroke.startsWith("-")) {
-      Command c = Command.ADDITIONAL_ASCII;
-      c.stroke = stroke;
-      return c;
+    } else {
+      return null;
     }
-
-    return null;
   }
 
-  public static void prettyPrintActions(GameMode gameMode) {
-    Command[] commands =
+  public static void prettyPrintCommands(GameMode gameMode) {
+    CommandEnum[] commands =
         gameMode == GameMode.NetHackChallenge ? nethackChallengeCommands : nethackCommands;
     int n = commands.length;
     int N = commands.length + additionalCommands.length;

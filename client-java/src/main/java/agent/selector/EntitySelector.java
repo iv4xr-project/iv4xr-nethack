@@ -22,6 +22,9 @@ public class EntitySelector extends Selector<WorldEntity> {
   public static final EntitySelector adjacentMonster =
       new EntitySelector(SelectionType.ADJACENT, EntityType.MONSTER);
 
+  public static final EntitySelector food =
+      new EntitySelector(SelectionType.CLOSEST, EntityType.EDIBLE);
+
   final EntityType entityType;
 
   public EntitySelector(

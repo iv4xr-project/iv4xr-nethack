@@ -9,7 +9,7 @@ import connection.SocketClient;
 import eu.iv4xr.framework.mainConcepts.TestAgent;
 import java.util.stream.Collectors;
 import nethack.NetHack;
-import nethack.enums.Command;
+import nethack.object.Command;
 import nethack.object.Player;
 import nethack.object.Turn;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
