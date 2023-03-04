@@ -1,6 +1,7 @@
 *.o
 *.gcov
 *.gcno
+*.gcda
 
 */nethack.343-nao
 /dat/*.lev

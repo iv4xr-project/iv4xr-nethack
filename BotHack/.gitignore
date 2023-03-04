@@ -20,3 +20,4 @@ notes
 .classpath
 *.ttyrec
 /bin/
+/coverage/htmlreport/
