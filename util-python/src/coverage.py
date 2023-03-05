@@ -1,23 +1,28 @@
 import json
 import os
-import sys
 import matplotlib.pyplot as plt
 import numpy as np
+import inflect
 
 
-def get_entries_from_data(data: json) -> [(str, int)]:
-    entries = [(f['filename'].replace('src/', ''), f['line_total'], f['line_covered']) for f in data['files']]
+def get_plural(word: str):
+    p = inflect.engine()
+    return p.plural(word)
+
+
+def get_entries_from_data(data: json, metric: str) -> [(str, int)]:
+    entries = [(file['filename'].replace('src/', ''), file[f'{metric}_total'], file[f'{metric}_covered']) for file in data['files']]
     sorted_entries = sorted(entries, key=lambda x: (x[1], x[0]), reverse=True)
     return sorted_entries
 
 
-def create_line_coverage_plot(file_path: str, method: str, show_file_names=False):
+def create_coverage_plot(file_path: str, method: str, metric: str, show_file_names=False):
     # Get the data
-    with open(file_path, 'r') as f:
-        data = json.load(f)
+    with open(file_path, 'r') as file:
+        data = json.load(file)
 
     # Get the data per file
-    xy = get_entries_from_data(data)
+    xy = get_entries_from_data(data, metric)
     file_labels, line_total, line_amount = zip(*xy)
     print(method, f'({len(file_labels)}):', sorted(file_labels))
 
@@ -28,13 +33,13 @@ def create_line_coverage_plot(file_path: str, method: str, show_file_names=False
         fig, ax = plt.subplots(figsize=(7, 4))
 
     index = np.arange(len(file_labels))
-    ax.bar(index, line_amount, label='Nr. lines covered')
-    ax.plot(index, line_total, label='Total nr. lines', color='black')
+    ax.bar(index, line_amount, label=f'Nr. {get_plural(metric)} covered')
+    ax.plot(index, line_total, label=f'Total nr. {get_plural(metric)}', color='black')
 
     # Add the labels and legends
-    ax.set_ylabel('Line Coverage')
+    ax.set_ylabel(f'Nr. {get_plural(metric)}')
     ax.set_xlabel('Files')
-    ax.set_title(f'Per-file coverage using {method}')
+    ax.set_title(f'Per-file {metric} coverage using {method}')
 
     if show_file_names:
         ax.set_xticks(index)
@@ -48,7 +53,7 @@ def create_line_coverage_plot(file_path: str, method: str, show_file_names=False
 
     fig.tight_layout()
     fig.align_labels()
-    fig.savefig(f"plots/coverage_{method}.png")
+    fig.savefig(f"plots/{metric}_coverage_{method}.png")
 
 
 def get_coverage_file_names(directory_path: str) -> [str]:
@@ -68,10 +73,13 @@ def get_coverage_file_names(directory_path: str) -> [str]:
 
 def main():
     iv4xr_coverage_names = get_coverage_file_names('../server-python/coverage')
-    create_line_coverage_plot(iv4xr_coverage_names[0], 'iv4XR', True)
+    create_coverage_plot(iv4xr_coverage_names[0], 'iv4XR', 'line', True)
 
-    bothack_coverage_names = get_coverage_file_names('../BotHack/coverage')
-    create_line_coverage_plot(bothack_coverage_names[0], 'BotHack', True)
+    iv4xr_coverage_names = get_coverage_file_names('../server-python/coverage')
+    create_coverage_plot(iv4xr_coverage_names[0], 'iv4XR', 'branch', True)
+
+    # bothack_coverage_names = get_coverage_file_names('../BotHack/coverage')
+    # create_line_coverage_plot(bothack_coverage_names[0], 'BotHack', 'line', True)
 
 
 if __name__ == '__main__':
