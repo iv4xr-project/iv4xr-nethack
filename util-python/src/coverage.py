@@ -94,7 +94,7 @@ def create_coverage_plot(coverage_results_paths: [str], method: str, metric: str
 
     # Add the labels and legends
     ax.set_ylabel(f'Nr. {get_plural(metric)}')
-    ax.set_xlabel('Files')
+    ax.set_xlabel('File')
     ax.set_title(f'Per-file {metric} coverage using {method} (over {mat.shape[0]} report(s))')
 
     # Ticks along the x-axis, can be empty
