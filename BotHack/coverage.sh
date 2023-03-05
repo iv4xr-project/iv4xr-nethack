@@ -16,13 +16,13 @@ if [ "$1" = "html" ] ; then
   echo "Creates an html report"
   rm -rf coverage/htmlreport/*
   mkdir -p coverage/htmlreport
-  gcovr -r nh343-nao --filter nh343-nao/src --html-details -o coverage/htmlreport/report.html
+  gcovr -r nh343-nao/src --html-details -o coverage/htmlreport/report.html
 else
   # Otherwise just create a json file that contains all coverage information
   timestamp=$(date +"%Y-%m-%d_%H-%M-%S")
   filename="summary_${timestamp}.json"
   echo "Generates json coverage report (${filename})"
-  gcovr -r nh343-nao --filter nh343-nao/src --json-summary-pretty --json-summary -o coverage/"${filename}"
+  gcovr -r nh343-nao/src --json-summary-pretty --json-summary -o coverage/"${filename}"
 fi
 
 # Remove trap
