@@ -15,23 +15,31 @@ public class Sounds {
 
   static final Map<String, File> soundCollection =
       Map.ofEntries(
-          new AbstractMap.SimpleEntry<>("soft_ding", new File("./sounds/58731_wipe-soft.wav")),
-          new AbstractMap.SimpleEntry<>("door_knock", new File("./sounds/193859_door-knock.wav")),
-          new AbstractMap.SimpleEntry<>("footstep", new File("./sounds/336598_footstep.wav")),
-          new AbstractMap.SimpleEntry<>("metallic", new File("./sounds/406489_metallic-pipe.wav")),
-          new AbstractMap.SimpleEntry<>("eat", new File("./sounds/412068_chewing-carrot.wav")),
-          new AbstractMap.SimpleEntry<>("door", new File("./sounds/424496_door.wav")),
-          new AbstractMap.SimpleEntry<>("sword", new File("./sounds/441666_sword-slash.wav")),
-          new AbstractMap.SimpleEntry<>("bowl", new File("./sounds/448073_ceramic-bowl.wav")),
           new AbstractMap.SimpleEntry<>(
-              "door_kick", new File("./sounds/452600_door-wood-kick-open.wav")),
-          new AbstractMap.SimpleEntry<>("ding", new File("./sounds/454612_ding.wav")),
-          new AbstractMap.SimpleEntry<>("piano", new File("./sounds/587634_piano.wav")));
+              "soft_ding", getFileFromResource("./sounds/58731_wipe-soft.wav")),
+          new AbstractMap.SimpleEntry<>(
+              "door_knock", getFileFromResource("./sounds/193859_door-knock.wav")),
+          new AbstractMap.SimpleEntry<>(
+              "footstep", getFileFromResource("./sounds/336598_footstep.wav")),
+          new AbstractMap.SimpleEntry<>(
+              "metallic", getFileFromResource("./sounds/406489_metallic-pipe.wav")),
+          new AbstractMap.SimpleEntry<>(
+              "eat", getFileFromResource("./sounds/412068_chewing-carrot.wav")),
+          new AbstractMap.SimpleEntry<>("door", getFileFromResource("./sounds/424496_door.wav")),
+          new AbstractMap.SimpleEntry<>(
+              "sword", getFileFromResource("./sounds/441666_sword-slash.wav")),
+          new AbstractMap.SimpleEntry<>(
+              "bowl", getFileFromResource("./sounds/448073_ceramic-bowl.wav")),
+          new AbstractMap.SimpleEntry<>(
+              "door_kick", getFileFromResource("./sounds/452600_door-wood-kick-open.wav")),
+          new AbstractMap.SimpleEntry<>("ding", getFileFromResource("./sounds/454612_ding.wav")),
+          new AbstractMap.SimpleEntry<>("piano", getFileFromResource("./sounds/587634_piano.wav")));
 
   static {
     try {
       for (Map.Entry<String, File> entry : soundCollection.entrySet()) {
         Clip clip = AudioSystem.getClip();
+
         clip.open(AudioSystem.getAudioInputStream(entry.getValue()));
         clipCollection.put(entry.getKey(), clip);
       }
@@ -86,6 +94,12 @@ public class Sounds {
     // To prevent having to reset the audio resource, just set the start time at 0
     clip.setMicrosecondPosition(0);
     clip.start();
+  }
+
+  private static File getFileFromResource(String path) {
+    String resourcePath =
+        Objects.requireNonNull(ClassLoader.getSystemClassLoader().getResource(path)).getFile();
+    return new File(resourcePath);
   }
 
   public static void main(String[] args) throws Exception {
