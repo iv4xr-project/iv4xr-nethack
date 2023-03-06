@@ -29,6 +29,14 @@ public class Command {
     }
   }
 
+  public String toString() {
+    String result = commandEnum.toString();
+    if (commandEnum == CommandEnum.ADDITIONAL_ASCII) {
+      result += " " + stroke;
+    }
+    return result;
+  }
+
   public static void main(String[] args) {
     Command a = new Command("a");
     Command b = new Command("b");

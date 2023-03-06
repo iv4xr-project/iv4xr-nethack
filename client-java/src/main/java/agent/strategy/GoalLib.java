@@ -19,8 +19,8 @@ public class GoalLib {
         goal("Main")
             .toSolve(
                 (Pair<AgentState, WorldModel> proposal) -> {
-                  return false;
-                  //          return tacticLib.explorationExhausted(proposal.fst);
+                  return proposal.fst.app().gameState.done;
+                  //                  return tacticLib.explorationExhausted(proposal.fst);
                 })
             .withTactic(
                 FIRSTof(

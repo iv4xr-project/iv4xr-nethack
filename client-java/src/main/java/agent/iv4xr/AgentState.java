@@ -73,6 +73,11 @@ public class AgentState extends Iv4xrAgentState<Void> {
 
   @Override
   public void updateState(String agentId) {
+    // Don't update the GameState if it is terminated
+    if (app().gameState.done) {
+      return;
+    }
+
     super.updateState(agentId);
     addMapIfNew();
     updateMap();

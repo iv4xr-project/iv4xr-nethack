@@ -8,7 +8,6 @@ public class Turn implements Comparable<Turn> {
   public int turnNr = 0;
 
   public Turn(int time) {
-    assert time > 0 : "Turn with 0 or negative time does not exist";
     this.time = time;
   }
 

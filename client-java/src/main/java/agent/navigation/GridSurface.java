@@ -252,7 +252,7 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
    */
   public List<Tile> getFrontier() {
     List<Tile> frontiers = new LinkedList<>();
-    List<Tile> cannotBeFrontier = new LinkedList<>();
+    List<IntVec2D> cannotBeFrontier = new LinkedList<>();
     for (IntVec2D frontierPosition : frontierCandidates) {
       List<IntVec2D> pNeighbors =
           NavUtils.neighbourCoordinates(frontierPosition, hierarchicalMap.size, true);
@@ -265,7 +265,7 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
         }
       }
       if (!isFrontier) {
-        cannotBeFrontier.add(new Tile(frontierPosition));
+        cannotBeFrontier.add(frontierPosition);
       }
     }
     cannotBeFrontier.forEach(frontierCandidates::remove);

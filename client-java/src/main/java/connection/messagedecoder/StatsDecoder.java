@@ -27,6 +27,7 @@ public class StatsDecoder extends Decoder {
       ByteBuffer bb = ByteBuffer.wrap(arr);
       blStats[i] = bb.getInt();
     }
+
     return inPair(blStats);
   }
 

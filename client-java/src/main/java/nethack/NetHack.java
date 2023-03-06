@@ -60,7 +60,9 @@ public class NetHack {
     while (!gameState.done) {
       Command command = waitCommand(false);
       StepType stepType = step(command);
-      if (stepType == StepType.Valid) {
+      if (stepType == StepType.Terminated) {
+        break;
+      } else if (stepType == StepType.Valid) {
         render();
       }
     }
@@ -155,7 +157,7 @@ public class NetHack {
   private void updateGameState(StepState stepState) {
     if (stepState.done) {
       Loggers.NetHackLogger.info("Game run terminated, step indicated: done");
-      return;
+      gameState.done = true;
     }
 
     // Update turn before overriding stats
@@ -186,6 +188,7 @@ public class NetHack {
   public enum StepType {
     Invalid,
     Valid,
-    Special;
+    Special,
+    Terminated;
   }
 }

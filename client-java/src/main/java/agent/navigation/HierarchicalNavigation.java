@@ -82,12 +82,14 @@ public class HierarchicalNavigation
             costToStair1,
             costBetweenStairs,
             costToStair2);
+        return pathsToArea1Stairs.get(stairPosArea1).stream()
+            .map(pos -> new Pair<>(from.fst, pos))
+            .collect(Collectors.toList());
       }
     }
 
     // TODO: Implement shortest path method for multi-level
     return null;
-    //    throw new RuntimeException("Not yet implemented");
   }
 
   private Map<IntVec2D, List<Tile>> pathsToStairs(

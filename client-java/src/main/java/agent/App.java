@@ -10,6 +10,7 @@ import eu.iv4xr.framework.mainConcepts.TestAgent;
 import java.util.stream.Collectors;
 import nethack.NetHack;
 import nethack.object.Command;
+import nethack.object.GameState;
 import nethack.object.Player;
 import nethack.object.Turn;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
@@ -45,7 +46,8 @@ public class App {
   }
 
   private static void fastForwardToTurn(Turn desiredTurn, TestAgent agent, AgentState state) {
-    if (state.app().gameState.stats.turn.equals(desiredTurn)) {
+    GameState gameState = state.app().gameState;
+    if (gameState.stats.turn.equals(desiredTurn)) {
       return;
     }
 
@@ -53,9 +55,20 @@ public class App {
     Sounds.disableSound();
     ProgressBar bar = new ProgressBar();
     Stopwatch stopwatch = new Stopwatch(true);
-    while (state.app().gameState.stats.turn.compareTo(desiredTurn) < 0) {
+
+    int lastRenderedTurn = 0;
+    while (gameState.stats.turn.compareTo(desiredTurn) < 0) {
+      if (gameState.stats.turn.time - lastRenderedTurn >= 50) {
+        lastRenderedTurn = gameState.stats.turn.time;
+        state.render();
+      }
       agent.update();
-      bar.updateTurn(state.app().gameState.stats.turn, desiredTurn);
+      bar.updateTurn(gameState.stats.turn, desiredTurn);
+
+      // Loop is probably stuck
+      if (gameState.stats.turn.step > 20) {
+        break;
+      }
     }
     stopwatch.printTotal("Running automatic loop");
     Sounds.setSound(Config.getSoundState());
@@ -71,7 +84,9 @@ public class App {
       Command command = netHack.waitCommand(true);
       if (command != null) {
         NetHack.StepType stepType = netHack.step(command);
-        if (stepType != NetHack.StepType.Valid) {
+        if (stepType == NetHack.StepType.Terminated) {
+          break;
+        } else if (stepType != NetHack.StepType.Valid) {
           continue;
         }
       } else {
