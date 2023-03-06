@@ -16,6 +16,11 @@
                 <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
             </PatternLayout>
         </File>
+        <File name="LogToActionFile" fileName="logs/actions.log" append="false">
+            <Patternlayout>
+                <Pattern>%m%n</Pattern>
+            </Patternlayout>
+        </File>
     </Appenders>
     <Loggers>
         <Logger name="📡" level="debug" additivity="false">
@@ -33,6 +38,7 @@
 
         <Logger name="⚔️" level="debug" additivity="false">
             <AppenderRef ref="LogToFile" level="debug"/>
+            <AppenderRef ref="LogToActionFile" level="info"/>
             <AppenderRef ref="LogToConsole" level="info"/>
         </Logger>
         <Logger name="🌱" level="debug" additivity="false">
@@ -62,6 +68,11 @@
         </Logger>
         <Logger name="HPA" level="trace" additivity="false">
 <!--            <AppenderRef ref="LogToConsole"/>-->
+        </Logger>
+
+        <Logger name="⌨️" level="debug" additivity="false">
+            <AppenderRef ref="LogToFile"/>
+            <AppenderRef ref="LogToActionFile"/>
         </Logger>
 
         <Root level="debug" additivity="false">
