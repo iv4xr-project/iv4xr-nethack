@@ -70,11 +70,6 @@
 <!--            <AppenderRef ref="LogToConsole"/>-->
         </Logger>
 
-        <Logger name="⌨️" level="debug" additivity="false">
-            <AppenderRef ref="LogToFile"/>
-            <AppenderRef ref="LogToActionFile"/>
-        </Logger>
-
         <Root level="debug" additivity="false">
             <AppenderRef ref="LogToFile" level="debug"/>
             <AppenderRef ref="LogToConsole" level="trace"/>

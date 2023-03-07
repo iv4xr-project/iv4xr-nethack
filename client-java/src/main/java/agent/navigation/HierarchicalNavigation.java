@@ -7,7 +7,6 @@ package agent.navigation;
 import agent.navigation.hpastar.*;
 import agent.navigation.hpastar.factories.HierarchicalMapFactory;
 import agent.navigation.hpastar.graph.*;
-import agent.navigation.hpastar.infrastructure.Constants;
 import agent.navigation.hpastar.infrastructure.Id;
 import agent.navigation.hpastar.search.AStar;
 import agent.navigation.hpastar.search.Path;
@@ -65,23 +64,25 @@ public class HierarchicalNavigation
         if (path.pathNodes.isEmpty()) {
           continue;
         }
-        System.out.printf(
-            "Found path: %s -> %s. PathToStair1 (%s): %s PathFromStair2(%s): %s%n",
-            from,
-            to,
-            stair1Id,
-            pathsToArea1Stairs.get(stairPosArea1),
-            stair2Id,
-            pathsToArea2Stairs.get(stairPosArea2));
-        int costToStair1 = pathsToArea1Stairs.get(stairPosArea1).size() * Constants.COST_ONE;
-        int costToStair2 = pathsToArea2Stairs.get(stairPosArea2).size() * Constants.COST_ONE;
-        int costBetweenStairs = path.pathCost;
-        System.out.printf(
-            "Cost of path %d: %d > %d < %d%n",
-            costBetweenStairs + costToStair1 + costToStair2,
-            costToStair1,
-            costBetweenStairs,
-            costToStair2);
+        //        System.out.printf(
+        //            "Found path: %s -> %s. PathToStair1 (%s): %s PathFromStair2(%s): %s%n",
+        //            from,
+        //            to,
+        //            stair1Id,
+        //            pathsToArea1Stairs.get(stairPosArea1),
+        //            stair2Id,
+        //            pathsToArea2Stairs.get(stairPosArea2));
+        //        int costToStair1 = pathsToArea1Stairs.get(stairPosArea1).size() *
+        // Constants.COST_ONE;
+        //        int costToStair2 = pathsToArea2Stairs.get(stairPosArea2).size() *
+        // Constants.COST_ONE;
+        //        int costBetweenStairs = path.pathCost;
+        //        System.out.printf(
+        //            "Cost of path %d: %d > %d < %d%n",
+        //            costBetweenStairs + costToStair1 + costToStair2,
+        //            costToStair1,
+        //            costBetweenStairs,
+        //            costToStair2);
         return pathsToArea1Stairs.get(stairPosArea1).stream()
             .map(pos -> new Pair<>(from.fst, pos))
             .collect(Collectors.toList());

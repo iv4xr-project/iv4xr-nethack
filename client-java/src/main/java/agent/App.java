@@ -36,15 +36,19 @@ public class App {
         new TestAgent(Player.ID, "player").attachState(state).attachEnvironment(env).setGoal(G);
     state.updateState(Player.ID);
 
-    fastForwardToTurn(Config.getStartTurn(), agent, state);
-    mainAgentLoop(commander, agent, state, G, nethack);
+    fastForwardToTurn(Config.getStartTurn(), agent, state, G);
+    // Only enter if the goal structure is still in progress
+    if (G.getStatus().inProgress()) {
+      mainAgentLoop(commander, agent, state, G, nethack);
+    }
 
     Loggers.AgentLogger.info("Closing NetHack since the loop in agent has terminated");
     nethack.close();
     commander.sendSaveCoverage();
   }
 
-  private static void fastForwardToTurn(Turn desiredTurn, TestAgent agent, AgentState state) {
+  private static void fastForwardToTurn(
+      Turn desiredTurn, TestAgent agent, AgentState state, GoalStructure G) {
     GameState gameState = state.app().gameState;
     if (gameState.stats.turn.equals(desiredTurn)) {
       return;
@@ -55,11 +59,11 @@ public class App {
     ProgressBar bar = new ProgressBar();
     Stopwatch stopwatch = new Stopwatch(true);
 
-    while (gameState.stats.turn.compareTo(desiredTurn) < 0) {
+    while (gameState.stats.turn.compareTo(desiredTurn) < 0 && G.getStatus().inProgress()) {
       agent.update();
       // Game terminated or probably stuck
       if (gameState.done || gameState.stats.turn.step > 20) {
-        System.out.print("Game done or stuck");
+        Loggers.AgentLogger.info("Game done or stuck");
         break;
       }
 

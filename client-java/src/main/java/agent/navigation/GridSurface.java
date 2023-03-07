@@ -269,7 +269,6 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
       }
     }
     cannotBeFrontier.forEach(frontierCandidates::remove);
-    System.out.printf("Frontiers: %s%n", frontiers);
     return frontiers;
   }
 
@@ -306,6 +305,11 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
 
   @Override
   public List<Tile> findPath(Tile from, Tile to) {
+    // Already on location
+    if (from.equals(to)) {
+      return new ArrayList<>();
+    }
+
     HierarchicalMapFactory factory = new HierarchicalMapFactory();
     Id<AbstractNode> startAbsNode = factory.insertAbstractNode(hierarchicalMap, from.pos);
     Id<AbstractNode> targetAbsNode = factory.insertAbstractNode(hierarchicalMap, to.pos);

@@ -62,19 +62,20 @@ public class HierarchicalMapFactory {
     //  If the node already existed (for instance, it was an entrance point already
     //  existing in the graph, we need to keep track of the previous status in order
     //  to be able to restore it once we delete this STALL
-    for (Id<AbstractNode> nodeId : map.concreteNodeIdToAbstractNodeIdMap.values()) {
-      assert map.abstractGraph.getNode(nodeId) != null : "Must contain nodeId";
-    }
-    if (map.concreteNodeIdToAbstractNodeIdMap.containsKey(concreteNodeId)) {
-      Id<AbstractNode> existingAbstractNodeId =
-          map.concreteNodeIdToAbstractNodeIdMap.get(concreteNodeId);
-      NodeBackup nodeBackup =
-          new NodeBackup(
-              map.abstractGraph.getNodeInfo(existingAbstractNodeId).level,
-              map.getNodeEdges(concreteNodeId));
-      nodeBackups.put(existingAbstractNodeId, nodeBackup);
-      return map.concreteNodeIdToAbstractNodeIdMap.get(concreteNodeId);
-    }
+    // TODO: Figure out whether these backups can be used
+    //    for (Id<AbstractNode> nodeId : map.concreteNodeIdToAbstractNodeIdMap.values()) {
+    //      assert map.abstractGraph.getNode(nodeId) != null : "Must contain nodeId";
+    //    }
+    //    if (map.concreteNodeIdToAbstractNodeIdMap.containsKey(concreteNodeId)) {
+    //      Id<AbstractNode> existingAbstractNodeId =
+    //          map.concreteNodeIdToAbstractNodeIdMap.get(concreteNodeId);
+    //      NodeBackup nodeBackup =
+    //          new NodeBackup(
+    //              map.abstractGraph.getNodeInfo(existingAbstractNodeId).level,
+    //              map.getNodeEdges(concreteNodeId));
+    //      nodeBackups.put(existingAbstractNodeId, nodeBackup);
+    //      return map.concreteNodeIdToAbstractNodeIdMap.get(concreteNodeId);
+    //    }
 
     Cluster cluster = map.findClusterForPosition(pos);
     //  create global entrance
