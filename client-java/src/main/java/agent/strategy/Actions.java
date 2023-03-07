@@ -12,7 +12,6 @@ import agent.navigation.surface.Tile;
 import agent.navigation.surface.Wall;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import eu.iv4xr.framework.spatial.IntVec2D;
-import eu.iv4xr.framework.spatial.Vec3;
 import java.util.*;
 import nethack.enums.CommandEnum;
 import nethack.object.Command;
@@ -47,13 +46,8 @@ public class Actions {
             (AgentState S) ->
                 (Direction direction) -> {
                   Sounds.attack();
-                  IntVec2D agentPos = NavUtils.loc2(S.worldmodel.position);
-                  IntVec2D nextPos = NavUtils.posInDirection(agentPos, direction);
-                  Loggers.GoalLogger.info(">>> attackMonster %s", nextPos);
-                  WorldModel newWom =
-                      NavUtils.moveTo(
-                          S,
-                          new Vec3(nextPos.x, nextPos.y, NavUtils.levelNr(S.worldmodel.position)));
+                  Loggers.GoalLogger.info(">>> attackMonster %s", direction);
+                  WorldModel newWom = WorldModels.forceAttack(S, direction);
                   return new Pair<>(S, newWom);
                 });
   }

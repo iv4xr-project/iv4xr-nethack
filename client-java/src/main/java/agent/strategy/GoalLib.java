@@ -25,7 +25,7 @@ public class GoalLib {
             .withTactic(
                 FIRSTof(
                     // Survival
-                    NavTactic.navigateToWorldEntity(EntitySelector.adjacentMonster),
+                    TacticLib.attackAdjacentMonsters(),
                     TacticLib.resolveHungerState(900),
 
                     // Collect money

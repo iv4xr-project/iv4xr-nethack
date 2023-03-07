@@ -147,7 +147,7 @@ public class NetHack {
   }
 
   private StepType step(Command command, char character) {
-    Loggers.NetHackLogger.info("Command: %s %c", command, character);
+    Loggers.NetHackLogger.info("Command: %s", command);
     StepState stepState = client.sendStepStroke(character);
     updateGameState(stepState);
     return StepType.Valid;

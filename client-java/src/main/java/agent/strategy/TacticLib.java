@@ -4,13 +4,14 @@ import static nl.uu.cs.aplib.AplibEDSL.*;
 
 import agent.iv4xr.AgentState;
 import agent.navigation.strategy.NavUtils;
+import agent.selector.EntitySelector;
 import agent.selector.ItemSelector;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
 import nethack.object.Player;
 import nl.uu.cs.aplib.mainConcepts.Tactic;
-import util.Loggers;
 
 /**
  * Provide several basic actions and tactics.
@@ -23,19 +24,6 @@ import util.Loggers;
  * @author wish
  */
 public class TacticLib {
-  public static Tactic abortOnDeath() {
-    return ABORT()
-        .on(
-            (AgentState S) -> {
-              boolean agentAlive = S.agentIsAlive();
-              if (agentAlive) {
-                return null;
-              }
-              Loggers.AgentLogger.info(">>> Agent dead, abort");
-              return true;
-            });
-  }
-
   /**
    * This constructs a "default" tactic to interact with an entity. The tactic is enabled if the
    * entity is known in the agent's state/wom, and if it is adjacent to the agent.
@@ -54,6 +42,21 @@ public class TacticLib {
                 return NavUtils.loc2(e.position);
               }
               return null;
+            })
+        .lift();
+  }
+
+  public static Tactic attackAdjacentMonsters() {
+    return Actions.attack()
+        .on(
+            (AgentState S) -> {
+              WorldEntity we =
+                  EntitySelector.adjacentMonster.apply(
+                      new ArrayList<>(S.worldmodel.elements.values()), S);
+              if (we == null) {
+                return null;
+              }
+              return NavUtils.toDirection(S, NavUtils.loc3(we.position));
             })
         .lift();
   }

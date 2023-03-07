@@ -79,6 +79,7 @@ def create_coverage_plot(coverage_results_paths: [str], method: str, metric: str
         fig, ax = plt.subplots(figsize=(7, 4))
 
     index = np.arange(len(file_names))
+    ax.set_ylim(0, metric_total[0] + 200)
 
     if mat.shape[0] == 1:
         # Plot bar for single result
@@ -87,7 +88,14 @@ def create_coverage_plot(coverage_results_paths: [str], method: str, metric: str
         # Average the coverage results over the number of runs and add error bars
         metric_mean = np.mean(mat, axis=0)
         metric_std = np.std(mat, axis=0)
-        ax.bar(index, metric_mean, yerr=metric_std, label=f'Avg. {get_plural(metric)} covered')
+
+        # Cap the upper standard deviation to the total number of lines, the true value cannot be above that.
+        upper_std = np.min(np.array([metric_mean + metric_std, metric_total]), axis=0) - metric_mean
+        y_error_directional = np.array([metric_std, upper_std])
+
+        # Plot the bar and the error-bars
+        ax.bar(index, metric_mean, label=f'Avg. {get_plural(metric)} covered')
+        ax.errorbar(index, metric_mean, yerr=y_error_directional, fmt=',k')
 
     # Plot the maximum that can be reached
     ax.plot(index, metric_total, label=f'Total nr. {get_plural(metric)}', color='black')
@@ -134,11 +142,13 @@ def get_coverage_file_names(directory_path: str) -> [str]:
 
 
 def main():
-    iv4xr_coverage_names = get_coverage_file_names('../server-python/coverage')
-    create_coverage_plot(iv4xr_coverage_names, 'iv4XR', 'line', True)
+    show_file_names = True
 
     iv4xr_coverage_names = get_coverage_file_names('../server-python/coverage')
-    create_coverage_plot(iv4xr_coverage_names, 'iv4XR', 'branch', True)
+    create_coverage_plot(iv4xr_coverage_names, 'iv4XR', 'line', show_file_names)
+
+    iv4xr_coverage_names = get_coverage_file_names('../server-python/coverage')
+    create_coverage_plot(iv4xr_coverage_names, 'iv4XR', 'branch', show_file_names)
 
     # bothack_coverage_names = get_coverage_file_names('../BotHack/coverage')
     # create_coverage_plot(bothack_coverage_names, 'BotHack', 'line', True)
