@@ -51,6 +51,10 @@ def string_to_bytes(ints: np.array, trim=False):
     return length_byte + to_2byte(ints)
 
 
+def write_null_byte(sock):
+    sock.write(struct.pack('>B', 0))
+    sock.flush()
+
 def write_str(sock, string: str):
     sock.write(to_2byte(len(string)))
     chars = np.array(list(map(lambda c: ord(c), string)))

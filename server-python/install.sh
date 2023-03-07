@@ -7,7 +7,7 @@ set -e
 trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
 
 # Run script from script directory
-BASEDIR=$(dirname "$0")
+BASEDIR=$(cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P)
 cd "$BASEDIR"
 
 sudo apt update && sudo apt update -y

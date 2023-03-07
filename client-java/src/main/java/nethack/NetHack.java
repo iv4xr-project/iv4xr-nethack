@@ -14,12 +14,13 @@ public class NetHack {
   public Seed seed;
   SocketClient client;
 
-  public NetHack(SocketClient commander) {
-    init(commander, GameMode.NetHackChallenge);
+  public NetHack(SocketClient client) {
+    init(client, GameMode.NetHackChallenge);
     reset();
   }
 
   public NetHack(SocketClient client, Seed seed) {
+    Loggers.NetHackLogger.info("Initialize game");
     if (seed == null) {
       init(client, GameMode.NetHackChallenge);
       reset();
@@ -33,8 +34,6 @@ public class NetHack {
   private void init(SocketClient client, GameMode gameMode) {
     this.client = client;
     this.gameMode = gameMode;
-    Loggers.NetHackLogger.info("Initialize game");
-    client.readObservationMessage();
   }
 
   public Seed getSeed() {

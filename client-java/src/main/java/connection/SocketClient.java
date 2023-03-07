@@ -10,6 +10,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Arrays;
 import nethack.object.Inventory;
 import nethack.object.Level;
 import nethack.object.Seed;
@@ -34,7 +35,7 @@ public class SocketClient {
     Pair<String, Integer> info = Config.getConnectionInfo();
     this.host = info.fst;
     this.port = info.snd;
-    int maxWaitTime = 20000;
+    int maxWaitTime = 60000;
     Loggers.ConnectionLogger.info(
         "Trying to connect with a host on %s:%d (will time-out after %d seconds)",
         host, port, maxWaitTime / 1000);
@@ -102,11 +103,24 @@ public class SocketClient {
   public void sendSaveCoverage() {
     writeBit(Encoder.EncoderBit.SaveCoverage);
     flush();
+    Loggers.ConnectionLogger.info("Waiting on saving coverage...");
+    readNullByte();
   }
 
   public void sendResetCoverage() {
     writeBit(Encoder.EncoderBit.ResetCoverage);
     flush();
+    readNullByte();
+  }
+
+  private void readNullByte() {
+    try {
+      byte nullByte = reader.readByte();
+      assert nullByte == 0
+          : String.format("Null byte should indicate its done, value was %s", nullByte);
+    } catch (IOException exception) {
+      throw new RuntimeException(Arrays.toString(exception.getStackTrace()));
+    }
   }
 
   public StepState sendStep(int index) {
@@ -175,5 +189,6 @@ public class SocketClient {
     if (reader != null) reader.close();
     if (writer != null) writer.close();
     socket.close();
+    Loggers.ConnectionLogger.info("Socket connection closed");
   }
 }

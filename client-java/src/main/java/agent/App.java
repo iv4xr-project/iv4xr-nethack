@@ -26,7 +26,6 @@ public class App {
 
   private static void runAgent(SocketClient commander) {
     commander.sendResetCoverage();
-
     NetHack nethack = new NetHack(commander, Config.getSeed());
     AgentEnv env = new AgentEnv(nethack);
     AgentState state = new AgentState();
@@ -56,19 +55,15 @@ public class App {
     ProgressBar bar = new ProgressBar();
     Stopwatch stopwatch = new Stopwatch(true);
 
-    int lastRenderedTurn = 0;
     while (gameState.stats.turn.compareTo(desiredTurn) < 0) {
-      if (gameState.stats.turn.time - lastRenderedTurn >= 50) {
-        lastRenderedTurn = gameState.stats.turn.time;
-        state.render();
-      }
       agent.update();
-      bar.updateTurn(gameState.stats.turn, desiredTurn);
-
-      // Loop is probably stuck
-      if (gameState.stats.turn.step > 20) {
+      // Game terminated or probably stuck
+      if (gameState.done || gameState.stats.turn.step > 20) {
+        System.out.print("Game done or stuck");
         break;
       }
+
+      bar.updateTurn(gameState.stats.turn, desiredTurn);
     }
     stopwatch.printTotal("Running automatic loop");
     Sounds.setSound(Config.getSoundState());

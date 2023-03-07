@@ -14,10 +14,10 @@ import subprocess
 import gym
 import nle
 from gym import Env
-import universe_plugin
 
 # Add path to run from commandline
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+project_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+sys.path.append(project_dir)
 
 import src.socket_code.protocol.write as write
 import src.socket_code.protocol.read as read
@@ -43,96 +43,84 @@ def main():
 
     in_file = io.open(options.fd, 'rb', buffering=0)
     out_file = io.open(options.fd, 'wb', buffering=0)
-    handle(io.BufferedRWPair(in_file, out_file), options)
+
+    # In case closing connection gave an error
+    try:
+        handle(io.BufferedRWPair(in_file, out_file))
+    except util.ProtoException as exc:
+        logging.error('%s gave error: %s' % (options.addr, str(exc)))
 
 
-CURRENT_ENV = "NetHackChallenge-v0"
+CURRENT_ENV = None # "NetHackChallenge-v0"
 
 
-def handle(sock_file, info):
+def handle(sock):
     """
     Handle a connection from a client.
     """
+    env = None
     try:
-        uni = universe_plugin.Universe(info.universe)
-        env = handshake(sock_file)
-        try:
-            loop(sock_file, uni, env)
-        except Exception:
+        # Handle commands from the client as they come in and
+        # apply them to the given Gym environment.
+        last_point = time.time()
+        iterations = 0
+        acc_rcv = 0
+        acc_done = 0
+        while True:
+            if iterations == 50:
+                print(f"RCV in: {acc_rcv / 50} DONE in: {acc_done / 50}")
+                # sys.exit()
+            iterations += 1
+            message_bit = int(read.read_byte(sock))
+            current_time = time.time()
+            # print("RCV in:", current_time - last_point)
+            acc_rcv += current_time - last_point
+            last_point = current_time
+
+            # Handle msg type
+            match message_bit:
+                case read.RESET_BYTE:
+                    logging.debug("Reset")
+                    env = handle_reset(sock, env, None)
+                case read.SET_SEED_BYTE:
+                    logging.debug("Set seed")
+                    env = handle_set_seed(sock, env)
+                case read.GET_SEED_BYTE:
+                    logging.debug("Get seed")
+                    handle_get_seed(sock, env)
+                case read.RENDER_BYTE:
+                    logging.debug("Render")
+                    env.render()
+                case read.CLOSE_BYTE:
+                    logging.debug("Close")
+                    env.close()
+                case read.STEP_BYTE:
+                    logging.debug("Step")
+                    handle_step(sock, env)
+                case read.STEP_STROKE_BYTE:
+                    logging.debug("Step stroke")
+                    handle_step_stroke(sock, env)
+                case read.SAVE_COVERAGE_BYTE:
+                    logging.debug("Save coverage")
+                    handle_save_coverage(sock)
+                case read.RESET_COVERAGE_BYTE:
+                    logging.debug("Reset coverage")
+                    handle_reset_coverage(sock)
+                case unknown:
+                    logging.warning(f'Action "{unknown}" not known')
+
+            current_time = time.time()
+            # print("DONE in:", current_time - last_point)
+            acc_done += current_time - last_point
+            last_point = current_time
+
+    except Exception as ex:
+        print(ex)
+        if env:
             env.render()
-        finally:
-            if env:
-                env.close()
-    except util.ProtoException as exc:
-        logging.error('%s gave error: %s' % (info.addr, str(exc)))
-
-
-def handshake(sock):
-    """
-    Perform the initial handshake and return the resulting
-    Gym environment.
-    """
-    logging.info(f"Init env {CURRENT_ENV}")
-    env = gym.make(CURRENT_ENV)
-    return handle_reset(sock, env, CURRENT_ENV)
-
-
-def loop(sock, uni, env: Env):
-    """
-    Handle commands from the client as they come in and
-    apply them to the given Gym environment.
-    """
-    last_point = time.time()
-    iterations = 0
-    acc_rcv = 0
-    acc_done = 0
-    while True:
-        if iterations == 50:
-            print(f"RCV in: {acc_rcv / 50} DONE in: {acc_done / 50}")
-            # sys.exit()
-        iterations += 1
-        message_bit = int(read.read_byte(sock))
-        current_time = time.time()
-        # print("RCV in:", current_time - last_point)
-        acc_rcv += current_time - last_point
-        last_point = current_time
-
-        # Handle msg type
-        match message_bit:
-            case read.RESET_BYTE:
-                logging.debug("Reset")
-                env = handle_reset(sock, env, None)
-            case read.SET_SEED_BYTE:
-                logging.debug("Set seed")
-                env = handle_set_seed(sock, env)
-            case read.GET_SEED_BYTE:
-                logging.debug("Get seed")
-                handle_get_seed(sock, env)
-            case read.RENDER_BYTE:
-                logging.debug("Render")
-                env.render()
-            case read.CLOSE_BYTE:
-                logging.debug("Close")
-                return
-            case read.STEP_BYTE:
-                logging.debug("Step")
-                handle_step(sock, env)
-            case read.STEP_STROKE_BYTE:
-                logging.debug("Step stroke")
-                handle_step_stroke(sock, env)
-            case read.SAVE_COVERAGE_BYTE:
-                logging.debug("Save coverage")
-                handle_save_coverage()
-            case read.RESET_COVERAGE_BYTE:
-                logging.debug("Reset coverage")
-                handle_reset_coverage()
-            case unknown:
-                logging.warning(f'Action "{unknown}" not known')
-
-        current_time = time.time()
-        # print("DONE in:", current_time - last_point)
-        acc_done += current_time - last_point
-        last_point = current_time
+    finally:
+        if env:
+            env.close()
 
 
 def handle_reset(sock, env, desired_env):
@@ -200,12 +188,18 @@ def handle_step_stroke(sock, env):
     sock.flush()
 
 
-def handle_save_coverage():
-    subprocess.call(['bash', 'coverage.sh', 'json'])
+def handle_save_coverage(sock):
+    script_path = os.path.join(project_dir, 'coverage.sh')
+    logging.warning(f'calling script: {script_path}')
+    subprocess.call([script_path])
+    write.write_null_byte(sock)
 
 
-def handle_reset_coverage():
-    subprocess.call(['bash', 'reset-coverage.sh'])
+def handle_reset_coverage(sock):
+    script_path = os.path.join(project_dir, 'reset-coverage.sh')
+    logging.info(f'calling script: {script_path}')
+    subprocess.call([script_path])
+    write.write_null_byte(sock)
 
 
 if __name__ == '__main__':
