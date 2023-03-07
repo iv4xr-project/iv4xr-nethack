@@ -14,17 +14,17 @@ public class WorldModels {
   }
 
   static WorldModel eatItem(AgentState state, char itemSlot) {
-    Command itemCommand = Command.fromStroke(String.valueOf(itemSlot));
+    Command itemCommand = Command.fromLiteralStroke(String.valueOf(itemSlot));
     return performCommands(state, new Command(COMMAND_EAT), itemCommand, new Command(MISC_MORE));
   }
 
   static WorldModel quaffItem(AgentState state, char itemSlot) {
-    Command itemCommand = Command.fromStroke(String.valueOf(itemSlot));
+    Command itemCommand = Command.fromLiteralStroke(String.valueOf(itemSlot));
     return performCommands(state, new Command(COMMAND_QUAFF), itemCommand, new Command(MISC_MORE));
   }
 
   static WorldModel zapWand(AgentState state, char itemSlot) {
-    Command itemCommand = Command.fromStroke(String.valueOf(itemSlot));
+    Command itemCommand = Command.fromLiteralStroke(String.valueOf(itemSlot));
     return performCommands(state, new Command(COMMAND_ZAP), itemCommand);
   }
 
