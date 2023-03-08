@@ -25,7 +25,11 @@ public class App {
   }
 
   private static void runAgent(SocketClient commander) {
-    commander.sendResetCoverage();
+    // Whether to collect coverage is specified in the config file
+    boolean collectCoverage = Config.getCollectCoverage();
+    if (collectCoverage) {
+      commander.sendResetCoverage();
+    }
     NetHack nethack = new NetHack(commander, Config.getSeed());
     AgentEnv env = new AgentEnv(nethack);
     AgentState state = new AgentState();
@@ -44,7 +48,9 @@ public class App {
 
     Loggers.AgentLogger.info("Closing NetHack since the loop in agent has terminated");
     nethack.close();
-    commander.sendSaveCoverage();
+    if (collectCoverage) {
+      commander.sendSaveCoverage();
+    }
   }
 
   private static void fastForwardToTurn(

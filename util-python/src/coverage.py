@@ -74,7 +74,7 @@ def create_coverage_plot(coverage_results_paths: [str], method: str, metric: str
 
     # Set up the bar chart
     if show_file_names:
-        fig, ax = plt.subplots(figsize=(19, 6))
+        fig, ax = plt.subplots(figsize=(21, 6))
     else:
         fig, ax = plt.subplots(figsize=(7, 4))
 
@@ -150,8 +150,8 @@ def main():
     iv4xr_coverage_names = get_coverage_file_names('../server-python/coverage')
     create_coverage_plot(iv4xr_coverage_names, 'iv4XR', 'branch', show_file_names)
 
-    # bothack_coverage_names = get_coverage_file_names('../BotHack/coverage')
-    # create_coverage_plot(bothack_coverage_names, 'BotHack', 'line', True)
+    bothack_coverage_names = get_coverage_file_names('../BotHack/coverage')
+    create_coverage_plot(bothack_coverage_names, 'BotHack', 'line', show_file_names)
 
 
 if __name__ == '__main__':

@@ -102,6 +102,7 @@ public class SocketClient {
 
   public void sendSaveCoverage() {
     writeBit(Encoder.EncoderBit.SaveCoverage);
+    Encoder.sendString(writer, Config.getCoverageSummaryType());
     flush();
     Loggers.ConnectionLogger.info("Waiting on saving coverage...");
     readNullByte();

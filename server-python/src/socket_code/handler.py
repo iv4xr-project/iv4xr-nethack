@@ -190,8 +190,9 @@ def handle_step_stroke(sock, env):
 
 def handle_save_coverage(sock):
     script_path = os.path.join(project_dir, 'coverage.sh')
-    logging.warning(f'calling script: {script_path}')
-    subprocess.call([script_path])
+    summary_type = read.read_string(sock)
+    logging.info(f'calling script: {script_path} {summary_type}')
+    subprocess.call([script_path, summary_type])
     write.write_null_byte(sock)
 
 

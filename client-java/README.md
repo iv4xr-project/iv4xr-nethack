@@ -21,3 +21,19 @@ The project depends on aplib, in Eclipse this dependency is resolved when import
 Source code has been inspired by Japyre code for socket connection which can be found [here](https://github.com/iv4xr-project/japyre).
 
 The package contains code to handle a socket-based connection.
+
+## Configurations
+
+The configuration file used during normal operation is located [here](src/main/resources/config.properties).
+The configurations that are possible are as follows:
+
+| Field name       | Default value                 | Description                                                                                               |
+| ---------------- | ----------------------------- |-----------------------------------------------------------------------------------------------------------|
+| IP               | 127.0.0.1                     | IP address of the python server                                                                           |
+| PORT             | 5001                          | Port to connect to on the server                                                                          |
+| SEED             | -                             | Seed to use for the game run, if empty the seed is random. Pattern expected are two comma separated longs |
+| START_TURN       | 1, 0                          | If set, automatically forwards to the given turn. The pattern is the same as the SEED field               |
+| COLLECT_COVERAGE | false                         | Whether coverage of the run should be gathered                                                            |
+| SUMMARY_TYPE     | json                          | The argument given to coverage collection script. Can be json or html                                     |
+| SOUND            | true                          | Whether sound is on                                                                                   |
+| LOG_CONFIG       | src/main/resources/log4j2.xml | The log4j2 log configuration file location                                                                |

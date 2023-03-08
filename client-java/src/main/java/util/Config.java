@@ -68,4 +68,12 @@ public class Config {
   public static boolean getSoundState() {
     return config.getBoolean("SOUND", true);
   }
+
+  public static boolean getCollectCoverage() {
+    return config.getBoolean("COLLECT_COVERAGE", false);
+  }
+
+  public static String getCoverageSummaryType() {
+    return config.getString("SUMMARY_TYPE", "");
+  }
 }
