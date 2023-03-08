@@ -132,8 +132,8 @@ def handle_reset(sock, env, desired_env):
     if not desired_env:
         desired_env = read.read_string(sock)
     if desired_env != CURRENT_ENV:
-        env = gym.make(desired_env)
         CURRENT_ENV = desired_env
+        env = create_env(CURRENT_ENV)
 
     write.write_obs(sock, env, env.reset())
     sock.flush()
@@ -148,7 +148,7 @@ def handle_set_seed(sock, env):
     if CURRENT_ENV != "NetHack-v0":
         logging.info(f"Env changed to {CURRENT_ENV} for seeding")
         CURRENT_ENV = "NetHack-v0"
-        env = gym.make(CURRENT_ENV)
+        env = create_env(CURRENT_ENV)
 
     core = read.read_string(sock)
     disp = read.read_string(sock)
@@ -156,6 +156,14 @@ def handle_set_seed(sock, env):
     env.seed(int(core), int(disp), reseed)
     return env
 
+
+def create_env(env_name, save_ttyrec=False):
+    # Settings can be found in: server-python\lib\nle\nle\env\base.py line: 168
+    max_episode_steps = 10000000
+    if save_ttyrec:
+        return gym.make(env_name, max_episode_steps=max_episode_steps, save_ttyrec_every=1000000, savedir="nle-recordings")
+    else:
+        return gym.make(env_name, max_episode_steps=max_episode_steps)
 
 def handle_get_seed(sock, env):
     assert CURRENT_ENV == "NetHack-v0"

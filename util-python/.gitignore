@@ -3,6 +3,7 @@
 #
 
 venv/
+plots/
 
 sandbox/
 .idea/

@@ -151,7 +151,7 @@ def main():
     create_coverage_plot(iv4xr_coverage_names, 'iv4XR', 'branch', show_file_names)
 
     bothack_coverage_names = get_coverage_file_names('../BotHack/coverage')
-    create_coverage_plot(bothack_coverage_names, 'BotHack', 'line', show_file_names)
+    create_coverage_plot([bothack_coverage_names[2]], 'BotHack', 'line', show_file_names)
 
 
 if __name__ == '__main__':
