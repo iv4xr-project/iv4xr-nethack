@@ -25,6 +25,11 @@ This Python project can only run on Linux/macOS. It has been compiled and ran on
 bash <path-to>/install.sh
 ```
 
+## Configuration
+
+NetHack has options that can be set. Those options can be found in [here](lib/nle/nle/nethack/nethack.py) using the `NETHACKOPTIONS`
+Changing them can remove bots' understanding of the game, so be careful!
+
 ## Running
 
 Resets the coverage for the run and starts up the server.

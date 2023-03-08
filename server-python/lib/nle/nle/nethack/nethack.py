@@ -52,6 +52,19 @@ OBSERVATION_DESC = {
 
 NETHACKOPTIONS = (
     "autopickup",
+    "pickup_types:$",
+    "pickup_thrown",
+    "pickup_burden:S",
+    # Gameplay
+    "autoquiver",
+
+    # "dark_room",
+
+    # Symbols
+    "S_lava:~",
+    "S_pool:~",
+    "S_water:~",
+
     "color",
     "disclose:+i +a +v +g +c +o",
     "mention_walls",
@@ -59,8 +72,8 @@ NETHACKOPTIONS = (
     "nocmdassist",
     "nolegacy",
     "nosparkle",
-    "pickup_burden:unencumbered",
-    "pickup_types:$?!/",
+    # "pickup_burden:unencumbered",
+    # "pickup_types:$?!/",
     "runmode:teleport",
     "showexp",
     "showscore",

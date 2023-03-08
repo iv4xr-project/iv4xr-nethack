@@ -36,9 +36,12 @@ public class WorldModels {
   static WorldModel performCommands(AgentState state, Command... commands) {
     assert commands.length != 0;
     for (int i = 0; i < commands.length - 1; i++) {
-      state.env().command(commands[i]);
+      WorldModel worldModel = state.env().command(commands[i]);
+      state.worldmodel.mergeNewObservation(worldModel);
     }
-    return state.env().command(commands[commands.length - 1]);
+    WorldModel worldModel = state.env().command(commands[commands.length - 1]);
+    state.worldmodel.mergeNewObservation(worldModel);
+    return state.worldmodel;
   }
 
   static WorldModel doNothing(AgentState state) {

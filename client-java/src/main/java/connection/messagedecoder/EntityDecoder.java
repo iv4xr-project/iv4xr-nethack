@@ -98,7 +98,7 @@ public class EntityDecoder extends Decoder {
         return color == Color.WHITE ? EntityType.PET : EntityType.MONSTER;
       case 'u':
         return color == Color.BROWN ? EntityType.PET : EntityType.MONSTER;
-      case '}':
+      case '~':
         return EntityType.POOL;
       case '!':
         return EntityType.POTION;

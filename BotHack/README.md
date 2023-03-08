@@ -59,3 +59,8 @@ To reset the coverage (since it accumelates over several runs):
 ```commandline
 sh reset-coverage.sh
 ```
+
+## Replay
+
+The ttyrec is created for a play-through. The recording can then be played using a [ttyplayer](https://angband.pl/termrec.html).
+*Note: This is only a visual replay to inspect later, the code is not executed, so coverage cannot be computed on it.*

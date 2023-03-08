@@ -157,6 +157,7 @@ public class NetHack {
     if (stepState.done) {
       Loggers.NetHackLogger.info("Game run terminated, step indicated: done");
       gameState.done = true;
+      return;
     }
 
     // Update turn before overriding stats
