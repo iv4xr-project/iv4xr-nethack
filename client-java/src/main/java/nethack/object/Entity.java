@@ -8,16 +8,17 @@ import nethack.enums.EntityType;
 // Actions listed at: /python-server/lib/nle/nle/nethack/actions.py
 public class Entity {
   public final int glyph;
+  public final int id;
   public final Color color;
   public final char symbol;
   public final EntityType type;
-  //  public String id = new String(100);
 
-  public Entity(int glyph, char symbol, EntityType type, Color color) {
+  public Entity(int glyph, char symbol, int id, EntityType type, Color color) {
     this.glyph = glyph;
     this.color = color;
     this.symbol = symbol;
     this.type = type;
+    this.id = id;
   }
 
   public boolean closedDoor() {
@@ -30,7 +31,7 @@ public class Entity {
   }
 
   public String createId(IntVec2D pos) {
-    return String.format("%s_%d", type.name(), glyph);
+    return String.format("%s_%d_%d", type.name(), glyph, id);
   }
 
   @Override
@@ -44,7 +45,8 @@ public class Entity {
       return glyph == other.glyph
           && symbol == other.symbol
           && other.color.equals(color)
-          && type == other.type;
+          && type == other.type
+          && id == other.id;
     }
     return false;
   }

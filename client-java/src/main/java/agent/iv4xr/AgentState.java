@@ -136,7 +136,14 @@ public class AgentState extends Iv4xrAgentState<Void> {
     List<Tile> updatedTiles = new ArrayList<>();
     List<IntVec2D> toggleBlockingOff = new ArrayList<>();
 
+    // Player position must be walkable
     IntVec2D playerPos = NavUtils.loc2(worldmodel.position);
+    if (area().nullTile(playerPos)) {
+      updatedTiles.add(new Unknown(playerPos));
+      //    } else {
+      //      toggleBlockingOff.add(playerPos);
+    }
+
     Set<IntVec2D> adjacentCoords =
         new HashSet<>(NavUtils.neighbourCoordinates(playerPos, Level.SIZE, true));
 

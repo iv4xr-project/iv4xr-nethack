@@ -13,6 +13,7 @@ import time
 import subprocess
 import gym
 import nle
+import traceback
 from gym import Env
 
 # Add path to run from commandline
@@ -114,8 +115,8 @@ def handle(sock):
             acc_done += current_time - last_point
             last_point = current_time
 
-    except Exception as ex:
-        print(ex)
+    except Exception:
+        traceback.print_exc()
         if env:
             env.render()
     finally:

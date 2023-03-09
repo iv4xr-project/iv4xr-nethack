@@ -5,6 +5,7 @@ import logging
 import struct
 
 import numpy as np
+import src.nethack_util as nethack_util
 import src.socket_code.protocol.util as util
 
 
@@ -65,11 +66,13 @@ def write_obs(sock, env, obs):
     """
     Encode and send an observation.
     """
+    obs, monster_descriptions = nethack_util.id_monsters(env, obs)
+
     sock.write(OBS_BYTE)
     sock.write(struct.pack('>27i', *obs['blstats']))
     sock.write(struct.pack('>256B', *obs['message']))
 
-    write_map(sock, zip(obs['chars'].flatten(), obs['colors'].flatten(), obs['glyphs'].flatten()))
+    write_map(sock, zip(obs['chars'].flatten(), obs['colors'].flatten(), obs['glyphs'].flatten(), monster_descriptions.flatten()))
 
     nr_items = np.trim_zeros(obs['inv_letters']).shape[0]
     write_inv(sock, zip(obs['inv_letters'], obs['inv_oclasses'], obs['inv_strs']), nr_items)
@@ -109,8 +112,9 @@ def write_map(sock, map_entities):
     Encode the entire map in bytes
     """
     sent_items = 0
-    for char, color, glyph in map_entities:
-        sock.write(struct.pack(">BBH", char, color, glyph))
+    for char, color, glyph, monster_description in map_entities:
+        sock.write(struct.pack(">BBHH", char, color, glyph, monster_description))
+        # sock.write(struct.pack(">BBH", char, color, glyph))
         sent_items += 1
 
         if sent_items % 79 == 0:

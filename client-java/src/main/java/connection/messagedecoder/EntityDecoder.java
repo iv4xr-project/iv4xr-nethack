@@ -8,10 +8,11 @@ import util.Loggers;
 
 // Source: https://studytrails.com/2016/09/12/java-google-json-type-adapter/
 public class EntityDecoder extends Decoder {
-  public static Entity decode(DataInputStream input, char symbol, int colorCode, int glyph) {
+  public static Entity decode(
+      DataInputStream input, char symbol, int colorCode, int glyph, int id) {
     Color color = Color.fromValue(colorCode);
     EntityType type = toEntityType(glyph, symbol, color);
-    return new Entity(glyph, symbol, type, color);
+    return new Entity(glyph, symbol, id, type, color);
   }
 
   private static EntityType toEntityType(int glyph, char symbol, Color color) {

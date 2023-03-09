@@ -31,15 +31,18 @@ public class ObservationMessageDecoder extends Decoder {
       Loggers.ProfilerLogger.trace("READ MESSAGE TOOK: %d", stopwatch.split());
 
       long total = 0;
-      byte[] entities = input.readNBytes(4 * Level.SIZE.width * Level.SIZE.height);
+      int bytesPerEntry = 6;
+      byte[] entities = input.readNBytes(bytesPerEntry * Level.SIZE.width * Level.SIZE.height);
       for (int y = 0; y < Level.SIZE.height; y++) {
-        int rowOffset = 4 * Level.SIZE.width * y;
+        int rowOffset = bytesPerEntry * Level.SIZE.width * y;
         for (int x = 0; x < Level.SIZE.width; x++) {
-          int offset = rowOffset + x * 4;
+          int offset = rowOffset + x * bytesPerEntry;
           char symbol = (char) entities[offset];
           int colorCode = entities[offset + 1];
           int glyph = (entities[offset + 2] << 8) + entities[offset + 3];
-          observationMessage.entities[y][x] = EntityDecoder.decode(input, symbol, colorCode, glyph);
+          int id = (entities[offset + 4] << 8) + entities[offset + 5];
+          observationMessage.entities[y][x] =
+              EntityDecoder.decode(input, symbol, colorCode, glyph, id);
         }
       }
       Loggers.ProfilerLogger.trace("READ MAP TOOK: %d", stopwatch.split());

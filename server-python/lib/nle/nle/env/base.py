@@ -13,6 +13,8 @@ import gym
 import numpy as np
 
 from nle import nethack
+# import src.nethack_util as nethack_util
+
 
 logger = logging.getLogger(__name__)
 
@@ -363,9 +365,24 @@ class NLE(gym.Env):
                 observation, done, exceptions=True
             )
 
+        # observation, done = nethack_util.id_monsters(self)
         self._steps += 1
-
         self.last_observation = observation
+
+        # # Get all unique descriptions and write it to a file
+        # arr = self.last_observation[10]
+        # func = np.vectorize(lambda t: chr(t))
+        # char_arr = func(arr)
+        #
+        # descriptions = []
+        # for row in range(char_arr.shape[0]):
+        #     for col in range(char_arr.shape[1]):
+        #         chars = char_arr[row, col]
+        #         description = ''.join(chars)
+        #         descriptions.append(description)
+        #
+        # unique_descriptions = '\n'.join(list(set(descriptions)))
+        # print(unique_descriptions)
 
         if self._check_abort(observation):
             end_status = self.StepStatus.ABORTED
