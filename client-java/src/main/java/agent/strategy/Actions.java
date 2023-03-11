@@ -13,7 +13,6 @@ import agent.navigation.surface.Wall;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.*;
-import nethack.enums.CommandEnum;
 import nethack.object.Command;
 import nethack.object.Item;
 import nethack.object.Level;
@@ -154,13 +153,9 @@ public class Actions {
         .do1(
             (AgentState S) -> {
               Loggers.GoalLogger.info(">>> pray");
-              CommandEnum.ADDITIONAL_ASCII.stroke = "-y";
               WorldModel newWom =
                   WorldModels.performCommands(
-                      S,
-                      new Command(COMMAND_PRAY),
-                      new Command(ADDITIONAL_ASCII),
-                      new Command(MISC_WAIT));
+                      S, new Command(COMMAND_PRAY), new Command("y"), new Command(MISC_MORE));
               S.app().gameState.player.lastPrayerTurn =
                   Optional.of(S.app().gameState.stats.turn.time);
               return new Pair<>(S, newWom);

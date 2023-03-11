@@ -1,8 +1,6 @@
 package nethack.enums;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import util.ColoredStringBuilder;
 
 // Actions listed at: /python-server/lib/nle/nle/nethack/actions.py
@@ -356,6 +354,15 @@ public enum CommandEnum {
       };
   static final CommandEnum[] additionalCommands =
       new CommandEnum[] {ADDITIONAL_SHOW_SEED, ADDITIONAL_SHOW_VERBOSE, ADDITIONAL_ASCII};
+  private static final Set<CommandEnum> commandsHandledByClient =
+      new HashSet<>(
+          Arrays.asList(
+              COMMAND_EXTLIST,
+              COMMAND_REDRAW,
+              ADDITIONAL_SHOW_VERBOSE,
+              ADDITIONAL_SHOW_SEED,
+              COMMAND_INVENTORY,
+              COMMAND_INVENTTYPE));
   private static final Map<String, CommandEnum> BY_STROKE = new HashMap<>();
   private static final Map<CommandEnum, Integer> COMMAND_TO_NETHACK_CHALLENGE_INDEX =
       new HashMap<>();
@@ -379,7 +386,7 @@ public enum CommandEnum {
   }
 
   private final String description;
-  public String stroke;
+  public final String stroke;
 
   CommandEnum(String stroke, String description) {
     this.stroke = stroke;
@@ -387,11 +394,7 @@ public enum CommandEnum {
   }
 
   public static CommandEnum fromValue(String stroke) {
-    if (BY_STROKE.containsKey(stroke)) {
-      return BY_STROKE.get(stroke);
-    } else {
-      return null;
-    }
+    return BY_STROKE.getOrDefault(stroke, null);
   }
 
   public static void prettyPrintCommands(GameMode gameMode) {
@@ -437,6 +440,10 @@ public enum CommandEnum {
       csb.newLine();
     }
     System.out.print(csb);
+  }
+
+  public boolean handleByClient() {
+    return commandsHandledByClient.contains(this);
   }
 
   public int getIndex(GameMode gameMode) {

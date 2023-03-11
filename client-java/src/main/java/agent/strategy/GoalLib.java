@@ -34,7 +34,7 @@ public class GoalLib {
                     // Navigation
                     Actions.kick().on(Predicates.get_lockedDoor()).lift(),
                     Actions.openDoor().on(Predicates.get_closedDoor()).lift(),
-                    NavTactic.navigateNextToTile(TileSelector.closedDoorSelector, false),
+                    NavTactic.navigateToTile(TileSelector.adjacentClosedDoorSelector),
                     NavTactic.explore(),
 
                     // Go to next level
@@ -44,7 +44,7 @@ public class GoalLib {
                         .lift(),
 
                     // Explore walls for hidden doors
-                    NavTactic.navigateNextToTile(TileSelector.wallSelector, true),
+                    NavTactic.navigateToTile(TileSelector.adjacentWallSelector),
                     Actions.searchWalls().lift(),
                     ABORT()));
 

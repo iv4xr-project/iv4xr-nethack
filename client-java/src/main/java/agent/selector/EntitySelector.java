@@ -15,26 +15,29 @@ import nethack.enums.EntityType;
 public class EntitySelector extends Selector<WorldEntity> {
   public static final EntitySelector closedDoor =
       new EntitySelector(
-          SelectionType.FIRST, EntityType.DOOR, d -> (boolean) d.properties.get("closed"));
+          SelectionType.FIRST, EntityType.DOOR, d -> (boolean) d.properties.get("closed"), false);
   public static final EntitySelector money =
-      new EntitySelector(SelectionType.CLOSEST, EntityType.GOLD);
+      new EntitySelector(SelectionType.CLOSEST, EntityType.GOLD, false);
 
   public static final EntitySelector adjacentMonster =
-      new EntitySelector(SelectionType.ADJACENT, EntityType.MONSTER);
+      new EntitySelector(SelectionType.ADJACENT, EntityType.MONSTER, false);
 
   public static final EntitySelector food =
-      new EntitySelector(SelectionType.CLOSEST, EntityType.EDIBLE);
+      new EntitySelector(SelectionType.CLOSEST, EntityType.EDIBLE, false);
 
   final EntityType entityType;
 
   public EntitySelector(
-      SelectionType selectionType, EntityType entityType, Predicate<WorldEntity> predicate) {
-    super(selectionType, predicate);
+      SelectionType selectionType,
+      EntityType entityType,
+      Predicate<WorldEntity> predicate,
+      boolean adjacent) {
+    super(selectionType, predicate, adjacent);
     this.entityType = entityType;
   }
 
-  public EntitySelector(SelectionType selectionType, EntityType entityType) {
-    super(selectionType);
+  public EntitySelector(SelectionType selectionType, EntityType entityType, boolean adjacent) {
+    super(selectionType, adjacent);
     this.entityType = entityType;
   }
 
@@ -45,7 +48,7 @@ public class EntitySelector extends Selector<WorldEntity> {
   }
 
   @Override
-  protected WorldEntity select(List<WorldEntity> entities, AgentState S) {
+  public WorldEntity select(List<WorldEntity> entities, AgentState S) {
     if (entities.isEmpty()) {
       return null;
     }
@@ -58,11 +61,15 @@ public class EntitySelector extends Selector<WorldEntity> {
       return entity.orElse(null);
     }
 
-    if (selectionType == SelectionType.FIRST || selectionType == SelectionType.LAST) {
-      return super.select(entities, S);
+    int n = entities.size();
+    if (n == 1 || selectionType == SelectionType.FIRST) {
+      return entities.get(0);
     }
 
-    int n = entities.size();
+    if (selectionType == SelectionType.LAST) {
+      return entities.get(n - 1);
+    }
+
     // Goes wrong for multiple levels
     IntVec2D agentPos = NavUtils.loc2(S.worldmodel.position);
     float min = NetHackSurface.heuristic(agentPos, NavUtils.loc2(entities.get(0).position));

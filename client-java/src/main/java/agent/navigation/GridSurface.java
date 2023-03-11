@@ -313,9 +313,6 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
     HierarchicalMapFactory factory = new HierarchicalMapFactory();
     Id<AbstractNode> startAbsNode = factory.insertAbstractNode(hierarchicalMap, from.pos);
     Id<AbstractNode> targetAbsNode = factory.insertAbstractNode(hierarchicalMap, to.pos);
-    if (startAbsNode.equals(targetAbsNode)) {
-      return new ArrayList<>();
-    }
     int maxPathsToRefine = Integer.MAX_VALUE;
     HierarchicalSearch hierarchicalSearch = new HierarchicalSearch();
     List<AbstractPathNode> abstractPath =
@@ -324,13 +321,15 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
     List<IPathNode> path =
         hierarchicalSearch.abstractPathToLowLevelPath(
             hierarchicalMap, abstractPath, hierarchicalMap.size.width, maxPathsToRefine);
-
     SmoothWizard smoother = new SmoothWizard(concreteMap, path);
     path = smoother.smoothPath();
     factory.removeAbstractNode(hierarchicalMap, targetAbsNode);
     factory.removeAbstractNode(hierarchicalMap, startAbsNode);
-
+    if (path.isEmpty()) {
+      return null;
+    }
     List<IntVec2D> posPath = toPositionPath(path, concreteMap);
+
     Loggers.HPALogger.info("FindPath: %s -> %s (%s)", from, to, posPath);
     verifyPath(from.pos, to.pos, posPath);
     return posPath.stream().map(Tile::new).collect(Collectors.toList());
@@ -354,6 +353,7 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
   private void verifyPath(IntVec2D from, IntVec2D to, List<IntVec2D> path) {
     assert !from.equals(to) : "Path to itself";
     if (path.isEmpty()) {
+      assert from.equals(to) : "If path is empty, it must be a path to itself";
       return;
     }
 
@@ -462,15 +462,19 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
     return heuristic(from.pos, to.pos);
   }
 
+  @Override
+  public float distance(Tile tile, Tile nodeId1) {
+    return heuristic(tile, nodeId1);
+  }
+
+  public int manhattenDistance(Tile tile1, Tile tile2) {
+    return Math.max(Math.abs(tile1.pos.x - tile2.pos.x), Math.abs(tile1.pos.y - tile2.pos.y));
+  }
+
   public static float heuristic(IntVec2D from, IntVec2D to) {
     int dx = Math.abs(from.x - to.x);
     int dy = Math.abs(from.y - to.y);
     return dx * dx + dy * dy;
-  }
-
-  /** The distance between two neighboring tiles. */
-  public float distance(Tile from, Tile to) {
-    return 1;
   }
   // endregion
 

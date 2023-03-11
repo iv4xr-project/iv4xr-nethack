@@ -11,10 +11,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Arrays;
-import nethack.object.Inventory;
-import nethack.object.Level;
-import nethack.object.Seed;
-import nethack.object.StepState;
+import nethack.object.*;
 import nl.uu.cs.aplib.utils.Pair;
 import util.Config;
 import util.Loggers;
@@ -124,22 +121,16 @@ public class SocketClient {
     }
   }
 
-  public StepState sendStep(int index) {
+  public StepState sendStepBytes(byte[] bytes) {
     Stopwatch stopwatch = new Stopwatch(true);
     try {
-      writer.write(new byte[] {Encoder.EncoderBit.StepBit.value, (byte) index});
+      writer.write(bytes);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
     flush();
-    Loggers.ProfilerLogger.trace("SENDING COMMAND TOOK: %d%n", stopwatch.total());
-    return readStepState();
-  }
 
-  public StepState sendStepStroke(char stroke) {
-    writeBit(Encoder.EncoderBit.StepStrokeBit);
-    Encoder.sendChar(writer, stroke);
-    flush();
+    Loggers.ProfilerLogger.trace("SENDING STEP BYTES TOOK: %d%n", stopwatch.total());
     return readStepState();
   }
 

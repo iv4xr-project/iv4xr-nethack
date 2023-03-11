@@ -44,7 +44,7 @@ public class HierarchicalNavigation
 
     if (area1_id == area2_id) {
       var path = getPathInLevel(area1_id, from.snd, to.snd);
-      if (path.isEmpty()) {
+      if (path == null || path.isEmpty()) {
         return null;
       }
       return path;
@@ -116,6 +116,9 @@ public class HierarchicalNavigation
 
   private List<Pair<Integer, Tile>> getPathInLevel(int level, Tile from, Tile to) {
     List<Tile> posPath = areas.get(level).findPath(from, to);
+    if (posPath == null) {
+      return null;
+    }
     return posPath.stream().map(tile -> new Pair<>(level, tile)).collect(Collectors.toList());
   }
 

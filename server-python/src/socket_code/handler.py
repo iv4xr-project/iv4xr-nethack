@@ -97,10 +97,11 @@ def handle(sock):
                     env.close()
                 case read.STEP_BYTE:
                     logging.debug("Step")
-                    handle_step(sock, env)
-                case read.STEP_STROKE_BYTE:
-                    logging.debug("Step stroke")
-                    handle_step_stroke(sock, env)
+                    handle_steps(sock, env)
+                    # handle_step(sock, env)
+                # case read.STEP_STROKE_BYTE:
+                #     logging.debug("Step stroke")
+                #     handle_step_stroke(sock, env)
                 case read.SAVE_COVERAGE_BYTE:
                     logging.debug("Save coverage")
                     handle_save_coverage(sock)
@@ -173,25 +174,17 @@ def handle_get_seed(sock, env):
     sock.flush()
 
 
-def handle_step(sock, env):
-    """
-    Step the environment and send the result.
-    """
-    action = read.read_byte(sock)
-    obs, rew, done, info = env.step(action)
-    write.write_obs(sock, env, obs)
-    write.write_step(sock, done, info)
-    sock.flush()
+def handle_steps(sock, env):
+    steps_info = read.read_step_commands(sock)
+    obs, done = None, None
+    for i in range(int(len(steps_info) / 2)):
+        is_nle_command = steps_info[i * 2]
+        if is_nle_command:
+            obs, rew, done, info = env.step(steps_info[i * 2 + 1])
+        else:
+            raw_obs, done = env.nethack.step(steps_info[i * 2 + 1])
+            obs = env._get_observation(raw_obs)
 
-
-def handle_step_stroke(sock, env):
-    """
-    Step the environment and send the result.
-    """
-    stroke = chr(read.read_short(sock))
-    raw_obs, done = env.nethack.step(ord(stroke))
-    # Raw observation needs to get zipped
-    obs = env._get_observation(raw_obs)
     write.write_obs(sock, env, obs)
     write.write_step(sock, done, None)
     sock.flush()

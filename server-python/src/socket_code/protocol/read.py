@@ -10,9 +10,8 @@ GET_SEED_BYTE = 3
 RENDER_BYTE = 4
 CLOSE_BYTE = 5
 STEP_BYTE = 6
-STEP_STROKE_BYTE = 7
-SAVE_COVERAGE_BYTE = 8
-RESET_COVERAGE_BYTE = 9
+SAVE_COVERAGE_BYTE = 7
+RESET_COVERAGE_BYTE = 8
 
 
 def read_byte(sock):
@@ -59,3 +58,9 @@ def read_string(sock):
     for c in data_shorts:
         string += chr(c)
     return string
+
+
+def read_step_commands(sock):
+    nr_commands = read_byte(sock)
+    data = sock.read(nr_commands * 2)
+    return struct.unpack('>' + ('?B' * nr_commands), data)

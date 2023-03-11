@@ -15,12 +15,12 @@ public class ItemSelector extends Selector<Item> {
   final ItemType itemType;
 
   public ItemSelector(SelectionType selectionType, ItemType itemType, Predicate<Item> predicate) {
-    super(selectionType, predicate);
+    super(selectionType, predicate, false);
     this.itemType = itemType;
   }
 
   public ItemSelector(SelectionType selectionType, ItemType itemType) {
-    super(selectionType);
+    super(selectionType, false);
     this.itemType = itemType;
   }
 
@@ -30,16 +30,21 @@ public class ItemSelector extends Selector<Item> {
   }
 
   @Override
-  protected Item select(List<Item> items, AgentState S) {
+  public Item select(List<Item> items, AgentState S) {
     if (items.isEmpty()) {
       return null;
     }
 
-    if (selectionType == SelectionType.FIRST || selectionType == SelectionType.LAST) {
-      return super.select(items, S);
+    int n = items.size();
+    if (n == 1 || selectionType == SelectionType.FIRST) {
+      return items.get(0);
     }
 
-    return items.get(0);
+    if (selectionType == SelectionType.LAST) {
+      return items.get(n - 1);
+    }
+
+    throw new IllegalArgumentException("Not valid");
   }
 
   private List<Item> filter(List<Item> items, AgentState S) {

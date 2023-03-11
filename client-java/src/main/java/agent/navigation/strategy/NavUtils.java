@@ -1,16 +1,21 @@
 package agent.navigation.strategy;
 
 import agent.iv4xr.AgentState;
+import agent.navigation.GridSurface;
 import agent.navigation.HierarchicalNavigation;
 import agent.navigation.hpastar.Size;
 import agent.navigation.hpastar.smoother.Direction;
+import agent.navigation.hpastar.utils.RefSupport;
 import agent.navigation.surface.Tile;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import eu.iv4xr.framework.spatial.IntVec2D;
 import eu.iv4xr.framework.spatial.Vec3;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import nethack.object.Command;
 import nethack.object.Player;
 import nl.uu.cs.aplib.utils.Pair;
@@ -136,6 +141,38 @@ public class NavUtils {
     return allowDiagonally || dx == 0 || dy == 0;
   }
 
+  public static List<Pair<Integer, Tile>> adjacentPositions(
+      List<Pair<Integer, Tile>> positions, AgentState S) {
+    int levelNr = levelNr(S.worldmodel.position);
+    assert positions.stream().allMatch(entry -> entry.fst.equals(levelNr))
+        : "All must be on same level";
+    GridSurface surface = S.area();
+    Set<IntVec2D> processedPositions =
+        positions.stream().map(entry -> entry.snd.pos).collect(Collectors.toSet());
+    Set<IntVec2D> adjacentPositions = new HashSet<>();
+
+    for (IntVec2D pos : new ArrayList<>(processedPositions)) {
+      List<IntVec2D> neighbours =
+          NavUtils.neighbourCoordinates(pos, surface.hierarchicalMap.size, true);
+      for (IntVec2D neighbour : neighbours) {
+        if (processedPositions.contains(neighbour)) {
+          continue;
+        }
+
+        processedPositions.add(neighbour);
+        if (surface.concreteMap.passability.cannotEnter(neighbour, new RefSupport<>())) {
+          continue;
+        }
+
+        adjacentPositions.add(neighbour);
+      }
+    }
+
+    return adjacentPositions.stream()
+        .map(pos -> NavUtils.loc3(levelNr, pos))
+        .collect(Collectors.toList());
+  }
+
   public static int levelNr(Vec3 pos) {
     return (int) pos.z;
   }
@@ -169,7 +206,7 @@ public class NavUtils {
 
   public static WorldModel moveTo(AgentState state, Pair<Integer, Tile> targetTile) {
     Command command = Direction.getCommand(toDirection(state, targetTile));
-    return state.env().command(command);
+    return state.env().commands(command);
   }
 
   public static WorldModel moveTo(AgentState state, Vec3 targetPosition) {

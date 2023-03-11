@@ -1,12 +1,14 @@
 package nethack;
 
 import connection.SocketClient;
-import java.util.Objects;
-import java.util.Scanner;
+import connection.messageencoder.Encoder;
+import java.util.*;
+import java.util.stream.Collectors;
 import nethack.enums.CommandEnum;
 import nethack.enums.GameMode;
 import nethack.object.*;
 import util.Loggers;
+import util.Stopwatch;
 
 public class NetHack {
   public final GameState gameState = new GameState();
@@ -57,8 +59,8 @@ public class NetHack {
 
   public void loop() {
     while (!gameState.done) {
-      Command command = waitCommand(false);
-      StepType stepType = step(command);
+      List<Command> commands = waitCommands(false);
+      StepType stepType = step(commands.toArray(new Command[] {}));
       if (stepType == StepType.Terminated) {
         break;
       } else if (stepType == StepType.Valid) {
@@ -82,7 +84,7 @@ public class NetHack {
     System.out.println(gameState);
   }
 
-  public Command waitCommand(boolean acceptNoCommand) {
+  public List<Command> waitCommands(boolean acceptNoCommand) {
     // Do not close scanner, otherwise it cannot read the next command
     Scanner scanner = new Scanner(System.in);
     String prompt = "";
@@ -92,63 +94,100 @@ public class NetHack {
     prompt += "Input a command: ";
     System.out.print(prompt);
 
+    readCommand:
     while (true) {
-      String input = scanner.nextLine();
-      Command command = Command.fromStroke(input);
-      if (command != null) {
-        return command;
-      } else if (Objects.equals(input, "") && acceptNoCommand) {
+      String line = scanner.nextLine();
+      String[] inputs = line.split(" ");
+      List<Command> commands = new ArrayList<>();
+      for (String input : inputs) {
+        Command command = Command.fromStroke(input);
+        if (command != null) {
+          commands.add(command);
+          continue;
+        } else if (Objects.equals(input, "")) {
+          continue;
+        }
+        System.out.print("Input \"" + input + "\" not found, enter again: ");
+        continue readCommand;
+      }
+
+      if (commands.isEmpty() && acceptNoCommand) {
         return null;
       }
-      System.out.print("Input \"" + input + "\" not found, enter again: ");
+
+      return commands;
     }
   }
 
-  public StepType step(Command command) {
-    switch (command.commandEnum) {
-      case COMMAND_EXTLIST:
-        CommandEnum.prettyPrintCommands(gameMode);
-        return StepType.Special;
-      case COMMAND_REDRAW:
-        System.out.println(gameState);
-        return StepType.Special;
-      case ADDITIONAL_SHOW_VERBOSE:
-        System.out.print(gameState.verbose());
-        return StepType.Special;
-      case ADDITIONAL_SHOW_SEED:
-        Seed seed = client.sendGetSeed();
-        Loggers.SeedLogger.info(seed);
-        return StepType.Special;
-      case ADDITIONAL_ASCII:
-        char character = command.stroke.charAt(0);
-        return step(command, character);
-      case COMMAND_INVENTORY:
-      case COMMAND_INVENTTYPE: // Should do something differently
-        System.out.println(gameState.player.inventory);
-        return StepType.Special;
-      default:
-        break;
-    }
+  public StepType step(Command... commands) {
+    Stopwatch stopwatch = new Stopwatch(true);
+    assert commands.length > 0 : "Must at least provide one command";
+    Map<Boolean, List<Command>> split =
+        Arrays.stream(commands)
+            .collect(Collectors.partitioningBy(command -> command.commandEnum.handleByClient()));
 
-    int index = command.commandEnum.getIndex(gameMode);
-    if (index < 0) {
-      Loggers.NetHackLogger.warn("Command: %s not available in GameMode: %s", command, gameMode);
-      return StepType.Invalid;
+    StepType stepType = stepServerSideCommand(split.getOrDefault(false, new ArrayList<>()));
+    stepClientSideCommands(split.getOrDefault(true, new ArrayList<>()));
+    if (stepType == null) {
+      return StepType.Special;
     }
-
-    return step(command, index);
+    return stepType;
   }
 
-  private StepType step(Command command, int index) {
-    Loggers.NetHackLogger.info("Command: %s", command);
-    StepState stepState = client.sendStep(index);
-    updateGameState(stepState);
-    return StepType.Valid;
+  private void stepClientSideCommands(List<Command> commands) {
+    for (Command command : commands) {
+      switch (command.commandEnum) {
+        case COMMAND_EXTLIST:
+          CommandEnum.prettyPrintCommands(gameMode);
+          break;
+        case COMMAND_REDRAW:
+          System.out.println(gameState);
+          break;
+        case ADDITIONAL_SHOW_VERBOSE:
+          System.out.print(gameState.verbose());
+          break;
+        case ADDITIONAL_SHOW_SEED:
+          Seed seed = client.sendGetSeed();
+          Loggers.SeedLogger.info(seed);
+          break;
+        case COMMAND_INVENTORY:
+        case COMMAND_INVENTTYPE: // Should do something differently
+          System.out.println(gameState.player.inventory);
+          break;
+        default:
+          throw new IllegalArgumentException(
+              "This client side command does not have logic to handle it");
+      }
+    }
   }
 
-  private StepType step(Command command, char character) {
-    Loggers.NetHackLogger.info("Command: %s", command);
-    StepState stepState = client.sendStepStroke(character);
+  private StepType stepServerSideCommand(List<Command> commands) {
+    if (commands.isEmpty()) {
+      return null;
+    }
+    int n = commands.size();
+    assert n <= 256 : "No more than 256 commands can be chained at once";
+    byte[] msg = new byte[2 + 2 * n];
+    msg[0] = Encoder.EncoderBit.StepBit.value;
+    msg[1] = (byte) n;
+    for (int i = 0; i < n; i++) {
+      Command command = commands.get(i);
+
+      if (command.commandEnum == CommandEnum.ADDITIONAL_ASCII) {
+        msg[i * 2 + 2] = 0;
+        msg[i * 2 + 3] = (byte) command.stroke.charAt(0);
+      } else {
+        msg[i * 2 + 2] = 1;
+        int commandIndex = command.commandEnum.getIndex(gameMode);
+        if (commandIndex < 0) {
+          Loggers.NetHackLogger.warn("Invalid command");
+          return StepType.Invalid;
+        }
+        msg[i * 2 + 3] = (byte) commandIndex;
+      }
+    }
+
+    StepState stepState = client.sendStepBytes(msg);
     updateGameState(stepState);
     return StepType.Valid;
   }

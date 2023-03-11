@@ -44,9 +44,8 @@ public abstract class Encoder {
     RenderBit(4),
     CloseBit(5),
     StepBit(6),
-    StepStrokeBit(7),
-    SaveCoverage(8),
-    ResetCoverage(9);
+    SaveCoverage(7),
+    ResetCoverage(8);
     public byte value = 0;
 
     private EncoderBit(int bitValue) {

@@ -1,5 +1,6 @@
 import re
 import numpy as np
+import sys
 from nle import nethack
 
 # Defined in lib/nle/include/display.h
@@ -16,10 +17,10 @@ def glyph_to_is_monster():
     func = np.vectorize(lambda g: nethack.glyph_is_monster(g))
     return func(glyphs)
 
-monster_glyphs = glyph_to_is_monster()
+MONSTER_GLYPHS = glyph_to_is_monster()
 
 def id_monsters(env, obs):
-    is_monster = monster_glyphs[obs['glyphs']]
+    is_monster = MONSTER_GLYPHS[obs['glyphs']]
     monster_indexes = indexes[is_monster]
     pattern = r"^.*(?:called|named)\s(\S+)"
 
@@ -59,10 +60,7 @@ def move_cursor(env, key, delta):
 
 def unique_id_monster(env, obs, x, y):
     global counter
-
-    cursor_y, cursor_x = obs['tty_cursor']
-    cursor_y -= 1
-    # env.render()
+    cursor_x, cursor_y = get_cursor_pos(obs)
     # Name
     for char in '#n':
         do_step(env, char)
@@ -93,7 +91,13 @@ def unique_id_monster(env, obs, x, y):
 
 
 def do_step(env, char):
-    # print("Char:", char)
     obs, done = env.nethack.step(ord(char))
+    print("Char:", char, 'msg:', ''.join([chr(char) for char in obs[5] if char != bytes(1)]))
     # env.render()
     return obs, done
+
+
+def get_cursor_pos(obs) -> (int, int):
+    cursor_y, cursor_x = obs['tty_cursor']
+    cursor_y -= 1
+    return cursor_x, cursor_y

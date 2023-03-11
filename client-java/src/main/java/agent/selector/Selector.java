@@ -8,37 +8,32 @@ public abstract class Selector<T> {
   protected final SelectionType selectionType;
   protected Predicate<T> predicate = null;
   protected final boolean onlySameLevel = true;
+  protected final boolean adjacent;
 
-  public Selector(SelectionType selectionType, Predicate<T> predicate) {
+  public Selector(SelectionType selectionType, Predicate<T> predicate, boolean adjacent) {
+    assert selectionType != SelectionType.ADJACENT || !adjacent
+        : "Does not make sense to be adjacent to an adjacent square";
     this.selectionType = selectionType;
     this.predicate = predicate;
+    this.adjacent = adjacent;
   }
 
-  public Selector(SelectionType selectionType) {
+  public Selector(SelectionType selectionType, boolean adjacent) {
+    assert selectionType != SelectionType.ADJACENT || !adjacent
+        : "Does not make sense to be adjacent to an adjacent square";
     this.selectionType = selectionType;
+    this.adjacent = adjacent;
   }
 
   public abstract T apply(List<T> elems, AgentState S);
 
-  protected T select(List<T> elems, AgentState S) {
-    int n = elems.size();
-    if (n == 0) {
-      return null;
-    }
-    assert selectionType == SelectionType.FIRST || selectionType == SelectionType.LAST
-        : "No general selection implemented for " + selectionType;
-    if (selectionType == SelectionType.FIRST) {
-      return elems.get(0);
-    } else {
-      return elems.get(n - 1);
-    }
-  }
+  public abstract T select(List<T> elems, AgentState S);
 
   public enum SelectionType {
     FIRST,
     LAST,
     CLOSEST,
     FARTHEST,
-    ADJACENT
+    ADJACENT,
   }
 }

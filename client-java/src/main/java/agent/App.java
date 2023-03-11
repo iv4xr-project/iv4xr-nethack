@@ -7,6 +7,7 @@ import agent.navigation.hpastar.Cluster;
 import agent.strategy.GoalLib;
 import connection.SocketClient;
 import eu.iv4xr.framework.mainConcepts.TestAgent;
+import java.util.List;
 import java.util.stream.Collectors;
 import nethack.NetHack;
 import nethack.object.Command;
@@ -86,9 +87,9 @@ public class App {
     Loggers.AgentLogger.info("Start agent loop...");
     // Now we run the agent:
     while (G.getStatus().inProgress()) {
-      Command command = netHack.waitCommand(true);
-      if (command != null) {
-        NetHack.StepType stepType = netHack.step(command);
+      List<Command> commands = netHack.waitCommands(true);
+      if (commands != null) {
+        NetHack.StepType stepType = netHack.step(commands.toArray(new Command[] {}));
         if (stepType == NetHack.StepType.Terminated) {
           break;
         } else if (stepType != NetHack.StepType.Valid) {
