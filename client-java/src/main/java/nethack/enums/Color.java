@@ -54,14 +54,13 @@ public enum Color {
     return color;
   }
 
-  private static void colorpalette() {
+  public static void main(String[] args) {
     for (Color color : Color.values()) {
       System.out.printf("%s %s%n", color, color.name());
     }
-  }
 
-  public static void main(String[] args) {
-    colorpalette();
+    System.out.printf("\033[103;32m W.O %s W.O", Color.GREEN);
+    //    System.out.printf("%s %s", Color.GREEN, "W.O");
   }
 
   public String toString() {

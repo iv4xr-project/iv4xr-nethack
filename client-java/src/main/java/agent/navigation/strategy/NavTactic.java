@@ -58,7 +58,7 @@ public class NavTactic {
             (AgentState S) -> {
               Pair<Integer, Tile> t = tileSelector.apply(S);
               if (t == null) {
-                Loggers.NavLogger.debug("Tile does not exist in level");
+                //                Loggers.NavLogger.debug("Tile does not exist in level");
                 return null;
               }
               Vec3 agentPos = S.worldmodel.position;

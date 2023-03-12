@@ -13,6 +13,11 @@ public class WorldModels {
     return performCommands(state, new Command(COMMAND_KICK), command);
   }
 
+  static WorldModel open(AgentState state, Direction direction) {
+    Command command = Direction.getCommand(direction);
+    return performCommands(state, new Command(COMMAND_OPEN), command);
+  }
+
   static WorldModel forceAttack(AgentState state, Direction direction) {
     Command command = Direction.getCommand(direction);
     return performCommands(state, new Command(COMMAND_FIGHT), command);

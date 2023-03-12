@@ -358,10 +358,11 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
     }
 
     assert path.get(0).equals(from) : "Path from or to is incorrect";
-    assert path.get(path.size() - 1).equals(to) : "Path to is incorrect";
+    int n = path.size();
+    assert path.get(n - 1).equals(to) : "Path to is incorrect";
 
     IntVec2D prevPos = path.get(0);
-    for (int i = 1; i < path.size(); i++) {
+    for (int i = 1; i < n; i++) {
       IntVec2D currentPos = path.get(i);
       assert NavUtils.adjacent(prevPos, currentPos, true)
           : String.format("Non adjacent node error at %s -> %s", prevPos, currentPos);
@@ -482,9 +483,7 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
   public String toString() {
     ColoredStringBuilder csb = new ColoredStringBuilder();
     Set<IntVec2D> frontiers =
-        frontierCandidates.stream()
-            .map(frontierPosition -> frontierPosition)
-            .collect(Collectors.toSet());
+        getFrontier().stream().map(frontier -> frontier.pos).collect(Collectors.toSet());
 
     // Add row by row to the StringBuilder
     for (int y = 0; y < hierarchicalMap.size.height; y++) {
@@ -492,19 +491,27 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
         // Get tile, if it doesn't know the type it is not know or void.
         IntVec2D pos = new IntVec2D(x, y);
         Tile t = getTile(pos);
+        boolean isFrontier = frontiers.contains(pos);
+        boolean isVisible = t instanceof Printable && ((Printable) t).isVisible();
+
+        String colorString;
+        if (isFrontier && isVisible) {
+          colorString = "\033[103;32m";
+        } else if (isFrontier) {
+          colorString = "\033[103m";
+        } else if (isVisible) {
+          colorString = "\033[0;32m";
+        } else {
+          colorString = Color.RESET.toString();
+        }
+        assert t instanceof Printable || t == null : "Tile cannot be printed";
 
         if (t instanceof Printable) {
           Printable p = (Printable) t;
           char c = p.toChar();
-          if (p.isVisible()) {
-            csb.append(Color.GREEN_BRIGHT, c);
-          } else {
-            csb.append(c);
-          }
-        } else if (t == null) {
-          csb.append(' ');
+          csb.append(colorString).append(c);
         } else {
-          csb.append('?');
+          csb.append(colorString).append(' ');
         }
       }
 

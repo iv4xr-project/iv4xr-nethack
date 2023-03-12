@@ -27,19 +27,17 @@ public class Predicates {
       };
 
   @Contract(pure = true)
-  public static @NotNull Function<AgentState, Pair<Integer, Tile>> get_closedDoor() {
-    return Predicates::closedDoor;
-  }
-
-  private static Pair<Integer, Tile> closedDoor(AgentState S) {
-    Pair<Integer, Tile> t = TileSelector.closedDoorSelector.apply(S);
-    if (t == null) {
-      return null;
-    }
-    if (!NavUtils.adjacent(t.snd.pos, NavUtils.loc2(S.worldmodel.position), false)) {
-      return null;
-    }
-    return t;
+  public static @NotNull Function<AgentState, Direction> get_closedDoor() {
+    return S -> {
+      Pair<Integer, Tile> t = TileSelector.closedDoorSelector.apply(S);
+      if (t == null) {
+        return null;
+      }
+      if (!NavUtils.adjacent(t.snd.pos, NavUtils.loc2(S.worldmodel.position), true)) {
+        return null;
+      }
+      return NavUtils.toDirection(S, t);
+    };
   }
 
   @Contract(pure = true)
@@ -49,7 +47,7 @@ public class Predicates {
       if (t == null) {
         return null;
       }
-      if (!NavUtils.adjacent(t.snd.pos, NavUtils.loc2(S.worldmodel.position), false)) {
+      if (!NavUtils.adjacent(t.snd.pos, NavUtils.loc2(S.worldmodel.position), true)) {
         return null;
       }
       return NavUtils.toDirection(S, t);

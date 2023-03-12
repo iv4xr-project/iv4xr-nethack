@@ -69,15 +69,17 @@ public class Actions {
     return action("open door")
         .do2(
             (AgentState S) ->
-                (Pair<Integer, Tile> doorTile) -> {
+                (Direction direction) -> {
                   Sounds.door();
-                  Loggers.GoalLogger.info("open door @%s", doorTile);
-                  WorldModel newwom = NavUtils.moveTo(S, doorTile);
+                  Loggers.GoalLogger.info("open door @%s", direction);
+                  WorldModel newWom = WorldModels.open(S, direction);
                   if (Objects.equals(S.app().gameState.message, "This door is locked.")) {
-                    Door d = (Door) doorTile.snd;
+                    IntVec2D doorPos =
+                        NavUtils.posInDirection(NavUtils.loc2(S.worldmodel.position), direction);
+                    Door d = (Door) S.area().getTile(doorPos);
                     d.isLocked = true;
                   }
-                  return new Pair<>(S, newwom);
+                  return new Pair<>(S, newWom);
                 });
   }
 
