@@ -1,7 +1,8 @@
 import re
 import numpy as np
-import sys
 from nle import nethack
+
+from src.nethack_util import message
 
 # Defined in lib/nle/include/display.h
 # Can throw index out of range
@@ -26,6 +27,7 @@ def id_monsters(env, obs):
 
     monster_descriptions = np.zeros(21 * 79, dtype=int)
     descriptions = obs['screen_descriptions']
+    id_monster = False
     for index in monster_indexes:
         x = index % 79
         y = int(index / 79)
@@ -39,7 +41,12 @@ def id_monsters(env, obs):
                 value = int(word)
                 monster_descriptions[index] = value
         else:
+            print("Unidentified monster detected", x, y, "index:", index)
             obs, done = unique_id_monster(env, obs, x, y)
+            id_monster = True
+
+    if id_monster:
+        env.render()
 
     return obs, monster_descriptions
 
@@ -83,12 +90,10 @@ def unique_id_monster(env, obs, x, y):
 
     # Select square
     raw_obs, _ = do_step(env, ',')
-    msg = ''.join([chr(char) for char in raw_obs[5] if char != bytes(1)])
+    msg = message.read_raw_obs_msg(raw_obs)
 
-    # Creature already has a name, do not change it
-    if msg.__contains__('called'):
-        do_step(env, '\n')
-    else:
+    # Creature has no name yet
+    if not msg.__contains__('called'):
         # Give name character by character
         for char in str(counter):
             do_step(env, char)
@@ -102,10 +107,11 @@ def unique_id_monster(env, obs, x, y):
 
 
 def do_step(env, char):
-    obs, done = env.nethack.step(ord(char))
-    print("Char:", char, 'msg:', ''.join([chr(char) for char in obs[5] if char != bytes(1)]))
+    raw_obs, done = env.nethack.step(ord(char))
+    msg = message.read_raw_obs_msg(raw_obs)
+    print("Char:", char, 'msg:', msg)
     # env.render()
-    return obs, done
+    return raw_obs, done
 
 
 def get_cursor_pos(obs) -> (int, int):

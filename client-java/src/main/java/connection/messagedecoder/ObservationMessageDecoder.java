@@ -57,7 +57,6 @@ public class ObservationMessageDecoder extends Decoder {
 
       return observationMessage;
     } catch (IOException e) {
-      e.printStackTrace();
       throw new RuntimeException(e);
     }
   }

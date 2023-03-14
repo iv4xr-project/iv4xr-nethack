@@ -47,13 +47,16 @@ public class NetHack {
   public void setSeed(Seed seed) {
     gameMode = GameMode.NetHack;
     Loggers.SeedLogger.info("New seed is:" + seed);
+    Loggers.ReplayLogger.info("SEED:%s", seed.shortString());
     client.sendSetSeed(seed);
     reset();
   }
 
   public void reset() {
     client.sendReset(gameMode.toString());
-    step(new Command(CommandEnum.MISC_MORE));
+    StepState stepState = client.readStepState();
+    updateGameState(stepState);
+    //    step(new Command(CommandEnum.MISC_MORE));
     render();
   }
 
@@ -165,6 +168,9 @@ public class NetHack {
     if (commands.isEmpty()) {
       return null;
     }
+    Loggers.ReplayLogger.info(
+        "%s:%s", gameState.stats == null ? "null" : gameState.stats.turn, commands);
+    Loggers.NetHackLogger.info(commands);
     int n = commands.size();
     assert n <= 256 : "No more than 256 commands can be chained at once";
     byte[] msg = new byte[2 + 2 * n];

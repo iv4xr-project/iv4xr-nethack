@@ -21,6 +21,7 @@ public class Loggers {
   public static final Logger NetHackLogger = createLogger("⚔️"); // ⚔️
   public static final Logger ProfilerLogger = createLogger("Profiler");
   public static final Logger SeedLogger = createLogger("\uD83C\uDF31"); // 🌱
+  public static final Logger ReplayLogger = createLogger("🎥️"); // 🎥️
 
   // Agent Loggers
   public static final Logger AgentLogger = createLogger("\uD83D\uDD75️"); // 🕵️

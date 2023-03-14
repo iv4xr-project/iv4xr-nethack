@@ -78,7 +78,6 @@ public class SocketClient {
     writeBit(Encoder.EncoderBit.ResetBit);
     Encoder.writeString(writer, gameMode);
     flush();
-    readObservationMessage();
   }
 
   public Seed sendGetSeed() {

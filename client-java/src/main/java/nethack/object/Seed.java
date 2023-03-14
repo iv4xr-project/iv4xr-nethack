@@ -35,6 +35,10 @@ public class Seed {
     return new Seed(coreSeed, dspSeed, false);
   }
 
+  public String shortString() {
+    return String.format("%s %s", core, disp);
+  }
+
   @Override
   public String toString() {
     return String.format("%s %s %b [SEED=%s, %s]", core, disp, reseed, core, disp);

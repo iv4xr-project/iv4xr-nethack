@@ -5,7 +5,8 @@ import logging
 import struct
 
 import numpy as np
-import src.nethack_util as nethack_util
+from src.nethack_util import monster
+from src.nethack_util import message
 import src.socket_code.protocol.util as util
 
 
@@ -66,7 +67,8 @@ def write_obs(sock, env, obs):
     """
     Encode and send an observation.
     """
-    obs, monster_descriptions = nethack_util.id_monsters(env, obs)
+    obs, monster_descriptions = monster.id_monsters(env, obs)
+    message.read_obs_msg(obs)
 
     sock.write(OBS_BYTE)
     sock.write(struct.pack('>27i', *obs['blstats']))

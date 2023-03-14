@@ -151,23 +151,23 @@ public class HierarchicalNavigation
     List<Pair<Integer, Tile>> candidates = getFrontier();
     if (candidates.isEmpty()) {
       return null;
+    }
+
+    List<Pair<Pair<Integer, Tile>, List<Pair<Integer, Tile>>>> candidates2 =
+        candidates.stream()
+            .map(c -> new Pair<>(c, this.findPath(startNode, c)))
+            .filter(d -> d.snd != null)
+            .collect(Collectors.toList());
+    if (candidates2.isEmpty()) {
+      return null;
     } else {
-      List<Pair<Pair<Integer, Tile>, List<Pair<Integer, Tile>>>> candidates2 =
-          candidates.stream()
-              .map(c -> new Pair<>(c, this.findPath(startNode, c)))
-              .filter(d -> d.snd != null)
-              .collect(Collectors.toList());
-      if (candidates2.size() == 0) {
-        return null;
-      } else {
-        candidates2.sort(
-            (d1, d2) -> {
-              return Integer.compare(
-                  this.distanceCandidate(d1, heuristicNode),
-                  this.distanceCandidate(d2, heuristicNode));
-            });
-        return candidates2.get(0).snd;
-      }
+      candidates2.sort(
+          (d1, d2) -> {
+            return Integer.compare(
+                this.distanceCandidate(d1, heuristicNode),
+                this.distanceCandidate(d2, heuristicNode));
+          });
+      return candidates2.get(0).snd;
     }
   }
 

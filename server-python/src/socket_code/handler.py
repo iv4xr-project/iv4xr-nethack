@@ -133,6 +133,7 @@ def handle_reset(sock, env, desired_env):
         env = create_env(CURRENT_ENV)
 
     write.write_obs(sock, env, env.reset())
+    write.write_step(sock, False, None)
     sock.flush()
     return env
 

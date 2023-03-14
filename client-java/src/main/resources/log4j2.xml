@@ -16,10 +16,10 @@
                 <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
             </PatternLayout>
         </File>
-        <File name="LogToActionFile" fileName="logs/actions.log" append="false">
-            <Patternlayout>
+        <File name="LogToReplayFile" fileName="logs/replay.log" append="false">
+            <PatternLayout>
                 <Pattern>%m%n</Pattern>
-            </Patternlayout>
+            </PatternLayout>
         </File>
     </Appenders>
     <Loggers>
@@ -38,13 +38,15 @@
 
         <Logger name="⚔️" level="debug" additivity="false">
             <AppenderRef ref="LogToFile" level="debug"/>
-            <AppenderRef ref="LogToActionFile" level="info"/>
             <AppenderRef ref="LogToConsole" level="info"/>
         </Logger>
         <Logger name="🌱" level="debug" additivity="false">
             <AppenderRef ref="LogToFile" level="info"/>
             <AppenderRef ref="LogToSeedFile" level="info"/>
             <AppenderRef ref="LogToConsole" level="info"/>
+        </Logger>
+        <Logger name="🎥️" additivity="false">
+            <AppenderRef ref="LogToReplayFile"/>
         </Logger>
 
         <Logger name="🧭" level="debug" additivity="false">

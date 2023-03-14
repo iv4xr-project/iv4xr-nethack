@@ -109,7 +109,8 @@ public class NavAction {
               if (nextTile == null) {
                 return null;
               }
-              Loggers.NavLogger.info("explore to %s via %s", heuristicLocation, nextTile, path);
+              Loggers.NavLogger.info(
+                  "explore to %s via %s", path.get(path.size() - 1), nextTile, path);
               return nextTile;
             });
   }

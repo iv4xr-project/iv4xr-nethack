@@ -28,7 +28,7 @@ public enum CommandEnum {
   MISC_UP("<", "Up stairs"),
   MISC_DOWN(">", "Down stairs"),
   MISC_WAIT(".", "Wait"),
-  MISC_MORE(" ", "Next message"),
+  MISC_MORE("~", "Next message"),
 
   // Commands
   COMMAND_EXTCMD("#", "Longer cmd"),

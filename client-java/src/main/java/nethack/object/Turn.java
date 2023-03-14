@@ -11,6 +11,11 @@ public class Turn implements Comparable<Turn> {
     this.time = time;
   }
 
+  public Turn(int time, int step) {
+    this.time = time;
+    this.step = step;
+  }
+
   public static final Turn startTurn = new Turn(1);
 
   public void updateTurn(Turn previousTurn) {
@@ -27,7 +32,7 @@ public class Turn implements Comparable<Turn> {
       return false;
     }
     Turn other = (Turn) object;
-    return turnNr == other.turnNr && time == other.time && step == other.step;
+    return time == other.time && step == other.step;
   }
 
   @Override
@@ -41,5 +46,10 @@ public class Turn implements Comparable<Turn> {
     }
 
     return Integer.compare(step, o.step);
+  }
+
+  @Override
+  public String toString() {
+    return String.format("%d(%d)", time, step);
   }
 }
