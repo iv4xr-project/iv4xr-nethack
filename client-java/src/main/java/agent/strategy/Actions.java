@@ -73,7 +73,8 @@ public class Actions {
                   Sounds.door();
                   Loggers.GoalLogger.info("open door @%s", direction);
                   WorldModel newWom = WorldModels.open(S, direction);
-                  if (Objects.equals(S.app().gameState.message, "This door is locked.")) {
+                  if (Objects.equals(S.app().gameState.message, "This door is locked.")
+                      || Objects.equals(S.app().gameState.message, "")) {
                     IntVec2D doorPos =
                         NavUtils.posInDirection(NavUtils.loc2(S.worldmodel.position), direction);
                     Door d = (Door) S.area().getTile(doorPos);

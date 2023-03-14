@@ -61,7 +61,8 @@ def move_cursor(env, key, delta):
 def unique_id_monster(env, obs, x, y):
     global counter
     cursor_x, cursor_y = get_cursor_pos(obs)
-    # Name
+
+    # Activate command '#name'
     for char in '#n':
         do_step(env, char)
     do_step(env, '\n')
@@ -69,6 +70,7 @@ def unique_id_monster(env, obs, x, y):
     # Name a monster
     do_step(env, 'm')
 
+    # Move cursor to correct position
     dx = cursor_x - x
     x_key = 'l' if dx < 0 else 'h'
     dx = abs(dx)
@@ -79,15 +81,24 @@ def unique_id_monster(env, obs, x, y):
     dy = abs(dy)
     move_cursor(env, y_key, dy)
 
-    do_step(env, ',')
+    # Select square
+    raw_obs, _ = do_step(env, ',')
+    msg = ''.join([chr(char) for char in raw_obs[5] if char != bytes(1)])
 
-    for char in str(counter):
-        do_step(env, char)
+    # Creature already has a name, do not change it
+    if msg.__contains__('called'):
+        do_step(env, '\n')
+    else:
+        # Give name character by character
+        for char in str(counter):
+            do_step(env, char)
 
-    counter += 1
+        # Increment counter
+        counter += 1
 
+    # Updated observation
     raw_obs, done = do_step(env, '\n')
-    return env._get_observation(raw_obs), done
+    return env.get_observation(raw_obs), done
 
 
 def do_step(env, char):

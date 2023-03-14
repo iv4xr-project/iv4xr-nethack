@@ -11,19 +11,23 @@ BASEDIR=$(cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P)
 cd "$BASEDIR"
 mkdir -p "${BASEDIR}"/coverage
 
+# Otherwise just create a json file that contains all coverage information
+timestamp=$(date +"%Y-%m-%d_%H-%M-%S")
+filename="summary_${timestamp}.json"
+
 if [ "$1" = "html" ] ; then
   # Generates html coverage report
-  echo "Generating html report..."
   rm -rf "${BASEDIR}"/coverage/htmlreport/*
   mkdir -p "${BASEDIR}"/coverage/htmlreport
-  gcovr -r "${BASEDIR}"/nh343-nao/src --html-details -o "${BASEDIR}"/coverage/htmlreport/report.html
+  html_options="--html-details -o ${BASEDIR}/coverage/htmlreport/report.html"
+  echo "Generating JSON and HTML report... (${filename})"
 else
-  # Otherwise just create a json file that contains all coverage information
-  timestamp=$(date +"%Y-%m-%d_%H-%M-%S")
-  filename="summary_${timestamp}.json"
-  echo "Generating json coverage report... (${filename})"
-  gcovr -r "${BASEDIR}"/nh343-nao/src --json-summary-pretty --json-summary -o "${BASEDIR}"/coverage/"${filename}"
+  html_options=""
+  echo "Generating JSON report... (${filename})"
 fi
+
+gcovr_command="gcovr -r ${BASEDIR}/nh343-nao/src --json-summary-pretty --json-summary=${BASEDIR}/coverage/${filename} $html_options"
+eval "$gcovr_command"
 
 # Remove trap
 trap - EXIT

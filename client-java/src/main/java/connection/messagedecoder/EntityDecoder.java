@@ -122,6 +122,8 @@ public class EntityDecoder extends Decoder {
         return EntityType.WAND;
       case ')':
         return EntityType.WEAPON;
+      case '*':
+        return EntityType.ROCK;
     }
 
     if (Character.isAlphabetic(symbol) || symbol == ':') {

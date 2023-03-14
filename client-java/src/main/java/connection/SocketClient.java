@@ -76,7 +76,7 @@ public class SocketClient {
 
   public void sendReset(String gameMode) {
     writeBit(Encoder.EncoderBit.ResetBit);
-    Encoder.sendString(writer, gameMode);
+    Encoder.writeString(writer, gameMode);
     flush();
     readObservationMessage();
   }
@@ -99,7 +99,7 @@ public class SocketClient {
 
   public void sendSaveCoverage() {
     writeBit(Encoder.EncoderBit.SaveCoverage);
-    Encoder.sendString(writer, Config.getCoverageSummaryType());
+    Encoder.writeBoolean(writer, Config.getGenerateHTML());
     flush();
     Loggers.ConnectionLogger.info("Waiting on saving coverage...");
     readNullByte();

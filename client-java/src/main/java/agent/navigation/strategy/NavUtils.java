@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 import nethack.object.Command;
 import nethack.object.Player;
 import nl.uu.cs.aplib.utils.Pair;
-import util.Loggers;
 
 public class NavUtils {
   /**
@@ -244,12 +243,12 @@ public class NavUtils {
   }
 
   public static Pair<Integer, Tile> nextTile(List<Pair<Integer, Tile>> path) {
-    if (path == null) {
-      Loggers.NavLogger.debug("Path not found");
+    if (path == null || path.isEmpty()) {
+      //      Loggers.NavLogger.debug("Path not found");
       return null;
-    } else if (path.size() <= 1) {
-      Loggers.NavLogger.debug("Already on location, path is length %s", path.size());
-      return null;
+      //    } else if (path.isEmpty()) {
+      //      Loggers.NavLogger.debug("Already on location");
+      //      return null;
     } else {
       // The first element is the src itself, so we need to pick the next one:
       return path.get(1);

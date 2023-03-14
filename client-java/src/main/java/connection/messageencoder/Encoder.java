@@ -4,7 +4,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public abstract class Encoder {
-  public static void sendString(DataOutputStream output, String msg) {
+  public static void writeString(DataOutputStream output, String msg) {
     try {
       output.writeShort(msg.length());
       output.writeChars(msg);
@@ -13,7 +13,7 @@ public abstract class Encoder {
     }
   }
 
-  public static void sendInt(DataOutputStream output, int value) {
+  public static void writeInt(DataOutputStream output, int value) {
     try {
       output.writeInt(value);
     } catch (IOException e) {
@@ -21,7 +21,7 @@ public abstract class Encoder {
     }
   }
 
-  public static void sendChar(DataOutputStream output, char character) {
+  public static void writeChar(DataOutputStream output, char character) {
     try {
       output.writeChar(character);
     } catch (IOException e) {
@@ -34,6 +34,14 @@ public abstract class Encoder {
       output.writeByte(byteValue);
     } catch (IOException e) {
       throw new RuntimeException(e);
+    }
+  }
+
+  public static void writeBoolean(DataOutputStream output, boolean booleanValue) {
+    if (booleanValue) {
+      writeByte(output, 1);
+    } else {
+      writeByte(output, 0);
     }
   }
 

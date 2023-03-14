@@ -27,6 +27,9 @@ public class GoalLib {
                     // Survival
                     TacticLib.attackAdjacentMonsters(),
                     TacticLib.resolveHungerState(900),
+                    Actions.singleCommand(new Command(CommandEnum.MISC_WAIT))
+                        .on_(Predicates.outOfCombat_HpCritical)
+                        .lift(),
 
                     // Collect money
                     NavTactic.navigateToWorldEntity(EntitySelector.money),

@@ -73,7 +73,7 @@ public class Config {
     return config.getBoolean("COLLECT_COVERAGE", false);
   }
 
-  public static String getCoverageSummaryType() {
-    return config.getString("SUMMARY_TYPE", "");
+  public static boolean getGenerateHTML() {
+    return config.getBoolean("GENERATE_HTML", false);
   }
 }

@@ -138,10 +138,8 @@ public class AgentState extends Iv4xrAgentState<Void> {
 
     // Player position must be walkable
     IntVec2D playerPos = NavUtils.loc2(worldmodel.position);
-    if (area().nullTile(playerPos)) {
+    if (surface.nullTile(playerPos) || !(surface.getTile(playerPos) instanceof StraightWalkable)) {
       updatedTiles.add(new Unknown(playerPos));
-      //    } else {
-      //      toggleBlockingOff.add(playerPos);
     }
 
     Set<IntVec2D> adjacentCoords =
@@ -194,10 +192,10 @@ public class AgentState extends Iv4xrAgentState<Void> {
         default:
           // If the tile has been seen we switch the state to non-blocking.
           // If we don't know the type of the tile, we for now put a tile in its place
-          if (area().nullTile(pos)) {
+          if (surface.nullTile(pos)) {
             updatedTiles.add(new Unknown(pos));
-          } else if (area().canBeDoor(pos)) {
-            if (area().getTile(pos) instanceof Unknown) {
+          } else if (surface.canBeDoor(pos)) {
+            if (surface.getTile(pos) instanceof Unknown) {
               updatedTiles.add(new Door(pos, true));
             }
             // If the type is more specific than Tile, then don't change anything

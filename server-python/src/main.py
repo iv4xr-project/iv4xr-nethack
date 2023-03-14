@@ -1,5 +1,4 @@
 import logger
-import nle
 import gym
 import sys
 import os

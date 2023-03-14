@@ -325,7 +325,7 @@ class NLE(gym.Env):
 
         self.action_space = gym.spaces.Discrete(len(self.actions))
 
-    def _get_observation(self, observation):
+    def get_observation(self, observation):
         return {
             key: observation[i]
             for key, i in zip(self._original_observation_keys, self._original_indices)
@@ -403,7 +403,7 @@ class NLE(gym.Env):
         info["end_status"] = end_status
         info["is_ascended"] = self.nethack.how_done() == nethack.ASCENDED
 
-        return self._get_observation(observation), reward, done, info
+        return self.get_observation(observation), reward, done, info
 
     def _in_moveloop(self, observation):
         program_state = observation[self._program_state_index]
@@ -449,7 +449,7 @@ class NLE(gym.Env):
             )
             return self.reset(wizkit_items=wizkit_items)
 
-        return self._get_observation(self.last_observation)
+        return self.get_observation(self.last_observation)
 
     def close(self):
         self._close_nethack()

@@ -19,11 +19,16 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public class Predicates {
-  public static final Predicate<AgentState> inCombat_and_hpNotCritical =
+  public static final Predicate<AgentState> outOfCombat_HpCritical =
       S -> {
         WorldEntity player = S.worldmodel.elements.get(S.worldmodel.agentId);
+        if (S.nextToEntity(EntityType.MONSTER, true)) {
+          return false;
+        }
         int hp = (int) player.properties.get("hp");
-        return hp > 5 && S.nextToEntity(EntityType.MONSTER, true);
+        int hpMax = (int) player.properties.get("hpmax");
+        float hpPercentage = (float) hp / (float) hpMax;
+        return hp < 5 || hpPercentage < 0.40;
       };
 
   @Contract(pure = true)

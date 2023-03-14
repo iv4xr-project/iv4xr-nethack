@@ -14,7 +14,6 @@ import subprocess
 import gym
 import nle
 import traceback
-from gym import Env
 
 # Add path to run from commandline
 project_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -98,10 +97,6 @@ def handle(sock):
                 case read.STEP_BYTE:
                     logging.debug("Step")
                     handle_steps(sock, env)
-                    # handle_step(sock, env)
-                # case read.STEP_STROKE_BYTE:
-                #     logging.debug("Step stroke")
-                #     handle_step_stroke(sock, env)
                 case read.SAVE_COVERAGE_BYTE:
                     logging.debug("Save coverage")
                     handle_save_coverage(sock)
@@ -183,7 +178,7 @@ def handle_steps(sock, env):
             obs, rew, done, info = env.step(steps_info[i * 2 + 1])
         else:
             raw_obs, done = env.nethack.step(steps_info[i * 2 + 1])
-            obs = env._get_observation(raw_obs)
+            obs = env.get_observation(raw_obs)
 
     write.write_obs(sock, env, obs)
     write.write_step(sock, done, None)
@@ -192,9 +187,14 @@ def handle_steps(sock, env):
 
 def handle_save_coverage(sock):
     script_path = os.path.join(project_dir, 'coverage.sh')
-    summary_type = read.read_string(sock)
-    logging.info(f'calling script: {script_path} {summary_type}')
-    subprocess.call([script_path, summary_type])
+    generate_html = read.read_bool(sock)
+    if generate_html:
+        logging.info(f'calling script: {script_path} html')
+        subprocess.call([script_path, "html"])
+    else:
+        logging.info(f'calling script: {script_path}')
+        subprocess.call([script_path])
+
     write.write_null_byte(sock)
 
 
