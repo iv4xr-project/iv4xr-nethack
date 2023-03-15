@@ -41,6 +41,8 @@ public class EntityDecoder extends Decoder {
       case 2379:
       case 2378:
         return EntityType.FLOOR;
+      case 2377:
+        return EntityType.TREE;
       case 2374: // Door in vertical wall
       case 2375: // Door in horizontal wall
         return EntityType.DOOR;

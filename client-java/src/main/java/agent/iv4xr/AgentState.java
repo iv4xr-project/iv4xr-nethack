@@ -195,6 +195,9 @@ public class AgentState extends Iv4xrAgentState<Void> {
         case SINK:
           updatedTiles.add(new Sink(pos));
           break;
+        case TREE:
+          updatedTiles.add(new Tree(pos));
+          break;
         default:
           // If the tile has been seen we switch the state to non-blocking.
           // If we don't know the type of the tile, we for now put a tile in its place

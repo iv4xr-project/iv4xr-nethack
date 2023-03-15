@@ -38,6 +38,7 @@ public enum EntityType implements Serializable {
   STATUE,
   THRONE,
   TRAP,
+  TREE,
   UNKNOWN,
   VOID,
   WALL,
