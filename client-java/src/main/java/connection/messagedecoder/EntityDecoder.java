@@ -93,8 +93,6 @@ public class EntityDecoder extends Decoder {
         return color == Color.WHITE ? EntityType.PLAYER : EntityType.HUMAN;
       case '(':
         return EntityType.ITEM;
-      case 'I':
-        return color == Color.TRANSPARENT ? EntityType.LAST_LOCATION : EntityType.MONSTER;
       case 'f':
         return color == Color.WHITE ? EntityType.PET : EntityType.MONSTER;
       case 'u':

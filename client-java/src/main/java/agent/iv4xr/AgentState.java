@@ -15,6 +15,7 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 import nethack.NetHack;
+import nethack.enums.Condition;
 import nethack.enums.EntityType;
 import nethack.object.Entity;
 import nethack.object.Level;
@@ -142,8 +143,13 @@ public class AgentState extends Iv4xrAgentState<Void> {
       updatedTiles.add(new Unknown(playerPos));
     }
 
-    Set<IntVec2D> adjacentCoords =
-        new HashSet<>(NavUtils.neighbourCoordinates(playerPos, Level.SIZE, true));
+    // Adjacent coordinates are not automatically updated if we are blind
+    Set<IntVec2D> adjacentCoords;
+    if (app().gameState.player.conditions.hasCondition(Condition.BLIND)) {
+      adjacentCoords = new HashSet<>();
+    } else {
+      adjacentCoords = new HashSet<>(NavUtils.neighbourCoordinates(playerPos, Level.SIZE, true));
+    }
 
     for (Serializable entry_ : changedCoordinates) {
       Serializable[] entry = (Serializable[]) entry_;

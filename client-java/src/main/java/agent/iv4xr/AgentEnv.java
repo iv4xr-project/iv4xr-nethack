@@ -62,7 +62,6 @@ public class AgentEnv extends Iv4xrEnvironment {
     Level level = app.level();
     for (IntVec2D pos : level.changedCoordinates) {
       Entity e = level.getEntity(pos);
-
       // Unimportant types, and player is updated separately
       if (ignoredTypes.contains(e.type) || e.type == EntityType.PLAYER) {
         continue;

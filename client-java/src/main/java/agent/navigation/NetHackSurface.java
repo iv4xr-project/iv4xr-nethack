@@ -6,6 +6,8 @@ import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.*;
 import java.util.stream.Collectors;
 import nethack.enums.Color;
+import nethack.enums.EntityType;
+import nethack.object.Entity;
 import nethack.object.Level;
 
 public class NetHackSurface extends GridSurface {
@@ -85,7 +87,10 @@ public class NetHackSurface extends GridSurface {
       Tile t = getTile(nextPos);
       if (!(t instanceof Viewable)) {
         continue;
-      } else if (level.getEntity(nextPos).color == Color.TRANSPARENT) {
+      }
+      Entity entity = level.getEntity(nextPos);
+
+      if (entity.color == Color.TRANSPARENT && entity.type != EntityType.MONSTER) {
         continue;
       }
 

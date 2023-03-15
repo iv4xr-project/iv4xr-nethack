@@ -5,13 +5,13 @@
 package agent.navigation.hpastar.graph;
 
 import agent.navigation.hpastar.infrastructure.Id;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 public abstract class INode<TId, TInfo, TEdge> {
   public Id<TId> nodeId;
   public TInfo info;
-  public final Map<Id<TId>, TEdge> edges = new HashMap<>();
+  public final SortedMap<Id<TId>, TEdge> edges = new TreeMap<>();
 
   public abstract void removeEdge(Id<TId> targetNodeId);
 

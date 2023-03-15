@@ -22,7 +22,6 @@ public enum EntityType implements Serializable {
   HUMAN,
   ICE,
   ITEM,
-  LAST_LOCATION,
   MONSTER,
   PLAYER,
   PET,

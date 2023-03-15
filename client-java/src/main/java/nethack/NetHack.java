@@ -56,7 +56,6 @@ public class NetHack {
     client.sendReset(gameMode.toString());
     StepState stepState = client.readStepState();
     updateGameState(stepState);
-    //    step(new Command(CommandEnum.MISC_MORE));
     render();
   }
 

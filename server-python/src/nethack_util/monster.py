@@ -21,6 +21,10 @@ def glyph_to_is_monster():
 MONSTER_GLYPHS = glyph_to_is_monster()
 
 def id_monsters(env, obs):
+    msg = message.read_obs_msg(obs)
+    if msg.__contains__('(n)'):
+        return obs, obs['screen_descriptions']
+
     is_monster = MONSTER_GLYPHS[obs['glyphs']]
     monster_indexes = indexes[is_monster]
     pattern = r"^.*(?:called|named)\s(\S+)"
@@ -40,10 +44,16 @@ def id_monsters(env, obs):
             if word.isnumeric():
                 value = int(word)
                 monster_descriptions[index] = value
-        else:
-            print("Unidentified monster detected", x, y, "index:", index)
-            obs, done = unique_id_monster(env, obs, x, y)
-            id_monster = True
+            continue
+
+        # Cannot name a human since already has a name
+        character = obs['chars'][y][x]
+        if character == ord('@'):
+            continue
+
+        print("Unidentified monster detected", x, y, "index:", index)
+        obs, done = unique_id_monster(env, obs, x, y)
+        id_monster = True
 
     if id_monster:
         env.render()
