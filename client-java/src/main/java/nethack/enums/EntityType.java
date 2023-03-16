@@ -22,10 +22,10 @@ public enum EntityType implements Serializable {
   HUMAN,
   ICE,
   ITEM,
+  LAVA,
   MONSTER,
   PLAYER,
   PET,
-  POOL,
   PORTAL,
   POTION,
   RING,
@@ -36,6 +36,7 @@ public enum EntityType implements Serializable {
   STAIRS_UP,
   SPIDER_WEB,
   STATUE,
+  STRANGE_OBJECT,
   THRONE,
   TRAP,
   TREE,
@@ -43,6 +44,7 @@ public enum EntityType implements Serializable {
   VOID,
   WALL,
   WAND,
+  WATER,
   WEAPON;
 
   private static final long serialVersionUID = 1L;

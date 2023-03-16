@@ -11,17 +11,17 @@ public class EntityDecoder extends Decoder {
   public static Entity decode(
       DataInputStream input, char symbol, int colorCode, int glyph, int id) {
     Color color = Color.fromValue(colorCode);
-    EntityType type = toEntityType(glyph, symbol, color);
+    EntityType type = toEntityType(glyph, symbol, id, color);
     return new Entity(glyph, symbol, id, type, color);
   }
 
-  private static EntityType toEntityType(int glyph, char symbol, Color color) {
+  private static EntityType toEntityType(int glyph, char symbol, int id, Color color) {
     EntityType type = toEntityType(glyph);
     if (type != EntityType.UNKNOWN) {
       return type;
     }
 
-    type = toEntityType(symbol, color);
+    type = toEntityType(symbol, id, color);
     if (type != EntityType.UNKNOWN) {
       return type;
     }
@@ -59,13 +59,15 @@ public class EntityDecoder extends Decoder {
     return EntityType.UNKNOWN;
   }
 
-  private static EntityType toEntityType(char symbol, Color color) {
+  private static EntityType toEntityType(char symbol, int id, Color color) {
     // When simply the symbol and color is enough to identify the type
     switch (symbol) {
       case '_':
         return EntityType.ALTAR;
       case '"':
         return EntityType.AMULET;
+      case ']':
+        return EntityType.STRANGE_OBJECT;
       case '[':
         return EntityType.ARMOR;
       case '0':
@@ -100,7 +102,7 @@ public class EntityDecoder extends Decoder {
       case 'u':
         return color == Color.BROWN ? EntityType.PET : EntityType.MONSTER;
       case '~':
-        return EntityType.POOL;
+        return color == Color.RED ? EntityType.LAVA : EntityType.WATER;
       case '!':
         return EntityType.POTION;
       case '=':
@@ -126,11 +128,12 @@ public class EntityDecoder extends Decoder {
         return EntityType.ROCK;
     }
 
-    if (Character.isAlphabetic(symbol) || symbol == ':') {
-      if (color == Color.WHITE) {
-        return EntityType.STATUE;
-      }
+    if (symbol == 'I' && color == Color.TRANSPARENT) {
       return EntityType.MONSTER;
+    }
+
+    if (Character.isAlphabetic(symbol) || symbol == ':' || symbol == '\'') {
+      return id == 0 ? EntityType.STATUE : EntityType.MONSTER;
     }
 
     return EntityType.UNKNOWN;

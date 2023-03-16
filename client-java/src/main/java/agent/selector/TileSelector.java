@@ -151,7 +151,7 @@ public class TileSelector extends Selector<Pair<Integer, Tile>> {
     }
   }
 
-  private Pair<Integer, Tile> selectClosest(List<Pair<Integer, Tile>> tiles, AgentState S) {
+  public Pair<Integer, Tile> selectClosest(List<Pair<Integer, Tile>> tiles, AgentState S) {
     int n = tiles.size();
     NetHackSurface surface = S.area();
     Tile agentTile = NavUtils.toTile(S.worldmodel.position);

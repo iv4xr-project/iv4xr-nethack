@@ -16,10 +16,10 @@ public class Loggers {
   public static final Logger ConnectionLogger = createLogger("\uD83D\uDCE1"); // 📡
   public static final Logger EncoderLogger = createLogger("\uD83D\uDCE6"); // 📦
   public static final Logger DecoderLogger = createLogger("\uD83D\uDCE8"); // 📬;
+  public static final Logger ProfilerLogger = createLogger("⏱️"); // ⏱️
 
   // NetHack loggers
   public static final Logger NetHackLogger = createLogger("⚔️"); // ⚔️
-  public static final Logger ProfilerLogger = createLogger("Profiler");
   public static final Logger SeedLogger = createLogger("\uD83C\uDF31"); // 🌱
   public static final Logger ReplayLogger = createLogger("🎥️"); // 🎥️
 

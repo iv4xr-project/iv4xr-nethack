@@ -48,6 +48,11 @@ public class Config {
   }
 
   public static Turn getStartTurn() {
+    // Autoplay overrides start turn
+    if (getAutoPlay()) {
+      return new Turn(1000000);
+    }
+
     List<Object> startTurn = config.getList("START_TURN", new ArrayList<Object>());
     assert startTurn.isEmpty() || startTurn.size() == 2
         : String.format(
@@ -60,13 +65,19 @@ public class Config {
     // Create turn from the two ints
     int time = Integer.parseInt(startTurn.get(0).toString());
     int step = Integer.parseInt(startTurn.get(1).toString());
-    Turn turn = new Turn(time);
-    turn.step = step;
-    return turn;
+    return new Turn(time, step);
+  }
+
+  public static boolean getAutoPlay() {
+    return config.getBoolean("AUTO_PLAY", false);
   }
 
   public static boolean getSoundState() {
     return config.getBoolean("SOUND", true);
+  }
+
+  public static String getReplayFile() {
+    return config.getString("REPLAY_FILE", "logs/replay.log");
   }
 
   public static boolean getCollectCoverage() {

@@ -174,6 +174,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
           updatedTiles.add(new Corridor(pos));
           break;
         case FLOOR:
+        case ICE:
           updatedTiles.add(new Floor(pos));
           break;
         case DOOR:
@@ -197,6 +198,18 @@ public class AgentState extends Iv4xrAgentState<Void> {
           break;
         case TREE:
           updatedTiles.add(new Tree(pos));
+          break;
+        case WATER:
+          updatedTiles.add(new Water(pos));
+          break;
+        case LAVA:
+          updatedTiles.add(new Lava(pos));
+          break;
+        case FOUNTAIN:
+          updatedTiles.add(new Fountain(pos));
+          break;
+        case THRONE:
+          updatedTiles.add(new Throne(pos));
           break;
         default:
           // If the tile has been seen we switch the state to non-blocking.

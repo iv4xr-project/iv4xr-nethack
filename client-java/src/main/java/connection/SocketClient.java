@@ -129,7 +129,7 @@ public class SocketClient {
     }
     flush();
 
-    Loggers.ProfilerLogger.trace("SENDING STEP BYTES TOOK: %d%n", stopwatch.total());
+    Loggers.ProfilerLogger.trace("SENDING STEP BYTES TOOK: %f", stopwatch.total());
     return readStepState();
   }
 
@@ -151,7 +151,7 @@ public class SocketClient {
     ObservationMessage obsMessage = readObservationMessage();
     StepMessage stepMessage = StepMessageDecoder.decode(reader);
     Stopwatch stopwatch = new Stopwatch(true);
-    Loggers.ProfilerLogger.trace("READ OBS MESSAGE TOOK: %d%n%n", stopwatch.split());
+    Loggers.ProfilerLogger.trace("READ OBS MESSAGE TOOK: %f", stopwatch.split());
 
     StepState stepState = new StepState();
     stepState.player = obsMessage.player;
@@ -163,7 +163,7 @@ public class SocketClient {
     stepState.info = null;
     stepState.level = new Level(obsMessage.entities);
     stepState.message = obsMessage.message;
-    Loggers.ProfilerLogger.trace("EXIT TOOK: %d%n", stopwatch.split());
+    Loggers.ProfilerLogger.trace("EXIT TOOK: %f", stopwatch.split());
     return stepState;
   }
 

@@ -18,17 +18,17 @@ public class ObservationMessageDecoder extends Decoder {
 
       int inputByte = input.readByte();
       assert inputByte == DecoderBit.ObservationBit.value;
-      Loggers.ProfilerLogger.trace("READ BIT TOOK: %d", stopwatch.split());
+      Loggers.ProfilerLogger.trace("READ BIT TOOK: %fs", stopwatch.split());
 
       Pair<Stats, Player> pair = StatsDecoder.decode(input);
       observationMessage.stats = pair.fst;
       observationMessage.player = pair.snd;
-      Loggers.ProfilerLogger.trace("READ STATS TOOK: %d", stopwatch.split());
+      Loggers.ProfilerLogger.trace("READ STATS TOOK: %fs", stopwatch.split());
 
       byte[] chars = input.readNBytes(256);
       observationMessage.message = new String(chars, StandardCharsets.UTF_8);
       observationMessage.message = observationMessage.message.replaceAll("\0", "");
-      Loggers.ProfilerLogger.trace("READ MESSAGE TOOK: %d", stopwatch.split());
+      Loggers.ProfilerLogger.trace("READ MESSAGE TOOK: %fs", stopwatch.split());
 
       long total = 0;
       int bytesPerEntry = 6;
@@ -45,7 +45,7 @@ public class ObservationMessageDecoder extends Decoder {
               EntityDecoder.decode(input, symbol, colorCode, glyph, id);
         }
       }
-      Loggers.ProfilerLogger.trace("READ MAP TOOK: %d", stopwatch.split());
+      Loggers.ProfilerLogger.trace("READ MAP TOOK: %f", stopwatch.split());
 
       int nr_items = input.readByte();
       observationMessage.items = new Item[nr_items];
@@ -53,7 +53,7 @@ public class ObservationMessageDecoder extends Decoder {
       for (int i = 0; i < nr_items; i++) {
         observationMessage.items[i] = ItemDecoder.decode(input);
       }
-      Loggers.ProfilerLogger.trace("READ ITEMS TOOK: %d", stopwatch.split());
+      Loggers.ProfilerLogger.trace("READ ITEMS TOOK: %f", stopwatch.split());
 
       return observationMessage;
     } catch (IOException e) {

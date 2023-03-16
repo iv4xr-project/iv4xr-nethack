@@ -26,6 +26,7 @@ import util.Loggers;
  * @author wish
  */
 public class AgentEnv extends Iv4xrEnvironment {
+  // Ignores all dungeon features
   private static final Set<EntityType> ignoredTypes =
       new HashSet<>(
           Arrays.asList(
@@ -39,7 +40,11 @@ public class AgentEnv extends Iv4xrEnvironment {
               EntityType.STAIRS_UP,
               EntityType.STAIRS_DOWN,
               EntityType.SINK,
-              EntityType.TREE));
+              EntityType.TREE,
+              EntityType.LAVA,
+              EntityType.WATER,
+              EntityType.THRONE,
+              EntityType.FOUNTAIN));
   public final NetHack app;
 
   public AgentEnv(NetHack app) {

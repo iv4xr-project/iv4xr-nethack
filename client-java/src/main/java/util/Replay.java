@@ -62,7 +62,7 @@ public class Replay {
   }
 
   public static void main(String[] args) {
-    String fileName = "logs/replay.log";
+    String fileName = Config.getReplayFile();
     Replay replay = new Replay(fileName);
 
     SocketClient client = new SocketClient();

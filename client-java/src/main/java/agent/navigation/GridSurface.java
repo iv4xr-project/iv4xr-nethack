@@ -335,6 +335,55 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
     return posPath.stream().map(Tile::new).collect(Collectors.toList());
   }
 
+  // Has optimizations in place to reduce the amount of time to find the shortest path
+  public List<Tile> findShortestPath(Tile from, List<Tile> targets) {
+    assert !targets.isEmpty() : "Shortest cannot be";
+    HierarchicalMapFactory factory = new HierarchicalMapFactory();
+    Id<AbstractNode> startAbsNode = factory.insertAbstractNode(hierarchicalMap, from.pos);
+    int maxPathsToRefine = Integer.MAX_VALUE;
+    HierarchicalSearch hierarchicalSearch = new HierarchicalSearch();
+
+    List<IntVec2D> shortestPath = null;
+
+    for (Tile target : targets) {
+      if (from.equals(target)) {
+        shortestPath = new ArrayList<>();
+        break;
+      }
+
+      if (shortestPath != null && manhattenDistance(from, target) >= shortestPath.size()) {
+        continue;
+      }
+
+      Id<AbstractNode> targetAbsNode = factory.insertAbstractNode(hierarchicalMap, target.pos);
+      List<AbstractPathNode> abstractPath =
+          hierarchicalSearch.doHierarchicalSearch(
+              hierarchicalMap, startAbsNode, targetAbsNode, 1, maxPathsToRefine);
+      List<IPathNode> path =
+          hierarchicalSearch.abstractPathToLowLevelPath(
+              hierarchicalMap, abstractPath, hierarchicalMap.size.width, maxPathsToRefine);
+      SmoothWizard smoother = new SmoothWizard(concreteMap, path);
+      path = smoother.smoothPath();
+      List<IntVec2D> posPath = toPositionPath(path, concreteMap);
+      if (!posPath.isEmpty()) {
+        verifyPath(from.pos, target.pos, posPath);
+        if (shortestPath == null || shortestPath.size() > posPath.size()) {
+          shortestPath = posPath;
+        }
+      }
+      factory.removeAbstractNode(hierarchicalMap, targetAbsNode);
+    }
+
+    factory.removeAbstractNode(hierarchicalMap, startAbsNode);
+
+    if (shortestPath == null) {
+      return null;
+    } else if (shortestPath.isEmpty()) {
+      return new ArrayList<>(Collections.singletonList(new Tile(from.pos)));
+    }
+    return shortestPath.stream().map(Tile::new).collect(Collectors.toList());
+  }
+
   private List<IntVec2D> toPositionPath(List<IPathNode> path, ConcreteMap concreteMap) {
     return path.stream()
         .map(

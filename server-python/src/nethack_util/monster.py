@@ -10,7 +10,8 @@ from src.nethack_util import message
 
 # nethack.glyph_is_monster(1500) returns true/false
 
-counter = 0
+# ID starts at 1
+counter = 1
 indexes = np.arange(0, 21 * 79).reshape(21, 79)
 
 def glyph_to_is_monster():
@@ -52,7 +53,7 @@ def id_monsters(env, obs):
             continue
 
         print("Unidentified monster detected", x, y, "index:", index)
-        obs, done = unique_id_monster(env, obs, x, y)
+        obs, done = unique_id_monster(env, obs, x, y, monster_descriptions, index)
         id_monster = True
 
     if id_monster:
@@ -75,7 +76,7 @@ def move_cursor(env, key, delta):
         delta -= 1
 
 
-def unique_id_monster(env, obs, x, y):
+def unique_id_monster(env, obs, x, y, monster_descriptions, index):
     global counter
     cursor_x, cursor_y = get_cursor_pos(obs)
 
@@ -108,8 +109,13 @@ def unique_id_monster(env, obs, x, y):
         for char in str(counter):
             do_step(env, char)
 
+        monster_descriptions[index] = counter
         # Increment counter
         counter += 1
+    else:
+        msg_words = msg.replace('?', '').split()
+        monster_id = msg_words[-1]
+        monster_descriptions[index] = monster_id
 
     # Updated observation
     raw_obs, done = do_step(env, '\n')

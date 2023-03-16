@@ -23,56 +23,57 @@
         </File>
     </Appenders>
     <Loggers>
-        <Logger name="📡" level="debug" additivity="false">
+        <Logger name="📡" additivity="false" level="all">
             <AppenderRef ref="LogToFile" level="info"/>
             <AppenderRef ref="LogToConsole" level="info"/>
         </Logger>
-        <Logger name="📬" level="debug" additivity="false">
+        <Logger name="📬" additivity="false" level="all">
             <AppenderRef ref="LogToFile" level="info"/>
             <AppenderRef ref="LogToConsole" level="info"/>
         </Logger>
-        <Logger name="📦" level="debug" additivity="false">
+        <Logger name="📦" additivity="false" level="all">
             <AppenderRef ref="LogToFile" level="info"/>
             <AppenderRef ref="LogToConsole" level="info"/>
+        </Logger>
+        <Logger name="⏱️" additivity="false" level="all">
+<!--            <AppenderRef ref="LogToConsole" level="trace"/>-->
         </Logger>
 
-        <Logger name="⚔️" level="debug" additivity="false">
+        <Logger name="⚔️" additivity="false" level="all">
             <AppenderRef ref="LogToFile" level="debug"/>
             <AppenderRef ref="LogToConsole" level="info"/>
         </Logger>
-        <Logger name="🌱" level="debug" additivity="false">
+        <Logger name="🌱" additivity="false" level="all">
             <AppenderRef ref="LogToFile" level="info"/>
             <AppenderRef ref="LogToSeedFile" level="info"/>
             <AppenderRef ref="LogToConsole" level="info"/>
         </Logger>
-        <Logger name="🎥️" additivity="false">
+        <Logger name="🎥️" additivity="false" level="all">
             <AppenderRef ref="LogToReplayFile"/>
         </Logger>
 
-        <Logger name="🧭" level="debug" additivity="false">
+        <Logger name="🧭" additivity="false" level="all">
             <AppenderRef ref="LogToFile" level="debug"/>
             <AppenderRef ref="LogToConsole" level="debug"/>
         </Logger>
-        <Logger name="💡" level="debug" additivity="false">
+        <Logger name="💡" additivity="false" level="all">
             <AppenderRef ref="LogToFile" level="debug"/>
             <AppenderRef ref="LogToConsole" level="info"/>
         </Logger>
-        <Logger name="🕵️" level="debug" additivity="false">
+        <Logger name="🕵️" additivity="false" level="all">
             <AppenderRef ref="LogToFile" level="debug"/>
             <AppenderRef ref="LogToConsole" level="info"/>
         </Logger>
-        <Logger name="🌎" level="debug" additivity="false">
+        <Logger name="🌎" additivity="false" level="all">
             <AppenderRef ref="LogToFile" level="info"/>
             <AppenderRef ref="LogToConsole" level="info"/>
         </Logger>
-        <Logger name="🎵" level="debug" additivity="false">
-            <AppenderRef ref="LogToConsole" level="debug"/>
-        </Logger>
-        <Logger name="HPA" level="trace" additivity="false">
-<!--            <AppenderRef ref="LogToConsole"/>-->
+        <Logger name="🎵" additivity="false" level="all"/>
+        <Logger name="HPA" additivity="false" level="all">
+<!--            <AppenderRef level="info" ref="LogToConsole"/>-->
         </Logger>
 
-        <Root level="debug" additivity="false">
+        <Root additivity="false" level="all">
             <AppenderRef ref="LogToFile" level="debug"/>
             <AppenderRef ref="LogToConsole" level="trace"/>
         </Root>
