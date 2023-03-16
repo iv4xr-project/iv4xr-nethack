@@ -19,7 +19,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 import nethack.enums.Color;
 import util.ColoredStringBuilder;
-import util.Loggers;
 
 /**
  * Representing a navigation graph over a 2D tiled-world. The world is assumed to be made of
@@ -305,39 +304,12 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
 
   @Override
   public List<Tile> findPath(Tile from, Tile to) {
-    // Already on location
-    if (from.equals(to)) {
-      return new ArrayList<>();
-    }
-
-    HierarchicalMapFactory factory = new HierarchicalMapFactory();
-    Id<AbstractNode> startAbsNode = factory.insertAbstractNode(hierarchicalMap, from.pos);
-    Id<AbstractNode> targetAbsNode = factory.insertAbstractNode(hierarchicalMap, to.pos);
-    int maxPathsToRefine = Integer.MAX_VALUE;
-    HierarchicalSearch hierarchicalSearch = new HierarchicalSearch();
-    List<AbstractPathNode> abstractPath =
-        hierarchicalSearch.doHierarchicalSearch(
-            hierarchicalMap, startAbsNode, targetAbsNode, 1, maxPathsToRefine);
-    List<IPathNode> path =
-        hierarchicalSearch.abstractPathToLowLevelPath(
-            hierarchicalMap, abstractPath, hierarchicalMap.size.width, maxPathsToRefine);
-    SmoothWizard smoother = new SmoothWizard(concreteMap, path);
-    path = smoother.smoothPath();
-    factory.removeAbstractNode(hierarchicalMap, targetAbsNode);
-    factory.removeAbstractNode(hierarchicalMap, startAbsNode);
-    if (path.isEmpty()) {
-      return null;
-    }
-    List<IntVec2D> posPath = toPositionPath(path, concreteMap);
-
-    Loggers.HPALogger.info("FindPath: %s -> %s (%s)", from, to, posPath);
-    verifyPath(from.pos, to.pos, posPath);
-    return posPath.stream().map(Tile::new).collect(Collectors.toList());
+    return findShortestPath(from, to);
   }
 
   // Has optimizations in place to reduce the amount of time to find the shortest path
-  public List<Tile> findShortestPath(Tile from, List<Tile> targets) {
-    assert !targets.isEmpty() : "Shortest cannot be";
+  public List<IntVec2D> findShortestPosPath(Tile from, Tile... targets) {
+    assert targets.length != 0 : "Cannot find shortest path to zero targets";
     HierarchicalMapFactory factory = new HierarchicalMapFactory();
     Id<AbstractNode> startAbsNode = factory.insertAbstractNode(hierarchicalMap, from.pos);
     int maxPathsToRefine = Integer.MAX_VALUE;
@@ -351,7 +323,7 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
         break;
       }
 
-      if (shortestPath != null && manhattenDistance(from, target) >= shortestPath.size()) {
+      if (shortestPath != null && manhattanDistance(from, target) >= shortestPath.size()) {
         continue;
       }
 
@@ -375,13 +347,16 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
     }
 
     factory.removeAbstractNode(hierarchicalMap, startAbsNode);
+    return shortestPath;
+  }
 
-    if (shortestPath == null) {
+  // Has optimizations in place to reduce the amount of time to find the shortest path
+  public List<Tile> findShortestPath(Tile from, Tile... targets) {
+    List<IntVec2D> posPath = findShortestPosPath(from, targets);
+    if (posPath == null) {
       return null;
-    } else if (shortestPath.isEmpty()) {
-      return new ArrayList<>(Collections.singletonList(new Tile(from.pos)));
     }
-    return shortestPath.stream().map(Tile::new).collect(Collectors.toList());
+    return posPath.stream().map(Tile::new).collect(Collectors.toList());
   }
 
   private List<IntVec2D> toPositionPath(List<IPathNode> path, ConcreteMap concreteMap) {
@@ -517,14 +492,16 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
     return heuristic(tile, nodeId1);
   }
 
-  public int manhattenDistance(Tile tile1, Tile tile2) {
-    return Math.max(Math.abs(tile1.pos.x - tile2.pos.x), Math.abs(tile1.pos.y - tile2.pos.y));
+  public int manhattanDistance(Tile tile1, Tile tile2) {
+    return manhattanDistance(tile1.pos, tile2.pos);
+  }
+
+  public int manhattanDistance(IntVec2D from, IntVec2D to) {
+    return Math.max(Math.abs(from.x - to.x), Math.abs(from.y - to.y));
   }
 
   public static float heuristic(IntVec2D from, IntVec2D to) {
-    int dx = Math.abs(from.x - to.x);
-    int dy = Math.abs(from.y - to.y);
-    return dx * dx + dy * dy;
+    return IntVec2D.distSq(from, to);
   }
   // endregion
 

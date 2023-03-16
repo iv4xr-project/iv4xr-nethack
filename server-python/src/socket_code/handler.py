@@ -158,10 +158,12 @@ def handle_set_seed(sock, env):
 def create_env(env_name, save_ttyrec=False):
     # Settings can be found in: server-python\lib\nle\nle\env\base.py line: 168
     max_episode_steps = 10000000
+    character = "mon-hum-neu-mal"
+    # character = "ran-hum-neu-mal"
     if save_ttyrec:
-        return gym.make(env_name, max_episode_steps=max_episode_steps, save_ttyrec_every=1000000, savedir="nle-recordings")
+        return gym.make(env_name, character=character, max_episode_steps=max_episode_steps, save_ttyrec_every=1000000, savedir="nle-recordings")
     else:
-        return gym.make(env_name, max_episode_steps=max_episode_steps)
+        return gym.make(env_name, character=character, max_episode_steps=max_episode_steps)
 
 def handle_get_seed(sock, env):
     assert CURRENT_ENV == "NetHack-v0"

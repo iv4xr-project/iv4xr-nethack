@@ -164,7 +164,7 @@ public class TileSelector extends Selector<Pair<Integer, Tile>> {
 
       // Cannot be shorter since distance is at least equal
       if (shortestPath != null
-          && surface.manhattenDistance(agentTile, tile.snd) >= shortestPath.size()) {
+          && surface.manhattanDistance(agentTile, tile.snd) >= shortestPath.size()) {
         continue;
       }
 

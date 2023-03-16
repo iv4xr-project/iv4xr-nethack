@@ -51,6 +51,19 @@ public class Actions {
                 });
   }
 
+  // Construct an action that would fire in a direction.
+  static Action fire() {
+    return action("fire")
+        .do2(
+            (AgentState S) ->
+                (Direction direction) -> {
+                  Sounds.attack();
+                  Loggers.GoalLogger.info(">>> fire %s", direction);
+                  WorldModel newWom = WorldModels.fire(S, direction);
+                  return new Pair<>(S, newWom);
+                });
+  }
+
   // Construct an action that would kick the door.
   static Action kick() {
     return action("kick")

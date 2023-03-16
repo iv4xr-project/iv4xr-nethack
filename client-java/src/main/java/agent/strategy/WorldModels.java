@@ -23,6 +23,11 @@ public class WorldModels {
     return performCommands(state, new Command(COMMAND_FIGHT), command);
   }
 
+  static WorldModel fire(AgentState state, Direction direction) {
+    Command command = Direction.getCommand(direction);
+    return performCommands(state, new Command(COMMAND_FIRE), command);
+  }
+
   static WorldModel eatItem(AgentState state, char itemSlot) {
     Command itemCommand = Command.fromLiteralStroke(String.valueOf(itemSlot));
     return performCommands(state, new Command(COMMAND_EAT), itemCommand, new Command(MISC_MORE));

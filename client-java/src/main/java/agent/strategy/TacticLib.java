@@ -47,18 +47,38 @@ public class TacticLib {
   }
 
   public static Tactic attackAdjacentMonsters() {
-    return Actions.attack()
-        .on(
-            (AgentState S) -> {
-              WorldEntity we =
-                  EntitySelector.adjacentMonster.apply(
-                      new ArrayList<>(S.worldmodel.elements.values()), S);
-              if (we == null) {
-                return null;
-              }
-              return NavUtils.toDirection(S, NavUtils.loc3(we.position));
-            })
-        .lift();
+    return FIRSTof(
+        Actions.attack()
+            .on(
+                (AgentState S) -> {
+                  WorldEntity we =
+                      EntitySelector.adjacentMonster.apply(
+                          new ArrayList<>(S.worldmodel.elements.values()), S);
+                  if (we == null) {
+                    return null;
+                  }
+                  return NavUtils.toDirection(S, NavUtils.loc3(we.position));
+                })
+            //        .lift(),
+            //            Actions.fire().on((AgentState S) -> {
+            //              int agentLvl = NavUtils.levelNr(S.worldmodel.position);
+            //              List<WorldEntity> wes =
+            // S.worldmodel.elements.values().stream().filter(worldEntity ->
+            // NavUtils.levelNr(worldEntity.position) == agentLvl)).collect(Collectors.toList());
+            //              if (wes.isEmpty()) {
+            //                return null;
+            //              }
+            //              WorldEntity entity = null;
+            //              IntVec2D agentPos = NavUtils.loc2(S.worldmodel.position);
+            //              for (WorldEntity we : wes) {
+            //                IntVec2D entityPos = NavUtils.loc2(we.position);
+            //                if (agentPos.x == entityPos.x || agentPos.y == entityPos.y) {
+            //                  entity = true;
+            //                }
+            //              }
+            //
+            //              return NavUtils.toDirection(S, NavUtils.loc3(we.position));})
+            .lift());
   }
 
   public static Tactic resolveHungerState(int prayerTimeOut) {
