@@ -1,11 +1,11 @@
 package agent.navigation.surface;
 
-import eu.iv4xr.framework.spatial.IntVec2D;
+import util.CustomVec3D;
 
 public class Unknown extends Tile implements Printable, Walkable {
   private boolean isVisible;
 
-  public Unknown(IntVec2D pos) {
+  public Unknown(CustomVec3D pos) {
     super(pos);
   }
 

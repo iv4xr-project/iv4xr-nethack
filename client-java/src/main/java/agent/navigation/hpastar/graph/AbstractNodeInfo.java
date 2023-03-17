@@ -6,23 +6,34 @@ package agent.navigation.hpastar.graph;
 
 import agent.navigation.hpastar.Cluster;
 import agent.navigation.hpastar.infrastructure.Id;
-import eu.iv4xr.framework.spatial.IntVec2D;
 import org.apache.commons.lang.NotImplementedException;
 import util.ColoredStringBuilder;
+import util.CustomVec2D;
 
 // implements nodes in the abstract graph
 public class AbstractNodeInfo {
   public final Id<AbstractNode> id;
-  public final IntVec2D position;
+  public final CustomVec2D position;
   public final Id<Cluster> clusterId;
   public final Id<ConcreteNode> concreteNodeId;
   public int level;
 
   public AbstractNodeInfo(
       Id<AbstractNode> id,
+      Id<Cluster> clId,
+      CustomVec2D position,
+      Id<ConcreteNode> concreteNodeId) {
+    this.id = id;
+    this.clusterId = clId;
+    this.position = position;
+    this.concreteNodeId = concreteNodeId;
+  }
+
+  public AbstractNodeInfo(
+      Id<AbstractNode> id,
       int level,
       Id<Cluster> clId,
-      IntVec2D position,
+      CustomVec2D position,
       Id<ConcreteNode> concreteNodeId) {
     this.id = id;
     this.level = level;

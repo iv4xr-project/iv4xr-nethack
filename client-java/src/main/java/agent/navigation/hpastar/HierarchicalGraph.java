@@ -7,17 +7,15 @@ import agent.navigation.hpastar.infrastructure.IMap;
 import agent.navigation.hpastar.infrastructure.Id;
 import agent.navigation.hpastar.search.AStar;
 import agent.navigation.hpastar.search.Path;
-import agent.navigation.surface.Tile;
-import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.*;
-import nl.uu.cs.aplib.utils.Pair;
+import util.CustomVec2D;
+import util.CustomVec3D;
 import util.Loggers;
 
 public class HierarchicalGraph implements IMap<AbstractNode> {
   public final AbstractGraph abstractGraph = new AbstractGraph();
-  public final Map<Pair<Integer, IntVec2D>, Id<AbstractNode>> positionToAbstractNodeIdMap =
-      new HashMap<>();
-  public final Map<Integer, List<IntVec2D>> levelToEntrancesMap = new HashMap<>();
+  public final Map<CustomVec3D, Id<AbstractNode>> positionToAbstractNodeIdMap = new HashMap<>();
+  public final Map<Integer, List<CustomVec2D>> levelToEntrancesMap = new HashMap<>();
 
   @Override
   public int getNrNodes() {
@@ -45,29 +43,29 @@ public class HierarchicalGraph implements IMap<AbstractNode> {
     return result;
   }
 
-  public Id<AbstractNode> addAbstractNode(int level, IntVec2D pos) {
-    Id<AbstractNode> nodeId = getAbsNodeId(level, pos);
+  public Id<AbstractNode> addAbstractNode(CustomVec3D loc) {
+    Id<AbstractNode> nodeId = getAbsNodeId(loc);
     if (nodeId != null) {
-      System.out.printf("HierarchGraph Ignored AddNode %s: (%d,%s)%n", nodeId, level, pos);
+      System.out.printf("HierarchGraph Ignored AddNode %s: %s%n", nodeId, loc);
       return nodeId;
     }
 
-    if (!levelToEntrancesMap.containsKey(level)) {
-      levelToEntrancesMap.put(level, new ArrayList<>());
+    if (!levelToEntrancesMap.containsKey(loc.lvl)) {
+      levelToEntrancesMap.put(loc.lvl, new ArrayList<>());
     }
-    levelToEntrancesMap.get(level).add(pos);
+    levelToEntrancesMap.get(loc.lvl).add(loc.pos);
 
-    System.out.printf("HierarchGraph AddNode (%d,%s)%n", level, pos);
+    System.out.printf("HierarchGraph AddNode %s%n", loc);
     Id<AbstractNode> absNodeId = new Id<AbstractNode>().from(abstractGraph.nextId);
-    AbstractNodeInfo nodeInfo = new AbstractNodeInfo(absNodeId, level, null, pos, null);
+    AbstractNodeInfo nodeInfo = new AbstractNodeInfo(absNodeId, loc.lvl, null, loc.pos, null);
     abstractGraph.addNode(nodeInfo.id, nodeInfo);
-    positionToAbstractNodeIdMap.put(new Pair<>(level, pos), absNodeId);
+    positionToAbstractNodeIdMap.put(loc, absNodeId);
     return absNodeId;
   }
 
   public void removeAbstractNode(Id<AbstractNode> abstractNodeId) {
     AbstractNodeInfo abstractNodeInfo = abstractGraph.getNodeInfo(abstractNodeId);
-    Pair<Integer, IntVec2D> pos = new Pair<>(abstractNodeInfo.level, abstractNodeInfo.position);
+    CustomVec3D pos = new CustomVec3D(abstractNodeInfo.level, abstractNodeInfo.position);
     positionToAbstractNodeIdMap.remove(pos);
     abstractGraph.removeEdgesFromAndToNode(abstractNodeId);
     abstractGraph.removeNode(abstractNodeId);
@@ -135,13 +133,13 @@ public class HierarchicalGraph implements IMap<AbstractNode> {
   }
 
   public void createEdgesWithinLevel(int level, GridSurface surface) {
-    List<IntVec2D> entrances = levelToEntrancesMap.get(level);
+    List<CustomVec2D> entrances = levelToEntrancesMap.get(level);
     if (entrances == null) {
       return;
     }
 
     // Remove edges between entrances within the same level
-    for (IntVec2D pos : entrances) {
+    for (CustomVec2D pos : entrances) {
       Id<AbstractNode> absNodeId = getAbsNodeId(level, pos);
       List<Id<AbstractNode>> neighboursToRemove = new ArrayList<>();
       AbstractNode node = abstractGraph.getNode(absNodeId);
@@ -162,34 +160,38 @@ public class HierarchicalGraph implements IMap<AbstractNode> {
     }
 
     // Creates edges between the entrances within the level
-    for (IntVec2D pos1 : entrances) {
+    for (CustomVec2D pos1 : entrances) {
       Id<AbstractNode> abs1 = getAbsNodeId(level, pos1);
-      for (IntVec2D pos2 : entrances) {
+      for (CustomVec2D pos2 : entrances) {
         if (pos1.equals(pos2)) {
           continue;
         }
 
         Id<AbstractNode> abs2 = getAbsNodeId(level, pos2);
-        List<Tile> path = surface.findPath(new Tile(pos1), new Tile(pos2));
+        List<CustomVec2D> path = surface.findPath(pos1, pos2);
         addEdge(abs1, abs2, path.size() * Constants.COST_ONE);
       }
     }
   }
 
-  public Id<AbstractNode> getAbsNodeId(int level, IntVec2D pos) {
-    return positionToAbstractNodeIdMap.get(new Pair<>(level, pos));
+  public Id<AbstractNode> getAbsNodeId(CustomVec3D loc) {
+    return positionToAbstractNodeIdMap.get(loc);
+  }
+
+  public Id<AbstractNode> getAbsNodeId(int lvl, CustomVec2D pos) {
+    return getAbsNodeId(new CustomVec3D(lvl, pos));
   }
 
   public static void main(String[] args) throws Exception {
-    Pair<Integer, Tile> from = new Pair<>(0, new Tile(new IntVec2D(1, 1)));
-    Pair<Integer, Tile> to = new Pair<>(1, new Tile(new IntVec2D(2, 2)));
+    CustomVec3D from = new CustomVec3D(0, new CustomVec2D(1, 1));
+    CustomVec3D to = new CustomVec3D(1, new CustomVec2D(2, 2));
 
     HierarchicalGraph graph = new HierarchicalGraph();
-    Id<AbstractNode> absFromId = graph.addAbstractNode(from.fst, from.snd.pos);
-    Id<AbstractNode> absToId = graph.addAbstractNode(to.fst, to.snd.pos);
+    Id<AbstractNode> absFromId = graph.addAbstractNode(from);
+    Id<AbstractNode> absToId = graph.addAbstractNode(to);
     graph.addEdge(absFromId, absToId, Constants.COST_ONE);
     Loggers.HPALogger.info("Search: %s -> %s, %s %s", absFromId, absFromId, from, to);
-    AStar<AbstractNode> search = new AStar<AbstractNode>(graph, absFromId, absToId);
+    AStar<AbstractNode> search = new AStar<>(graph, absFromId, absToId);
     Path<AbstractNode> abstractNodePath = search.findPath();
     System.out.println(abstractNodePath.pathNodes);
   }

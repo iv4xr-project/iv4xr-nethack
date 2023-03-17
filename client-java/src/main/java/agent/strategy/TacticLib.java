@@ -12,9 +12,10 @@ import java.util.Arrays;
 import java.util.Optional;
 import nethack.object.Player;
 import nl.uu.cs.aplib.mainConcepts.Tactic;
+import util.CustomVec3D;
 
 /**
- * Provide several basic actions and tactics.
+ * CustomVec2D Provide several basic actions and tactics.
  *
  * <p>Keep in mind that the provided navigation and exploration tactics/goals currently has no
  * ability to deal with items that block a corridor. The solution is for now to just generate
@@ -24,28 +25,6 @@ import nl.uu.cs.aplib.mainConcepts.Tactic;
  * @author wish
  */
 public class TacticLib {
-  /**
-   * This constructs a "default" tactic to interact with an entity. The tactic is enabled if the
-   * entity is known in the agent's state/wom, and if it is adjacent to the agent.
-   */
-  public Tactic interactTac(String targetId) {
-    return Actions.interact(targetId)
-        .on(
-            (AgentState S) -> {
-              WorldEntity e = S.worldmodel.elements.get(targetId);
-              if (e == null
-                  || NavUtils.levelNr(S.worldmodel.position) != NavUtils.levelNr(e.position)) {
-                return null;
-              }
-              if (NavUtils.adjacent(
-                  NavUtils.loc2(S.worldmodel.position), NavUtils.loc2(e.position), true)) {
-                return NavUtils.loc2(e.position);
-              }
-              return null;
-            })
-        .lift();
-  }
-
   public static Tactic attackAdjacentMonsters() {
     return FIRSTof(
         Actions.attack()
@@ -57,23 +36,24 @@ public class TacticLib {
                   if (we == null) {
                     return null;
                   }
-                  return NavUtils.toDirection(S, NavUtils.loc3(we.position));
+                  return NavUtils.toDirection(S, new CustomVec3D(we.position));
                 })
             //        .lift(),
             //            Actions.fire().on((AgentState S) -> {
             //              int agentLvl = NavUtils.levelNr(S.worldmodel.position);
             //              List<WorldEntity> wes =
             // S.worldmodel.elements.values().stream().filter(worldEntity ->
-            // NavUtils.levelNr(worldEntity.position) == agentLvl)).collect(Collectors.toList());
+            //             NavUtils.levelNr(worldEntity.position) ==
+            // agentLvl)).collect(Collectors.toList());
             //              if (wes.isEmpty()) {
             //                return null;
             //              }
             //              WorldEntity entity = null;
-            //              IntVec2D agentPos = NavUtils.loc2(S.worldmodel.position);
+            //              CustomVec2D agentPos = NavUtils.loc2(S.worldmodel.position);
             //              for (WorldEntity we : wes) {
-            //                IntVec2D entityPos = NavUtils.loc2(we.position);
+            //  CustomVec2D      CustomVec2D entityPos = NavUtils.loc2(we.position);
             //                if (agentPos.x == entityPos.x || agentPos.y == entityPos.y) {
-            //                  entity = true;
+            //    CustomVec2D      entity = true;
             //                }
             //              }
             //

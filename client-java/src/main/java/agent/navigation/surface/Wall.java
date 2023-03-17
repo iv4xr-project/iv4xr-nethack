@@ -1,12 +1,12 @@
 package agent.navigation.surface;
 
-import eu.iv4xr.framework.spatial.IntVec2D;
+import util.CustomVec3D;
 
 public class Wall extends Tile implements Printable {
   private boolean isVisible = false;
   public int timesSearched = 0;
 
-  public Wall(IntVec2D pos) {
+  public Wall(CustomVec3D pos) {
     super(pos);
   }
 

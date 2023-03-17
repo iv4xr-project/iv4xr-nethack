@@ -1,19 +1,19 @@
 package nethack.object;
 
 import agent.navigation.hpastar.Size;
-import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.ArrayList;
 import java.util.List;
 import nethack.enums.Color;
 import nethack.enums.EntityType;
 import util.ColoredStringBuilder;
+import util.CustomVec2D;
 import util.Loggers;
 
 public class Level {
   public static final Size SIZE = new Size(79, 21);
   public final Entity[][] map;
-  public final List<IntVec2D> changedCoordinates = new ArrayList<>();
-  public final List<IntVec2D> visibleFloors = new ArrayList<>();
+  public final List<CustomVec2D> changedCoordinates = new ArrayList<>();
+  public final List<CustomVec2D> visibleFloors = new ArrayList<>();
 
   public Level(Entity[][] entities) {
     this.map = entities;
@@ -26,7 +26,7 @@ public class Level {
       for (int y = 0; y < SIZE.height; y++) {
         Entity e = getEntity(x, y);
         if (e.type == EntityType.FLOOR && e.color == Color.GRAY) {
-          visibleFloors.add(new IntVec2D(x, y));
+          visibleFloors.add(new CustomVec2D(x, y));
         }
       }
     }
@@ -46,7 +46,7 @@ public class Level {
     for (int x = 0; x < SIZE.width; x++) {
       for (int y = 0; y < SIZE.height; y++) {
         if (!oldLevel.getEntity(x, y).equals(getEntity(x, y))) {
-          changedCoordinates.add(new IntVec2D(x, y));
+          changedCoordinates.add(new CustomVec2D(x, y));
         }
       }
     }
@@ -61,13 +61,13 @@ public class Level {
       for (int y = 0; y < SIZE.height; y++) {
         Entity e = getEntity(x, y);
         if (e.type != EntityType.VOID) {
-          changedCoordinates.add(new IntVec2D(x, y));
+          changedCoordinates.add(new CustomVec2D(x, y));
         }
       }
     }
   }
 
-  public Entity getEntity(IntVec2D p) {
+  public Entity getEntity(CustomVec2D p) {
     return getEntity(p.x, p.y);
   }
 
@@ -75,7 +75,7 @@ public class Level {
     return map[y][x];
   }
 
-  public void setEntity(IntVec2D p, Entity entity) {
+  public void setEntity(CustomVec2D p, Entity entity) {
     setEntity(p.x, p.y, entity);
   }
 

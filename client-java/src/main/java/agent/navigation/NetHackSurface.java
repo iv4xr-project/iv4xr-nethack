@@ -2,43 +2,43 @@ package agent.navigation;
 
 import agent.navigation.strategy.NavUtils;
 import agent.navigation.surface.*;
-import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.*;
-import java.util.stream.Collectors;
 import nethack.enums.Color;
 import nethack.enums.EntityType;
 import nethack.object.Entity;
 import nethack.object.Level;
+import util.CustomVec2D;
 
 public class NetHackSurface extends GridSurface {
   public NetHackSurface() {
     super(Level.SIZE, 8);
   }
 
-  @Override
-  public Iterable<Tile> neighbours(Tile t) {
-    List<Tile> neighbours = (List<Tile>) super.neighbours(t);
+  //  @Override
+  //  public Iterable<Tile> neighbours(Tile t) {
+  //    List<Tile> neighbours = (List<Tile>) super.neighbours(t);
+  //
+  //    if (getTile(t.pos) instanceof Door) {
+  //      return neighbours.stream()
+  //          .filter(tile -> !NavUtils.isDiagonal(t.pos, tile.pos))
+  //          .collect(Collectors.toList());
+  //    } else {
+  //      return neighbours.stream()
+  //          .filter(
+  //              tile -> !(NavUtils.isDiagonal(t.pos, tile.pos) && getTile(tile.pos) instanceof
+  // Door))
+  //          .collect(Collectors.toList());
+  //    }
+  //  }
 
-    if (getTile(t.pos) instanceof Door) {
-      return neighbours.stream()
-          .filter(tile -> !NavUtils.isDiagonal(t.pos, tile.pos))
-          .collect(Collectors.toList());
-    } else {
-      return neighbours.stream()
-          .filter(
-              tile -> !(NavUtils.isDiagonal(t.pos, tile.pos) && getTile(tile.pos) instanceof Door))
-          .collect(Collectors.toList());
-    }
-  }
-
-  public boolean canBeDoor(IntVec2D pos) {
+  public boolean canBeDoor(CustomVec2D pos) {
     Tile t = getTile(pos);
     if (t == null) {
       return false;
     }
-    List<IntVec2D> neighbours = NavUtils.neighbourCoordinates(pos, Level.SIZE, false);
+    List<CustomVec2D> neighbours = NavUtils.neighbourCoordinates(pos, Level.SIZE, false);
     int horizontalWalls = 0, verticalWalls = 0;
-    for (IntVec2D neighbour : neighbours) {
+    for (CustomVec2D neighbour : neighbours) {
       Tile neighbourTile = getTile(neighbour);
       boolean tileCanBeWall = neighbourTile == null || neighbourTile instanceof Wall;
       if (!tileCanBeWall) {
@@ -54,13 +54,14 @@ public class NetHackSurface extends GridSurface {
     return verticalWalls + horizontalWalls == 2 && (verticalWalls == 2 || horizontalWalls == 2);
   }
 
-  public List<IntVec2D> VisibleCoordinates(IntVec2D agentPosition, Level level) {
+  public List<CustomVec2D> VisibleCoordinates(CustomVec2D agentPosition, Level level) {
     resetVisibility();
 
     // Perform BFS on the graph, initiate the queue with the agent position and all the lit floor
     // tiles
-    List<IntVec2D> agentNeighbours = NavUtils.neighbourCoordinates(agentPosition, Level.SIZE, true);
-    for (IntVec2D neighbour : agentNeighbours) {
+    List<CustomVec2D> agentNeighbours =
+        NavUtils.neighbourCoordinates(agentPosition, Level.SIZE, true);
+    for (CustomVec2D neighbour : agentNeighbours) {
       Tile neighbourTile = getTile(neighbour);
       if (!(neighbourTile instanceof Viewable)) {
         continue;
@@ -68,16 +69,16 @@ public class NetHackSurface extends GridSurface {
       ((Viewable) neighbourTile).setVisible(true);
     }
 
-    HashSet<IntVec2D> visibleCoordinates = new HashSet<>(agentNeighbours);
-    HashSet<IntVec2D> processedCoordinates = new HashSet<>();
-    Queue<IntVec2D> queue = new LinkedList<>(level.visibleFloors);
+    HashSet<CustomVec2D> visibleCoordinates = new HashSet<>(agentNeighbours);
+    HashSet<CustomVec2D> processedCoordinates = new HashSet<>();
+    Queue<CustomVec2D> queue = new LinkedList<>(level.visibleFloors);
 
     processedCoordinates.add(agentPosition);
     queue.addAll(NavUtils.neighbourCoordinates(agentPosition, Level.SIZE, true));
 
     // While there are coordinates left to be explored
     while (!queue.isEmpty()) {
-      IntVec2D nextPos = queue.remove();
+      CustomVec2D nextPos = queue.remove();
       // Already processed
       if (processedCoordinates.contains(nextPos)) {
         continue;
@@ -95,7 +96,7 @@ public class NetHackSurface extends GridSurface {
       }
 
       // Get the neighbours
-      List<IntVec2D> neighbours = NavUtils.neighbourCoordinates(nextPos, Level.SIZE, true);
+      List<CustomVec2D> neighbours = NavUtils.neighbourCoordinates(nextPos, Level.SIZE, true);
       if (t instanceof Doorway) {
         // Does not have a lit floor tile next to it, so we assume we cannot see it
         if (neighbours.stream()

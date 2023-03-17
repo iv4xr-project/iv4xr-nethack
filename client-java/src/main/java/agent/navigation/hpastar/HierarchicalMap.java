@@ -17,13 +17,12 @@ import agent.navigation.hpastar.infrastructure.IMap;
 import agent.navigation.hpastar.infrastructure.Id;
 import agent.navigation.hpastar.search.AStar;
 import agent.navigation.hpastar.search.Path;
-import agent.navigation.hpastar.utils.RefSupport;
-import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import nethack.enums.Color;
 import util.ColoredStringBuilder;
+import util.CustomVec2D;
 
 /** Abstract maps represent, as the name implies, an abstraction built over the concrete map. */
 public class HierarchicalMap implements IMap<AbstractNode> {
@@ -74,8 +73,8 @@ public class HierarchicalMap implements IMap<AbstractNode> {
   }
 
   public int getHeuristic(Id<AbstractNode> startNodeId, Id<AbstractNode> targetNodeId) {
-    IntVec2D startPos = abstractGraph.getNodeInfo(startNodeId).position;
-    IntVec2D targetPos = abstractGraph.getNodeInfo(targetNodeId).position;
+    CustomVec2D startPos = abstractGraph.getNodeInfo(startNodeId).position;
+    CustomVec2D targetPos = abstractGraph.getNodeInfo(targetNodeId).position;
     int diffY = Math.abs(startPos.y - targetPos.y);
     int diffX = Math.abs(startPos.x - targetPos.x);
     return (diffY + diffX) * Constants.COST_ONE;
@@ -83,7 +82,7 @@ public class HierarchicalMap implements IMap<AbstractNode> {
 
   // Manhattan distance, after testing a bit for hierarchical searches we do not need
   // the level of precision of Diagonal distance or euclidean distance
-  public Cluster findClusterForPosition(IntVec2D pos) {
+  public Cluster findClusterForPosition(CustomVec2D pos) {
     size.withinBounds(pos);
     Cluster foundCluster = null;
     for (Cluster cluster : clusters) {
@@ -161,7 +160,7 @@ public class HierarchicalMap implements IMap<AbstractNode> {
     return edgeInfo.level == level;
   }
 
-  public boolean positionInCurrentCluster(IntVec2D position) {
+  public boolean positionInCurrentCluster(CustomVec2D position) {
     int y = position.y;
     int x = position.x;
     return y >= currentClusterY0
@@ -182,7 +181,7 @@ public class HierarchicalMap implements IMap<AbstractNode> {
     currentClusterX1 = size.width - 1;
   }
 
-  public void setCurrentClusterByPositionAndLevel(IntVec2D pos, int level) {
+  public void setCurrentClusterByPositionAndLevel(CustomVec2D pos, int level) {
     int offset = getOffset(level);
     int nodeY = pos.y;
     int nodeX = pos.x;
@@ -194,8 +193,8 @@ public class HierarchicalMap implements IMap<AbstractNode> {
 
   public boolean belongToSameCluster(
       Id<AbstractNode> node1Id, Id<AbstractNode> node2Id, int level) {
-    IntVec2D node1Pos = abstractGraph.getNodeInfo(node1Id).position;
-    IntVec2D node2Pos = abstractGraph.getNodeInfo(node2Id).position;
+    CustomVec2D node1Pos = abstractGraph.getNodeInfo(node1Id).position;
+    CustomVec2D node2Pos = abstractGraph.getNodeInfo(node2Id).position;
     int offset = getOffset(level);
     int currentRow1 = node1Pos.y - (node1Pos.y % offset);
     int currentRow2 = node2Pos.y - (node2Pos.y % offset);
@@ -250,7 +249,7 @@ public class HierarchicalMap implements IMap<AbstractNode> {
           continue;
         }
 
-        IntVec2D entrancePosition =
+        CustomVec2D entrancePosition =
             abstractGraph.getNode(firstEntrance.get().abstractNodeId).info.position;
         setCurrentClusterByPositionAndLevel(entrancePosition, level);
         for (EntrancePoint entrance1 : entrancesInClusterGroup) {
@@ -327,9 +326,9 @@ public class HierarchicalMap implements IMap<AbstractNode> {
         csb.newLine();
       }
       for (int x = 0; x < size.width; x++) {
-        IntVec2D pos = new IntVec2D(x, y);
+        CustomVec2D pos = new CustomVec2D(x, y);
         int relX = x % clusterSize;
-        IntVec2D relPos = new IntVec2D(relX, relY);
+        CustomVec2D relPos = new CustomVec2D(relX, relY);
         if (relX == 0) {
           verticalClusterBorderEdge(csb, pos, relPos);
         }
@@ -342,12 +341,12 @@ public class HierarchicalMap implements IMap<AbstractNode> {
     return csb.toString();
   }
 
-  private void nodeToString(ColoredStringBuilder csb, IntVec2D pos, IntVec2D relPos) {
+  private void nodeToString(ColoredStringBuilder csb, CustomVec2D pos, CustomVec2D relPos) {
     Cluster cluster = findClusterForPosition(pos);
     Id<ConcreteNode> nodeId = cluster.subConcreteMap.getNodeIdFromPos(relPos);
     ConcreteNode node = cluster.subConcreteMap.graph.getNode(nodeId);
     Color color;
-    if (cluster.subConcreteMap.passability.cannotEnter(relPos, new RefSupport<>())) {
+    if (cluster.subConcreteMap.passability.cannotEnter(relPos)) {
       color = Color.TRANSPARENT;
     } else if (cluster.subConcreteMap.passability.canMoveDiagonal(relPos)) {
       color = Color.GREEN_BRIGHT;
@@ -357,9 +356,10 @@ public class HierarchicalMap implements IMap<AbstractNode> {
     csb.append(color, node.edges.size());
   }
 
-  private void verticalClusterBorderEdge(ColoredStringBuilder csb, IntVec2D pos, IntVec2D relPos) {
+  private void verticalClusterBorderEdge(
+      ColoredStringBuilder csb, CustomVec2D pos, CustomVec2D relPos) {
     Cluster cluster = findClusterForPosition(pos);
-    IntVec2D posLeft = new IntVec2D(pos.x - 1, pos.y);
+    CustomVec2D posLeft = new CustomVec2D(pos.x - 1, pos.y);
 
     List<AbstractNode> absNodes =
         cluster.entrancePoints.stream()
@@ -368,7 +368,7 @@ public class HierarchicalMap implements IMap<AbstractNode> {
             .collect(Collectors.toList());
     for (AbstractNode absNode : absNodes) {
       for (Id<AbstractNode> neighbourNodeId : absNode.edges.keySet()) {
-        IntVec2D neighbourPos = abstractGraph.getNodeInfo(neighbourNodeId).position;
+        CustomVec2D neighbourPos = abstractGraph.getNodeInfo(neighbourNodeId).position;
         if (neighbourPos.x != pos.x - 1) {
           continue;
         }
@@ -395,7 +395,7 @@ public class HierarchicalMap implements IMap<AbstractNode> {
     outerloop:
     for (int x = 0; x < size.width; x++) {
       int relX = x % clusterSize;
-      IntVec2D absPos = new IntVec2D(x, y);
+      CustomVec2D absPos = new CustomVec2D(x, y);
       Cluster cluster = findClusterForPosition(absPos);
       if (relX == 0) {
         csb.append(Color.MAGENTA_BRIGHT, cluster.entrancePoints.size());
@@ -404,8 +404,8 @@ public class HierarchicalMap implements IMap<AbstractNode> {
       if (y - 1 < 0) {
         csb.append('-');
       } else {
-        IntVec2D posAbove = new IntVec2D(x, y - 1);
-        IntVec2D relPos = new IntVec2D(relX, relY);
+        CustomVec2D posAbove = new CustomVec2D(x, y - 1);
+        CustomVec2D relPos = new CustomVec2D(relX, relY);
         Cluster clusterAbove = findClusterForPosition(posAbove);
 
         List<AbstractNode> absNodes =
@@ -415,7 +415,7 @@ public class HierarchicalMap implements IMap<AbstractNode> {
                 .collect(Collectors.toList());
         for (AbstractNode absNode : absNodes) {
           for (Id<AbstractNode> neighbourNodeId : absNode.edges.keySet()) {
-            IntVec2D neighbourPos = abstractGraph.getNodeInfo(neighbourNodeId).position;
+            CustomVec2D neighbourPos = abstractGraph.getNodeInfo(neighbourNodeId).position;
             if (neighbourPos.y != y - 1) {
               continue;
             }

@@ -21,6 +21,10 @@ public class EntityDecoder extends Decoder {
       return type;
     }
 
+    if (symbol == '@') {
+      Loggers.EncoderLogger.warn("%s%s%s: %d", color, symbol, Color.RESET, glyph);
+    }
+
     type = toEntityType(symbol, id, color);
     if (type != EntityType.UNKNOWN) {
       return type;
@@ -52,6 +56,10 @@ public class EntityDecoder extends Decoder {
         return EntityType.VOID;
       case 397: // Pet dog
         return EntityType.PET;
+      case 333: // Player
+        return EntityType.PLAYER;
+      case 267:
+        return EntityType.SHOPKEEPER;
       case 16: // Same character as pet dog, but not the PET
         return EntityType.MONSTER;
     }
@@ -94,7 +102,7 @@ public class EntityDecoder extends Decoder {
       case '$':
         return EntityType.GOLD;
       case '@':
-        return color == Color.WHITE ? EntityType.PLAYER : EntityType.HUMAN;
+        return EntityType.HUMAN;
       case '(':
         return EntityType.ITEM;
       case 'f':

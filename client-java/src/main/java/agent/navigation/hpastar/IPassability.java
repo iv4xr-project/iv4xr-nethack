@@ -5,19 +5,21 @@
 package agent.navigation.hpastar;
 
 import agent.navigation.hpastar.utils.RefSupport;
-import eu.iv4xr.framework.spatial.IntVec2D;
+import util.CustomVec2D;
 
 public interface IPassability {
   /** Tells whether for a given position this passability class can enter or not. */
-  public void updateCanMoveDiagonally(IntVec2D pos, boolean canMoveDiagonally);
+  public void updateCanMoveDiagonally(CustomVec2D pos, boolean canMoveDiagonally);
 
-  public void updateObstacle(IntVec2D pos, boolean isObstacle);
+  public void updateObstacle(CustomVec2D pos, boolean isObstacle);
 
-  boolean cannotEnter(IntVec2D pos, RefSupport<Integer> movementCost);
+  boolean cannotEnter(CustomVec2D pos, RefSupport<Integer> movementCost);
 
-  boolean canMoveDiagonal(IntVec2D pos1, IntVec2D pos2);
+  boolean cannotEnter(CustomVec2D pos);
 
-  boolean canMoveDiagonal(IntVec2D pos);
+  boolean canMoveDiagonal(CustomVec2D pos1, CustomVec2D pos2);
+
+  boolean canMoveDiagonal(CustomVec2D pos);
 
   ConcreteMap slice(int horizOrigin, int vertOrigin, Size size);
 

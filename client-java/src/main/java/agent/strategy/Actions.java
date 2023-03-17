@@ -11,33 +11,17 @@ import agent.navigation.surface.Door;
 import agent.navigation.surface.Tile;
 import agent.navigation.surface.Wall;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
-import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.*;
 import nethack.object.Command;
 import nethack.object.Item;
 import nethack.object.Level;
 import nl.uu.cs.aplib.mainConcepts.Action;
 import nl.uu.cs.aplib.utils.Pair;
+import util.CustomVec2D;
 import util.Loggers;
 import util.Sounds;
 
 public class Actions {
-  /**
-   * Construct an action that would interact with an entity of the given id. The action's guard is
-   * left unconstrained (so the action would always be enabled). You can use the "on" method to add
-   * a guard.
-   */
-  static Action interact(String targetId) {
-    return action("interact")
-        .do2(
-            (AgentState S) ->
-                (Pair<Integer, Tile> nextTile) -> {
-                  WorldModel newwom = NavUtils.moveTo(S, nextTile);
-                  Loggers.GoalLogger.info(">>> interact %s", nextTile);
-                  return new Pair<>(S, newwom);
-                });
-  }
-
   // Construct an action that would attack an adjacent monster.
   static Action attack() {
     return action("attack")
@@ -88,7 +72,7 @@ public class Actions {
                   WorldModel newWom = WorldModels.open(S, direction);
                   if (Objects.equals(S.app().gameState.message, "This door is locked.")
                       || Objects.equals(S.app().gameState.message, "")) {
-                    IntVec2D doorPos =
+                    CustomVec2D doorPos =
                         NavUtils.posInDirection(NavUtils.loc2(S.worldmodel.position), direction);
                     Door d = (Door) S.area().getTile(doorPos);
                     d.isLocked = true;
@@ -134,11 +118,11 @@ public class Actions {
         .on(
             (AgentState S) -> {
               NetHackSurface surface = S.area();
-              List<IntVec2D> neighbours =
+              List<CustomVec2D> neighbours =
                   NavUtils.neighbourCoordinates(
                       NavUtils.loc2(S.worldmodel.position), Level.SIZE, true);
               List<Wall> walls = new ArrayList<>();
-              for (IntVec2D neighbour : neighbours) {
+              for (CustomVec2D neighbour : neighbours) {
                 Tile t = surface.getTile(neighbour);
                 if (t instanceof Wall) {
                   walls.add((Wall) t);

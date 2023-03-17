@@ -3,8 +3,6 @@ package agent.iv4xr;
 import eu.iv4xr.framework.mainConcepts.Iv4xrEnvironment;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
-import eu.iv4xr.framework.spatial.IntVec2D;
-import eu.iv4xr.framework.spatial.Vec3;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -16,7 +14,8 @@ import nethack.object.Command;
 import nethack.object.Entity;
 import nethack.object.Level;
 import nethack.object.Player;
-import nl.uu.cs.aplib.utils.Pair;
+import util.CustomVec2D;
+import util.CustomVec3D;
 import util.Loggers;
 
 /**
@@ -66,7 +65,7 @@ public class AgentEnv extends Iv4xrEnvironment {
 
     // Add changed coordinates
     Level level = app.level();
-    for (IntVec2D pos : level.changedCoordinates) {
+    for (CustomVec2D pos : level.changedCoordinates) {
       Entity e = level.getEntity(pos);
       // Unimportant types, and player is updated separately
       if (ignoredTypes.contains(e.type) || e.type == EntityType.PLAYER) {
@@ -76,7 +75,7 @@ public class AgentEnv extends Iv4xrEnvironment {
       String id = e.createId(pos);
       int levelNr = app.gameState.getLevelNr();
       Loggers.WOMLogger.debug("%s %s Added", id, pos);
-      wom.elements.put(id, toWorldEntity(e, new Pair<>(levelNr, pos)));
+      wom.elements.put(id, toWorldEntity(e, new CustomVec3D(levelNr, pos)));
     }
 
     // Time-stamp the elements:
@@ -100,10 +99,10 @@ public class AgentEnv extends Iv4xrEnvironment {
     return we;
   }
 
-  WorldEntity toWorldEntity(Entity e, Pair<Integer, IntVec2D> pos) {
-    String id = e.createId(pos.snd);
+  WorldEntity toWorldEntity(Entity e, CustomVec3D loc) {
+    String id = e.createId(loc.pos);
     WorldEntity we = new WorldEntity(id, e.type.name(), true);
-    we.position = new Vec3(pos.snd.x, pos.snd.y, pos.fst);
+    we.position = loc.toVec3();
     return we;
   }
 
@@ -115,10 +114,10 @@ public class AgentEnv extends Iv4xrEnvironment {
 
     // Part of the map that has updates that might be relevant to the map navigation state
     Level level = app.level();
-    List<IntVec2D> changedCoordinates_ = level.changedCoordinates;
+    List<CustomVec2D> changedCoordinates_ = level.changedCoordinates;
     Serializable[] changedCoordinates = new Serializable[changedCoordinates_.size()];
     int k = 0;
-    for (IntVec2D pos : changedCoordinates_) {
+    for (CustomVec2D pos : changedCoordinates_) {
       Entity e = level.getEntity(pos);
       EntityType entityType = e.type;
       Serializable[] entry = {pos, entityType};

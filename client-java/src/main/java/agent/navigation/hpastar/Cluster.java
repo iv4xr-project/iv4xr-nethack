@@ -9,9 +9,9 @@ import agent.navigation.hpastar.graph.ConcreteNode;
 import agent.navigation.hpastar.infrastructure.Id;
 import agent.navigation.hpastar.search.AStar;
 import agent.navigation.hpastar.search.Path;
-import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.*;
 import nl.uu.cs.aplib.utils.Pair;
+import util.CustomVec2D;
 
 public class Cluster {
   public final Id<Cluster> id;
@@ -35,14 +35,14 @@ public class Cluster {
   // Necessary to do local search to find paths and distances between local entrances
   public final ConcreteMap subConcreteMap;
   public Size size;
-  public IntVec2D origin;
+  public CustomVec2D origin;
 
   public Cluster(
       ConcreteMap concreteMap,
       Id<Cluster> id,
       int clusterX,
       int clusterY,
-      IntVec2D origin,
+      CustomVec2D origin,
       Size size) {
     subConcreteMap = concreteMap.slice(origin.x, origin.y, size, concreteMap.passability);
     this.id = id;
@@ -61,12 +61,12 @@ public class Cluster {
     }
   }
 
-  public IntVec2D toRelativePos(IntVec2D pos) {
+  public CustomVec2D toRelativePos(CustomVec2D pos) {
     assert pos.x >= origin.x
         && pos.x < origin.x + size.width
         && pos.y >= origin.y
         && pos.y < origin.y + size.height;
-    return new IntVec2D(pos.x - origin.x, pos.y - origin.y);
+    return new CustomVec2D(pos.x - origin.x, pos.y - origin.y);
   }
 
   /** Gets the index of the entrance point inside this cluster */
@@ -89,7 +89,7 @@ public class Cluster {
     Id<ConcreteNode> targetNodeId = new Id<ConcreteNode>().from(getEntrancePositionIndex(e2));
     AStar<ConcreteNode> search = new AStar<>(subConcreteMap, startNodeId, targetNodeId);
     Path<ConcreteNode> path = search.findPath();
-    if (path.pathCost != -1) {
+    if (path != null) {
       // Yeah, we suppose reaching A - B is the same as reaching B - A. Which
       // depending on the game this is NOT necessarily true (e.g. climbing, stepping down a
       // mountain)
@@ -127,7 +127,7 @@ public class Cluster {
     return entrancePoints.size();
   }
 
-  public EntrancePoint addEntrance(Id<AbstractNode> abstractNodeId, IntVec2D relativePosition) {
+  public EntrancePoint addEntrance(Id<AbstractNode> abstractNodeId, CustomVec2D relativePosition) {
     EntrancePoint entrancePoint = new EntrancePoint(abstractNodeId, relativePosition);
     entrancePoints.add(entrancePoint);
     return entrancePoint;

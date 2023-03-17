@@ -1,20 +1,20 @@
 package nethack.object;
 
-import eu.iv4xr.framework.spatial.IntVec2D;
 import eu.iv4xr.framework.spatial.Vec3;
 import java.util.Optional;
 import nethack.enums.Alignment;
 import nethack.enums.Encumbrance;
 import nethack.enums.HungerState;
 import util.ColoredStringBuilder;
+import util.CustomVec2D;
 
 public class Player {
   public static final String ID = "player";
   public Inventory inventory;
   public Vec3 previousPosition;
-  public IntVec2D previousPosition2D;
+  public CustomVec2D previousPosition2D;
   public Vec3 position;
-  public IntVec2D position2D;
+  public CustomVec2D position2D;
   public int strength;
   public int dexterity;
   public int constitution;

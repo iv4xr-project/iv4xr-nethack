@@ -1,11 +1,11 @@
 package agent.navigation.surface;
 
-import eu.iv4xr.framework.spatial.IntVec2D;
+import util.CustomVec3D;
 
 public class Floor extends Tile implements Walkable, Printable {
   private boolean isVisible;
 
-  public Floor(IntVec2D pos) {
+  public Floor(CustomVec3D pos) {
     super(pos);
   }
 

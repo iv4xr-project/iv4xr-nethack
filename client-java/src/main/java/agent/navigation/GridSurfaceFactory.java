@@ -14,13 +14,13 @@ import agent.navigation.hpastar.smoother.Direction;
 import agent.navigation.hpastar.utils.RefSupport;
 import agent.navigation.strategy.NavUtils;
 import agent.navigation.surface.Tile;
-import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 import nl.uu.cs.aplib.utils.Pair;
+import util.CustomVec2D;
 import util.Loggers;
 
 public class GridSurfaceFactory {
@@ -32,7 +32,7 @@ public class GridSurfaceFactory {
     staticSurface = surface;
     Cluster originalCluster = staticSurface.hierarchicalMap.findClusterForPosition(tile.pos);
     ConcreteMap subConcreteMap = originalCluster.subConcreteMap;
-    IntVec2D relativePos = originalCluster.toRelativePos(tile.pos);
+    CustomVec2D relativePos = originalCluster.toRelativePos(tile.pos);
 
     Id<ConcreteNode> nodeId =
         GraphFactory.getNodeByPos(
@@ -51,7 +51,7 @@ public class GridSurfaceFactory {
 
     Cluster originalCluster = staticSurface.hierarchicalMap.findClusterForPosition(t.pos);
     ConcreteMap subConcreteMap = originalCluster.subConcreteMap;
-    IntVec2D relativePos = originalCluster.toRelativePos(t.pos);
+    CustomVec2D relativePos = originalCluster.toRelativePos(t.pos);
 
     Id<ConcreteNode> nodeId =
         GraphFactory.getNodeByPos(subConcreteMap.graph, relativePos, originalCluster.size.width)
@@ -59,17 +59,17 @@ public class GridSurfaceFactory {
     ConcreteNode node = subConcreteMap.graph.getNode(nodeId);
     node.info.isObstacle = false;
 
-    List<IntVec2D> neighbours =
+    List<CustomVec2D> neighbours =
         NavUtils.neighbourCoordinates(t.pos, staticSurface.hierarchicalMap.size, true);
-    for (IntVec2D neighbourPos : neighbours) {
+    for (CustomVec2D neighbourPos : neighbours) {
       Cluster neighbourCluster = staticSurface.hierarchicalMap.findClusterForPosition(neighbourPos);
-      IntVec2D neighbourRelativePos = neighbourCluster.toRelativePos(neighbourPos);
+      CustomVec2D neighbourRelativePos = neighbourCluster.toRelativePos(neighbourPos);
       ConcreteMap neighbourConcreteMap = neighbourCluster.subConcreteMap;
-      if (neighbourConcreteMap.passability.cannotEnter(neighbourRelativePos, new RefSupport<>())) {
+      if (neighbourConcreteMap.passability.cannotEnter(neighbourRelativePos)) {
         continue; // Do not add edge if it is not passable
       }
 
-      if (NavUtils.isDiagonal(t.pos, neighbourPos)) {
+      if (CustomVec2D.diagonal(t.pos, neighbourPos)) {
         // Cannot move diagonal
         if (!subConcreteMap.passability.canMoveDiagonal(relativePos)
             || !neighbourConcreteMap.passability.canMoveDiagonal(neighbourRelativePos)) {
@@ -120,12 +120,12 @@ public class GridSurfaceFactory {
   }
 
   private static void addInterClusterEdge(Entrance entrance) {
-    IntVec2D srcPos =
-        new IntVec2D(
+    CustomVec2D srcPos =
+        new CustomVec2D(
             entrance.cluster1.origin.x + entrance.srcNode.info.position.x,
             entrance.cluster1.origin.y + entrance.srcNode.info.position.y);
-    IntVec2D destPos =
-        new IntVec2D(
+    CustomVec2D destPos =
+        new CustomVec2D(
             entrance.cluster2.origin.x + entrance.destNode.info.position.x,
             entrance.cluster2.origin.y + entrance.destNode.info.position.y);
     Id<AbstractNode> startAbsNodeId = addAbstractNode(entrance.cluster1, srcPos);
@@ -140,7 +140,7 @@ public class GridSurfaceFactory {
         targetAbsNodeId, startAbsNodeId, new AbstractEdgeInfo(Constants.COST_ONE, 1, true));
   }
 
-  private static Id<AbstractNode> addAbstractNode(Cluster cluster, IntVec2D pos) {
+  private static Id<AbstractNode> addAbstractNode(Cluster cluster, CustomVec2D pos) {
     Id<AbstractNode> absNodeId =
         new Id<AbstractNode>().from(staticSurface.hierarchicalMap.abstractGraph.nextId);
     cluster.addEntrance(absNodeId, cluster.toRelativePos(pos));
@@ -280,9 +280,9 @@ public class GridSurfaceFactory {
         AbstractNode absNode2 =
             staticSurface.hierarchicalMap.abstractGraph.getNode(entrance2.abstractNodeId);
 
-        IntVec2D entrance1Pos = absNode1.info.position;
-        IntVec2D entrance2Pos = absNode2.info.position;
-        if (NavUtils.adjacent(entrance1Pos, entrance2Pos, true)
+        CustomVec2D entrance1Pos = absNode1.info.position;
+        CustomVec2D entrance2Pos = absNode2.info.position;
+        if (CustomVec2D.adjacent(entrance1Pos, entrance2Pos, true)
             && absNode1.edges.containsKey(absNode2.nodeId)
             && absNode2.edges.containsKey(absNode1.nodeId)) {
           Loggers.HPALogger.debug("Remove entrance: %s -> %s", entrance1Pos, entrance2Pos);
@@ -347,9 +347,9 @@ public class GridSurfaceFactory {
   }
 
   private static ConcreteNode getNode(int left, int top) {
-    IntVec2D pos = new IntVec2D(left, top);
+    CustomVec2D pos = new CustomVec2D(left, top);
     Cluster cluster = staticSurface.hierarchicalMap.findClusterForPosition(pos);
-    IntVec2D relPos = cluster.toRelativePos(pos);
+    CustomVec2D relPos = cluster.toRelativePos(pos);
     var nodeId = cluster.subConcreteMap.getNodeIdFromPos(relPos);
     return cluster.subConcreteMap.graph.getNode(nodeId);
   }

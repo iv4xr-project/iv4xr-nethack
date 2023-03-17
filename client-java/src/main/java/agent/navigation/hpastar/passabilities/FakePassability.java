@@ -10,8 +10,8 @@ import agent.navigation.hpastar.Size;
 import agent.navigation.hpastar.TileType;
 import agent.navigation.hpastar.infrastructure.Constants;
 import agent.navigation.hpastar.utils.RefSupport;
-import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.Random;
+import util.CustomVec2D;
 
 public class FakePassability implements IPassability {
   private final Size size;
@@ -35,26 +35,30 @@ public class FakePassability implements IPassability {
   }
 
   @Override
-  public void updateCanMoveDiagonally(IntVec2D pos, boolean canMoveDiagonally) {}
+  public void updateCanMoveDiagonally(CustomVec2D pos, boolean canMoveDiagonally) {}
 
   @Override
-  public void updateObstacle(IntVec2D pos, boolean isObstacle) {
+  public void updateObstacle(CustomVec2D pos, boolean isObstacle) {
     boolean update = obstacles[pos.x][pos.y] != isObstacle;
     obstacles[pos.x][pos.y] = isObstacle;
   }
 
-  public boolean cannotEnter(IntVec2D pos, RefSupport<Integer> cost) {
+  public boolean cannotEnter(CustomVec2D pos, RefSupport<Integer> cost) {
     cost.setValue(Constants.COST_ONE);
     return obstacles[pos.x][pos.y];
   }
 
+  public boolean cannotEnter(CustomVec2D pos) {
+    return obstacles[pos.x][pos.y];
+  }
+
   @Override
-  public boolean canMoveDiagonal(IntVec2D pos1, IntVec2D pos2) {
+  public boolean canMoveDiagonal(CustomVec2D pos1, CustomVec2D pos2) {
     return true;
   }
 
   @Override
-  public boolean canMoveDiagonal(IntVec2D pos) {
+  public boolean canMoveDiagonal(CustomVec2D pos) {
     return true;
   }
 
@@ -114,14 +118,14 @@ public class FakePassability implements IPassability {
     }
   }
 
-  public IntVec2D getRandomFreePosition() {
+  public CustomVec2D getRandomFreePosition() {
     int x = random.nextInt(size.width);
     int y = random.nextInt(size.height);
     while (obstacles[x][y]) {
       x = random.nextInt(size.width);
       y = random.nextInt(size.height);
     }
-    return new IntVec2D(x, y);
+    return new CustomVec2D(x, y);
   }
 
   private boolean conflictDiag(int row, int col, int roff, int coff, int width, int height) {

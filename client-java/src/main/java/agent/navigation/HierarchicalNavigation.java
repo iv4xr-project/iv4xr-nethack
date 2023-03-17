@@ -13,17 +13,18 @@ import agent.navigation.hpastar.search.Path;
 import agent.navigation.surface.Tile;
 import eu.iv4xr.framework.extensions.pathfinding.Navigatable;
 import eu.iv4xr.framework.extensions.pathfinding.XPathfinder;
-import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.*;
 import java.util.stream.Collectors;
 import nl.uu.cs.aplib.utils.Pair;
+import org.apache.commons.lang.NotImplementedException;
+import util.CustomVec2D;
+import util.CustomVec3D;
 
-public class HierarchicalNavigation
-    implements Navigatable<Pair<Integer, Tile>>, XPathfinder<Pair<Integer, Tile>> {
+public class HierarchicalNavigation implements Navigatable<CustomVec3D>, XPathfinder<CustomVec3D> {
   public final List<NetHackSurface> areas = new LinkedList<>();
+  public final HierarchicalGraph hierarchicalGraph = new HierarchicalGraph();
   boolean perfect_memory_pathfinding = true;
   final HierarchicalMapFactory factory = new HierarchicalMapFactory();
-  public final HierarchicalGraph hierarchicalGraph = new HierarchicalGraph();
 
   public HierarchicalNavigation(NetHackSurface surface) {
     areas.add(surface);
@@ -34,34 +35,31 @@ public class HierarchicalNavigation
     areas.add(area);
   }
 
-  public NetHackSurface level(Pair<Integer, Tile> level) {
-    return areas.get(level.fst);
+  public Tile getTile(CustomVec3D loc) {
+    return areas.get(loc.lvl).getTile(loc.pos);
   }
 
-  public List<Pair<Integer, Tile>> findPath(Pair<Integer, Tile> from, Pair<Integer, Tile> to) {
-    int area1_id = (Integer) from.fst;
-    int area2_id = (Integer) to.fst;
-
-    if (area1_id == area2_id) {
-      var path = getPathInLevel(area1_id, from.snd, to.snd);
-      if (path == null || path.isEmpty()) {
+  public List<CustomVec3D> findPath(CustomVec3D from, CustomVec3D to) {
+    if (from.lvl == to.lvl) {
+      List<CustomVec2D> path = areas.get(from.lvl).findPath(from.pos, to.pos);
+      if (path == null) {
         return null;
       }
-      return path;
+      return path.stream().map(pos -> new CustomVec3D(from.lvl, pos)).collect(Collectors.toList());
     }
 
-    Map<IntVec2D, List<Tile>> pathsToArea1Stairs =
-        pathsToStairs(from.fst, from.snd.pos, hierarchicalGraph.levelToEntrancesMap.get(from.fst));
-    Map<IntVec2D, List<Tile>> pathsToArea2Stairs =
-        pathsToStairs(to.fst, to.snd.pos, hierarchicalGraph.levelToEntrancesMap.get(to.fst));
+    Map<CustomVec2D, List<CustomVec2D>> pathsToArea1Stairs =
+        pathsToStairs(from, hierarchicalGraph.levelToEntrancesMap.get(from.lvl));
+    Map<CustomVec2D, List<CustomVec2D>> pathsToArea2Stairs =
+        pathsToStairs(to, hierarchicalGraph.levelToEntrancesMap.get(to.lvl));
 
-    for (IntVec2D stairPosArea1 : pathsToArea1Stairs.keySet()) {
-      Id<AbstractNode> stair1Id = hierarchicalGraph.getAbsNodeId(from.fst, stairPosArea1);
-      for (IntVec2D stairPosArea2 : pathsToArea2Stairs.keySet()) {
-        Id<AbstractNode> stair2Id = hierarchicalGraph.getAbsNodeId(to.fst, stairPosArea2);
+    for (CustomVec2D stairPosArea1 : pathsToArea1Stairs.keySet()) {
+      Id<AbstractNode> stair1Id = hierarchicalGraph.getAbsNodeId(from.lvl, stairPosArea1);
+      for (CustomVec2D stairPosArea2 : pathsToArea2Stairs.keySet()) {
+        Id<AbstractNode> stair2Id = hierarchicalGraph.getAbsNodeId(to.lvl, stairPosArea2);
         AStar<AbstractNode> search = new AStar<>(hierarchicalGraph, stair1Id, stair2Id);
         Path<AbstractNode> path = search.findPath();
-        if (path.pathNodes.isEmpty()) {
+        if (path == null) {
           continue;
         }
         //        System.out.printf(
@@ -84,7 +82,7 @@ public class HierarchicalNavigation
         //            costBetweenStairs,
         //            costToStair2);
         return pathsToArea1Stairs.get(stairPosArea1).stream()
-            .map(pos -> new Pair<>(from.fst, pos))
+            .map(pos -> new CustomVec3D(from.lvl, pos))
             .collect(Collectors.toList());
       }
     }
@@ -93,52 +91,39 @@ public class HierarchicalNavigation
     return null;
   }
 
-  private Map<IntVec2D, List<Tile>> pathsToStairs(
-      int level, IntVec2D startPos, List<IntVec2D> stairPositions) {
-    GridSurface surface = areas.get(level);
-    Tile startTile = new Tile(startPos);
-    Map<IntVec2D, List<Tile>> paths = new HashMap<>();
-    for (IntVec2D targetPos : stairPositions) {
-      if (startPos.equals(targetPos)) {
-        paths.put(targetPos, new ArrayList<>());
-      } else {
-        List<Tile> tilePath = surface.findPath(startTile, new Tile(targetPos));
-        if (tilePath == null || tilePath.isEmpty()) {
-          continue;
-        }
-
-        paths.put(targetPos, tilePath);
+  private Map<CustomVec2D, List<CustomVec2D>> pathsToStairs(
+      CustomVec3D from, List<CustomVec2D> stairPositions) {
+    GridSurface surface = areas.get(from.lvl);
+    Map<CustomVec2D, List<CustomVec2D>> paths = new HashMap<>();
+    for (CustomVec2D targetPos : stairPositions) {
+      List<CustomVec2D> path = surface.findPath(from.pos, targetPos);
+      if (path == null) {
+        continue;
       }
+
+      paths.put(targetPos, path);
     }
 
     return paths;
   }
 
-  private List<Pair<Integer, Tile>> getPathInLevel(int level, Tile from, Tile to) {
-    List<Tile> posPath = areas.get(level).findPath(from, to);
-    if (posPath == null) {
-      return null;
-    }
-    return posPath.stream().map(tile -> new Pair<>(level, tile)).collect(Collectors.toList());
+  public void markAsSeen(CustomVec3D loc) {
+    areas.get(loc.lvl).markAsSeen(loc.pos);
   }
 
-  public void markAsSeen(Pair<Integer, Tile> ndx) {
-    areas.get(ndx.fst).markAsSeen(ndx.snd);
+  public boolean hasbeenSeen(CustomVec3D loc) {
+    return areas.get(loc.lvl).hasbeenSeen(loc.pos);
   }
 
-  public boolean hasbeenSeen(Pair<Integer, Tile> ndx) {
-    return areas.get(ndx.fst).hasbeenSeen(ndx.snd);
-  }
-
-  public List<Pair<Integer, Tile>> getFrontier() {
-    List<Pair<Integer, Tile>> allFrontiers = new LinkedList<>();
+  public List<CustomVec3D> getFrontier() {
+    List<CustomVec3D> allFrontiers = new LinkedList<>();
 
     for (int i = 0; i < areas.size(); ++i) {
       NetHackSurface area = areas.get(i);
-      Integer levelNr = i;
-      List<Pair<Integer, Tile>> frontiers =
+      int levelNr = i;
+      List<CustomVec3D> frontiers =
           area.getFrontier().stream()
-              .map(nd -> new Pair<>(levelNr, nd))
+              .map(pos -> new CustomVec3D(levelNr, pos))
               .collect(Collectors.toList());
       allFrontiers.addAll(frontiers);
     }
@@ -146,16 +131,15 @@ public class HierarchicalNavigation
     return allFrontiers;
   }
 
-  public List<Pair<Integer, Tile>> explore(
-      Pair<Integer, Tile> startNode, Pair<Integer, Tile> heuristicNode) {
-    List<Pair<Integer, Tile>> candidates = getFrontier();
+  public List<CustomVec3D> explore(CustomVec3D from, CustomVec3D to) {
+    List<CustomVec3D> candidates = getFrontier();
     if (candidates.isEmpty()) {
       return null;
     }
 
-    List<Pair<Pair<Integer, Tile>, List<Pair<Integer, Tile>>>> candidates2 =
+    List<Pair<CustomVec3D, List<CustomVec3D>>> candidates2 =
         candidates.stream()
-            .map(c -> new Pair<>(c, this.findPath(startNode, c)))
+            .map(target -> new Pair<>(target, findPath(from, target)))
             .filter(d -> d.snd != null)
             .collect(Collectors.toList());
     if (candidates2.isEmpty()) {
@@ -163,21 +147,18 @@ public class HierarchicalNavigation
     } else {
       candidates2.sort(
           (d1, d2) -> {
-            return Integer.compare(
-                this.distanceCandidate(d1, heuristicNode),
-                this.distanceCandidate(d2, heuristicNode));
+            return Integer.compare(distanceCandidate(d1, to), distanceCandidate(d2, to));
           });
       return candidates2.get(0).snd;
     }
   }
 
   private int distanceCandidate(
-      Pair<Pair<Integer, Tile>, List<Pair<Integer, Tile>>> candidate,
-      Pair<Integer, Tile> heuristicNode) {
-    int c = candidate.fst.fst;
-    return c == heuristicNode.fst
+      Pair<CustomVec3D, List<CustomVec3D>> candidate, CustomVec3D heuristicNode) {
+    int c = candidate.fst.lvl;
+    return c == heuristicNode.lvl
         ? candidate.snd.size()
-        : Math.abs(c - heuristicNode.fst) * 20000 + candidate.snd.size();
+        : Math.abs(c - heuristicNode.lvl) * 20000 + candidate.snd.size();
   }
 
   public void wipeOutMemory() {
@@ -198,17 +179,20 @@ public class HierarchicalNavigation
   }
 
   @Override
-  public Iterable<Pair<Integer, Tile>> neighbours(Pair<Integer, Tile> integerTilePair) {
-    return null;
+  public Iterable<CustomVec3D> neighbours(CustomVec3D loc) {
+    //    return null;
+    throw new NotImplementedException("Neighbours not implemented");
   }
 
   @Override
-  public float heuristic(Pair<Integer, Tile> integerTilePair, Pair<Integer, Tile> nodeId1) {
-    return 0;
+  public float heuristic(CustomVec3D from, CustomVec3D to) {
+    //    return 0;
+    throw new NotImplementedException("Heuristic between levels not valid");
   }
 
   @Override
-  public float distance(Pair<Integer, Tile> integerTilePair, Pair<Integer, Tile> nodeId1) {
-    return 0;
+  public float distance(CustomVec3D from, CustomVec3D to) {
+    //    return 0;
+    throw new NotImplementedException("Distance between levels not implemented");
   }
 }

@@ -1,40 +1,36 @@
 package agent.navigation.surface;
 
-import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.Objects;
+import util.CustomVec2D;
+import util.CustomVec3D;
 
 public class Tile {
-  public final IntVec2D pos;
+  public CustomVec3D loc;
+  public final CustomVec2D pos;
   public boolean seen = false;
 
-  public Tile(IntVec2D pos) {
-    this.pos = pos;
-  }
-
-  public Tile(int x, int y) {
-    this.pos = new IntVec2D(x, y);
+  public Tile(CustomVec3D loc) {
+    this.loc = loc;
+    this.pos = loc.pos;
   }
 
   @Override
   public boolean equals(Object o) {
-    if (o == null) {
+    if (!(o instanceof Tile)) {
       return false;
     }
 
-    if (o instanceof Tile) {
-      Tile t = (Tile) o;
-      return pos.equals(t.pos);
-    }
-    return false;
+    Tile t = (Tile) o;
+    return loc.equals(t.loc);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(pos);
+    return Objects.hash(loc);
   }
 
   @Override
   public String toString() {
-    return pos.toString();
+    return loc.toString();
   }
 }

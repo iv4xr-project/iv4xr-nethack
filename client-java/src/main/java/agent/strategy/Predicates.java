@@ -14,9 +14,9 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import nethack.enums.EntityType;
-import nl.uu.cs.aplib.utils.Pair;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import util.CustomVec3D;
 
 public class Predicates {
   public static final Predicate<AgentState> outOfCombat_HpCritical =
@@ -34,28 +34,22 @@ public class Predicates {
   @Contract(pure = true)
   public static @NotNull Function<AgentState, Direction> get_closedDoor() {
     return S -> {
-      Pair<Integer, Tile> t = TileSelector.closedDoorSelector.apply(S);
-      if (t == null) {
+      Tile tile = TileSelector.closedDoorSelector.apply(S);
+      if (tile == null || !CustomVec3D.adjacent(S.loc(), tile.loc, true)) {
         return null;
       }
-      if (!NavUtils.adjacent(t.snd.pos, NavUtils.loc2(S.worldmodel.position), true)) {
-        return null;
-      }
-      return NavUtils.toDirection(S, t);
+      return NavUtils.toDirection(S, tile.loc);
     };
   }
 
   @Contract(pure = true)
   public static @NotNull Function<AgentState, Direction> get_lockedDoor() {
     return S -> {
-      Pair<Integer, Tile> t = TileSelector.lockedDoorSelector.apply(S);
-      if (t == null) {
+      Tile tile = TileSelector.lockedDoorSelector.apply(S);
+      if (tile == null || !CustomVec3D.adjacent(S.loc(), tile.loc, true)) {
         return null;
       }
-      if (!NavUtils.adjacent(t.snd.pos, NavUtils.loc2(S.worldmodel.position), true)) {
-        return null;
-      }
-      return NavUtils.toDirection(S, t);
+      return NavUtils.toDirection(S, tile.loc);
     };
   }
 

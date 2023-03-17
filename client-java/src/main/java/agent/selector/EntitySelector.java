@@ -1,16 +1,16 @@
 package agent.selector;
 
 import agent.iv4xr.AgentState;
-import agent.navigation.NetHackSurface;
 import agent.navigation.strategy.NavUtils;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
-import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import nethack.enums.EntityType;
+import util.CustomVec2D;
+import util.CustomVec3D;
 
 public class EntitySelector extends Selector<WorldEntity> {
   public static final EntitySelector closedDoor =
@@ -58,7 +58,7 @@ public class EntitySelector extends Selector<WorldEntity> {
     if (selectionType == SelectionType.ADJACENT) {
       var entity =
           entities.stream()
-              .filter(e -> NavUtils.adjacent(e.position, S.worldmodel.position, true))
+              .filter(e -> CustomVec3D.adjacent(new CustomVec3D(e.position), S.loc(), true))
               .findFirst();
       return entity.orElse(null);
     }
@@ -73,13 +73,13 @@ public class EntitySelector extends Selector<WorldEntity> {
     }
 
     // Goes wrong for multiple levels
-    IntVec2D agentPos = NavUtils.loc2(S.worldmodel.position);
-    float min = NetHackSurface.heuristic(agentPos, NavUtils.loc2(entities.get(0).position));
+    CustomVec2D agentPos = S.loc().pos;
+    float min = CustomVec2D.distSq(agentPos, new CustomVec2D(entities.get(0).position));
     float max = min;
     int minIndex = 0, maxIndex = 0;
     for (int i = 1; i < n; i++) {
       WorldEntity we = entities.get(i);
-      float dist = NetHackSurface.heuristic(agentPos, NavUtils.loc2(we.position));
+      float dist = CustomVec2D.distSq(agentPos, NavUtils.loc2(we.position));
       if (dist < min) {
         min = dist;
         minIndex = i;

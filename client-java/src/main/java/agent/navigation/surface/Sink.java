@@ -1,11 +1,11 @@
 package agent.navigation.surface;
 
-import eu.iv4xr.framework.spatial.IntVec2D;
+import util.CustomVec3D;
 
 public class Sink extends Tile implements Walkable, Printable {
   private boolean isVisible;
 
-  public Sink(IntVec2D pos) {
+  public Sink(CustomVec3D pos) {
     super(pos);
   }
 

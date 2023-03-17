@@ -5,11 +5,8 @@ import agent.navigation.GridSurface;
 import agent.navigation.HierarchicalNavigation;
 import agent.navigation.hpastar.Size;
 import agent.navigation.hpastar.smoother.Direction;
-import agent.navigation.hpastar.utils.RefSupport;
-import agent.navigation.surface.Tile;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
-import eu.iv4xr.framework.spatial.IntVec2D;
 import eu.iv4xr.framework.spatial.Vec3;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -18,7 +15,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import nethack.object.Command;
 import nethack.object.Player;
-import nl.uu.cs.aplib.utils.Pair;
+import util.CustomVec2D;
+import util.CustomVec3D;
 
 public class NavUtils {
   /**
@@ -26,8 +24,8 @@ public class NavUtils {
    * adjustedFindPath to calculate the path.
    */
   static int distTo(AgentState S, WorldEntity e) {
-    List<Pair<Integer, Tile>> path =
-        adjustedFindPath(S, NavUtils.loc3(S.worldmodel.position), NavUtils.loc3(e.position));
+    List<CustomVec3D> path =
+        adjustedFindPath(S, new CustomVec3D(S.worldmodel.position), new CustomVec3D(e.position));
     if (path == null) {
       return Integer.MAX_VALUE;
     }
@@ -39,127 +37,70 @@ public class NavUtils {
    * source (x0,y0) and destination (x1,y1) are non-blocking (even if they are, e.g. if one of them
    * is an occupied tile).
    */
-  public static List<Pair<Integer, Tile>> adjustedFindPath(
-      AgentState state, int level0, IntVec2D pos0, int level1, IntVec2D pos1) {
-    return adjustedFindPath(state, loc3(level0, pos0), loc3(level1, pos1));
+  public static List<CustomVec3D> adjustedFindPath(
+      AgentState state, int level0, CustomVec2D pos0, int level1, CustomVec2D pos1) {
+    return adjustedFindPath(state, new CustomVec3D(level0, pos0), new CustomVec3D(level1, pos1));
   }
 
-  public static List<Pair<Integer, Tile>> adjustedFindPath(
-      AgentState state, Pair<Integer, Tile> oldLocation, Pair<Integer, Tile> newLocation) {
+  public static List<CustomVec3D> adjustedFindPath(
+      AgentState state, CustomVec3D oldLocation, CustomVec3D newLocation) {
     HierarchicalNavigation nav = state.hierarchicalNav;
     //    boolean srcOriginalBlockingState = nav.isBlocking(oldLocation);
     //    boolean destOriginalBlockingState = nav.isBlocking(newLocation);
     //    nav.toggleBlockingOff(oldLocation);
     //    nav.toggleBlockingOff(newLocation);
-    List<Pair<Integer, Tile>> path = nav.findPath(oldLocation, newLocation);
+    List<CustomVec3D> path = nav.findPath(oldLocation, newLocation);
     //    nav.setBlockingState(oldLocation, srcOriginalBlockingState);
     //    nav.setBlockingState(newLocation, destOriginalBlockingState);
     return path;
   }
 
-  public static Tile toTile(Vec3 p) {
-    return toTile((int) p.x, (int) p.y);
-  }
-
-  public static Tile toTile(int x, int y) {
-    return new Tile(x, y);
-  }
-
-  public static Tile toTile(IntVec2D pos) {
-    return new Tile(pos);
-  }
-
-  public static IntVec2D posInDirection(IntVec2D pos, Direction direction) {
+  public static CustomVec2D posInDirection(CustomVec2D pos, Direction direction) {
     switch (direction) {
       case North:
-        return new IntVec2D(pos.x, pos.y - 1);
+        return new CustomVec2D(pos.x, pos.y - 1);
       case South:
-        return new IntVec2D(pos.x, pos.y + 1);
+        return new CustomVec2D(pos.x, pos.y + 1);
       case East:
-        return new IntVec2D(pos.x + 1, pos.y);
+        return new CustomVec2D(pos.x + 1, pos.y);
       case West:
-        return new IntVec2D(pos.x - 1, pos.y);
+        return new CustomVec2D(pos.x - 1, pos.y);
       case NorthEast:
-        return new IntVec2D(pos.x + 1, pos.y - 1);
+        return new CustomVec2D(pos.x + 1, pos.y - 1);
       case NorthWest:
-        return new IntVec2D(pos.x - 1, pos.y - 1);
+        return new CustomVec2D(pos.x - 1, pos.y - 1);
       case SouthEast:
-        return new IntVec2D(pos.x + 1, pos.y + 1);
+        return new CustomVec2D(pos.x + 1, pos.y + 1);
       case SouthWest:
-        return new IntVec2D(pos.x - 1, pos.y + 1);
+        return new CustomVec2D(pos.x - 1, pos.y + 1);
       default:
         throw new IllegalArgumentException("Direction does not exist");
     }
   }
 
-  public static IntVec2D loc2(int x, int y) {
-    return new IntVec2D(x, y);
+  public static CustomVec2D loc2(Vec3 pos) {
+    return new CustomVec2D((int) pos.x, (int) pos.y);
   }
 
-  public static IntVec2D loc2(Vec3 pos) {
-    return new IntVec2D((int) pos.x, (int) pos.y);
-  }
-
-  static Pair<Integer, Tile> loc3(int levelNr, int x, int y) {
-    return loc3(levelNr, loc2(x, y));
-  }
-
-  static Pair<Integer, Tile> loc3(int levelNr, IntVec2D pos) {
-    return new Pair<>(levelNr, toTile(pos));
-  }
-
-  public static Pair<Integer, Tile> loc3(Vec3 pos) {
-    return new Pair<>((int) pos.z, toTile(pos));
-  }
-
-  public static boolean adjacent(Vec3 vec1, Vec3 vec2, boolean allowDiagonally) {
-    return adjacent(toTile(vec1), toTile(vec2), allowDiagonally);
-  }
-
-  public static boolean adjacent(IntVec2D pos1, IntVec2D pos2, boolean allowDiagonally) {
-    return adjacent(pos1.x, pos1.y, pos2.x, pos2.y, allowDiagonally);
-  }
-
-  // Check if two tiles are adjacent.
-  public static boolean adjacent(Tile tile1, Tile tile2, boolean allowDiagonally) {
-    return adjacent(tile1.pos.x, tile1.pos.y, tile2.pos.x, tile2.pos.y, allowDiagonally);
-  }
-
-  public static boolean isDiagonal(IntVec2D pos1, IntVec2D pos2) {
-    return pos1.x != pos2.x && pos1.y != pos2.y;
-  }
-
-  private static boolean adjacent(int x0, int y0, int x1, int y1, boolean allowDiagonally) {
-    int dx = Math.abs(x0 - x1);
-    int dy = Math.abs(y0 - y1);
-
-    // Further than 1 away or same tile
-    if (dx > 1 || dy > 1 || (dx == 0 && dy == 0)) {
-      return false;
-    }
-    return allowDiagonally || dx == 0 || dy == 0;
-  }
-
-  public static List<Pair<Integer, Tile>> adjacentPositions(
-      List<Pair<Integer, Tile>> positions, AgentState S) {
-    int levelNr = levelNr(S.worldmodel.position);
-    assert positions.stream().allMatch(entry -> entry.fst.equals(levelNr))
-        : "All must be on same level";
+  public static List<CustomVec3D> adjacentPositions(List<CustomVec3D> locations, AgentState S) {
+    CustomVec3D agentLoc = S.loc();
+    assert locations.stream().allMatch(loc -> loc.lvl == agentLoc.lvl)
+        : "All must be on same level for now";
     GridSurface surface = S.area();
-    Set<IntVec2D> processedPositions =
-        positions.stream().map(entry -> entry.snd.pos).collect(Collectors.toSet());
-    Set<IntVec2D> adjacentPositions = new HashSet<>();
+    Set<CustomVec2D> processedPositions =
+        locations.stream().map(entry -> entry.pos).collect(Collectors.toSet());
+    Set<CustomVec2D> adjacentPositions = new HashSet<>();
 
-    for (IntVec2D pos : new ArrayList<>(processedPositions)) {
-      List<IntVec2D> neighbours =
+    for (CustomVec2D pos : new ArrayList<>(processedPositions)) {
+      List<CustomVec2D> neighbours =
           NavUtils.neighbourCoordinates(pos, surface.hierarchicalMap.size, true);
-      for (IntVec2D neighbour : neighbours) {
+      for (CustomVec2D neighbour : neighbours) {
         if (processedPositions.contains(neighbour)) {
           continue;
         }
 
         processedPositions.add(neighbour);
-        if (surface.concreteMap.passability.cannotEnter(neighbour, new RefSupport<>())) {
+        if (surface.concreteMap.passability.cannotEnter(neighbour)) {
           continue;
         }
 
@@ -168,12 +109,12 @@ public class NavUtils {
     }
 
     return adjacentPositions.stream()
-        .map(pos -> NavUtils.loc3(levelNr, pos))
+        .map(pos -> new CustomVec3D(agentLoc.lvl, pos))
         .collect(Collectors.toList());
   }
 
-  public static int levelNr(Vec3 pos) {
-    return (int) pos.z;
+  public static int levelNr(Vec3 loc) {
+    return (int) loc.z;
   }
 
   /**
@@ -203,21 +144,21 @@ public class NavUtils {
     return distanceBetweenEntities(S.worldmodel.elements.get(Player.ID), e);
   }
 
-  public static WorldModel moveTo(AgentState state, Pair<Integer, Tile> targetTile) {
+  public static WorldModel moveTo(AgentState state, CustomVec3D targetTile) {
     Command command = Direction.getCommand(toDirection(state, targetTile));
     return state.env().commands(command);
   }
 
   public static WorldModel moveTo(AgentState state, Vec3 targetPosition) {
-    return moveTo(state, loc3(targetPosition));
+    return moveTo(state, new CustomVec3D(targetPosition));
   }
 
-  public static Direction toDirection(AgentState state, Pair<Integer, Tile> targetTile) {
-    Pair<Integer, Tile> agentTile = NavUtils.loc3(state.worldmodel.position);
-    assert agentTile.fst.equals(targetTile.fst) : "Direction must be on same level";
-    IntVec2D targetPos = targetTile.snd.pos;
-    IntVec2D agentPos = agentTile.snd.pos;
-    assert adjacent(agentPos, targetPos, true);
+  public static Direction toDirection(AgentState state, CustomVec3D target) {
+    CustomVec3D agentLoc = state.loc();
+    assert agentLoc.lvl == target.lvl : "Direction must be on same level";
+    CustomVec2D targetPos = target.pos;
+    CustomVec2D agentPos = agentLoc.pos;
+    assert CustomVec2D.adjacent(agentPos, targetPos, true);
 
     if (targetPos.y > agentPos.y) {
       if (targetPos.x > agentPos.x) {
@@ -242,26 +183,22 @@ public class NavUtils {
     }
   }
 
-  public static Pair<Integer, Tile> nextTile(List<Pair<Integer, Tile>> path) {
-    if (path == null || path.isEmpty()) {
-      //      Loggers.NavLogger.debug("Path not found");
+  public static CustomVec3D nextLoc(List<CustomVec3D> path) {
+    if (path == null || path.size() < 1) {
       return null;
-      //    } else if (path.isEmpty()) {
-      //      Loggers.NavLogger.debug("Already on location");
-      //      return null;
     } else {
       // The first element is the src itself, so we need to pick the next one:
       return path.get(1);
     }
   }
 
-  public static boolean withinBounds(IntVec2D pos, Size size) {
+  public static boolean withinBounds(CustomVec2D pos, Size size) {
     return pos.x >= 0 && pos.y >= 0 && pos.x < size.width && pos.y < size.height;
   }
 
-  public static List<IntVec2D> neighbourCoordinates(
-      IntVec2D pos, Size size, boolean allowDiagonal) {
-    List<IntVec2D> neighbourCoords = new ArrayList<>(2);
+  public static List<CustomVec2D> neighbourCoordinates(
+      CustomVec2D pos, Size size, boolean allowDiagonal) {
+    List<CustomVec2D> neighbourCoords = new ArrayList<>(2);
     assert withinBounds(pos, size) : "Position outside the boundaries";
 
     int left = pos.x - 1;
@@ -276,46 +213,46 @@ public class NavUtils {
     boolean aboveInsideMap = above < size.height;
 
     if (leftInsideMap && rightInsideMap && belowInsideMap && aboveInsideMap) {
-      neighbourCoords.add(new IntVec2D(pos.x, below));
-      neighbourCoords.add(new IntVec2D(pos.x, above));
-      neighbourCoords.add(new IntVec2D(left, pos.y));
-      neighbourCoords.add(new IntVec2D(right, pos.y));
+      neighbourCoords.add(new CustomVec2D(pos.x, below));
+      neighbourCoords.add(new CustomVec2D(pos.x, above));
+      neighbourCoords.add(new CustomVec2D(left, pos.y));
+      neighbourCoords.add(new CustomVec2D(right, pos.y));
 
       if (allowDiagonal) {
-        neighbourCoords.add(new IntVec2D(right, above));
-        neighbourCoords.add(new IntVec2D(left, above));
-        neighbourCoords.add(new IntVec2D(right, below));
-        neighbourCoords.add(new IntVec2D(left, below));
+        neighbourCoords.add(new CustomVec2D(right, above));
+        neighbourCoords.add(new CustomVec2D(left, above));
+        neighbourCoords.add(new CustomVec2D(right, below));
+        neighbourCoords.add(new CustomVec2D(left, below));
       }
 
       return neighbourCoords;
     }
 
     if (leftInsideMap) {
-      neighbourCoords.add(new IntVec2D(left, pos.y));
+      neighbourCoords.add(new CustomVec2D(left, pos.y));
       if (allowDiagonal) {
         if (belowInsideMap) {
-          neighbourCoords.add(new IntVec2D(left, below));
+          neighbourCoords.add(new CustomVec2D(left, below));
         }
         if (aboveInsideMap) {
-          neighbourCoords.add(new IntVec2D(left, above));
+          neighbourCoords.add(new CustomVec2D(left, above));
         }
       }
     }
     if (aboveInsideMap) {
-      neighbourCoords.add(new IntVec2D(pos.x, above));
+      neighbourCoords.add(new CustomVec2D(pos.x, above));
     }
     if (belowInsideMap) {
-      neighbourCoords.add(new IntVec2D(pos.x, below));
+      neighbourCoords.add(new CustomVec2D(pos.x, below));
     }
     if (rightInsideMap) {
-      neighbourCoords.add(new IntVec2D(right, pos.y));
+      neighbourCoords.add(new CustomVec2D(right, pos.y));
       if (allowDiagonal) {
         if (belowInsideMap) {
-          neighbourCoords.add(new IntVec2D(right, below));
+          neighbourCoords.add(new CustomVec2D(right, below));
         }
         if (aboveInsideMap) {
-          neighbourCoords.add(new IntVec2D(right, above));
+          neighbourCoords.add(new CustomVec2D(right, above));
         }
       }
     }
@@ -325,7 +262,7 @@ public class NavUtils {
 
   /** check if the location of the entity e is reachable from the agent current position. */
   public static boolean isReachable(AgentState S, WorldEntity e) {
-    var path = adjustedFindPath(S, loc3(S.worldmodel.position), loc3(e.position));
-    return path != null && path.size() > 0;
+    var path = adjustedFindPath(S, S.loc(), new CustomVec3D(e.position));
+    return path != null && !path.isEmpty();
   }
 }

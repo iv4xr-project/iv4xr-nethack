@@ -1,11 +1,11 @@
 package agent.navigation.surface;
 
-import eu.iv4xr.framework.spatial.IntVec2D;
+import util.CustomVec3D;
 
 public class Fountain extends Tile implements Walkable, Printable {
   boolean isVisible;
 
-  public Fountain(IntVec2D pos) {
+  public Fountain(CustomVec3D pos) {
     super(pos);
   }
 

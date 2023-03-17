@@ -14,11 +14,11 @@ import agent.navigation.strategy.NavUtils;
 import agent.navigation.surface.*;
 import eu.iv4xr.framework.extensions.pathfinding.Navigatable;
 import eu.iv4xr.framework.extensions.pathfinding.XPathfinder;
-import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.*;
 import java.util.stream.Collectors;
 import nethack.enums.Color;
 import util.ColoredStringBuilder;
+import util.CustomVec2D;
 
 /**
  * Representing a navigation graph over a 2D tiled-world. The world is assumed to be made of
@@ -33,10 +33,10 @@ import util.ColoredStringBuilder;
  *
  * @author Wish
  */
-public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
+public class GridSurface implements Navigatable<CustomVec2D>, XPathfinder<CustomVec2D> {
   public final Tile[][] tiles;
-  public final Map<String, HashSet<IntVec2D>> tileTypes = new HashMap<>();
-  public final Set<IntVec2D> frontierCandidates = new HashSet<>();
+  public final Map<String, HashSet<CustomVec2D>> tileTypes = new HashMap<>();
+  public final Set<CustomVec2D> frontierCandidates = new HashSet<>();
   public final HierarchicalMap hierarchicalMap;
 
   /**
@@ -58,10 +58,10 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
                 emptyConcreteMap, clusterSize, 1, EntranceStyle.EndEntrance, size);
   }
 
-  public void updateTiles(List<Tile> newTiles, List<IntVec2D> toggleOffBlocking) {
+  public void updateTiles(List<Tile> newTiles, List<CustomVec2D> toggleOffBlocking) {
     Map<Id<Cluster>, Set<Direction>> entrances = new HashMap<>();
 
-    for (IntVec2D pos : toggleOffBlocking) {
+    for (CustomVec2D pos : toggleOffBlocking) {
       Tile tile = getTile(pos);
       if (tile instanceof Door) {
         Door door = (Door) tile;
@@ -71,7 +71,7 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
 
     for (Tile tile : newTiles) {
       boolean updated = updateTile(tile);
-      markAsSeen(tile);
+      markAsSeen(tile.pos);
       if (!updated) {
         continue;
       }
@@ -170,7 +170,7 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
 
   public void updatePassibility(Tile tile) {
     Cluster cluster = hierarchicalMap.findClusterForPosition(tile.pos);
-    IntVec2D relPos = cluster.toRelativePos(tile.pos);
+    CustomVec2D relPos = cluster.toRelativePos(tile.pos);
 
     // Update main concreteMap
     concreteMap.passability.updateCanMoveDiagonally(tile.pos, tile instanceof Walkable);
@@ -196,46 +196,41 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
     tileTypes.get(newTypeName).add(newTile.pos);
   }
 
-  public HashSet<IntVec2D> getCoordinatesOfTileType(Class tileClass) {
+  public HashSet<CustomVec2D> getCoordinatesOfTileType(Class tileClass) {
     return tileTypes.get(tileClass.getName());
   }
 
-  public boolean nullTile(IntVec2D pos) {
+  public boolean nullTile(CustomVec2D pos) {
     return getTile(pos) == null;
   }
 
-  public Tile getTile(IntVec2D pos) {
+  public Tile getTile(CustomVec2D pos) {
     return tiles[pos.y][pos.x];
   }
 
   // region XPathfinder interface
-  @Override
-  public boolean hasbeenSeen(Tile tile) {
-    return hasbeenSeen(tile.pos);
-  }
-
-  private boolean hasbeenSeen(IntVec2D pos) {
+  public boolean hasbeenSeen(CustomVec2D pos) {
     Tile t = getTile(pos);
     return t != null && t.seen;
   }
 
   @Override
-  public void markAsSeen(List<Tile> newlySeen) {
+  public void markAsSeen(List<CustomVec2D> newlySeen) {
     newlySeen.forEach(this::markAsSeen);
   }
 
   @Override
-  public void markAsSeen(Tile p) {
-    Tile t = getTile(p.pos);
+  public void markAsSeen(CustomVec2D p) {
+    Tile t = getTile(p);
     assert t != null;
     t.seen = true;
     // Add as frontier if it is walkable
     if (t instanceof StraightWalkable) {
-      frontierCandidates.add(p.pos);
+      frontierCandidates.add(p);
     }
   }
 
-  public boolean isWalkable(IntVec2D pos) {
+  public boolean isWalkable(CustomVec2D pos) {
     return isWalkable(getTile(pos));
   }
 
@@ -249,16 +244,16 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
    * definition a frontier does not have to be reachable. You can use findPath to check which
    * frontiers are reachable.
    */
-  public List<Tile> getFrontier() {
-    List<Tile> frontiers = new LinkedList<>();
-    List<IntVec2D> cannotBeFrontier = new LinkedList<>();
-    for (IntVec2D frontierPosition : frontierCandidates) {
-      List<IntVec2D> pNeighbors =
+  public List<CustomVec2D> getFrontier() {
+    List<CustomVec2D> frontiers = new LinkedList<>();
+    List<CustomVec2D> cannotBeFrontier = new LinkedList<>();
+    for (CustomVec2D frontierPosition : frontierCandidates) {
+      List<CustomVec2D> pNeighbors =
           NavUtils.neighbourCoordinates(frontierPosition, hierarchicalMap.size, true);
       boolean isFrontier = false;
-      for (IntVec2D n : pNeighbors) {
+      for (CustomVec2D n : pNeighbors) {
         if (!hasbeenSeen(n)) {
-          frontiers.add(new Tile(frontierPosition));
+          frontiers.add(frontierPosition);
           isFrontier = true;
           break;
         }
@@ -271,30 +266,25 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
     return frontiers;
   }
 
-  public List<Tile> explore(Tile startingLocation, Tile heuristicLocation) {
+  public List<CustomVec2D> explore(CustomVec2D startingLocation, CustomVec2D heuristicLocation) {
     return explore(
-        startingLocation.pos.x,
-        startingLocation.pos.y,
-        heuristicLocation.pos.x,
-        heuristicLocation.pos.y);
+        startingLocation.x, startingLocation.y, heuristicLocation.x, heuristicLocation.y);
   }
 
-  private List<Tile> explore(int x, int y, int heuristicX, int heuristicY) {
-    IntVec2D startPos = new IntVec2D(x, y);
-    List<Tile> frontiers = getFrontier();
-    frontiers.removeIf(tile -> tile.pos.equals(startPos));
+  private List<CustomVec2D> explore(int x, int y, int heuristicX, int heuristicY) {
+    CustomVec2D startPos = new CustomVec2D(x, y);
+    List<CustomVec2D> frontiers = getFrontier();
+    frontiers.removeIf(pos -> pos.equals(startPos));
     if (frontiers.isEmpty()) {
       return null;
     }
 
-    IntVec2D heuristicPos = new IntVec2D(heuristicX, heuristicY);
-
+    CustomVec2D heuristicPos = new CustomVec2D(heuristicX, heuristicY);
     // sort the frontiers in ascending order, by their geometric distance to (x,y):
-    frontiers.sort(
-        (p1, p2) -> Float.compare(heuristic(p1.pos, startPos), heuristic(p2.pos, heuristicPos)));
+    frontiers.sort((p1, p2) -> Float.compare(heuristic(p1, startPos), heuristic(p2, heuristicPos)));
 
-    for (Tile front : frontiers) {
-      List<Tile> path = findPath(x, y, front.pos.x, front.pos.y);
+    for (CustomVec2D front : frontiers) {
+      List<CustomVec2D> path = findPath(x, y, front.x, front.y);
       if (path != null) {
         return path;
       }
@@ -303,42 +293,43 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
   }
 
   @Override
-  public List<Tile> findPath(Tile from, Tile to) {
+  public List<CustomVec2D> findPath(CustomVec2D from, CustomVec2D to) {
     return findShortestPath(from, to);
   }
 
   // Has optimizations in place to reduce the amount of time to find the shortest path
-  public List<IntVec2D> findShortestPosPath(Tile from, Tile... targets) {
+  public List<CustomVec2D> findShortestPath(CustomVec2D from, CustomVec2D... targets) {
     assert targets.length != 0 : "Cannot find shortest path to zero targets";
     HierarchicalMapFactory factory = new HierarchicalMapFactory();
-    Id<AbstractNode> startAbsNode = factory.insertAbstractNode(hierarchicalMap, from.pos);
+    Id<AbstractNode> startAbsNode = factory.insertAbstractNode(hierarchicalMap, from);
     int maxPathsToRefine = Integer.MAX_VALUE;
     HierarchicalSearch hierarchicalSearch = new HierarchicalSearch();
 
-    List<IntVec2D> shortestPath = null;
+    List<CustomVec2D> shortestPath = null;
 
-    for (Tile target : targets) {
+    for (CustomVec2D target : targets) {
       if (from.equals(target)) {
         shortestPath = new ArrayList<>();
         break;
       }
 
-      if (shortestPath != null && manhattanDistance(from, target) >= shortestPath.size()) {
+      if (shortestPath != null && CustomVec2D.manhattan(from, target) >= shortestPath.size()) {
         continue;
       }
 
-      Id<AbstractNode> targetAbsNode = factory.insertAbstractNode(hierarchicalMap, target.pos);
+      Id<AbstractNode> targetAbsNode = factory.insertAbstractNode(hierarchicalMap, target);
       List<AbstractPathNode> abstractPath =
           hierarchicalSearch.doHierarchicalSearch(
               hierarchicalMap, startAbsNode, targetAbsNode, 1, maxPathsToRefine);
-      List<IPathNode> path =
-          hierarchicalSearch.abstractPathToLowLevelPath(
-              hierarchicalMap, abstractPath, hierarchicalMap.size.width, maxPathsToRefine);
-      SmoothWizard smoother = new SmoothWizard(concreteMap, path);
-      path = smoother.smoothPath();
-      List<IntVec2D> posPath = toPositionPath(path, concreteMap);
-      if (!posPath.isEmpty()) {
-        verifyPath(from.pos, target.pos, posPath);
+
+      if (abstractPath != null) {
+        List<IPathNode> path =
+            hierarchicalSearch.abstractPathToLowLevelPath(
+                hierarchicalMap, abstractPath, hierarchicalMap.size.width, maxPathsToRefine);
+        SmoothWizard smoother = new SmoothWizard(concreteMap, path);
+        path = smoother.smoothPath();
+        List<CustomVec2D> posPath = toPositionPath(path, concreteMap);
+        verifyPath(from, target, posPath);
         if (shortestPath == null || shortestPath.size() > posPath.size()) {
           shortestPath = posPath;
         }
@@ -350,16 +341,7 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
     return shortestPath;
   }
 
-  // Has optimizations in place to reduce the amount of time to find the shortest path
-  public List<Tile> findShortestPath(Tile from, Tile... targets) {
-    List<IntVec2D> posPath = findShortestPosPath(from, targets);
-    if (posPath == null) {
-      return null;
-    }
-    return posPath.stream().map(Tile::new).collect(Collectors.toList());
-  }
-
-  private List<IntVec2D> toPositionPath(List<IPathNode> path, ConcreteMap concreteMap) {
+  private List<CustomVec2D> toPositionPath(List<IPathNode> path, ConcreteMap concreteMap) {
     return path.stream()
         .map(
             (p) -> {
@@ -374,8 +356,8 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
         .collect(Collectors.toList());
   }
 
-  private void verifyPath(IntVec2D from, IntVec2D to, List<IntVec2D> path) {
-    assert !from.equals(to) : "Path to itself";
+  private void verifyPath(CustomVec2D from, CustomVec2D to, List<CustomVec2D> path) {
+    assert !from.equals(to);
     if (path.isEmpty()) {
       assert from.equals(to) : "If path is empty, it must be a path to itself";
       return;
@@ -385,17 +367,17 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
     int n = path.size();
     assert path.get(n - 1).equals(to) : "Path to is incorrect";
 
-    IntVec2D prevPos = path.get(0);
+    CustomVec2D prevPos = path.get(0);
     for (int i = 1; i < n; i++) {
-      IntVec2D currentPos = path.get(i);
-      assert NavUtils.adjacent(prevPos, currentPos, true)
+      CustomVec2D currentPos = path.get(i);
+      assert CustomVec2D.adjacent(prevPos, currentPos, true)
           : String.format("Non adjacent node error at %s -> %s", prevPos, currentPos);
       prevPos = currentPos;
     }
   }
 
-  public List<Tile> findPath(int fromX, int fromY, int toX, int toY) {
-    return findPath(new Tile(fromX, fromY), new Tile(toX, toY));
+  public List<CustomVec2D> findPath(int fromX, int fromY, int toX, int toY) {
+    return findPath(new CustomVec2D(fromX, fromY), new CustomVec2D(toX, toY));
   }
 
   /** When true then the pathfinder will consider all nodes in the graph to have been seen. */
@@ -435,8 +417,8 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
    * <p>Only neighbors that have been seen before will be included.
    */
   @Override
-  public Iterable<Tile> neighbours(Tile t) {
-    Tile tile = getTile(t.pos);
+  public Iterable<CustomVec2D> neighbours(CustomVec2D pos) {
+    Tile tile = getTile(pos);
     if (tile == null) {
       return new ArrayList<>();
     }
@@ -454,16 +436,16 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
    * <p>For optimization purposes Lists with filters or streams have been avoided Instead arrays are
    * used and at the end a list is built
    */
-  private List<Tile> neighbours_(IntVec2D pos) {
+  private List<CustomVec2D> neighbours_(CustomVec2D pos) {
     boolean allowDiagonal = getTile(pos) instanceof Walkable;
-    List<IntVec2D> candidates =
+    List<CustomVec2D> candidates =
         NavUtils.neighbourCoordinates(pos, hierarchicalMap.size, allowDiagonal);
 
     int nrResults = 0;
     boolean[] toNeighbour = new boolean[candidates.size()];
 
     for (int i = 0; i < candidates.size(); i++) {
-      IntVec2D candidate = candidates.get(i);
+      CustomVec2D candidate = candidates.get(i);
       toNeighbour[i] = isWalkable(getTile(candidate));
       if (!perfect_memory_pathfinding) {
         toNeighbour[i] = toNeighbour[i] && hasbeenSeen(candidate);
@@ -473,49 +455,35 @@ public class GridSurface implements Navigatable<Tile>, XPathfinder<Tile> {
       }
     }
 
-    List<Tile> result = new ArrayList<>(nrResults);
+    List<CustomVec2D> result = new ArrayList<>(nrResults);
     for (int i = 0; i < candidates.size(); i++) {
       if (toNeighbour[i]) {
-        result.add(new Tile(candidates.get(i)));
+        result.add(candidates.get(i));
       }
     }
     return result;
   }
 
   /** The estimated distance between two arbitrary vertices. */
-  public float heuristic(Tile from, Tile to) {
-    return heuristic(from.pos, to.pos);
+  public float heuristic(CustomVec2D p, CustomVec2D q) {
+    return CustomVec2D.distSq(p, q);
   }
 
   @Override
-  public float distance(Tile tile, Tile nodeId1) {
-    return heuristic(tile, nodeId1);
-  }
-
-  public int manhattanDistance(Tile tile1, Tile tile2) {
-    return manhattanDistance(tile1.pos, tile2.pos);
-  }
-
-  public int manhattanDistance(IntVec2D from, IntVec2D to) {
-    return Math.max(Math.abs(from.x - to.x), Math.abs(from.y - to.y));
-  }
-
-  public static float heuristic(IntVec2D from, IntVec2D to) {
-    return IntVec2D.distSq(from, to);
+  public float distance(CustomVec2D p, CustomVec2D q) {
+    return heuristic(p, q);
   }
   // endregion
 
   @Override
   public String toString() {
     ColoredStringBuilder csb = new ColoredStringBuilder();
-    Set<IntVec2D> frontiers =
-        getFrontier().stream().map(frontier -> frontier.pos).collect(Collectors.toSet());
-
+    Set<CustomVec2D> frontiers = new HashSet<>(getFrontier());
     // Add row by row to the StringBuilder
     for (int y = 0; y < hierarchicalMap.size.height; y++) {
       for (int x = 0; x < hierarchicalMap.size.width; x++) {
         // Get tile, if it doesn't know the type it is not know or void.
-        IntVec2D pos = new IntVec2D(x, y);
+        CustomVec2D pos = new CustomVec2D(x, y);
         Tile t = getTile(pos);
         boolean isFrontier = frontiers.contains(pos);
         boolean isVisible = t instanceof Printable && ((Printable) t).isVisible();

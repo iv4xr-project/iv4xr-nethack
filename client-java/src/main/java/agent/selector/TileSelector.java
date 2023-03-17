@@ -4,7 +4,6 @@ import agent.iv4xr.AgentState;
 import agent.navigation.NetHackSurface;
 import agent.navigation.strategy.NavUtils;
 import agent.navigation.surface.*;
-import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -12,15 +11,16 @@ import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import nl.uu.cs.aplib.utils.Pair;
+import util.CustomVec2D;
+import util.CustomVec3D;
 
-public class TileSelector extends Selector<Pair<Integer, Tile>> {
+public class TileSelector extends Selector<Tile> {
   public static final TileSelector adjacentWallSelector =
       new TileSelector(
           SelectionType.CLOSEST,
           Wall.class,
           t -> {
-            Wall w = (Wall) t.snd;
+            Wall w = (Wall) t;
             return w.timesSearched < 10;
           },
           true);
@@ -30,7 +30,7 @@ public class TileSelector extends Selector<Pair<Integer, Tile>> {
           SelectionType.CLOSEST,
           Door.class,
           t -> {
-            Door d = (Door) t.snd;
+            Door d = (Door) t;
             return !d.isOpen;
           },
           true);
@@ -40,7 +40,7 @@ public class TileSelector extends Selector<Pair<Integer, Tile>> {
           SelectionType.CLOSEST,
           Door.class,
           t -> {
-            Door d = (Door) t.snd;
+            Door d = (Door) t;
             return !d.isOpen;
           },
           false);
@@ -50,7 +50,7 @@ public class TileSelector extends Selector<Pair<Integer, Tile>> {
           SelectionType.CLOSEST,
           Door.class,
           t -> {
-            Door d = (Door) t.snd;
+            Door d = (Door) t;
             return d.isLocked && !d.isOpen;
           },
           false);
@@ -60,56 +60,59 @@ public class TileSelector extends Selector<Pair<Integer, Tile>> {
           SelectionType.FIRST,
           Stair.class,
           t -> {
-            return ((Stair) t.snd).getClimbType() == Climbable.ClimbType.Descendable;
+            return ((Stair) t).getClimbType() == Climbable.ClimbType.Descendable;
           },
           false);
 
   final Class tileClass;
 
   public TileSelector(
-      SelectionType selectionType,
-      Class tileClass,
-      Predicate<Pair<Integer, Tile>> predicate,
-      boolean adjacent) {
+      SelectionType selectionType, Class tileClass, Predicate<Tile> predicate, boolean adjacent) {
     super(selectionType, predicate, adjacent);
     this.tileClass = tileClass;
   }
 
-  public Pair<Integer, Tile> apply(AgentState S) {
-    List<Pair<Integer, Tile>> tiles = new ArrayList<>();
+  public Tile apply(AgentState S) {
+    List<Tile> coordinates = new ArrayList<>();
+    int lvl = S.loc().lvl;
     NetHackSurface surface = S.area();
     if (tileClass != null) {
-      HashSet<IntVec2D> tilesOfType = surface.getCoordinatesOfTileType(tileClass);
+      HashSet<CustomVec2D> tilesOfType = surface.getCoordinatesOfTileType(tileClass);
       if (tilesOfType == null) {
         return null;
       }
-      for (IntVec2D pos : tilesOfType) {
-        tiles.add(
-            new Pair<Integer, Tile>(NavUtils.levelNr(S.worldmodel.position), surface.getTile(pos)));
+      for (CustomVec2D pos : tilesOfType) {
+        coordinates.add(surface.getTile(pos));
       }
     } else {
       for (Tile[] row : surface.tiles) {
         for (Tile tile : row) {
           if (tile != null) {
-            tiles.add(new Pair<>(NavUtils.levelNr(S.worldmodel.position), tile));
+            coordinates.add(surface.getTile(tile.pos));
           }
         }
       }
     }
-    return apply(tiles, S);
+    return apply(coordinates, S);
   }
 
   @Override
-  public Pair<Integer, Tile> apply(List<Pair<Integer, Tile>> tiles, AgentState S) {
-    List<Pair<Integer, Tile>> filteredTiles = filter(tiles);
+  public Tile apply(List<Tile> coordinates, AgentState S) {
+    List<Tile> filteredTiles = filter(coordinates);
     if (adjacent) {
-      filteredTiles = NavUtils.adjacentPositions(filteredTiles, S);
+      List<CustomVec3D> tileLocations =
+          filteredTiles.stream().map(tile -> tile.loc).collect(Collectors.toList());
+      tileLocations = NavUtils.adjacentPositions(tileLocations, S);
+      filteredTiles =
+          tileLocations.stream()
+              .map(loc -> S.hierarchicalNav.getTile(loc))
+              .collect(Collectors.toList());
     }
     return select(filteredTiles, S);
   }
 
   @Override
-  public Pair<Integer, Tile> select(List<Pair<Integer, Tile>> tiles, AgentState S) {
+  public Tile select(List<Tile> tiles, AgentState S) {
     if (tiles.isEmpty()) {
       return null;
     }
@@ -129,12 +132,12 @@ public class TileSelector extends Selector<Pair<Integer, Tile>> {
     }
 
     // Goes wrong for multiple levels
-    IntVec2D agentPos = NavUtils.loc2(S.worldmodel.position);
-    float min = NetHackSurface.heuristic(agentPos, tiles.get(0).snd.pos);
+    CustomVec2D agentPos = NavUtils.loc2(S.worldmodel.position);
+    float min = CustomVec2D.distSq(agentPos, tiles.get(0).pos);
     float max = min;
     int minIndex = 0, maxIndex = 0;
     for (int i = 1; i < n; i++) {
-      float dist = NetHackSurface.heuristic(agentPos, tiles.get(i).snd.pos);
+      float dist = CustomVec2D.distSq(agentPos, tiles.get(i).pos);
       if (dist < min) {
         min = dist;
         minIndex = i;
@@ -151,57 +154,55 @@ public class TileSelector extends Selector<Pair<Integer, Tile>> {
     }
   }
 
-  public Pair<Integer, Tile> selectClosest(List<Pair<Integer, Tile>> tiles, AgentState S) {
+  public Tile selectClosest(List<Tile> tiles, AgentState S) {
     int n = tiles.size();
     NetHackSurface surface = S.area();
-    Tile agentTile = NavUtils.toTile(S.worldmodel.position);
-    List<Tile> shortestPath = null;
+    CustomVec3D agentLoc = S.loc();
+    List<CustomVec2D> shortestPath = null;
     Tile closestTile = null;
 
-    for (Pair<Integer, Tile> tile : tiles) {
-      assert tile.fst.equals(NavUtils.levelNr(S.worldmodel.position))
-          : "The level must be the same for closest/furthest navigation";
+    for (Tile tile : tiles) {
+      CustomVec3D loc = tile.loc;
+      assert loc.lvl == agentLoc.lvl : "The level must be the same for closest/furthest navigation";
 
       // Cannot be shorter since distance is at least equal
       if (shortestPath != null
-          && surface.manhattanDistance(agentTile, tile.snd) >= shortestPath.size()) {
+          && CustomVec2D.manhattan(agentLoc.pos, loc.pos) >= shortestPath.size()) {
         continue;
       }
 
-      List<Tile> path = surface.findPath(agentTile, tile.snd);
+      List<CustomVec2D> path = surface.findPath(agentLoc.pos, tile.pos);
       if (path == null) {
         continue;
       }
       if (shortestPath == null || path.size() < shortestPath.size()) {
         shortestPath = path;
         if (path.isEmpty()) {
-          closestTile = agentTile;
+          closestTile = surface.getTile(agentLoc.pos);
+          break;
         } else {
-          closestTile = path.get(path.size() - 1);
+          closestTile = surface.getTile(path.get(path.size() - 1));
         }
       }
     }
 
-    if (shortestPath == null) {
-      return null;
-    } else if (shortestPath.isEmpty()) {
-      return NavUtils.loc3(S.worldmodel.position);
-    }
-    return new Pair<>(NavUtils.levelNr(S.worldmodel.position), closestTile);
+    return closestTile;
   }
 
-  private List<Pair<Integer, Tile>> filter(List<Pair<Integer, Tile>> tiles) {
-    Stream<Pair<Integer, Tile>> stream;
+  private List<Tile> filter(List<Tile> tiles) {
+    if (tileClass == null && predicate == null) {
+      return tiles;
+    }
+
+    Stream<Tile> stream;
     if (tileClass != null && predicate != null) {
       stream =
           tiles.stream()
-              .filter(t -> Objects.equals(tileClass, t.snd.getClass()) && predicate.test(t));
+              .filter(tile -> Objects.equals(tileClass, tile.getClass()) && predicate.test(tile));
     } else if (tileClass != null) {
-      stream = tiles.stream().filter(t -> Objects.equals(tileClass, t.snd.getClass()));
-    } else if (predicate != null) {
-      stream = tiles.stream().filter(t -> predicate.test(t));
+      stream = tiles.stream().filter(tile -> Objects.equals(tileClass, tile.getClass()));
     } else {
-      return tiles;
+      stream = tiles.stream().filter(tile -> predicate.test(tile));
     }
     return stream.collect(Collectors.toList());
   }

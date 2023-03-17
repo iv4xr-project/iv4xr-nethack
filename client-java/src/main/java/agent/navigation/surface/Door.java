@@ -1,6 +1,6 @@
 package agent.navigation.surface;
 
-import eu.iv4xr.framework.spatial.IntVec2D;
+import util.CustomVec3D;
 
 public class Door extends Tile implements StraightWalkable, Printable {
   public boolean isOpen = false;
@@ -9,11 +9,11 @@ public class Door extends Tile implements StraightWalkable, Printable {
 
   boolean isVisible = false;
 
-  public Door(IntVec2D pos) {
+  public Door(CustomVec3D pos) {
     super(pos);
   }
 
-  public Door(IntVec2D pos, boolean isOpen) {
+  public Door(CustomVec3D pos, boolean isOpen) {
     super(pos);
     this.isOpen = isOpen;
   }

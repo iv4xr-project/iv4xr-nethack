@@ -4,7 +4,7 @@
 
 package agent.navigation.hpastar;
 
-import eu.iv4xr.framework.spatial.IntVec2D;
+import util.CustomVec2D;
 
 public class Helpers {
   public static int getMaxEdges(TileType tileType) {
@@ -20,7 +20,7 @@ public class Helpers {
     return 0;
   }
 
-  public static boolean areAligned(IntVec2D p1, IntVec2D p2) {
+  public static boolean areAligned(CustomVec2D p1, CustomVec2D p2) {
     return p1.x == p2.x || p1.y == p2.y;
   }
 }

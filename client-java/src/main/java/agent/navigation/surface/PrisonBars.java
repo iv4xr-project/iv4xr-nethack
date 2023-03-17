@@ -1,12 +1,12 @@
 package agent.navigation.surface;
 
-import eu.iv4xr.framework.spatial.IntVec2D;
+import util.CustomVec3D;
 
 public class PrisonBars extends Tile implements Printable {
   private boolean isVisible;
   public final boolean seeThrough = true;
 
-  public PrisonBars(IntVec2D pos) {
+  public PrisonBars(CustomVec3D pos) {
     super(pos);
   }
 

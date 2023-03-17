@@ -3,30 +3,25 @@ package agent.navigation.strategy;
 import static nl.uu.cs.aplib.AplibEDSL.action;
 
 import agent.iv4xr.AgentState;
-import agent.navigation.surface.Tile;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
-import eu.iv4xr.framework.spatial.Vec3;
 import java.util.List;
 import nl.uu.cs.aplib.mainConcepts.Action;
 import nl.uu.cs.aplib.utils.Pair;
+import util.CustomVec3D;
 import util.Loggers;
 import util.Sounds;
 
 public class NavAction {
   /** Construct an action that would guide the agent to the given location. */
-  public static Action navigateTo(int levelNr, int x, int y) {
+  public static Action navigateTo(CustomVec3D target) {
     return action("move-to")
         .do2(
             (AgentState S) ->
-                (Pair<Integer, Tile> nextTile) -> {
-                  Loggers.NavLogger.info("navigateTo %d (%d, %d) via %s", levelNr, x, y, nextTile);
-                  return new Pair<>(S, NavUtils.moveTo(S, nextTile));
+                (CustomVec3D nextLoc) -> {
+                  Loggers.NavLogger.info("navigateTo %s via %s", target, nextLoc);
+                  return new Pair<>(S, NavUtils.moveTo(S, nextLoc));
                 })
-        .on(
-            (AgentState S) ->
-                NavUtils.nextTile(
-                    NavUtils.adjustedFindPath(
-                        S, NavUtils.loc3(S.worldmodel.position), NavUtils.loc3(levelNr, x, y))));
+        .on((AgentState S) -> NavUtils.nextLoc(NavUtils.adjustedFindPath(S, S.loc(), target)));
   }
 
   // Construct an action that would guide the agent to the target entity.
@@ -34,9 +29,9 @@ public class NavAction {
     return action("move-to")
         .do2(
             (AgentState S) ->
-                (Pair<Integer, Tile> nextTile) -> {
-                  Loggers.NavLogger.info("navigateTo %s via %s", targetId, nextTile);
-                  return new Pair<>(S, NavUtils.moveTo(S, nextTile));
+                (CustomVec3D nextLoc) -> {
+                  Loggers.NavLogger.info("navigateTo %s via %s", targetId, nextLoc);
+                  return new Pair<>(S, NavUtils.moveTo(S, nextLoc));
                 })
         .on(
             (AgentState S) -> {
@@ -45,9 +40,8 @@ public class NavAction {
                 Loggers.NavLogger.debug("Entity does not exist");
                 return null;
               }
-              return NavUtils.nextTile(
-                  NavUtils.adjustedFindPath(
-                      S, NavUtils.loc3(S.worldmodel.position), NavUtils.loc3(e.position)));
+              return NavUtils.nextLoc(
+                  NavUtils.adjustedFindPath(S, S.loc(), new CustomVec3D(e.position)));
             });
   }
 
@@ -55,9 +49,9 @@ public class NavAction {
     return action("move-to")
         .do2(
             (AgentState S) ->
-                (Pair<Integer, Tile> nextTile) -> {
-                  Loggers.NavLogger.info("navigateTo ? via %s", nextTile);
-                  return new Pair<>(S, NavUtils.moveTo(S, nextTile));
+                (CustomVec3D nextLoc) -> {
+                  Loggers.NavLogger.info("navigateTo ? via %s", nextLoc);
+                  return new Pair<>(S, NavUtils.moveTo(S, nextLoc));
                 });
   }
 
@@ -66,9 +60,9 @@ public class NavAction {
     return action("move-to")
         .do2(
             (AgentState S) ->
-                (Pair<Integer, Tile> nextTile) -> {
-                  Loggers.NavLogger.info("navigateNextTo %s via %s", targetId, nextTile);
-                  return new Pair<>(S, NavUtils.moveTo(S, nextTile));
+                (CustomVec3D nextLoc) -> {
+                  Loggers.NavLogger.info("navigateNextTo %s via %s", targetId, nextLoc);
+                  return new Pair<>(S, NavUtils.moveTo(S, nextLoc));
                 })
         .on(
             (AgentState S) -> {
@@ -81,31 +75,29 @@ public class NavAction {
                 Loggers.NavLogger.debug("Next to item id:%s", targetId);
                 return null;
               }
-              return NavUtils.nextTile(
-                  NavUtils.adjustedFindPath(
-                      S, NavUtils.loc3(S.worldmodel.position), NavUtils.loc3(e.position)));
+              return NavUtils.nextLoc(
+                  NavUtils.adjustedFindPath(S, S.loc(), new CustomVec3D(e.position)));
             });
   }
 
   /** Construct an action that would explore the world, in the direction of the given location. */
-  public static Action explore(Pair<Integer, Tile> heuristicLocation) {
+  public static Action explore(CustomVec3D heuristicLocation) {
     return action("explore")
         .do2(
             (AgentState S) ->
-                (Pair<Integer, Tile> nextTile) -> {
+                (CustomVec3D nextLoc) -> {
                   Sounds.explore();
-                  return new Pair<>(S, NavUtils.moveTo(S, nextTile));
+                  return new Pair<>(S, NavUtils.moveTo(S, nextLoc));
                 })
         .on(
             (AgentState S) -> {
-              Vec3 agentPos = S.worldmodel.position;
-              List<Pair<Integer, Tile>> path;
+              List<CustomVec3D> path;
               if (heuristicLocation == null) {
-                path = S.hierarchicalNav.explore(NavUtils.loc3(agentPos));
+                path = S.hierarchicalNav.explore(S.loc());
               } else {
-                path = S.hierarchicalNav.explore(NavUtils.loc3(agentPos), heuristicLocation);
+                path = S.hierarchicalNav.explore(S.loc(), heuristicLocation);
               }
-              Pair<Integer, Tile> nextTile = NavUtils.nextTile(path);
+              CustomVec3D nextTile = NavUtils.nextLoc(path);
               if (nextTile == null) {
                 return null;
               }

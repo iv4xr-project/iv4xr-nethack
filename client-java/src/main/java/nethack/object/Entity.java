@@ -1,8 +1,8 @@
 package nethack.object;
 
-import eu.iv4xr.framework.spatial.IntVec2D;
 import nethack.enums.Color;
 import nethack.enums.EntityType;
+import util.CustomVec2D;
 
 // Source: https://www.baeldung.com/java-enum-values
 // Actions listed at: /python-server/lib/nle/nle/nethack/actions.py
@@ -30,7 +30,7 @@ public class Entity {
     return symbol == '+';
   }
 
-  public String createId(IntVec2D pos) {
+  public String createId(CustomVec2D pos) {
     return String.format("%s_%d_%d", type.name(), glyph, id);
   }
 

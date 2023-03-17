@@ -1,12 +1,12 @@
 package agent.navigation.surface;
 
-import eu.iv4xr.framework.spatial.IntVec2D;
+import util.CustomVec3D;
 
 public class Tree extends Tile implements Printable {
   private boolean isVisible;
   public final boolean seeThrough = true;
 
-  public Tree(IntVec2D pos) {
+  public Tree(CustomVec3D pos) {
     super(pos);
   }
 

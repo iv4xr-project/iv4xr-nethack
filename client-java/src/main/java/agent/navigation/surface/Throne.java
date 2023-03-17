@@ -1,11 +1,11 @@
 package agent.navigation.surface;
 
-import eu.iv4xr.framework.spatial.IntVec2D;
+import util.CustomVec3D;
 
 public class Throne extends Tile implements Walkable, Printable {
   boolean isVisible;
 
-  public Throne(IntVec2D pos) {
+  public Throne(CustomVec3D pos) {
     super(pos);
   }
 

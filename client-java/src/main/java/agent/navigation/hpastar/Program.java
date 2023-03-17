@@ -18,7 +18,6 @@ import agent.navigation.hpastar.search.HierarchicalSearch;
 import agent.navigation.hpastar.search.Path;
 import agent.navigation.hpastar.smoother.SmoothWizard;
 import agent.navigation.hpastar.utils.RefSupport;
-import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,6 +27,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import nl.uu.cs.aplib.utils.Pair;
 import util.ColoredStringBuilder;
+import util.CustomVec2D;
 import util.Stopwatch;
 
 public class Program {
@@ -95,36 +95,40 @@ public class Program {
 
     final Random rnd = new Random(700);
 
-    public IntVec2D getRandomFreePosition() {
+    public CustomVec2D getRandomFreePosition() {
       int x = rnd.nextInt(40);
       int y = rnd.nextInt(40);
       while (obstacles[x][y]) {
         x = rnd.nextInt(40);
         y = rnd.nextInt(40);
       }
-      return new IntVec2D(x, y);
+      return new CustomVec2D(x, y);
     }
 
     private final boolean[][] obstacles;
 
     @Override
-    public void updateCanMoveDiagonally(IntVec2D pos, boolean canMoveDiagonally) {}
+    public void updateCanMoveDiagonally(CustomVec2D pos, boolean canMoveDiagonally) {}
 
     @Override
-    public void updateObstacle(IntVec2D pos, boolean isObstacle) {}
+    public void updateObstacle(CustomVec2D pos, boolean isObstacle) {}
 
-    public boolean cannotEnter(IntVec2D pos, RefSupport<Integer> cost) {
+    public boolean cannotEnter(CustomVec2D pos, RefSupport<Integer> cost) {
       cost.setValue(Constants.COST_ONE);
       return obstacles[pos.y][pos.x];
     }
 
+    public boolean cannotEnter(CustomVec2D pos) {
+      return obstacles[pos.y][pos.x];
+    }
+
     @Override
-    public boolean canMoveDiagonal(IntVec2D pos1, IntVec2D pos2) {
+    public boolean canMoveDiagonal(CustomVec2D pos1, CustomVec2D pos2) {
       return true;
     }
 
     @Override
-    public boolean canMoveDiagonal(IntVec2D pos) {
+    public boolean canMoveDiagonal(CustomVec2D pos) {
       return false;
     }
 
@@ -144,8 +148,8 @@ public class Program {
     int maxLevel = 2;
     Size size = new Size(70, 70);
 
-    IntVec2D startPosition = new IntVec2D(1, 0);
-    IntVec2D endPosition = new IntVec2D(69, 69);
+    CustomVec2D startPosition = new CustomVec2D(1, 0);
+    CustomVec2D endPosition = new CustomVec2D(69, 69);
     // Prepare the abstract graph beforehand
     IPassability passability = new FakePassability(size, true);
     ConcreteMap concreteMap =
@@ -163,7 +167,7 @@ public class Program {
     List<IPathNode> hierarchicalSearchPath =
         hierarchicalSearch(absTiling, maxLevel, concreteMap, startPosition, endPosition);
     float hierarchicalSearchTime = stopwatch.split();
-    List<IntVec2D> pospath =
+    List<CustomVec2D> pospath =
         hierarchicalSearchPath.stream()
             .map(
                 p -> {
@@ -190,8 +194,8 @@ public class Program {
     int maxLevel = 2;
     Size size = new Size(128, 128);
 
-    IntVec2D startPosition = new IntVec2D(17, 38);
-    IntVec2D endPosition = new IntVec2D(16, 18);
+    CustomVec2D startPosition = new CustomVec2D(17, 38);
+    CustomVec2D endPosition = new CustomVec2D(16, 18);
     // Prepare the abstract graph beforehand
     IPassability passability = new FakePassability(size, true);
     ConcreteMap concreteMap =
@@ -206,7 +210,7 @@ public class Program {
     List<IPathNode> hierarchicalSearchPath =
         hierarchicalSearch(absTiling, maxLevel, concreteMap, startPosition, endPosition);
     float hierarchicalSearchTime = stopwatch.split();
-    List<IntVec2D> pospath =
+    List<CustomVec2D> pospath =
         hierarchicalSearchPath.stream()
             .map(
                 p -> {
@@ -248,13 +252,13 @@ public class Program {
     // var edges = absTiling.AbstractGraph.Nodes.SelectMany(x => x.Edges.Values)
     //    .GroupBy(x => x.Info.Level)
     //    .ToDictionary(x => x.Key, x => x.Count());
-    Function<Pair<IntVec2D, IntVec2D>, List<IPathNode>> doHierarchicalSearch =
+    Function<Pair<CustomVec2D, CustomVec2D>, List<IPathNode>> doHierarchicalSearch =
         (positions) ->
             hierarchicalSearch(absTiling, maxLevel, concreteMap, positions.fst, positions.snd);
-    Function<Pair<IntVec2D, IntVec2D>, List<IPathNode>> doRegularSearch =
+    Function<Pair<CustomVec2D, CustomVec2D>, List<IPathNode>> doRegularSearch =
         (positions) -> regularSearch(concreteMap, positions.fst, positions.snd);
 
-    Function<List<IPathNode>, List<IntVec2D>> toPositionPath =
+    Function<List<IPathNode>, List<CustomVec2D>> toPositionPath =
         (path) -> {
           return path.stream()
               .map(
@@ -269,31 +273,33 @@ public class Program {
                   })
               .collect(Collectors.toList());
         };
-    List<Pair<IntVec2D, IntVec2D>> points =
+    List<Pair<CustomVec2D, CustomVec2D>> points =
         IntStream.range(0, 2000)
             .mapToObj(
                 i -> {
-                  IntVec2D pos1 = ((FakePassability) passability).getRandomFreePosition();
-                  IntVec2D pos2 = ((FakePassability) passability).getRandomFreePosition();
+                  CustomVec2D pos1 = ((FakePassability) passability).getRandomFreePosition();
+                  CustomVec2D pos2 = ((FakePassability) passability).getRandomFreePosition();
                   while (Math.abs(pos1.x - pos2.x) + Math.abs(pos1.y - pos2.y) < 10) {
                     pos2 = ((FakePassability) passability).getRandomFreePosition();
                   }
-                  return new Pair<IntVec2D, IntVec2D>(pos1, pos2);
+                  return new Pair<CustomVec2D, CustomVec2D>(pos1, pos2);
                 })
             .collect(Collectors.toList());
 
-    List<Function<Pair<IntVec2D, IntVec2D>, List<IPathNode>>> searchStrategies = new ArrayList<>(2);
+    List<Function<Pair<CustomVec2D, CustomVec2D>, List<IPathNode>>> searchStrategies =
+        new ArrayList<>(2);
     searchStrategies.add(doRegularSearch);
     searchStrategies.add(doHierarchicalSearch);
 
-    for (Function<Pair<IntVec2D, IntVec2D>, List<IPathNode>> searchStrategy : searchStrategies) {
+    for (Function<Pair<CustomVec2D, CustomVec2D>, List<IPathNode>> searchStrategy :
+        searchStrategies) {
       Stopwatch stopwatch = new Stopwatch(true);
-      for (Pair<IntVec2D, IntVec2D> point : points) {
-        IntVec2D startPosition2 = point.fst;
-        IntVec2D endPosition2 = point.snd;
+      for (Pair<CustomVec2D, CustomVec2D> point : points) {
+        CustomVec2D startPosition2 = point.fst;
+        CustomVec2D endPosition2 = point.snd;
         List<IPathNode> regularSearchPath =
             searchStrategy.apply(new Pair<>(startPosition2, endPosition2));
-        List<IntVec2D> posPath1 = toPositionPath.apply(regularSearchPath);
+        List<CustomVec2D> posPath1 = toPositionPath.apply(regularSearchPath);
         System.out.println(posPath1);
       }
       float regularSearchTime = stopwatch.split();
@@ -305,8 +311,8 @@ public class Program {
       HierarchicalMap hierarchicalMap,
       int maxLevel,
       ConcreteMap concreteMap,
-      IntVec2D startPosition,
-      IntVec2D endPosition) {
+      CustomVec2D startPosition,
+      CustomVec2D endPosition) {
     HierarchicalMapFactory factory = new HierarchicalMapFactory();
     Id<AbstractNode> startAbsNode = factory.insertAbstractNode(hierarchicalMap, startPosition);
     Id<AbstractNode> targetAbsNode = factory.insertAbstractNode(hierarchicalMap, endPosition);
@@ -326,7 +332,7 @@ public class Program {
   }
 
   private static List<IPathNode> regularSearch(
-      ConcreteMap concreteMap, IntVec2D startPosition, IntVec2D endPosition) {
+      ConcreteMap concreteMap, CustomVec2D startPosition, CustomVec2D endPosition) {
     ConcreteGraph tilingGraph = concreteMap.graph;
     Function<Pair<Integer, Integer>, ConcreteNode> getNode =
         (pos) -> tilingGraph.getNode(concreteMap.getNodeIdFromPos(pos.fst, pos.snd));
@@ -358,7 +364,7 @@ public class Program {
       ConcreteMap concreteMap,
       HierarchicalMap hierarchicalGraph,
       int clusterSize,
-      List<IntVec2D> path) {
+      List<CustomVec2D> path) {
     printFormatted(getCharVector(concreteMap), concreteMap, hierarchicalGraph, clusterSize, path);
   }
 
@@ -367,7 +373,7 @@ public class Program {
       ConcreteMap concreteMap,
       HierarchicalMap hierarchicalGraph,
       int clusterSize,
-      List<IntVec2D> path) {
+      List<CustomVec2D> path) {
     ColoredStringBuilder csb = new ColoredStringBuilder();
     for (int y = 0; y < concreteMap.size.height; y++) {
       if (y % clusterSize == 0) {

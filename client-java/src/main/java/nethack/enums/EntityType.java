@@ -31,6 +31,7 @@ public enum EntityType implements Serializable {
   RING,
   ROCK,
   SCROLL,
+  SHOPKEEPER,
   SINK,
   STAIRS_DOWN,
   STAIRS_UP,

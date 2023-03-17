@@ -10,7 +10,6 @@ import agent.navigation.surface.*;
 import eu.iv4xr.framework.extensions.pathfinding.Navigatable;
 import eu.iv4xr.framework.mainConcepts.Iv4xrAgentState;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
-import eu.iv4xr.framework.spatial.IntVec2D;
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -22,6 +21,8 @@ import nethack.object.Level;
 import nethack.object.Player;
 import nl.uu.cs.aplib.mainConcepts.Environment;
 import util.ColoredStringBuilder;
+import util.CustomVec2D;
+import util.CustomVec3D;
 import util.Loggers;
 
 /**
@@ -41,6 +42,10 @@ public class AgentState extends Iv4xrAgentState<Void> {
 
   public NetHack app() {
     return env().app;
+  }
+
+  public CustomVec3D loc() {
+    return new CustomVec3D(worldmodel.position);
   }
 
   /** We are not going to keep a Nav-graph, but will instead keep a layered-nav-graphs. */
@@ -99,31 +104,28 @@ public class AgentState extends Iv4xrAgentState<Void> {
     }
 
     WorldEntity previousState = worldmodel.elements.get(Player.ID).getPreviousState();
-    var currentLocation = NavUtils.loc3(worldmodel.position);
+    CustomVec3D currentLocation = loc();
 
-    // The level number changed, an edge between the
-    if (previousState != null
-        && !currentLocation.fst.equals(NavUtils.levelNr(previousState.position))) {
-      var previousLocation = NavUtils.loc3(previousState.position);
-      Id<AbstractNode> previousNodeId =
-          hierarchicalNav.hierarchicalGraph.addAbstractNode(
-              previousLocation.fst, previousLocation.snd.pos);
-      Id<AbstractNode> currentNodeId =
-          hierarchicalNav.hierarchicalGraph.addAbstractNode(
-              currentLocation.fst, currentLocation.snd.pos);
+    // The level number changed didn't change, don't add edge
+    if (previousState == null || currentLocation.lvl == NavUtils.levelNr(previousState.position)) {
+      return;
+    }
 
-      AbstractNode previousNode =
-          hierarchicalNav.hierarchicalGraph.abstractGraph.getNode(previousNodeId);
-      AbstractNode currentNode =
-          hierarchicalNav.hierarchicalGraph.abstractGraph.getNode(currentNodeId);
-      if (!previousNode.edges.containsKey(currentNodeId)) {
-        hierarchicalNav.hierarchicalGraph.addEdge(
-            previousNodeId, currentNodeId, Constants.COST_ONE);
-      }
-      if (!currentNode.edges.containsKey(previousNodeId)) {
-        hierarchicalNav.hierarchicalGraph.addEdge(
-            currentNodeId, previousNodeId, Constants.COST_ONE);
-      }
+    CustomVec3D previousLocation = new CustomVec3D(previousState.position);
+    Id<AbstractNode> previousNodeId =
+        hierarchicalNav.hierarchicalGraph.addAbstractNode(previousLocation);
+    Id<AbstractNode> currentNodeId =
+        hierarchicalNav.hierarchicalGraph.addAbstractNode(currentLocation);
+
+    AbstractNode previousNode =
+        hierarchicalNav.hierarchicalGraph.abstractGraph.getNode(previousNodeId);
+    AbstractNode currentNode =
+        hierarchicalNav.hierarchicalGraph.abstractGraph.getNode(currentNodeId);
+    if (!previousNode.edges.containsKey(currentNodeId)) {
+      hierarchicalNav.hierarchicalGraph.addEdge(previousNodeId, currentNodeId, Constants.COST_ONE);
+    }
+    if (!currentNode.edges.containsKey(previousNodeId)) {
+      hierarchicalNav.hierarchicalGraph.addEdge(currentNodeId, previousNodeId, Constants.COST_ONE);
     }
   }
 
@@ -135,90 +137,94 @@ public class AgentState extends Iv4xrAgentState<Void> {
     Serializable[] changedCoordinates = (Serializable[]) aux.properties.get("changedCoordinates");
     Loggers.AgentLogger.debug("update state with %d new coordinates", changedCoordinates.length);
     List<Tile> updatedTiles = new ArrayList<>();
-    List<IntVec2D> toggleBlockingOff = new ArrayList<>();
+    List<CustomVec2D> toggleBlockingOff = new ArrayList<>();
 
     // Player position must be walkable
-    IntVec2D playerPos = NavUtils.loc2(worldmodel.position);
-    if (surface.nullTile(playerPos) || !(surface.getTile(playerPos) instanceof StraightWalkable)) {
-      updatedTiles.add(new Unknown(playerPos));
+    CustomVec3D playerLoc = loc();
+    if (surface.nullTile(playerLoc.pos)
+        || !(surface.getTile(playerLoc.pos) instanceof StraightWalkable)) {
+      updatedTiles.add(new Unknown(playerLoc));
     }
 
     // Adjacent coordinates are not automatically updated if we are blind
-    Set<IntVec2D> adjacentCoords;
+    Set<CustomVec2D> adjacentCoords;
     if (app().gameState.player.conditions.hasCondition(Condition.BLIND)) {
       adjacentCoords = new HashSet<>();
     } else {
-      adjacentCoords = new HashSet<>(NavUtils.neighbourCoordinates(playerPos, Level.SIZE, true));
+      adjacentCoords =
+          new HashSet<>(NavUtils.neighbourCoordinates(playerLoc.pos, Level.SIZE, true));
     }
 
     for (Serializable entry_ : changedCoordinates) {
       Serializable[] entry = (Serializable[]) entry_;
-      IntVec2D pos = (IntVec2D) entry[0];
+      CustomVec2D pos = (CustomVec2D) entry[0];
       adjacentCoords.remove(pos);
 
       EntityType type = (EntityType) entry[1];
 
+      CustomVec3D loc = new CustomVec3D(levelNr, pos);
+
       switch (type) {
         case PLAYER:
           if (area().nullTile(pos)) {
-            updatedTiles.add(new Unknown(pos));
+            updatedTiles.add(new Unknown(loc));
           } else {
             toggleBlockingOff.add(pos);
           }
           break;
         case WALL:
         case BOULDER:
-          updatedTiles.add(new Wall(pos));
+          updatedTiles.add(new Wall(loc));
           break;
         case CORRIDOR:
-          updatedTiles.add(new Corridor(pos));
+          updatedTiles.add(new Corridor(loc));
           break;
         case FLOOR:
         case ICE:
-          updatedTiles.add(new Floor(pos));
+          updatedTiles.add(new Floor(loc));
           break;
         case DOOR:
           Entity entity = env().app.level().getEntity(pos);
-          updatedTiles.add(new Door(pos, !entity.closedDoor()));
+          updatedTiles.add(new Door(loc, !entity.closedDoor()));
           break;
         case DOORWAY:
-          updatedTiles.add(new Doorway(pos));
+          updatedTiles.add(new Doorway(loc));
           break;
         case PRISON_BARS:
-          updatedTiles.add(new PrisonBars(pos));
+          updatedTiles.add(new PrisonBars(loc));
           break;
         case STAIRS_DOWN:
-          updatedTiles.add(new Stair(pos, Climbable.ClimbType.Descendable));
+          updatedTiles.add(new Stair(loc, Climbable.ClimbType.Descendable));
           break;
         case STAIRS_UP:
-          updatedTiles.add(new Stair(pos, Climbable.ClimbType.Ascendable));
+          updatedTiles.add(new Stair(loc, Climbable.ClimbType.Ascendable));
           break;
         case SINK:
-          updatedTiles.add(new Sink(pos));
+          updatedTiles.add(new Sink(loc));
           break;
         case TREE:
-          updatedTiles.add(new Tree(pos));
+          updatedTiles.add(new Tree(loc));
           break;
         case WATER:
-          updatedTiles.add(new Water(pos));
+          updatedTiles.add(new Water(loc));
           break;
         case LAVA:
-          updatedTiles.add(new Lava(pos));
+          updatedTiles.add(new Lava(loc));
           break;
         case FOUNTAIN:
-          updatedTiles.add(new Fountain(pos));
+          updatedTiles.add(new Fountain(loc));
           break;
         case THRONE:
-          updatedTiles.add(new Throne(pos));
+          updatedTiles.add(new Throne(loc));
           break;
         default:
           // If the tile has been seen we switch the state to non-blocking.
           // If we don't know the type of the tile, we for now put a tile in its place
           if (surface.nullTile(pos)) {
-            updatedTiles.add(new Unknown(pos));
+            updatedTiles.add(new Unknown(loc));
           } else if (surface.canBeDoor(pos)) {
             if (surface.getTile(pos) instanceof Unknown) {
-              updatedTiles.add(new Door(pos, true));
+              updatedTiles.add(new Door(loc, true));
             }
             // If the type is more specific than Tile, then don't change anything
           } else {
@@ -229,9 +235,9 @@ public class AgentState extends Iv4xrAgentState<Void> {
     }
 
     // Missed adjacent coords, these are walls
-    for (IntVec2D adjacentPos : adjacentCoords) {
+    for (CustomVec2D adjacentPos : adjacentCoords) {
       if (surface.nullTile(adjacentPos)) {
-        updatedTiles.add(new Wall(adjacentPos));
+        updatedTiles.add(new Wall(new CustomVec3D(levelNr, adjacentPos)));
       }
     }
 
@@ -244,9 +250,9 @@ public class AgentState extends Iv4xrAgentState<Void> {
 
   private void updateEntities() {
     // Update visibility cone
-    IntVec2D playerPos = NavUtils.loc2(worldmodel.position);
+    CustomVec2D playerPos = NavUtils.loc2(worldmodel.position);
     Level level = env().app.gameState.getLevel();
-    HashSet<IntVec2D> visibleCoordinates =
+    HashSet<CustomVec2D> visibleCoordinates =
         new HashSet<>(area().VisibleCoordinates(playerPos, level));
 
     // Remove all entities that are in vision range but can't be seen.
@@ -265,7 +271,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
         continue;
       }
 
-      IntVec2D entityPosition = NavUtils.loc2(we.position);
+      CustomVec2D entityPosition = NavUtils.loc2(we.position);
       // If it is not inside the visibility then do not update.
       if (!visibleCoordinates.contains(entityPosition)) {
         continue;
@@ -305,16 +311,15 @@ public class AgentState extends Iv4xrAgentState<Void> {
    * owns this state.
    */
   public List<WorldEntity> adjacentEntities(EntityType type, boolean allowDiagonally) {
+    CustomVec3D agentLoc = loc();
     List<WorldEntity> ms =
         worldmodel.elements.values().stream()
             .filter(
                 e ->
                     Objects.equals(e.type, type.name())
                         && NavUtils.levelNr(worldmodel.position) == NavUtils.levelNr(e.position)
-                        && NavUtils.adjacent(
-                            NavUtils.toTile(worldmodel.position),
-                            NavUtils.toTile(e.position),
-                            allowDiagonally))
+                        && CustomVec3D.adjacent(
+                            agentLoc, new CustomVec3D(e.position), allowDiagonally))
             .collect(Collectors.toList());
 
     if (!ms.isEmpty()) {
@@ -326,18 +331,19 @@ public class AgentState extends Iv4xrAgentState<Void> {
   }
 
   public boolean nextToEntity(EntityType entityType, boolean allowDiagonally) {
-    return adjacentEntities(entityType, allowDiagonally).size() > 0;
+    return !adjacentEntities(entityType, allowDiagonally).isEmpty();
   }
 
   public boolean nextToEntity(String entityId, boolean allowDiagonally) {
-    Tile p = NavUtils.toTile(env().app.gameState.player.position);
+    CustomVec3D playerLoc = loc();
     List<WorldEntity> ms =
         worldmodel.elements.values().stream()
             .filter(
                 e ->
                     e.position != null
                         && Objects.equals(e.id, entityId)
-                        && NavUtils.adjacent(p, NavUtils.toTile(e.position), allowDiagonally))
+                        && CustomVec3D.adjacent(
+                            playerLoc, new CustomVec3D(e.position), allowDiagonally))
             .collect(Collectors.toList());
     return !ms.isEmpty();
   }

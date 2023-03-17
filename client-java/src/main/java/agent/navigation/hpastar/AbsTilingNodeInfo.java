@@ -4,20 +4,20 @@
 
 package agent.navigation.hpastar;
 
-import eu.iv4xr.framework.spatial.IntVec2D;
 import util.ColoredStringBuilder;
+import util.CustomVec2D;
 
 // implements nodes in the abstract graph
 public class AbsTilingNodeInfo {
   public final int id;
-  public final IntVec2D position;
+  public final CustomVec2D position;
   public final int clusterId;
   public final int centerId;
   public final int level;
   public final int localIdxCluster;
 
   public AbsTilingNodeInfo(
-      int id, int level, int clId, IntVec2D position, int centerId, int localIdxCluster) {
+      int id, int level, int clId, CustomVec2D position, int centerId, int localIdxCluster) {
     this.id = id;
     this.level = level;
     this.clusterId = clId;

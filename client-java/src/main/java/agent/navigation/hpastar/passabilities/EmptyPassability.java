@@ -10,8 +10,8 @@ import agent.navigation.hpastar.Size;
 import agent.navigation.hpastar.TileType;
 import agent.navigation.hpastar.infrastructure.Constants;
 import agent.navigation.hpastar.utils.RefSupport;
-import eu.iv4xr.framework.spatial.IntVec2D;
 import util.ColoredStringBuilder;
+import util.CustomVec2D;
 
 public class EmptyPassability implements IPassability {
   final Size size;
@@ -33,29 +33,33 @@ public class EmptyPassability implements IPassability {
   }
 
   @Override
-  public void updateCanMoveDiagonally(IntVec2D pos, boolean canMoveDiagonally) {
+  public void updateCanMoveDiagonally(CustomVec2D pos, boolean canMoveDiagonally) {
     boolean updated = this.canMoveDiagonally[pos.y][pos.x] != canMoveDiagonally;
     this.canMoveDiagonally[pos.y][pos.x] = canMoveDiagonally;
   }
 
   @Override
-  public void updateObstacle(IntVec2D pos, boolean isObstacle) {
+  public void updateObstacle(CustomVec2D pos, boolean isObstacle) {
     boolean updated = this.obstacles[pos.y][pos.x] != isObstacle;
     this.obstacles[pos.y][pos.x] = isObstacle;
   }
 
-  public boolean cannotEnter(IntVec2D pos, RefSupport<Integer> cost) {
+  public boolean cannotEnter(CustomVec2D pos, RefSupport<Integer> cost) {
     cost.setValue(Constants.COST_ONE);
     return obstacles[pos.y][pos.x];
   }
 
+  public boolean cannotEnter(CustomVec2D pos) {
+    return obstacles[pos.y][pos.x];
+  }
+
   @Override
-  public boolean canMoveDiagonal(IntVec2D pos1, IntVec2D pos2) {
+  public boolean canMoveDiagonal(CustomVec2D pos1, CustomVec2D pos2) {
     return canMoveDiagonally[pos1.y][pos1.x] && canMoveDiagonally[pos2.y][pos2.x];
   }
 
   @Override
-  public boolean canMoveDiagonal(IntVec2D pos) {
+  public boolean canMoveDiagonal(CustomVec2D pos) {
     return canMoveDiagonally[pos.y][pos.x];
   }
 
@@ -80,7 +84,7 @@ public class EmptyPassability implements IPassability {
     ColoredStringBuilder csb = new ColoredStringBuilder();
     for (int y = 0; y < size.height; y++) {
       for (int x = 0; x < size.width; x++) {
-        if (cannotEnter(new IntVec2D(x, y), new RefSupport<>())) {
+        if (cannotEnter(new CustomVec2D(x, y))) {
           csb.append('#');
         } else {
           csb.append('.');

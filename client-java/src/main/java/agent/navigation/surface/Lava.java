@@ -1,11 +1,11 @@
 package agent.navigation.surface;
 
-import eu.iv4xr.framework.spatial.IntVec2D;
+import util.CustomVec3D;
 
 public class Lava extends Tile implements Printable {
   boolean isVisible;
 
-  public Lava(IntVec2D pos) {
+  public Lava(CustomVec3D pos) {
     super(pos);
   }
 

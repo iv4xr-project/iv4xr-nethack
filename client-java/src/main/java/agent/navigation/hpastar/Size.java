@@ -4,7 +4,7 @@
 
 package agent.navigation.hpastar;
 
-import eu.iv4xr.framework.spatial.IntVec2D;
+import util.CustomVec2D;
 
 public class Size {
   public final int height;
@@ -15,7 +15,7 @@ public class Size {
     this.height = height;
   }
 
-  public void withinBounds(IntVec2D pos) {
+  public void withinBounds(CustomVec2D pos) {
     assert pos.x >= 0 && pos.x < width && pos.y >= 0 && pos.y < height
         : String.format("Position outside bounds %s (size=%s)", pos, this);
   }

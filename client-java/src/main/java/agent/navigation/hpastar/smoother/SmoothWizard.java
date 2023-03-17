@@ -15,13 +15,13 @@ import agent.navigation.hpastar.infrastructure.Constants;
 import agent.navigation.hpastar.infrastructure.Id;
 import agent.navigation.hpastar.search.AStar;
 import agent.navigation.hpastar.search.Path;
-import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import nl.uu.cs.aplib.utils.Pair;
+import util.CustomVec2D;
 
 public class SmoothWizard {
   private List<IPathNode> initialPath = new ArrayList<>();
@@ -38,7 +38,7 @@ public class SmoothWizard {
     }
   }
 
-  private IntVec2D getPosition(Id<ConcreteNode> nodeId) {
+  private CustomVec2D getPosition(Id<ConcreteNode> nodeId) {
     return _concreteMap.graph.getNodeInfo(nodeId).position;
   }
 
@@ -104,7 +104,7 @@ public class SmoothWizard {
   }
 
   // count the path reduction (e.g., 2)
-  private static boolean areAdjacent(IntVec2D a, IntVec2D b) {
+  private static boolean areAdjacent(CustomVec2D a, CustomVec2D b) {
     return Math.abs(a.x - b.x) <= 1 && Math.abs(a.y - b.y) <= 1;
   }
 

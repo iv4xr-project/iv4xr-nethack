@@ -15,8 +15,8 @@ import agent.navigation.hpastar.graph.ConcreteNodeInfo;
 import agent.navigation.hpastar.infrastructure.Id;
 import agent.navigation.hpastar.utils.RefSupport;
 import agent.navigation.strategy.NavUtils;
-import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.List;
+import util.CustomVec2D;
 
 public class GraphFactory {
   public static ConcreteGraph createGraph(Size size, IPassability passability) {
@@ -26,7 +26,7 @@ public class GraphFactory {
     return graph;
   }
 
-  public static ConcreteNode getNodeByPos(ConcreteGraph graph, IntVec2D pos, int width) {
+  public static ConcreteNode getNodeByPos(ConcreteGraph graph, CustomVec2D pos, int width) {
     return graph.getNode(getNodeIdFromPos(pos.x, pos.y, width));
   }
 
@@ -41,7 +41,7 @@ public class GraphFactory {
 
   public static void addEdge(
       ConcreteGraph graph, Id<ConcreteNode> nodeId, int x, int y, Size size, boolean isDiag) {
-    IntVec2D pos = new IntVec2D(x, y);
+    CustomVec2D pos = new CustomVec2D(x, y);
     assert NavUtils.withinBounds(pos, size);
 
     ConcreteNode targetNode = getNodeByPos(graph, pos, size.width);
@@ -54,8 +54,8 @@ public class GraphFactory {
       Size size, ConcreteGraph graph, TileType tileType, IPassability passability) {
     for (int top = 0; top < size.height; ++top) {
       for (int left = 0; left < size.width; ++left) {
-        IntVec2D currentPos = new IntVec2D(left, top);
-        if (passability.cannotEnter(currentPos, new RefSupport<>())) {
+        CustomVec2D currentPos = new CustomVec2D(left, top);
+        if (passability.cannotEnter(currentPos)) {
           continue;
         }
         Id<ConcreteNode> nodeId = getNodeByPos(graph, currentPos, size.width).nodeId;
@@ -70,12 +70,12 @@ public class GraphFactory {
           continue;
         }
 
-        List<IntVec2D> neighbours = NavUtils.neighbourCoordinates(currentPos, size, true);
-        for (IntVec2D neighbourPos : neighbours) {
-          if (passability.cannotEnter(neighbourPos, new RefSupport<>())) {
+        List<CustomVec2D> neighbours = NavUtils.neighbourCoordinates(currentPos, size, true);
+        for (CustomVec2D neighbourPos : neighbours) {
+          if (passability.cannotEnter(neighbourPos)) {
             continue;
           }
-          boolean isDiagonal = NavUtils.isDiagonal(currentPos, neighbourPos);
+          boolean isDiagonal = CustomVec2D.diagonal(currentPos, neighbourPos);
           if (isDiagonal && !passability.canMoveDiagonal(currentPos, neighbourPos)) {
             continue;
           }
@@ -89,7 +89,7 @@ public class GraphFactory {
     for (int top = 0; top < size.height; ++top) {
       for (int left = 0; left < size.width; ++left) {
         Id<ConcreteNode> nodeId = getNodeIdFromPos(left, top, size.width);
-        IntVec2D position = new IntVec2D(left, top);
+        CustomVec2D position = new CustomVec2D(left, top);
         RefSupport<Integer> refVar___0 = new RefSupport<>();
         boolean isObstacle = passability.cannotEnter(position, refVar___0);
         int movementCost = refVar___0.getValue();

@@ -12,10 +12,10 @@ import agent.navigation.hpastar.graph.ConcreteNodeInfo;
 import agent.navigation.hpastar.infrastructure.Constants;
 import agent.navigation.hpastar.infrastructure.IMap;
 import agent.navigation.hpastar.infrastructure.Id;
-import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.ArrayList;
 import java.util.List;
 import util.ColoredStringBuilder;
+import util.CustomVec2D;
 
 public class ConcreteMap implements IMap<ConcreteNode> {
   public final IPassability passability;
@@ -42,9 +42,9 @@ public class ConcreteMap implements IMap<ConcreteNode> {
     ConcreteMap slicedConcreteMap = passability.slice(horizOrigin, vertOrigin, size);
     for (int y = 0; y < size.height; y++) {
       for (int x = 0; x < size.width; x++) {
-        IntVec2D pos = new IntVec2D(horizOrigin + x, vertOrigin + y);
+        CustomVec2D pos = new CustomVec2D(horizOrigin + x, vertOrigin + y);
         ConcreteNode globalConcreteNode = graph.getNode(getNodeIdFromPos(pos));
-        ConcreteNode subConcreteNode = graph.getNode(getNodeIdFromPos(new IntVec2D(x, y)));
+        ConcreteNode subConcreteNode = graph.getNode(getNodeIdFromPos(new CustomVec2D(x, y)));
         subConcreteNode.info.isObstacle = globalConcreteNode.info.isObstacle;
         subConcreteNode.info.cost = globalConcreteNode.info.cost;
       }
@@ -52,7 +52,7 @@ public class ConcreteMap implements IMap<ConcreteNode> {
     return slicedConcreteMap;
   }
 
-  public Id<ConcreteNode> getNodeIdFromPos(IntVec2D pos) {
+  public Id<ConcreteNode> getNodeIdFromPos(CustomVec2D pos) {
     return getNodeIdFromPos(pos.x, pos.y);
   }
 
@@ -61,8 +61,8 @@ public class ConcreteMap implements IMap<ConcreteNode> {
   }
 
   public int getHeuristic(Id<ConcreteNode> startNodeId, Id<ConcreteNode> targetNodeId) {
-    IntVec2D startPosition = graph.getNodeInfo(startNodeId).position;
-    IntVec2D targetPosition = graph.getNodeInfo(targetNodeId).position;
+    CustomVec2D startPosition = graph.getNodeInfo(startNodeId).position;
+    CustomVec2D targetPosition = graph.getNodeInfo(targetNodeId).position;
     int startX = startPosition.x;
     int targetX = targetPosition.x;
     int startY = startPosition.y;
@@ -122,7 +122,7 @@ public class ConcreteMap implements IMap<ConcreteNode> {
    * Tells whether we can move from p1 to p2 in line. Bear in mind this function does not consider
    * intermediate points (it is assumed you can jump between intermediate points)
    */
-  public boolean canJump(IntVec2D p1, IntVec2D p2) {
+  public boolean canJump(CustomVec2D p1, CustomVec2D p2) {
     // TODO: Check whether can jump
     if (tileType != TileType.Octile && tileType != TileType.OctileUnicost) return true;
 

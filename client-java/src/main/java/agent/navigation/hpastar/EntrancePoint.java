@@ -6,7 +6,7 @@ package agent.navigation.hpastar;
 
 import agent.navigation.hpastar.graph.AbstractNode;
 import agent.navigation.hpastar.infrastructure.Id;
-import eu.iv4xr.framework.spatial.IntVec2D;
+import util.CustomVec2D;
 
 /**
  * An Entrance Point represents a point inside a cluster that belongs to an entrance. It holds a
@@ -14,9 +14,9 @@ import eu.iv4xr.framework.spatial.IntVec2D;
  */
 public class EntrancePoint {
   public final Id<AbstractNode> abstractNodeId;
-  public final IntVec2D relativePosition;
+  public final CustomVec2D relativePosition;
 
-  public EntrancePoint(Id<AbstractNode> abstractNodeId, IntVec2D relativePosition) {
+  public EntrancePoint(Id<AbstractNode> abstractNodeId, CustomVec2D relativePosition) {
     this.abstractNodeId = abstractNodeId;
     this.relativePosition = relativePosition;
 

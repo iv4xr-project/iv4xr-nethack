@@ -26,7 +26,7 @@ public class HierarchicalSearch {
       int maxSearchLevel,
       int maxPathsToRefine) {
     List<AbstractPathNode> path = getPath(map, startNodeId, targetNodeId, maxSearchLevel, true);
-    if (path.isEmpty()) {
+    if (path == null) {
       return path;
     }
 
@@ -61,8 +61,9 @@ public class HierarchicalSearch {
           map.abstractGraph.getNodeInfo(targetNodeId));
       path = search.findPath();
     }
-    if (path.pathCost == -1) {
-      return new ArrayList<>();
+
+    if (path == null) {
+      return null;
     }
 
     List<AbstractPathNode> result = new ArrayList<>(path.pathNodes.size());
@@ -104,6 +105,10 @@ public class HierarchicalSearch {
       List<AbstractPathNode> abstractPath,
       int mapWidth,
       int maxPathsToCalculate) {
+    if (abstractPath == null) {
+      return null;
+    }
+
     List<IPathNode> result = new ArrayList<>();
     if (abstractPath.isEmpty()) {
       return result;

@@ -1,18 +1,13 @@
 package agent.navigation.surface;
 
-import eu.iv4xr.framework.spatial.IntVec2D;
+import util.CustomVec3D;
 
 public class Stair extends Tile implements Climbable, Walkable, Printable {
   private boolean isVisible = false;
   public final ClimbType climbType;
 
-  public Stair(IntVec2D pos, ClimbType climbType) {
+  public Stair(CustomVec3D pos, ClimbType climbType) {
     super(pos);
-    this.climbType = climbType;
-  }
-
-  public Stair(int x, int y, ClimbType climbType) {
-    super(x, y);
     this.climbType = climbType;
   }
 

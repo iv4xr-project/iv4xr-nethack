@@ -1,11 +1,11 @@
 package agent.navigation.surface;
 
-import eu.iv4xr.framework.spatial.IntVec2D;
+import util.CustomVec3D;
 
 public class Corridor extends Tile implements Walkable, Printable {
   boolean isVisible;
 
-  public Corridor(IntVec2D pos) {
+  public Corridor(CustomVec3D pos) {
     super(pos);
   }
 

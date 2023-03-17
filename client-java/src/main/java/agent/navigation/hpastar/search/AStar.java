@@ -50,7 +50,8 @@ public class AStar<TNode> {
       }
     }
 
-    return new Path<TNode>(new ArrayList<>(), -1);
+    // If no path is found, don't return magic value with path cost '-1'
+    return null;
   }
 
   private Id<TNode> expand() {

@@ -5,11 +5,11 @@ import agent.navigation.hpastar.graph.*;
 import agent.navigation.hpastar.infrastructure.Constants;
 import agent.navigation.hpastar.infrastructure.Id;
 import agent.navigation.hpastar.utils.RefSupport;
-import eu.iv4xr.framework.spatial.IntVec2D;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import nl.uu.cs.aplib.utils.Pair;
+import util.CustomVec2D;
 import util.Loggers;
 
 public class HierarchicalMapFactory {
@@ -47,7 +47,7 @@ public class HierarchicalMapFactory {
     }
   }
 
-  public Id<AbstractNode> insertAbstractNode(HierarchicalMap map, IntVec2D pos) {
+  public Id<AbstractNode> insertAbstractNode(HierarchicalMap map, CustomVec2D pos) {
     Id<ConcreteNode> nodeId = new Id<ConcreteNode>().from(pos.y * map.size.width + pos.x);
     Id<AbstractNode> abstractNodeId = insertNodeIntoHierarchicalMap(map, nodeId, pos);
     map.addHierarchicalEdgesForAbstractNode(abstractNodeId);
@@ -58,7 +58,7 @@ public class HierarchicalMapFactory {
   //  returns the id of the newly created node in the abstract graph
   //  x and y are the positions where I want to put the node
   public Id<AbstractNode> insertNodeIntoHierarchicalMap(
-      HierarchicalMap map, Id<ConcreteNode> concreteNodeId, IntVec2D pos) {
+      HierarchicalMap map, Id<ConcreteNode> concreteNodeId, CustomVec2D pos) {
     //  If the node already existed (for instance, it was an entrance point already
     //  existing in the graph, we need to keep track of the previous status in order
     //  to be able to restore it once we delete this STALL
@@ -80,7 +80,7 @@ public class HierarchicalMapFactory {
     Cluster cluster = map.findClusterForPosition(pos);
     //  create global entrance
     Id<AbstractNode> abstractNodeId = new Id<AbstractNode>().from(map.getNrNodes());
-    IntVec2D relPos = new IntVec2D(pos.x - cluster.origin.x, pos.y - cluster.origin.y);
+    CustomVec2D relPos = new CustomVec2D(pos.x - cluster.origin.x, pos.y - cluster.origin.y);
     EntrancePoint entrance = cluster.addEntrance(abstractNodeId, relPos);
     cluster.updatePathsForLocalEntrance(entrance);
     map.concreteNodeIdToAbstractNodeIdMap.put(concreteNodeId, abstractNodeId);
@@ -230,7 +230,7 @@ public class HierarchicalMapFactory {
                 new Id<Cluster>().from(clusterId),
                 clusterX,
                 clusterY,
-                new IntVec2D(left, top),
+                new CustomVec2D(left, top),
                 new Size(width, height));
 
         hierarchicalMap.clusters.add(cluster);
@@ -447,8 +447,8 @@ public class HierarchicalMapFactory {
       Map<Id<ConcreteNode>, AbstractNodeInfo> abstractNodes) {
     AbstractNodeInfo abstractNodeInfo;
     if (!abstractNodes.containsKey(srcNode.nodeId)) {
-      IntVec2D relativePosition =
-          new IntVec2D(
+      CustomVec2D relativePosition =
+          new CustomVec2D(
               srcNode.info.position.x - cluster.origin.x,
               srcNode.info.position.y - cluster.origin.y);
       assert relativePosition.x >= 0 && relativePosition.y >= 0;
