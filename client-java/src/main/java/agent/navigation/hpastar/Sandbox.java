@@ -93,7 +93,7 @@ public class Sandbox {
             hierarchicalMap, abstractPath, hierarchicalMap.size.width, maxPathsToRefine);
 
     SmoothWizard smoother = new SmoothWizard(concreteMap, path);
-    path = smoother.smoothPath();
+    path = smoother.smoothConcretePath();
     factory.removeAbstractNode(hierarchicalMap, targetAbsNode);
     factory.removeAbstractNode(hierarchicalMap, startAbsNode);
     return path;

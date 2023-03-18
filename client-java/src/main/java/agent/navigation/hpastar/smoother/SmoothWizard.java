@@ -42,38 +42,52 @@ public class SmoothWizard {
     return _concreteMap.graph.getNodeInfo(nodeId).position;
   }
 
-  public List<IPathNode> smoothPath() {
+  public List<IPathNode> smoothConcretePath() {
     List<ConcretePathNode> smoothedConcretePath = new ArrayList<>();
-    for (int index = 0;
-        index < initialPath.size() && initialPath.get(index) instanceof ConcretePathNode;
-        index++) {
+    for (int index = 0; index < initialPath.size(); index++) {
+      assert initialPath.get(index) instanceof ConcretePathNode;
       ConcretePathNode pathNode = (ConcretePathNode) initialPath.get(index);
-      if (smoothedConcretePath.isEmpty()) {
-        smoothedConcretePath.add(pathNode);
-      }
-      // add this node to the smoothed path
-      if (!smoothedConcretePath.get(smoothedConcretePath.size() - 1).id.equals(pathNode.id)) {
-        // It's possible that, when smoothing, the next node that will be put in the path
-        // will not be adjacent. In those cases, since OpenRA requires a continuous path
-        // without breaking, we should calculate a new path for that section
-        ConcretePathNode lastNodeInSmoothedPath =
-            smoothedConcretePath.get(smoothedConcretePath.size() - 1);
-        if (!areAdjacent(getPosition(lastNodeInSmoothedPath.id), getPosition(pathNode.id))) {
-          List<Id<ConcreteNode>> intermediatePath =
-              generateIntermediateNodes(
-                  smoothedConcretePath.get(smoothedConcretePath.size() - 1).id, pathNode.id);
-          for (int i = 1; i < intermediatePath.size(); i++) {
-            smoothedConcretePath.add(new ConcretePathNode(intermediatePath.get(i)));
-          }
-        } else {
-          smoothedConcretePath.add(pathNode);
-        }
-      }
-
-      index = decideNextNodeToConsider(index);
+      smoothedConcretePath.add(pathNode);
+      System.out.print(getPosition(pathNode.id));
     }
+    System.out.println();
+    //    System.out.println(smoothedConcretePath);
     return new ArrayList<>(smoothedConcretePath);
   }
+
+  //  public List<IPathNode> smoothConcretePath() {
+  //    List<ConcretePathNode> smoothedConcretePath = new ArrayList<>();
+  //    for (int index = 0;
+  //        index < initialPath.size() && initialPath.get(index) instanceof ConcretePathNode;
+  //        index++) {
+  //      ConcretePathNode pathNode = (ConcretePathNode) initialPath.get(index);
+  //      if (smoothedConcretePath.isEmpty()) {
+  //        smoothedConcretePath.add(pathNode);
+  //      }
+  //      // add this node to the smoothed path
+  //      if (!smoothedConcretePath.get(smoothedConcretePath.size() - 1).id.equals(pathNode.id)) {
+  //        // It's possible that, when smoothing, the next node that will be put in the path
+  //        // will not be adjacent. In those cases, since OpenRA requires a continuous path
+  //        // without breaking, we should calculate a new path for that section
+  //        ConcretePathNode lastNodeInSmoothedPath =
+  //            smoothedConcretePath.get(smoothedConcretePath.size() - 1);
+  //        if (!CustomVec2D.adjacent(getPosition(lastNodeInSmoothedPath.id),
+  // getPosition(pathNode.id), true)) {
+  //          List<Id<ConcreteNode>> intermediatePath =
+  //              generateIntermediateNodes(
+  //                  smoothedConcretePath.get(smoothedConcretePath.size() - 1).id, pathNode.id);
+  //          for (int i = 1; i < intermediatePath.size(); i++) {
+  //            smoothedConcretePath.add(new ConcretePathNode(intermediatePath.get(i)));
+  //          }
+  //        } else {
+  //          smoothedConcretePath.add(pathNode);
+  //        }
+  //      }
+  //
+  //      index = decideNextNodeToConsider(index);
+  //    }
+  //    return new ArrayList<>(smoothedConcretePath);
+  //  }
 
   private int decideNextNodeToConsider(int index) {
     int newIndex = index;
@@ -101,11 +115,6 @@ public class SmoothWizard {
       break;
     }
     return newIndex;
-  }
-
-  // count the path reduction (e.g., 2)
-  private static boolean areAdjacent(CustomVec2D a, CustomVec2D b) {
-    return Math.abs(a.x - b.x) <= 1 && Math.abs(a.y - b.y) <= 1;
   }
 
   // if the Manhattan distance between a and b is > 2, then they are not

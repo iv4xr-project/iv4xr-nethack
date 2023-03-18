@@ -8,7 +8,6 @@ import agent.navigation.hpastar.infrastructure.Id;
 import agent.navigation.hpastar.passabilities.EmptyPassability;
 import agent.navigation.hpastar.search.HierarchicalSearch;
 import agent.navigation.hpastar.smoother.Direction;
-import agent.navigation.hpastar.smoother.SmoothWizard;
 import agent.navigation.hpastar.utils.RefSupport;
 import agent.navigation.strategy.NavUtils;
 import agent.navigation.surface.*;
@@ -326,10 +325,9 @@ public class GridSurface implements Navigatable<CustomVec2D>, XPathfinder<Custom
         List<IPathNode> path =
             hierarchicalSearch.abstractPathToLowLevelPath(
                 hierarchicalMap, abstractPath, hierarchicalMap.size.width, maxPathsToRefine);
-        SmoothWizard smoother = new SmoothWizard(concreteMap, path);
-        path = smoother.smoothPath();
+        // Instead of smooth, optimize path by taking shortcuts
         List<CustomVec2D> posPath = toPositionPath(path, concreteMap);
-        verifyPath(from, target, posPath);
+        assert isValidPath(from, target, posPath);
         if (shortestPath == null || shortestPath.size() > posPath.size()) {
           shortestPath = posPath;
         }
@@ -356,11 +354,11 @@ public class GridSurface implements Navigatable<CustomVec2D>, XPathfinder<Custom
         .collect(Collectors.toList());
   }
 
-  private void verifyPath(CustomVec2D from, CustomVec2D to, List<CustomVec2D> path) {
+  public boolean isValidPath(CustomVec2D from, CustomVec2D to, List<CustomVec2D> path) {
     assert !from.equals(to);
     if (path.isEmpty()) {
       assert from.equals(to) : "If path is empty, it must be a path to itself";
-      return;
+      return true;
     }
 
     assert path.get(0).equals(from) : "Path from or to is incorrect";
@@ -374,6 +372,8 @@ public class GridSurface implements Navigatable<CustomVec2D>, XPathfinder<Custom
           : String.format("Non adjacent node error at %s -> %s", prevPos, currentPos);
       prevPos = currentPos;
     }
+
+    return true;
   }
 
   public List<CustomVec2D> findPath(int fromX, int fromY, int toX, int toY) {

@@ -27,7 +27,7 @@ public class HierarchicalSearch {
       int maxPathsToRefine) {
     List<AbstractPathNode> path = getPath(map, startNodeId, targetNodeId, maxSearchLevel, true);
     if (path == null) {
-      return path;
+      return null;
     }
 
     for (int level = maxSearchLevel; level > 1; level--) {
@@ -154,6 +154,10 @@ public class HierarchicalSearch {
             }
             int concreteNodeId =
                 localNodeId2ConcreteNodeId(localPath.get(i).getIdValue(), cluster, mapWidth);
+            // ID was already added by inter-cluster edge
+            if (!result.isEmpty() && result.get(result.size() - 1).getIdValue() == concreteNodeId) {
+              continue;
+            }
             result.add(new ConcretePathNode(new Id<ConcreteNode>().from(concreteNodeId)));
           }
           calculatedPaths++;

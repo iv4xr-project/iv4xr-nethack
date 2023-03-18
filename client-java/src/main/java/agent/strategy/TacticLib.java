@@ -37,27 +37,28 @@ public class TacticLib {
                     return null;
                   }
                   return NavUtils.toDirection(S, new CustomVec3D(we.position));
-                })
-            //        .lift(),
-            //            Actions.fire().on((AgentState S) -> {
-            //              int agentLvl = NavUtils.levelNr(S.worldmodel.position);
-            //              List<WorldEntity> wes =
-            // S.worldmodel.elements.values().stream().filter(worldEntity ->
-            //             NavUtils.levelNr(worldEntity.position) ==
-            // agentLvl)).collect(Collectors.toList());
-            //              if (wes.isEmpty()) {
-            //                return null;
-            //              }
-            //              WorldEntity entity = null;
-            //              CustomVec2D agentPos = NavUtils.loc2(S.worldmodel.position);
-            //              for (WorldEntity we : wes) {
-            //  CustomVec2D      CustomVec2D entityPos = NavUtils.loc2(we.position);
-            //                if (agentPos.x == entityPos.x || agentPos.y == entityPos.y) {
-            //    CustomVec2D      entity = true;
-            //                }
-            //              }
+                }) // .lift(),
+            //        Actions.fire().on((AgentState S) -> {
+            //               int agentLvl = NavUtils.levelNr(S.worldmodel.position);
+            //               List<WorldEntity> wes =
+            //                 S.worldmodel.elements.values().stream().filter(worldEntity ->
+            //                         NavUtils.levelNr(worldEntity.position) ==
+            //                 agentLvl)).collect(Collectors.toList());
+            //                 if (wes.isEmpty()) {
+            //                            return null;
+            //                          }
+            //                          WorldEntity entity = null;
+            //                          CustomVec2D agentPos = NavUtils.loc2(S.worldmodel.position);
+            //                          for (WorldEntity we : wes) {
+            //                  CustomVec2D      CustomVec2D entityPos = NavUtils.loc2(we.position);
+            //                            if (agentPos.x == entityPos.x || agentPos.y ==
+            // entityPos.y) {
+            //                CustomVec2D      entity = true;
+            //                            }
+            //                          }
             //
-            //              return NavUtils.toDirection(S, NavUtils.loc3(we.position));})
+            //                          return NavUtils.toDirection(S,
+            // NavUtils.loc3(we.position));})
             .lift());
   }
 
