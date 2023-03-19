@@ -7,9 +7,11 @@ package agent.navigation;
 import agent.navigation.hpastar.*;
 import agent.navigation.hpastar.factories.HierarchicalMapFactory;
 import agent.navigation.hpastar.graph.*;
+import agent.navigation.hpastar.infrastructure.Constants;
 import agent.navigation.hpastar.infrastructure.Id;
 import agent.navigation.hpastar.search.AStar;
 import agent.navigation.hpastar.search.Path;
+import agent.navigation.strategy.NavUtils;
 import agent.navigation.surface.Tile;
 import eu.iv4xr.framework.extensions.pathfinding.Navigatable;
 import eu.iv4xr.framework.extensions.pathfinding.XPathfinder;
@@ -19,6 +21,7 @@ import nl.uu.cs.aplib.utils.Pair;
 import org.apache.commons.lang.NotImplementedException;
 import util.CustomVec2D;
 import util.CustomVec3D;
+import util.Loggers;
 
 public class HierarchicalNavigation implements Navigatable<CustomVec3D>, XPathfinder<CustomVec3D> {
   public final List<NetHackSurface> areas = new LinkedList<>();
@@ -31,6 +34,7 @@ public class HierarchicalNavigation implements Navigatable<CustomVec3D>, XPathfi
   }
 
   public void addNextArea(NetHackSurface area) {
+    Loggers.AgentLogger.info("Adding a new level");
     area.setPerfectMemoryPathfinding(perfect_memory_pathfinding);
     areas.add(area);
   }
@@ -40,65 +44,85 @@ public class HierarchicalNavigation implements Navigatable<CustomVec3D>, XPathfi
   }
 
   public List<CustomVec3D> findPath(CustomVec3D from, CustomVec3D to) {
-    if (from.lvl == to.lvl) {
-      List<CustomVec2D> path = areas.get(from.lvl).findPath(from.pos, to.pos);
-      if (path == null) {
-        return null;
+    return findPaths(from, Collections.singletonList(to)).get(0);
+  }
+
+  public List<List<CustomVec3D>> findPaths(CustomVec3D from, List<CustomVec3D> targets) {
+    assert !targets.isEmpty() : "Must contain at least one target";
+    List<List<CustomVec3D>> paths = new ArrayList<>(targets.size());
+
+    // Only paths to targets on same level, no
+    if (targets.stream().allMatch(loc -> loc.lvl == from.lvl)) {
+      for (CustomVec3D target : targets) {
+        paths.add(findSameLvlPath(from, target));
       }
-      return path.stream().map(pos -> new CustomVec3D(from.lvl, pos)).collect(Collectors.toList());
+      return paths;
     }
 
     Map<CustomVec2D, List<CustomVec2D>> pathsToArea1Stairs =
-        pathsToStairs(from, hierarchicalGraph.levelToEntrancesMap.get(from.lvl));
-    Map<CustomVec2D, List<CustomVec2D>> pathsToArea2Stairs =
-        pathsToStairs(to, hierarchicalGraph.levelToEntrancesMap.get(to.lvl));
+        pathsToStairs(from, hierarchicalGraph.levelToEntrancesMap.get(from.lvl), false);
 
-    for (CustomVec2D stairPosArea1 : pathsToArea1Stairs.keySet()) {
-      Id<AbstractNode> stair1Id = hierarchicalGraph.getAbsNodeId(from.lvl, stairPosArea1);
-      for (CustomVec2D stairPosArea2 : pathsToArea2Stairs.keySet()) {
-        Id<AbstractNode> stair2Id = hierarchicalGraph.getAbsNodeId(to.lvl, stairPosArea2);
-        AStar<AbstractNode> search = new AStar<>(hierarchicalGraph, stair1Id, stair2Id);
-        Path<AbstractNode> path = search.findPath();
-        if (path == null) {
-          continue;
+    for (CustomVec3D target : targets) {
+      Map<CustomVec2D, List<CustomVec2D>> pathsFromStairs2Area =
+          pathsToStairs(target, hierarchicalGraph.levelToEntrancesMap.get(target.lvl), true);
+
+      Pair<CustomVec2D, CustomVec2D> pathPair = null;
+      Integer shortestPathCost = null;
+
+      for (CustomVec2D stairPosArea1 : pathsToArea1Stairs.keySet()) {
+        Id<AbstractNode> stair1Id = hierarchicalGraph.getAbsNodeId(from.lvl, stairPosArea1);
+        for (CustomVec2D stairPosArea2 : pathsFromStairs2Area.keySet()) {
+          Id<AbstractNode> stair2Id = hierarchicalGraph.getAbsNodeId(target.lvl, stairPosArea2);
+          AStar<AbstractNode> search = new AStar<>(hierarchicalGraph, stair1Id, stair2Id);
+          Path<AbstractNode> path = search.findPath();
+          if (path == null) {
+            continue;
+          }
+
+          int costToStair1 = pathsToArea1Stairs.get(stairPosArea1).size() * Constants.COST_ONE;
+          int costToStair2 = pathsFromStairs2Area.get(stairPosArea2).size() * Constants.COST_ONE;
+          int pathCost = path.pathCost + costToStair1 + costToStair2;
+          if (shortestPathCost == null || shortestPathCost > pathCost) {
+            pathPair = new Pair<>(stairPosArea1, stairPosArea2);
+            shortestPathCost = pathCost;
+          }
         }
-        //        System.out.printf(
-        //            "Found path: %s -> %s. PathToStair1 (%s): %s PathFromStair2(%s): %s%n",
-        //            from,
-        //            to,
-        //            stair1Id,
-        //            pathsToArea1Stairs.get(stairPosArea1),
-        //            stair2Id,
-        //            pathsToArea2Stairs.get(stairPosArea2));
-        //        int costToStair1 = pathsToArea1Stairs.get(stairPosArea1).size() *
-        // Constants.COST_ONE;
-        //        int costToStair2 = pathsToArea2Stairs.get(stairPosArea2).size() *
-        // Constants.COST_ONE;
-        //        int costBetweenStairs = path.pathCost;
-        //        System.out.printf(
-        //            "Cost of path %d: %d > %d < %d%n",
-        //            costBetweenStairs + costToStair1 + costToStair2,
-        //            costToStair1,
-        //            costBetweenStairs,
-        //            costToStair2);
-        return pathsToArea1Stairs.get(stairPosArea1).stream()
-            .map(pos -> new CustomVec3D(from.lvl, pos))
-            .collect(Collectors.toList());
       }
+
+      if (pathPair == null) {
+        paths.add(null);
+        continue;
+      }
+
+      List<CustomVec3D> path = NavUtils.addLevelNr(pathsToArea1Stairs.get(pathPair.fst), from.lvl);
+      path.addAll(NavUtils.addLevelNr(pathsFromStairs2Area.get(pathPair.snd), target.lvl));
+
+      System.out.printf(
+          "Founds shortest path (Cost=%d) [%d]: %s%n", shortestPathCost, path.size(), path);
+      paths.add(path);
     }
 
-    // TODO: Implement shortest path method for multi-level
-    return null;
+    return paths;
+  }
+
+  public List<CustomVec3D> findSameLvlPath(CustomVec3D from, CustomVec3D to) {
+    assert from.lvl == to.lvl : "Must be on same level";
+    List<CustomVec2D> path = areas.get(from.lvl).findPath(from.pos, to.pos);
+    return NavUtils.addLevelNr(path, from.lvl);
   }
 
   private Map<CustomVec2D, List<CustomVec2D>> pathsToStairs(
-      CustomVec3D from, List<CustomVec2D> stairPositions) {
+      CustomVec3D from, List<CustomVec2D> stairPositions, boolean reverse) {
     GridSurface surface = areas.get(from.lvl);
     Map<CustomVec2D, List<CustomVec2D>> paths = new HashMap<>();
     for (CustomVec2D targetPos : stairPositions) {
       List<CustomVec2D> path = surface.findPath(from.pos, targetPos);
       if (path == null) {
         continue;
+      }
+
+      if (reverse) {
+        Collections.reverse(path);
       }
 
       paths.put(targetPos, path);
@@ -119,13 +143,8 @@ public class HierarchicalNavigation implements Navigatable<CustomVec3D>, XPathfi
     List<CustomVec3D> allFrontiers = new LinkedList<>();
 
     for (int i = 0; i < areas.size(); ++i) {
-      NetHackSurface area = areas.get(i);
-      int levelNr = i;
-      List<CustomVec3D> frontiers =
-          area.getFrontier().stream()
-              .map(pos -> new CustomVec3D(levelNr, pos))
-              .collect(Collectors.toList());
-      allFrontiers.addAll(frontiers);
+      List<CustomVec2D> frontiers = areas.get(i).getFrontier();
+      allFrontiers.addAll(NavUtils.addLevelNr(frontiers, i));
     }
 
     return allFrontiers;

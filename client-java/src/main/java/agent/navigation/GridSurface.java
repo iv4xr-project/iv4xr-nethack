@@ -293,7 +293,43 @@ public class GridSurface implements Navigatable<CustomVec2D>, XPathfinder<Custom
 
   @Override
   public List<CustomVec2D> findPath(CustomVec2D from, CustomVec2D to) {
-    return findShortestPath(from, to);
+    return findPaths(from, Collections.singletonList(to)).get(0);
+  }
+
+  public List<List<CustomVec2D>> findPaths(CustomVec2D from, List<CustomVec2D> targets) {
+    assert !targets.isEmpty() : "Cannot find shortest path to zero targets";
+    HierarchicalMapFactory factory = new HierarchicalMapFactory();
+    Id<AbstractNode> startAbsNode = factory.insertAbstractNode(hierarchicalMap, from);
+    int maxPathsToRefine = Integer.MAX_VALUE;
+    HierarchicalSearch hierarchicalSearch = new HierarchicalSearch();
+    List<List<CustomVec2D>> result = new ArrayList<>(targets.size());
+    for (CustomVec2D target : targets) {
+      if (from.equals(target)) {
+        result.add(new ArrayList<>());
+        continue;
+      }
+
+      Id<AbstractNode> targetAbsNode = factory.insertAbstractNode(hierarchicalMap, target);
+      List<AbstractPathNode> abstractPath =
+          hierarchicalSearch.doHierarchicalSearch(
+              hierarchicalMap, startAbsNode, targetAbsNode, 1, maxPathsToRefine);
+
+      if (abstractPath == null) {
+        result.add(null);
+      } else {
+        List<IPathNode> path =
+            hierarchicalSearch.abstractPathToLowLevelPath(
+                hierarchicalMap, abstractPath, hierarchicalMap.size.width, maxPathsToRefine);
+        // Instead of smooth, optimize path by taking shortcuts
+        List<CustomVec2D> posPath = toPositionPath(path, concreteMap);
+        assert isValidPath(from, target, posPath);
+        result.add(posPath);
+      }
+      factory.removeAbstractNode(hierarchicalMap, targetAbsNode);
+    }
+
+    factory.removeAbstractNode(hierarchicalMap, startAbsNode);
+    return result;
   }
 
   // Has optimizations in place to reduce the amount of time to find the shortest path
@@ -305,7 +341,6 @@ public class GridSurface implements Navigatable<CustomVec2D>, XPathfinder<Custom
     HierarchicalSearch hierarchicalSearch = new HierarchicalSearch();
 
     List<CustomVec2D> shortestPath = null;
-
     for (CustomVec2D target : targets) {
       if (from.equals(target)) {
         shortestPath = new ArrayList<>();

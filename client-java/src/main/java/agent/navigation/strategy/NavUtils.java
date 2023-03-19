@@ -5,6 +5,9 @@ import agent.navigation.GridSurface;
 import agent.navigation.HierarchicalNavigation;
 import agent.navigation.hpastar.Size;
 import agent.navigation.hpastar.smoother.Direction;
+import agent.navigation.surface.Climbable;
+import agent.navigation.surface.Stair;
+import agent.navigation.surface.Tile;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import eu.iv4xr.framework.spatial.Vec3;
@@ -13,6 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import nethack.enums.CommandEnum;
 import nethack.object.Command;
 import nethack.object.Player;
 import util.CustomVec2D;
@@ -30,6 +34,13 @@ public class NavUtils {
       return Integer.MAX_VALUE;
     }
     return path.size() - 1;
+  }
+
+  public static List<CustomVec3D> addLevelNr(List<CustomVec2D> path, int lvl) {
+    if (path == null) {
+      return null;
+    }
+    return path.stream().map(pos -> new CustomVec3D(lvl, pos)).collect(Collectors.toList());
   }
 
   /**
@@ -145,7 +156,20 @@ public class NavUtils {
   }
 
   public static WorldModel moveTo(AgentState state, CustomVec3D targetTile) {
-    Command command = Direction.getCommand(toDirection(state, targetTile));
+    Command command;
+    if (state.loc().lvl == targetTile.lvl) {
+      command = Direction.getCommand(toDirection(state, targetTile));
+    } else {
+      Tile tile = state.hierarchicalNav.getTile(state.loc());
+      assert tile instanceof Stair : "Level is different however no stairs at location";
+      Stair stairTile = (Stair) tile;
+      if (stairTile.climbType == Climbable.ClimbType.Descendable) {
+        command = new Command(CommandEnum.MISC_DOWN);
+      } else {
+        command = new Command(CommandEnum.MISC_UP);
+      }
+    }
+
     return state.env().commands(command);
   }
 

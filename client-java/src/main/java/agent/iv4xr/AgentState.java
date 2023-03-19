@@ -99,7 +99,6 @@ public class AgentState extends Iv4xrAgentState<Void> {
     int levelNr = (int) aux.properties.get("levelNr");
     // If detecting a new maze, need to allocate a nav-graph for this maze:
     if (levelNr >= hierarchicalNav.areas.size()) {
-      Loggers.AgentLogger.info("Adding a new level at index: %d", levelNr);
       hierarchicalNav.addNextArea(new NetHackSurface());
     }
 

@@ -17,15 +17,15 @@ public class EntitySelector extends Selector<WorldEntity> {
       new EntitySelector(
           SelectionType.FIRST, EntityType.DOOR, d -> (boolean) d.properties.get("closed"), false);
   public static final EntitySelector money =
-      new EntitySelector(SelectionType.CLOSEST, EntityType.GOLD, false);
+      new EntitySelector(SelectionType.SHORTEST, EntityType.GOLD, false);
 
   public static final EntitySelector adjacentMonster =
       new EntitySelector(SelectionType.ADJACENT, EntityType.MONSTER, false);
   public static final EntitySelector closestMonster =
-      new EntitySelector(SelectionType.CLOSEST, EntityType.MONSTER, false);
+      new EntitySelector(SelectionType.SHORTEST, EntityType.MONSTER, false);
 
   public static final EntitySelector food =
-      new EntitySelector(SelectionType.CLOSEST, EntityType.EDIBLE, false);
+      new EntitySelector(SelectionType.SHORTEST, EntityType.EDIBLE, false);
 
   final EntityType entityType;
 
@@ -89,7 +89,7 @@ public class EntitySelector extends Selector<WorldEntity> {
       }
     }
 
-    if (selectionType == SelectionType.CLOSEST) {
+    if (selectionType == SelectionType.SHORTEST) {
       return entities.get(minIndex);
     } else if (selectionType == SelectionType.FARTHEST) {
       return entities.get(maxIndex);

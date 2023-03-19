@@ -17,7 +17,7 @@ import util.CustomVec3D;
 public class TileSelector extends Selector<Tile> {
   public static final TileSelector adjacentWallSelector =
       new TileSelector(
-          SelectionType.CLOSEST,
+          SelectionType.SHORTEST,
           Wall.class,
           t -> {
             Wall w = (Wall) t;
@@ -27,7 +27,7 @@ public class TileSelector extends Selector<Tile> {
 
   public static final TileSelector adjacentClosedDoorSelector =
       new TileSelector(
-          SelectionType.CLOSEST,
+          SelectionType.SHORTEST,
           Door.class,
           t -> {
             Door d = (Door) t;
@@ -37,7 +37,7 @@ public class TileSelector extends Selector<Tile> {
 
   public static final TileSelector closedDoorSelector =
       new TileSelector(
-          SelectionType.CLOSEST,
+          SelectionType.SHORTEST,
           Door.class,
           t -> {
             Door d = (Door) t;
@@ -47,7 +47,7 @@ public class TileSelector extends Selector<Tile> {
 
   public static final TileSelector lockedDoorSelector =
       new TileSelector(
-          SelectionType.CLOSEST,
+          SelectionType.SHORTEST,
           Door.class,
           t -> {
             Door d = (Door) t;
@@ -127,7 +127,7 @@ public class TileSelector extends Selector<Tile> {
       return tiles.get(n - 1);
     }
 
-    if (selectionType == SelectionType.CLOSEST) {
+    if (selectionType == SelectionType.SHORTEST) {
       return selectClosest(tiles, S);
     }
 
