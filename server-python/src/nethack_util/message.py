@@ -1,7 +1,7 @@
 def concat_all_messages(env, obs):
     current_msg = read_obs_msg(obs)
     total_msg = current_msg
-    while current_msg and current_msg != "Unknown command '^M'." and not current_msg.endswith("(n) "):
+    while current_msg and current_msg != "Unknown command '^M'." and not current_msg.endswith("(n) ") and not current_msg.endswith("?*] "):
         obs, _, _, _ = env.step(19)
         current_msg = read_obs_msg(obs)
         total_msg += " " + current_msg
