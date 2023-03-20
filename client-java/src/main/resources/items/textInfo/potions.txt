@@ -1,0 +1,29 @@
+Potion	Cost	Weight	Relative probability[1]	Appearance
+water (uncursed)	0	20	6.9%	clear
+booze	50	20	4.2%	random
+fruit juice	50	20	4.2%	random
+see invisible	50	20	4.2%	random
+sickness	50	20	4.2%	random
+confusion	100	20	4.2%	random
+extra healing	100	20	4.7%	random
+hallucination	100	20	4%	random
+healing	100	20	5.7%	random
+holy water	100	20	1.15%	clear
+unholy water	100	20	1.15%	clear
+restore ability	100	20	4%	random
+sleeping	100	20	4.2%	random
+blindness	150	20	4%	random
+gain energy	150	20	4.2%	random
+invisibility	150	20	4%	random
+monster detection	150	20	4%	random
+object detection	150	20	4.2%	random
+enlightenment	200	20	2%	random
+full healing	200	20	1%	random
+levitation	200	20	4.2%	random
+polymorph	200	20	1%	random
+speed	200	20	4.2%	random
+acid	250	20	1%	random
+oil	250	20	3%	random
+gain ability	300	20	4.2%	random
+gain level	300	20	2%	random
+paralysis	300	20	4.2%	random

@@ -1,0 +1,370 @@
+[
+    {
+        "Nutr": 800,
+        "Item": "food ration",
+        "Prob": 380,
+        "Wgt": 20,
+        "Time": 5,
+        "Nutr/Time": 800,
+        "Conduct": "vegan",
+        "Cost": 45,
+        "Nutr/Wgt": 40
+    },
+    {
+        "Nutr": 600,
+        "Item": "cram ration",
+        "Prob": 20,
+        "Wgt": 15,
+        "Time": 3,
+        "Nutr/Time": 600,
+        "Conduct": "vegan",
+        "Cost": 35,
+        "Nutr/Wgt": 40
+    },
+    {
+        "Nutr": 300,
+        "Item": "C-ration",
+        "Prob": 0,
+        "Wgt": 10,
+        "Time": 1,
+        "Nutr/Time": 300,
+        "Conduct": "vegan",
+        "Cost": 20,
+        "Nutr/Wgt": 30
+    },
+    {
+        "Nutr": 400,
+        "Item": "K-ration",
+        "Prob": 0,
+        "Wgt": 10,
+        "Time": 1,
+        "Nutr/Time": 400,
+        "Conduct": "vegan",
+        "Cost": 25,
+        "Nutr/Wgt": 40
+    },
+    {
+        "Nutr": 200,
+        "Item": "tripe ration",
+        "Prob": 140,
+        "Wgt": 10,
+        "Time": 2,
+        "Nutr/Time": 200,
+        "Conduct": "none",
+        "Cost": 15,
+        "Nutr/Wgt": 20
+    },
+    {
+        "Nutr": 800,
+        "Item": "lembas wafer",
+        "Prob": 20,
+        "Wgt": 5,
+        "Time": 2,
+        "Nutr/Time": 800,
+        "Conduct": "vegan",
+        "Cost": 45,
+        "Nutr/Wgt": 160
+    },
+    {
+        "Nutr": 100,
+        "Item": "cream pie",
+        "Prob": 25,
+        "Wgt": 10,
+        "Time": 1,
+        "Nutr/Time": 100,
+        "Conduct": "vegetarian",
+        "Cost": 10,
+        "Nutr/Wgt": 10
+    },
+    {
+        "Nutr": 200,
+        "Item": "pancake",
+        "Prob": 25,
+        "Wgt": 2,
+        "Time": 2,
+        "Nutr/Time": 200,
+        "Conduct": "vegetarian",
+        "Cost": 15,
+        "Nutr/Wgt": 100
+    },
+    {
+        "Nutr": 100,
+        "Item": "candy bar",
+        "Prob": 13,
+        "Wgt": 2,
+        "Time": 1,
+        "Nutr/Time": 100,
+        "Conduct": "vegetarian",
+        "Cost": 10,
+        "Nutr/Wgt": 50
+    },
+    {
+        "Nutr": 40,
+        "Item": "fortune cookie",
+        "Prob": 55,
+        "Wgt": 1,
+        "Time": 1,
+        "Nutr/Time": 40,
+        "Conduct": "vegetarian",
+        "Cost": 7,
+        "Nutr/Wgt": 40
+    },
+    {
+        "Nutr": 50,
+        "Item": "tin (homemade)",
+        "Wgt": 10,
+        "Conduct": "varies",
+        "Cost": 5,
+        "Nutr/Wgt": 5
+    },
+    {
+        "Nutr": 600,
+        "Item": "tin of spinach (blessed)",
+        "Prob": 0.625,
+        "Wgt": 10,
+        "Nutr/Time": 600,
+        "Conduct": "vegan",
+        "Cost": 5,
+        "Nutr/Wgt": 60
+    },
+    {
+        "Nutr": 500.5,
+        "Item": "tin of spinach (uncursed)",
+        "Prob": 11.25,
+        "Wgt": 10,
+        "Conduct": "vegan",
+        "Cost": 5,
+        "Nutr/Wgt": 50.05
+    },
+    {
+        "Nutr": 400.5,
+        "Item": "tin of spinach (cursed)",
+        "Prob": 0.625,
+        "Wgt": 10,
+        "Conduct": "vegan",
+        "Cost": 5,
+        "Nutr/Wgt": 40.05
+    },
+    {
+        "Item": "tin (other)",
+        "Prob": 62.5,
+        "Wgt": 10,
+        "Conduct": "varies",
+        "Cost": 5
+    },
+    {
+        "Nutr": 50,
+        "Item": "apple",
+        "Prob": 15,
+        "Wgt": 2,
+        "Time": 1,
+        "Nutr/Time": 50,
+        "Conduct": "vegan",
+        "Cost": 7,
+        "Nutr/Wgt": 25
+    },
+    {
+        "Nutr": 80,
+        "Item": "orange",
+        "Prob": 10,
+        "Wgt": 2,
+        "Time": 1,
+        "Nutr/Time": 80,
+        "Conduct": "vegan",
+        "Cost": 9,
+        "Nutr/Wgt": 40
+    },
+    {
+        "Nutr": 80,
+        "Item": "banana",
+        "Prob": 10,
+        "Wgt": 2,
+        "Time": 1,
+        "Nutr/Time": 80,
+        "Conduct": "vegan",
+        "Cost": 9,
+        "Nutr/Wgt": 40
+    },
+    {
+        "Nutr": 40,
+        "Item": "sprig of wolfsbane",
+        "Prob": 7,
+        "Wgt": 1,
+        "Time": 1,
+        "Nutr/Time": 40,
+        "Conduct": "vegan",
+        "Cost": 7,
+        "Nutr/Wgt": 40
+    },
+    {
+        "Nutr": 50,
+        "Item": "pear",
+        "Prob": 10,
+        "Wgt": 2,
+        "Time": 1,
+        "Nutr/Time": 50,
+        "Conduct": "vegan",
+        "Cost": 7,
+        "Nutr/Wgt": 25
+    },
+    {
+        "Nutr": 250,
+        "Item": "slime mold",
+        "Prob": 75,
+        "Wgt": 5,
+        "Time": 1,
+        "Nutr/Time": 250,
+        "Conduct": "vegan",
+        "Cost": 17,
+        "Nutr/Wgt": 50
+    },
+    {
+        "Nutr": 40,
+        "Item": "clove of garlic",
+        "Prob": 7,
+        "Wgt": 1,
+        "Time": 1,
+        "Nutr/Time": 40,
+        "Conduct": "vegan",
+        "Cost": 7,
+        "Nutr/Wgt": 40
+    },
+    {
+        "Nutr": 100,
+        "Item": "melon",
+        "Prob": 10,
+        "Wgt": 5,
+        "Time": 1,
+        "Nutr/Time": 100,
+        "Conduct": "vegan",
+        "Cost": 10,
+        "Nutr/Wgt": 20
+    },
+    {
+        "Nutr": 50,
+        "Item": "carrot",
+        "Prob": 15,
+        "Wgt": 2,
+        "Time": 1,
+        "Nutr/Time": 50,
+        "Conduct": "vegan",
+        "Cost": 7,
+        "Nutr/Wgt": 25
+    },
+    {
+        "Nutr": 30,
+        "Item": "eucalyptus leaf",
+        "Prob": 3,
+        "Wgt": 1,
+        "Time": 1,
+        "Nutr/Time": 30,
+        "Conduct": "vegan",
+        "Cost": 6,
+        "Nutr/Wgt": 30
+    },
+    {
+        "Nutr": 30,
+        "Item": "kelp frond",
+        "Prob": 0,
+        "Wgt": 1,
+        "Time": 1,
+        "Nutr/Time": 30,
+        "Conduct": "vegan",
+        "Cost": 6,
+        "Nutr/Wgt": 30
+    },
+    {
+        "Nutr": 5,
+        "Item": "meatball",
+        "Prob": 0,
+        "Wgt": 1,
+        "Time": 1,
+        "Nutr/Time": 5,
+        "Conduct": "none",
+        "Cost": 5,
+        "Nutr/Wgt": 5
+    },
+    {
+        "Nutr": 5,
+        "Item": "meat ring",
+        "Prob": 0,
+        "Wgt": 1,
+        "Time": 1,
+        "Nutr/Time": 5,
+        "Conduct": "none",
+        "Cost": 5,
+        "Nutr/Wgt": 5
+    },
+    {
+        "Nutr": 5,
+        "Item": "meat stick",
+        "Prob": 0,
+        "Wgt": 1,
+        "Time": 1,
+        "Nutr/Time": 5,
+        "Conduct": "none",
+        "Cost": 5,
+        "Nutr/Wgt": 5
+    },
+    {
+        "Nutr": 2000,
+        "Item": "huge chunk of meat",
+        "Prob": 0,
+        "Wgt": 400,
+        "Time": 20,
+        "Nutr/Time": 2000,
+        "Conduct": "none",
+        "Cost": 105,
+        "Nutr/Wgt": 5
+    },
+    {
+        "Nutr": 80,
+        "Item": "egg",
+        "Prob": 85,
+        "Wgt": 1,
+        "Time": 1,
+        "Nutr/Time": 80,
+        "Conduct": "vegetarian",
+        "Cost": 9,
+        "Nutr/Wgt": 80
+    },
+    {
+        "Nutr": 200,
+        "Item": "lump of royal jelly",
+        "Prob": 0,
+        "Wgt": 2,
+        "Time": 1,
+        "Nutr/Time": 200,
+        "Conduct": "vegetarian",
+        "Cost": 15,
+        "Nutr/Wgt": 100
+    },
+    {
+        "Nutr": 200,
+        "Item": "corpse (lichen)",
+        "Prob": 0,
+        "Wgt": 20,
+        "Time": 3,
+        "Nutr/Time": 200,
+        "Conduct": "vegan",
+        "Cost": 5,
+        "Nutr/Wgt": 10
+    },
+    {
+        "Nutr": 40,
+        "Item": "corpse (lizard)",
+        "Prob": 0,
+        "Wgt": 10,
+        "Time": 3,
+        "Nutr/Time": 40,
+        "Conduct": "none",
+        "Cost": 5,
+        "Nutr/Wgt": 4
+    },
+    {
+        "Item": "corpse (other)",
+        "Prob": 0,
+        "Conduct": "varies",
+        "Cost": 5
+    }
+]

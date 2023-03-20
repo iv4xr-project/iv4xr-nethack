@@ -22,7 +22,7 @@ repos:
     hooks:
       - id: forbid-tabs
         files: .(hs|lhs|cs|pxd|py|py3|pyw|pyx|pyz|pyi|c|cc|cxx|cpp|c\+\+|hpp|h|h\+\+|hh|R|java)
-        exclude: .xlogfile
+        exclude: .xlogfile|client-java/src/main/resources/items/textInfo/
   # Lint yaml files
   - repo: https://github.com/adrienverge/yamllint
     rev: v1.26.3

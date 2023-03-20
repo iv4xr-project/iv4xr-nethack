@@ -1,0 +1,36 @@
+Item	Cost	Wgt	Prob	Nutr	Nutr/Wgt	Time	Nutr/Time	Conduct
+food ration	45	20	380	800	40	5	160	vegan
+cram ration	35	15	20	600	40	3	200	vegan
+C-ration	20	10	0	300	30	1	300	vegan
+K-ration	25	10	0	400	40	1	400	vegan
+tripe ration	15	10	140	200	20	2	100	none
+lembas wafer	45	5	20	800	160	2	400	vegan
+cream pie	10	10	25	100	10	1	100	vegetarian
+pancake	15	2	25	200	100	2	100	vegetarian
+candy bar	10	2	13	100	50	1	100	vegetarian
+fortune cookie	7	1	55	40	40	1	40	vegetarian
+tin (homemade)	5	10	—*	50	5	varies	varies	varies
+tin of spinach (blessed)	5	10	0.625*	600	60	1–2	450	vegan
+tin of spinach (uncursed)	5	10	11.25*	401–600	50.05	varies	varies	vegan
+tin of spinach (cursed)	5	10	0.625*	201–600	40.05	varies	varies	vegan
+tin (other)	5	10	62.5*	varies	varies	varies	varies	varies
+apple	7	2	15	50	25	1	50	vegan
+orange	9	2	10	80	40	1	80	vegan
+banana	9	2	10	80	40	1	80	vegan
+sprig of wolfsbane	7	1	7	40	40	1	40	vegan
+pear	7	2	10	50	25	1	50	vegan
+slime mold	17	5	75	250	50	1	250	vegan
+clove of garlic	7	1	7	40	40	1	40	vegan
+melon	10	5	10	100	20	1	100	vegan
+carrot	7	2	15	50	25	1	50	vegan
+eucalyptus leaf	6	1	3	30	30	1	30	vegan
+kelp frond	6	1	0	30	30	1	30	vegan
+meatball	5	1	0	5	5	1	5	none
+meat ring	5	1	0	5	5	1	5	none
+meat stick	5	1	0	5	5	1	5	none
+huge chunk of meat	105	400	0	2000	5	20	100	none
+egg	9	1	85	80	80	1	80	vegetarian
+lump of royal jelly	15	2	0	200	100	1	200	vegetarian
+corpse (lichen)	5	20	0	200	10	3	66	vegan
+corpse (lizard)	5	10	0	40	4	3	13	none
+corpse (other)	5	varies	0	varies	varies	varies	varies	varies

@@ -1,0 +1,37 @@
+Name	Description	Minimum level	Cost (zm)	Weight	Hardness	Prob (‰)	Material
+dilithium crystal	white gem	27	4500	1	soft	2	gemstone
+diamond	white gem	24	4000	1	HARD	3	gemstone
+ruby	red gem	21	3500	1	HARD	4	gemstone
+jacinth stone	orange gem	18	3250	1	HARD	3	gemstone
+sapphire	blue gem	15	3000	1	HARD	4	gemstone
+black opal	black gem	12	2500	1	HARD	3	gemstone
+emerald	green gem	9	2500	1	HARD	5	gemstone
+turquoise stone	green gem/blue gem	6	2000	1	soft	6	gemstone
+citrine stone	yellow gem	3	1500	1	soft	4	gemstone
+aquamarine stone	green gem/blue gem	1	1500	1	HARD	6	gemstone
+amber stone	yellowish brown gem	1	1000	1	soft	8	gemstone
+topaz stone	yellowish brown gem	1	900	1	HARD	10	gemstone
+jet stone	black gem	1	850	1	soft	6	gemstone
+opal	white gem	1	800	1	soft	12	gemstone
+chrysoberyl stone	yellow gem	1	700	1	soft	8	gemstone
+garnet stone	red gem	1	700	1	soft	12	gemstone
+amethyst stone	violet gem	1	600	1	soft	14	gemstone
+jasper stone	red gem	1	500	1	soft	15	gemstone
+fluorite stone	green gem/blue gem/white gem/violet gem	1	400	1	soft	15	gemstone
+jade stone	green gem	1	300	1	soft	10	gemstone
+obsidian stone	black gem	1	200	1	soft	9	gemstone
+agate stone	orange gem	1	200	1	soft	12	gemstone
+worthless piece of white glass	white gem	1	0	1	soft	77	glass
+worthless piece of blue glass	blue gem	1	0	1	soft	77	glass
+worthless piece of red glass	red gem	1	0	1	soft	77	glass
+worthless piece of yellowish brown glass	yellowish brown gem	1	0	1	soft	77	glass
+worthless piece of orange glass	orange gem	1	0	1	soft	76	glass
+worthless piece of yellow glass	yellow gem	1	0	1	soft	77	glass
+worthless piece of black glass	black gem	1	0	1	soft	76	glass
+worthless piece of green glass	green gem	1	0	1	soft	77	glass
+worthless piece of violet glass	violet gem	1	0	1	soft	77	glass
+luckstone	gray stone	1	60	10	soft	10	mineral
+loadstone	gray stone	1	1	500	soft	10	mineral
+touchstone	gray stone	1	45	10	soft	8	mineral
+flint stone	gray stone	1	1	10	soft	10	mineral
+rock	rock	1	0	10	soft	100	mineral

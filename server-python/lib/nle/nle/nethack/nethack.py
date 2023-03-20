@@ -64,6 +64,7 @@ NETHACKOPTIONS = (
     "S_lava:~",
     "S_pool:~",
     "S_water:~",
+    # "S_boulder:0",
 
     "color",
     "disclose:+i +a +v +g +c +o",

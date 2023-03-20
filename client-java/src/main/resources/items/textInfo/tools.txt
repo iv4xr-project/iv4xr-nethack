@@ -1,0 +1,67 @@
+Name	Cost	Weight	Cost:weight ratio	Use (where not obvious)	Prob (‰)	Creation	Magic?
+Character accessories
+blindfold	20 zm	2	10	Blinds you	50		No
+lenses	80 zm	3	27	Spellbook reading	5		No
+Eyes of the Overworld	2500 zm	3	833	Enlightenment	0	Monk quest artifact	No
+towel	50 zm	2	25	Blinds you, cleans face and hands	50		No
+Pet accessories
+leash	20 zm	12	1.67	Keeps pets nearby	65		No
+saddle	150 zm	200	.75	Riding	5		No
+Containers
+bag of holding	100 zm	15	5.67	Makes items lighter	20	Contains 0-1 items	Yes
+chest	16 zm	600	0.027		35	Contains 0-5 items	No
+ice box	42 zm	900	0.047	Keeps corpses fresh	5	Contains 0-20 corpses	No
+large box	8 zm	350	0.023		40	Contains 0-3 items	No
+oilskin sack	100 zm	15	5.67	Prevents blanking	5	Contains 0-1 items	No
+sack	2 zm	15	0.133		35	Contains 0-1 items	No
+Tonal instruments	Passtune
+bugle	15 zm	10	1.5	Aggravates nearby soldiers	4		No
+fire horn	50 zm	18	2.78	Ray of fire	2		Yes
+frost horn	50 zm	18	2.78	Ray of frost	2		Yes
+magic flute	36 zm	5	7.2	Lulls monsters to sleep	2		Yes
+magic harp	50 zm	30	1.67	Tames monsters	2		Yes
+tooled horn	15 zm	18	0.83	Scares monsters	5		No
+wooden flute	12 zm	5	2.4	Pacifies snakes	4		No
+wooden harp	50 zm	30	1.67	Pacifies nymphs	4		No
+Atonal instruments
+bell	50 zm	30	1.67	Wakes monsters, summons nymphs	2		No
+Bell of Opening	5000 zm	10	500	Invocation		get from quest nemesis	Yes
+drum of earthquake	25 zm	25	1	Creates pits, scares monsters, angers peacefuls	2		Yes
+leather drum	25 zm	25	1	Wakes and scares monsters	4		No
+magic whistle	10 zm	3	3.33	Teleports pets to you	30		Yes
+tin whistle	10 zm	3	3.33	Calls pets	100		No
+Light sources
+brass lantern	20 zm	30	0.67		30		No
+Candelabrum of Invocation	5000 zm	10	500	Invocation		get from Vlad	Yes
+magic lamp	50 zm	20	2.5	Possible wish	15		Yes
+oil lamp	10 zm	20	0.5		45		No
+tallow candle	10 zm	2	5	Invocation	20	stack of 1 (4/7 prob.) or 2-7 (1/14 prob. each)	No
+wax candle	20 zm	2	10	Invocation	5	stack of 1 (4/7 prob.) or 2-7 (1/14 prob. each)	No
+Traps
+beartrap	60 zm	200	0.3		0		No
+land mine	180 zm	300	0.6		0		No
+Unlocking tools
+credit card	10 zm	1	10		15		No
+The Platinum Yendorian Express Card	7000 zm	1	7000	Charging		Tourist quest artifact	No
+lock pick (osaku to Samurai)	20 zm	4	5		60		No
+skeleton key	10 zm	3	3.33		80		No
+The Master Key of Thievery	3500 zm	3	1166		0	Rogue quest artifact	No
+Weapon-tools
+grappling hook	50 zm	30	1.67		20		No
+pick-axe	50 zm	100	0.5	Digging	5		No
+unicorn horn	100 zm	20	5	Cure status effects, various other	0		Yes
+Miscellaneous
+bag of tricks	100 zm	15	6.67	Summoning monsters	20	1-20 charges	Yes
+can of grease	20 zm	20	1	Protects against mind flayers, drowning attacks, and water damage	15	1-25 charges	No
+crystal ball	60 zm	150	.4		15	1-5 charges	Yes
+The Orb of Detection	2500 zm	150	16.7	Invisibility	0	Archeologist quest artifact	No
+The Orb of Fate	2500 zm	150	16.7	Level teleport	0	Valkyrie quest artifact	No
+expensive camera	200 zm	12	16.7	Scare monsters	15		No
+figurine	80 zm	50	1.6	Summons a monster	25		Yes
+horn of plenty	50 zm	18	2.78	Produces food or some potions	2		Yes
+magic marker	50 zm	2	25	Writes scrolls and spellbooks	15	30-99 charges	Yes
+mirror	10 zm	13	.77	Nymph and foocubus control, Luck management, scare monsters	45		No
+The Magic Mirror of Merlin	1500 zm	13	115.385		0	Knight quest artifact	No
+stethoscope	75 zm	4	18.3	Get monster status information, detect secret doors/corridors	25		No
+tin opener	30 zm	4	7.5		35		No
+tinning kit	30 zm	100	.3	Prevents troll resurrection, tins corpses for intrinsics	15		No

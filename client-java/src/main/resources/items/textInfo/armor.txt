@@ -1,0 +1,72 @@
+Name	Cost	Weight	AC	Weight per AC (+0)	Max AC[8]	Weight per max AC	Material	Effect	MC	Prob[9] (‰)	Magical	Appearance	Turns to (un)equip[10]
+Shirts
+Hawaiian shirt	3	5	0	Infinite	5	1.0	cloth	Shop		8		--	0
+T-shirt	2	5	0	Infinite	5	1.0	cloth	Shop		2		--	0
+Suits
+leather jacket	10	30	1	30	6	5.0	leather			12		--	0
+leather armor	5	150	2	75	7	21	leather		1	82		--	3
+orcish ring mail	80	250	2	125	7	36	iron		1	20		crude ring mail	5
+studded leather armor	15	200	3	67	8	25	leather		1	72		--	3
+ring mail	100	250	3	83	8	31	iron		1	72		--	5
+scale mail	45	250	4	63	9	28	iron		1	72		--	5
+orcish chain mail	75	300	4	75	9	33	iron		1	20		crude chain mail	5
+chain mail	75	300	5	60	10	30	iron		1	72		--	5
+elven mithril-coat	240	150	5	30	12	13	mithril		2	15		--	1
+splint mail	80	400	6	67	11	36	iron		1	62		--	5
+banded mail	90	350	6	58	11	32	iron		1	72		--	5
+dwarvish mithril-coat	240	150	6	25	11	14	mithril		2	10		--	1
+bronze plate mail	400	450	6	75	11	41	copper		1	25		--	5
+plate mail (tanko)	600	450	7	64	12	38	iron		2	44		--	5
+crystal plate mail	820	450	7	64	12	38	glass		2	10		--	5
+Dragon suits
+dragon scales	500	40	3	13	8	5.0	dragon	Resist%		--		--	5
+dragon scale mail	900	40	9	4.4	14	2.9	dragon	Resist%		--	Yes	--	5
+Cloaks
+mummy wrapping	2	3	0	Infinite	5	0.60	cloth	Vis	1	--		--	0
+orcish cloak	40	10	0	Infinite	5	2.0	cloth		1	8		coarse mantelet	0
+dwarvish cloak	50	10	0	Infinite	5	2.0	cloth		1	8		hooded cloak	0
+leather cloak	40	15	1	15	6	2.5	leather		1	8		--	0
+cloak of displacement	50	10	1	10	6	1.7	cloth	Displ	1	10	Yes	*piece of cloth	0
+oilskin cloak	50	10	1	10	6	1.7	cloth	Water	2	8		slippery cloak	0
+alchemy smock	50	10	1	10	6	1.7	cloth	Poi+Acd	1	9	Yes	apron	0
+cloak of invisibility	60	10	1	10	6	1.7	cloth	Invis	1	10	Yes	*opera cloak	0
+cloak of magic resistance	60	10	1	10	6	1.7	cloth	Magic	1	2	Yes	*ornamental cope	0
+elven cloak	60	10	1	10	8	1.3	cloth	Stealth	1	8	Yes	faded pall	0
+robe	50	15	2	7.5	7	2.1	cloth	Spell1	2	3	Yes	--	0
+cloak of protection	50	10	3	3.3	8	1.3	cloth	Prot	3	9	Yes	*tattered cape	0
+Helms
+fedora	1	3	0	Infinite	5	0.60	cloth			--		--	0
+dunce cap	1	4	0	Infinite	5	0.80	cloth	Stupid		3	Yes	conical hat	1
+cornuthaum	80	4	0	Infinite	7 wizard,5 others	0.57 wizard,0.80 others	cloth	Clair	1	3	Yes	conical hat	1
+dented pot	8	10	1	10	6	1.7	iron			2		--	0
+elven leather helm	8	3	1	3.0	8	0.38	leather			6		leather hat	1
+helmet (kabuto)	10	30	1	30	6	5.0	iron			10		*plumed helmet	1
+orcish helm	10	30	1	30	6	5.0	iron			6		iron skull cap	1
+helm of brilliance	50	50	1	50	6	8.3	iron	Int+Wis		6	Yes	*etched helmet	1
+helm of opposite alignment	50	50	1	50	6	8.3	iron	Align		6	Yes	*crested helmet	1
+helm of telepathy	50	50	1	50	6	8.3	iron	ESP		2	Yes	*visored helmet	1
+dwarvish iron helm	20	40	2	20	7	5.7	iron			6		hard hat	1
+Gloves
+leather gloves (yugake)	8	10	1	10	6	1.7	leather			16		*old gloves	1
+gauntlets of dexterity	50	10	1	10	6	1.7	leather	Dex		8	Yes	*padded gloves	1
+gauntlets of fumbling	50	10	1	10	6	1.7	leather	Fumble		8	Yes	*riding gloves	1
+gauntlets of power	50	30	1	30	6	5.0	iron	Str		8	Yes	*fencing gloves	1
+Shields
+small shield	3	30	1	30	6	5.0	wood	Spell2		6		--	0
+orcish shield	7	50	1	50	6	8.3	iron			2		red-eyed	0
+Uruk-hai shield	7	50	1	50	6	8.3	iron			2		white-handed	0
+elven shield	7	40	2	20	9	4.4	wood			2		blue and green	0
+dwarvish roundshield	10	100	2	50	7	14	iron			4		large round	0
+large shield	10	100	2	50	7	14	iron			7		--	0
+shield of reflection	50	50	2	25	7	7.1	silver	Reflect		3	Yes	polished silver	0
+Boots
+low boots	8	10	1	10	6	1.7	leather			25		walking shoes	2
+elven boots	8	15	1	15	8	1.9	leather	Stealth		12	Yes	*mud boots	2
+kicking boots	8	50	1	50	6	8.3	iron	Kick		12	Yes	*buckled boots	2
+fumble boots	30	20	1	20	6	3.3	leather	Fumble		12	Yes	*riding boots	2
+levitation boots	30	15	1	15	6	2.5	leather	Lev		12	Yes	*snow boots	2
+jumping boots	50	20	1	20	6	3.3	leather	Jump		12	Yes	*hiking boots	2
+speed boots	50	20	1	20	6	3.3	leather	Speed		12	Yes	*combat boots	2
+water walking boots	50	20	1	20	6	3.3	leather	WWalk		12	Yes	*jungle boots	2
+high boots	12	20	2	10	7	2.9	leather			15		jackboots	2
+iron shoes	16	50	2	25	7	7.1	iron			7		hard shoes	2

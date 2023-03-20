@@ -1,0 +1,362 @@
+[
+    {
+        "Prob (\u2030)": 2,
+        "Description": "white gem",
+        "Minimum level": 27,
+        "Material": "gemstone",
+        "Hardness": "soft",
+        "Cost": 4500,
+        "Weight": 1,
+        "Name": "dilithium crystal"
+    },
+    {
+        "Prob (\u2030)": 3,
+        "Description": "white gem",
+        "Minimum level": 24,
+        "Material": "gemstone",
+        "Hardness": "HARD",
+        "Cost": 4000,
+        "Weight": 1,
+        "Name": "diamond"
+    },
+    {
+        "Prob (\u2030)": 4,
+        "Description": "red gem",
+        "Minimum level": 21,
+        "Material": "gemstone",
+        "Hardness": "HARD",
+        "Cost": 3500,
+        "Weight": 1,
+        "Name": "ruby"
+    },
+    {
+        "Prob (\u2030)": 3,
+        "Description": "orange gem",
+        "Minimum level": 18,
+        "Material": "gemstone",
+        "Hardness": "HARD",
+        "Cost": 3250,
+        "Weight": 1,
+        "Name": "jacinth stone"
+    },
+    {
+        "Prob (\u2030)": 4,
+        "Description": "blue gem",
+        "Minimum level": 15,
+        "Material": "gemstone",
+        "Hardness": "HARD",
+        "Cost": 3000,
+        "Weight": 1,
+        "Name": "sapphire"
+    },
+    {
+        "Prob (\u2030)": 3,
+        "Description": "black gem",
+        "Minimum level": 12,
+        "Material": "gemstone",
+        "Hardness": "HARD",
+        "Cost": 2500,
+        "Weight": 1,
+        "Name": "black opal"
+    },
+    {
+        "Prob (\u2030)": 5,
+        "Description": "green gem",
+        "Minimum level": 9,
+        "Material": "gemstone",
+        "Hardness": "HARD",
+        "Cost": 2500,
+        "Weight": 1,
+        "Name": "emerald"
+    },
+    {
+        "Prob (\u2030)": 6,
+        "Description": "green gem/blue gem",
+        "Minimum level": 6,
+        "Material": "gemstone",
+        "Hardness": "soft",
+        "Cost": 2000,
+        "Weight": 1,
+        "Name": "turquoise stone"
+    },
+    {
+        "Prob (\u2030)": 4,
+        "Description": "yellow gem",
+        "Minimum level": 3,
+        "Material": "gemstone",
+        "Hardness": "soft",
+        "Cost": 1500,
+        "Weight": 1,
+        "Name": "citrine stone"
+    },
+    {
+        "Prob (\u2030)": 6,
+        "Description": "green gem/blue gem",
+        "Minimum level": 1,
+        "Material": "gemstone",
+        "Hardness": "HARD",
+        "Cost": 1500,
+        "Weight": 1,
+        "Name": "aquamarine stone"
+    },
+    {
+        "Prob (\u2030)": 8,
+        "Description": "yellowish brown gem",
+        "Minimum level": 1,
+        "Material": "gemstone",
+        "Hardness": "soft",
+        "Cost": 1000,
+        "Weight": 1,
+        "Name": "amber stone"
+    },
+    {
+        "Prob (\u2030)": 10,
+        "Description": "yellowish brown gem",
+        "Minimum level": 1,
+        "Material": "gemstone",
+        "Hardness": "HARD",
+        "Cost": 900,
+        "Weight": 1,
+        "Name": "topaz stone"
+    },
+    {
+        "Prob (\u2030)": 6,
+        "Description": "black gem",
+        "Minimum level": 1,
+        "Material": "gemstone",
+        "Hardness": "soft",
+        "Cost": 850,
+        "Weight": 1,
+        "Name": "jet stone"
+    },
+    {
+        "Prob (\u2030)": 12,
+        "Description": "white gem",
+        "Minimum level": 1,
+        "Material": "gemstone",
+        "Hardness": "soft",
+        "Cost": 800,
+        "Weight": 1,
+        "Name": "opal"
+    },
+    {
+        "Prob (\u2030)": 8,
+        "Description": "yellow gem",
+        "Minimum level": 1,
+        "Material": "gemstone",
+        "Hardness": "soft",
+        "Cost": 700,
+        "Weight": 1,
+        "Name": "chrysoberyl stone"
+    },
+    {
+        "Prob (\u2030)": 12,
+        "Description": "red gem",
+        "Minimum level": 1,
+        "Material": "gemstone",
+        "Hardness": "soft",
+        "Cost": 700,
+        "Weight": 1,
+        "Name": "garnet stone"
+    },
+    {
+        "Prob (\u2030)": 14,
+        "Description": "violet gem",
+        "Minimum level": 1,
+        "Material": "gemstone",
+        "Hardness": "soft",
+        "Cost": 600,
+        "Weight": 1,
+        "Name": "amethyst stone"
+    },
+    {
+        "Prob (\u2030)": 15,
+        "Description": "red gem",
+        "Minimum level": 1,
+        "Material": "gemstone",
+        "Hardness": "soft",
+        "Cost": 500,
+        "Weight": 1,
+        "Name": "jasper stone"
+    },
+    {
+        "Prob (\u2030)": 15,
+        "Description": "green gem/blue gem/white gem/violet gem",
+        "Minimum level": 1,
+        "Material": "gemstone",
+        "Hardness": "soft",
+        "Cost": 400,
+        "Weight": 1,
+        "Name": "fluorite stone"
+    },
+    {
+        "Prob (\u2030)": 10,
+        "Description": "green gem",
+        "Minimum level": 1,
+        "Material": "gemstone",
+        "Hardness": "soft",
+        "Cost": 300,
+        "Weight": 1,
+        "Name": "jade stone"
+    },
+    {
+        "Prob (\u2030)": 9,
+        "Description": "black gem",
+        "Minimum level": 1,
+        "Material": "gemstone",
+        "Hardness": "soft",
+        "Cost": 200,
+        "Weight": 1,
+        "Name": "obsidian stone"
+    },
+    {
+        "Prob (\u2030)": 12,
+        "Description": "orange gem",
+        "Minimum level": 1,
+        "Material": "gemstone",
+        "Hardness": "soft",
+        "Cost": 200,
+        "Weight": 1,
+        "Name": "agate stone"
+    },
+    {
+        "Prob (\u2030)": 77,
+        "Description": "white gem",
+        "Minimum level": 1,
+        "Material": "glass",
+        "Hardness": "soft",
+        "Cost": 0,
+        "Weight": 1,
+        "Name": "worthless piece of white glass"
+    },
+    {
+        "Prob (\u2030)": 77,
+        "Description": "blue gem",
+        "Minimum level": 1,
+        "Material": "glass",
+        "Hardness": "soft",
+        "Cost": 0,
+        "Weight": 1,
+        "Name": "worthless piece of blue glass"
+    },
+    {
+        "Prob (\u2030)": 77,
+        "Description": "red gem",
+        "Minimum level": 1,
+        "Material": "glass",
+        "Hardness": "soft",
+        "Cost": 0,
+        "Weight": 1,
+        "Name": "worthless piece of red glass"
+    },
+    {
+        "Prob (\u2030)": 77,
+        "Description": "yellowish brown gem",
+        "Minimum level": 1,
+        "Material": "glass",
+        "Hardness": "soft",
+        "Cost": 0,
+        "Weight": 1,
+        "Name": "worthless piece of yellowish brown glass"
+    },
+    {
+        "Prob (\u2030)": 76,
+        "Description": "orange gem",
+        "Minimum level": 1,
+        "Material": "glass",
+        "Hardness": "soft",
+        "Cost": 0,
+        "Weight": 1,
+        "Name": "worthless piece of orange glass"
+    },
+    {
+        "Prob (\u2030)": 77,
+        "Description": "yellow gem",
+        "Minimum level": 1,
+        "Material": "glass",
+        "Hardness": "soft",
+        "Cost": 0,
+        "Weight": 1,
+        "Name": "worthless piece of yellow glass"
+    },
+    {
+        "Prob (\u2030)": 76,
+        "Description": "black gem",
+        "Minimum level": 1,
+        "Material": "glass",
+        "Hardness": "soft",
+        "Cost": 0,
+        "Weight": 1,
+        "Name": "worthless piece of black glass"
+    },
+    {
+        "Prob (\u2030)": 77,
+        "Description": "green gem",
+        "Minimum level": 1,
+        "Material": "glass",
+        "Hardness": "soft",
+        "Cost": 0,
+        "Weight": 1,
+        "Name": "worthless piece of green glass"
+    },
+    {
+        "Prob (\u2030)": 77,
+        "Description": "violet gem",
+        "Minimum level": 1,
+        "Material": "glass",
+        "Hardness": "soft",
+        "Cost": 0,
+        "Weight": 1,
+        "Name": "worthless piece of violet glass"
+    },
+    {
+        "Prob (\u2030)": 10,
+        "Description": "gray stone",
+        "Minimum level": 1,
+        "Material": "mineral",
+        "Hardness": "soft",
+        "Cost": 60,
+        "Weight": 10,
+        "Name": "luckstone"
+    },
+    {
+        "Prob (\u2030)": 10,
+        "Description": "gray stone",
+        "Minimum level": 1,
+        "Material": "mineral",
+        "Hardness": "soft",
+        "Cost": 1,
+        "Weight": 500,
+        "Name": "loadstone"
+    },
+    {
+        "Prob (\u2030)": 8,
+        "Description": "gray stone",
+        "Minimum level": 1,
+        "Material": "mineral",
+        "Hardness": "soft",
+        "Cost": 45,
+        "Weight": 10,
+        "Name": "touchstone"
+    },
+    {
+        "Prob (\u2030)": 10,
+        "Description": "gray stone",
+        "Minimum level": 1,
+        "Material": "mineral",
+        "Hardness": "soft",
+        "Cost": 1,
+        "Weight": 10,
+        "Name": "flint stone"
+    },
+    {
+        "Prob (\u2030)": 100,
+        "Description": "rock",
+        "Minimum level": 1,
+        "Material": "mineral",
+        "Hardness": "soft",
+        "Cost": 0,
+        "Weight": 10,
+        "Name": "rock"
+    }
+]

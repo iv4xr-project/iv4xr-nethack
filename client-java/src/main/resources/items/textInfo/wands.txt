@@ -1,0 +1,25 @@
+Wand	Cost	Starting charges	Prob	Type
+light	100	11–15	9.5%	non-directional
+nothing	100	varies	2.5%	varies
+digging	150	4–8	5.5%	ray
+enlightenment	150	11–15	1.5%	non-directional
+locking	150	4–8	2.5%	beam
+magic missile	150	4–8	5%	ray
+make invisible	150	4–8	4.5%	beam
+opening	150	4–8	2.5%	beam
+probing	150	4–8	3%	beam
+secret door detection	150	11–15	5%	non-directional
+slow monster	150	4–8	5%	beam
+speed monster	150	4–8	5%	beam
+striking	150	4–8	7.5%	beam
+undead turning	150	4–8	5%	beam
+cold	175	4–8	4%	ray
+fire	175	4–8	4%	ray
+lightning	175	4–8	4%	ray
+sleep	175	4–8	5%	ray
+cancellation	200	4–8	4.5%	beam
+create monster	200	11–15	4.5%	non-directional
+polymorph	200	4–8	4.5%	beam
+teleportation	200	4–8	4.5%	beam
+death	500	4–8	.5%	ray
+wishing	500	1–3	.5%	non-directional

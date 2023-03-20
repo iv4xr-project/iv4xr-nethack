@@ -1,0 +1,198 @@
+[
+    {
+        "Relative probability": 6.9,
+        "Cost": 0,
+        "Appearance": "clear",
+        "Weight": 20,
+        "Name": "water (uncursed)"
+    },
+    {
+        "Relative probability": 4.2,
+        "Cost": 50,
+        "Appearance": "random",
+        "Weight": 20,
+        "Name": "booze"
+    },
+    {
+        "Relative probability": 4.2,
+        "Cost": 50,
+        "Appearance": "random",
+        "Weight": 20,
+        "Name": "fruit juice"
+    },
+    {
+        "Relative probability": 4.2,
+        "Cost": 50,
+        "Appearance": "random",
+        "Weight": 20,
+        "Name": "see invisible"
+    },
+    {
+        "Relative probability": 4.2,
+        "Cost": 50,
+        "Appearance": "random",
+        "Weight": 20,
+        "Name": "sickness"
+    },
+    {
+        "Relative probability": 4.2,
+        "Cost": 100,
+        "Appearance": "random",
+        "Weight": 20,
+        "Name": "confusion"
+    },
+    {
+        "Relative probability": 4.7,
+        "Cost": 100,
+        "Appearance": "random",
+        "Weight": 20,
+        "Name": "extra healing"
+    },
+    {
+        "Relative probability": 4,
+        "Cost": 100,
+        "Appearance": "random",
+        "Weight": 20,
+        "Name": "hallucination"
+    },
+    {
+        "Relative probability": 5.7,
+        "Cost": 100,
+        "Appearance": "random",
+        "Weight": 20,
+        "Name": "healing"
+    },
+    {
+        "Relative probability": 1.15,
+        "Cost": 100,
+        "Appearance": "clear",
+        "Weight": 20,
+        "Name": "holy water"
+    },
+    {
+        "Relative probability": 1.15,
+        "Cost": 100,
+        "Appearance": "clear",
+        "Weight": 20,
+        "Name": "unholy water"
+    },
+    {
+        "Relative probability": 4,
+        "Cost": 100,
+        "Appearance": "random",
+        "Weight": 20,
+        "Name": "restore ability"
+    },
+    {
+        "Relative probability": 4.2,
+        "Cost": 100,
+        "Appearance": "random",
+        "Weight": 20,
+        "Name": "sleeping"
+    },
+    {
+        "Relative probability": 4,
+        "Cost": 150,
+        "Appearance": "random",
+        "Weight": 20,
+        "Name": "blindness"
+    },
+    {
+        "Relative probability": 4.2,
+        "Cost": 150,
+        "Appearance": "random",
+        "Weight": 20,
+        "Name": "gain energy"
+    },
+    {
+        "Relative probability": 4,
+        "Cost": 150,
+        "Appearance": "random",
+        "Weight": 20,
+        "Name": "invisibility"
+    },
+    {
+        "Relative probability": 4,
+        "Cost": 150,
+        "Appearance": "random",
+        "Weight": 20,
+        "Name": "monster detection"
+    },
+    {
+        "Relative probability": 4.2,
+        "Cost": 150,
+        "Appearance": "random",
+        "Weight": 20,
+        "Name": "object detection"
+    },
+    {
+        "Relative probability": 2,
+        "Cost": 200,
+        "Appearance": "random",
+        "Weight": 20,
+        "Name": "enlightenment"
+    },
+    {
+        "Relative probability": 1,
+        "Cost": 200,
+        "Appearance": "random",
+        "Weight": 20,
+        "Name": "full healing"
+    },
+    {
+        "Relative probability": 4.2,
+        "Cost": 200,
+        "Appearance": "random",
+        "Weight": 20,
+        "Name": "levitation"
+    },
+    {
+        "Relative probability": 1,
+        "Cost": 200,
+        "Appearance": "random",
+        "Weight": 20,
+        "Name": "polymorph"
+    },
+    {
+        "Relative probability": 4.2,
+        "Cost": 200,
+        "Appearance": "random",
+        "Weight": 20,
+        "Name": "speed"
+    },
+    {
+        "Relative probability": 1,
+        "Cost": 250,
+        "Appearance": "random",
+        "Weight": 20,
+        "Name": "acid"
+    },
+    {
+        "Relative probability": 3,
+        "Cost": 250,
+        "Appearance": "random",
+        "Weight": 20,
+        "Name": "oil"
+    },
+    {
+        "Relative probability": 4.2,
+        "Cost": 300,
+        "Appearance": "random",
+        "Weight": 20,
+        "Name": "gain ability"
+    },
+    {
+        "Relative probability": 2,
+        "Cost": 300,
+        "Appearance": "random",
+        "Weight": 20,
+        "Name": "gain level"
+    },
+    {
+        "Relative probability": 4.2,
+        "Cost": 300,
+        "Appearance": "random",
+        "Weight": 20,
+        "Name": "paralysis"
+    }
+]

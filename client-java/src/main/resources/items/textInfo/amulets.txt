@@ -1,0 +1,13 @@
+Amulet	Relative probability	When eaten	Notes	produces the line...	Other sources
+change	13.0%	Changes gender	90.5% generated cursed	"You are telepathic."	Helm of telepathy, some quest artifacts, intrinsic
+ESP	17.5%	Telepathy		"Your life will be saved."	none
+life saving	7.5%	(no effect)		"You can survive without air."	none
+magical breathing	6.5%	Breathlessness		"You have reflection."	silver dragon scale mail, shield of reflection, wielded Longbow of Diana or wielded Dragonbane (3.6.1)
+reflection	7.5%	(no effect)		"You fall asleep."	none
+restful sleep	13.5%	Restful sleep	90.5% generated cursed	"You can not change from your current form."	none
+strangulation	13.5%	Instantly choke	90.5% generated cursed	"You are poison resistant."	green dragon scale mail, ring of poison resistance, alchemy smock, intrinsic
+unchanging	4.5%	Revert to original form
+versus poison	16.5%	Poison resistance
+cheap plastic imitation of the Amulet of Yendor	0	(inedible)
+Amulet of Yendor	0	(inedible)	Cannot be put in a container
+The Eye of the Aethiopica	0	Telepathy	Wizard quest artifact

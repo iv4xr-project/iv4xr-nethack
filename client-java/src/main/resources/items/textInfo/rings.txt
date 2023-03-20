@@ -1,0 +1,30 @@
+Ring	Cost	Extrinsic granted	Notes
+meat ring	5	None	symbolized by %; never randomly generated
+ring of adornment	100	+n charisma	chargeable
+ring of hunger	100	hunger	90% generated cursed
+ring of protection	100	+n protection	chargeable
+ring of protection from shape changers	100	protection from shape changers
+ring of stealth	100	stealth
+ring of sustain ability	100	sustain ability
+ring of warning	100	warning
+ring of aggravate monster	150	aggravate monster	90% generated cursed
+ring of cold resistance	150	cold resistance
+ring of gain constitution	150	+n constitution	chargeable
+ring of gain strength	150	+n strength	chargeable
+ring of increase accuracy	150	+n to-hit bonus	chargeable
+ring of increase damage	150	+n damage bonus	chargeable
+ring of invisibility	150	invisibility	cursed if from a Nazgul
+ring of poison resistance	150	poison resistance
+ring of see invisible	150	see invisible
+ring of shock resistance	150	shock resistance
+ring of fire resistance	200	fire resistance
+ring of free action	200	free action
+ring of levitation	200	levitation
+ring of regeneration	200	regeneration
+ring of searching	200	searching
+ring of slow digestion	200	slow digestion
+ring of teleportation	200	teleportitis	90% generated cursed
+ring of conflict	300	conflict
+ring of polymorph	300	polymorphitis	90% generated cursed
+ring of polymorph control	300	polymorph control
+ring of teleport control	300	teleport control

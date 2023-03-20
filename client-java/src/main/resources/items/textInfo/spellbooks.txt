@@ -1,0 +1,48 @@
+Spellbook	Spell level	Direction	Relative probability	Probability conditional on price	Actions to read	Skill changes
+Attack
+Spellbook of force bolt	1	beam	3.56%	12.2%	4
+Spellbook of drain life	2	beam	1.01%	4.3%	4
+Spellbook of magic missile	2	ray	4.58%	19.1%	4
+Spellbook of cone of cold	4	ray (distant if skilled)	1.01%	8.3%	23	S
+Spellbook of fireball	4	ray (distant if skilled)	2.03%	16.7%	14	S
+Spellbook of finger of death	7	ray	0.5%	25.0%	82
+Clerical
+Spellbook of protection	1	non-directional	1.83%	6.3%	5	E
+Spellbook of create monster	2	non-directional	3.56%	14.9%	5
+Spellbook of remove curse	3	non-directional	2.54%	10.8%	12	S
+Spellbook of create familiar	6	non-directional	1.01%	19.6%	44
+Spellbook of turn undead	6	beam	1.62%	31.4%	50
+Divination
+Spellbook of detect monsters	1	non-directional	4.37%	15.0%	3	S
+Spellbook of light	1	non-directional	4.58%	15.7%	3
+Spellbook of detect food	2	non-directional	3.05%	12.8%	5	S
+Spellbook of clairvoyance	3	non-directional	1.52%	16.5%	8	S
+Spellbook of detect unseen	3	non-directional	2.03%	8.6%	10
+Spellbook of identify	3	non-directional	2.03%	8.6%	14	S
+Spellbook of detect treasure	4	non-directional	2.03%	16.7%	17	S
+Spellbook of magic mapping	5	non-directional	1.83%	47.4%	37
+Enchantment
+Spellbook of sleep	1	ray	5.09%	17.5%	3
+Spellbook of confuse monster	2	non-directional	3.05%	12.8%	4	S
+Spellbook of slow monster	2	beam	3.05%	12.8%	4
+Spellbook of cause fear	3	non-directional	2.54%	10.8%	8
+Spellbook of charm monster	3	non-directional	2.03%	8.6%	8
+Escape
+Spellbook of jumping	1	non-directional	2.03%	7.0%	5	BSE
+Spellbook of haste self	3	non-directional	3.36%	14.2%	10	S
+Spellbook of invisibility	4	non-directional	2.54%	20.8%	17
+Spellbook of levitation	4	non-directional	2.03%	16.7%	14	S
+Spellbook of teleport away	6	beam	1.52%	29.4%	38
+Healing
+Spellbook of healing	1	beam	4.07%	14.0%	4	S
+Spellbook of cure blindness	2	non-directional	2.54%	10.6%	4
+Spellbook of cure sickness	3	non-directional	3.25%	13.8%	8
+Spellbook of extra healing	3	beam	2.74%	11.6%	12
+Spellbook of stone to flesh	3	beam	1.52%	6.5%	4
+Spellbook of restore ability	4	non-directional	2.54%	20.8%	17	S
+Matter
+Spellbook of knock	1	beam	3.56%	12.2%	3
+Spellbook of wizard lock	2	beam	3.05%	12.8%	5
+Spellbook of dig	5	ray	2.03%	52.6%	32
+Spellbook of polymorph	6	beam	1.01%	19.6%	50
+Spellbook of cancellation	7	beam	1.52%	75.0%	66

@@ -1,0 +1,377 @@
+[
+    {
+        "Relative probability": 3.56,
+        "Category": "Attack",
+        "Probability conditional on price": 12.2,
+        "Direction": "beam",
+        "Name": "Spellbook of force bolt",
+        "Spell level": 1,
+        "Actions to read": 4
+    },
+    {
+        "Relative probability": 1.01,
+        "Category": "Attack",
+        "Probability conditional on price": 4.3,
+        "Direction": "beam",
+        "Name": "Spellbook of drain life",
+        "Spell level": 2,
+        "Actions to read": 4
+    },
+    {
+        "Relative probability": 4.58,
+        "Category": "Attack",
+        "Probability conditional on price": 19.1,
+        "Direction": "ray",
+        "Name": "Spellbook of magic missile",
+        "Spell level": 2,
+        "Actions to read": 4
+    },
+    {
+        "Skill changes": "S",
+        "Relative probability": 1.01,
+        "Category": "Attack",
+        "Probability conditional on price": 8.3,
+        "Direction": "ray (distant if skilled)",
+        "Name": "Spellbook of cone of cold",
+        "Spell level": 4,
+        "Actions to read": 23
+    },
+    {
+        "Skill changes": "S",
+        "Relative probability": 2.03,
+        "Category": "Attack",
+        "Probability conditional on price": 16.7,
+        "Direction": "ray (distant if skilled)",
+        "Name": "Spellbook of fireball",
+        "Spell level": 4,
+        "Actions to read": 14
+    },
+    {
+        "Relative probability": 0.5,
+        "Category": "Attack",
+        "Probability conditional on price": 25,
+        "Direction": "ray",
+        "Name": "Spellbook of finger of death",
+        "Spell level": 7,
+        "Actions to read": 82
+    },
+    {
+        "Skill changes": "E",
+        "Relative probability": 1.83,
+        "Category": "Clerical",
+        "Probability conditional on price": 6.3,
+        "Direction": "non-directional",
+        "Name": "Spellbook of protection",
+        "Spell level": 1,
+        "Actions to read": 5
+    },
+    {
+        "Relative probability": 3.56,
+        "Category": "Clerical",
+        "Probability conditional on price": 14.9,
+        "Direction": "non-directional",
+        "Name": "Spellbook of create monster",
+        "Spell level": 2,
+        "Actions to read": 5
+    },
+    {
+        "Skill changes": "S",
+        "Relative probability": 2.54,
+        "Category": "Clerical",
+        "Probability conditional on price": 10.8,
+        "Direction": "non-directional",
+        "Name": "Spellbook of remove curse",
+        "Spell level": 3,
+        "Actions to read": 12
+    },
+    {
+        "Relative probability": 1.01,
+        "Category": "Clerical",
+        "Probability conditional on price": 19.6,
+        "Direction": "non-directional",
+        "Name": "Spellbook of create familiar",
+        "Spell level": 6,
+        "Actions to read": 44
+    },
+    {
+        "Relative probability": 1.62,
+        "Category": "Clerical",
+        "Probability conditional on price": 31.4,
+        "Direction": "beam",
+        "Name": "Spellbook of turn undead",
+        "Spell level": 6,
+        "Actions to read": 50
+    },
+    {
+        "Skill changes": "S",
+        "Relative probability": 4.37,
+        "Category": "Divination",
+        "Probability conditional on price": 15,
+        "Direction": "non-directional",
+        "Name": "Spellbook of detect monsters",
+        "Spell level": 1,
+        "Actions to read": 3
+    },
+    {
+        "Relative probability": 4.58,
+        "Category": "Divination",
+        "Probability conditional on price": 15.7,
+        "Direction": "non-directional",
+        "Name": "Spellbook of light",
+        "Spell level": 1,
+        "Actions to read": 3
+    },
+    {
+        "Skill changes": "S",
+        "Relative probability": 3.05,
+        "Category": "Divination",
+        "Probability conditional on price": 12.8,
+        "Direction": "non-directional",
+        "Name": "Spellbook of detect food",
+        "Spell level": 2,
+        "Actions to read": 5
+    },
+    {
+        "Skill changes": "S",
+        "Relative probability": 1.52,
+        "Category": "Divination",
+        "Probability conditional on price": 16.5,
+        "Direction": "non-directional",
+        "Name": "Spellbook of clairvoyance",
+        "Spell level": 3,
+        "Actions to read": 8
+    },
+    {
+        "Relative probability": 2.03,
+        "Category": "Divination",
+        "Probability conditional on price": 8.6,
+        "Direction": "non-directional",
+        "Name": "Spellbook of detect unseen",
+        "Spell level": 3,
+        "Actions to read": 10
+    },
+    {
+        "Skill changes": "S",
+        "Relative probability": 2.03,
+        "Category": "Divination",
+        "Probability conditional on price": 8.6,
+        "Direction": "non-directional",
+        "Name": "Spellbook of identify",
+        "Spell level": 3,
+        "Actions to read": 14
+    },
+    {
+        "Skill changes": "S",
+        "Relative probability": 2.03,
+        "Category": "Divination",
+        "Probability conditional on price": 16.7,
+        "Direction": "non-directional",
+        "Name": "Spellbook of detect treasure",
+        "Spell level": 4,
+        "Actions to read": 17
+    },
+    {
+        "Relative probability": 1.83,
+        "Category": "Divination",
+        "Probability conditional on price": 47.4,
+        "Direction": "non-directional",
+        "Name": "Spellbook of magic mapping",
+        "Spell level": 5,
+        "Actions to read": 37
+    },
+    {
+        "Relative probability": 5.09,
+        "Category": "Enchantment",
+        "Probability conditional on price": 17.5,
+        "Direction": "ray",
+        "Name": "Spellbook of sleep",
+        "Spell level": 1,
+        "Actions to read": 3
+    },
+    {
+        "Skill changes": "S",
+        "Relative probability": 3.05,
+        "Category": "Enchantment",
+        "Probability conditional on price": 12.8,
+        "Direction": "non-directional",
+        "Name": "Spellbook of confuse monster",
+        "Spell level": 2,
+        "Actions to read": 4
+    },
+    {
+        "Relative probability": 3.05,
+        "Category": "Enchantment",
+        "Probability conditional on price": 12.8,
+        "Direction": "beam",
+        "Name": "Spellbook of slow monster",
+        "Spell level": 2,
+        "Actions to read": 4
+    },
+    {
+        "Relative probability": 2.54,
+        "Category": "Enchantment",
+        "Probability conditional on price": 10.8,
+        "Direction": "non-directional",
+        "Name": "Spellbook of cause fear",
+        "Spell level": 3,
+        "Actions to read": 8
+    },
+    {
+        "Relative probability": 2.03,
+        "Category": "Enchantment",
+        "Probability conditional on price": 8.6,
+        "Direction": "non-directional",
+        "Name": "Spellbook of charm monster",
+        "Spell level": 3,
+        "Actions to read": 8
+    },
+    {
+        "Skill changes": "BSE",
+        "Relative probability": 2.03,
+        "Category": "Escape",
+        "Probability conditional on price": 7,
+        "Direction": "non-directional",
+        "Name": "Spellbook of jumping",
+        "Spell level": 1,
+        "Actions to read": 5
+    },
+    {
+        "Skill changes": "S",
+        "Relative probability": 3.36,
+        "Category": "Escape",
+        "Probability conditional on price": 14.2,
+        "Direction": "non-directional",
+        "Name": "Spellbook of haste self",
+        "Spell level": 3,
+        "Actions to read": 10
+    },
+    {
+        "Relative probability": 2.54,
+        "Category": "Escape",
+        "Probability conditional on price": 20.8,
+        "Direction": "non-directional",
+        "Name": "Spellbook of invisibility",
+        "Spell level": 4,
+        "Actions to read": 17
+    },
+    {
+        "Skill changes": "S",
+        "Relative probability": 2.03,
+        "Category": "Escape",
+        "Probability conditional on price": 16.7,
+        "Direction": "non-directional",
+        "Name": "Spellbook of levitation",
+        "Spell level": 4,
+        "Actions to read": 14
+    },
+    {
+        "Relative probability": 1.52,
+        "Category": "Escape",
+        "Probability conditional on price": 29.4,
+        "Direction": "beam",
+        "Name": "Spellbook of teleport away",
+        "Spell level": 6,
+        "Actions to read": 38
+    },
+    {
+        "Skill changes": "S",
+        "Relative probability": 4.07,
+        "Category": "Healing",
+        "Probability conditional on price": 14,
+        "Direction": "beam",
+        "Name": "Spellbook of healing",
+        "Spell level": 1,
+        "Actions to read": 4
+    },
+    {
+        "Relative probability": 2.54,
+        "Category": "Healing",
+        "Probability conditional on price": 10.6,
+        "Direction": "non-directional",
+        "Name": "Spellbook of cure blindness",
+        "Spell level": 2,
+        "Actions to read": 4
+    },
+    {
+        "Relative probability": 3.25,
+        "Category": "Healing",
+        "Probability conditional on price": 13.8,
+        "Direction": "non-directional",
+        "Name": "Spellbook of cure sickness",
+        "Spell level": 3,
+        "Actions to read": 8
+    },
+    {
+        "Relative probability": 2.74,
+        "Category": "Healing",
+        "Probability conditional on price": 11.6,
+        "Direction": "beam",
+        "Name": "Spellbook of extra healing",
+        "Spell level": 3,
+        "Actions to read": 12
+    },
+    {
+        "Relative probability": 1.52,
+        "Category": "Healing",
+        "Probability conditional on price": 6.5,
+        "Direction": "beam",
+        "Name": "Spellbook of stone to flesh",
+        "Spell level": 3,
+        "Actions to read": 4
+    },
+    {
+        "Skill changes": "S",
+        "Relative probability": 2.54,
+        "Category": "Healing",
+        "Probability conditional on price": 20.8,
+        "Direction": "non-directional",
+        "Name": "Spellbook of restore ability",
+        "Spell level": 4,
+        "Actions to read": 17
+    },
+    {
+        "Relative probability": 3.56,
+        "Category": "Matter",
+        "Probability conditional on price": 12.2,
+        "Direction": "beam",
+        "Name": "Spellbook of knock",
+        "Spell level": 1,
+        "Actions to read": 3
+    },
+    {
+        "Relative probability": 3.05,
+        "Category": "Matter",
+        "Probability conditional on price": 12.8,
+        "Direction": "beam",
+        "Name": "Spellbook of wizard lock",
+        "Spell level": 2,
+        "Actions to read": 5
+    },
+    {
+        "Relative probability": 2.03,
+        "Category": "Matter",
+        "Probability conditional on price": 52.6,
+        "Direction": "ray",
+        "Name": "Spellbook of dig",
+        "Spell level": 5,
+        "Actions to read": 32
+    },
+    {
+        "Relative probability": 1.01,
+        "Category": "Matter",
+        "Probability conditional on price": 19.6,
+        "Direction": "beam",
+        "Name": "Spellbook of polymorph",
+        "Spell level": 6,
+        "Actions to read": 50
+    },
+    {
+        "Relative probability": 1.52,
+        "Category": "Matter",
+        "Probability conditional on price": 75,
+        "Direction": "beam",
+        "Name": "Spellbook of cancellation",
+        "Spell level": 7,
+        "Actions to read": 66
+    }
+]
