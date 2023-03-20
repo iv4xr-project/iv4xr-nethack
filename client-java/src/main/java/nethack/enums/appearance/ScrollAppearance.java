@@ -1,0 +1,62 @@
+package nethack.enums.appearance;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public enum ScrollAppearance {
+  ZELGO_MER("ZELGO MER"),
+  JUYED_AWK_YACC("JUYED AWK YACC"),
+  NR_9("NR 9"),
+  XIXAXA_XOXAXA_XUXAXA("XIXAXA XOXAXA XUXAXA"),
+  PRATYAVAYAH("PRATYAVAYAH"),
+  DAIYEN_FOOELS("DAIYEN FOOELS"),
+  LEP_GEX_VEN_ZEA("LEP GEX VEN ZEA"),
+  PRIRUTSENIE("PRIRUTSENIE"),
+  ELBIB_YLOH("ELBIB YLOH"),
+  VERR_YED_HORRE("VERR YED HORRE"),
+  VENZAR_BORGAVVE("VENZAR BORGAVVE"),
+  THARR("THARR"),
+  YUM_YUM("YUM YUM"),
+  KERNOD_WEL("KERNOD WEL"),
+  ELAM_EBOW("ELAM EBOW"),
+  DUAM_XNAHT("DUAM XNAHT"),
+  ANDOVA_BEGARIN("ANDOVA BEGARIN"),
+  KIRJE("KIRJE"),
+  VE_FORBRYDERNE("VE FORBRYDERNE"),
+  HACKEM_MUCHE("HACKEM MUCHE"),
+  VELOX_NEB("VELOX NEB"),
+  FOOBIE_BLETCH("FOOBIE BLETCH"),
+  TEMOV("TEMOV"),
+  GARVEN_DEH("GARVEN DEH"),
+  READ_ME("READ ME"),
+  ETAOIN_SHRDLU("ETAOIN SHRDLU"),
+  LOREM_IPSUM("LOREM IPSUM"),
+  FNORD("FNORD"),
+  KO_BATE("KO BATE"),
+  ABRA_KA_DABRA("ABRA KA DABRA"),
+  ASHPD_SODALG("ASHPD SODALG"),
+  ZLORFIK("ZLORFIK"),
+  GNIK_SISI_VLE("GNIK SISI VLE"),
+  HAPAX_LEGOMENON("HAPAX LEGOMENON"),
+  EIRIS_SAZUN_IDISI("EIRIS SAZUN IDISI"),
+  PHOL_ENDE_WODAN("PHOL ENDE WODAN"),
+  GHOTI("GHOTI"),
+  MAPIRO_MAHAMA_DIROMAT("MAPIRO MAHAMA DIROMAT"),
+  VAS_CORP_BET_MANI("VAS CORP BET MANI"),
+  XOR_OTA("XOR OTA"),
+  STRC_PRST_SKRZ_KRK("STRC PRST SKRZ KRK");
+
+  private final String value;
+
+  private ScrollAppearance(String appearanceString) {
+    value = appearanceString;
+  }
+
+  public static final Map<String, ScrollAppearance> mapping = new HashMap<>();
+
+  static {
+    for (ScrollAppearance sa : values()) {
+      mapping.put(sa.value, sa);
+    }
+  }
+}

@@ -74,8 +74,6 @@ def write_obs(sock, env, obs):
     sock.write(OBS_BYTE)
     sock.write(struct.pack('>27i', *obs['blstats']))
     write_str(sock, msg)
-    # sock.write(struct.pack('>256B', *obs['message']))
-
     write_map(sock, zip(obs['chars'].flatten(), obs['colors'].flatten(), obs['glyphs'].flatten(), monster_descriptions.flatten()))
 
     nr_items = np.trim_zeros(obs['inv_letters']).shape[0]
