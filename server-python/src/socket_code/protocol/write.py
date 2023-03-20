@@ -57,8 +57,9 @@ def write_null_byte(sock):
     sock.write(struct.pack('>B', 0))
     sock.flush()
 
+
 def write_str(sock, string: str):
-    sock.write(to_2byte(len(string)))
+    sock.write(to_2byte(np.array([len(string)])))
     chars = np.array(list(map(lambda c: ord(c), string)))
     sock.write(to_2byte(chars))
 
@@ -68,16 +69,17 @@ def write_obs(sock, env, obs):
     Encode and send an observation.
     """
     obs, monster_descriptions = monster.id_monsters(env, obs)
-    message.read_obs_msg(obs)
+    obs, msg = message.concat_all_messages(env, obs)
 
     sock.write(OBS_BYTE)
     sock.write(struct.pack('>27i', *obs['blstats']))
-    sock.write(struct.pack('>256B', *obs['message']))
+    write_str(sock, msg)
+    # sock.write(struct.pack('>256B', *obs['message']))
 
     write_map(sock, zip(obs['chars'].flatten(), obs['colors'].flatten(), obs['glyphs'].flatten(), monster_descriptions.flatten()))
 
     nr_items = np.trim_zeros(obs['inv_letters']).shape[0]
-    write_inv(sock, zip(obs['inv_letters'], obs['inv_oclasses'], obs['inv_strs']), nr_items)
+    write_inv(sock, zip(obs['inv_letters'], obs['inv_oclasses'], obs['inv_glyphs'], obs['inv_strs']), nr_items)
 
 
 def write_step(sock, done, info):
@@ -102,10 +104,10 @@ def write_inv(sock, inv_items, nr_items):
     """
     sock.write(util.to_byte(nr_items))
     i = 0
-    for letter, oclass, strs in inv_items:
+    for letter, oclass, glyph, strs in inv_items:
         if i == nr_items:
             return
-        sock.write(struct.pack(">HB80B", letter, oclass, *strs))
+        sock.write(struct.pack(">HBH80B", letter, oclass, glyph, *strs))
         i += 1
 
 
@@ -116,7 +118,6 @@ def write_map(sock, map_entities):
     sent_items = 0
     for char, color, glyph, monster_description in map_entities:
         sock.write(struct.pack(">BBHH", char, color, glyph, monster_description))
-        # sock.write(struct.pack(">BBH", char, color, glyph))
         sent_items += 1
 
         if sent_items % 79 == 0:

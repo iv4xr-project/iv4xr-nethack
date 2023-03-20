@@ -3,7 +3,6 @@ package connection.messagedecoder;
 import connection.ObservationMessage;
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import nethack.object.*;
 import nl.uu.cs.aplib.utils.Pair;
 import util.Loggers;
@@ -25,9 +24,7 @@ public class ObservationMessageDecoder extends Decoder {
       observationMessage.player = pair.snd;
       Loggers.ProfilerLogger.trace("READ STATS TOOK: %fs", stopwatch.split());
 
-      byte[] chars = input.readNBytes(256);
-      observationMessage.message = new String(chars, StandardCharsets.UTF_8);
-      observationMessage.message = observationMessage.message.replaceAll("\0", "");
+      observationMessage.message = readString(input);
       Loggers.ProfilerLogger.trace("READ MESSAGE TOOK: %fs", stopwatch.split());
 
       long total = 0;
