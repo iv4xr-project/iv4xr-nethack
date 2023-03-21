@@ -167,8 +167,7 @@ public class NetHack {
     if (commands.isEmpty()) {
       return null;
     }
-    Loggers.ReplayLogger.info(
-        "%s:%s", gameState.stats == null ? "null" : gameState.stats.turn, commands);
+    Loggers.ReplayLogger.info("%s:%s", gameState.stats.turn, commands);
     Loggers.NetHackLogger.info(commands);
     int n = commands.size();
     assert n <= 256 : "No more than 256 commands can be chained at once";
@@ -177,12 +176,15 @@ public class NetHack {
     msg[1] = (byte) n;
     for (int i = 0; i < n; i++) {
       Command command = commands.get(i);
+      assert command != null : "Command cannot be null";
 
       // Quaff and read doesn't work in NLE, use direct command instead
       if (command.commandEnum == CommandEnum.COMMAND_QUAFF) {
         command = Command.fromStroke("-q");
       } else if (command.commandEnum == CommandEnum.COMMAND_READ) {
         command = Command.fromStroke("-r");
+      } else if (command.commandEnum == CommandEnum.COMMAND_WIELD) {
+        command = Command.fromStroke("-w");
       }
 
       if (command.commandEnum == CommandEnum.ADDITIONAL_ASCII) {
@@ -224,14 +226,13 @@ public class NetHack {
     gameState.message = stepState.message;
     // Remember last position of player
     if (gameState.player != null) {
-      stepState.player.previousPosition = gameState.player.position;
-      stepState.player.previousPosition2D = gameState.player.position2D;
+      stepState.player.previousLocation = gameState.player.location;
       stepState.player.lastPrayerTurn = gameState.player.lastPrayerTurn;
     }
     gameState.player = stepState.player;
-    assert gameState.player.position.z == 0
+    assert gameState.player.location.lvl == 0
         : "Before this line the levelNr is not known, assert is not already set";
-    gameState.player.position.z = gameState.getLevelNr();
+    gameState.player.location.lvl = gameState.getLevelNr();
     gameState.done = stepState.done;
     gameState.info = stepState.info;
   }

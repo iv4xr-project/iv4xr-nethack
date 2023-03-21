@@ -1,6 +1,7 @@
 package connection;
 
 import nethack.object.*;
+import nethack.object.items.Item;
 
 public class ObservationMessage {
   public Stats stats;

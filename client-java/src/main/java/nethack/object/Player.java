@@ -1,20 +1,17 @@
 package nethack.object;
 
-import eu.iv4xr.framework.spatial.Vec3;
 import java.util.Optional;
 import nethack.enums.Alignment;
 import nethack.enums.Encumbrance;
 import nethack.enums.HungerState;
 import util.ColoredStringBuilder;
-import util.CustomVec2D;
+import util.CustomVec3D;
 
 public class Player {
   public static final String ID = "player";
   public Inventory inventory;
-  public Vec3 previousPosition;
-  public CustomVec2D previousPosition2D;
-  public Vec3 position;
-  public CustomVec2D position2D;
+  public CustomVec3D previousLocation;
+  public CustomVec3D location;
   public int strength;
   public int dexterity;
   public int constitution;
@@ -40,7 +37,7 @@ public class Player {
   public String verbose() {
     ColoredStringBuilder csb = new ColoredStringBuilder();
     csb.appendf("PlayerInfo:%n");
-    csb.appendf("Position:%s%n", position);
+    csb.appendf("Losition:%s%n", location);
     csb.appendf("Strength:%d%n", strength);
     csb.appendf("dexterity:%d%n", dexterity);
     csb.appendf("constitution:%d%n", constitution);

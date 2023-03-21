@@ -10,6 +10,7 @@ repos:
       - id: check-merge-conflict
       - id: check-xml
       - id: end-of-file-fixer
+        files: (?x).(hs|lhs|cs|pxd|py|py3|pyw|pyx|pyz|pyi|c|cc|cxx|cpp|c\+\+|hpp|h|h\+\+|hh|R|java)
       - id: trailing-whitespace
       - id: check-added-large-files
         exclude: client-java/src/main/resources/sounds/

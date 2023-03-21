@@ -1,14 +1,21 @@
 package util.JSONConverters;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.BufferedReader;
 import java.io.IOException;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ScrollConverter extends JSONConverter {
+  public String getFileName() {
+    return "scrolls";
+  }
+
   @Override
-  protected JSONArray convertUsingReader(BufferedReader br) throws IOException {
-    JSONArray jsonArray = new JSONArray();
+  protected List<ObjectNode> convertUsingReader(BufferedReader br, ObjectMapper mapper)
+      throws IOException {
+    List<ObjectNode> objectNodes = new ArrayList<>();
 
     // First line is the header
     String line = br.readLine();
@@ -16,21 +23,16 @@ public class ScrollConverter extends JSONConverter {
     // Process each line of the input file
     while ((line = br.readLine()) != null) {
       String[] fields = line.split("\t");
-      JSONObject jsonObject = new JSONObject();
-      jsonObject.put("Weight", 5);
-      jsonObject.put("Name", fields[0]);
-      jsonObject.put("Cost", Integer.parseInt(fields[1]));
-      jsonObject.put("Relative probability", Double.parseDouble(fields[2].replace("%", "")));
-      jsonObject.put("Ink", Integer.parseInt(fields[3]));
-      jsonObject.put("Appearance", fields[4]);
-      jsonArray.put(jsonObject);
+      ObjectNode objectNode = mapper.createObjectNode();
+      objectNode.put("Weight", 5);
+      objectNode.put("Name", fields[0]);
+      objectNode.put("Cost", Integer.parseInt(fields[1]));
+      objectNode.put("Relative probability", Double.parseDouble(fields[2].replace("%", "")));
+      objectNode.put("Ink", Integer.parseInt(fields[3]));
+      objectNode.put("Appearance", fields[4]);
+      objectNodes.add(objectNode);
     }
 
-    return jsonArray;
-  }
-
-  @Override
-  void convert() {
-    convertFile("scrolls.txt");
+    return objectNodes;
   }
 }

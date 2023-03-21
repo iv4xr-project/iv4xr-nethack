@@ -113,8 +113,12 @@ public class HierarchicalNavigation implements Navigatable<CustomVec3D>, XPathfi
 
   private Map<CustomVec2D, List<CustomVec2D>> pathsToStairs(
       CustomVec3D from, List<CustomVec2D> stairPositions, boolean reverse) {
-    GridSurface surface = areas.get(from.lvl);
     Map<CustomVec2D, List<CustomVec2D>> paths = new HashMap<>();
+    if (stairPositions == null) {
+      return paths;
+    }
+
+    GridSurface surface = areas.get(from.lvl);
     for (CustomVec2D targetPos : stairPositions) {
       List<CustomVec2D> path = surface.findPath(from.pos, targetPos);
       if (path == null) {

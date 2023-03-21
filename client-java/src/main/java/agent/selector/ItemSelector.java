@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import nethack.enums.ItemType;
-import nethack.object.Item;
+import nethack.object.items.Item;
 
 public class ItemSelector extends Selector<Item> {
   public static final ItemSelector inventoryFood =

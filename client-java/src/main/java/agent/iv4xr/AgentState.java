@@ -110,6 +110,11 @@ public class AgentState extends Iv4xrAgentState<Void> {
       return;
     }
 
+    // Previous tile was not a stair
+    if (!(hierarchicalNav.getTile(new CustomVec3D(previousState.position)) instanceof Stair)) {
+      return;
+    }
+
     CustomVec3D previousLocation = new CustomVec3D(previousState.position);
     Id<AbstractNode> previousNodeId =
         hierarchicalNav.hierarchicalGraph.addAbstractNode(previousLocation);

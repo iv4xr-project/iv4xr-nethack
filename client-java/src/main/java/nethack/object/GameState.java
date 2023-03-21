@@ -55,7 +55,7 @@ public class GameState {
     csb.append(getLevel()).newLine();
     csb.appendf(
         "@%s St:%d Dx:%d Co:%d In:%d Wi:%d Ch:%d %s S:%d%n",
-        player.position2D,
+        player.location,
         player.strength,
         player.dexterity,
         player.constitution,

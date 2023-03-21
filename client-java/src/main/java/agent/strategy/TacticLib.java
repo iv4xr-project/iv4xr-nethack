@@ -5,12 +5,12 @@ import static nl.uu.cs.aplib.AplibEDSL.*;
 import agent.iv4xr.AgentState;
 import agent.navigation.strategy.NavUtils;
 import agent.selector.EntitySelector;
-import agent.selector.ItemSelector;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 import nethack.object.Player;
+import nethack.object.items.FoodItem;
+import nethack.object.items.Item;
 import nl.uu.cs.aplib.mainConcepts.Tactic;
 import util.CustomVec3D;
 
@@ -89,7 +89,18 @@ public class TacticLib {
                   if (!player.hungerState.wantsFood()) {
                     return null;
                   }
-                  return ItemSelector.inventoryFood.apply(Arrays.asList(player.inventory.items), S);
+                  // Picks the food item with the lowest nutrition per weight
+                  List<Item> items =
+                      Arrays.stream(player.inventory.items)
+                          .filter(item -> item instanceof FoodItem)
+                          .sorted(
+                              Comparator.comparingDouble(
+                                  item -> ((FoodItem) item).food.nutritionPerWeight))
+                          .collect(Collectors.toList());
+                  if (items.isEmpty()) {
+                    return null;
+                  }
+                  return items.get(0);
                 })
             .lift());
   }

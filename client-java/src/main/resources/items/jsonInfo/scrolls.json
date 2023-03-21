@@ -1,186 +1,162 @@
-[
-    {
-        "Relative probability": 0,
-        "Ink": 2,
-        "Cost": 0,
-        "Appearance": "stamped",
-        "Weight": 5,
-        "Name": "mail"
-    },
-    {
-        "Relative probability": 18,
-        "Ink": 14,
-        "Cost": 20,
-        "Appearance": "random",
-        "Weight": 5,
-        "Name": "identify"
-    },
-    {
-        "Relative probability": 9,
-        "Ink": 8,
-        "Cost": 50,
-        "Appearance": "random",
-        "Weight": 5,
-        "Name": "light"
-    },
-    {
-        "Relative probability": 2.8,
-        "Ink": 0,
-        "Cost": 60,
-        "Appearance": "unlabeled",
-        "Weight": 5,
-        "Name": "blank paper2"
-    },
-    {
-        "Relative probability": 8,
-        "Ink": 16,
-        "Cost": 60,
-        "Appearance": "random",
-        "Weight": 5,
-        "Name": "enchant weapon"
-    },
-    {
-        "Relative probability": 6.3,
-        "Ink": 16,
-        "Cost": 80,
-        "Appearance": "random",
-        "Weight": 5,
-        "Name": "enchant armor"
-    },
-    {
-        "Relative probability": 6.5,
-        "Ink": 16,
-        "Cost": 80,
-        "Appearance": "random",
-        "Weight": 5,
-        "Name": "remove curse"
-    },
-    {
-        "Relative probability": 5.3,
-        "Ink": 12,
-        "Cost": 100,
-        "Appearance": "random",
-        "Weight": 5,
-        "Name": "confuse monster"
-    },
-    {
-        "Relative probability": 4.5,
-        "Ink": 10,
-        "Cost": 100,
-        "Appearance": "random",
-        "Weight": 5,
-        "Name": "destroy armor"
-    },
-    {
-        "Relative probability": 3,
-        "Ink": 8,
-        "Cost": 100,
-        "Appearance": "random",
-        "Weight": 5,
-        "Name": "fire"
-    },
-    {
-        "Relative probability": 2.5,
-        "Ink": 8,
-        "Cost": 100,
-        "Appearance": "random",
-        "Weight": 5,
-        "Name": "food detection"
-    },
-    {
-        "Relative probability": 3.3,
-        "Ink": 8,
-        "Cost": 100,
-        "Appearance": "random",
-        "Weight": 5,
-        "Name": "gold detection"
-    },
-    {
-        "Relative probability": 4.5,
-        "Ink": 8,
-        "Cost": 100,
-        "Appearance": "random",
-        "Weight": 5,
-        "Name": "magic mapping"
-    },
-    {
-        "Relative probability": 3.5,
-        "Ink": 20,
-        "Cost": 100,
-        "Appearance": "random",
-        "Weight": 5,
-        "Name": "scare monster"
-    },
-    {
-        "Relative probability": 5.5,
-        "Ink": 20,
-        "Cost": 100,
-        "Appearance": "random",
-        "Weight": 5,
-        "Name": "teleportation1, 3"
-    },
-    {
-        "Relative probability": 3.5,
-        "Ink": 8,
-        "Cost": 200,
-        "Appearance": "random",
-        "Weight": 5,
-        "Name": "amnesia"
-    },
-    {
-        "Relative probability": 4.5,
-        "Ink": 10,
-        "Cost": 200,
-        "Appearance": "random",
-        "Weight": 5,
-        "Name": "create monster1"
-    },
-    {
-        "Relative probability": 1.8,
-        "Ink": 8,
-        "Cost": 200,
-        "Appearance": "random",
-        "Weight": 5,
-        "Name": "earth1"
-    },
-    {
-        "Relative probability": 1.5,
-        "Ink": 20,
-        "Cost": 200,
-        "Appearance": "random",
-        "Weight": 5,
-        "Name": "taming"
-    },
-    {
-        "Relative probability": 1.5,
-        "Ink": 16,
-        "Cost": 300,
-        "Appearance": "random",
-        "Weight": 5,
-        "Name": "charging"
-    },
-    {
-        "Relative probability": 1.5,
-        "Ink": 30,
-        "Cost": 300,
-        "Appearance": "random",
-        "Weight": 5,
-        "Name": "genocide"
-    },
-    {
-        "Relative probability": 1.5,
-        "Ink": 10,
-        "Cost": 300,
-        "Appearance": "random",
-        "Weight": 5,
-        "Name": "punishment"
-    },
-    {
-        "Relative probability": 1.5,
-        "Ink": 20,
-        "Cost": 300,
-        "Appearance": "random",
-        "Weight": 5,
-        "Name": "stinking cloud"
-    }
-]
+[ {
+  "Weight" : 5,
+  "Name" : "mail",
+  "Cost" : 0,
+  "Relative probability" : 0.0,
+  "Ink" : 2,
+  "Appearance" : "stamped"
+}, {
+  "Weight" : 5,
+  "Name" : "identify",
+  "Cost" : 20,
+  "Relative probability" : 18.0,
+  "Ink" : 14,
+  "Appearance" : "random"
+}, {
+  "Weight" : 5,
+  "Name" : "light",
+  "Cost" : 50,
+  "Relative probability" : 9.0,
+  "Ink" : 8,
+  "Appearance" : "random"
+}, {
+  "Weight" : 5,
+  "Name" : "blank paper2",
+  "Cost" : 60,
+  "Relative probability" : 2.8,
+  "Ink" : 0,
+  "Appearance" : "unlabeled"
+}, {
+  "Weight" : 5,
+  "Name" : "enchant weapon",
+  "Cost" : 60,
+  "Relative probability" : 8.0,
+  "Ink" : 16,
+  "Appearance" : "random"
+}, {
+  "Weight" : 5,
+  "Name" : "enchant armor",
+  "Cost" : 80,
+  "Relative probability" : 6.3,
+  "Ink" : 16,
+  "Appearance" : "random"
+}, {
+  "Weight" : 5,
+  "Name" : "remove curse",
+  "Cost" : 80,
+  "Relative probability" : 6.5,
+  "Ink" : 16,
+  "Appearance" : "random"
+}, {
+  "Weight" : 5,
+  "Name" : "confuse monster",
+  "Cost" : 100,
+  "Relative probability" : 5.3,
+  "Ink" : 12,
+  "Appearance" : "random"
+}, {
+  "Weight" : 5,
+  "Name" : "destroy armor",
+  "Cost" : 100,
+  "Relative probability" : 4.5,
+  "Ink" : 10,
+  "Appearance" : "random"
+}, {
+  "Weight" : 5,
+  "Name" : "fire",
+  "Cost" : 100,
+  "Relative probability" : 3.0,
+  "Ink" : 8,
+  "Appearance" : "random"
+}, {
+  "Weight" : 5,
+  "Name" : "food detection",
+  "Cost" : 100,
+  "Relative probability" : 2.5,
+  "Ink" : 8,
+  "Appearance" : "random"
+}, {
+  "Weight" : 5,
+  "Name" : "gold detection",
+  "Cost" : 100,
+  "Relative probability" : 3.3,
+  "Ink" : 8,
+  "Appearance" : "random"
+}, {
+  "Weight" : 5,
+  "Name" : "magic mapping",
+  "Cost" : 100,
+  "Relative probability" : 4.5,
+  "Ink" : 8,
+  "Appearance" : "random"
+}, {
+  "Weight" : 5,
+  "Name" : "scare monster",
+  "Cost" : 100,
+  "Relative probability" : 3.5,
+  "Ink" : 20,
+  "Appearance" : "random"
+}, {
+  "Weight" : 5,
+  "Name" : "teleportation1, 3",
+  "Cost" : 100,
+  "Relative probability" : 5.5,
+  "Ink" : 20,
+  "Appearance" : "random"
+}, {
+  "Weight" : 5,
+  "Name" : "amnesia",
+  "Cost" : 200,
+  "Relative probability" : 3.5,
+  "Ink" : 8,
+  "Appearance" : "random"
+}, {
+  "Weight" : 5,
+  "Name" : "create monster1",
+  "Cost" : 200,
+  "Relative probability" : 4.5,
+  "Ink" : 10,
+  "Appearance" : "random"
+}, {
+  "Weight" : 5,
+  "Name" : "earth1",
+  "Cost" : 200,
+  "Relative probability" : 1.8,
+  "Ink" : 8,
+  "Appearance" : "random"
+}, {
+  "Weight" : 5,
+  "Name" : "taming",
+  "Cost" : 200,
+  "Relative probability" : 1.5,
+  "Ink" : 20,
+  "Appearance" : "random"
+}, {
+  "Weight" : 5,
+  "Name" : "charging",
+  "Cost" : 300,
+  "Relative probability" : 1.5,
+  "Ink" : 16,
+  "Appearance" : "random"
+}, {
+  "Weight" : 5,
+  "Name" : "genocide",
+  "Cost" : 300,
+  "Relative probability" : 1.5,
+  "Ink" : 30,
+  "Appearance" : "random"
+}, {
+  "Weight" : 5,
+  "Name" : "punishment",
+  "Cost" : 300,
+  "Relative probability" : 1.5,
+  "Ink" : 10,
+  "Appearance" : "random"
+}, {
+  "Weight" : 5,
+  "Name" : "stinking cloud",
+  "Cost" : 300,
+  "Relative probability" : 1.5,
+  "Ink" : 20,
+  "Appearance" : "random"
+} ]

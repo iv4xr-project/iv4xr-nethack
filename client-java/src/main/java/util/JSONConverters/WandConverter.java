@@ -1,14 +1,21 @@
 package util.JSONConverters;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.BufferedReader;
 import java.io.IOException;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import java.util.ArrayList;
+import java.util.List;
 
 public class WandConverter extends JSONConverter {
+  public String getFileName() {
+    return "wands";
+  }
+
   @Override
-  protected JSONArray convertUsingReader(BufferedReader br) throws IOException {
-    JSONArray jsonArray = new JSONArray();
+  protected List<ObjectNode> convertUsingReader(BufferedReader br, ObjectMapper mapper)
+      throws IOException {
+    List<ObjectNode> objectNodes = new ArrayList<>();
 
     // First line is the header
     String line = br.readLine();
@@ -16,27 +23,22 @@ public class WandConverter extends JSONConverter {
     // Process each line of the input file
     while ((line = br.readLine()) != null) {
       String[] fields = line.split("\t");
-      JSONObject jsonObject = new JSONObject();
-      jsonObject.put("Weight", 7);
-      jsonObject.put("Name", fields[0]);
-      jsonObject.put("Cost", Integer.parseInt(fields[1]));
+      ObjectNode objectNode = mapper.createObjectNode();
+      objectNode.put("Weight", 7);
+      objectNode.put("Name", fields[0]);
+      objectNode.put("Cost", Integer.parseInt(fields[1]));
       if (!fields[2].equals("varies")) {
         String[] chargesString = fields[2].split("–");
-        JSONObject charges = new JSONObject();
+        ObjectNode charges = mapper.createObjectNode();
         charges.put("min", Integer.parseInt(chargesString[0]));
         charges.put("max", Integer.parseInt(chargesString[1]));
-        jsonObject.put("Charges", charges);
+        objectNode.put("Charges", charges);
       }
-      jsonObject.put("Relative probability", Double.parseDouble(fields[3].replace("%", "")));
-      jsonObject.put("Type", fields[4]);
-      jsonArray.put(jsonObject);
+      objectNode.put("Relative probability", Double.parseDouble(fields[3].replace("%", "")));
+      objectNode.put("Type", fields[4]);
+      objectNodes.add(objectNode);
     }
 
-    return jsonArray;
-  }
-
-  @Override
-  void convert() {
-    convertFile("wands.txt");
+    return objectNodes;
   }
 }

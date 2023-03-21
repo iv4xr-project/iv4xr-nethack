@@ -1,38 +1,48 @@
 package util.JSONConverters;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import org.json.JSONArray;
+import java.util.List;
 
 public abstract class JSONConverter {
-  protected String textDir = "src/main/resources/items/textInfo";
-  protected String jsonDir = "src/main/resources/items/jsonInfo";
+  protected static String textDir = "src/main/resources/items/textInfo";
+  public static String jsonDir = "src/main/resources/items/jsonInfo";
 
-  protected abstract JSONArray convertUsingReader(BufferedReader br) throws IOException;
+  protected abstract List<ObjectNode> convertUsingReader(BufferedReader br, ObjectMapper mapper)
+      throws IOException;
 
-  abstract void convert();
+  public abstract String getFileName();
 
-  protected void convertFile(String fileName) {
-    assert fileName.endsWith(".txt") : String.format("Must read text file, not %s", fileName);
-    Path filePath = Paths.get(textDir, fileName);
+  protected void convert() {
+    String fileName = getFileName();
+    assert !fileName.contains(".") : String.format("Must not have extension, unlike %s", fileName);
+    Path filePath = Paths.get(textDir, fileName + ".txt");
+
+    ObjectMapper mapper = new ObjectMapper();
+    mapper.enable(SerializationFeature.INDENT_OUTPUT);
 
     // Resource is automatically closed
     try (BufferedReader br = new BufferedReader(new FileReader(filePath.toFile()))) {
-      JSONArray data = convertUsingReader(br);
+      List<ObjectNode> data = convertUsingReader(br, mapper);
       String jsonFileName = fileName.replace(".txt", ".json");
-      writeToFile(jsonFileName, data);
+      writeToFile(fileName, data, mapper);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
   }
 
-  protected void writeToFile(String fileName, JSONArray data) throws IOException {
-    assert fileName.endsWith(".json") : String.format("Must write to json file, not %s", fileName);
-    Path filePath = Paths.get(jsonDir, fileName);
+  protected void writeToFile(String fileName, List<ObjectNode> data, ObjectMapper mapper)
+      throws IOException {
+    assert !fileName.contains(".")
+        : String.format("Must not have an extension, unlike %s", fileName);
+    Path filePath = Paths.get(jsonDir, fileName + ".json");
     FileWriter fileWriter = new FileWriter(filePath.toFile());
-    fileWriter.write(data.toString(4));
-    fileWriter.write(System.lineSeparator());
+
+    fileWriter.write(mapper.writeValueAsString(data));
     fileWriter.close();
   }
 

@@ -1,562 +1,505 @@
-[
-    {
-        "Category": "Character accessories",
-        "Use (where not obvious)": "Blinds you",
-        "Creation": "",
-        "Cost:weight ratio": 10,
-        "Cost": 20,
-        "Weight": 2,
-        "Magic?": false,
-        "Name": "blindfold"
-    },
-    {
-        "Category": "Character accessories",
-        "Use (where not obvious)": "Spellbook reading",
-        "Creation": "",
-        "Cost:weight ratio": 27,
-        "Cost": 80,
-        "Weight": 3,
-        "Magic?": false,
-        "Name": "lenses"
-    },
-    {
-        "Category": "Character accessories",
-        "Use (where not obvious)": "Enlightenment",
-        "Creation": "Monk quest artifact",
-        "Cost:weight ratio": 833,
-        "Cost": 2500,
-        "Weight": 3,
-        "Magic?": false,
-        "Name": "Eyes of the Overworld"
-    },
-    {
-        "Category": "Character accessories",
-        "Use (where not obvious)": "Blinds you, cleans face and hands",
-        "Creation": "",
-        "Cost:weight ratio": 25,
-        "Cost": 50,
-        "Weight": 2,
-        "Magic?": false,
-        "Name": "towel"
-    },
-    {
-        "Category": "Pet accessories",
-        "Use (where not obvious)": "Keeps pets nearby",
-        "Creation": "",
-        "Cost:weight ratio": 1.67,
-        "Cost": 20,
-        "Weight": 12,
-        "Magic?": false,
-        "Name": "leash"
-    },
-    {
-        "Category": "Pet accessories",
-        "Use (where not obvious)": "Riding",
-        "Creation": "",
-        "Cost:weight ratio": 0.75,
-        "Cost": 150,
-        "Weight": 200,
-        "Magic?": false,
-        "Name": "saddle"
-    },
-    {
-        "Category": "Containers",
-        "Use (where not obvious)": "Makes items lighter",
-        "Creation": "Contains 0-1 items",
-        "Cost:weight ratio": 5.67,
-        "Cost": 100,
-        "Weight": 15,
-        "Magic?": true,
-        "Name": "bag of holding"
-    },
-    {
-        "Category": "Containers",
-        "Use (where not obvious)": "",
-        "Creation": "Contains 0-5 items",
-        "Cost:weight ratio": 0.027,
-        "Cost": 16,
-        "Weight": 600,
-        "Magic?": false,
-        "Name": "chest"
-    },
-    {
-        "Category": "Containers",
-        "Use (where not obvious)": "Keeps corpses fresh",
-        "Creation": "Contains 0-20 corpses",
-        "Cost:weight ratio": 0.047,
-        "Cost": 42,
-        "Weight": 900,
-        "Magic?": false,
-        "Name": "ice box"
-    },
-    {
-        "Category": "Containers",
-        "Use (where not obvious)": "",
-        "Creation": "Contains 0-3 items",
-        "Cost:weight ratio": 0.023,
-        "Cost": 8,
-        "Weight": 350,
-        "Magic?": false,
-        "Name": "large box"
-    },
-    {
-        "Category": "Containers",
-        "Use (where not obvious)": "Prevents blanking",
-        "Creation": "Contains 0-1 items",
-        "Cost:weight ratio": 5.67,
-        "Cost": 100,
-        "Weight": 15,
-        "Magic?": false,
-        "Name": "oilskin sack"
-    },
-    {
-        "Category": "Containers",
-        "Use (where not obvious)": "",
-        "Creation": "Contains 0-1 items",
-        "Cost:weight ratio": 0.133,
-        "Cost": 2,
-        "Weight": 15,
-        "Magic?": false,
-        "Name": "sack"
-    },
-    {
-        "Category": "Tonal instruments",
-        "Use (where not obvious)": "Aggravates nearby soldiers",
-        "Creation": "",
-        "Cost:weight ratio": 1.5,
-        "Cost": 15,
-        "Weight": 10,
-        "Magic?": false,
-        "Name": "bugle"
-    },
-    {
-        "Category": "Tonal instruments",
-        "Use (where not obvious)": "Ray of fire",
-        "Creation": "",
-        "Cost:weight ratio": 2.78,
-        "Cost": 50,
-        "Weight": 18,
-        "Magic?": true,
-        "Name": "fire horn"
-    },
-    {
-        "Category": "Tonal instruments",
-        "Use (where not obvious)": "Ray of frost",
-        "Creation": "",
-        "Cost:weight ratio": 2.78,
-        "Cost": 50,
-        "Weight": 18,
-        "Magic?": true,
-        "Name": "frost horn"
-    },
-    {
-        "Category": "Tonal instruments",
-        "Use (where not obvious)": "Lulls monsters to sleep",
-        "Creation": "",
-        "Cost:weight ratio": 7.2,
-        "Cost": 36,
-        "Weight": 5,
-        "Magic?": true,
-        "Name": "magic flute"
-    },
-    {
-        "Category": "Tonal instruments",
-        "Use (where not obvious)": "Tames monsters",
-        "Creation": "",
-        "Cost:weight ratio": 1.67,
-        "Cost": 50,
-        "Weight": 30,
-        "Magic?": true,
-        "Name": "magic harp"
-    },
-    {
-        "Category": "Tonal instruments",
-        "Use (where not obvious)": "Scares monsters",
-        "Creation": "",
-        "Cost:weight ratio": 0.83,
-        "Cost": 15,
-        "Weight": 18,
-        "Magic?": false,
-        "Name": "tooled horn"
-    },
-    {
-        "Category": "Tonal instruments",
-        "Use (where not obvious)": "Pacifies snakes",
-        "Creation": "",
-        "Cost:weight ratio": 2.4,
-        "Cost": 12,
-        "Weight": 5,
-        "Magic?": false,
-        "Name": "wooden flute"
-    },
-    {
-        "Category": "Tonal instruments",
-        "Use (where not obvious)": "Pacifies nymphs",
-        "Creation": "",
-        "Cost:weight ratio": 1.67,
-        "Cost": 50,
-        "Weight": 30,
-        "Magic?": false,
-        "Name": "wooden harp"
-    },
-    {
-        "Category": "Atonal instruments",
-        "Use (where not obvious)": "Wakes monsters, summons nymphs",
-        "Creation": "",
-        "Cost:weight ratio": 1.67,
-        "Cost": 50,
-        "Weight": 30,
-        "Magic?": false,
-        "Name": "bell"
-    },
-    {
-        "Category": "Atonal instruments",
-        "Use (where not obvious)": "Invocation",
-        "Creation": "get from quest nemesis",
-        "Cost:weight ratio": 500,
-        "Cost": 5000,
-        "Weight": 10,
-        "Magic?": true,
-        "Name": "Bell of Opening"
-    },
-    {
-        "Category": "Atonal instruments",
-        "Use (where not obvious)": "Creates pits, scares monsters, angers peacefuls",
-        "Creation": "",
-        "Cost:weight ratio": 1,
-        "Cost": 25,
-        "Weight": 25,
-        "Magic?": true,
-        "Name": "drum of earthquake"
-    },
-    {
-        "Category": "Atonal instruments",
-        "Use (where not obvious)": "Wakes and scares monsters",
-        "Creation": "",
-        "Cost:weight ratio": 1,
-        "Cost": 25,
-        "Weight": 25,
-        "Magic?": false,
-        "Name": "leather drum"
-    },
-    {
-        "Category": "Atonal instruments",
-        "Use (where not obvious)": "Teleports pets to you",
-        "Creation": "",
-        "Cost:weight ratio": 3.33,
-        "Cost": 10,
-        "Weight": 3,
-        "Magic?": true,
-        "Name": "magic whistle"
-    },
-    {
-        "Category": "Atonal instruments",
-        "Use (where not obvious)": "Calls pets",
-        "Creation": "",
-        "Cost:weight ratio": 3.33,
-        "Cost": 10,
-        "Weight": 3,
-        "Magic?": false,
-        "Name": "tin whistle"
-    },
-    {
-        "Category": "Light sources",
-        "Use (where not obvious)": "",
-        "Creation": "",
-        "Cost:weight ratio": 0.67,
-        "Cost": 20,
-        "Weight": 30,
-        "Magic?": false,
-        "Name": "brass lantern"
-    },
-    {
-        "Category": "Light sources",
-        "Use (where not obvious)": "Invocation",
-        "Creation": "get from Vlad",
-        "Cost:weight ratio": 500,
-        "Cost": 5000,
-        "Weight": 10,
-        "Magic?": true,
-        "Name": "Candelabrum of Invocation"
-    },
-    {
-        "Category": "Light sources",
-        "Use (where not obvious)": "Possible wish",
-        "Creation": "",
-        "Cost:weight ratio": 2.5,
-        "Cost": 50,
-        "Weight": 20,
-        "Magic?": true,
-        "Name": "magic lamp"
-    },
-    {
-        "Category": "Light sources",
-        "Use (where not obvious)": "",
-        "Creation": "",
-        "Cost:weight ratio": 0.5,
-        "Cost": 10,
-        "Weight": 20,
-        "Magic?": false,
-        "Name": "oil lamp"
-    },
-    {
-        "Category": "Light sources",
-        "Use (where not obvious)": "Invocation",
-        "Creation": "stack of 1 (4/7 prob.) or 2-7 (1/14 prob. each)",
-        "Cost:weight ratio": 5,
-        "Cost": 10,
-        "Weight": 2,
-        "Magic?": false,
-        "Name": "tallow candle"
-    },
-    {
-        "Category": "Light sources",
-        "Use (where not obvious)": "Invocation",
-        "Creation": "stack of 1 (4/7 prob.) or 2-7 (1/14 prob. each)",
-        "Cost:weight ratio": 10,
-        "Cost": 20,
-        "Weight": 2,
-        "Magic?": false,
-        "Name": "wax candle"
-    },
-    {
-        "Category": "Traps",
-        "Use (where not obvious)": "",
-        "Creation": "",
-        "Cost:weight ratio": 0.3,
-        "Cost": 60,
-        "Weight": 200,
-        "Magic?": false,
-        "Name": "beartrap"
-    },
-    {
-        "Category": "Traps",
-        "Use (where not obvious)": "",
-        "Creation": "",
-        "Cost:weight ratio": 0.6,
-        "Cost": 180,
-        "Weight": 300,
-        "Magic?": false,
-        "Name": "land mine"
-    },
-    {
-        "Category": "Unlocking tools",
-        "Use (where not obvious)": "",
-        "Creation": "",
-        "Cost:weight ratio": 10,
-        "Cost": 10,
-        "Weight": 1,
-        "Magic?": false,
-        "Name": "credit card"
-    },
-    {
-        "Category": "Unlocking tools",
-        "Use (where not obvious)": "Charging",
-        "Creation": "Tourist quest artifact",
-        "Cost:weight ratio": 7000,
-        "Cost": 7000,
-        "Weight": 1,
-        "Magic?": false,
-        "Name": "The Platinum Yendorian Express Card"
-    },
-    {
-        "Category": "Unlocking tools",
-        "Use (where not obvious)": "",
-        "Creation": "",
-        "Cost:weight ratio": 5,
-        "Cost": 20,
-        "Weight": 4,
-        "Magic?": false,
-        "Name": "lock pick (osaku to Samurai)"
-    },
-    {
-        "Category": "Unlocking tools",
-        "Use (where not obvious)": "",
-        "Creation": "",
-        "Cost:weight ratio": 3.33,
-        "Cost": 10,
-        "Weight": 3,
-        "Magic?": false,
-        "Name": "skeleton key"
-    },
-    {
-        "Category": "Unlocking tools",
-        "Use (where not obvious)": "",
-        "Creation": "Rogue quest artifact",
-        "Cost:weight ratio": 1166,
-        "Cost": 3500,
-        "Weight": 3,
-        "Magic?": false,
-        "Name": "The Master Key of Thievery"
-    },
-    {
-        "Category": "Weapon-tools",
-        "Use (where not obvious)": "",
-        "Creation": "",
-        "Cost:weight ratio": 1.67,
-        "Cost": 50,
-        "Weight": 30,
-        "Magic?": false,
-        "Name": "grappling hook"
-    },
-    {
-        "Category": "Weapon-tools",
-        "Use (where not obvious)": "Digging",
-        "Creation": "",
-        "Cost:weight ratio": 0.5,
-        "Cost": 50,
-        "Weight": 100,
-        "Magic?": false,
-        "Name": "pick-axe"
-    },
-    {
-        "Category": "Weapon-tools",
-        "Use (where not obvious)": "Cure status effects, various other",
-        "Creation": "",
-        "Cost:weight ratio": 5,
-        "Cost": 100,
-        "Weight": 20,
-        "Magic?": true,
-        "Name": "unicorn horn"
-    },
-    {
-        "Category": "Miscellaneous",
-        "Use (where not obvious)": "Summoning monsters",
-        "Creation": "1-20 charges",
-        "Cost:weight ratio": 6.67,
-        "Cost": 100,
-        "Weight": 15,
-        "Magic?": true,
-        "Name": "bag of tricks"
-    },
-    {
-        "Category": "Miscellaneous",
-        "Use (where not obvious)": "Protects against mind flayers, drowning attacks, and water damage",
-        "Creation": "1-25 charges",
-        "Cost:weight ratio": 1,
-        "Cost": 20,
-        "Weight": 20,
-        "Magic?": false,
-        "Name": "can of grease"
-    },
-    {
-        "Category": "Miscellaneous",
-        "Use (where not obvious)": "",
-        "Creation": "1-5 charges",
-        "Cost:weight ratio": 0.4,
-        "Cost": 60,
-        "Weight": 150,
-        "Magic?": true,
-        "Name": "crystal ball"
-    },
-    {
-        "Category": "Miscellaneous",
-        "Use (where not obvious)": "Invisibility",
-        "Creation": "Archeologist quest artifact",
-        "Cost:weight ratio": 16.7,
-        "Cost": 2500,
-        "Weight": 150,
-        "Magic?": false,
-        "Name": "The Orb of Detection"
-    },
-    {
-        "Category": "Miscellaneous",
-        "Use (where not obvious)": "Level teleport",
-        "Creation": "Valkyrie quest artifact",
-        "Cost:weight ratio": 16.7,
-        "Cost": 2500,
-        "Weight": 150,
-        "Magic?": false,
-        "Name": "The Orb of Fate"
-    },
-    {
-        "Category": "Miscellaneous",
-        "Use (where not obvious)": "Scare monsters",
-        "Creation": "",
-        "Cost:weight ratio": 16.7,
-        "Cost": 200,
-        "Weight": 12,
-        "Magic?": false,
-        "Name": "expensive camera"
-    },
-    {
-        "Category": "Miscellaneous",
-        "Use (where not obvious)": "Summons a monster",
-        "Creation": "",
-        "Cost:weight ratio": 1.6,
-        "Cost": 80,
-        "Weight": 50,
-        "Magic?": true,
-        "Name": "figurine"
-    },
-    {
-        "Category": "Miscellaneous",
-        "Use (where not obvious)": "Produces food or some potions",
-        "Creation": "",
-        "Cost:weight ratio": 2.78,
-        "Cost": 50,
-        "Weight": 18,
-        "Magic?": true,
-        "Name": "horn of plenty"
-    },
-    {
-        "Category": "Miscellaneous",
-        "Use (where not obvious)": "Writes scrolls and spellbooks",
-        "Creation": "30-99 charges",
-        "Cost:weight ratio": 25,
-        "Cost": 50,
-        "Weight": 2,
-        "Magic?": true,
-        "Name": "magic marker"
-    },
-    {
-        "Category": "Miscellaneous",
-        "Use (where not obvious)": "Nymph and foocubus control, Luck management, scare monsters",
-        "Creation": "",
-        "Cost:weight ratio": 0.77,
-        "Cost": 10,
-        "Weight": 13,
-        "Magic?": false,
-        "Name": "mirror"
-    },
-    {
-        "Category": "Miscellaneous",
-        "Use (where not obvious)": "",
-        "Creation": "Knight quest artifact",
-        "Cost:weight ratio": 115.385,
-        "Cost": 1500,
-        "Weight": 13,
-        "Magic?": false,
-        "Name": "The Magic Mirror of Merlin"
-    },
-    {
-        "Category": "Miscellaneous",
-        "Use (where not obvious)": "Get monster status information, detect secret doors/corridors",
-        "Creation": "",
-        "Cost:weight ratio": 18.3,
-        "Cost": 75,
-        "Weight": 4,
-        "Magic?": false,
-        "Name": "stethoscope"
-    },
-    {
-        "Category": "Miscellaneous",
-        "Use (where not obvious)": "",
-        "Creation": "",
-        "Cost:weight ratio": 7.5,
-        "Cost": 30,
-        "Weight": 4,
-        "Magic?": false,
-        "Name": "tin opener"
-    },
-    {
-        "Category": "Miscellaneous",
-        "Use (where not obvious)": "Prevents troll resurrection, tins corpses for intrinsics",
-        "Creation": "",
-        "Cost:weight ratio": 0.3,
-        "Cost": 30,
-        "Weight": 100,
-        "Magic?": false,
-        "Name": "tinning kit"
-    }
-]
+[ {
+  "Category" : "Character accessories",
+  "Name" : "blindfold",
+  "Cost" : 20,
+  "Weight" : 2,
+  "Cost:weight ratio" : 10.0,
+  "Use (where not obvious)" : "Blinds you",
+  "Creation" : "",
+  "Magic?" : false
+}, {
+  "Category" : "Character accessories",
+  "Name" : "lenses",
+  "Cost" : 80,
+  "Weight" : 3,
+  "Cost:weight ratio" : 27.0,
+  "Use (where not obvious)" : "Spellbook reading",
+  "Creation" : "",
+  "Magic?" : false
+}, {
+  "Category" : "Character accessories",
+  "Name" : "Eyes of the Overworld",
+  "Cost" : 2500,
+  "Weight" : 3,
+  "Cost:weight ratio" : 833.0,
+  "Use (where not obvious)" : "Enlightenment",
+  "Creation" : "Monk quest artifact",
+  "Magic?" : false
+}, {
+  "Category" : "Character accessories",
+  "Name" : "towel",
+  "Cost" : 50,
+  "Weight" : 2,
+  "Cost:weight ratio" : 25.0,
+  "Use (where not obvious)" : "Blinds you, cleans face and hands",
+  "Creation" : "",
+  "Magic?" : false
+}, {
+  "Category" : "Pet accessories",
+  "Name" : "leash",
+  "Cost" : 20,
+  "Weight" : 12,
+  "Cost:weight ratio" : 1.67,
+  "Use (where not obvious)" : "Keeps pets nearby",
+  "Creation" : "",
+  "Magic?" : false
+}, {
+  "Category" : "Pet accessories",
+  "Name" : "saddle",
+  "Cost" : 150,
+  "Weight" : 200,
+  "Cost:weight ratio" : 0.75,
+  "Use (where not obvious)" : "Riding",
+  "Creation" : "",
+  "Magic?" : false
+}, {
+  "Category" : "Containers",
+  "Name" : "bag of holding",
+  "Cost" : 100,
+  "Weight" : 15,
+  "Cost:weight ratio" : 5.67,
+  "Use (where not obvious)" : "Makes items lighter",
+  "Creation" : "Contains 0-1 items",
+  "Magic?" : true
+}, {
+  "Category" : "Containers",
+  "Name" : "chest",
+  "Cost" : 16,
+  "Weight" : 600,
+  "Cost:weight ratio" : 0.027,
+  "Use (where not obvious)" : "",
+  "Creation" : "Contains 0-5 items",
+  "Magic?" : false
+}, {
+  "Category" : "Containers",
+  "Name" : "ice box",
+  "Cost" : 42,
+  "Weight" : 900,
+  "Cost:weight ratio" : 0.047,
+  "Use (where not obvious)" : "Keeps corpses fresh",
+  "Creation" : "Contains 0-20 corpses",
+  "Magic?" : false
+}, {
+  "Category" : "Containers",
+  "Name" : "large box",
+  "Cost" : 8,
+  "Weight" : 350,
+  "Cost:weight ratio" : 0.023,
+  "Use (where not obvious)" : "",
+  "Creation" : "Contains 0-3 items",
+  "Magic?" : false
+}, {
+  "Category" : "Containers",
+  "Name" : "oilskin sack",
+  "Cost" : 100,
+  "Weight" : 15,
+  "Cost:weight ratio" : 5.67,
+  "Use (where not obvious)" : "Prevents blanking",
+  "Creation" : "Contains 0-1 items",
+  "Magic?" : false
+}, {
+  "Category" : "Containers",
+  "Name" : "sack",
+  "Cost" : 2,
+  "Weight" : 15,
+  "Cost:weight ratio" : 0.133,
+  "Use (where not obvious)" : "",
+  "Creation" : "Contains 0-1 items",
+  "Magic?" : false
+}, {
+  "Category" : "Tonal instruments",
+  "Name" : "bugle",
+  "Cost" : 15,
+  "Weight" : 10,
+  "Cost:weight ratio" : 1.5,
+  "Use (where not obvious)" : "Aggravates nearby soldiers",
+  "Creation" : "",
+  "Magic?" : false
+}, {
+  "Category" : "Tonal instruments",
+  "Name" : "fire horn",
+  "Cost" : 50,
+  "Weight" : 18,
+  "Cost:weight ratio" : 2.78,
+  "Use (where not obvious)" : "Ray of fire",
+  "Creation" : "",
+  "Magic?" : true
+}, {
+  "Category" : "Tonal instruments",
+  "Name" : "frost horn",
+  "Cost" : 50,
+  "Weight" : 18,
+  "Cost:weight ratio" : 2.78,
+  "Use (where not obvious)" : "Ray of frost",
+  "Creation" : "",
+  "Magic?" : true
+}, {
+  "Category" : "Tonal instruments",
+  "Name" : "magic flute",
+  "Cost" : 36,
+  "Weight" : 5,
+  "Cost:weight ratio" : 7.2,
+  "Use (where not obvious)" : "Lulls monsters to sleep",
+  "Creation" : "",
+  "Magic?" : true
+}, {
+  "Category" : "Tonal instruments",
+  "Name" : "magic harp",
+  "Cost" : 50,
+  "Weight" : 30,
+  "Cost:weight ratio" : 1.67,
+  "Use (where not obvious)" : "Tames monsters",
+  "Creation" : "",
+  "Magic?" : true
+}, {
+  "Category" : "Tonal instruments",
+  "Name" : "tooled horn",
+  "Cost" : 15,
+  "Weight" : 18,
+  "Cost:weight ratio" : 0.83,
+  "Use (where not obvious)" : "Scares monsters",
+  "Creation" : "",
+  "Magic?" : false
+}, {
+  "Category" : "Tonal instruments",
+  "Name" : "wooden flute",
+  "Cost" : 12,
+  "Weight" : 5,
+  "Cost:weight ratio" : 2.4,
+  "Use (where not obvious)" : "Pacifies snakes",
+  "Creation" : "",
+  "Magic?" : false
+}, {
+  "Category" : "Tonal instruments",
+  "Name" : "wooden harp",
+  "Cost" : 50,
+  "Weight" : 30,
+  "Cost:weight ratio" : 1.67,
+  "Use (where not obvious)" : "Pacifies nymphs",
+  "Creation" : "",
+  "Magic?" : false
+}, {
+  "Category" : "Atonal instruments",
+  "Name" : "bell",
+  "Cost" : 50,
+  "Weight" : 30,
+  "Cost:weight ratio" : 1.67,
+  "Use (where not obvious)" : "Wakes monsters, summons nymphs",
+  "Creation" : "",
+  "Magic?" : false
+}, {
+  "Category" : "Atonal instruments",
+  "Name" : "Bell of Opening",
+  "Cost" : 5000,
+  "Weight" : 10,
+  "Cost:weight ratio" : 500.0,
+  "Use (where not obvious)" : "Invocation",
+  "Creation" : "get from quest nemesis",
+  "Magic?" : true
+}, {
+  "Category" : "Atonal instruments",
+  "Name" : "drum of earthquake",
+  "Cost" : 25,
+  "Weight" : 25,
+  "Cost:weight ratio" : 1.0,
+  "Use (where not obvious)" : "Creates pits, scares monsters, angers peacefuls",
+  "Creation" : "",
+  "Magic?" : true
+}, {
+  "Category" : "Atonal instruments",
+  "Name" : "leather drum",
+  "Cost" : 25,
+  "Weight" : 25,
+  "Cost:weight ratio" : 1.0,
+  "Use (where not obvious)" : "Wakes and scares monsters",
+  "Creation" : "",
+  "Magic?" : false
+}, {
+  "Category" : "Atonal instruments",
+  "Name" : "magic whistle",
+  "Cost" : 10,
+  "Weight" : 3,
+  "Cost:weight ratio" : 3.33,
+  "Use (where not obvious)" : "Teleports pets to you",
+  "Creation" : "",
+  "Magic?" : true
+}, {
+  "Category" : "Atonal instruments",
+  "Name" : "tin whistle",
+  "Cost" : 10,
+  "Weight" : 3,
+  "Cost:weight ratio" : 3.33,
+  "Use (where not obvious)" : "Calls pets",
+  "Creation" : "",
+  "Magic?" : false
+}, {
+  "Category" : "Light sources",
+  "Name" : "brass lantern",
+  "Cost" : 20,
+  "Weight" : 30,
+  "Cost:weight ratio" : 0.67,
+  "Use (where not obvious)" : "",
+  "Creation" : "",
+  "Magic?" : false
+}, {
+  "Category" : "Light sources",
+  "Name" : "Candelabrum of Invocation",
+  "Cost" : 5000,
+  "Weight" : 10,
+  "Cost:weight ratio" : 500.0,
+  "Use (where not obvious)" : "Invocation",
+  "Creation" : "get from Vlad",
+  "Magic?" : true
+}, {
+  "Category" : "Light sources",
+  "Name" : "magic lamp",
+  "Cost" : 50,
+  "Weight" : 20,
+  "Cost:weight ratio" : 2.5,
+  "Use (where not obvious)" : "Possible wish",
+  "Creation" : "",
+  "Magic?" : true
+}, {
+  "Category" : "Light sources",
+  "Name" : "oil lamp",
+  "Cost" : 10,
+  "Weight" : 20,
+  "Cost:weight ratio" : 0.5,
+  "Use (where not obvious)" : "",
+  "Creation" : "",
+  "Magic?" : false
+}, {
+  "Category" : "Light sources",
+  "Name" : "tallow candle",
+  "Cost" : 10,
+  "Weight" : 2,
+  "Cost:weight ratio" : 5.0,
+  "Use (where not obvious)" : "Invocation",
+  "Creation" : "stack of 1 (4/7 prob.) or 2-7 (1/14 prob. each)",
+  "Magic?" : false
+}, {
+  "Category" : "Light sources",
+  "Name" : "wax candle",
+  "Cost" : 20,
+  "Weight" : 2,
+  "Cost:weight ratio" : 10.0,
+  "Use (where not obvious)" : "Invocation",
+  "Creation" : "stack of 1 (4/7 prob.) or 2-7 (1/14 prob. each)",
+  "Magic?" : false
+}, {
+  "Category" : "Traps",
+  "Name" : "beartrap",
+  "Cost" : 60,
+  "Weight" : 200,
+  "Cost:weight ratio" : 0.3,
+  "Use (where not obvious)" : "",
+  "Creation" : "",
+  "Magic?" : false
+}, {
+  "Category" : "Traps",
+  "Name" : "land mine",
+  "Cost" : 180,
+  "Weight" : 300,
+  "Cost:weight ratio" : 0.6,
+  "Use (where not obvious)" : "",
+  "Creation" : "",
+  "Magic?" : false
+}, {
+  "Category" : "Unlocking tools",
+  "Name" : "credit card",
+  "Cost" : 10,
+  "Weight" : 1,
+  "Cost:weight ratio" : 10.0,
+  "Use (where not obvious)" : "",
+  "Creation" : "",
+  "Magic?" : false
+}, {
+  "Category" : "Unlocking tools",
+  "Name" : "The Platinum Yendorian Express Card",
+  "Cost" : 7000,
+  "Weight" : 1,
+  "Cost:weight ratio" : 7000.0,
+  "Use (where not obvious)" : "Charging",
+  "Creation" : "Tourist quest artifact",
+  "Magic?" : false
+}, {
+  "Category" : "Unlocking tools",
+  "Name" : "lock pick (osaku to Samurai)",
+  "Cost" : 20,
+  "Weight" : 4,
+  "Cost:weight ratio" : 5.0,
+  "Use (where not obvious)" : "",
+  "Creation" : "",
+  "Magic?" : false
+}, {
+  "Category" : "Unlocking tools",
+  "Name" : "skeleton key",
+  "Cost" : 10,
+  "Weight" : 3,
+  "Cost:weight ratio" : 3.33,
+  "Use (where not obvious)" : "",
+  "Creation" : "",
+  "Magic?" : false
+}, {
+  "Category" : "Unlocking tools",
+  "Name" : "The Master Key of Thievery",
+  "Cost" : 3500,
+  "Weight" : 3,
+  "Cost:weight ratio" : 1166.0,
+  "Use (where not obvious)" : "",
+  "Creation" : "Rogue quest artifact",
+  "Magic?" : false
+}, {
+  "Category" : "Weapon-tools",
+  "Name" : "grappling hook",
+  "Cost" : 50,
+  "Weight" : 30,
+  "Cost:weight ratio" : 1.67,
+  "Use (where not obvious)" : "",
+  "Creation" : "",
+  "Magic?" : false
+}, {
+  "Category" : "Weapon-tools",
+  "Name" : "pick-axe",
+  "Cost" : 50,
+  "Weight" : 100,
+  "Cost:weight ratio" : 0.5,
+  "Use (where not obvious)" : "Digging",
+  "Creation" : "",
+  "Magic?" : false
+}, {
+  "Category" : "Weapon-tools",
+  "Name" : "unicorn horn",
+  "Cost" : 100,
+  "Weight" : 20,
+  "Cost:weight ratio" : 5.0,
+  "Use (where not obvious)" : "Cure status effects, various other",
+  "Creation" : "",
+  "Magic?" : true
+}, {
+  "Category" : "Miscellaneous",
+  "Name" : "bag of tricks",
+  "Cost" : 100,
+  "Weight" : 15,
+  "Cost:weight ratio" : 6.67,
+  "Use (where not obvious)" : "Summoning monsters",
+  "Creation" : "1-20 charges",
+  "Magic?" : true
+}, {
+  "Category" : "Miscellaneous",
+  "Name" : "can of grease",
+  "Cost" : 20,
+  "Weight" : 20,
+  "Cost:weight ratio" : 1.0,
+  "Use (where not obvious)" : "Protects against mind flayers, drowning attacks, and water damage",
+  "Creation" : "1-25 charges",
+  "Magic?" : false
+}, {
+  "Category" : "Miscellaneous",
+  "Name" : "crystal ball",
+  "Cost" : 60,
+  "Weight" : 150,
+  "Cost:weight ratio" : 0.4,
+  "Use (where not obvious)" : "",
+  "Creation" : "1-5 charges",
+  "Magic?" : true
+}, {
+  "Category" : "Miscellaneous",
+  "Name" : "The Orb of Detection",
+  "Cost" : 2500,
+  "Weight" : 150,
+  "Cost:weight ratio" : 16.7,
+  "Use (where not obvious)" : "Invisibility",
+  "Creation" : "Archeologist quest artifact",
+  "Magic?" : false
+}, {
+  "Category" : "Miscellaneous",
+  "Name" : "The Orb of Fate",
+  "Cost" : 2500,
+  "Weight" : 150,
+  "Cost:weight ratio" : 16.7,
+  "Use (where not obvious)" : "Level teleport",
+  "Creation" : "Valkyrie quest artifact",
+  "Magic?" : false
+}, {
+  "Category" : "Miscellaneous",
+  "Name" : "expensive camera",
+  "Cost" : 200,
+  "Weight" : 12,
+  "Cost:weight ratio" : 16.7,
+  "Use (where not obvious)" : "Scare monsters",
+  "Creation" : "",
+  "Magic?" : false
+}, {
+  "Category" : "Miscellaneous",
+  "Name" : "figurine",
+  "Cost" : 80,
+  "Weight" : 50,
+  "Cost:weight ratio" : 1.6,
+  "Use (where not obvious)" : "Summons a monster",
+  "Creation" : "",
+  "Magic?" : true
+}, {
+  "Category" : "Miscellaneous",
+  "Name" : "horn of plenty",
+  "Cost" : 50,
+  "Weight" : 18,
+  "Cost:weight ratio" : 2.78,
+  "Use (where not obvious)" : "Produces food or some potions",
+  "Creation" : "",
+  "Magic?" : true
+}, {
+  "Category" : "Miscellaneous",
+  "Name" : "magic marker",
+  "Cost" : 50,
+  "Weight" : 2,
+  "Cost:weight ratio" : 25.0,
+  "Use (where not obvious)" : "Writes scrolls and spellbooks",
+  "Creation" : "30-99 charges",
+  "Magic?" : true
+}, {
+  "Category" : "Miscellaneous",
+  "Name" : "mirror",
+  "Cost" : 10,
+  "Weight" : 13,
+  "Cost:weight ratio" : 0.77,
+  "Use (where not obvious)" : "Nymph and foocubus control, Luck management, scare monsters",
+  "Creation" : "",
+  "Magic?" : false
+}, {
+  "Category" : "Miscellaneous",
+  "Name" : "The Magic Mirror of Merlin",
+  "Cost" : 1500,
+  "Weight" : 13,
+  "Cost:weight ratio" : 115.385,
+  "Use (where not obvious)" : "",
+  "Creation" : "Knight quest artifact",
+  "Magic?" : false
+}, {
+  "Category" : "Miscellaneous",
+  "Name" : "stethoscope",
+  "Cost" : 75,
+  "Weight" : 4,
+  "Cost:weight ratio" : 18.3,
+  "Use (where not obvious)" : "Get monster status information, detect secret doors/corridors",
+  "Creation" : "",
+  "Magic?" : false
+}, {
+  "Category" : "Miscellaneous",
+  "Name" : "tin opener",
+  "Cost" : 30,
+  "Weight" : 4,
+  "Cost:weight ratio" : 7.5,
+  "Use (where not obvious)" : "",
+  "Creation" : "",
+  "Magic?" : false
+}, {
+  "Category" : "Miscellaneous",
+  "Name" : "tinning kit",
+  "Cost" : 30,
+  "Weight" : 100,
+  "Cost:weight ratio" : 0.3,
+  "Use (where not obvious)" : "Prevents troll resurrection, tins corpses for intrinsics",
+  "Creation" : "",
+  "Magic?" : false
+} ]

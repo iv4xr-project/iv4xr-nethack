@@ -4,6 +4,7 @@ import connection.ObservationMessage;
 import java.io.DataInputStream;
 import java.io.IOException;
 import nethack.object.*;
+import nethack.object.items.Item;
 import nl.uu.cs.aplib.utils.Pair;
 import util.Loggers;
 import util.Stopwatch;

@@ -5,7 +5,6 @@ import connection.messagedecoder.SeedDecoder;
 import connection.messagedecoder.StepMessageDecoder;
 import connection.messageencoder.Encoder;
 import connection.messageencoder.SeedEncoder;
-import eu.iv4xr.framework.spatial.Vec3;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -13,9 +12,7 @@ import java.net.Socket;
 import java.util.Arrays;
 import nethack.object.*;
 import nl.uu.cs.aplib.utils.Pair;
-import util.Config;
-import util.Loggers;
-import util.Stopwatch;
+import util.*;
 
 public class SocketClient {
   final String host;
@@ -155,8 +152,7 @@ public class SocketClient {
 
     StepState stepState = new StepState();
     stepState.player = obsMessage.player;
-    stepState.player.position =
-        new Vec3(obsMessage.player.position.x, obsMessage.player.position.y, 0);
+    stepState.player.location = obsMessage.player.location;
     stepState.player.inventory = new Inventory(obsMessage.items);
     stepState.stats = obsMessage.stats;
     stepState.done = stepMessage.done;

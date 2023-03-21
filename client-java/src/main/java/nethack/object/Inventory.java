@@ -1,5 +1,6 @@
 package nethack.object;
 
+import nethack.object.items.Item;
 import util.ColoredStringBuilder;
 
 public class Inventory {

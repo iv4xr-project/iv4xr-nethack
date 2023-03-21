@@ -1,262 +1,237 @@
-[
-    {
-        "Relative probability": 9.5,
-        "Type": "non-directional",
-        "Charges": {
-            "min": 11,
-            "max": 15
-        },
-        "Cost": 100,
-        "Weight": 7,
-        "Name": "light"
-    },
-    {
-        "Relative probability": 2.5,
-        "Type": "varies",
-        "Cost": 100,
-        "Weight": 7,
-        "Name": "nothing"
-    },
-    {
-        "Relative probability": 5.5,
-        "Type": "ray",
-        "Charges": {
-            "min": 4,
-            "max": 8
-        },
-        "Cost": 150,
-        "Weight": 7,
-        "Name": "digging"
-    },
-    {
-        "Relative probability": 1.5,
-        "Type": "non-directional",
-        "Charges": {
-            "min": 11,
-            "max": 15
-        },
-        "Cost": 150,
-        "Weight": 7,
-        "Name": "enlightenment"
-    },
-    {
-        "Relative probability": 2.5,
-        "Type": "beam",
-        "Charges": {
-            "min": 4,
-            "max": 8
-        },
-        "Cost": 150,
-        "Weight": 7,
-        "Name": "locking"
-    },
-    {
-        "Relative probability": 5,
-        "Type": "ray",
-        "Charges": {
-            "min": 4,
-            "max": 8
-        },
-        "Cost": 150,
-        "Weight": 7,
-        "Name": "magic missile"
-    },
-    {
-        "Relative probability": 4.5,
-        "Type": "beam",
-        "Charges": {
-            "min": 4,
-            "max": 8
-        },
-        "Cost": 150,
-        "Weight": 7,
-        "Name": "make invisible"
-    },
-    {
-        "Relative probability": 2.5,
-        "Type": "beam",
-        "Charges": {
-            "min": 4,
-            "max": 8
-        },
-        "Cost": 150,
-        "Weight": 7,
-        "Name": "opening"
-    },
-    {
-        "Relative probability": 3,
-        "Type": "beam",
-        "Charges": {
-            "min": 4,
-            "max": 8
-        },
-        "Cost": 150,
-        "Weight": 7,
-        "Name": "probing"
-    },
-    {
-        "Relative probability": 5,
-        "Type": "non-directional",
-        "Charges": {
-            "min": 11,
-            "max": 15
-        },
-        "Cost": 150,
-        "Weight": 7,
-        "Name": "secret door detection"
-    },
-    {
-        "Relative probability": 5,
-        "Type": "beam",
-        "Charges": {
-            "min": 4,
-            "max": 8
-        },
-        "Cost": 150,
-        "Weight": 7,
-        "Name": "slow monster"
-    },
-    {
-        "Relative probability": 5,
-        "Type": "beam",
-        "Charges": {
-            "min": 4,
-            "max": 8
-        },
-        "Cost": 150,
-        "Weight": 7,
-        "Name": "speed monster"
-    },
-    {
-        "Relative probability": 7.5,
-        "Type": "beam",
-        "Charges": {
-            "min": 4,
-            "max": 8
-        },
-        "Cost": 150,
-        "Weight": 7,
-        "Name": "striking"
-    },
-    {
-        "Relative probability": 5,
-        "Type": "beam",
-        "Charges": {
-            "min": 4,
-            "max": 8
-        },
-        "Cost": 150,
-        "Weight": 7,
-        "Name": "undead turning"
-    },
-    {
-        "Relative probability": 4,
-        "Type": "ray",
-        "Charges": {
-            "min": 4,
-            "max": 8
-        },
-        "Cost": 175,
-        "Weight": 7,
-        "Name": "cold"
-    },
-    {
-        "Relative probability": 4,
-        "Type": "ray",
-        "Charges": {
-            "min": 4,
-            "max": 8
-        },
-        "Cost": 175,
-        "Weight": 7,
-        "Name": "fire"
-    },
-    {
-        "Relative probability": 4,
-        "Type": "ray",
-        "Charges": {
-            "min": 4,
-            "max": 8
-        },
-        "Cost": 175,
-        "Weight": 7,
-        "Name": "lightning"
-    },
-    {
-        "Relative probability": 5,
-        "Type": "ray",
-        "Charges": {
-            "min": 4,
-            "max": 8
-        },
-        "Cost": 175,
-        "Weight": 7,
-        "Name": "sleep"
-    },
-    {
-        "Relative probability": 4.5,
-        "Type": "beam",
-        "Charges": {
-            "min": 4,
-            "max": 8
-        },
-        "Cost": 200,
-        "Weight": 7,
-        "Name": "cancellation"
-    },
-    {
-        "Relative probability": 4.5,
-        "Type": "non-directional",
-        "Charges": {
-            "min": 11,
-            "max": 15
-        },
-        "Cost": 200,
-        "Weight": 7,
-        "Name": "create monster"
-    },
-    {
-        "Relative probability": 4.5,
-        "Type": "beam",
-        "Charges": {
-            "min": 4,
-            "max": 8
-        },
-        "Cost": 200,
-        "Weight": 7,
-        "Name": "polymorph"
-    },
-    {
-        "Relative probability": 4.5,
-        "Type": "beam",
-        "Charges": {
-            "min": 4,
-            "max": 8
-        },
-        "Cost": 200,
-        "Weight": 7,
-        "Name": "teleportation"
-    },
-    {
-        "Relative probability": 0.5,
-        "Type": "ray",
-        "Charges": {
-            "min": 4,
-            "max": 8
-        },
-        "Cost": 500,
-        "Weight": 7,
-        "Name": "death"
-    },
-    {
-        "Relative probability": 0.5,
-        "Type": "non-directional",
-        "Charges": {
-            "min": 1,
-            "max": 3
-        },
-        "Cost": 500,
-        "Weight": 7,
-        "Name": "wishing"
-    }
-]
+[ {
+  "Weight" : 7,
+  "Name" : "light",
+  "Cost" : 100,
+  "Charges" : {
+    "min" : 11,
+    "max" : 15
+  },
+  "Relative probability" : 9.5,
+  "Type" : "non-directional"
+}, {
+  "Weight" : 7,
+  "Name" : "nothing",
+  "Cost" : 100,
+  "Relative probability" : 2.5,
+  "Type" : "varies"
+}, {
+  "Weight" : 7,
+  "Name" : "digging",
+  "Cost" : 150,
+  "Charges" : {
+    "min" : 4,
+    "max" : 8
+  },
+  "Relative probability" : 5.5,
+  "Type" : "ray"
+}, {
+  "Weight" : 7,
+  "Name" : "enlightenment",
+  "Cost" : 150,
+  "Charges" : {
+    "min" : 11,
+    "max" : 15
+  },
+  "Relative probability" : 1.5,
+  "Type" : "non-directional"
+}, {
+  "Weight" : 7,
+  "Name" : "locking",
+  "Cost" : 150,
+  "Charges" : {
+    "min" : 4,
+    "max" : 8
+  },
+  "Relative probability" : 2.5,
+  "Type" : "beam"
+}, {
+  "Weight" : 7,
+  "Name" : "magic missile",
+  "Cost" : 150,
+  "Charges" : {
+    "min" : 4,
+    "max" : 8
+  },
+  "Relative probability" : 5.0,
+  "Type" : "ray"
+}, {
+  "Weight" : 7,
+  "Name" : "make invisible",
+  "Cost" : 150,
+  "Charges" : {
+    "min" : 4,
+    "max" : 8
+  },
+  "Relative probability" : 4.5,
+  "Type" : "beam"
+}, {
+  "Weight" : 7,
+  "Name" : "opening",
+  "Cost" : 150,
+  "Charges" : {
+    "min" : 4,
+    "max" : 8
+  },
+  "Relative probability" : 2.5,
+  "Type" : "beam"
+}, {
+  "Weight" : 7,
+  "Name" : "probing",
+  "Cost" : 150,
+  "Charges" : {
+    "min" : 4,
+    "max" : 8
+  },
+  "Relative probability" : 3.0,
+  "Type" : "beam"
+}, {
+  "Weight" : 7,
+  "Name" : "secret door detection",
+  "Cost" : 150,
+  "Charges" : {
+    "min" : 11,
+    "max" : 15
+  },
+  "Relative probability" : 5.0,
+  "Type" : "non-directional"
+}, {
+  "Weight" : 7,
+  "Name" : "slow monster",
+  "Cost" : 150,
+  "Charges" : {
+    "min" : 4,
+    "max" : 8
+  },
+  "Relative probability" : 5.0,
+  "Type" : "beam"
+}, {
+  "Weight" : 7,
+  "Name" : "speed monster",
+  "Cost" : 150,
+  "Charges" : {
+    "min" : 4,
+    "max" : 8
+  },
+  "Relative probability" : 5.0,
+  "Type" : "beam"
+}, {
+  "Weight" : 7,
+  "Name" : "striking",
+  "Cost" : 150,
+  "Charges" : {
+    "min" : 4,
+    "max" : 8
+  },
+  "Relative probability" : 7.5,
+  "Type" : "beam"
+}, {
+  "Weight" : 7,
+  "Name" : "undead turning",
+  "Cost" : 150,
+  "Charges" : {
+    "min" : 4,
+    "max" : 8
+  },
+  "Relative probability" : 5.0,
+  "Type" : "beam"
+}, {
+  "Weight" : 7,
+  "Name" : "cold",
+  "Cost" : 175,
+  "Charges" : {
+    "min" : 4,
+    "max" : 8
+  },
+  "Relative probability" : 4.0,
+  "Type" : "ray"
+}, {
+  "Weight" : 7,
+  "Name" : "fire",
+  "Cost" : 175,
+  "Charges" : {
+    "min" : 4,
+    "max" : 8
+  },
+  "Relative probability" : 4.0,
+  "Type" : "ray"
+}, {
+  "Weight" : 7,
+  "Name" : "lightning",
+  "Cost" : 175,
+  "Charges" : {
+    "min" : 4,
+    "max" : 8
+  },
+  "Relative probability" : 4.0,
+  "Type" : "ray"
+}, {
+  "Weight" : 7,
+  "Name" : "sleep",
+  "Cost" : 175,
+  "Charges" : {
+    "min" : 4,
+    "max" : 8
+  },
+  "Relative probability" : 5.0,
+  "Type" : "ray"
+}, {
+  "Weight" : 7,
+  "Name" : "cancellation",
+  "Cost" : 200,
+  "Charges" : {
+    "min" : 4,
+    "max" : 8
+  },
+  "Relative probability" : 4.5,
+  "Type" : "beam"
+}, {
+  "Weight" : 7,
+  "Name" : "create monster",
+  "Cost" : 200,
+  "Charges" : {
+    "min" : 11,
+    "max" : 15
+  },
+  "Relative probability" : 4.5,
+  "Type" : "non-directional"
+}, {
+  "Weight" : 7,
+  "Name" : "polymorph",
+  "Cost" : 200,
+  "Charges" : {
+    "min" : 4,
+    "max" : 8
+  },
+  "Relative probability" : 4.5,
+  "Type" : "beam"
+}, {
+  "Weight" : 7,
+  "Name" : "teleportation",
+  "Cost" : 200,
+  "Charges" : {
+    "min" : 4,
+    "max" : 8
+  },
+  "Relative probability" : 4.5,
+  "Type" : "beam"
+}, {
+  "Weight" : 7,
+  "Name" : "death",
+  "Cost" : 500,
+  "Charges" : {
+    "min" : 4,
+    "max" : 8
+  },
+  "Relative probability" : 0.5,
+  "Type" : "ray"
+}, {
+  "Weight" : 7,
+  "Name" : "wishing",
+  "Cost" : 500,
+  "Charges" : {
+    "min" : 1,
+    "max" : 3
+  },
+  "Relative probability" : 0.5,
+  "Type" : "non-directional"
+} ]

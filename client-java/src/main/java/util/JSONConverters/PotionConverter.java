@@ -1,14 +1,21 @@
 package util.JSONConverters;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.BufferedReader;
 import java.io.IOException;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PotionConverter extends JSONConverter {
+  public String getFileName() {
+    return "potions";
+  }
+
   @Override
-  protected JSONArray convertUsingReader(BufferedReader br) throws IOException {
-    JSONArray jsonArray = new JSONArray();
+  protected List<ObjectNode> convertUsingReader(BufferedReader br, ObjectMapper mapper)
+      throws IOException {
+    List<ObjectNode> objectNodes = new ArrayList<>();
 
     // First line is the header
     String line = br.readLine();
@@ -16,20 +23,15 @@ public class PotionConverter extends JSONConverter {
     // Process each line of the input file
     while ((line = br.readLine()) != null) {
       String[] fields = line.split("\t");
-      JSONObject jsonObject = new JSONObject();
-      jsonObject.put("Name", fields[0]);
-      jsonObject.put("Cost", Integer.parseInt(fields[1]));
-      jsonObject.put("Weight", Integer.parseInt(fields[2]));
-      jsonObject.put("Relative probability", Double.parseDouble(fields[3].replace("%", "")));
-      jsonObject.put("Appearance", fields[4]);
-      jsonArray.put(jsonObject);
+      ObjectNode objectNode = mapper.createObjectNode();
+      objectNode.put("Name", fields[0]);
+      objectNode.put("Cost", Integer.parseInt(fields[1]));
+      objectNode.put("Weight", Integer.parseInt(fields[2]));
+      objectNode.put("Relative probability", Double.parseDouble(fields[3].replace("%", "")));
+      objectNode.put("Appearance", fields[4]);
+      objectNodes.add(objectNode);
     }
 
-    return jsonArray;
-  }
-
-  @Override
-  void convert() {
-    convertFile("potions.txt");
+    return objectNodes;
   }
 }

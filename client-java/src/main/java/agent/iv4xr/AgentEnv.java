@@ -56,7 +56,7 @@ public class AgentEnv extends Iv4xrEnvironment {
     WorldModel wom = new WorldModel();
 
     wom.agentId = agentId;
-    wom.position = app.gameState.player.position;
+    wom.position = app.gameState.player.location.toVec3();
     wom.timestamp = app.gameState.stats.turn.time;
 
     WorldEntity aux = mkGameAuxState();
@@ -95,7 +95,7 @@ public class AgentEnv extends Iv4xrEnvironment {
     WorldEntity we = new WorldEntity(Player.ID, EntityType.PLAYER.name(), true);
     we.properties.put("hp", app.gameState.player.hp);
     we.properties.put("hpmax", app.gameState.player.hpMax);
-    we.position = p.position;
+    we.position = p.location.toVec3();
     return we;
   }
 

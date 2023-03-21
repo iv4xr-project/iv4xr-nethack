@@ -1,14 +1,21 @@
 package util.JSONConverters;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.BufferedReader;
 import java.io.IOException;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SpellbookConverter extends JSONConverter {
+  public String getFileName() {
+    return "spellbooks";
+  }
+
   @Override
-  protected JSONArray convertUsingReader(BufferedReader br) throws IOException {
-    JSONArray jsonArray = new JSONArray();
+  protected List<ObjectNode> convertUsingReader(BufferedReader br, ObjectMapper mapper)
+      throws IOException {
+    List<ObjectNode> objectNodes = new ArrayList<>();
 
     // First line is the header
     String line = br.readLine();
@@ -20,26 +27,21 @@ public class SpellbookConverter extends JSONConverter {
         category = fields[0];
         continue;
       }
-      JSONObject jsonObject = new JSONObject();
-      jsonObject.put("Category", category);
-      jsonObject.put("Name", fields[0]);
-      jsonObject.put("Spell level", Integer.parseInt(fields[1]));
-      jsonObject.put("Direction", fields[2]);
-      jsonObject.put("Relative probability", Double.parseDouble(fields[3].replace("%", "")));
-      jsonObject.put(
+      ObjectNode objectNode = mapper.createObjectNode();
+      objectNode.put("Category", category);
+      objectNode.put("Name", fields[0]);
+      objectNode.put("Spell level", Integer.parseInt(fields[1]));
+      objectNode.put("Direction", fields[2]);
+      objectNode.put("Relative probability", Double.parseDouble(fields[3].replace("%", "")));
+      objectNode.put(
           "Probability conditional on price", Double.parseDouble(fields[4].replace("%", "")));
-      jsonObject.put("Actions to read", Integer.parseInt(fields[5]));
+      objectNode.put("Actions to read", Integer.parseInt(fields[5]));
       if (fields.length > 6) {
-        jsonObject.put("Skill changes", fields[6]);
+        objectNode.put("Skill changes", fields[6]);
       }
-      jsonArray.put(jsonObject);
+      objectNodes.add(objectNode);
     }
 
-    return jsonArray;
-  }
-
-  @Override
-  void convert() {
-    convertFile("spellbooks.txt");
+    return objectNodes;
   }
 }

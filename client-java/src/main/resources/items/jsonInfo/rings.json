@@ -1,159 +1,129 @@
-[
-    {
-        "Extrinsic granted": "None",
-        "Cost": "5",
-        "Notes": "symbolized by %; never randomly generated",
-        "Name": "meat ring"
-    },
-    {
-        "Extrinsic granted": "+n charisma",
-        "Cost": "100",
-        "Notes": "chargeable",
-        "Name": "ring of adornment"
-    },
-    {
-        "Extrinsic granted": "hunger",
-        "Cost": "100",
-        "Notes": "90% generated cursed",
-        "Name": "ring of hunger"
-    },
-    {
-        "Extrinsic granted": "+n protection",
-        "Cost": "100",
-        "Notes": "chargeable",
-        "Name": "ring of protection"
-    },
-    {
-        "Extrinsic granted": "protection from shape changers",
-        "Cost": "100",
-        "Name": "ring of protection from shape changers"
-    },
-    {
-        "Extrinsic granted": "stealth",
-        "Cost": "100",
-        "Name": "ring of stealth"
-    },
-    {
-        "Extrinsic granted": "sustain ability",
-        "Cost": "100",
-        "Name": "ring of sustain ability"
-    },
-    {
-        "Extrinsic granted": "warning",
-        "Cost": "100",
-        "Name": "ring of warning"
-    },
-    {
-        "Extrinsic granted": "aggravate monster",
-        "Cost": "150",
-        "Notes": "90% generated cursed",
-        "Name": "ring of aggravate monster"
-    },
-    {
-        "Extrinsic granted": "cold resistance",
-        "Cost": "150",
-        "Name": "ring of cold resistance"
-    },
-    {
-        "Extrinsic granted": "+n constitution",
-        "Cost": "150",
-        "Notes": "chargeable",
-        "Name": "ring of gain constitution"
-    },
-    {
-        "Extrinsic granted": "+n strength",
-        "Cost": "150",
-        "Notes": "chargeable",
-        "Name": "ring of gain strength"
-    },
-    {
-        "Extrinsic granted": "+n to-hit bonus",
-        "Cost": "150",
-        "Notes": "chargeable",
-        "Name": "ring of increase accuracy"
-    },
-    {
-        "Extrinsic granted": "+n damage bonus",
-        "Cost": "150",
-        "Notes": "chargeable",
-        "Name": "ring of increase damage"
-    },
-    {
-        "Extrinsic granted": "invisibility",
-        "Cost": "150",
-        "Notes": "cursed if from a Nazgul",
-        "Name": "ring of invisibility"
-    },
-    {
-        "Extrinsic granted": "poison resistance",
-        "Cost": "150",
-        "Name": "ring of poison resistance"
-    },
-    {
-        "Extrinsic granted": "see invisible",
-        "Cost": "150",
-        "Name": "ring of see invisible"
-    },
-    {
-        "Extrinsic granted": "shock resistance",
-        "Cost": "150",
-        "Name": "ring of shock resistance"
-    },
-    {
-        "Extrinsic granted": "fire resistance",
-        "Cost": "200",
-        "Name": "ring of fire resistance"
-    },
-    {
-        "Extrinsic granted": "free action",
-        "Cost": "200",
-        "Name": "ring of free action"
-    },
-    {
-        "Extrinsic granted": "levitation",
-        "Cost": "200",
-        "Name": "ring of levitation"
-    },
-    {
-        "Extrinsic granted": "regeneration",
-        "Cost": "200",
-        "Name": "ring of regeneration"
-    },
-    {
-        "Extrinsic granted": "searching",
-        "Cost": "200",
-        "Name": "ring of searching"
-    },
-    {
-        "Extrinsic granted": "slow digestion",
-        "Cost": "200",
-        "Name": "ring of slow digestion"
-    },
-    {
-        "Extrinsic granted": "teleportitis",
-        "Cost": "200",
-        "Notes": "90% generated cursed",
-        "Name": "ring of teleportation"
-    },
-    {
-        "Extrinsic granted": "conflict",
-        "Cost": "300",
-        "Name": "ring of conflict"
-    },
-    {
-        "Extrinsic granted": "polymorphitis",
-        "Cost": "300",
-        "Notes": "90% generated cursed",
-        "Name": "ring of polymorph"
-    },
-    {
-        "Extrinsic granted": "polymorph control",
-        "Cost": "300",
-        "Name": "ring of polymorph control"
-    },
-    {
-        "Extrinsic granted": "teleport control",
-        "Cost": "300",
-        "Name": "ring of teleport control"
-    }
-]
+[ {
+  "Name" : "meat ring",
+  "Cost" : "5",
+  "Extrinsic granted" : "None",
+  "Notes" : "symbolized by %; never randomly generated"
+}, {
+  "Name" : "ring of adornment",
+  "Cost" : "100",
+  "Extrinsic granted" : "+n charisma",
+  "Notes" : "chargeable"
+}, {
+  "Name" : "ring of hunger",
+  "Cost" : "100",
+  "Extrinsic granted" : "hunger",
+  "Notes" : "90% generated cursed"
+}, {
+  "Name" : "ring of protection",
+  "Cost" : "100",
+  "Extrinsic granted" : "+n protection",
+  "Notes" : "chargeable"
+}, {
+  "Name" : "ring of protection from shape changers",
+  "Cost" : "100",
+  "Extrinsic granted" : "protection from shape changers"
+}, {
+  "Name" : "ring of stealth",
+  "Cost" : "100",
+  "Extrinsic granted" : "stealth"
+}, {
+  "Name" : "ring of sustain ability",
+  "Cost" : "100",
+  "Extrinsic granted" : "sustain ability"
+}, {
+  "Name" : "ring of warning",
+  "Cost" : "100",
+  "Extrinsic granted" : "warning"
+}, {
+  "Name" : "ring of aggravate monster",
+  "Cost" : "150",
+  "Extrinsic granted" : "aggravate monster",
+  "Notes" : "90% generated cursed"
+}, {
+  "Name" : "ring of cold resistance",
+  "Cost" : "150",
+  "Extrinsic granted" : "cold resistance"
+}, {
+  "Name" : "ring of gain constitution",
+  "Cost" : "150",
+  "Extrinsic granted" : "+n constitution",
+  "Notes" : "chargeable"
+}, {
+  "Name" : "ring of gain strength",
+  "Cost" : "150",
+  "Extrinsic granted" : "+n strength",
+  "Notes" : "chargeable"
+}, {
+  "Name" : "ring of increase accuracy",
+  "Cost" : "150",
+  "Extrinsic granted" : "+n to-hit bonus",
+  "Notes" : "chargeable"
+}, {
+  "Name" : "ring of increase damage",
+  "Cost" : "150",
+  "Extrinsic granted" : "+n damage bonus",
+  "Notes" : "chargeable"
+}, {
+  "Name" : "ring of invisibility",
+  "Cost" : "150",
+  "Extrinsic granted" : "invisibility",
+  "Notes" : "cursed if from a Nazgul"
+}, {
+  "Name" : "ring of poison resistance",
+  "Cost" : "150",
+  "Extrinsic granted" : "poison resistance"
+}, {
+  "Name" : "ring of see invisible",
+  "Cost" : "150",
+  "Extrinsic granted" : "see invisible"
+}, {
+  "Name" : "ring of shock resistance",
+  "Cost" : "150",
+  "Extrinsic granted" : "shock resistance"
+}, {
+  "Name" : "ring of fire resistance",
+  "Cost" : "200",
+  "Extrinsic granted" : "fire resistance"
+}, {
+  "Name" : "ring of free action",
+  "Cost" : "200",
+  "Extrinsic granted" : "free action"
+}, {
+  "Name" : "ring of levitation",
+  "Cost" : "200",
+  "Extrinsic granted" : "levitation"
+}, {
+  "Name" : "ring of regeneration",
+  "Cost" : "200",
+  "Extrinsic granted" : "regeneration"
+}, {
+  "Name" : "ring of searching",
+  "Cost" : "200",
+  "Extrinsic granted" : "searching"
+}, {
+  "Name" : "ring of slow digestion",
+  "Cost" : "200",
+  "Extrinsic granted" : "slow digestion"
+}, {
+  "Name" : "ring of teleportation",
+  "Cost" : "200",
+  "Extrinsic granted" : "teleportitis",
+  "Notes" : "90% generated cursed"
+}, {
+  "Name" : "ring of conflict",
+  "Cost" : "300",
+  "Extrinsic granted" : "conflict"
+}, {
+  "Name" : "ring of polymorph",
+  "Cost" : "300",
+  "Extrinsic granted" : "polymorphitis",
+  "Notes" : "90% generated cursed"
+}, {
+  "Name" : "ring of polymorph control",
+  "Cost" : "300",
+  "Extrinsic granted" : "polymorph control"
+}, {
+  "Name" : "ring of teleport control",
+  "Cost" : "300",
+  "Extrinsic granted" : "teleport control"
+} ]

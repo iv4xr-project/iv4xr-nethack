@@ -1,6 +1,5 @@
 package connection.messagedecoder;
 
-import eu.iv4xr.framework.spatial.Vec3;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -11,6 +10,7 @@ import nethack.enums.HungerState;
 import nethack.object.*;
 import nl.uu.cs.aplib.utils.Pair;
 import util.CustomVec2D;
+import util.CustomVec3D;
 
 // Source: https://studytrails.com/2016/09/12/java-google-json-type-adapter/
 public class StatsDecoder extends Decoder {
@@ -37,8 +37,7 @@ public class StatsDecoder extends Decoder {
     Stats stats = new Stats();
 
     stats.dlvl = new Dlvl(values[12], values[23]);
-    player.position = new Vec3(values[0], values[1], 0);
-    player.position2D = new CustomVec2D(values[0], values[1]);
+    player.location = new CustomVec3D(0, new CustomVec2D(values[0], values[1]));
     player.strength = values[2];
     player.dexterity = values[4];
     player.constitution = values[5];

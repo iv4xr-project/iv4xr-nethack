@@ -1,109 +1,80 @@
-[
-    {
-        "Relative probability": 13,
-        "Amulet": "change",
-        "Other sources": "Helm of telepathy, some quest artifacts, intrinsic",
-        "When eaten": "Changes gender",
-        "weight": 20,
-        "produces the line...": "\"You are telepathic.\"",
-        "Cost": 150,
-        "Notes": "90.5% generated cursed"
-    },
-    {
-        "Relative probability": 17.5,
-        "Amulet": "ESP",
-        "Other sources": "none",
-        "When eaten": "Telepathy",
-        "weight": 20,
-        "produces the line...": "\"Your life will be saved.\"",
-        "Cost": 150,
-        "Notes": ""
-    },
-    {
-        "Relative probability": 7.5,
-        "Amulet": "life saving",
-        "Other sources": "none",
-        "When eaten": "(no effect)",
-        "weight": 20,
-        "produces the line...": "\"You can survive without air.\"",
-        "Cost": 150,
-        "Notes": ""
-    },
-    {
-        "Relative probability": 6.5,
-        "Amulet": "magical breathing",
-        "Other sources": "silver dragon scale mail, shield of reflection, wielded Longbow of Diana or wielded Dragonbane (3.6.1)",
-        "When eaten": "Breathlessness",
-        "weight": 20,
-        "produces the line...": "\"You have reflection.\"",
-        "Cost": 150,
-        "Notes": ""
-    },
-    {
-        "Relative probability": 7.5,
-        "Amulet": "reflection",
-        "Other sources": "none",
-        "When eaten": "(no effect)",
-        "weight": 20,
-        "produces the line...": "\"You fall asleep.\"",
-        "Cost": 150,
-        "Notes": ""
-    },
-    {
-        "Relative probability": 13.5,
-        "Amulet": "restful sleep",
-        "Other sources": "none",
-        "When eaten": "Restful sleep",
-        "weight": 20,
-        "produces the line...": "\"You can not change from your current form.\"",
-        "Cost": 150,
-        "Notes": "90.5% generated cursed"
-    },
-    {
-        "Relative probability": 13.5,
-        "Amulet": "strangulation",
-        "Other sources": "green dragon scale mail, ring of poison resistance, alchemy smock, intrinsic",
-        "When eaten": "Instantly choke",
-        "weight": 20,
-        "produces the line...": "\"You are poison resistant.\"",
-        "Cost": 150,
-        "Notes": "90.5% generated cursed"
-    },
-    {
-        "Relative probability": 4.5,
-        "Amulet": "unchanging",
-        "When eaten": "Revert to original form",
-        "weight": 20,
-        "Cost": 150
-    },
-    {
-        "Relative probability": 16.5,
-        "Amulet": "versus poison",
-        "When eaten": "Poison resistance",
-        "weight": 20,
-        "Cost": 150
-    },
-    {
-        "Relative probability": 0,
-        "Amulet": "cheap plastic imitation of the Amulet of Yendor",
-        "When eaten": "(inedible)",
-        "weight": 20,
-        "Cost": 150
-    },
-    {
-        "Relative probability": 0,
-        "Amulet": "Amulet of Yendor",
-        "When eaten": "(inedible)",
-        "weight": 20,
-        "Cost": 150,
-        "Notes": "Cannot be put in a container"
-    },
-    {
-        "Relative probability": 0,
-        "Amulet": "The Eye of the Aethiopica",
-        "When eaten": "Telepathy",
-        "weight": 20,
-        "Cost": 150,
-        "Notes": "Wizard quest artifact"
-    }
-]
+[ {
+  "Amulet" : "change",
+  "cost" : 150,
+  "weight" : 20,
+  "When eaten" : "Changes gender",
+  "notes" : "90.5% generated cursed",
+  "produces the line..." : "\"You are telepathic.\"",
+  "Other sources" : "Helm of telepathy, some quest artifacts, intrinsic"
+}, {
+  "Amulet" : "ESP",
+  "cost" : 150,
+  "weight" : 20,
+  "When eaten" : "Telepathy",
+  "produces the line..." : "\"Your life will be saved.\"",
+  "Other sources" : "none"
+}, {
+  "Amulet" : "life saving",
+  "cost" : 150,
+  "weight" : 20,
+  "When eaten" : "(no effect)",
+  "produces the line..." : "\"You can survive without air.\"",
+  "Other sources" : "none"
+}, {
+  "Amulet" : "magical breathing",
+  "cost" : 150,
+  "weight" : 20,
+  "When eaten" : "Breathlessness",
+  "produces the line..." : "\"You have reflection.\"",
+  "Other sources" : "silver dragon scale mail, shield of reflection, wielded Longbow of Diana or wielded Dragonbane (3.6.1)"
+}, {
+  "Amulet" : "reflection",
+  "cost" : 150,
+  "weight" : 20,
+  "When eaten" : "(no effect)",
+  "produces the line..." : "\"You fall asleep.\"",
+  "Other sources" : "none"
+}, {
+  "Amulet" : "restful sleep",
+  "cost" : 150,
+  "weight" : 20,
+  "When eaten" : "Restful sleep",
+  "notes" : "90.5% generated cursed",
+  "produces the line..." : "\"You can not change from your current form.\"",
+  "Other sources" : "none"
+}, {
+  "Amulet" : "strangulation",
+  "cost" : 150,
+  "weight" : 20,
+  "When eaten" : "Instantly choke",
+  "notes" : "90.5% generated cursed",
+  "produces the line..." : "\"You are poison resistant.\"",
+  "Other sources" : "green dragon scale mail, ring of poison resistance, alchemy smock, intrinsic"
+}, {
+  "Amulet" : "unchanging",
+  "cost" : 150,
+  "weight" : 20,
+  "When eaten" : "Revert to original form"
+}, {
+  "Amulet" : "versus poison",
+  "cost" : 150,
+  "weight" : 20,
+  "When eaten" : "Poison resistance"
+}, {
+  "Amulet" : "cheap plastic imitation of the Amulet of Yendor",
+  "cost" : 150,
+  "weight" : 20,
+  "When eaten" : "(inedible)"
+}, {
+  "Amulet" : "Amulet of Yendor",
+  "cost" : 150,
+  "weight" : 20,
+  "When eaten" : "(inedible)",
+  "notes" : "Cannot be put in a container"
+}, {
+  "Amulet" : "The Eye of the Aethiopica",
+  "cost" : 150,
+  "weight" : 20,
+  "When eaten" : "Telepathy",
+  "notes" : "Wizard quest artifact"
+} ]

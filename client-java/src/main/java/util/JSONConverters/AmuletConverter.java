@@ -1,12 +1,20 @@
 package util.JSONConverters;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.BufferedReader;
 import java.io.IOException;
-import org.json.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AmuletConverter extends JSONConverter {
-  protected JSONArray convertUsingReader(BufferedReader br) throws IOException {
-    JSONArray jsonArray = new JSONArray();
+  public String getFileName() {
+    return "amulets";
+  }
+
+  protected List<ObjectNode> convertUsingReader(BufferedReader br, ObjectMapper mapper)
+      throws IOException {
+    List<ObjectNode> objectNodes = new ArrayList<>();
 
     // First line is the header
     String line = br.readLine();
@@ -14,32 +22,27 @@ public class AmuletConverter extends JSONConverter {
     // Process each line of the input file
     while ((line = br.readLine()) != null) {
       String[] fields = line.split("\t");
-      JSONObject jsonObject = new JSONObject();
-      jsonObject.put("Amulet", fields[0]);
-      jsonObject.put(
-          "Relative probability", Double.parseDouble(fields[1].replaceAll("[^\\d.]", "")));
-      jsonObject.put("Cost", 150);
-      jsonObject.put("weight", 20);
+      ObjectNode objectNode = mapper.createObjectNode();
+      objectNode.put("Amulet", fields[0]);
+      //      objectNode.put(
+      //          "Relative probability", Double.parseDouble(fields[1].replaceAll("[^\\d.]", "")));
+      objectNode.put("cost", 150);
+      objectNode.put("weight", 20);
       if (fields.length >= 3) {
-        jsonObject.put("When eaten", fields[2]);
+        objectNode.put("When eaten", fields[2]);
       }
-      if (fields.length >= 4) {
-        jsonObject.put("Notes", fields[3]);
+      if (fields.length >= 4 && !fields[3].isEmpty()) {
+        objectNode.put("notes", fields[3]);
       }
       if (fields.length >= 5) {
-        jsonObject.put("produces the line...", fields[4]);
+        objectNode.put("produces the line...", fields[4]);
       }
       if (fields.length >= 6) {
-        jsonObject.put("Other sources", fields[5]);
+        objectNode.put("Other sources", fields[5]);
       }
-      jsonArray.put(jsonObject);
+      objectNodes.add(objectNode);
     }
 
-    return jsonArray;
-  }
-
-  @Override
-  void convert() {
-    convertFile("amulets.txt");
+    return objectNodes;
   }
 }

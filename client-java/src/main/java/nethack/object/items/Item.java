@@ -1,6 +1,5 @@
-package nethack.object;
+package nethack.object.items;
 
-import nethack.enums.BUC;
 import nethack.enums.ItemType;
 
 public class Item {
@@ -9,15 +8,13 @@ public class Item {
   public final ItemType type;
   public final int glyph;
   public final String description;
-  public BUC buc;
   public int quantity;
 
-  public Item(char symbol, ItemType type, int glyph, String description, BUC buc, int quantity) {
+  public Item(char symbol, ItemType type, int glyph, String description, int quantity) {
     this.symbol = symbol;
     this.type = type;
     this.description = description;
     this.glyph = glyph;
-    this.buc = buc;
     this.quantity = quantity;
   }
 
