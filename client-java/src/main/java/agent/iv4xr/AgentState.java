@@ -19,6 +19,7 @@ import nethack.enums.EntityType;
 import nethack.object.Entity;
 import nethack.object.Level;
 import nethack.object.Player;
+import nethack.object.Turn;
 import nl.uu.cs.aplib.mainConcepts.Environment;
 import util.ColoredStringBuilder;
 import util.CustomVec2D;
@@ -34,6 +35,7 @@ import util.Loggers;
  */
 public class AgentState extends Iv4xrAgentState<Void> {
   public HierarchicalNavigation hierarchicalNav;
+  Turn previousTurn;
 
   @Override
   public AgentEnv env() {
@@ -84,10 +86,17 @@ public class AgentState extends Iv4xrAgentState<Void> {
       return;
     }
 
+    // Turn did not update
+    Turn currentTurn = app().gameState.stats.turn;
+    if (previousTurn != null && previousTurn.equals(currentTurn)) {
+      return;
+    }
+
     super.updateState(agentId);
     addMapIfNew();
     updateMap();
     updateEntities();
+    previousTurn = currentTurn;
   }
 
   public NetHackSurface area() {
@@ -246,18 +255,16 @@ public class AgentState extends Iv4xrAgentState<Void> {
     }
 
     surface.updateTiles(updatedTiles, toggleBlockingOff);
-    hierarchicalNav.hierarchicalGraph.createEdgesWithinLevel(levelNr, surface);
+    surface.updateVisibleCoordinates(loc().pos, app().level());
 
-    // Clear list of coordinates
-    aux.properties.put("changedCoordinates", new Serializable[0]);
+    hierarchicalNav.hierarchicalGraph.createEdgesWithinLevel(levelNr, surface);
   }
 
   private void updateEntities() {
     // Update visibility cone
     CustomVec2D playerPos = NavUtils.loc2(worldmodel.position);
     Level level = env().app.gameState.getLevel();
-    HashSet<CustomVec2D> visibleCoordinates =
-        new HashSet<>(area().VisibleCoordinates(playerPos, level));
+    HashSet<CustomVec2D> visibleCoordinates = area().visibleCoordinates;
 
     // Remove all entities that are in vision range but can't be seen.
     List<String> idsToRemove = new ArrayList<>();

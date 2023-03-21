@@ -41,7 +41,7 @@ public class Actions {
         .do2(
             (AgentState S) ->
                 (Direction direction) -> {
-                  Sounds.attack();
+                  Sounds.fire();
                   Loggers.GoalLogger.info(">>> fire %s", direction);
                   WorldModel newWom = WorldModels.fire(S, direction);
                   return new Pair<>(S, newWom);

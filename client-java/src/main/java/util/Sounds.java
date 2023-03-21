@@ -20,6 +20,8 @@ public class Sounds {
           new AbstractMap.SimpleEntry<>(
               "door_knock", getFileFromResource("./sounds/193859_door-knock.wav")),
           new AbstractMap.SimpleEntry<>(
+              "arrow", getFileFromResource("./sounds/253548_arrow-shot.wav")),
+          new AbstractMap.SimpleEntry<>(
               "footstep", getFileFromResource("./sounds/336598_footstep.wav")),
           new AbstractMap.SimpleEntry<>(
               "metallic", getFileFromResource("./sounds/406489_metallic-pipe.wav")),
@@ -82,6 +84,10 @@ public class Sounds {
 
   public static void search() {
     playSound("door_knock");
+  }
+
+  public static void fire() {
+    playSound("arrow");
   }
 
   private static void playSound(String soundName) {

@@ -2,7 +2,9 @@ package nethack.object;
 
 import agent.navigation.hpastar.Size;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import nethack.enums.Color;
 import nethack.enums.EntityType;
 import util.ColoredStringBuilder;
@@ -13,11 +15,12 @@ public class Level {
   public static final Size SIZE = new Size(79, 21);
   public final Entity[][] map;
   public final List<CustomVec2D> changedCoordinates = new ArrayList<>();
-  public final List<CustomVec2D> visibleFloors = new ArrayList<>();
+  public Set<CustomVec2D> visibleFloors = new HashSet<>();
 
   public Level(Entity[][] entities) {
     this.map = entities;
 
+    // All visible floors are candidates for visibility checks
     setVisibleFloors();
   }
 

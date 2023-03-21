@@ -10,26 +10,11 @@ import nethack.object.Level;
 import util.CustomVec2D;
 
 public class NetHackSurface extends GridSurface {
+  public HashSet<CustomVec2D> visibleCoordinates = new HashSet<>();
+
   public NetHackSurface() {
     super(Level.SIZE, 8);
   }
-
-  //  @Override
-  //  public Iterable<Tile> neighbours(Tile t) {
-  //    List<Tile> neighbours = (List<Tile>) super.neighbours(t);
-  //
-  //    if (getTile(t.pos) instanceof Door) {
-  //      return neighbours.stream()
-  //          .filter(tile -> !NavUtils.isDiagonal(t.pos, tile.pos))
-  //          .collect(Collectors.toList());
-  //    } else {
-  //      return neighbours.stream()
-  //          .filter(
-  //              tile -> !(NavUtils.isDiagonal(t.pos, tile.pos) && getTile(tile.pos) instanceof
-  // Door))
-  //          .collect(Collectors.toList());
-  //    }
-  //  }
 
   public boolean canBeDoor(CustomVec2D pos) {
     Tile t = getTile(pos);
@@ -54,7 +39,7 @@ public class NetHackSurface extends GridSurface {
     return verticalWalls + horizontalWalls == 2 && (verticalWalls == 2 || horizontalWalls == 2);
   }
 
-  public List<CustomVec2D> VisibleCoordinates(CustomVec2D agentPosition, Level level) {
+  public void updateVisibleCoordinates(CustomVec2D agentPosition, Level level) {
     resetVisibility();
 
     // Perform BFS on the graph, initiate the queue with the agent position and all the lit floor
@@ -118,7 +103,7 @@ public class NetHackSurface extends GridSurface {
       }
     }
 
-    return new ArrayList<>(visibleCoordinates);
+    this.visibleCoordinates = visibleCoordinates;
   }
 
   private void resetVisibility() {

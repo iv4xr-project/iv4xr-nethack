@@ -19,6 +19,13 @@ public class CustomVec2D implements Serializable {
     this.y = (int) p.y;
   }
 
+  // Add two vectors together
+  public CustomVec2D add(CustomVec2D other) {
+    int newX = x + other.x;
+    int newY = y + other.y;
+    return new CustomVec2D(newX, newY);
+  }
+
   public static boolean adjacent(CustomVec2D p, CustomVec2D q, boolean allowDiagonally) {
     assert !p.equals(q) : "Cannot request adjacent for equal coordinates";
     int dx = Math.abs(p.x - q.x);
@@ -29,6 +36,11 @@ public class CustomVec2D implements Serializable {
       return false;
     }
     return allowDiagonally || dx == 0 || dy == 0;
+  }
+
+  public static boolean straightLine(CustomVec2D p, CustomVec2D q) {
+    assert !p.equals(q) : "Cannot determine straightline from equal coordinates";
+    return p.x == q.x || p.y == q.y || diagonal(p, q);
   }
 
   public static boolean diagonal(CustomVec2D p, CustomVec2D q) {

@@ -4,6 +4,7 @@ import static nl.uu.cs.aplib.AplibEDSL.*;
 
 import agent.iv4xr.AgentState;
 import agent.navigation.strategy.NavUtils;
+import agent.navigation.surface.StraightWalkable;
 import agent.selector.EntitySelector;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import java.util.*;
@@ -12,10 +13,11 @@ import nethack.object.Player;
 import nethack.object.items.FoodItem;
 import nethack.object.items.Item;
 import nl.uu.cs.aplib.mainConcepts.Tactic;
+import util.CustomVec2D;
 import util.CustomVec3D;
 
 /**
- * CustomVec2D Provide several basic actions and tactics.
+ * TacticLib Provide several basic actions and tactics.
  *
  * <p>Keep in mind that the provided navigation and exploration tactics/goals currently has no
  * ability to deal with items that block a corridor. The solution is for now to just generate
@@ -37,28 +39,70 @@ public class TacticLib {
                     return null;
                   }
                   return NavUtils.toDirection(S, new CustomVec3D(we.position));
-                }) // .lift(),
-            //        Actions.fire().on((AgentState S) -> {
-            //               int agentLvl = NavUtils.levelNr(S.worldmodel.position);
-            //               List<WorldEntity> wes =
-            //                 S.worldmodel.elements.values().stream().filter(worldEntity ->
-            //                         NavUtils.levelNr(worldEntity.position) ==
-            //                 agentLvl)).collect(Collectors.toList());
-            //                 if (wes.isEmpty()) {
-            //                            return null;
-            //                          }
-            //                          WorldEntity entity = null;
-            //                          CustomVec2D agentPos = NavUtils.loc2(S.worldmodel.position);
-            //                          for (WorldEntity we : wes) {
-            //                  CustomVec2D      CustomVec2D entityPos = NavUtils.loc2(we.position);
-            //                            if (agentPos.x == entityPos.x || agentPos.y ==
-            // entityPos.y) {
-            //                CustomVec2D      entity = true;
-            //                            }
-            //                          }
-            //
-            //                          return NavUtils.toDirection(S,
-            // NavUtils.loc3(we.position));})
+                })
+            .lift(),
+        Actions.fire()
+            .on(
+                (AgentState S) -> {
+                  CustomVec3D agentLoc = S.loc();
+                  List<WorldEntity> wes =
+                      S.worldmodel.elements.values().stream()
+                          .filter(
+                              worldEntity ->
+                                  worldEntity.position != null
+                                      && worldEntity.type.equals("MONSTER")
+                                      && NavUtils.levelNr(worldEntity.position) == agentLoc.lvl
+                                      && CustomVec2D.straightLine(
+                                          agentLoc.pos, new CustomVec2D(worldEntity.position)))
+                          .collect(Collectors.toList());
+                  if (wes.isEmpty()) {
+                    return null;
+                  }
+
+                  // Get closest entity
+                  WorldEntity entity = null;
+                  int manhattanDistance = Integer.MAX_VALUE;
+
+                  outer:
+                  for (WorldEntity we : wes) {
+                    CustomVec2D entityPos = new CustomVec2D(we.position);
+                    // Coordinate not visible
+                    if (!S.area().visibleCoordinates.contains(entityPos)) {
+                      continue;
+                    }
+
+                    int xSign = Integer.signum(entityPos.x - agentLoc.pos.x);
+                    int ySign = Integer.signum(entityPos.y - agentLoc.pos.y);
+                    CustomVec2D delta = new CustomVec2D(xSign, ySign);
+                    CustomVec2D currentPos = agentLoc.pos.add(delta);
+                    int currentDistance = 1;
+
+                    while (!currentPos.equals(entityPos)) {
+                      if (!(S.area().getTile(currentPos) instanceof StraightWalkable)) {
+                        continue outer;
+                      }
+                      currentPos = currentPos.add(delta);
+                      currentDistance += 1;
+                      if (currentDistance >= manhattanDistance) {
+                        continue outer;
+                      }
+                    }
+
+                    entity = we;
+                    manhattanDistance = currentDistance;
+                  }
+
+                  if (entity == null) {
+                    return null;
+                  }
+
+                  CustomVec2D entityPos = new CustomVec2D(entity.position);
+                  int xSign = Integer.signum(entityPos.x - agentLoc.pos.x);
+                  int ySign = Integer.signum(entityPos.y - agentLoc.pos.y);
+                  CustomVec2D delta = new CustomVec2D(xSign, ySign);
+                  return NavUtils.toDirection(
+                      S, new CustomVec3D(agentLoc.lvl, agentLoc.pos.add(delta)));
+                })
             .lift());
   }
 
