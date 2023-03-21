@@ -178,6 +178,13 @@ public class NetHack {
     for (int i = 0; i < n; i++) {
       Command command = commands.get(i);
 
+      // Quaff and read doesn't work in NLE, use direct command instead
+      if (command.commandEnum == CommandEnum.COMMAND_QUAFF) {
+        command = Command.fromStroke("-q");
+      } else if (command.commandEnum == CommandEnum.COMMAND_READ) {
+        command = Command.fromStroke("-r");
+      }
+
       if (command.commandEnum == CommandEnum.ADDITIONAL_ASCII) {
         msg[i * 2 + 2] = 0;
         msg[i * 2 + 3] = (byte) command.stroke.charAt(0);

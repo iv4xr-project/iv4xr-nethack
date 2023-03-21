@@ -2,7 +2,7 @@ import re
 import numpy as np
 from nle import nethack
 
-from src.nethack_util import message
+from src.nethack_util import message, step
 
 # Defined in lib/nle/include/display.h
 # Can throw index out of range
@@ -69,10 +69,10 @@ def to_description(arr):
 
 def move_cursor(env, key, delta):
     while int(delta / 8) != 0:
-        do_step(env, key.capitalize())
+        step.step_stroke(env, key.capitalize())
         delta -= 8
     while delta != 0:
-        do_step(env, key)
+        step.step_stroke(env, key)
         delta -= 1
 
 
@@ -82,11 +82,11 @@ def unique_id_monster(env, obs, x, y, monster_descriptions, index):
 
     # Activate command '#name'
     for char in '#n':
-        do_step(env, char)
-    do_step(env, '\n')
+        step.step_stroke(env, char)
+    step.step_stroke(env, '\n')
 
     # Name a monster
-    do_step(env, 'm')
+    step.step_stroke(env, 'm')
 
     # Move cursor to correct position
     dx = cursor_x - x
@@ -100,14 +100,14 @@ def unique_id_monster(env, obs, x, y, monster_descriptions, index):
     move_cursor(env, y_key, dy)
 
     # Select square
-    raw_obs, _ = do_step(env, ',')
-    msg = message.read_raw_obs_msg(raw_obs)
+    obs, _ = step.step_stroke(env, ',')
+    msg = message.read_obs_msg(obs)
 
     # Creature has no name yet
     if not msg.__contains__('called'):
         # Give name character by character
         for char in str(counter):
-            do_step(env, char)
+            step.step_stroke(env, char)
 
         monster_descriptions[index] = counter
         # Increment counter
@@ -118,16 +118,8 @@ def unique_id_monster(env, obs, x, y, monster_descriptions, index):
         monster_descriptions[index] = monster_id
 
     # Updated observation
-    raw_obs, done = do_step(env, '\n')
-    return env.get_observation(raw_obs), done
-
-
-def do_step(env, char):
-    raw_obs, done = env.nethack.step(ord(char))
-    msg = message.read_raw_obs_msg(raw_obs)
-    print("Char:", char, 'msg:', msg)
-    # env.render()
-    return raw_obs, done
+    obs, done = step.step_stroke(env, '\n')
+    return obs, done
 
 
 def get_cursor_pos(obs) -> (int, int):

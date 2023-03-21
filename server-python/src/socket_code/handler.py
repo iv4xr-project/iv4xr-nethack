@@ -22,6 +22,7 @@ sys.path.append(project_dir)
 import src.socket_code.protocol.write as write
 import src.socket_code.protocol.read as read
 import src.socket_code.protocol.util as util
+from src.nethack_util import step
 import src.logger as logger
 
 
@@ -177,11 +178,11 @@ def handle_steps(sock, env):
     obs, done = None, None
     for i in range(int(len(steps_info) / 2)):
         is_nle_command = steps_info[i * 2]
+        command = steps_info[i * 2 + 1]
         if is_nle_command:
-            obs, rew, done, info = env.step(steps_info[i * 2 + 1])
+            obs, done = step.step_action(env, command)
         else:
-            raw_obs, done = env.nethack.step(steps_info[i * 2 + 1])
-            obs = env.get_observation(raw_obs)
+            obs, done = step.step_stroke(env, chr(command))
 
     write.write_obs(sock, env, obs)
     write.write_step(sock, done, None)
