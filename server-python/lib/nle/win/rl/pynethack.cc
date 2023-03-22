@@ -202,7 +202,7 @@ class Nethack
     }
 
     void
-    set_buffers(py::object glyphs, py::object chars, py::object colors,
+    set_buffers(py::object hidden, py::object glyphs, py::object chars, py::object colors, // GERARD:
                 py::object specials, py::object blstats, py::object message,
                 py::object program_state, py::object internal,
                 py::object inv_glyphs, py::object inv_letters,
@@ -214,6 +214,8 @@ class Nethack
             throw std::runtime_error("set_buffers called after reset()");
 
         std::vector<ssize_t> dungeon{ ROWNO, COLNO - 1 };
+        // GERARD:
+        obs_.hidden = checked_conversion<int16_t>(hidden, dungeon);
         obs_.glyphs = checked_conversion<int16_t>(glyphs, dungeon);
         obs_.chars = checked_conversion<uint8_t>(chars, dungeon);
         obs_.colors = checked_conversion<uint8_t>(colors, dungeon);
@@ -243,7 +245,8 @@ class Nethack
         obs_.tty_cursor = checked_conversion<uint8_t>(tty_cursor, { 2 });
         obs_.misc = checked_conversion<int32_t>(misc, { NLE_MISC_SIZE });
 
-        py_buffers_ = { std::move(glyphs),
+        py_buffers_ = { std::move(hidden), // GERARD:
+                        std::move(glyphs),
                         std::move(chars),
                         std::move(colors),
                         std::move(specials),
@@ -385,6 +388,7 @@ PYBIND11_MODULE(_pynethack, m)
         .def("reset", py::overload_cast<>(&Nethack::reset))
         .def("reset", py::overload_cast<std::string>(&Nethack::reset))
         .def("set_buffers", &Nethack::set_buffers,
+             py::arg("hidden") = py::none(), // GERARD
              py::arg("glyphs") = py::none(), py::arg("chars") = py::none(),
              py::arg("colors") = py::none(), py::arg("specials") = py::none(),
              py::arg("blstats") = py::none(), py::arg("message") = py::none(),
@@ -404,7 +408,8 @@ PYBIND11_MODULE(_pynethack, m)
         .def("get_seeds", &Nethack::get_seeds)
         .def("in_normal_game", &Nethack::in_normal_game)
         .def("how_done", &Nethack::how_done)
-        .def("set_wizkit", &Nethack::set_wizkit);
+        .def("set_wizkit", &Nethack::set_wizkit)
+        .def("TEST", &Nethack::close);
 
     py::module mn = m.def_submodule(
         "nethack", "Collection of NetHack constants and functions");
@@ -638,7 +643,7 @@ PYBIND11_MODULE(_pynethack, m)
         .def_readonly("mmove", &permonst::mmove)   /* move speed */
         .def_readonly("ac", &permonst::ac)         /* (base) armor class */
         .def_readonly("mr", &permonst::mr) /* (base) magic resistance */
-        // .def_readonly("maligntyp", &permonst::maligntyp) /* basic
+        .def_readonly("maligntyp", &permonst::maligntyp) /* basic
         // monster alignment */
         .def_readonly("geno", &permonst::geno) /* creation/geno mask value */
         // .def_readonly("mattk", &permonst::mattk) /* attacks matrix
@@ -664,6 +669,46 @@ PYBIND11_MODULE(_pynethack, m)
         .def_readonly("mcolor", &permonst::mcolor) /* color to use */
 #endif
         ;
+
+    // // Bind the struct definition
+    // py::class_<dlevel_t>(mn, "dlevel_t")
+    //   //  .def(py::init<>())
+    //    .def_readonly("locations", &dlevel_t::locations)
+    // //    .def_readonly("objects", &dlevel_t::objects)
+    // //    .def_readonly("monsters", &dlevel_t::monsters)
+    // //    .def_readonly("objlist", &dlevel_t::objlist)
+    // //    .def_readonly("buriedobjlist", &dlevel_t::buriedobjlist)
+    // //    .def_readonly("monlist", &dlevel_t::monlist)
+    // //    .def_readonly("damagelist", &dlevel_t::damagelist)
+    // //    .def_readonly("bonesinfo", &dlevel_t::bonesinfo)
+    // //    .def_readonly("flags", &dlevel_t::flags);
+
+    // mn.def("level", &level, py::return_value_policy::reference);
+
+    // // Bind the struct definition
+    // py::class_<rm>(m, "rm")
+    //     .def(py::init<>())
+    //     .def_readwrite("glyph", &rm::glyph)
+    //     .def_readwrite("typ", &rm::typ);
+
+    // Bind the locations array
+    // mn.def_property_readonly("locations", []() {
+    mn.def("locations", []() {
+        py::list rows;
+        for (int i = 0; i < ROWNO; i++) {
+            py::list row;
+            for (int j = 0; j < COLNO; j++) {
+              row.append(level.locations[j][i].glyph);
+            }
+            rows.append(row);
+        }
+        return rows;
+    });
+
+    // mn.attr("test1") = py::int_(botl_score());
+    // mn.def("test1", []() { py::print(&level); return 1; });
+    mn.attr("test2") = py::int_(level.locations[1][1].glyph);
+    mn.attr("test3") = py::int_(level.locations[1][1].typ);
 
     py::class_<class_sym>(mn, "class_sym")
         .def_static(

@@ -30,6 +30,7 @@ SCREEN_DESCRIPTIONS_SHAPE = DUNGEON_SHAPE + (
 TERMINAL_SHAPE = (_pynethack.nethack.NLE_TERM_LI, _pynethack.nethack.NLE_TERM_CO)
 
 OBSERVATION_DESC = {
+    "hidden": dict(shape=DUNGEON_SHAPE, dtype=np.int16), # GERARD:
     "glyphs": dict(shape=DUNGEON_SHAPE, dtype=np.int16),
     "chars": dict(shape=DUNGEON_SHAPE, dtype=np.uint8),
     "colors": dict(shape=DUNGEON_SHAPE, dtype=np.uint8),
