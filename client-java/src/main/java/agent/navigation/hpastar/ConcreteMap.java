@@ -19,7 +19,7 @@ import util.CustomVec2D;
 
 public class ConcreteMap implements IMap<ConcreteNode> {
   public final IPassability passability;
-  public final TileType tileType;
+  public final NavType navType;
 
   public final Size size;
   public final int maxEdges;
@@ -29,10 +29,10 @@ public class ConcreteMap implements IMap<ConcreteNode> {
     return size.height * size.width;
   }
 
-  public ConcreteMap(TileType tileType, Size size, IPassability passability) {
+  public ConcreteMap(NavType navType, Size size, IPassability passability) {
     this.passability = passability;
-    this.tileType = tileType;
-    this.maxEdges = Helpers.getMaxEdges(tileType);
+    this.navType = navType;
+    this.maxEdges = Helpers.getMaxEdges(navType);
     this.size = size;
     this.graph = GraphFactory.createGraph(size, passability);
   }
@@ -69,7 +69,7 @@ public class ConcreteMap implements IMap<ConcreteNode> {
     int targetY = targetPosition.y;
     int diffX = Math.abs(targetX - startX);
     int diffY = Math.abs(targetY - startY);
-    switch (tileType) {
+    switch (navType) {
       case Hex:
         {
           // Vancouver distance
@@ -124,7 +124,7 @@ public class ConcreteMap implements IMap<ConcreteNode> {
    */
   public boolean canJump(CustomVec2D p1, CustomVec2D p2) {
     // TODO: Check whether can jump
-    if (tileType != TileType.Octile && tileType != TileType.OctileUnicost) return true;
+    if (navType != NavType.Octile && navType != NavType.OctileUnicost) return true;
 
     if (Helpers.areAligned(p1, p2)) return true;
 

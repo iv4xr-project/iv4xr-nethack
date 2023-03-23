@@ -13,7 +13,7 @@ food detection	100	2.5%	8	random
 gold detection	100	3.3%	8	random
 magic mapping	100	4.5%	8	random
 scare monster	100	3.5%	20	random
-teleportation1, 3	100	5.5%	20	random
+teleportation 3	100	5.5%	20	random
 amnesia	200	3.5%	8	random
 create monster1	200	4.5%	10	random
 earth1	200	1.8%	8	random

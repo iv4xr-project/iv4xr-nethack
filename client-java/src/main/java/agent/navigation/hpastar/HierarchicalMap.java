@@ -51,8 +51,8 @@ public class HierarchicalMap implements IMap<AbstractNode> {
   private int currentClusterX0;
   private int currentClusterX1;
 
-  public void setType(TileType tileType) {
-    switch (tileType) {
+  public void setType(NavType navType) {
+    switch (navType) {
       case Tile:
         type = AbsType.ABSTRACT_TILE;
         break;
@@ -65,10 +65,10 @@ public class HierarchicalMap implements IMap<AbstractNode> {
     }
   }
 
-  public HierarchicalMap(TileType tileType, int clusterSize, int maxLevel, Size size) {
+  public HierarchicalMap(NavType navType, int clusterSize, int maxLevel, Size size) {
     this.clusterSize = clusterSize;
     this.maxLevel = maxLevel;
-    setType(tileType);
+    setType(navType);
     this.size = size;
   }
 

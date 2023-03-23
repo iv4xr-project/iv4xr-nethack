@@ -31,7 +31,7 @@ public class HierarchicalMapFactory {
     entranceStyle = style;
     this.maxLevel = maxLevel;
     this.concreteMap = concreteMap;
-    hierarchicalMap = new HierarchicalMap(TileType.OctileUnicost, clusterSize, maxLevel, size);
+    hierarchicalMap = new HierarchicalMap(NavType.OctileUnicost, clusterSize, maxLevel, size);
     List<Entrance> entrances = new ArrayList<>();
     createEntrancesAndClusters(entrances);
     createAbstractNodes(entrances);

@@ -6,8 +6,8 @@ package agent.navigation.hpastar.passabilities;
 
 import agent.navigation.hpastar.ConcreteMap;
 import agent.navigation.hpastar.IPassability;
+import agent.navigation.hpastar.NavType;
 import agent.navigation.hpastar.Size;
-import agent.navigation.hpastar.TileType;
 import agent.navigation.hpastar.infrastructure.Constants;
 import agent.navigation.hpastar.utils.RefSupport;
 import java.util.Random;
@@ -70,7 +70,7 @@ public class FakePassability implements IPassability {
         slice.obstacles[relX][relY] = obstacles[x][y];
       }
     }
-    return new ConcreteMap(TileType.OctileUnicost, size, slice);
+    return new ConcreteMap(NavType.OctileUnicost, size, slice);
   }
 
   @Override

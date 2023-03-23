@@ -6,13 +6,13 @@ package agent.navigation.hpastar.factories;
 
 import agent.navigation.hpastar.ConcreteMap;
 import agent.navigation.hpastar.IPassability;
+import agent.navigation.hpastar.NavType;
 import agent.navigation.hpastar.Size;
-import agent.navigation.hpastar.TileType;
 
 /** Constructs ConcreteMap objects */
 public class ConcreteMapFactory {
   public static ConcreteMap createConcreteMap(
-      Size size, IPassability passability, TileType tilingType) {
+      Size size, IPassability passability, NavType tilingType) {
     return new ConcreteMap(tilingType, size, passability);
   }
 }

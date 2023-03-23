@@ -7,8 +7,8 @@ package agent.navigation.hpastar;
 import util.CustomVec2D;
 
 public class Helpers {
-  public static int getMaxEdges(TileType tileType) {
-    switch (tileType) {
+  public static int getMaxEdges(NavType navType) {
+    switch (navType) {
       case Hex:
         return 6;
       case Octile:

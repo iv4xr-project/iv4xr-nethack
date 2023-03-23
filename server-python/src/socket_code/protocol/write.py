@@ -74,7 +74,7 @@ def write_obs(sock, env, obs):
     sock.write(OBS_BYTE)
     sock.write(struct.pack('>27i', *obs['blstats']))
     write_str(sock, msg)
-    write_map(sock, zip(obs['chars'].flatten(), obs['colors'].flatten(), obs['glyphs'].flatten(), monster_descriptions.flatten()))
+    write_map(sock, zip(obs['chars'].flatten(), obs['colors'].flatten(), obs['glyphs'].flatten(), obs['tiles'].flatten(), monster_descriptions.flatten()))
 
     nr_items = np.trim_zeros(obs['inv_letters']).shape[0]
     write_inv(sock, zip(obs['inv_letters'], obs['inv_oclasses'], obs['inv_glyphs'], obs['inv_strs']), nr_items)
@@ -114,8 +114,8 @@ def write_map(sock, map_entities):
     Encode the entire map in bytes
     """
     sent_items = 0
-    for char, color, glyph, monster_description in map_entities:
-        sock.write(struct.pack(">BBHH", char, color, glyph, monster_description))
+    for char, color, glyph, tile, monster_description in map_entities:
+        sock.write(struct.pack(">BBHBH", char, color, glyph, tile, monster_description))
         sent_items += 1
 
         if sent_items % 79 == 0:

@@ -6,8 +6,8 @@ package agent.navigation.hpastar.factories;
 
 import agent.navigation.hpastar.Cluster;
 import agent.navigation.hpastar.IPassability;
+import agent.navigation.hpastar.NavType;
 import agent.navigation.hpastar.Size;
-import agent.navigation.hpastar.TileType;
 import agent.navigation.hpastar.graph.ConcreteEdgeInfo;
 import agent.navigation.hpastar.graph.ConcreteGraph;
 import agent.navigation.hpastar.graph.ConcreteNode;
@@ -22,7 +22,7 @@ public class GraphFactory {
   public static ConcreteGraph createGraph(Size size, IPassability passability) {
     ConcreteGraph graph = new ConcreteGraph();
     createNodes(size, graph, passability);
-    createEdges(size, graph, TileType.OctileUnicost, passability);
+    createEdges(size, graph, NavType.OctileUnicost, passability);
     return graph;
   }
 
@@ -51,7 +51,7 @@ public class GraphFactory {
   }
 
   private static void createEdges(
-      Size size, ConcreteGraph graph, TileType tileType, IPassability passability) {
+      Size size, ConcreteGraph graph, NavType navType, IPassability passability) {
     for (int top = 0; top < size.height; ++top) {
       for (int left = 0; left < size.width; ++left) {
         CustomVec2D currentPos = new CustomVec2D(left, top);
@@ -59,7 +59,7 @@ public class GraphFactory {
           continue;
         }
         Id<ConcreteNode> nodeId = getNodeByPos(graph, currentPos, size.width).nodeId;
-        if (tileType == TileType.Hex) {
+        if (navType == NavType.Hex) {
           if (left % 2 == 0) {
             addEdge(graph, nodeId, left + 1, top - 1, size, false);
             addEdge(graph, nodeId, left - 1, top - 1, size, false);

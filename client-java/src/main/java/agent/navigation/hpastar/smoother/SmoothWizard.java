@@ -7,7 +7,7 @@ package agent.navigation.hpastar.smoother;
 import agent.navigation.hpastar.ConcreteMap;
 import agent.navigation.hpastar.ConcretePathNode;
 import agent.navigation.hpastar.IPathNode;
-import agent.navigation.hpastar.TileType;
+import agent.navigation.hpastar.NavType;
 import agent.navigation.hpastar.graph.ConcreteGraph;
 import agent.navigation.hpastar.graph.ConcreteNode;
 import agent.navigation.hpastar.graph.ConcreteNodeInfo;
@@ -94,7 +94,7 @@ public class SmoothWizard {
     for (int dir = ((Enum) Direction.North).ordinal();
         dir <= ((Enum) Direction.NorthWest).ordinal();
         dir++) {
-      if (_concreteMap.tileType == TileType.Tile && dir > ((Enum) Direction.West).ordinal()) break;
+      if (_concreteMap.navType == NavType.Tile && dir > ((Enum) Direction.West).ordinal()) break;
 
       Id<ConcreteNode> seenPathNode =
           advanceThroughDirection(

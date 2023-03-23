@@ -4,7 +4,7 @@
 
 package agent.navigation.hpastar;
 
-public enum TileType {
+public enum NavType {
   Hex,
   /** Octiles with cost 1 to adjacent and sqrt(2) to diagonal. */
   Octile,

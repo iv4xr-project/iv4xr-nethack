@@ -153,7 +153,7 @@ public class Program {
     // Prepare the abstract graph beforehand
     IPassability passability = new FakePassability(size, true);
     ConcreteMap concreteMap =
-        ConcreteMapFactory.createConcreteMap(size, passability, TileType.Octile);
+        ConcreteMapFactory.createConcreteMap(size, passability, NavType.Octile);
     HierarchicalMapFactory abstractMapFactory = new HierarchicalMapFactory();
     HierarchicalMap absTiling =
         abstractMapFactory.createHierarchicalMap(
@@ -199,7 +199,7 @@ public class Program {
     // Prepare the abstract graph beforehand
     IPassability passability = new FakePassability(size, true);
     ConcreteMap concreteMap =
-        ConcreteMapFactory.createConcreteMap(size, passability, TileType.Octile);
+        ConcreteMapFactory.createConcreteMap(size, passability, NavType.Octile);
     HierarchicalMapFactory abstractMapFactory = new HierarchicalMapFactory();
     HierarchicalMap absTiling =
         abstractMapFactory.createHierarchicalMap(
@@ -244,7 +244,7 @@ public class Program {
     // IPassability passability = new ExamplePassability();
     IPassability passability = new FakePassability(size, true);
     ConcreteMap concreteMap =
-        ConcreteMapFactory.createConcreteMap(size, passability, TileType.Octile);
+        ConcreteMapFactory.createConcreteMap(size, passability, NavType.Octile);
     HierarchicalMapFactory abstractMapFactory = new HierarchicalMapFactory();
     HierarchicalMap absTiling =
         abstractMapFactory.createHierarchicalMap(
