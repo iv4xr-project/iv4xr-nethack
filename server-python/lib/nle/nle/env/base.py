@@ -35,11 +35,11 @@ FULL_ACTIONS = nethack.USEFUL_ACTIONS
 SKIP_EXCEPTIONS = (b"eat", b"attack", b"direction?", b"pray")
 
 NLE_SPACE_ITEMS = (
-    # GERARD:
+    # GERARD: tiles
     (
-        "hidden",
+        "tiles",
         gym.spaces.Box(
-            low=0, high=nethack.MAX_GLYPH, **nethack.OBSERVATION_DESC["hidden"]
+            low=0, high=nethack.MAX_TYPE, **nethack.OBSERVATION_DESC["tiles"]
         ),
     ),
     (
@@ -181,7 +181,7 @@ class NLE(gym.Env):
         character="mon-hum-neu-mal",
         max_episode_steps=5000,
         observation_keys=(
-            "hidden",
+            "tiles",
             "glyphs",
             "chars",
             "colors",

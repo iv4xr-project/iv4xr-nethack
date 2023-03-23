@@ -202,7 +202,7 @@ class Nethack
     }
 
     void
-    set_buffers(py::object hidden, py::object glyphs, py::object chars, py::object colors, // GERARD:
+    set_buffers(py::object tiles, py::object glyphs, py::object chars, py::object colors, // GERARD: tiles
                 py::object specials, py::object blstats, py::object message,
                 py::object program_state, py::object internal,
                 py::object inv_glyphs, py::object inv_letters,
@@ -214,8 +214,8 @@ class Nethack
             throw std::runtime_error("set_buffers called after reset()");
 
         std::vector<ssize_t> dungeon{ ROWNO, COLNO - 1 };
-        // GERARD:
-        obs_.hidden = checked_conversion<int16_t>(hidden, dungeon);
+        // GERARD: tiles
+        obs_.tiles = checked_conversion<uint8_t>(tiles, dungeon);
         obs_.glyphs = checked_conversion<int16_t>(glyphs, dungeon);
         obs_.chars = checked_conversion<uint8_t>(chars, dungeon);
         obs_.colors = checked_conversion<uint8_t>(colors, dungeon);
@@ -245,7 +245,7 @@ class Nethack
         obs_.tty_cursor = checked_conversion<uint8_t>(tty_cursor, { 2 });
         obs_.misc = checked_conversion<int32_t>(misc, { NLE_MISC_SIZE });
 
-        py_buffers_ = { std::move(hidden), // GERARD:
+        py_buffers_ = { std::move(tiles), // GERARD: tiles
                         std::move(glyphs),
                         std::move(chars),
                         std::move(colors),
@@ -388,7 +388,7 @@ PYBIND11_MODULE(_pynethack, m)
         .def("reset", py::overload_cast<>(&Nethack::reset))
         .def("reset", py::overload_cast<std::string>(&Nethack::reset))
         .def("set_buffers", &Nethack::set_buffers,
-             py::arg("hidden") = py::none(), // GERARD
+             py::arg("tiles") = py::none(), // GERARD: tiles
              py::arg("glyphs") = py::none(), py::arg("chars") = py::none(),
              py::arg("colors") = py::none(), py::arg("specials") = py::none(),
              py::arg("blstats") = py::none(), py::arg("message") = py::none(),
@@ -621,6 +621,7 @@ PYBIND11_MODULE(_pynethack, m)
                                     /*strides=*/{ sizeof(glyph2tile[0]) },
                                     /*readonly=*/true);
 #endif
+    mn.attr("MAX_TYPE") = py::int_(36);
 
     py::class_<permonst>(mn, "permonst", "The permonst struct.")
         .def(
