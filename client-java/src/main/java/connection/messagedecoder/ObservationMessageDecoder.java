@@ -29,7 +29,7 @@ public class ObservationMessageDecoder extends Decoder {
       observationMessage.message = readString(input);
       Loggers.ProfilerLogger.trace("READ MESSAGE TOOK: %fs", stopwatch.split());
 
-      int bytesPerEntry = 7;
+      int bytesPerEntry = 8;
       byte[] entities = input.readNBytes(bytesPerEntry * Level.SIZE.width * Level.SIZE.height);
       int offset = 0;
       for (int y = 0; y < Level.SIZE.height; y++) {
@@ -37,10 +37,11 @@ public class ObservationMessageDecoder extends Decoder {
           char symbol = (char) entities[offset];
           int colorCode = entities[offset + 1];
           int glyph = (entities[offset + 2] << 8) + entities[offset + 3];
-          int id = (entities[offset + 5] << 8) + entities[offset + 6];
+          int id = (entities[offset + 7] << 8) + entities[offset + 6];
           observationMessage.entities[y][x] =
               EntityDecoder.decode(input, symbol, colorCode, glyph, id);
           observationMessage.tileTypes[y][x] = TileType.fromValue(entities[offset + 4]);
+          observationMessage.tileFlags[y][x] = entities[offset + 5];
           offset += bytesPerEntry;
         }
       }

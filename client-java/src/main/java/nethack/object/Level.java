@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 import nethack.enums.Color;
 import nethack.enums.EntityType;
+import nethack.enums.TileType;
 import util.ColoredStringBuilder;
 import util.CustomVec2D;
 import util.Loggers;
@@ -14,10 +15,12 @@ import util.Loggers;
 public class Level {
   public static final Size SIZE = new Size(79, 21);
   public final Entity[][] map;
+  public final TileType[][] tileTypes;
+  //  public final byte[][] tileFlags;
   public final List<CustomVec2D> changedCoordinates = new ArrayList<>();
   public Set<CustomVec2D> visibleFloors = new HashSet<>();
 
-  public Level(Entity[][] entities) {
+  public Level(Entity[][] entities, TileType[][] tileTypes) {
     this.map = entities;
 
     // All visible floors are candidates for visibility checks

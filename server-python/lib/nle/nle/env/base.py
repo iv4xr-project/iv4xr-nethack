@@ -188,7 +188,8 @@ class NLE(gym.Env):
         character="mon-hum-neu-mal",
         max_episode_steps=5000,
         observation_keys=(
-            "tiles",
+            "tiles", # GERARD: tiles
+            "flags", # GERARD: flags
             "glyphs",
             "chars",
             "colors",

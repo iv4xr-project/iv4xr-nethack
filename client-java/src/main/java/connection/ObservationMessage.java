@@ -10,6 +10,7 @@ public class ObservationMessage {
   public Player player;
   public final Entity[][] entities = new Entity[Level.SIZE.height][Level.SIZE.width];
   public final TileType[][] tileTypes = new TileType[Level.SIZE.height][Level.SIZE.width];
+  public final byte[][] tileFlags = new byte[Level.SIZE.height][Level.SIZE.width];
   public String message;
   public Item[] items;
 
@@ -21,6 +22,11 @@ public class ObservationMessage {
       for (int x = 0; x < Level.SIZE.width; x++) {
         TileType tileType = tileTypes[y][x];
         csb.append(tileType.color, tileType.symbol);
+      }
+      csb.append("  ");
+      for (int x = 0; x < Level.SIZE.width; x++) {
+        byte tileFlag = tileFlags[y][x];
+        csb.append(tileFlag).append(",");
       }
       csb.newLine();
     }
