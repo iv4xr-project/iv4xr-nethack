@@ -482,7 +482,7 @@ NetHackRL::store_glyph(XCHAR_P x, XCHAR_P y, int glyph)
     // TODO: Glyphs might be taken from gbuf[y][x].glyph.
     glyphs_[offset] = shuffled_glyph(glyph);
     // GERARD: tiles
-    tiles_[offset] = levl[x][y].typ;
+    tiles_[offset] = levl[x - 1][y].typ;
 }
 
 void

@@ -1,32 +1,40 @@
 package nethack.enums;
 
 public enum TileType {
-  STONE,
-  WALL,
-  TREE,
-  SECRET_DOOR,
-  SECRET_CORRIDOR,
-  POOL,
-  MOAT,
-  WATER,
-  DRAWBRIDGE_UP,
-  LAVA_POOL,
-  IRON_BARS,
-  DOOR,
-  CORRIDOR,
-  ROOM,
-  STAIRS,
-  LADDER,
-  FOUNTAIN,
-  THRONE,
-  SINK,
-  GRAVE,
-  ALTAR,
-  ICE,
-  DRAWBRIDGE_DOWN,
-  AIR,
-  CLOUD,
-  NOTHING;
+  STONE(' ', Color.GRAY),
+  WALL('W', Color.GRAY),
+  TREE('#', Color.GREEN_BRIGHT),
+  SECRET_DOOR('+', Color.TRANSPARENT),
+  SECRET_CORRIDOR('#', Color.TRANSPARENT),
+  POOL('~', Color.BLUE_BRIGHT),
+  MOAT('M', Color.BLUE),
+  WATER('~', Color.BLUE),
+  DRAWBRIDGE_UP('#', Color.BROWN),
+  LAVA_POOL('~', Color.RED),
+  IRON_BARS('#', Color.BLUE),
+  DOOR('+', Color.BROWN),
+  CORRIDOR('#', Color.GRAY),
+  ROOM('.', Color.GRAY),
+  STAIRS('=', Color.MAGENTA),
+  LADDER('=', Color.BROWN),
+  FOUNTAIN('{', Color.BLUE),
+  THRONE('\\', Color.YELLOW),
+  SINK('s', Color.WHITE),
+  GRAVE('|', Color.WHITE),
+  ALTAR('_', Color.WHITE),
+  ICE('.', Color.BLUE_BRIGHT),
+  DRAWBRIDGE_DOWN('=', Color.GREEN_BRIGHT),
+  AIR('A', Color.BLUE_BRIGHT),
+  CLOUD('#', Color.WHITE),
+  NOTHING('?', Color.WHITE);
+
+  public final char symbol;
+  public final Color color;
+
+  TileType(char symbol, Color color) {
+    this.symbol = symbol;
+    this.color = color;
+  }
 
   public static TileType fromValue(int value) {
     assert value >= 0 && value <= 36 : "Other tile types are not known";

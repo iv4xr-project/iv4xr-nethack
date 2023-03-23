@@ -55,6 +55,8 @@ public class ObservationMessageDecoder extends Decoder {
       }
       Loggers.ProfilerLogger.trace("READ ITEMS TOOK: %f", stopwatch.split());
 
+      System.out.println(observationMessage);
+
       return observationMessage;
     } catch (IOException e) {
       throw new RuntimeException(e);
