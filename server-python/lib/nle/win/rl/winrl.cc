@@ -196,6 +196,7 @@ class NetHackRL
 
     std::array<int16_t, (COLNO - 1) * ROWNO> glyphs_;
     std::array<uint8_t, (COLNO - 1) * ROWNO> tiles_; // GERARD: tiles
+    std::array<uint8_t, (COLNO - 1) * ROWNO> flags_; // GERARD: flags
 
     /* Output of mapglyph */
     std::array<uint8_t, (COLNO - 1) * ROWNO> chars_;
@@ -242,7 +243,7 @@ class NetHackRL
 std::unique_ptr<NetHackRL> NetHackRL::instance =
     std::unique_ptr<NetHackRL>(nullptr);
 
-NetHackRL::NetHackRL(int &argc, char **argv) : glyphs_(), tiles_(), blstats_{} // GERARD: tiles
+NetHackRL::NetHackRL(int &argc, char **argv) : glyphs_(), tiles_(), flags_(), blstats_{} // GERARD: tiles GERARD: flags
 {
     // create base window
     // (done in tty_init_nhwindows before this NetHackRL object got created).
@@ -251,6 +252,8 @@ NetHackRL::NetHackRL(int &argc, char **argv) : glyphs_(), tiles_(), blstats_{} /
     glyphs_.fill(nul_glyph);
     // GERARD: tiles
     tiles_.fill(MAX_TYPE);
+    // GERARD: flags
+    flags_.fill(0);
 }
 
 void
@@ -308,6 +311,9 @@ NetHackRL::fill_obs(nle_obs *obs)
         // GERARD: tiles
         if (obs->tiles)
             std::memset(obs->tiles, MAX_TYPE, tiles_.size());
+        // GERARD: flags
+        if (obs->flags)
+            std::memset(obs->flags, 0, flags_.size());
         if (obs->chars)
             std::memset(obs->chars, 0, chars_.size()); /* Or fill with ' '? */
         if (obs->colors)
@@ -332,6 +338,10 @@ NetHackRL::fill_obs(nle_obs *obs)
     // GERARD: tiles
     if (obs->tiles) {
         std::memcpy(obs->tiles, tiles_.data(), tiles_.size());
+    }
+    // GERARD: flags
+    if (obs->flags) {
+        std::memcpy(obs->flags, flags_.data(), flags_.size());
     }
     if (obs->chars) {
         std::memcpy(obs->chars, chars_.data(), chars_.size());
@@ -483,6 +493,8 @@ NetHackRL::store_glyph(XCHAR_P x, XCHAR_P y, int glyph)
     glyphs_[offset] = shuffled_glyph(glyph);
     // GERARD: tiles
     tiles_[offset] = levl[x - 1][y].typ;
+    // GERARD: flags
+    flags_[offset] = levl[x - 1][y].flags;
 }
 
 void
@@ -658,11 +670,14 @@ NetHackRL::clear_nhwindow_method(winid wid)
         glyphs_.fill(nul_glyph);
         // GERARD: tiles
         tiles_.fill(MAX_TYPE);
+        // GERARD: tiles
+        flags_.fill(0);
         // Inspect all tiles with their corresponding type
         for (int x = 0; x < COLNO - 1; x++) {
           for (int y = 0; y < ROWNO; y++) {
             int offset = x + y * (COLNO - 1);
             tiles_[offset] = levl[x][y].typ;
+            flags_[offset] = levl[x][y].flags;
           }
         }
         chars_.fill(' ');

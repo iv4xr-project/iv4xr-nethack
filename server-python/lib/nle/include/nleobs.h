@@ -52,6 +52,7 @@ typedef struct nle_observation {
     int how_done;            /* If game is really_done, how it ended. */
     short *glyphs;           /* Size ROWNO * (COLNO - 1) */
     unsigned char *tiles;    /* Size ROWNO * (COLNO - 1) */ // GERARD: tiles
+    unsigned char *flags;    /* Size ROWNO * (COLNO - 1) */ // GERARD: flags
     unsigned char *chars;    /* Size ROWNO * (COLNO - 1) */
     unsigned char *colors;   /* Size ROWNO * (COLNO - 1) */
     unsigned char *specials; /* Size ROWNO * (COLNO - 1) */

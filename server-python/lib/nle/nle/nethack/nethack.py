@@ -31,6 +31,7 @@ TERMINAL_SHAPE = (_pynethack.nethack.NLE_TERM_LI, _pynethack.nethack.NLE_TERM_CO
 
 OBSERVATION_DESC = {
     "tiles": dict(shape=DUNGEON_SHAPE, dtype=np.uint8),  # GERARD: tiles
+    "flags": dict(shape=DUNGEON_SHAPE, dtype=np.uint8),  # GERARD: flags
     "glyphs": dict(shape=DUNGEON_SHAPE, dtype=np.int16),
     "chars": dict(shape=DUNGEON_SHAPE, dtype=np.uint8),
     "colors": dict(shape=DUNGEON_SHAPE, dtype=np.uint8),

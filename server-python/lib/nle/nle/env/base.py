@@ -42,6 +42,13 @@ NLE_SPACE_ITEMS = (
             low=0, high=nethack.MAX_TYPE, **nethack.OBSERVATION_DESC["tiles"]
         ),
     ),
+    # GERARD: flags
+    (
+        "flags",
+        gym.spaces.Box(
+            low=0, high=255, **nethack.OBSERVATION_DESC["flags"]
+        ),
+    ),
     (
         "glyphs",
         gym.spaces.Box(
