@@ -1,12 +1,13 @@
-package agent.navigation.surface;
+package nethack.world.tiles;
 
+import agent.navigation.surface.Tile;
 import util.CustomVec3D;
 
-public class PrisonBars extends Tile implements Printable {
+public class IronBars extends Tile implements Viewable {
   private boolean isVisible;
   public final boolean seeThrough = true;
 
-  public PrisonBars(CustomVec3D pos) {
+  public IronBars(CustomVec3D pos) {
     super(pos);
   }
 
@@ -27,5 +28,13 @@ public class PrisonBars extends Tile implements Printable {
   @Override
   public void setVisible(boolean isVisible) {
     this.isVisible = isVisible;
+  }
+
+  public boolean equals(Object o) {
+    if (!(o instanceof IronBars)) {
+      return false;
+    }
+
+    return loc.equals(((IronBars) o).loc);
   }
 }

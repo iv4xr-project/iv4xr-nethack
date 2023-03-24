@@ -14,6 +14,7 @@ import agent.navigation.hpastar.smoother.Direction;
 import agent.navigation.hpastar.utils.RefSupport;
 import agent.navigation.strategy.NavUtils;
 import agent.navigation.surface.Tile;
+import agent.navigation.surface.Walkable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -28,30 +29,29 @@ public class GridSurfaceFactory {
   static final int MAX_ENTRANCE_WIDTH = 6;
   static final EntranceStyle entranceStyle = EntranceStyle.EndEntrance;
 
-  public static Set<Direction> removeEdges(GridSurface surface, Tile tile) {
+  public static void removeEdges(GridSurface surface, Tile tile) {
     staticSurface = surface;
     Cluster originalCluster = staticSurface.hierarchicalMap.findClusterForPosition(tile.pos);
     ConcreteMap subConcreteMap = originalCluster.subConcreteMap;
     CustomVec2D relativePos = originalCluster.toRelativePos(tile.pos);
 
-    Id<ConcreteNode> nodeId =
-        GraphFactory.getNodeByPos(
-                subConcreteMap.graph, relativePos, staticSurface.hierarchicalMap.clusterSize)
-            .nodeId;
+    ConcreteNode nodeDummy =
+        GraphFactory.getNodeByPos(subConcreteMap.graph, relativePos, originalCluster.size.width);
+    assert nodeDummy != null;
+    Id<ConcreteNode> nodeId = nodeDummy.nodeId;
     ConcreteNode node = subConcreteMap.graph.getNode(nodeId);
     node.info.isObstacle = true;
     subConcreteMap.graph.removeEdgesFromAndToNode(nodeId);
-
-    return new HashSet<>();
   }
 
-  public static Set<Direction> addEdges(GridSurface surface, Tile t) {
+  public static Set<Direction> addEdges(GridSurface surface, Tile tile) {
+    assert tile instanceof Walkable : "Must be walkable";
     staticSurface = surface;
     Set<Direction> updateClusterEdges = new HashSet<>();
 
-    Cluster originalCluster = staticSurface.hierarchicalMap.findClusterForPosition(t.pos);
+    Cluster originalCluster = staticSurface.hierarchicalMap.findClusterForPosition(tile.pos);
     ConcreteMap subConcreteMap = originalCluster.subConcreteMap;
-    CustomVec2D relativePos = originalCluster.toRelativePos(t.pos);
+    CustomVec2D relativePos = originalCluster.toRelativePos(tile.pos);
 
     Id<ConcreteNode> nodeId =
         GraphFactory.getNodeByPos(subConcreteMap.graph, relativePos, originalCluster.size.width)
@@ -60,7 +60,7 @@ public class GridSurfaceFactory {
     node.info.isObstacle = false;
 
     List<CustomVec2D> neighbours =
-        NavUtils.neighbourCoordinates(t.pos, staticSurface.hierarchicalMap.size, true);
+        NavUtils.neighbourCoordinates(tile.pos, staticSurface.hierarchicalMap.size, true);
     for (CustomVec2D neighbourPos : neighbours) {
       Cluster neighbourCluster = staticSurface.hierarchicalMap.findClusterForPosition(neighbourPos);
       CustomVec2D neighbourRelativePos = neighbourCluster.toRelativePos(neighbourPos);
@@ -69,7 +69,7 @@ public class GridSurfaceFactory {
         continue; // Do not add edge if it is not passable
       }
 
-      if (CustomVec2D.diagonal(t.pos, neighbourPos)) {
+      if (CustomVec2D.diagonal(tile.pos, neighbourPos)) {
         // Cannot move diagonal
         if (!subConcreteMap.passability.canMoveDiagonal(relativePos)
             || !neighbourConcreteMap.passability.canMoveDiagonal(neighbourRelativePos)) {

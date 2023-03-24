@@ -4,7 +4,7 @@ import static nl.uu.cs.aplib.AplibEDSL.*;
 
 import agent.iv4xr.AgentState;
 import agent.navigation.strategy.NavUtils;
-import agent.navigation.surface.StraightWalkable;
+import agent.navigation.surface.Walkable;
 import agent.selector.EntitySelector;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import java.util.*;
@@ -67,7 +67,7 @@ public class TacticLib {
                   for (WorldEntity we : wes) {
                     CustomVec2D entityPos = new CustomVec2D(we.position);
                     // Coordinate not visible
-                    if (!S.area().visibleCoordinates.contains(entityPos)) {
+                    if (!S.app().gameState.getLevel().visibleCoordinates.contains(entityPos)) {
                       continue;
                     }
 
@@ -78,7 +78,7 @@ public class TacticLib {
                     int currentDistance = 1;
 
                     while (!currentPos.equals(entityPos)) {
-                      if (!(S.area().getTile(currentPos) instanceof StraightWalkable)) {
+                      if (!(S.area().getTile(currentPos) instanceof Walkable)) {
                         continue outer;
                       }
                       currentPos = currentPos.add(delta);

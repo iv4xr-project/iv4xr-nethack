@@ -492,9 +492,9 @@ NetHackRL::store_glyph(XCHAR_P x, XCHAR_P y, int glyph)
     // TODO: Glyphs might be taken from gbuf[y][x].glyph.
     glyphs_[offset] = shuffled_glyph(glyph);
     // GERARD: tiles
-    tiles_[offset] = levl[x - 1][y].typ;
+    tiles_[offset] = levl[x][y].typ;
     // GERARD: flags
-    flags_[offset] = levl[x - 1][y].flags;
+    flags_[offset] = levl[x][y].flags;
 }
 
 void
@@ -673,9 +673,9 @@ NetHackRL::clear_nhwindow_method(winid wid)
         // GERARD: tiles
         flags_.fill(0);
         // Inspect all tiles with their corresponding type
-        for (int x = 0; x < COLNO - 1; x++) {
+        for (int x = 1; x < COLNO; x++) {
           for (int y = 0; y < ROWNO; y++) {
-            int offset = x + y * (COLNO - 1);
+            int offset = (x - 1) + y * (COLNO - 1);
             tiles_[offset] = levl[x][y].typ;
             flags_[offset] = levl[x][y].flags;
           }

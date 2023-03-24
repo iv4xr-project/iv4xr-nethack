@@ -1,25 +1,21 @@
 package agent.iv4xr;
 
 import agent.navigation.HierarchicalNavigation;
-import agent.navigation.NetHackSurface;
-import agent.navigation.hpastar.graph.AbstractNode;
-import agent.navigation.hpastar.infrastructure.Constants;
-import agent.navigation.hpastar.infrastructure.Id;
 import agent.navigation.strategy.NavUtils;
 import agent.navigation.surface.*;
 import eu.iv4xr.framework.extensions.pathfinding.Navigatable;
 import eu.iv4xr.framework.mainConcepts.Iv4xrAgentState;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
-import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 import nethack.NetHack;
-import nethack.enums.Condition;
 import nethack.enums.EntityType;
 import nethack.object.Entity;
-import nethack.object.Level;
 import nethack.object.Player;
 import nethack.object.Turn;
+import nethack.world.Level;
+import nethack.world.Surface;
+import nethack.world.tiles.*;
 import nl.uu.cs.aplib.mainConcepts.Environment;
 import util.ColoredStringBuilder;
 import util.CustomVec2D;
@@ -34,7 +30,6 @@ import util.Loggers;
  * @author wish
  */
 public class AgentState extends Iv4xrAgentState<Void> {
-  public HierarchicalNavigation hierarchicalNav;
   Turn previousTurn;
 
   @Override
@@ -44,6 +39,14 @@ public class AgentState extends Iv4xrAgentState<Void> {
 
   public NetHack app() {
     return env().app;
+  }
+
+  public Surface area() {
+    return app().gameState.getLevel().surface;
+  }
+
+  public HierarchicalNavigation hierarchicalNav() {
+    return app().gameState.dungeon.hierarchicalNav;
   }
 
   public CustomVec3D loc() {
@@ -65,18 +68,11 @@ public class AgentState extends Iv4xrAgentState<Void> {
   @Override
   public AgentState setEnvironment(Environment env) {
     super.setEnvironment(env);
-    setNavGraph();
     return this;
   }
 
   public WorldEntity auxState() {
     return worldmodel.elements.get("aux");
-  }
-
-  private void setNavGraph() {
-    NetHackSurface newNav = new NetHackSurface();
-    assert hierarchicalNav == null;
-    hierarchicalNav = new HierarchicalNavigation(newNav);
   }
 
   @Override
@@ -93,178 +89,15 @@ public class AgentState extends Iv4xrAgentState<Void> {
     }
 
     super.updateState(agentId);
-    addMapIfNew();
-    updateMap();
     updateEntities();
     previousTurn = currentTurn;
-  }
-
-  public NetHackSurface area() {
-    return hierarchicalNav.areas.get(NavUtils.levelNr(worldmodel.position));
-  }
-
-  private void addMapIfNew() {
-    WorldEntity aux = auxState();
-    int levelNr = (int) aux.properties.get("levelNr");
-    // If detecting a new maze, need to allocate a nav-graph for this maze:
-    if (levelNr >= hierarchicalNav.areas.size()) {
-      hierarchicalNav.addNextArea(new NetHackSurface());
-    }
-
-    WorldEntity previousState = worldmodel.elements.get(Player.ID).getPreviousState();
-    CustomVec3D currentLocation = loc();
-
-    // The level number changed didn't change, don't add edge
-    if (previousState == null || currentLocation.lvl == NavUtils.levelNr(previousState.position)) {
-      return;
-    }
-
-    // Previous tile was not a stair
-    if (!(hierarchicalNav.getTile(new CustomVec3D(previousState.position)) instanceof Stair)) {
-      return;
-    }
-
-    CustomVec3D previousLocation = new CustomVec3D(previousState.position);
-    Id<AbstractNode> previousNodeId =
-        hierarchicalNav.hierarchicalGraph.addAbstractNode(previousLocation);
-    Id<AbstractNode> currentNodeId =
-        hierarchicalNav.hierarchicalGraph.addAbstractNode(currentLocation);
-
-    AbstractNode previousNode =
-        hierarchicalNav.hierarchicalGraph.abstractGraph.getNode(previousNodeId);
-    AbstractNode currentNode =
-        hierarchicalNav.hierarchicalGraph.abstractGraph.getNode(currentNodeId);
-    if (!previousNode.edges.containsKey(currentNodeId)) {
-      hierarchicalNav.hierarchicalGraph.addEdge(previousNodeId, currentNodeId, Constants.COST_ONE);
-    }
-    if (!currentNode.edges.containsKey(previousNodeId)) {
-      hierarchicalNav.hierarchicalGraph.addEdge(currentNodeId, previousNodeId, Constants.COST_ONE);
-    }
-  }
-
-  private void updateMap() {
-    WorldEntity aux = auxState();
-    int levelNr = (int) aux.properties.get("levelNr");
-    NetHackSurface surface = area();
-
-    Serializable[] changedCoordinates = (Serializable[]) aux.properties.get("changedCoordinates");
-    Loggers.AgentLogger.debug("update state with %d new coordinates", changedCoordinates.length);
-    List<Tile> updatedTiles = new ArrayList<>();
-    List<CustomVec2D> toggleBlockingOff = new ArrayList<>();
-
-    // Player position must be walkable
-    CustomVec3D playerLoc = loc();
-    if (surface.nullTile(playerLoc.pos)
-        || !(surface.getTile(playerLoc.pos) instanceof StraightWalkable)) {
-      updatedTiles.add(new Unknown(playerLoc));
-    }
-
-    // Adjacent coordinates are not automatically updated if we are blind
-    Set<CustomVec2D> adjacentCoords;
-    if (app().gameState.player.conditions.hasCondition(Condition.BLIND)) {
-      adjacentCoords = new HashSet<>();
-    } else {
-      adjacentCoords =
-          new HashSet<>(NavUtils.neighbourCoordinates(playerLoc.pos, Level.SIZE, true));
-    }
-
-    for (Serializable entry_ : changedCoordinates) {
-      Serializable[] entry = (Serializable[]) entry_;
-      CustomVec2D pos = (CustomVec2D) entry[0];
-      adjacentCoords.remove(pos);
-
-      EntityType type = (EntityType) entry[1];
-
-      CustomVec3D loc = new CustomVec3D(levelNr, pos);
-
-      switch (type) {
-        case PLAYER:
-          if (area().nullTile(pos)) {
-            updatedTiles.add(new Unknown(loc));
-          } else {
-            toggleBlockingOff.add(pos);
-          }
-          break;
-        case WALL:
-        case BOULDER:
-          updatedTiles.add(new Wall(loc));
-          break;
-        case CORRIDOR:
-          updatedTiles.add(new Corridor(loc));
-          break;
-        case FLOOR:
-        case ICE:
-          updatedTiles.add(new Floor(loc));
-          break;
-        case DOOR:
-          Entity entity = env().app.level().getEntity(pos);
-          updatedTiles.add(new Door(loc, !entity.closedDoor()));
-          break;
-        case DOORWAY:
-          updatedTiles.add(new Doorway(loc));
-          break;
-        case PRISON_BARS:
-          updatedTiles.add(new PrisonBars(loc));
-          break;
-        case STAIRS_DOWN:
-          updatedTiles.add(new Stair(loc, Climbable.ClimbType.Descendable));
-          break;
-        case STAIRS_UP:
-          updatedTiles.add(new Stair(loc, Climbable.ClimbType.Ascendable));
-          break;
-        case SINK:
-          updatedTiles.add(new Sink(loc));
-          break;
-        case TREE:
-          updatedTiles.add(new Tree(loc));
-          break;
-        case WATER:
-          updatedTiles.add(new Water(loc));
-          break;
-        case LAVA:
-          updatedTiles.add(new Lava(loc));
-          break;
-        case FOUNTAIN:
-          updatedTiles.add(new Fountain(loc));
-          break;
-        case THRONE:
-          updatedTiles.add(new Throne(loc));
-          break;
-        default:
-          // If the tile has been seen we switch the state to non-blocking.
-          // If we don't know the type of the tile, we for now put a tile in its place
-          if (surface.nullTile(pos)) {
-            updatedTiles.add(new Unknown(loc));
-          } else if (surface.canBeDoor(pos)) {
-            if (surface.getTile(pos) instanceof Unknown) {
-              updatedTiles.add(new Door(loc, true));
-            }
-            // If the type is more specific than Tile, then don't change anything
-          } else {
-            toggleBlockingOff.add(pos);
-          }
-          break;
-      }
-    }
-
-    // Missed adjacent coords, these are walls
-    for (CustomVec2D adjacentPos : adjacentCoords) {
-      if (surface.nullTile(adjacentPos)) {
-        updatedTiles.add(new Wall(new CustomVec3D(levelNr, adjacentPos)));
-      }
-    }
-
-    surface.updateTiles(updatedTiles, toggleBlockingOff);
-    surface.updateVisibleCoordinates(loc().pos, app().level());
-
-    hierarchicalNav.hierarchicalGraph.createEdgesWithinLevel(levelNr, surface);
   }
 
   private void updateEntities() {
     // Update visibility cone
     CustomVec2D playerPos = NavUtils.loc2(worldmodel.position);
     Level level = env().app.gameState.getLevel();
-    HashSet<CustomVec2D> visibleCoordinates = area().visibleCoordinates;
+    Set<CustomVec2D> visibleCoordinates = level.visibleCoordinates;
 
     // Remove all entities that are in vision range but can't be seen.
     List<String> idsToRemove = new ArrayList<>();

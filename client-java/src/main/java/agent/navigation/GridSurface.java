@@ -1,5 +1,5 @@
 package agent.navigation;
-;
+
 import agent.navigation.hpastar.*;
 import agent.navigation.hpastar.factories.EntranceStyle;
 import agent.navigation.hpastar.factories.HierarchicalMapFactory;
@@ -16,6 +16,7 @@ import eu.iv4xr.framework.extensions.pathfinding.XPathfinder;
 import java.util.*;
 import java.util.stream.Collectors;
 import nethack.enums.Color;
+import nethack.world.tiles.Viewable;
 import util.ColoredStringBuilder;
 import util.CustomVec2D;
 
@@ -49,33 +50,21 @@ public class GridSurface implements Navigatable<CustomVec2D>, XPathfinder<Custom
 
   public GridSurface(Size size, int clusterSize) {
     tiles = new Tile[size.height][size.width];
-    ConcreteMap emptyConcreteMap = new EmptyPassability(size).getConcreteMap();
-    concreteMap = emptyConcreteMap;
+    concreteMap = new EmptyPassability(size).getConcreteMap();
     hierarchicalMap =
         new HierarchicalMapFactory()
-            .createHierarchicalMap(
-                emptyConcreteMap, clusterSize, 1, EntranceStyle.EndEntrance, size);
+            .createHierarchicalMap(concreteMap, clusterSize, 1, EntranceStyle.EndEntrance, size);
   }
 
-  public void updateTiles(List<Tile> newTiles, List<CustomVec2D> toggleOffBlocking) {
+  public void updateTiles(List<Tile> newTiles) {
     Map<Id<Cluster>, Set<Direction>> entrances = new HashMap<>();
-
-    for (CustomVec2D pos : toggleOffBlocking) {
-      Tile tile = getTile(pos);
-      if (tile instanceof Door) {
-        Door door = (Door) tile;
-        door.setBlockingState(false);
-      }
-    }
-
     for (Tile tile : newTiles) {
       boolean updated = updateTile(tile);
-      markAsSeen(tile.pos);
       if (!updated) {
         continue;
       }
 
-      boolean blocked = !(tile instanceof StraightWalkable);
+      boolean blocked = !(tile instanceof Walkable);
       if (blocked) {
         GridSurfaceFactory.removeEdges(this, tile);
         continue;
@@ -161,10 +150,24 @@ public class GridSurface implements Navigatable<CustomVec2D>, XPathfinder<Custom
   private boolean updateTile(Tile tile) {
     updatePassibility(tile);
     Tile prevTile = tiles[tile.pos.y][tile.pos.x];
-    replaceTile(prevTile, tile);
+    if (prevTile == null) {
+      replaceTile(prevTile, tile);
+      return true;
+    }
+
+    // Some state stuff might need to be remembered
+    Tile newTile = prevTile.updatedTile(tile);
+    replaceTile(prevTile, newTile);
     tiles[tile.pos.y][tile.pos.x] = tile;
-    return tile instanceof StraightWalkable != prevTile instanceof StraightWalkable
-        || tile instanceof Walkable != prevTile instanceof Walkable;
+    if (tile instanceof Walkable != prevTile instanceof Walkable) {
+      return true;
+    }
+
+    if (!(tile instanceof Walkable)) {
+      return false;
+    }
+
+    return ((Walkable) prevTile).getWalkableType() != ((Walkable) tile).getWalkableType();
   }
 
   public void updatePassibility(Tile tile) {
@@ -172,12 +175,16 @@ public class GridSurface implements Navigatable<CustomVec2D>, XPathfinder<Custom
     CustomVec2D relPos = cluster.toRelativePos(tile.pos);
 
     // Update main concreteMap
-    concreteMap.passability.updateCanMoveDiagonally(tile.pos, tile instanceof Walkable);
-    concreteMap.passability.updateObstacle(tile.pos, !(tile instanceof StraightWalkable));
+    boolean canMoveDiagonally =
+        tile instanceof Walkable
+            && ((Walkable) tile).getWalkableType() == Walkable.WalkableType.Diagonal;
+    boolean isObstacle = !(tile instanceof Walkable);
+    concreteMap.passability.updateCanMoveDiagonally(tile.pos, canMoveDiagonally);
+    concreteMap.passability.updateObstacle(tile.pos, isObstacle);
 
     // Update subConcreteMaps
-    cluster.subConcreteMap.passability.updateCanMoveDiagonally(relPos, tile instanceof Walkable);
-    cluster.subConcreteMap.passability.updateObstacle(relPos, !(tile instanceof StraightWalkable));
+    cluster.subConcreteMap.passability.updateCanMoveDiagonally(relPos, canMoveDiagonally);
+    cluster.subConcreteMap.passability.updateObstacle(relPos, isObstacle);
   }
 
   private void replaceTile(Tile oldTile, Tile newTile) {
@@ -193,6 +200,7 @@ public class GridSurface implements Navigatable<CustomVec2D>, XPathfinder<Custom
     String newTypeName = newTile.getClass().getName();
     tileTypes.putIfAbsent(newTypeName, new HashSet<>());
     tileTypes.get(newTypeName).add(newTile.pos);
+    tiles[newTile.pos.y][newTile.pos.x] = newTile;
   }
 
   public HashSet<CustomVec2D> getCoordinatesOfTileType(Class tileClass) {
@@ -207,6 +215,7 @@ public class GridSurface implements Navigatable<CustomVec2D>, XPathfinder<Custom
     return tiles[pos.y][pos.x];
   }
 
+  //  public void setTile(CustomVec2D pos, Tile tile) { ; }
   // region XPathfinder interface
   public boolean hasbeenSeen(CustomVec2D pos) {
     Tile t = getTile(pos);
@@ -224,7 +233,7 @@ public class GridSurface implements Navigatable<CustomVec2D>, XPathfinder<Custom
     assert t != null;
     t.seen = true;
     // Add as frontier if it is walkable
-    if (t instanceof StraightWalkable) {
+    if (t instanceof Walkable) {
       frontierCandidates.add(p);
     }
   }
@@ -234,7 +243,7 @@ public class GridSurface implements Navigatable<CustomVec2D>, XPathfinder<Custom
   }
 
   private boolean isWalkable(Tile tile) {
-    return tile instanceof StraightWalkable && ((StraightWalkable) tile).isWalkable();
+    return tile instanceof Walkable && ((Walkable) tile).isWalkable();
   }
 
   /**
@@ -521,7 +530,7 @@ public class GridSurface implements Navigatable<CustomVec2D>, XPathfinder<Custom
         CustomVec2D pos = new CustomVec2D(x, y);
         Tile t = getTile(pos);
         boolean isFrontier = frontiers.contains(pos);
-        boolean isVisible = t instanceof Printable && ((Printable) t).isVisible();
+        boolean isVisible = t instanceof Viewable && ((Viewable) t).isVisible();
 
         String colorString;
         if (isFrontier && isVisible) {
@@ -533,14 +542,10 @@ public class GridSurface implements Navigatable<CustomVec2D>, XPathfinder<Custom
         } else {
           colorString = Color.RESET.toString();
         }
-        assert t instanceof Printable || t == null : "Tile cannot be printed";
-
-        if (t instanceof Printable) {
-          Printable p = (Printable) t;
-          char c = p.toChar();
-          csb.append(colorString).append(c);
+        if (t == null) {
+          csb.append(' ');
         } else {
-          csb.append(colorString).append(' ');
+          csb.append(colorString).append(t.toChar());
         }
       }
 

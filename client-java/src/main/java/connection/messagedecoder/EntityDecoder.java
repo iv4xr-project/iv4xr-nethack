@@ -1,6 +1,5 @@
 package connection.messagedecoder;
 
-import java.io.DataInputStream;
 import nethack.enums.Color;
 import nethack.enums.EntityType;
 import nethack.object.Entity;
@@ -8,8 +7,7 @@ import util.Loggers;
 
 // Source: https://studytrails.com/2016/09/12/java-google-json-type-adapter/
 public class EntityDecoder extends Decoder {
-  public static Entity decode(
-      DataInputStream input, char symbol, int colorCode, int glyph, int id) {
+  public static Entity decode(char symbol, int colorCode, int glyph, int id) {
     Color color = Color.fromValue(colorCode);
     EntityType type = toEntityType(glyph, symbol, id, color);
     return new Entity(glyph, symbol, id, type, color);

@@ -12,8 +12,8 @@ import nethack.NetHack;
 import nethack.enums.EntityType;
 import nethack.object.Command;
 import nethack.object.Entity;
-import nethack.object.Level;
 import nethack.object.Player;
+import nethack.world.Level;
 import util.CustomVec2D;
 import util.CustomVec3D;
 import util.Loggers;
@@ -65,7 +65,7 @@ public class AgentEnv extends Iv4xrEnvironment {
 
     // Add changed coordinates
     Level level = app.level();
-    for (CustomVec2D pos : level.changedCoordinates) {
+    for (CustomVec2D pos : level.changedEntities) {
       Entity e = level.getEntity(pos);
       // Unimportant types, and player is updated separately
       if (ignoredTypes.contains(e.type) || e.type == EntityType.PLAYER) {
@@ -114,7 +114,7 @@ public class AgentEnv extends Iv4xrEnvironment {
 
     // Part of the map that has updates that might be relevant to the map navigation state
     Level level = app.level();
-    List<CustomVec2D> changedCoordinates_ = level.changedCoordinates;
+    List<CustomVec2D> changedCoordinates_ = level.changedEntities;
     Serializable[] changedCoordinates = new Serializable[changedCoordinates_.size()];
     int k = 0;
     for (CustomVec2D pos : changedCoordinates_) {

@@ -1,4 +1,4 @@
-package agent.navigation.surface;
+package nethack.world.tiles;
 
 public interface Viewable {
   public boolean isSeeThrough();

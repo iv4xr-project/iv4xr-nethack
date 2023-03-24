@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import nethack.enums.CommandEnum;
 import nethack.enums.GameMode;
 import nethack.object.*;
+import nethack.world.Level;
+import util.CustomVec2D;
 import util.Loggers;
 import util.Stopwatch;
 
@@ -220,15 +222,36 @@ public class NetHack {
 
     // Need to set new stats before setting the level
     gameState.stats = stepState.stats;
-    gameState.setLevel(stepState.level);
-
-    // Set all members to the correct values
     gameState.message = stepState.message;
-    // Remember last position of player
+    // Remember last position of player before setting
     if (gameState.player != null) {
       stepState.player.previousLocation = gameState.player.location;
       stepState.player.lastPrayerTurn = gameState.player.lastPrayerTurn;
     }
+
+    Dlvl dlvl = stepState.stats.dlvl;
+    CustomVec2D playerPos = stepState.player.location.pos;
+    int lvlNr;
+    if (gameState.dungeon.levelExists(dlvl)) {
+      lvlNr = gameState.dungeon.getLevelNr(dlvl);
+    } else {
+      lvlNr = gameState.dungeon.levels.size();
+    }
+    for (int y = 0; y < Level.SIZE.height; y++) {
+      for (int x = 0; x < Level.SIZE.width; x++) {
+        if (stepState.tiles[y][x] != null) stepState.tiles[y][x].loc.lvl = lvlNr;
+      }
+    }
+
+    if (!gameState.dungeon.levelExists(dlvl)) {
+      Level level = new Level(playerPos, stepState.entities, stepState.tiles);
+      gameState.dungeon.newLevel(level, dlvl, stepState.player);
+    } else {
+      gameState.dungeon.getLevelNr(dlvl);
+      Level level = gameState.dungeon.getLevel(dlvl);
+      level.updateLevel(stepState.player.location.pos, stepState.entities, stepState.tiles);
+    }
+
     gameState.player = stepState.player;
     assert gameState.player.location.lvl == 0
         : "Before this line the levelNr is not known, assert is not already set";

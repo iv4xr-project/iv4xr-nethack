@@ -6,7 +6,6 @@ import agent.navigation.HierarchicalNavigation;
 import agent.navigation.hpastar.Size;
 import agent.navigation.hpastar.smoother.Direction;
 import agent.navigation.surface.Climbable;
-import agent.navigation.surface.Stair;
 import agent.navigation.surface.Tile;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
@@ -19,6 +18,7 @@ import java.util.stream.Collectors;
 import nethack.enums.CommandEnum;
 import nethack.object.Command;
 import nethack.object.Player;
+import nethack.world.tiles.Stair;
 import util.CustomVec2D;
 import util.CustomVec3D;
 
@@ -55,7 +55,7 @@ public class NavUtils {
 
   public static List<CustomVec3D> adjustedFindPath(
       AgentState state, CustomVec3D oldLocation, CustomVec3D newLocation) {
-    HierarchicalNavigation nav = state.hierarchicalNav;
+    HierarchicalNavigation nav = state.hierarchicalNav();
     //    boolean srcOriginalBlockingState = nav.isBlocking(oldLocation);
     //    boolean destOriginalBlockingState = nav.isBlocking(newLocation);
     //    nav.toggleBlockingOff(oldLocation);
@@ -155,22 +155,22 @@ public class NavUtils {
     return distanceBetweenEntities(S.worldmodel.elements.get(Player.ID), e);
   }
 
-  public static WorldModel moveTo(AgentState state, CustomVec3D targetTile) {
+  public static WorldModel moveTo(AgentState S, CustomVec3D targetTile) {
     Command command;
-    if (state.loc().lvl == targetTile.lvl) {
-      command = Direction.getCommand(toDirection(state, targetTile));
+    if (S.loc().lvl == targetTile.lvl) {
+      command = Direction.getCommand(toDirection(S, targetTile));
     } else {
-      Tile tile = state.hierarchicalNav.getTile(state.loc());
+      Tile tile = S.hierarchicalNav().getTile(S.loc());
       assert tile instanceof Stair : "Level is different however no stairs at location";
       Stair stairTile = (Stair) tile;
-      if (stairTile.climbType == Climbable.ClimbType.Descendable) {
+      if (stairTile.climbType == Climbable.ClimbType.Down) {
         command = new Command(CommandEnum.MISC_DOWN);
       } else {
         command = new Command(CommandEnum.MISC_UP);
       }
     }
 
-    return state.env().commands(command);
+    return S.env().commands(command);
   }
 
   public static WorldModel moveTo(AgentState state, Vec3 targetPosition) {

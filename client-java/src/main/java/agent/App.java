@@ -2,7 +2,7 @@ package agent;
 
 import agent.iv4xr.AgentEnv;
 import agent.iv4xr.AgentState;
-import agent.navigation.NetHackSurface;
+import agent.navigation.GridSurface;
 import agent.navigation.hpastar.Cluster;
 import agent.strategy.GoalLib;
 import connection.SocketClient;
@@ -111,7 +111,7 @@ public class App {
   }
 
   private static void printAbsNodes(AgentState state) {
-    NetHackSurface surface = state.hierarchicalNav.areas.get(0);
+    GridSurface surface = state.area();
     for (Cluster cluster : surface.hierarchicalMap.clusters) {
       if (cluster.entrancePoints.isEmpty()) {
         continue;

@@ -24,16 +24,16 @@ import util.CustomVec3D;
 import util.Loggers;
 
 public class HierarchicalNavigation implements Navigatable<CustomVec3D>, XPathfinder<CustomVec3D> {
-  public final List<NetHackSurface> areas = new LinkedList<>();
+  List<GridSurface> areas = new ArrayList<>();
   public final HierarchicalGraph hierarchicalGraph = new HierarchicalGraph();
   boolean perfect_memory_pathfinding = true;
   final HierarchicalMapFactory factory = new HierarchicalMapFactory();
 
-  public HierarchicalNavigation(NetHackSurface surface) {
+  public HierarchicalNavigation(GridSurface surface) {
     areas.add(surface);
   }
 
-  public void addNextArea(NetHackSurface area) {
+  public void addNextArea(GridSurface area) {
     Loggers.AgentLogger.info("Adding a new level");
     area.setPerfectMemoryPathfinding(perfect_memory_pathfinding);
     areas.add(area);
@@ -185,7 +185,7 @@ public class HierarchicalNavigation implements Navigatable<CustomVec3D>, XPathfi
   }
 
   public void wipeOutMemory() {
-    for (NetHackSurface area : areas) {
+    for (GridSurface area : areas) {
       area.wipeOutMemory();
     }
   }
@@ -196,7 +196,7 @@ public class HierarchicalNavigation implements Navigatable<CustomVec3D>, XPathfi
 
   public void setPerfectMemoryPathfinding(Boolean flag) {
     perfect_memory_pathfinding = flag;
-    for (NetHackSurface area : areas) {
+    for (GridSurface area : areas) {
       area.setPerfectMemoryPathfinding(flag);
     }
   }

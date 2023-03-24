@@ -93,9 +93,9 @@ public class NavAction {
             (AgentState S) -> {
               List<CustomVec3D> path;
               if (heuristicLocation == null) {
-                path = S.hierarchicalNav.explore(S.loc());
+                path = S.hierarchicalNav().explore(S.loc());
               } else {
-                path = S.hierarchicalNav.explore(S.loc(), heuristicLocation);
+                path = S.hierarchicalNav().explore(S.loc(), heuristicLocation);
               }
               CustomVec3D nextTile = NavUtils.nextLoc(path);
               if (nextTile == null) {

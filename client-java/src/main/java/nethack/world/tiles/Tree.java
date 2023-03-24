@@ -1,8 +1,9 @@
-package agent.navigation.surface;
+package nethack.world.tiles;
 
+import agent.navigation.surface.Tile;
 import util.CustomVec3D;
 
-public class Tree extends Tile implements Printable {
+public class Tree extends Tile implements Viewable {
   private boolean isVisible;
   public final boolean seeThrough = true;
 
@@ -27,5 +28,13 @@ public class Tree extends Tile implements Printable {
   @Override
   public void setVisible(boolean isVisible) {
     this.isVisible = isVisible;
+  }
+
+  public boolean equals(Object o) {
+    if (!(o instanceof Tree)) {
+      return false;
+    }
+
+    return loc.equals(((Tree) o).loc);
   }
 }

@@ -1,10 +1,8 @@
 package nethack.object;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import nethack.enums.Color;
+import nethack.world.Dungeon;
+import nethack.world.Level;
 import util.ColoredStringBuilder;
 
 public class GameState {
@@ -13,30 +11,18 @@ public class GameState {
   public String message;
   public boolean done;
   public Object info;
-  private final List<Level> world = new ArrayList<>();
-  private final Map<Dlvl, Integer> indexes = new HashMap<>();
+  public Dungeon dungeon = new Dungeon();
 
   public Level getLevel() {
     assert stats != null : "Cannot retrieve level from GameState without stats";
-    if (!indexes.containsKey(stats.dlvl)) {
+    if (!dungeon.levelExists(stats.dlvl)) {
       return null;
     }
-    return world.get(getLevelNr());
-  }
-
-  // Assumes the stats are already updated
-  public void setLevel(Level level) {
-    Level previousLevel = getLevel();
-    if (!indexes.containsKey(stats.dlvl)) {
-      indexes.put(stats.dlvl, world.size());
-      world.add(null);
-    }
-    level.setChangedCoordinates(previousLevel);
-    world.set(getLevelNr(), level);
+    return dungeon.getLevel(stats.dlvl);
   }
 
   public int getLevelNr() {
-    return indexes.get(stats.dlvl);
+    return dungeon.getLevelNr(stats.dlvl);
   }
 
   public String verbose() {

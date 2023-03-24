@@ -1,7 +1,6 @@
 package agent.navigation.strategy;
 ;
 import agent.iv4xr.AgentState;
-import agent.navigation.NetHackSurface;
 import agent.navigation.surface.Tile;
 import agent.selector.EntitySelector;
 import agent.selector.TileSelector;
@@ -9,7 +8,8 @@ import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.spatial.Vec3;
 import java.util.ArrayList;
 import java.util.List;
-import nethack.object.Level;
+import nethack.world.Level;
+import nethack.world.Surface;
 import nl.uu.cs.aplib.mainConcepts.SimpleState;
 import nl.uu.cs.aplib.mainConcepts.Tactic;
 import util.CustomVec2D;
@@ -79,7 +79,7 @@ public class NavTactic {
               }
 
               CustomVec3D agentLoc = S.loc();
-              NetHackSurface surface = S.area();
+              Surface surface = S.area();
               List<CustomVec3D> path = null;
               for (CustomVec2D pos :
                   NavUtils.neighbourCoordinates(tile.pos, Level.SIZE, allowDiagonal)) {

@@ -6,7 +6,7 @@ import agent.navigation.hpastar.infrastructure.Id;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import nethack.object.Level;
+import nethack.world.Level;
 import util.Loggers;
 
 public class AStar<TNode> {

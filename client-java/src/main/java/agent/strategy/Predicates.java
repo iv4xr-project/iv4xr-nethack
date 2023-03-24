@@ -4,7 +4,6 @@ import agent.iv4xr.AgentState;
 import agent.navigation.hpastar.smoother.Direction;
 import agent.navigation.strategy.NavUtils;
 import agent.navigation.surface.Climbable;
-import agent.navigation.surface.Stair;
 import agent.navigation.surface.Tile;
 import agent.selector.TileSelector;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
@@ -14,6 +13,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import nethack.enums.EntityType;
+import nethack.world.tiles.Stair;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import util.CustomVec3D;
@@ -59,7 +59,7 @@ public class Predicates {
         if (!(t instanceof Stair)) {
           return false;
         }
-        return ((Stair) t).climbType == Climbable.ClimbType.Descendable;
+        return ((Stair) t).climbType == Climbable.ClimbType.Down;
       };
 
   public static List<WorldEntity> findOfType(@NotNull AgentState S, EntityType type) {

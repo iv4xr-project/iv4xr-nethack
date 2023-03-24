@@ -4,17 +4,17 @@ import static nethack.enums.CommandEnum.*;
 import static nl.uu.cs.aplib.AplibEDSL.action;
 
 import agent.iv4xr.AgentState;
-import agent.navigation.NetHackSurface;
 import agent.navigation.hpastar.smoother.Direction;
 import agent.navigation.strategy.NavUtils;
-import agent.navigation.surface.Door;
 import agent.navigation.surface.Tile;
-import agent.navigation.surface.Wall;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import java.util.*;
 import nethack.object.Command;
-import nethack.object.Level;
 import nethack.object.items.Item;
+import nethack.world.Level;
+import nethack.world.Surface;
+import nethack.world.tiles.Door;
+import nethack.world.tiles.Wall;
 import nl.uu.cs.aplib.mainConcepts.Action;
 import nl.uu.cs.aplib.utils.Pair;
 import util.CustomVec2D;
@@ -75,7 +75,7 @@ public class Actions {
                     CustomVec2D doorPos =
                         NavUtils.posInDirection(NavUtils.loc2(S.worldmodel.position), direction);
                     Door d = (Door) S.area().getTile(doorPos);
-                    d.isLocked = true;
+                    d.locked = true;
                   }
                   return new Pair<>(S, newWom);
                 });
@@ -117,7 +117,7 @@ public class Actions {
                 })
         .on(
             (AgentState S) -> {
-              NetHackSurface surface = S.area();
+              Surface surface = S.area();
               List<CustomVec2D> neighbours =
                   NavUtils.neighbourCoordinates(
                       NavUtils.loc2(S.worldmodel.position), Level.SIZE, true);

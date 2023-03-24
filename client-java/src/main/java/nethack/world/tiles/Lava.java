@@ -1,17 +1,17 @@
-package agent.navigation.surface;
+package nethack.world.tiles;
 
+import agent.navigation.surface.Tile;
 import util.CustomVec3D;
 
-public class Doorway extends Tile implements Walkable, Printable {
+public class Lava extends Tile implements Viewable {
   boolean isVisible;
 
-  public Doorway(CustomVec3D pos) {
+  public Lava(CustomVec3D pos) {
     super(pos);
   }
 
-  @Override
   public char toChar() {
-    return '.';
+    return '~';
   }
 
   @Override
@@ -29,8 +29,11 @@ public class Doorway extends Tile implements Walkable, Printable {
     this.isVisible = isVisible;
   }
 
-  @Override
-  public boolean isWalkable() {
-    return true;
+  public boolean equals(Object o) {
+    if (!(o instanceof Lava)) {
+      return false;
+    }
+
+    return loc.equals(((Lava) o).loc);
   }
 }

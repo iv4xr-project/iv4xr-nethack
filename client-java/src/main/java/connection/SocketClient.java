@@ -157,7 +157,8 @@ public class SocketClient {
     stepState.stats = obsMessage.stats;
     stepState.done = stepMessage.done;
     stepState.info = null;
-    stepState.level = new Level(obsMessage.entities);
+    stepState.tiles = obsMessage.tiles;
+    stepState.entities = obsMessage.entities;
     stepState.message = obsMessage.message;
     Loggers.ProfilerLogger.trace("EXIT TOOK: %f", stopwatch.split());
     return stepState;

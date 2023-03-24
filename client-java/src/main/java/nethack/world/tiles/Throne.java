@@ -1,8 +1,10 @@
-package agent.navigation.surface;
+package nethack.world.tiles;
 
+import agent.navigation.surface.Tile;
+import agent.navigation.surface.Walkable;
 import util.CustomVec3D;
 
-public class Throne extends Tile implements Walkable, Printable {
+public class Throne extends Tile implements Walkable, Viewable {
   boolean isVisible;
 
   public Throne(CustomVec3D pos) {
@@ -31,5 +33,18 @@ public class Throne extends Tile implements Walkable, Printable {
   @Override
   public boolean isWalkable() {
     return true;
+  }
+
+  @Override
+  public WalkableType getWalkableType() {
+    return WalkableType.Diagonal;
+  }
+
+  public boolean equals(Object o) {
+    if (!(o instanceof Throne)) {
+      return false;
+    }
+
+    return loc.equals(((Throne) o).loc);
   }
 }

@@ -3,9 +3,9 @@ package connection.messagedecoder;
 import connection.ObservationMessage;
 import java.io.DataInputStream;
 import java.io.IOException;
-import nethack.enums.TileType;
 import nethack.object.*;
 import nethack.object.items.Item;
+import nethack.world.Level;
 import nl.uu.cs.aplib.utils.Pair;
 import util.Loggers;
 import util.Stopwatch;
@@ -38,10 +38,9 @@ public class ObservationMessageDecoder extends Decoder {
           int colorCode = entities[offset + 1];
           int glyph = (entities[offset + 2] << 8) + entities[offset + 3];
           int id = (entities[offset + 7] << 8) + entities[offset + 6];
-          observationMessage.entities[y][x] =
-              EntityDecoder.decode(input, symbol, colorCode, glyph, id);
-          observationMessage.tileTypes[y][x] = TileType.fromValue(entities[offset + 4]);
-          observationMessage.tileFlags[y][x] = entities[offset + 5];
+          observationMessage.entities[y][x] = EntityDecoder.decode(symbol, colorCode, glyph, id);
+          observationMessage.tiles[y][x] =
+              TileDecoder.decode(x, y, entities[offset + 4], entities[offset + 5]);
           offset += bytesPerEntry;
         }
       }
@@ -55,8 +54,6 @@ public class ObservationMessageDecoder extends Decoder {
         observationMessage.items[i] = ItemDecoder.decode(input);
       }
       Loggers.ProfilerLogger.trace("READ ITEMS TOOK: %f", stopwatch.split());
-
-      System.out.println(observationMessage);
 
       return observationMessage;
     } catch (IOException e) {
