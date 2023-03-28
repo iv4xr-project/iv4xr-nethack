@@ -38,6 +38,7 @@ public class GoalLib {
                     //                    Actions.kick().on(Predicates.get_lockedDoor()).lift(),
                     Actions.openDoor().on(Predicates.get_closedDoor()).lift(),
                     NavTactic.navigateToTile(TileSelector.adjacentClosedDoorSelector),
+                    Actions.searchWalls().on_(Predicates.hidden_tile()).lift(),
                     NavTactic.explore(),
                     //                    NavAction.navigateTo().on((AgentState S) -> {
                     //                      NetHackSurface surface = S.area();

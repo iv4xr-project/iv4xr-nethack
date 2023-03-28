@@ -6,15 +6,11 @@ import static nl.uu.cs.aplib.AplibEDSL.action;
 import agent.iv4xr.AgentState;
 import agent.navigation.hpastar.smoother.Direction;
 import agent.navigation.strategy.NavUtils;
-import agent.navigation.surface.Tile;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import java.util.*;
 import nethack.object.Command;
 import nethack.object.items.Item;
-import nethack.world.Level;
-import nethack.world.Surface;
 import nethack.world.tiles.Door;
-import nethack.world.tiles.Wall;
 import nl.uu.cs.aplib.mainConcepts.Action;
 import nl.uu.cs.aplib.utils.Pair;
 import util.CustomVec2D;
@@ -93,34 +89,30 @@ public class Actions {
 
   static Action searchWalls() {
     return action("search")
-        .do2(
-            (AgentState S) ->
-                (List<Wall> walls) -> {
-                  Loggers.GoalLogger.info("searchWalls");
-                  Sounds.search();
-                  WorldModel newwom = WorldModels.performCommands(S, new Command(COMMAND_SEARCH));
-                  for (Wall wall : walls) {
-                    wall.timesSearched++;
-                  }
-                  return new Pair<>(S, newwom);
-                })
-        .on(
+        .do1(
             (AgentState S) -> {
-              Surface surface = S.area();
-              List<CustomVec2D> neighbours =
-                  NavUtils.neighbourCoordinates(
-                      NavUtils.loc2(S.worldmodel.position), Level.SIZE, true);
-              List<Wall> walls = new ArrayList<>();
-              for (CustomVec2D neighbour : neighbours) {
-                Tile t = surface.getTile(neighbour);
-                if (t instanceof Wall) {
-                  walls.add((Wall) t);
-                }
-              }
-              if (walls.isEmpty()) {
-                return null;
-              }
-              return walls;
+              Loggers.GoalLogger.info("searchWalls");
+              Sounds.search();
+              WorldModel newwom = WorldModels.performCommands(S, new Command(COMMAND_SEARCH));
+              return new Pair<>(S, newwom);
+              //            })
+              //        .on(
+              //            (AgentState S) -> {
+              //              Surface surface = S.area();
+              //              List<CustomVec2D> neighbours =
+              //                  NavUtils.neighbourCoordinates(
+              //                      NavUtils.loc2(S.worldmodel.position), Level.SIZE, true);
+              //              List<Wall> walls = new ArrayList<>();
+              //              for (CustomVec2D neighbour : neighbours) {
+              //                Tile t = surface.getTile(neighbour);
+              //                if (t instanceof Wall) {
+              //                  walls.add((Wall) t);
+              //                }
+              //              }
+              //              if (walls.isEmpty()) {
+              //                return null;
+              //              }
+              //              return walls;
             });
   }
 

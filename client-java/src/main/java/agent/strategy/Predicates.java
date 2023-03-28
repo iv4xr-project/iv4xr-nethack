@@ -13,9 +13,14 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import nethack.enums.EntityType;
+import nethack.world.Level;
+import nethack.world.tiles.SecretCorridor;
+import nethack.world.tiles.SecretDoor;
 import nethack.world.tiles.Stair;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import util.CustomVec2D;
+import util.CustomVec3D;
 
 public class Predicates {
   public static final Predicate<AgentState> outOfCombat_HpCritical =
@@ -40,17 +45,23 @@ public class Predicates {
       return NavUtils.toDirection(S, tile.loc);
     };
   }
-  //
-  //  @Contract(pure = true)
-  //  public static @NotNull Function<AgentState, Direction> get_lockedDoor() {
-  //    return S -> {
-  //      Tile tile = TileSelector.lockedDoorSelector.apply(S);
-  //      if (tile == null || !CustomVec3D.adjacent(S.loc(), tile.loc, true)) {
-  //        return null;
-  //      }
-  //      return NavUtils.toDirection(S, tile.loc);
-  //    };
-  //  }
+
+  @Contract(pure = true)
+  public static @NotNull Predicate<AgentState> hidden_tile() {
+    return S -> {
+      CustomVec3D agentLoc = S.loc();
+      List<CustomVec2D> neig = NavUtils.neighbourCoordinates(agentLoc.pos, Level.SIZE, true);
+      for (CustomVec2D pos : neig) {
+        CustomVec3D tileLoc = new CustomVec3D(agentLoc.lvl, pos);
+        Tile tile = S.hierarchicalNav().getTile(tileLoc);
+        if (tile instanceof SecretCorridor || tile instanceof SecretDoor) {
+          return true;
+        }
+      }
+
+      return false;
+    };
+  }
 
   public static Predicate<AgentState> on_stairs_down =
       S -> {
