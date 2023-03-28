@@ -1,18 +1,19 @@
 package nethack.world.tiles;
 
 import agent.navigation.surface.Tile;
+import agent.navigation.surface.Walkable;
 import util.CustomVec3D;
 
-public class IronBars extends Tile implements Viewable {
+public class Ice extends Tile implements Walkable, Viewable {
   private boolean isVisible;
-  public final boolean seeThrough = true;
 
-  public IronBars(CustomVec3D pos) {
+  public Ice(CustomVec3D pos) {
     super(pos);
   }
 
+  @Override
   public char toChar() {
-    return '#';
+    return '·';
   }
 
   @Override
@@ -22,22 +23,32 @@ public class IronBars extends Tile implements Viewable {
 
   @Override
   public boolean getVisibility() {
+    if (isVisible) {
+      markAsSeen();
+    }
     return isVisible;
   }
 
   @Override
   public void setVisibility(boolean isVisible) {
-    if (isVisible) {
-      markAsSeen();
-    }
     this.isVisible = isVisible;
   }
 
+  @Override
+  public boolean isWalkable() {
+    return true;
+  }
+
+  @Override
+  public WalkableType getWalkableType() {
+    return WalkableType.Diagonal;
+  }
+
   public boolean equals(Object o) {
-    if (!(o instanceof IronBars)) {
+    if (!(o instanceof Ice)) {
       return false;
     }
 
-    return loc.equals(((IronBars) o).loc);
+    return loc.equals(((Ice) o).loc);
   }
 }

@@ -4,6 +4,7 @@ import agent.iv4xr.AgentState;
 import agent.navigation.GridSurface;
 import agent.navigation.HierarchicalNavigation;
 import agent.navigation.hpastar.Size;
+import agent.navigation.hpastar.search.Path;
 import agent.navigation.hpastar.smoother.Direction;
 import agent.navigation.surface.Climbable;
 import agent.navigation.surface.Tile;
@@ -27,20 +28,20 @@ public class NavUtils {
    * Distance in terms of path-length from the agent that owns S to the entity e. It uses
    * adjustedFindPath to calculate the path.
    */
-  static int distTo(AgentState S, WorldEntity e) {
-    List<CustomVec3D> path =
-        adjustedFindPath(S, new CustomVec3D(S.worldmodel.position), new CustomVec3D(e.position));
-    if (path == null) {
-      return Integer.MAX_VALUE;
-    }
-    return path.size() - 1;
-  }
-
-  public static List<CustomVec3D> addLevelNr(List<CustomVec2D> path, int lvl) {
+  public static Path<CustomVec3D> addLevelNr(Path<CustomVec2D> path, int lvl) {
     if (path == null) {
       return null;
     }
-    return path.stream().map(pos -> new CustomVec3D(lvl, pos)).collect(Collectors.toList());
+    List<CustomVec3D> nodes =
+        path.nodes.stream().map(pos -> new CustomVec3D(lvl, pos)).collect(Collectors.toList());
+    return new Path<>(nodes, path.cost);
+  }
+
+  public static List<CustomVec3D> addLevelNr(List<CustomVec2D> coords, int lvl) {
+    if (coords == null) {
+      return null;
+    }
+    return coords.stream().map(pos -> new CustomVec3D(lvl, pos)).collect(Collectors.toList());
   }
 
   /**
@@ -48,22 +49,15 @@ public class NavUtils {
    * source (x0,y0) and destination (x1,y1) are non-blocking (even if they are, e.g. if one of them
    * is an occupied tile).
    */
-  public static List<CustomVec3D> adjustedFindPath(
+  public static Path<CustomVec3D> adjustedFindPath(
       AgentState state, int level0, CustomVec2D pos0, int level1, CustomVec2D pos1) {
     return adjustedFindPath(state, new CustomVec3D(level0, pos0), new CustomVec3D(level1, pos1));
   }
 
-  public static List<CustomVec3D> adjustedFindPath(
+  public static Path<CustomVec3D> adjustedFindPath(
       AgentState state, CustomVec3D oldLocation, CustomVec3D newLocation) {
     HierarchicalNavigation nav = state.hierarchicalNav();
-    //    boolean srcOriginalBlockingState = nav.isBlocking(oldLocation);
-    //    boolean destOriginalBlockingState = nav.isBlocking(newLocation);
-    //    nav.toggleBlockingOff(oldLocation);
-    //    nav.toggleBlockingOff(newLocation);
-    List<CustomVec3D> path = nav.findPath(oldLocation, newLocation);
-    //    nav.setBlockingState(oldLocation, srcOriginalBlockingState);
-    //    nav.setBlockingState(newLocation, destOriginalBlockingState);
-    return path;
+    return nav.findPath(oldLocation, newLocation);
   }
 
   public static CustomVec2D posInDirection(CustomVec2D pos, Direction direction) {
@@ -207,13 +201,11 @@ public class NavUtils {
     }
   }
 
-  public static CustomVec3D nextLoc(List<CustomVec3D> path) {
-    if (path == null || path.size() < 1) {
+  public static CustomVec3D nextLoc(Path<CustomVec3D> path) {
+    if (path == null || path.nextNode() == null) {
       return null;
-    } else {
-      // The first element is the src itself, so we need to pick the next one:
-      return path.get(1);
     }
+    return path.nextNode();
   }
 
   public static boolean withinBounds(CustomVec2D pos, Size size) {
@@ -286,7 +278,6 @@ public class NavUtils {
 
   /** check if the location of the entity e is reachable from the agent current position. */
   public static boolean isReachable(AgentState S, WorldEntity e) {
-    var path = adjustedFindPath(S, S.loc(), new CustomVec3D(e.position));
-    return path != null && !path.isEmpty();
+    return adjustedFindPath(S, S.loc(), new CustomVec3D(e.position)) != null;
   }
 }

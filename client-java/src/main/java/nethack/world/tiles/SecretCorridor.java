@@ -1,23 +1,23 @@
 package nethack.world.tiles;
 
 import agent.navigation.surface.Tile;
+import agent.navigation.surface.Walkable;
 import util.CustomVec3D;
 
-public class IronBars extends Tile implements Viewable {
-  private boolean isVisible;
-  public final boolean seeThrough = true;
+public class SecretCorridor extends Tile implements Walkable, Viewable {
+  boolean isVisible = false;
 
-  public IronBars(CustomVec3D pos) {
+  public SecretCorridor(CustomVec3D pos) {
     super(pos);
   }
 
   public char toChar() {
-    return '#';
+    return '-';
   }
 
   @Override
   public boolean isSeeThrough() {
-    return true;
+    return false;
   }
 
   @Override
@@ -33,11 +33,21 @@ public class IronBars extends Tile implements Viewable {
     this.isVisible = isVisible;
   }
 
+  @Override
+  public boolean isWalkable() {
+    return true;
+  }
+
+  @Override
+  public WalkableType getWalkableType() {
+    return WalkableType.Diagonal;
+  }
+
   public boolean equals(Object o) {
-    if (!(o instanceof IronBars)) {
+    if (!(o instanceof SecretCorridor)) {
       return false;
     }
 
-    return loc.equals(((IronBars) o).loc);
+    return loc.equals(((SecretCorridor) o).loc);
   }
 }

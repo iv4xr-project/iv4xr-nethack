@@ -8,7 +8,7 @@ import agent.navigation.hpastar.graph.AbstractNode;
 import agent.navigation.hpastar.graph.ConcreteNode;
 import agent.navigation.hpastar.infrastructure.Id;
 import agent.navigation.hpastar.search.AStar;
-import agent.navigation.hpastar.search.Path;
+import agent.navigation.hpastar.search.IdPath;
 import java.util.*;
 import nl.uu.cs.aplib.utils.Pair;
 import util.CustomVec2D;
@@ -88,16 +88,16 @@ public class Cluster {
     Id<ConcreteNode> startNodeId = new Id<ConcreteNode>().from(getEntrancePositionIndex(e1));
     Id<ConcreteNode> targetNodeId = new Id<ConcreteNode>().from(getEntrancePositionIndex(e2));
     AStar<ConcreteNode> search = new AStar<>(subConcreteMap, startNodeId, targetNodeId);
-    Path<ConcreteNode> path = search.findPath();
-    if (path != null) {
+    IdPath<ConcreteNode> idPath = search.findPath();
+    if (idPath != null) {
       // Yeah, we suppose reaching A - B is the same as reaching B - A. Which
       // depending on the game this is NOT necessarily true (e.g. climbing, stepping down a
       // mountain)
-      distances.put(tuple, path.pathCost);
-      distances.put(invTuple, path.pathCost);
-      cachedPaths.put(tuple, new ArrayList<>(path.pathNodes));
-      Collections.reverse(path.pathNodes);
-      cachedPaths.put(invTuple, path.pathNodes);
+      distances.put(tuple, idPath.pathCost);
+      distances.put(invTuple, idPath.pathCost);
+      cachedPaths.put(tuple, new ArrayList<>(idPath.pathNodes));
+      Collections.reverse(idPath.pathNodes);
+      cachedPaths.put(invTuple, idPath.pathNodes);
     }
 
     distanceCalculated.put(tuple, true);

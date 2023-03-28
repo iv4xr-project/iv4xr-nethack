@@ -36,7 +36,7 @@ public class AStar<TNode> {
     return !openQueue.isEmpty();
   }
 
-  public final Path<TNode> findPath() {
+  public final IdPath<TNode> findPath() {
     while (canExpand()) {
       Id<TNode> nodeId = expand();
       int id = nodeId.getIdValue();
@@ -101,7 +101,7 @@ public class AStar<TNode> {
   ///  TODO: Maybe I should guard this with some kind of safetyGuard to prevent
   ///  possible infinite loops in case of bugs, but meh...
   ///  </summary>
-  private Path<TNode> reconstructPathFrom(Id<TNode> destination) {
+  private IdPath<TNode> reconstructPathFrom(Id<TNode> destination) {
     List<Id<TNode>> pathNodes = new ArrayList<>();
     int pathCost = nodeLookup.getNodeValue(destination).f;
     Id<TNode> currentNode = destination;
@@ -112,7 +112,7 @@ public class AStar<TNode> {
 
     pathNodes.add(currentNode);
     Collections.reverse(pathNodes);
-    return new Path<TNode>(pathNodes, pathCost);
+    return new IdPath<TNode>(pathNodes, pathCost);
   }
 
   /**

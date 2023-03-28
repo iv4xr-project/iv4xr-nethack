@@ -35,7 +35,7 @@ public class GoalLib {
                     NavTactic.navigateToWorldEntity(EntitySelector.money),
 
                     // Navigation
-                    Actions.kick().on(Predicates.get_lockedDoor()).lift(),
+                    //                    Actions.kick().on(Predicates.get_lockedDoor()).lift(),
                     Actions.openDoor().on(Predicates.get_closedDoor()).lift(),
                     NavTactic.navigateToTile(TileSelector.adjacentClosedDoorSelector),
                     NavTactic.explore(),

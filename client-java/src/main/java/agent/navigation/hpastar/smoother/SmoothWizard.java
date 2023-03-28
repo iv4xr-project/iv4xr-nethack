@@ -14,7 +14,7 @@ import agent.navigation.hpastar.graph.ConcreteNodeInfo;
 import agent.navigation.hpastar.infrastructure.Constants;
 import agent.navigation.hpastar.infrastructure.Id;
 import agent.navigation.hpastar.search.AStar;
-import agent.navigation.hpastar.search.Path;
+import agent.navigation.hpastar.search.IdPath;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -122,8 +122,8 @@ public class SmoothWizard {
   private List<Id<ConcreteNode>> generateIntermediateNodes(
       Id<ConcreteNode> nodeid1, Id<ConcreteNode> nodeid2) {
     AStar<ConcreteNode> search = new AStar<>(_concreteMap, nodeid1, nodeid2);
-    Path<ConcreteNode> path = search.findPath();
-    return path.pathNodes;
+    IdPath<ConcreteNode> idPath = search.findPath();
+    return idPath.pathNodes;
   }
 
   /**

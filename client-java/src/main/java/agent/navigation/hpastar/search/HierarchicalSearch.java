@@ -44,12 +44,12 @@ public class HierarchicalSearch {
       boolean mainSearch) {
     map.setCurrentLevelForSearches(level);
     // TODO: This could be perfectly replaced by cached paths in the clusters!
-    Path<AbstractNode> path;
+    IdPath<AbstractNode> idPath;
     if (!mainSearch) {
       AbstractNodeInfo nodeInfo = map.abstractGraph.getNodeInfo(startNodeId);
       map.setCurrentClusterByPositionAndLevel(nodeInfo.position, level + 1);
       AbstractEdgeInfo edgeInfo = map.abstractGraph.getEdges(startNodeId).get(targetNodeId).info;
-      path = new Path<AbstractNode>(edgeInfo.innerLowerLevelPath, edgeInfo.cost);
+      idPath = new IdPath<AbstractNode>(edgeInfo.innerLowerLevelPath, edgeInfo.cost);
     } else {
       map.setAllMapAsCurrentCluster();
       AStar<AbstractNode> search = new AStar<>(map, startNodeId, targetNodeId);
@@ -59,15 +59,15 @@ public class HierarchicalSearch {
           targetNodeId,
           map.abstractGraph.getNodeInfo(startNodeId),
           map.abstractGraph.getNodeInfo(targetNodeId));
-      path = search.findPath();
+      idPath = search.findPath();
     }
 
-    if (path == null) {
+    if (idPath == null) {
       return null;
     }
 
-    List<AbstractPathNode> result = new ArrayList<>(path.pathNodes.size());
-    for (Id<AbstractNode> abstractNodeId : path.pathNodes) {
+    List<AbstractPathNode> result = new ArrayList<>(idPath.pathNodes.size());
+    for (Id<AbstractNode> abstractNodeId : idPath.pathNodes) {
       result.add(new AbstractPathNode(abstractNodeId, level));
     }
     return result;

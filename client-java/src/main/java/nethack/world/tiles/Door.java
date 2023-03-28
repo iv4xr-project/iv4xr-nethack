@@ -10,7 +10,6 @@ public class Door extends Tile implements Walkable, Viewable {
   public boolean closed;
   public boolean locked;
   public boolean trapped;
-  public boolean hasDoor = !isOpen && !closed;
   boolean isVisible = false;
 
   public Door(
@@ -28,11 +27,11 @@ public class Door extends Tile implements Walkable, Viewable {
     this.trapped = trapped;
   }
 
-  @Override
   public Tile updatedTile(Tile newTile) {
-    if (this.getClass() != newTile.getClass()) {
+    if (getClass() != newTile.getClass()) {
       return newTile;
     }
+    newTile.setSeen(newTile.getSeen() || getSeen());
     return this;
   }
 
@@ -66,12 +65,15 @@ public class Door extends Tile implements Walkable, Viewable {
   }
 
   @Override
-  public boolean isVisible() {
+  public boolean getVisibility() {
     return isVisible;
   }
 
   @Override
-  public void setVisible(boolean isVisible) {
+  public void setVisibility(boolean isVisible) {
+    if (isVisible) {
+      markAsSeen();
+    }
     this.isVisible = isVisible;
   }
 
@@ -82,6 +84,6 @@ public class Door extends Tile implements Walkable, Viewable {
 
   @Override
   public WalkableType getWalkableType() {
-    return hasDoor ? WalkableType.Straight : WalkableType.Diagonal;
+    return !isOpen || !closed ? WalkableType.Straight : WalkableType.Diagonal;
   }
 }

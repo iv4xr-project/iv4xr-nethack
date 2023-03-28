@@ -10,8 +10,6 @@ public class SecretDoor extends Tile implements Walkable, Viewable {
   public boolean closed;
   public boolean locked;
   public boolean trapped;
-  public boolean seeThrough = isOpen || broken;
-  public boolean hasDoor = !isOpen && !closed;
   boolean isVisible = false;
 
   public SecretDoor(
@@ -32,6 +30,7 @@ public class SecretDoor extends Tile implements Walkable, Viewable {
   @Override
   public Tile updatedTile(Tile newTile) {
     if (this.getClass() != newTile.getClass()) {
+      newTile.setSeen(newTile.getSeen() || getSeen());
       return newTile;
     }
     return this;
@@ -47,11 +46,11 @@ public class SecretDoor extends Tile implements Walkable, Viewable {
 
   @Override
   public boolean equals(Object o) {
-    if (!(o instanceof Door)) {
+    if (!(o instanceof SecretDoor)) {
       return false;
     }
 
-    Door door = (Door) o;
+    SecretDoor door = (SecretDoor) o;
     return loc.equals(door.loc)
         && broken == door.broken
         && isOpen == door.isOpen
@@ -63,16 +62,19 @@ public class SecretDoor extends Tile implements Walkable, Viewable {
 
   @Override
   public boolean isSeeThrough() {
-    return isOpen;
+    return isOpen || broken;
   }
 
   @Override
-  public boolean isVisible() {
+  public boolean getVisibility() {
     return isVisible;
   }
 
   @Override
-  public void setVisible(boolean isVisible) {
+  public void setVisibility(boolean isVisible) {
+    if (isVisible) {
+      markAsSeen();
+    }
     this.isVisible = isVisible;
   }
 
@@ -83,6 +85,6 @@ public class SecretDoor extends Tile implements Walkable, Viewable {
 
   @Override
   public WalkableType getWalkableType() {
-    return hasDoor ? WalkableType.Straight : WalkableType.Diagonal;
+    return !isOpen || !closed ? WalkableType.Straight : WalkableType.Diagonal;
   }
 }

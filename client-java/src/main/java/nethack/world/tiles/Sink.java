@@ -12,7 +12,7 @@ public class Sink extends Tile implements Walkable, Viewable {
   }
 
   public char toChar() {
-    return 's';
+    return seen ? 'S' : 's';
   }
 
   @Override
@@ -21,12 +21,15 @@ public class Sink extends Tile implements Walkable, Viewable {
   }
 
   @Override
-  public boolean isVisible() {
+  public boolean getVisibility() {
     return isVisible;
   }
 
   @Override
-  public void setVisible(boolean isVisible) {
+  public void setVisibility(boolean isVisible) {
+    if (isVisible) {
+      markAsSeen();
+    }
     this.isVisible = isVisible;
   }
 

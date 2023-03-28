@@ -6,6 +6,7 @@ import agent.navigation.hpastar.infrastructure.Constants;
 import agent.navigation.hpastar.infrastructure.IMap;
 import agent.navigation.hpastar.infrastructure.Id;
 import agent.navigation.hpastar.search.AStar;
+import agent.navigation.hpastar.search.IdPath;
 import agent.navigation.hpastar.search.Path;
 import java.util.*;
 import util.CustomVec2D;
@@ -118,17 +119,18 @@ public class HierarchicalGraph implements IMap<AbstractNode> {
   public void addEdgesBetweenAbstractNodes(
       Id<AbstractNode> srcAbstractNodeId, Id<AbstractNode> destAbstractNodeId, int level) {
     AStar<AbstractNode> search = new AStar<>(this, srcAbstractNodeId, destAbstractNodeId);
-    Path<AbstractNode> path = search.findPath();
-    if (path.pathCost >= 0) {
+    IdPath<AbstractNode> idPath = search.findPath();
+    if (idPath.pathCost >= 0) {
       addEdge(
           srcAbstractNodeId,
           destAbstractNodeId,
-          path.pathCost,
+          idPath.pathCost,
           level,
           false,
-          new ArrayList<>(path.pathNodes));
-      Collections.reverse(path.pathNodes);
-      addEdge(destAbstractNodeId, srcAbstractNodeId, path.pathCost, level, false, path.pathNodes);
+          new ArrayList<>(idPath.pathNodes));
+      Collections.reverse(idPath.pathNodes);
+      addEdge(
+          destAbstractNodeId, srcAbstractNodeId, idPath.pathCost, level, false, idPath.pathNodes);
     }
   }
 
@@ -168,8 +170,8 @@ public class HierarchicalGraph implements IMap<AbstractNode> {
         }
 
         Id<AbstractNode> abs2 = getAbsNodeId(level, pos2);
-        List<CustomVec2D> path = surface.findPath(pos1, pos2);
-        addEdge(abs1, abs2, path.size() * Constants.COST_ONE);
+        Path<CustomVec2D> path = surface.findPath(pos1, pos2);
+        addEdge(abs1, abs2, path.cost);
       }
     }
   }
@@ -192,7 +194,7 @@ public class HierarchicalGraph implements IMap<AbstractNode> {
     graph.addEdge(absFromId, absToId, Constants.COST_ONE);
     Loggers.HPALogger.info("Search: %s -> %s, %s %s", absFromId, absFromId, from, to);
     AStar<AbstractNode> search = new AStar<>(graph, absFromId, absToId);
-    Path<AbstractNode> abstractNodePath = search.findPath();
-    System.out.println(abstractNodePath.pathNodes);
+    IdPath<AbstractNode> abstractNodeIdPath = search.findPath();
+    System.out.println(abstractNodeIdPath.pathNodes);
   }
 }

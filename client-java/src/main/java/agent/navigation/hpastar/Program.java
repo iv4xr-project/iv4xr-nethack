@@ -15,7 +15,7 @@ import agent.navigation.hpastar.infrastructure.Id;
 import agent.navigation.hpastar.passabilities.FakePassability;
 import agent.navigation.hpastar.search.AStar;
 import agent.navigation.hpastar.search.HierarchicalSearch;
-import agent.navigation.hpastar.search.Path;
+import agent.navigation.hpastar.search.IdPath;
 import agent.navigation.hpastar.smoother.SmoothWizard;
 import agent.navigation.hpastar.utils.RefSupport;
 import java.util.ArrayList;
@@ -343,8 +343,8 @@ public class Program {
             concreteMap,
             getNode.apply(new Pair<>(startPosition.x, startPosition.y)).nodeId,
             getNode.apply(new Pair<>(endPosition.x, endPosition.y)).nodeId);
-    Path<ConcreteNode> path = searcher.findPath();
-    List<Id<ConcreteNode>> path2 = path.pathNodes;
+    IdPath<ConcreteNode> idPath = searcher.findPath();
+    List<Id<ConcreteNode>> path2 = idPath.pathNodes;
     return path2.stream()
         .map(p -> (IPathNode) new ConcretePathNode(p))
         .collect(Collectors.toList());

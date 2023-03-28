@@ -30,31 +30,11 @@ public class TileSelector extends Selector<Tile> {
 
   public static final TileSelector adjacentClosedDoorSelector =
       new TileSelector(
-          SelectionType.SHORTEST,
+          SelectionType.ADJACENT,
           Door.class,
           t -> {
             Door d = (Door) t;
-            return !d.isOpen;
-          },
-          true);
-
-  public static final TileSelector closedDoorSelector =
-      new TileSelector(
-          SelectionType.SHORTEST,
-          Door.class,
-          t -> {
-            Door d = (Door) t;
-            return !d.isOpen;
-          },
-          false);
-
-  public static final TileSelector lockedDoorSelector =
-      new TileSelector(
-          SelectionType.SHORTEST,
-          Door.class,
-          t -> {
-            Door d = (Door) t;
-            return d.locked;
+            return d.closed || d.locked;
           },
           false);
 
@@ -116,80 +96,13 @@ public class TileSelector extends Selector<Tile> {
 
   @Override
   public Tile select(List<Tile> tiles, AgentState S) {
-    if (tiles.isEmpty()) {
+    List<CustomVec3D> coordinates =
+        tiles.stream().map(tile -> tile.loc).collect(Collectors.toList());
+    Integer index = MapSelector.select(coordinates, S, selectionType);
+    if (index == null) {
       return null;
     }
-
-    // The selection type does not matter if there is no choice
-    int n = tiles.size();
-    if (n == 1 || selectionType == SelectionType.FIRST) {
-      return tiles.get(0);
-    }
-
-    if (selectionType == SelectionType.LAST) {
-      return tiles.get(n - 1);
-    }
-
-    if (selectionType == SelectionType.SHORTEST) {
-      return selectClosest(tiles, S);
-    }
-
-    // Goes wrong for multiple levels
-    CustomVec2D agentPos = NavUtils.loc2(S.worldmodel.position);
-    float min = CustomVec2D.distSq(agentPos, tiles.get(0).pos);
-    float max = min;
-    int minIndex = 0, maxIndex = 0;
-    for (int i = 1; i < n; i++) {
-      float dist = CustomVec2D.distSq(agentPos, tiles.get(i).pos);
-      if (dist < min) {
-        min = dist;
-        minIndex = i;
-      } else if (dist > max) {
-        max = dist;
-        maxIndex = i;
-      }
-    }
-
-    if (selectionType == SelectionType.FARTHEST) {
-      return tiles.get(maxIndex);
-    } else {
-      throw new UnknownError("SelectionType not implemented: " + selectionType);
-    }
-  }
-
-  public Tile selectClosest(List<Tile> tiles, AgentState S) {
-    int n = tiles.size();
-    Surface surface = S.area();
-    CustomVec3D agentLoc = S.loc();
-    List<CustomVec2D> shortestPath = null;
-    Tile closestTile = null;
-
-    for (Tile tile : tiles) {
-      CustomVec3D loc = tile.loc;
-      assert loc.lvl == agentLoc.lvl : "The level must be the same for closest/furthest navigation";
-
-      // Cannot be shorter since distance is at least equal
-      if (shortestPath != null
-          && CustomVec2D.manhattan(agentLoc.pos, loc.pos) >= shortestPath.size()) {
-        continue;
-      }
-
-      List<CustomVec2D> path = surface.findPath(agentLoc.pos, tile.pos);
-      if (path == null) {
-        continue;
-      }
-      if (shortestPath == null || path.size() < shortestPath.size()) {
-        shortestPath = path;
-        if (path.isEmpty()) {
-          closestTile = surface.getTile(agentLoc.pos);
-          break;
-        } else {
-          closestTile = surface.getTile(path.get(path.size() - 1));
-        }
-      }
-    }
-
-    return closestTile;
+    return tiles.get(index);
   }
 
   private List<Tile> filter(List<Tile> tiles) {

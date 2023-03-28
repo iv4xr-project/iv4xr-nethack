@@ -34,11 +34,16 @@ public class TileDecoder extends Decoder {
           return new Door(loc, broken, isOpen, closed, locked, trapped);
         }
       case 15: // Secret corridor
-        return null;
+      case 23: // Corridor
+        if (tileType == 15) {
+          return new SecretCorridor(loc);
+        } else {
+          return new Corridor(loc);
+        }
       case 16: // Pool
-        return null;
+        return new Pool(loc);
       case 17: // Moat
-        return null;
+        return new Moat(loc);
       case 18:
         return new Water(loc);
       case 19: // Drawbridge up
@@ -47,8 +52,6 @@ public class TileDecoder extends Decoder {
         return new Lava(loc);
       case 21:
         return new IronBars(loc);
-      case 23:
-        return new Corridor(loc);
       case 24:
         return new Floor(loc);
       case 25: // Stair
@@ -62,17 +65,17 @@ public class TileDecoder extends Decoder {
       case 29:
         return new Sink(loc);
       case 30: // Grave
-        return null;
+        return new Grave(loc);
       case 31: // Altar
-        return null;
+        return new Altar(loc);
       case 32: // Ice
-        return null;
+        return new Ice(loc);
       case 33: // Drawbridge down
         return null;
       case 34: // Air
-        return null;
+        return new Air(loc);
       case 35: // Cloud
-        return null;
+        return new Cloud(loc);
     }
 
     throw new IllegalArgumentException(String.format("TileType %d invalid", tileType));

@@ -48,34 +48,23 @@ public class Actions {
                 });
   }
 
-  // Construct an action that would kick the door.
-  static Action kick() {
-    return action("kick")
-        .do2(
-            (AgentState S) ->
-                (Direction direction) -> {
-                  Sounds.door_kick();
-                  Loggers.GoalLogger.info("kick @%s", direction);
-                  WorldModel newWom = WorldModels.kick(S, direction);
-                  return new Pair<>(S, newWom);
-                });
-  }
-
-  // Construct an action that would kick the door.
+  // Construct an action that would open the door.
   static Action openDoor() {
     return action("open door")
         .do2(
             (AgentState S) ->
                 (Direction direction) -> {
-                  Sounds.door();
-                  Loggers.GoalLogger.info("open door @%s", direction);
-                  WorldModel newWom = WorldModels.open(S, direction);
-                  if (S.app().gameState.message.contains("This door is locked.")
-                      || Objects.equals(S.app().gameState.message, "")) {
-                    CustomVec2D doorPos =
-                        NavUtils.posInDirection(NavUtils.loc2(S.worldmodel.position), direction);
-                    Door d = (Door) S.area().getTile(doorPos);
-                    d.locked = true;
+                  CustomVec2D doorPos = NavUtils.posInDirection(S.loc().pos, direction);
+                  Door d = (Door) S.area().getTile(doorPos);
+                  WorldModel newWom;
+                  if (d.locked) {
+                    Sounds.door_kick();
+                    Loggers.GoalLogger.info("kick @%s", direction);
+                    newWom = WorldModels.kick(S, direction);
+                  } else {
+                    Sounds.door();
+                    Loggers.GoalLogger.info("open door @%s", direction);
+                    newWom = WorldModels.open(S, direction);
                   }
                   return new Pair<>(S, newWom);
                 });

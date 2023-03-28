@@ -20,6 +20,7 @@ public abstract class Tile {
     if (this.getClass() != newTile.getClass()) {
       return newTile;
     }
+    newTile.setSeen(newTile.getSeen() || getSeen());
     return this;
   }
 

@@ -90,7 +90,7 @@ public class Level {
       if (!(neighbourTile instanceof Viewable)) {
         continue;
       }
-      ((Viewable) neighbourTile).setVisible(true);
+      ((Viewable) neighbourTile).setVisibility(true);
     }
 
     visibleCoordinates = new HashSet<>(agentNeighbours);
@@ -133,8 +133,7 @@ public class Level {
       }
 
       // Current tile is visible
-      ((Viewable) t).setVisible(true);
-      t.markAsSeen();
+      ((Viewable) t).setVisible();
       visibleCoordinates.add(nextPos);
 
       // Only add all neighbours if it is floor
@@ -149,7 +148,7 @@ public class Level {
     for (Tile[] row : surface.tiles) {
       for (Tile t : row) {
         if (t instanceof Viewable) {
-          ((Viewable) t).setVisible(false);
+          ((Viewable) t).setVisibility(false);
         }
       }
     }

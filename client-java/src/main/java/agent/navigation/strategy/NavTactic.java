@@ -1,13 +1,12 @@
 package agent.navigation.strategy;
-;
+
 import agent.iv4xr.AgentState;
+import agent.navigation.hpastar.search.Path;
 import agent.navigation.surface.Tile;
 import agent.selector.EntitySelector;
 import agent.selector.TileSelector;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
-import eu.iv4xr.framework.spatial.Vec3;
 import java.util.ArrayList;
-import java.util.List;
 import nethack.world.Level;
 import nethack.world.Surface;
 import nl.uu.cs.aplib.mainConcepts.SimpleState;
@@ -35,15 +34,15 @@ public class NavTactic {
               if (e == null) {
                 return null;
               }
-              CustomVec3D nextTile =
-                  NavUtils.nextLoc(
-                      NavUtils.adjustedFindPath(S, S.loc(), new CustomVec3D(e.position)));
-              if (nextTile == null) {
+              Path<CustomVec3D> path =
+                  NavUtils.adjustedFindPath(S, S.loc(), new CustomVec3D(e.position));
+              if (path == null || path.nextNode() == null) {
                 return null;
               }
+              CustomVec3D nextLoc = path.nextNode();
               Loggers.NavLogger.debug(
-                  String.format("navigateToWorldEntity (%s) via %s", entitySelector, nextTile));
-              return nextTile;
+                  String.format("navigateToWorldEntity (%s) via %s", entitySelector, nextLoc));
+              return nextLoc;
             })
         .lift();
   }
@@ -57,14 +56,12 @@ public class NavTactic {
                 return null;
               }
 
-              Vec3 agentPos = S.worldmodel.position;
-              CustomVec3D nextLoc =
-                  NavUtils.nextLoc(NavUtils.adjustedFindPath(S, S.loc(), tile.loc));
-              if (nextLoc == null) {
+              Path<CustomVec3D> path = NavUtils.adjustedFindPath(S, S.loc(), tile.loc);
+              if (path == null || path.nextNode() == null) {
                 return null;
               }
-              Loggers.NavLogger.debug("navigateToTile (%s) via %s", tileSelector, nextLoc);
-              return nextLoc;
+              Loggers.NavLogger.debug("navigateToTile (%s) via %s", tileSelector, path.nextNode());
+              return path.nextNode();
             })
         .lift();
   }
@@ -80,7 +77,7 @@ public class NavTactic {
 
               CustomVec3D agentLoc = S.loc();
               Surface surface = S.area();
-              List<CustomVec3D> path = null;
+              Path<CustomVec3D> path = null;
               for (CustomVec2D pos :
                   NavUtils.neighbourCoordinates(tile.pos, Level.SIZE, allowDiagonal)) {
                 if (pos.equals(agentLoc.pos)) {
@@ -90,21 +87,21 @@ public class NavTactic {
                   continue;
                 }
 
-                List<CustomVec3D> pathToNeighbour =
+                Path<CustomVec3D> pathToNeighbour =
                     NavUtils.adjustedFindPath(
                         S, agentLoc, new CustomVec3D(agentLoc.lvl, agentLoc.pos));
                 if (pathToNeighbour == null) {
                   continue;
                 }
-                if (path == null || pathToNeighbour.size() < path.size()) {
+                if (path == null || pathToNeighbour.cost < path.cost) {
                   path = pathToNeighbour;
                 }
               }
 
-              CustomVec3D nextLoc = NavUtils.nextLoc(path);
-              if (nextLoc == null) {
+              if (path == null || path.nextNode() == null) {
                 return null;
               }
+              CustomVec3D nextLoc = path.nextNode();
               Loggers.NavLogger.debug(
                   "navigateNextToTile (%s) via %s (allowDiagonal=%b)",
                   tileSelector, nextLoc, allowDiagonal);
@@ -126,8 +123,6 @@ public class NavTactic {
   // Construct a tactic that would guide the agent to a tile adjacent to the target entity.
   public static Tactic navigateNextTo(String targetId, boolean allowDiagonally) {
     return NavAction.navigateNextTo(targetId, allowDiagonally).lift();
-    // return NavAction.navigateTo(targetId).on_((AgentState S) -> !S.nextToEntity(targetId,
-    // allowDiagonally)).lift();
   }
 
   public static boolean exploringDone(SimpleState S) {

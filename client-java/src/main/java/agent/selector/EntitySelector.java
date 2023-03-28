@@ -9,16 +9,11 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import nethack.enums.EntityType;
-import util.CustomVec2D;
 import util.CustomVec3D;
 
 public class EntitySelector extends Selector<WorldEntity> {
-  public static final EntitySelector closedDoor =
-      new EntitySelector(
-          SelectionType.FIRST, EntityType.DOOR, d -> (boolean) d.properties.get("closed"), false);
   public static final EntitySelector money =
       new EntitySelector(SelectionType.SHORTEST, EntityType.GOLD, false);
-
   public static final EntitySelector adjacentMonster =
       new EntitySelector(SelectionType.ADJACENT, EntityType.MONSTER, false);
   public static final EntitySelector closestMonster =
@@ -51,51 +46,22 @@ public class EntitySelector extends Selector<WorldEntity> {
 
   @Override
   public WorldEntity select(List<WorldEntity> entities, AgentState S) {
-    if (entities.isEmpty()) {
+    List<CustomVec3D> coordinates =
+        entities.stream()
+            .map(entity -> new CustomVec3D(entity.position))
+            .collect(Collectors.toList());
+    Integer index = MapSelector.select(coordinates, S, selectionType);
+    if (index == null) {
       return null;
     }
-
-    if (selectionType == SelectionType.ADJACENT) {
-      var entity =
-          entities.stream()
-              .filter(e -> CustomVec3D.adjacent(new CustomVec3D(e.position), S.loc(), true))
-              .findFirst();
-      return entity.orElse(null);
-    }
-
-    int n = entities.size();
-    if (n == 1 || selectionType == SelectionType.FIRST) {
-      return entities.get(0);
-    }
-
-    if (selectionType == SelectionType.LAST) {
-      return entities.get(n - 1);
-    }
-
-    // Goes wrong for multiple levels
-    CustomVec2D agentPos = S.loc().pos;
-    float min = CustomVec2D.distSq(agentPos, new CustomVec2D(entities.get(0).position));
-    float max = min;
-    int minIndex = 0, maxIndex = 0;
-    for (int i = 1; i < n; i++) {
-      WorldEntity we = entities.get(i);
-      float dist = CustomVec2D.distSq(agentPos, NavUtils.loc2(we.position));
-      if (dist < min) {
-        min = dist;
-        minIndex = i;
-      } else if (dist > max) {
-        max = dist;
-        maxIndex = i;
-      }
-    }
-
-    if (selectionType == SelectionType.SHORTEST) {
-      return entities.get(minIndex);
-    } else if (selectionType == SelectionType.FARTHEST) {
-      return entities.get(maxIndex);
-    } else {
-      throw new UnknownError("SelectionType not implemented: " + selectionType);
-    }
+    return entities.get(index);
+    //    if (selectionType == SelectionType.ADJACENT) {
+    //      var entity =
+    //          entities.stream()
+    //              .filter(e -> CustomVec3D.adjacent(new CustomVec3D(e.position), S.loc(), true))
+    //              .findFirst();
+    //      return entity.orElse(null);
+    //    }
   }
 
   private List<WorldEntity> filter(List<WorldEntity> entities, AgentState S) {

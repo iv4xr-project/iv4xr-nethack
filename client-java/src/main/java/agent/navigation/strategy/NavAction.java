@@ -3,8 +3,8 @@ package agent.navigation.strategy;
 import static nl.uu.cs.aplib.AplibEDSL.action;
 
 import agent.iv4xr.AgentState;
+import agent.navigation.hpastar.search.Path;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
-import java.util.List;
 import nl.uu.cs.aplib.mainConcepts.Action;
 import nl.uu.cs.aplib.utils.Pair;
 import util.CustomVec3D;
@@ -91,19 +91,20 @@ public class NavAction {
                 })
         .on(
             (AgentState S) -> {
-              List<CustomVec3D> path;
+              Path<CustomVec3D> path;
               if (heuristicLocation == null) {
                 path = S.hierarchicalNav().explore(S.loc());
               } else {
                 path = S.hierarchicalNav().explore(S.loc(), heuristicLocation);
               }
-              CustomVec3D nextTile = NavUtils.nextLoc(path);
-              if (nextTile == null) {
+
+              if (path == null || path.nextNode() == null) {
                 return null;
               }
-              Loggers.NavLogger.info(
-                  "explore to %s via %s", path.get(path.size() - 1), nextTile, path);
-              return nextTile;
+
+              CustomVec3D nextLoc = path.nextNode();
+              Loggers.NavLogger.info("explore to %s via %s: %s", path.destination(), nextLoc, path);
+              return nextLoc;
             });
   }
 }

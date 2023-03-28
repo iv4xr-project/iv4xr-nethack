@@ -16,7 +16,7 @@ import agent.navigation.hpastar.infrastructure.Constants;
 import agent.navigation.hpastar.infrastructure.IMap;
 import agent.navigation.hpastar.infrastructure.Id;
 import agent.navigation.hpastar.search.AStar;
-import agent.navigation.hpastar.search.Path;
+import agent.navigation.hpastar.search.IdPath;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -270,17 +270,18 @@ public class HierarchicalMap implements IMap<AbstractNode> {
   public void addEdgesBetweenAbstractNodes(
       Id<AbstractNode> srcAbstractNodeId, Id<AbstractNode> destAbstractNodeId, int level) {
     AStar<AbstractNode> search = new AStar<>(this, srcAbstractNodeId, destAbstractNodeId);
-    Path<AbstractNode> path = search.findPath();
-    if (path.pathCost >= 0) {
+    IdPath<AbstractNode> idPath = search.findPath();
+    if (idPath.pathCost >= 0) {
       addEdge(
           srcAbstractNodeId,
           destAbstractNodeId,
-          path.pathCost,
+          idPath.pathCost,
           level,
           false,
-          new ArrayList<>(path.pathNodes));
-      Collections.reverse(path.pathNodes);
-      addEdge(destAbstractNodeId, srcAbstractNodeId, path.pathCost, level, false, path.pathNodes);
+          new ArrayList<>(idPath.pathNodes));
+      Collections.reverse(idPath.pathNodes);
+      addEdge(
+          destAbstractNodeId, srcAbstractNodeId, idPath.pathCost, level, false, idPath.pathNodes);
     }
   }
 
