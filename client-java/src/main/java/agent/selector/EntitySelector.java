@@ -14,6 +14,8 @@ import util.CustomVec3D;
 public class EntitySelector extends Selector<WorldEntity> {
   public static final EntitySelector money =
       new EntitySelector(SelectionType.SHORTEST, EntityType.GOLD, false);
+  public static final EntitySelector potion =
+      new EntitySelector(SelectionType.SHORTEST, EntityType.POTION, false);
   public static final EntitySelector adjacentMonster =
       new EntitySelector(SelectionType.ADJACENT, EntityType.MONSTER, false);
   public static final EntitySelector closestMonster =

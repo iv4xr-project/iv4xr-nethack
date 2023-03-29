@@ -80,9 +80,10 @@ bool in_getlin = false;
 int
 shuffled_glyph(int glyph)
 {
-    if glyph_is_normal_object (glyph) {
-        return GLYPH_OBJ_OFF + objects[glyph_to_obj(glyph)].oc_descr_idx;
-    }
+// GERARD: un-shuffle glyph
+//    if glyph_is_normal_object (glyph) {
+//        return GLYPH_OBJ_OFF + objects[glyph_to_obj(glyph)].oc_descr_idx;
+//    }
     return glyph;
 }
 

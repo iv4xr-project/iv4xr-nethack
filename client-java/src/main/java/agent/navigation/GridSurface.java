@@ -217,7 +217,7 @@ public class GridSurface implements Navigatable<CustomVec2D> { // , XPathfinder<
   }
 
   // region XPathfinder interface
-  public boolean hasbeenSeen(CustomVec2D pos) {
+  public boolean hasBeenSeen(CustomVec2D pos) {
     Tile t = getTile(pos);
     return t != null && t.seen;
   }
@@ -260,7 +260,12 @@ public class GridSurface implements Navigatable<CustomVec2D> { // , XPathfinder<
           NavUtils.neighbourCoordinates(frontierPosition, hierarchicalMap.size, true);
       boolean isFrontier = false;
       for (CustomVec2D n : pNeighbors) {
-        if (!hasbeenSeen(n)) {
+        Tile tile = getTile(n);
+        if (tile == null) {
+          continue;
+        }
+
+        if (!hasBeenSeen(n)) {
           frontiers.add(frontierPosition);
           isFrontier = true;
           break;
@@ -496,7 +501,7 @@ public class GridSurface implements Navigatable<CustomVec2D> { // , XPathfinder<
       CustomVec2D candidate = candidates.get(i);
       toNeighbour[i] = isWalkable(getTile(candidate));
       if (!perfect_memory_pathfinding) {
-        toNeighbour[i] = toNeighbour[i] && hasbeenSeen(candidate);
+        toNeighbour[i] = toNeighbour[i] && hasBeenSeen(candidate);
       }
       if (toNeighbour[i]) {
         nrResults++;

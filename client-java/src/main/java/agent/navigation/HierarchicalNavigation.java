@@ -7,6 +7,7 @@ package agent.navigation;
 import agent.navigation.hpastar.*;
 import agent.navigation.hpastar.factories.HierarchicalMapFactory;
 import agent.navigation.hpastar.graph.*;
+import agent.navigation.hpastar.infrastructure.Constants;
 import agent.navigation.hpastar.infrastructure.Id;
 import agent.navigation.hpastar.search.AStar;
 import agent.navigation.hpastar.search.IdPath;
@@ -116,6 +117,19 @@ public class HierarchicalNavigation implements Navigatable<CustomVec3D> {
         pathsToStairs(from, hierarchicalGraph.levelToEntrancesMap.get(from.lvl), false);
 
     for (CustomVec3D target : targets) {
+      if (target.lvl == from.lvl) {
+        int distance = CustomVec2D.manhattan(from.pos, target.pos);
+        if (shortestPath != null && distance * Constants.COST_ONE >= shortestPath.cost) {
+          continue;
+        }
+
+        Path<CustomVec3D> path = findSameLvlPath(from, target);
+        if (shortestPath == null || path.cost < shortestPath.cost) {
+          shortestPath = path;
+        }
+        continue;
+      }
+
       Map<CustomVec2D, Path<CustomVec2D>> pathsFromStairs2Area =
           pathsToStairs(target, hierarchicalGraph.levelToEntrancesMap.get(target.lvl), true);
 
@@ -196,8 +210,8 @@ public class HierarchicalNavigation implements Navigatable<CustomVec3D> {
     areas.get(loc.lvl).markAsSeen(loc.pos);
   }
 
-  public boolean hasbeenSeen(CustomVec3D loc) {
-    return areas.get(loc.lvl).hasbeenSeen(loc.pos);
+  public boolean hasBeenSeen(CustomVec3D loc) {
+    return areas.get(loc.lvl).hasBeenSeen(loc.pos);
   }
 
   public List<CustomVec3D> getFrontier() {

@@ -7,13 +7,15 @@ import util.CustomVec3D;
 
 public class TileDecoder extends Decoder {
   public static Tile decode(int x, int y, byte tileType, byte flags) {
-    assert tileType >= 0 && tileType <= 35
+    assert tileType >= 0 && tileType <= 36
         : String.format("TileType value must be >= 0 && <= 35 but value=%d", tileType);
     CustomVec3D loc = new CustomVec3D(0, new CustomVec2D(x, y));
 
     // Do not differentiate between all wall types
     if (tileType >= 1 && tileType <= 12) {
       return new Wall(loc);
+    } else if (tileType == 36) {
+      return null;
     }
 
     switch (tileType) {

@@ -5,8 +5,10 @@ import agent.navigation.hpastar.smoother.Direction;
 import agent.navigation.strategy.NavUtils;
 import agent.navigation.surface.Climbable;
 import agent.navigation.surface.Tile;
+import agent.selector.EntitySelector;
 import agent.selector.TileSelector;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
@@ -50,9 +52,9 @@ public class Predicates {
   public static @NotNull Predicate<AgentState> hidden_tile() {
     return S -> {
       CustomVec3D agentLoc = S.loc();
-      List<CustomVec2D> neig = NavUtils.neighbourCoordinates(agentLoc.pos, Level.SIZE, true);
-      for (CustomVec2D pos : neig) {
-        CustomVec3D tileLoc = new CustomVec3D(agentLoc.lvl, pos);
+      List<CustomVec2D> neighbours = NavUtils.neighbourCoordinates(agentLoc.pos, Level.SIZE, true);
+      for (CustomVec2D neighbour : neighbours) {
+        CustomVec3D tileLoc = new CustomVec3D(agentLoc.lvl, neighbour);
         Tile tile = S.hierarchicalNav().getTile(tileLoc);
         if (tile instanceof SecretCorridor || tile instanceof SecretDoor) {
           return true;
@@ -62,6 +64,13 @@ public class Predicates {
       return false;
     };
   }
+
+  public static Predicate<AgentState> on_potion =
+      S -> {
+        WorldEntity entity =
+            EntitySelector.potion.apply(new ArrayList<>(S.worldmodel.elements.values()), S);
+        return entity != null && new CustomVec3D(entity.position).equals(S.loc());
+      };
 
   public static Predicate<AgentState> on_stairs_down =
       S -> {

@@ -45,6 +45,10 @@ public class AgentState extends Iv4xrAgentState<Void> {
     return app().gameState.getLevel().surface;
   }
 
+  public List<WorldEntity> getWorldEntities() {
+    return new ArrayList<>(worldmodel.elements.values());
+  }
+
   public HierarchicalNavigation hierarchicalNav() {
     return app().gameState.dungeon.hierarchicalNav;
   }

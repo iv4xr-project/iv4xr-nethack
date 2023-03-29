@@ -90,7 +90,7 @@ public class Level {
       if (!(neighbourTile instanceof Viewable)) {
         continue;
       }
-      ((Viewable) neighbourTile).setVisibility(true);
+      setTileVisible(neighbourTile);
     }
 
     visibleCoordinates = new HashSet<>(agentNeighbours);
@@ -115,7 +115,8 @@ public class Level {
       }
       Entity entity = getEntity(nextPos);
 
-      if (entity.color == Color.TRANSPARENT && entity.type != EntityType.MONSTER) {
+      if (entity.type == EntityType.VOID
+          || (entity.color == Color.TRANSPARENT && entity.type != EntityType.MONSTER)) {
         continue;
       }
 
@@ -133,14 +134,19 @@ public class Level {
       }
 
       // Current tile is visible
-      ((Viewable) t).setVisible();
-      visibleCoordinates.add(nextPos);
+      setTileVisible(t);
 
       // Only add all neighbours if it is floor
       if (t instanceof Floor) {
         queue.addAll(neighbours);
       }
     }
+  }
+
+  private void setTileVisible(Tile tile) {
+    ((Viewable) tile).setVisible();
+    surface.markAsSeen(tile.pos);
+    visibleCoordinates.add(tile.pos);
   }
 
   private void resetVisibility() {

@@ -1,16 +1,22 @@
 package agent.navigation.strategy;
 
+import static nl.uu.cs.aplib.AplibEDSL.action;
+
 import agent.iv4xr.AgentState;
 import agent.navigation.hpastar.search.Path;
 import agent.navigation.surface.Tile;
 import agent.selector.EntitySelector;
 import agent.selector.TileSelector;
+import agent.strategy.WorldModels;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
-import java.util.ArrayList;
+import eu.iv4xr.framework.mainConcepts.WorldModel;
+import nethack.enums.CommandEnum;
+import nethack.object.Command;
 import nethack.world.Level;
 import nethack.world.Surface;
 import nl.uu.cs.aplib.mainConcepts.SimpleState;
 import nl.uu.cs.aplib.mainConcepts.Tactic;
+import nl.uu.cs.aplib.utils.Pair;
 import util.CustomVec2D;
 import util.CustomVec3D;
 import util.Loggers;
@@ -29,8 +35,7 @@ public class NavTactic {
     return NavAction.navigateTo()
         .on(
             (AgentState S) -> {
-              WorldEntity e =
-                  entitySelector.apply(new ArrayList<>(S.worldmodel.elements.values()), S);
+              WorldEntity e = entitySelector.apply(S.getWorldEntities(), S);
               if (e == null) {
                 return null;
               }
@@ -43,6 +48,32 @@ public class NavTactic {
               Loggers.NavLogger.debug(
                   String.format("navigateToWorldEntity (%s) via %s", entitySelector, nextLoc));
               return nextLoc;
+            })
+        .lift();
+  }
+
+  public static Tactic pickupWorldEntity(EntitySelector entitySelector) {
+    return action("navAndPickup")
+        .do2(
+            (AgentState S) ->
+                (Path<CustomVec3D> path) -> {
+                  if (path.atLocation()) {
+                    Command pickup = new Command(CommandEnum.COMMAND_PICKUP);
+                    WorldModel newWom = WorldModels.performCommands(S, pickup);
+                    WorldEntity e = entitySelector.apply(S.getWorldEntities(), S);
+                    newWom.elements.remove(e.id);
+                    return new Pair<>(S, newWom);
+                  } else {
+                    return new Pair<>(S, NavUtils.moveTo(S, path.nextNode()));
+                  }
+                })
+        .on(
+            (AgentState S) -> {
+              WorldEntity e = entitySelector.apply(S.getWorldEntities(), S);
+              if (e == null) {
+                return null;
+              }
+              return NavUtils.adjustedFindPath(S, S.loc(), new CustomVec3D(e.position));
             })
         .lift();
   }

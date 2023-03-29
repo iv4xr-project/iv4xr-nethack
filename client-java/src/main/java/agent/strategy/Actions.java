@@ -19,7 +19,7 @@ import util.Sounds;
 
 public class Actions {
   // Construct an action that would attack an adjacent monster.
-  static Action attack() {
+  public static Action attack() {
     return action("attack")
         .do2(
             (AgentState S) ->
@@ -32,7 +32,7 @@ public class Actions {
   }
 
   // Construct an action that would fire in a direction.
-  static Action fire() {
+  public static Action fire() {
     return action("fire")
         .do2(
             (AgentState S) ->
@@ -45,7 +45,7 @@ public class Actions {
   }
 
   // Construct an action that would open the door.
-  static Action openDoor() {
+  public static Action openDoor() {
     return action("open door")
         .do2(
             (AgentState S) ->
@@ -66,7 +66,7 @@ public class Actions {
                 });
   }
 
-  static Action quaffItem() {
+  public static Action quaffItem() {
     return action("quaff")
         .do2(
             (AgentState S) ->
@@ -77,7 +77,7 @@ public class Actions {
                 });
   }
 
-  static Action singleCommand(Command command) {
+  public static Action singleCommand(Command command) {
     return action(String.format("perform command: %s", command))
         .do1(
             (AgentState S) -> {

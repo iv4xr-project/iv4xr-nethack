@@ -51,11 +51,17 @@ public abstract class MapSelector {
   public static Integer selectShortest(List<CustomVec3D> locations, AgentState S) {
     CustomVec3D agentLoc = S.loc();
     Path<CustomVec3D> shortestPath = S.hierarchicalNav().findShortestPath(agentLoc, locations);
-    if (shortestPath == null || shortestPath.atLocation()) {
+    if (shortestPath == null) {
       return null;
     }
 
-    CustomVec3D target = shortestPath.destination();
+    CustomVec3D target;
+    if (shortestPath.atLocation()) {
+      target = agentLoc;
+    } else {
+      target = shortestPath.destination();
+    }
+
     int index = locations.indexOf(target);
     assert index != -1;
     return index;
