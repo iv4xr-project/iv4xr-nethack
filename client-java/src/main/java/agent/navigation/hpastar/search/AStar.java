@@ -6,8 +6,6 @@ import agent.navigation.hpastar.infrastructure.Id;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import nethack.world.Level;
-import util.Loggers;
 
 public class AStar<TNode> {
   private final Function<Id<TNode>, Boolean> isGoal;
@@ -40,11 +38,11 @@ public class AStar<TNode> {
     while (canExpand()) {
       Id<TNode> nodeId = expand();
       int id = nodeId.getIdValue();
-      Loggers.HPALogger.trace(
-          "Expand <%d,%d> (relPos:<%d,%d>) %d",
-          id % Level.SIZE.width, id / Level.SIZE.width, id % 8, id / 8, id);
+      //      Loggers.HPALogger.trace(
+      //          "Expand <%d,%d> (relPos:<%d,%d>) %d",
+      //          id % Level.SIZE.width, id / Level.SIZE.width, id % 8, id / 8, id);
       if (isGoal.apply(nodeId)) {
-        Loggers.HPALogger.trace("Found path");
+        //        Loggers.HPALogger.trace("Found path");
         openQueue.clear();
         return reconstructPathFrom(nodeId);
       }

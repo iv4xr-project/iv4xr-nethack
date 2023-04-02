@@ -2,6 +2,9 @@ package util;
 
 import eu.iv4xr.framework.spatial.Vec3;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Objects;
 
 public class CustomVec2D implements Serializable {
@@ -66,6 +69,38 @@ public class CustomVec2D implements Serializable {
 
   public static int manhattan(CustomVec2D p, CustomVec2D q) {
     return Math.max(Math.abs(p.x - q.x), Math.abs(p.y - q.y));
+  }
+
+  public void sortBasedOnManhattanDistance(List<CustomVec2D> targets) {
+    // Sort targets based on manhattan distance
+    if (targets.size() <= 1) {
+      return;
+    }
+
+    List<Integer> manhattanDistances = new ArrayList<>(targets.size());
+    for (CustomVec2D vec : targets) {
+      manhattanDistances.add(CustomVec2D.manhattan(this, vec));
+    }
+    List<Integer> indexList = new ArrayList<>(targets.size());
+    for (int i = 0; i < targets.size(); i++) {
+      indexList.add(i);
+    }
+
+    indexList.sort(
+        new Comparator<Integer>() {
+          @Override
+          public int compare(Integer i1, Integer i2) {
+            int distance1 = manhattanDistances.get(i1);
+            int distance2 = manhattanDistances.get(i2);
+            return Integer.compare(distance1, distance2);
+          }
+        });
+
+    List<CustomVec2D> sortedTargets = new ArrayList<>();
+    for (int index : indexList) {
+      sortedTargets.add(targets.get(index));
+    }
+    targets = sortedTargets;
   }
 
   public static float distSq(CustomVec2D p, CustomVec2D q) {

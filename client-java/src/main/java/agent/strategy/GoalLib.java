@@ -31,7 +31,7 @@ public class GoalLib {
                         .on_(Predicates.outOfCombat_HpCritical)
                         .lift(),
 
-                    // Collect money
+                    // Collect money and potions
                     NavTactic.navigateToWorldEntity(EntitySelector.money),
                     NavTactic.pickupWorldEntity(EntitySelector.potion),
 
@@ -46,11 +46,6 @@ public class GoalLib {
                     Actions.singleCommand(new Command(CommandEnum.MISC_DOWN))
                         .on_(Predicates.on_stairs_down)
                         .lift(),
-
-                    // Explore walls for hidden doors
-                    //
-                    // NavTactic.navigateToTile(TileSelector.adjacentWallSelector),
-                    //                    Actions.searchWalls().lift(),
                     ABORT()));
 
     return G.lift(); // REPEAT(G.lift());

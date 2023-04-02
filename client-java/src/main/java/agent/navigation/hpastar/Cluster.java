@@ -104,6 +104,12 @@ public class Cluster {
     distanceCalculated.put(invTuple, true);
   }
 
+  public void resetComputedPaths() {
+    distances.clear();
+    cachedPaths.clear();
+    distanceCalculated.clear();
+  }
+
   public void updatePathsForLocalEntrance(EntrancePoint srcEntrancePoint) {
     for (EntrancePoint entrancePoint : entrancePoints) {
       computePathBetweenEntrances(srcEntrancePoint, entrancePoint);

@@ -10,6 +10,7 @@ import agent.selector.TileSelector;
 import agent.strategy.WorldModels;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
+import java.util.List;
 import nethack.enums.CommandEnum;
 import nethack.object.Command;
 import nethack.world.Level;
@@ -108,30 +109,14 @@ public class NavTactic {
 
               CustomVec3D agentLoc = S.loc();
               Surface surface = S.area();
-              Path<CustomVec3D> path = null;
-              for (CustomVec2D pos :
-                  NavUtils.neighbourCoordinates(tile.pos, Level.SIZE, allowDiagonal)) {
-                if (pos.equals(agentLoc.pos)) {
-                  return null;
-                }
-                if (surface.nullTile(pos) || !surface.isWalkable(pos)) {
-                  continue;
-                }
-
-                Path<CustomVec3D> pathToNeighbour =
-                    NavUtils.adjustedFindPath(
-                        S, agentLoc, new CustomVec3D(agentLoc.lvl, agentLoc.pos));
-                if (pathToNeighbour == null) {
-                  continue;
-                }
-                if (path == null || pathToNeighbour.cost < path.cost) {
-                  path = pathToNeighbour;
-                }
-              }
-
-              if (path == null || path.nextNode() == null) {
+              List<CustomVec2D> neighbours =
+                  NavUtils.neighbourCoordinates(tile.pos, Level.SIZE, allowDiagonal);
+              List<CustomVec3D> targets = NavUtils.addLevelNr(neighbours, tile.loc.lvl);
+              Path<CustomVec3D> path = S.hierarchicalNav().findShortestPath(agentLoc, targets);
+              if (path == null || path.atLocation()) {
                 return null;
               }
+
               CustomVec3D nextLoc = path.nextNode();
               Loggers.NavLogger.debug(
                   "navigateNextToTile (%s) via %s (allowDiagonal=%b)",

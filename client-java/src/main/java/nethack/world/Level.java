@@ -10,6 +10,7 @@ import nethack.object.Entity;
 import nethack.world.tiles.Door;
 import nethack.world.tiles.Floor;
 import nethack.world.tiles.Viewable;
+import nethack.world.tiles.Wall;
 import util.ColoredStringBuilder;
 import util.CustomVec2D;
 import util.Loggers;
@@ -57,7 +58,13 @@ public class Level {
     for (int x = 0; x < SIZE.width; x++) {
       for (int y = 0; y < SIZE.height; y++) {
         CustomVec2D pos = new CustomVec2D(x, y);
-        if (!Objects.equals(surface.getTile(pos), tiles[y][x])) {
+        Entity entity = getEntity(pos);
+        if (entity.type == EntityType.BOULDER) {
+          if (!(surface.getTile(pos) instanceof Wall)) {
+            changedTiles.add(new Wall(tiles[y][x].loc));
+          }
+          continue;
+        } else if (!Objects.equals(surface.getTile(pos), tiles[y][x])) {
           changedTiles.add(tiles[y][x]);
         }
       }

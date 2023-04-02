@@ -32,6 +32,10 @@ public class CustomVec3D implements Serializable {
     return pos.y;
   }
 
+  public int lvl() {
+    return lvl;
+  }
+
   public boolean equals(Object o) {
     if (!(o instanceof CustomVec3D)) {
       return false;

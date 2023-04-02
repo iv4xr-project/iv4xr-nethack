@@ -59,11 +59,15 @@ public class GridSurface implements Navigatable<CustomVec2D> { // , XPathfinder<
 
   public void updateTiles(List<Tile> newTiles) {
     Map<Id<Cluster>, Set<Direction>> entrances = new HashMap<>();
+    Set<Id<Cluster>> updatedClusters = new HashSet<>();
     for (Tile tile : newTiles) {
       boolean updated = updateTile(tile);
       if (!updated) {
         continue;
       }
+
+      Id<Cluster> clusterId = hierarchicalMap.findClusterForPosition(tile.pos).id;
+      updatedClusters.add(clusterId);
 
       boolean blocked = !(tile instanceof Walkable);
       if (blocked) {
@@ -76,6 +80,30 @@ public class GridSurface implements Navigatable<CustomVec2D> { // , XPathfinder<
     }
 
     createEntrances(entrances);
+
+    // Update clusters after updating tiles
+    for (Id<Cluster> clusterId : updatedClusters) {
+      resetIntraClusterPaths(clusterId);
+    }
+  }
+
+  private void resetIntraClusterPaths(Id<Cluster> clusterId) {
+    Cluster cluster = hierarchicalMap.getCluster(clusterId);
+    cluster.resetComputedPaths();
+
+    List<Id<AbstractNode>> nodeIds =
+        cluster.entrancePoints.stream()
+            .map(entrancePoint -> entrancePoint.abstractNodeId)
+            .collect(Collectors.toList());
+    for (EntrancePoint entrance : cluster.entrancePoints) {
+      Id<AbstractNode> abstractNodeId = entrance.abstractNodeId;
+      AbstractNode abstractNode = hierarchicalMap.abstractGraph.getNode(abstractNodeId);
+      for (Id<AbstractNode> nodeId : nodeIds) {
+        abstractNode.removeEdge(nodeId);
+      }
+    }
+    cluster.createIntraClusterEdges();
+    GridSurfaceFactory.createIntraClusterEdges(this, cluster);
   }
 
   private void addClusterEdges(
@@ -347,22 +375,26 @@ public class GridSurface implements Navigatable<CustomVec2D> { // , XPathfinder<
   }
 
   // Has optimizations in place to reduce the amount of time to find the shortest path
-  public Path<CustomVec2D> findShortestPath(CustomVec2D from, CustomVec2D... targets) {
-    assert targets.length != 0 : "Cannot find shortest path to zero targets";
+  public Path<CustomVec2D> findShortestPath(CustomVec2D from, List<CustomVec2D> targets) {
+    assert !targets.isEmpty() : "Cannot find shortest path to zero targets";
+
+    from.sortBasedOnManhattanDistance(targets);
+    // Closest destination same as the target, path is empty
+    if (targets.get(0).equals(from)) {
+      return new Path<>();
+    }
+
     HierarchicalMapFactory factory = new HierarchicalMapFactory();
     Id<AbstractNode> startAbsNode = factory.insertAbstractNode(hierarchicalMap, from);
     int maxPathsToRefine = Integer.MAX_VALUE;
     HierarchicalSearch hierarchicalSearch = new HierarchicalSearch();
-
     Path<CustomVec2D> shortestPath = null;
-    for (CustomVec2D target : targets) {
-      if (from.equals(target)) {
-        shortestPath = new Path<>();
-        break;
-      }
 
-      if (shortestPath != null && CustomVec2D.manhattan(from, target) >= shortestPath.cost) {
-        continue;
+    for (CustomVec2D target : targets) {
+      if (shortestPath == null) {
+        // Computation must be performed since any path is shortest
+      } else if (CustomVec2D.manhattan(from, target) * Constants.COST_ONE >= shortestPath.cost) {
+        break;
       }
 
       Id<AbstractNode> targetAbsNode = factory.insertAbstractNode(hierarchicalMap, target);
@@ -377,7 +409,7 @@ public class GridSurface implements Navigatable<CustomVec2D> { // , XPathfinder<
         // Instead of smooth, optimize path by taking shortcuts
         Path<CustomVec2D> posPath = toPositionPath(path, concreteMap);
         assert isValidPath(from, target, posPath);
-        if (shortestPath == null || shortestPath.cost > posPath.cost) {
+        if (shortestPath == null || posPath.cost < shortestPath.cost) {
           shortestPath = posPath;
         }
       }
@@ -402,7 +434,7 @@ public class GridSurface implements Navigatable<CustomVec2D> { // , XPathfinder<
                   return hierarchicalMap.abstractGraph.getNodeInfo(abstractPathNode.id).position;
                 })
             .collect(Collectors.toList());
-    return new Path<>(nodes, nodes.size() * Constants.COST_ONE);
+    return new Path<>(nodes, (nodes.size() - 1) * Constants.COST_ONE);
   }
 
   public boolean isValidPath(CustomVec2D from, CustomVec2D to, Path<CustomVec2D> path) {

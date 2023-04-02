@@ -7,7 +7,6 @@ package agent.navigation;
 import agent.navigation.hpastar.*;
 import agent.navigation.hpastar.factories.HierarchicalMapFactory;
 import agent.navigation.hpastar.graph.*;
-import agent.navigation.hpastar.infrastructure.Constants;
 import agent.navigation.hpastar.infrastructure.Id;
 import agent.navigation.hpastar.search.AStar;
 import agent.navigation.hpastar.search.IdPath;
@@ -113,57 +112,73 @@ public class HierarchicalNavigation implements Navigatable<CustomVec3D> {
     assert !targets.isEmpty() : "Must contain at least one target";
     Path<CustomVec3D> shortestPath = null;
 
+    Map<Integer, List<CustomVec3D>> vecMap =
+        targets.stream().collect(Collectors.groupingBy(CustomVec3D::lvl));
+
     Map<CustomVec2D, Path<CustomVec2D>> pathsToArea1Stairs =
         pathsToStairs(from, hierarchicalGraph.levelToEntrancesMap.get(from.lvl), false);
 
-    for (CustomVec3D target : targets) {
-      if (target.lvl == from.lvl) {
-        int distance = CustomVec2D.manhattan(from.pos, target.pos);
-        if (shortestPath != null && distance * Constants.COST_ONE >= shortestPath.cost) {
-          continue;
-        }
+    if (vecMap.containsKey(from.lvl)) {
+      List<CustomVec2D> targets2D =
+          vecMap.get(from.lvl).stream().map(location -> location.pos).collect(Collectors.toList());
+      Path<CustomVec2D> path2D = areas.get(from.lvl).findShortestPath(from.pos, targets2D);
+      if (path2D != null) {
+        shortestPath = NavUtils.addLevelNr(path2D, from.lvl);
+      }
+    }
 
-        Path<CustomVec3D> path = findSameLvlPath(from, target);
-        if (shortestPath == null || path.cost < shortestPath.cost) {
-          shortestPath = path;
-        }
+    outterloop:
+    for (int lvl : vecMap.keySet()) {
+      // Handled separately
+      if (lvl == from.lvl) {
         continue;
       }
 
-      Map<CustomVec2D, Path<CustomVec2D>> pathsFromStairs2Area =
-          pathsToStairs(target, hierarchicalGraph.levelToEntrancesMap.get(target.lvl), true);
-
-      for (CustomVec2D stairPosArea1 : pathsToArea1Stairs.keySet()) {
-        int costToStair1 = pathsToArea1Stairs.get(stairPosArea1).cost;
-        if (shortestPath != null && costToStair1 >= shortestPath.cost) {
-          continue;
+      // Not possible to find a shorter path
+      if (shortestPath != null) {
+        for (Path<CustomVec2D> path : pathsToArea1Stairs.values()) {
+          if (path.cost < shortestPath.cost) {
+            break outterloop;
+          }
         }
+      }
 
-        Id<AbstractNode> stair1Id = hierarchicalGraph.getAbsNodeId(from.lvl, stairPosArea1);
-        for (CustomVec2D stairPosArea2 : pathsFromStairs2Area.keySet()) {
-          int costToStair2 = pathsFromStairs2Area.get(stairPosArea2).cost;
-          if (shortestPath != null && costToStair1 + costToStair2 >= shortestPath.cost) {
+      for (CustomVec3D target : vecMap.get(lvl)) {
+        Map<CustomVec2D, Path<CustomVec2D>> pathsFromStairs2Area =
+            pathsToStairs(target, hierarchicalGraph.levelToEntrancesMap.get(target.lvl), true);
+
+        for (CustomVec2D stairPosArea1 : pathsToArea1Stairs.keySet()) {
+          int costToStair1 = pathsToArea1Stairs.get(stairPosArea1).cost;
+          if (shortestPath != null && costToStair1 >= shortestPath.cost) {
             continue;
           }
 
-          Id<AbstractNode> stair2Id = hierarchicalGraph.getAbsNodeId(target.lvl, stairPosArea2);
-          AStar<AbstractNode> search = new AStar<>(hierarchicalGraph, stair1Id, stair2Id);
-          IdPath<AbstractNode> idPath = search.findPath();
-          if (idPath == null) {
-            continue;
+          Id<AbstractNode> stair1Id = hierarchicalGraph.getAbsNodeId(from.lvl, stairPosArea1);
+          for (CustomVec2D stairPosArea2 : pathsFromStairs2Area.keySet()) {
+            int costToStair2 = pathsFromStairs2Area.get(stairPosArea2).cost;
+            if (shortestPath != null && costToStair1 + costToStair2 >= shortestPath.cost) {
+              continue;
+            }
+
+            Id<AbstractNode> stair2Id = hierarchicalGraph.getAbsNodeId(target.lvl, stairPosArea2);
+            AStar<AbstractNode> search = new AStar<>(hierarchicalGraph, stair1Id, stair2Id);
+            IdPath<AbstractNode> idPath = search.findPath();
+            if (idPath == null) {
+              continue;
+            }
+
+            int pathCost = idPath.pathCost + costToStair1 + costToStair2;
+            if (shortestPath != null && pathCost >= shortestPath.cost) {
+              continue;
+            }
+
+            Path<CustomVec2D> area1Path = pathsToArea1Stairs.get(stairPosArea1);
+            Path<CustomVec2D> area2Path = pathsFromStairs2Area.get(stairPosArea2);
+
+            Path<CustomVec3D> node3D = NavUtils.addLevelNr(area1Path, from.lvl);
+            node3D.nodes.addAll(NavUtils.addLevelNr(area2Path, target.lvl).nodes);
+            shortestPath = new Path<>(node3D.nodes, pathCost);
           }
-
-          int pathCost = idPath.pathCost + costToStair1 + costToStair2;
-          if (shortestPath != null && pathCost >= shortestPath.cost) {
-            continue;
-          }
-
-          Path<CustomVec2D> area1Path = pathsToArea1Stairs.get(stairPosArea1);
-          Path<CustomVec2D> area2Path = pathsFromStairs2Area.get(stairPosArea2);
-
-          Path<CustomVec3D> node3D = NavUtils.addLevelNr(area1Path, from.lvl);
-          node3D.nodes.addAll(NavUtils.addLevelNr(area2Path, target.lvl).nodes);
-          shortestPath = new Path<>(node3D.nodes, pathCost);
         }
       }
     }
@@ -235,20 +250,7 @@ public class HierarchicalNavigation implements Navigatable<CustomVec3D> {
       return null;
     }
 
-    List<Pair<CustomVec3D, Path<CustomVec3D>>> candidates2 =
-        candidates.stream()
-            .map(target -> new Pair<>(target, findPath(from, target)))
-            .filter(d -> d.snd != null)
-            .collect(Collectors.toList());
-    if (candidates2.isEmpty()) {
-      return null;
-    } else {
-      candidates2.sort(
-          (d1, d2) -> {
-            return Integer.compare(distanceCandidate(d1, to), distanceCandidate(d2, to));
-          });
-      return candidates2.get(0).snd;
-    }
+    return findShortestPath(from, candidates);
   }
 
   private int distanceCandidate(

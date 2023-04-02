@@ -10,6 +10,7 @@ public class Path<T> {
   public Path(List<T> nodes, int cost) {
     assert nodes != null : "Nodes must not be empty, path must be a valid path";
     this.nodes = nodes;
+    assert cost >= 0 : "Cost must at least be 0";
     this.cost = cost;
   }
 

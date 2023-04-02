@@ -39,4 +39,27 @@ public enum Direction {
         throw new IllegalArgumentException("Direction not known");
     }
   }
+
+  public Direction oppositeDirection() {
+    switch (this) {
+      case North:
+        return South;
+      case South:
+        return North;
+      case East:
+        return West;
+      case West:
+        return East;
+      case NorthWest:
+        return SouthEast;
+      case NorthEast:
+        return SouthWest;
+      case SouthEast:
+        return NorthWest;
+      case SouthWest:
+        return NorthEast;
+    }
+
+    throw new IllegalArgumentException("Direction opposite unknown");
+  }
 }
