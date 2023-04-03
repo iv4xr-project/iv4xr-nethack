@@ -18,6 +18,7 @@ import eu.iv4xr.framework.extensions.pathfinding.XPathfinder;
 import java.util.*;
 import java.util.stream.Collectors;
 import nethack.enums.Color;
+import nethack.world.tiles.Door;
 import util.ColoredStringBuilder;
 import util.CustomVec2D;
 
@@ -293,6 +294,13 @@ public class GridSurface implements Navigatable<CustomVec2D> {
           continue;
         }
 
+        if (tile instanceof Door) {
+          Door door = (Door) tile;
+          if (door.isShopDoor) {
+            cannotBeFrontier.add(door.pos);
+          }
+        }
+
         if (!hasBeenSeen(n)) {
           frontiers.add(frontierPosition);
           isFrontier = true;
@@ -377,7 +385,7 @@ public class GridSurface implements Navigatable<CustomVec2D> {
   public Path<CustomVec2D> findShortestPath(CustomVec2D from, List<CustomVec2D> targets) {
     assert !targets.isEmpty() : "Cannot find shortest path to zero targets";
 
-    from.sortBasedOnManhattanDistance(targets);
+    targets = from.sortBasedOnManhattanDistance(targets);
     // Closest destination same as the target, path is empty
     if (targets.get(0).equals(from)) {
       return new Path<>();
@@ -437,12 +445,12 @@ public class GridSurface implements Navigatable<CustomVec2D> {
   }
 
   public boolean isValidPath(CustomVec2D from, CustomVec2D to, Path<CustomVec2D> path) {
-    assert !from.equals(to);
     if (path.atLocation()) {
       assert from.equals(to) : "If path is empty, it must be a path to itself";
       return true;
     }
 
+    assert !from.equals(to);
     List<CustomVec2D> nodes = path.nodes;
 
     assert nodes.get(0).equals(from) : "Path from or to is incorrect";
@@ -506,6 +514,10 @@ public class GridSurface implements Navigatable<CustomVec2D> {
     return neighbours_(tile.pos);
   }
 
+  public List<CustomVec2D> neighbourCoordinates(CustomVec2D pos, boolean allowDiagonal) {
+    return NavUtils.neighbourCoordinates(pos, hierarchicalMap.size, allowDiagonal);
+  }
+
   /**
    * Return the neighbors of a tile. A tile u is a neighbor of a tile t if u is adjacent to t, and
    * moreover u is navigable (e.g. it is not a wall or a closed door). If the flag
@@ -519,8 +531,7 @@ public class GridSurface implements Navigatable<CustomVec2D> {
    */
   private List<CustomVec2D> neighbours_(CustomVec2D pos) {
     boolean allowDiagonal = getTile(pos) instanceof Walkable;
-    List<CustomVec2D> candidates =
-        NavUtils.neighbourCoordinates(pos, hierarchicalMap.size, allowDiagonal);
+    List<CustomVec2D> candidates = neighbourCoordinates(pos, allowDiagonal);
 
     int nrResults = 0;
     boolean[] toNeighbour = new boolean[candidates.size()];

@@ -71,5 +71,9 @@ public class Replay {
       assert nethack.gameState.stats.turn.equals(action.fst) : "TURN WAS DIFFERENT";
       nethack.step(action.snd.toArray(new Command[] {}));
     }
+
+    // Render and then loop
+    nethack.render();
+    nethack.loop();
   }
 }

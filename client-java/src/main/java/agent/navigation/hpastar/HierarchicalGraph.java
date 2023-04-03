@@ -56,7 +56,7 @@ public class HierarchicalGraph implements IMap<AbstractNode> {
     }
     levelToEntrancesMap.get(loc.lvl).add(loc.pos);
 
-    System.out.printf("HierarchGraph AddNode %s%n", loc);
+    Loggers.HPALogger.info("HierarchGraph AddNode %s%n", loc);
     Id<AbstractNode> absNodeId = new Id<AbstractNode>().from(abstractGraph.nextId);
     AbstractNodeInfo nodeInfo = new AbstractNodeInfo(absNodeId, loc.lvl, null, loc.pos, null);
     abstractGraph.addNode(nodeInfo.id, nodeInfo);
@@ -81,7 +81,7 @@ public class HierarchicalGraph implements IMap<AbstractNode> {
       List<Id<AbstractNode>> pathPathNodes) {
     AbstractEdgeInfo edgeInfo = new AbstractEdgeInfo(cost, level, inter);
     edgeInfo.innerLowerLevelPath = pathPathNodes;
-    System.out.printf("HierarchGraph AddEdge %s -> %s%n", sourceNodeId, destNodeId);
+    Loggers.HPALogger.info("HierarchGraph AddEdge %s -> %s%n", sourceNodeId, destNodeId);
     abstractGraph.addEdge(sourceNodeId, destNodeId, edgeInfo);
   }
 

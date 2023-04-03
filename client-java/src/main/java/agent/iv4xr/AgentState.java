@@ -126,6 +126,10 @@ public class AgentState extends Iv4xrAgentState<Void> {
       }
 
       Entity e = level.getEntity(entityPosition);
+      if (e == null) {
+        continue;
+      }
+
       String id = e.createId(entityPosition);
       if (!id.equals(we.id)) {
         Loggers.WOMLogger.debug("REMOVE: %s [%s]", we.id, we.type);

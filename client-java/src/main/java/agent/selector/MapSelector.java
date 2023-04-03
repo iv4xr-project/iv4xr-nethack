@@ -13,7 +13,8 @@ public abstract class MapSelector {
     }
 
     // Adjacent coordinates
-    if (selectionType == Selector.SelectionType.ADJACENT) {
+    if (selectionType == Selector.SelectionType.STRAIGHT_ADJACENT
+        || selectionType == Selector.SelectionType.ADJACENT) {
       CustomVec3D location = S.loc();
       for (int i = 0; i < coordinates.size(); i++) {
         CustomVec3D coordinate = coordinates.get(i);
@@ -23,7 +24,8 @@ public abstract class MapSelector {
           continue;
         }
 
-        if (CustomVec3D.adjacent(location, coordinate, true)) {
+        if (CustomVec3D.adjacent(
+            location, coordinate, selectionType == Selector.SelectionType.ADJACENT)) {
           return i;
         }
       }

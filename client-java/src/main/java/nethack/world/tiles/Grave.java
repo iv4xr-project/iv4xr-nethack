@@ -12,7 +12,7 @@ public class Grave extends Tile implements Walkable, Viewable {
   }
 
   public char toChar() {
-    return '{';
+    return '|';
   }
 
   @Override

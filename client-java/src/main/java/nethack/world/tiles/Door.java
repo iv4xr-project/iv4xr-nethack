@@ -4,12 +4,15 @@ import agent.navigation.surface.Tile;
 import agent.navigation.surface.Walkable;
 import util.CustomVec3D;
 
-public class Door extends Tile implements Walkable, Viewable {
+public class Door extends Tile implements Walkable, Viewable, Secret {
   public boolean broken;
   public boolean isOpen;
   public boolean closed;
   public boolean locked;
   public boolean trapped;
+  public boolean isShopDoor;
+
+  public boolean isSecret = false;
   boolean isVisible = false;
 
   public Door(
@@ -31,16 +34,14 @@ public class Door extends Tile implements Walkable, Viewable {
     if (getClass() != newTile.getClass()) {
       return newTile;
     }
-    newTile.setSeen(newTile.getSeen() || getSeen());
+    Door door = ((Door) newTile);
+    seen = door.getSeen() || seen;
+    setIsSecret(door.getIsSecret());
     return this;
   }
 
   public char toChar() {
-    if (isOpen) {
-      return seen ? 'O' : 'o';
-    } else {
-      return seen ? 'X' : 'x';
-    }
+    return isOpen ? 'O' : 'X';
   }
 
   @Override
@@ -54,9 +55,9 @@ public class Door extends Tile implements Walkable, Viewable {
         && broken == door.broken
         && isOpen == door.isOpen
         && closed == door.closed
-        && locked
-        && door.locked
-        && trapped == door.trapped;
+        && locked == door.locked
+        && trapped == door.trapped
+        && isSecret == door.isSecret;
   }
 
   @Override
@@ -85,5 +86,15 @@ public class Door extends Tile implements Walkable, Viewable {
   @Override
   public WalkableType getWalkableType() {
     return !isOpen || !closed ? WalkableType.Straight : WalkableType.Diagonal;
+  }
+
+  @Override
+  public boolean getIsSecret() {
+    return isSecret;
+  }
+
+  @Override
+  public void setIsSecret(boolean isSecret) {
+    this.isSecret = isSecret;
   }
 }

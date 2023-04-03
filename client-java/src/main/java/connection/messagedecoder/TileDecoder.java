@@ -30,18 +30,18 @@ public class TileDecoder extends Decoder {
         boolean closed = (flags & 4) != 0;
         boolean locked = (flags & 8) != 0;
         boolean trapped = (flags & 16) != 0;
+        Door door = new Door(loc, broken, isOpen, closed, locked, trapped);
         if (tileType == 14) {
-          return new SecretDoor(loc, broken, isOpen, closed, locked, trapped);
-        } else {
-          return new Door(loc, broken, isOpen, closed, locked, trapped);
+          door.setSecret();
         }
+        return door;
       case 15: // Secret corridor
       case 23: // Corridor
+        Corridor corridor = new Corridor(loc);
         if (tileType == 15) {
-          return new SecretCorridor(loc);
-        } else {
-          return new Corridor(loc);
+          corridor.setSecret();
         }
+        return corridor;
       case 16: // Pool
         return new Pool(loc);
       case 17: // Moat

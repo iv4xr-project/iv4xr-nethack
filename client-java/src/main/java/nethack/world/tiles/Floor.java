@@ -4,8 +4,9 @@ import agent.navigation.surface.Tile;
 import agent.navigation.surface.Walkable;
 import util.CustomVec3D;
 
-public class Floor extends Tile implements Walkable, Viewable {
+public class Floor extends Tile implements Walkable, Viewable, Shop {
   private boolean isVisible;
+  public boolean isShop;
 
   public Floor(CustomVec3D pos) {
     super(pos);
@@ -44,11 +45,32 @@ public class Floor extends Tile implements Walkable, Viewable {
     return WalkableType.Diagonal;
   }
 
+  @Override
+  public boolean isShop() {
+    return isShop;
+  }
+
   public boolean equals(Object o) {
     if (!(o instanceof Floor)) {
       return false;
     }
 
-    return loc.equals(((Floor) o).loc);
+    Floor f = (Floor) o;
+    return loc.equals(f.loc);
+  }
+
+  @Override
+  public int hashCode() {
+    return super.hashCode();
+  }
+
+  public Floor updatedTile(Floor newTile) {
+    if (getClass() != newTile.getClass()) {
+      return newTile;
+    }
+    seen = newTile.getSeen() || seen;
+    isShop = newTile.isShop || isShop;
+    resetVisibility();
+    return this;
   }
 }

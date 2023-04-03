@@ -17,7 +17,8 @@ import util.Database;
 public class ItemDecoder extends Decoder {
   static final Pattern p =
       Pattern.compile(
-          "^(?<quantity>\\w+)\\s(?:(?<buc>uncursed|cursed|blessed)\\s)?(?:(?<modifier>[\\+-]\\d+)\\s)?(?:(?<name>[^(]*))(?:\\s\\((?<additional>.*)\\))?$");
+          "^(?<quantity>\\w+)\\s(?:(?<buc>uncursed|cursed|blessed)\\s)?(?:partly"
+              + " eaten\\s)?(?:(?<modifier>[\\+-]\\d+)\\s)?(?:(?<name>[^(]*))(?:\\s\\((?<additional>.*)\\))?$");
 
   public static Item decode(DataInputStream input) {
     try {

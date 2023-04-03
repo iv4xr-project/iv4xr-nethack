@@ -5,8 +5,8 @@ import agent.navigation.surface.Tile;
 import java.util.HashSet;
 import java.util.Set;
 import nethack.enums.Color;
-import nethack.world.tiles.SecretCorridor;
-import nethack.world.tiles.SecretDoor;
+import nethack.world.tiles.Secret;
+import nethack.world.tiles.Shop;
 import nethack.world.tiles.Viewable;
 import util.ColoredStringBuilder;
 import util.CustomVec2D;
@@ -38,16 +38,17 @@ public class Surface extends GridSurface {
         boolean isFrontier = frontiers.contains(pos);
         boolean isVisible = t instanceof Viewable && ((Viewable) t).getVisibility();
         boolean isSeen = t.getSeen();
+        boolean isShop = t instanceof Shop && ((Shop) t).isShop();
 
         String colorString;
-        if (t instanceof SecretDoor || t instanceof SecretCorridor) {
+        if (t instanceof Secret && ((Secret) t).isSecret()) {
           colorString = Color.TRANSPARENT.toString();
-        } else if (isFrontier && isVisible) {
-          colorString = "\033[103;32m";
         } else if (isFrontier) {
           colorString = "\033[103m";
         } else if (isVisible) {
           colorString = "\033[0;32m";
+        } else if (isShop) {
+          colorString = "\033[0;31m";
         } else if (isSeen) {
           colorString = "\033[0;34m";
         } else {

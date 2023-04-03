@@ -15,6 +15,8 @@ import util.Loggers;
 public class Level {
   public static final Size SIZE = new Size(79, 21);
   public final Entity[][] map = new Entity[SIZE.height][SIZE.width];
+  public final Map<EntityType, HashSet<CustomVec2D>> entityTypesMap = new HashMap<>();
+
   public Surface surface = new Surface();
 
   public final List<Tile> changedTiles = new ArrayList<>();
@@ -29,6 +31,17 @@ public class Level {
     updateEntities(newEntities);
     updateTiles(newTiles);
     updateVisibility(playerPos);
+    markShops();
+  }
+
+  public void markShopDoors(CustomVec2D playerPos) {
+    Iterable<CustomVec2D> neighbours = surface.neighbourCoordinates(playerPos, true);
+    for (CustomVec2D neighbour : neighbours) {
+      Tile tile = surface.getTile(neighbour);
+      if (tile instanceof Door) {
+        ((Door) tile).isShopDoor = true;
+      }
+    }
   }
 
   private void updateEntities(Entity[][] entities) {
@@ -38,10 +51,20 @@ public class Level {
     for (int x = 0; x < SIZE.width; x++) {
       for (int y = 0; y < SIZE.height; y++) {
         CustomVec2D pos = new CustomVec2D(x, y);
-        if (!Objects.equals(getEntity(pos), entities[y][x])) {
-          setEntity(pos, entities[y][x]);
-          changedEntities.add(pos);
+        Entity prevEntity = getEntity(pos);
+        Entity newEntity = entities[y][x];
+        if (Objects.equals(prevEntity, newEntity)) {
+          continue;
         }
+
+        // Remove old entity
+        if (prevEntity != null) {
+          assert entityTypesMap.containsKey(prevEntity.type);
+          entityTypesMap.get(prevEntity.type).remove(pos);
+        }
+
+        setEntity(pos, newEntity);
+        changedEntities.add(pos);
       }
     }
 
@@ -125,11 +148,6 @@ public class Level {
         continue;
       }
 
-      if (entity.type == EntityType.VOID
-          || (entity.color == Color.TRANSPARENT && entity.type != EntityType.MONSTER)) {
-        continue;
-      }
-
       // Get the neighbours
       List<CustomVec2D> neighbours = NavUtils.neighbourCoordinates(nextPos, Level.SIZE, true);
       if (t instanceof Door) {
@@ -144,6 +162,11 @@ public class Level {
         }
       }
 
+      // Unlit floor
+      if (entity.color == Color.TRANSPARENT && entity.type == EntityType.FLOOR) {
+        continue;
+      }
+
       // Current tile is visible
       setTileVisible(t);
 
@@ -151,6 +174,40 @@ public class Level {
       if (t instanceof Floor) {
         queue.addAll(neighbours);
       }
+    }
+  }
+
+  private void markShops() {
+    if (!entityTypesMap.containsKey(EntityType.SHOPKEEPER)) {
+      return;
+    }
+
+    // No shopkeepers
+    Set<CustomVec2D> processedCoordinates = new HashSet<>();
+    Queue<CustomVec2D> queue = new LinkedList<>(entityTypesMap.get(EntityType.SHOPKEEPER));
+    while (!queue.isEmpty()) {
+      CustomVec2D nextPos = queue.remove();
+      // Already processed
+      if (processedCoordinates.contains(nextPos)) {
+        continue;
+      }
+      processedCoordinates.add(nextPos);
+
+      Tile t = surface.getTile(nextPos);
+      if (!(t instanceof Floor)) {
+        continue;
+      }
+      Floor f = (Floor) t;
+      // Tile was already marked as shop
+      if (f.isShop()) {
+        continue;
+      }
+
+      f.isShop = true;
+
+      // Get the neighbours
+      List<CustomVec2D> neighbours = NavUtils.neighbourCoordinates(nextPos, Level.SIZE, true);
+      queue.addAll(neighbours);
     }
   }
 
@@ -180,15 +237,49 @@ public class Level {
   }
 
   public void setEntity(CustomVec2D p, Entity entity) {
-    setEntity(p.x, p.y, entity);
-  }
+    map[p.y][p.x] = entity;
 
-  public void setEntity(int x, int y, Entity entity) {
-    map[y][x] = entity;
+    if (entity == null) {
+      return;
+    }
+
+    if (!entityTypesMap.containsKey(entity.type)) {
+      entityTypesMap.put(entity.type, new HashSet<>());
+    }
+
+    entityTypesMap.get(entity.type).add(p);
   }
 
   @Override
   public String toString() {
+    //    ColoredStringBuilder csb = new ColoredStringBuilder();
+    //    String[] game = gameState.toString().split(System.lineSeparator());
+    //    String[] navigation = area().toString().split(System.lineSeparator());
+    //
+    //    String tripleFormatString =
+    //            String.format(
+    //                    "%%-%ds %%-%ds %%-%ds%n", Level.SIZE.width, Level.SIZE.width,
+    // Level.SIZE.width);
+    //    String doubleFormatString =
+    //            String.format("%%-%ds %%-%ds%n", 2 * Level.SIZE.width + 1, Level.SIZE.width);
+    //    int n = Level.SIZE.height;
+    //
+    //    csb.appendf(doubleFormatString, game[0], hierarchicalMap[0]);
+    //
+    //    for (int i = 0; i < n; i++) {
+    //      csb.appendf(tripleFormatString, game[i + 1], navigation[i], hierarchicalMap[i + 1]);
+    //    }
+    //
+    //    csb.appendf(doubleFormatString, game[n + 1], hierarchicalMap[n + 1]);
+    //    csb.appendf(
+    //            String.format("%%-%ds %%-%ds%n", Level.SIZE.width * 2 + 40, Level.SIZE.width),
+    //            game[n + 2],
+    //            hierarchicalMap[n + 2]);
+    //    csb.appendf(tripleFormatString, "", "", hierarchicalMap[n + 3]);
+    //    System.out.print(csb);
+
+    //    return surface.toString();
+
     ColoredStringBuilder csb = new ColoredStringBuilder();
     for (int y = 0; y < SIZE.height; y++) {
       for (int x = 0; x < SIZE.width; x++) {

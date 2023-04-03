@@ -16,8 +16,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import nethack.enums.EntityType;
 import nethack.world.Level;
-import nethack.world.tiles.SecretCorridor;
-import nethack.world.tiles.SecretDoor;
+import nethack.world.tiles.Secret;
 import nethack.world.tiles.Stair;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -56,7 +55,7 @@ public class Predicates {
       for (CustomVec2D neighbour : neighbours) {
         CustomVec3D tileLoc = new CustomVec3D(agentLoc.lvl, neighbour);
         Tile tile = S.hierarchicalNav().getTile(tileLoc);
-        if (tile instanceof SecretCorridor || tile instanceof SecretDoor) {
+        if (tile instanceof Secret && ((Secret) tile).isSecret()) {
           return true;
         }
       }

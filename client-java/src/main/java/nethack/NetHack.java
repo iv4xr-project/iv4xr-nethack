@@ -254,6 +254,11 @@ public class NetHack {
       gameState.dungeon.getLevelNr(dlvl);
       Level level = gameState.dungeon.getLevel(dlvl);
       level.updateLevel(stepState.player.location.pos, stepState.entities, stepState.tiles);
+
+      // Shop door might be around
+      if (gameState.message.contains("You read: \"")) {
+        level.markShopDoors(stepState.player.location.pos);
+      }
     }
 
     gameState.player = stepState.player;

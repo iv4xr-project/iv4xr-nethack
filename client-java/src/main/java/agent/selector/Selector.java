@@ -11,7 +11,9 @@ public abstract class Selector<T> {
   protected final boolean adjacent;
 
   public Selector(SelectionType selectionType, Predicate<T> predicate, boolean adjacent) {
-    assert selectionType != SelectionType.ADJACENT || !adjacent
+    assert (selectionType != SelectionType.ADJACENT
+                && selectionType != SelectionType.STRAIGHT_ADJACENT)
+            || !adjacent
         : "Does not make sense to be adjacent to an adjacent square";
     this.selectionType = selectionType;
     this.predicate = predicate;
@@ -19,7 +21,9 @@ public abstract class Selector<T> {
   }
 
   public Selector(SelectionType selectionType, boolean adjacent) {
-    assert selectionType != SelectionType.ADJACENT || !adjacent
+    assert (selectionType != SelectionType.ADJACENT
+                && selectionType != SelectionType.STRAIGHT_ADJACENT)
+            || !adjacent
         : "Does not make sense to be adjacent to an adjacent square";
     this.selectionType = selectionType;
     this.adjacent = adjacent;
@@ -35,6 +39,7 @@ public abstract class Selector<T> {
     //    CLOSEST,
     SHORTEST,
     FARTHEST,
-    ADJACENT,
+    STRAIGHT_ADJACENT,
+    ADJACENT
   }
 }

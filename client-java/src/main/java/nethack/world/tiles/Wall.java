@@ -13,7 +13,7 @@ public class Wall extends Tile implements Viewable {
 
   @Override
   public char toChar() {
-    return seen ? 'W' : 'w';
+    return 'W';
   }
 
   @Override

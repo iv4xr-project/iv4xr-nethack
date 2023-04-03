@@ -30,11 +30,11 @@ public class TileSelector extends Selector<Tile> {
 
   public static final TileSelector adjacentClosedDoorSelector =
       new TileSelector(
-          SelectionType.ADJACENT,
+          SelectionType.STRAIGHT_ADJACENT,
           Door.class,
           t -> {
             Door d = (Door) t;
-            return d.closed || d.locked;
+            return (d.closed || d.locked) && !d.isShopDoor;
           },
           false);
 

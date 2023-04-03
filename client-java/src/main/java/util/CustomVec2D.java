@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class CustomVec2D implements Serializable {
   private static final long serialVersionUID = 1L;
@@ -71,10 +72,10 @@ public class CustomVec2D implements Serializable {
     return Math.max(Math.abs(p.x - q.x), Math.abs(p.y - q.y));
   }
 
-  public void sortBasedOnManhattanDistance(List<CustomVec2D> targets) {
+  public List<CustomVec2D> sortBasedOnManhattanDistance(List<CustomVec2D> targets) {
     // Sort targets based on manhattan distance
     if (targets.size() <= 1) {
-      return;
+      return targets;
     }
 
     List<Integer> manhattanDistances = new ArrayList<>(targets.size());
@@ -100,7 +101,18 @@ public class CustomVec2D implements Serializable {
     for (int index : indexList) {
       sortedTargets.add(targets.get(index));
     }
-    targets = sortedTargets;
+
+    List<Integer> sortedDistances =
+        sortedTargets.stream()
+            .map(pos -> CustomVec2D.manhattan(this, pos))
+            .collect(Collectors.toList());
+    int prevDistance = sortedDistances.get(0);
+    for (int distance : sortedDistances) {
+      assert prevDistance <= distance;
+      prevDistance = distance;
+    }
+
+    return sortedTargets;
   }
 
   public static float distSq(CustomVec2D p, CustomVec2D q) {

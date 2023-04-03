@@ -68,7 +68,7 @@ public class AgentEnv extends Iv4xrEnvironment {
     for (CustomVec2D pos : level.changedEntities) {
       Entity e = level.getEntity(pos);
       // Unimportant types, and player is updated separately
-      if (ignoredTypes.contains(e.type) || e.type == EntityType.PLAYER) {
+      if (e == null || ignoredTypes.contains(e.type) || e.type == EntityType.PLAYER) {
         continue;
       }
 
@@ -119,6 +119,10 @@ public class AgentEnv extends Iv4xrEnvironment {
     int k = 0;
     for (CustomVec2D pos : changedCoordinates_) {
       Entity e = level.getEntity(pos);
+      if (e == null) {
+        continue;
+      }
+
       EntityType entityType = e.type;
       Serializable[] entry = {pos, entityType};
       changedCoordinates[k++] = entry;

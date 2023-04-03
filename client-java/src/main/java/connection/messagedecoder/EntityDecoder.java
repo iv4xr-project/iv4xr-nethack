@@ -51,8 +51,8 @@ public class EntityDecoder extends Decoder {
         return EntityType.DOORWAY;
       case 2359:
         return EntityType.VOID;
-      case 397: // Pet dog
-        return EntityType.PET;
+        //      case 397: // Pet dog
+        //        return EntityType.PET;
       case 333: // Player
         return EntityType.PLAYER;
       case 267:
@@ -102,10 +102,10 @@ public class EntityDecoder extends Decoder {
         return EntityType.HUMAN;
       case '(':
         return EntityType.ITEM;
-      case 'f':
-        return color == Color.WHITE ? EntityType.PET : EntityType.MONSTER;
-      case 'u':
-        return color == Color.BROWN ? EntityType.PET : EntityType.MONSTER;
+        //      case 'f':
+        //        return color == Color.WHITE ? EntityType.PET : EntityType.MONSTER;
+        //      case 'u':
+        //        return color == Color.BROWN ? EntityType.PET : EntityType.MONSTER;
       case '~':
         return color == Color.RED ? EntityType.LAVA : EntityType.WATER;
       case '!':

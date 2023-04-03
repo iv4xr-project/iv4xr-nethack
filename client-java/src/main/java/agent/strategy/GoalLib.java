@@ -31,14 +31,15 @@ public class GoalLib {
                         .on_(Predicates.outOfCombat_HpCritical)
                         .lift(),
 
+                    // Unlocks navigation to any place
+                    Actions.searchWalls().on_(Predicates.hidden_tile()).lift(),
+                    Actions.openDoor().on(Predicates.get_closedDoor()).lift(),
+
                     // Collect money and potions
                     NavTactic.navigateToWorldEntity(EntitySelector.money),
-                    NavTactic.pickupWorldEntity(EntitySelector.potion),
+                    //                    NavTactic.pickupWorldEntity(EntitySelector.potion),
 
                     // Navigation
-                    Actions.openDoor().on(Predicates.get_closedDoor()).lift(),
-                    NavTactic.navigateToTile(TileSelector.adjacentClosedDoorSelector),
-                    Actions.searchWalls().on_(Predicates.hidden_tile()).lift(),
                     NavTactic.explore(),
 
                     // Go to next level
