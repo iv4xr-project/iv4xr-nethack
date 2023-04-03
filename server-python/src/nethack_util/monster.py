@@ -23,14 +23,13 @@ MONSTER_GLYPHS = glyph_to_is_monster()
 
 def id_monsters(env, obs):
     msg = message.read_obs_msg(obs)
-    if msg.__contains__('(n)'):
-        return obs, obs['screen_descriptions']
+    can_id_monsters = not msg.__contains__('(n)')
 
     is_monster = MONSTER_GLYPHS[obs['glyphs']]
     monster_indexes = indexes[is_monster]
     pattern = r"^.*(?:called|named)\s(\S+)"
 
-    monster_descriptions = np.zeros(21 * 79, dtype=int)
+    monster_descriptions = np.zeros((21, 79), dtype=int)
     descriptions = obs['screen_descriptions']
     id_monster = False
     for index in monster_indexes:
@@ -44,7 +43,7 @@ def id_monsters(env, obs):
             word = match.group(1)
             if word.isnumeric():
                 value = int(word)
-                monster_descriptions[index] = value
+                monster_descriptions[y][x] = value
             continue
 
         # Cannot name a human since already has a name
@@ -52,9 +51,10 @@ def id_monsters(env, obs):
         if character == ord('@'):
             continue
 
-        print("Unidentified monster detected", x, y, "index:", index)
-        obs, done = unique_id_monster(env, obs, x, y, monster_descriptions, index)
-        id_monster = True
+        if can_id_monsters:
+            print("Unidentified monster detected", x, y, "index:", index)
+            obs, done = unique_id_monster(env, obs, x, y, monster_descriptions, index)
+            id_monster = True
 
     if id_monster:
         env.render()
@@ -109,13 +109,15 @@ def unique_id_monster(env, obs, x, y, monster_descriptions, index):
         for char in str(counter):
             step.step_stroke(env, char)
 
-        monster_descriptions[index] = counter
+        print("NAME", counter)
+        monster_descriptions[y][x] = counter
         # Increment counter
         counter += 1
     else:
         msg_words = msg.replace('?', '').split()
         monster_id = msg_words[-1]
-        monster_descriptions[index] = monster_id
+        print("MONSTER_ID", monster_id)
+        monster_descriptions[y][x] = monster_id
 
     # Updated observation
     obs, done = step.step_stroke(env, '\n')

@@ -241,7 +241,9 @@ public class NetHack {
     }
     for (int y = 0; y < Level.SIZE.height; y++) {
       for (int x = 0; x < Level.SIZE.width; x++) {
-        if (stepState.tiles[y][x] != null) stepState.tiles[y][x].loc.lvl = lvlNr;
+        if (stepState.tiles[y][x] != null) {
+          stepState.tiles[y][x].loc.lvl = lvlNr;
+        }
       }
     }
 

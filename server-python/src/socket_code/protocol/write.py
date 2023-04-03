@@ -74,8 +74,8 @@ def write_obs(sock, env, obs):
     sock.write(OBS_BYTE)
     sock.write(struct.pack('>27i', *obs['blstats']))
     write_str(sock, msg)
-    # GERARD: tiles GERARD: flags
-    write_map(sock, zip(obs['chars'].flatten(), obs['colors'].flatten(), obs['glyphs'].flatten(), obs['tiles'].flatten(), obs['flags'].flatten(), monster_descriptions.flatten()))
+    # GERARD
+    write_map(sock, obs['chars'], obs['colors'], obs['glyphs'], obs['tiles'], obs['flags'], monster_descriptions)
 
     nr_items = np.trim_zeros(obs['inv_letters']).shape[0]
     write_inv(sock, zip(obs['inv_letters'], obs['inv_oclasses'], obs['inv_glyphs'], obs['inv_strs']), nr_items)
@@ -110,14 +110,34 @@ def write_inv(sock, inv_items, nr_items):
         i += 1
 
 
-def write_map(sock, map_entities):
+def write_map(sock, chars, colors, glyphs, tiles, flags, monster_descriptions):
     """
     Encode the entire map in bytes
     """
-    sent_items = 0
-    for char, color, glyph, tile, flag, monster_description in map_entities: # GERARD: tiles GERARD: flags
-        sock.write(struct.pack(">BBHBBH", char, color, glyph, tile, flag, monster_description))
-        sent_items += 1
+    # Write tiles
+    nr_tiles = np.sum(np.sign(tiles))
+    sock.write(struct.pack(">H", nr_tiles))
+    sock.flush()
 
-        if sent_items % 79 == 0:
-            sock.flush()
+    for y in range(21):
+        for x in range(79):
+            if tiles[y][x] == 0:
+                continue
+
+            # GERARD
+            sock.write(struct.pack(">BBBB", x, y, tiles[y][x], flags[y][x]))
+
+    # Write tiles
+    nr_entities = np.count_nonzero(glyphs != 2359)
+    sock.write(struct.pack(">H", nr_entities))
+    sock.flush()
+
+    for y in range(21):
+        for x in range(79):
+            if glyphs[y][x] == 2359:
+                continue
+
+            # GERARD
+            sock.write(struct.pack(">BBBBHH", x, y, chars[y][x], colors[y][x], glyphs[y][x], monster_descriptions[y][x]))
+
+    sock.flush()

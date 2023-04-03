@@ -5,7 +5,6 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import nethack.object.*;
 import nethack.object.items.Item;
-import nethack.world.Level;
 import nl.uu.cs.aplib.utils.Pair;
 import util.Loggers;
 import util.Stopwatch;
@@ -29,24 +28,34 @@ public class ObservationMessageDecoder extends Decoder {
       observationMessage.message = readString(input);
       Loggers.ProfilerLogger.trace("READ MESSAGE TOOK: %fs", stopwatch.split());
 
-      int bytesPerEntry = 8;
-      byte[] entities = input.readNBytes(bytesPerEntry * Level.SIZE.width * Level.SIZE.height);
-      Loggers.ProfilerLogger.trace("READ BYTES OF MAP TOOK: %fs", stopwatch.split());
+      int bytesPerTile = 4;
+      int nrTiles = input.readShort();
+      byte[] tiles = input.readNBytes(bytesPerTile * nrTiles);
       int offset = 0;
-      for (int y = 0; y < Level.SIZE.height; y++) {
-        for (int x = 0; x < Level.SIZE.width; x++) {
-          char symbol = (char) entities[offset];
-          int colorCode = entities[offset + 1];
-          int glyph = (entities[offset + 2] << 8) + entities[offset + 3];
-          int id = (entities[offset + 7] << 8) + entities[offset + 6];
-          observationMessage.entities[y][x] = EntityDecoder.decode(symbol, colorCode, glyph, id);
-          observationMessage.tiles[y][x] =
-              TileDecoder.decode(x, y, entities[offset + 4], entities[offset + 5]);
-          offset += bytesPerEntry;
-        }
+      for (int i = 0; i < nrTiles; i++) {
+        int x = tiles[offset];
+        int y = tiles[offset + 1];
+        observationMessage.tiles[y][x] =
+            TileDecoder.decode(x, y, tiles[offset + 2], tiles[offset + 3]);
+        offset += bytesPerTile;
       }
+      Loggers.ProfilerLogger.trace("READ TILES TOOK: %fs", stopwatch.split());
 
-      Loggers.ProfilerLogger.trace("READ MAP TOOK: %f", stopwatch.split());
+      offset = 0;
+      int bytesPerEntity = 8;
+      int nrEntities = input.readShort();
+      byte[] entities = input.readNBytes(bytesPerEntity * nrEntities);
+      for (int i = 0; i < nrEntities; i++) {
+        int x = entities[offset];
+        int y = entities[offset + 1];
+        char symbol = (char) entities[offset + 2];
+        int colorCode = entities[offset + 3];
+        int glyph = (entities[offset + 4] << 8) + entities[offset + 5];
+        int id = (entities[offset + 6] << 8) + entities[offset + 7];
+        observationMessage.entities[y][x] = EntityDecoder.decode(symbol, colorCode, glyph, id);
+        offset += bytesPerEntity;
+      }
+      Loggers.ProfilerLogger.trace("READ ENTITIES TOOK: %f", stopwatch.split());
 
       int nr_items = input.readByte();
       observationMessage.items = new Item[nr_items];

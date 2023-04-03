@@ -56,7 +56,7 @@ public class Level {
       for (int y = 0; y < SIZE.height; y++) {
         CustomVec2D pos = new CustomVec2D(x, y);
         Entity entity = getEntity(pos);
-        if (entity.type == EntityType.BOULDER) {
+        if (entity != null && entity.type == EntityType.BOULDER) {
           if (!(surface.getTile(pos) instanceof Boulder)) {
             changedTiles.add(new Boulder(tiles[y][x].loc));
           }
@@ -78,6 +78,10 @@ public class Level {
     for (int x = 0; x < SIZE.width; x++) {
       for (int y = 0; y < SIZE.height; y++) {
         Entity e = getEntity(x, y);
+        if (e == null) {
+          continue;
+        }
+
         if (e.type == EntityType.FLOOR && e.color == Color.GRAY) {
           visibleFloors.add(new CustomVec2D(x, y));
         }
@@ -117,6 +121,9 @@ public class Level {
         continue;
       }
       Entity entity = getEntity(nextPos);
+      if (entity == null) {
+        continue;
+      }
 
       if (entity.type == EntityType.VOID
           || (entity.color == Color.TRANSPARENT && entity.type != EntityType.MONSTER)) {
@@ -131,6 +138,7 @@ public class Level {
             .noneMatch(
                 pos ->
                     surface.getTile(pos) instanceof Floor
+                        && getEntity(pos) != null
                         && getEntity(pos).color != Color.TRANSPARENT)) {
           continue;
         }
@@ -184,8 +192,13 @@ public class Level {
     ColoredStringBuilder csb = new ColoredStringBuilder();
     for (int y = 0; y < SIZE.height; y++) {
       for (int x = 0; x < SIZE.width; x++) {
-        csb.setColor(map[y][x].color);
-        csb.append(map[y][x].symbol);
+        Entity entity = getEntity(x, y);
+        if (entity == null) {
+          csb.append(' ');
+        } else {
+          csb.setColor(entity.color);
+          csb.append(entity.symbol);
+        }
       }
       csb.resetColor();
       if (y != map.length - 1) {
