@@ -12,6 +12,10 @@ import nethack.object.items.Item;
 public class ItemSelector extends Selector<Item> {
   public static final ItemSelector inventoryFood =
       new ItemSelector(SelectionType.FIRST, ItemType.FOOD);
+  public static final ItemSelector inventoryQuivered =
+      new ItemSelector(
+          SelectionType.FIRST, ItemType.WEAPON, item -> item.description.contains("(in quiver)"));
+
   final ItemType itemType;
 
   public ItemSelector(SelectionType selectionType, ItemType itemType, Predicate<Item> predicate) {

@@ -7,10 +7,7 @@ import java.util.*;
 import nethack.enums.Color;
 import nethack.enums.EntityType;
 import nethack.object.Entity;
-import nethack.world.tiles.Door;
-import nethack.world.tiles.Floor;
-import nethack.world.tiles.Viewable;
-import nethack.world.tiles.Wall;
+import nethack.world.tiles.*;
 import util.ColoredStringBuilder;
 import util.CustomVec2D;
 import util.Loggers;
@@ -60,10 +57,9 @@ public class Level {
         CustomVec2D pos = new CustomVec2D(x, y);
         Entity entity = getEntity(pos);
         if (entity.type == EntityType.BOULDER) {
-          if (!(surface.getTile(pos) instanceof Wall)) {
-            changedTiles.add(new Wall(tiles[y][x].loc));
+          if (!(surface.getTile(pos) instanceof Boulder)) {
+            changedTiles.add(new Boulder(tiles[y][x].loc));
           }
-          continue;
         } else if (!Objects.equals(surface.getTile(pos), tiles[y][x])) {
           changedTiles.add(tiles[y][x]);
         }

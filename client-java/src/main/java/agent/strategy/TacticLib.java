@@ -6,6 +6,7 @@ import agent.iv4xr.AgentState;
 import agent.navigation.strategy.NavUtils;
 import agent.navigation.surface.Walkable;
 import agent.selector.EntitySelector;
+import agent.selector.ItemSelector;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -44,9 +45,17 @@ public class TacticLib {
         Actions.fire()
             .on(
                 (AgentState S) -> {
+                  Item item =
+                      ItemSelector.inventoryQuivered.apply(
+                          Arrays.asList(S.app().gameState.player.inventory.items), S);
+                  // No quivered items, cannot fire
+                  if (item == null) {
+                    return null;
+                  }
+
                   CustomVec3D agentLoc = S.loc();
                   List<WorldEntity> wes =
-                      S.worldmodel.elements.values().stream()
+                      S.getWorldEntities().stream()
                           .filter(
                               worldEntity ->
                                   worldEntity.position != null
@@ -92,7 +101,8 @@ public class TacticLib {
                     manhattanDistance = currentDistance;
                   }
 
-                  if (entity == null) {
+                  // Too far away to reliably hit
+                  if (manhattanDistance > 6) {
                     return null;
                   }
 

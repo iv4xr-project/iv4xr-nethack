@@ -31,6 +31,7 @@ public class ObservationMessageDecoder extends Decoder {
 
       int bytesPerEntry = 8;
       byte[] entities = input.readNBytes(bytesPerEntry * Level.SIZE.width * Level.SIZE.height);
+      Loggers.ProfilerLogger.trace("READ BYTES OF MAP TOOK: %fs", stopwatch.split());
       int offset = 0;
       for (int y = 0; y < Level.SIZE.height; y++) {
         for (int x = 0; x < Level.SIZE.width; x++) {

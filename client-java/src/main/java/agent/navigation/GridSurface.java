@@ -34,7 +34,7 @@ import util.CustomVec2D;
  *
  * @author Wish
  */
-public class GridSurface implements Navigatable<CustomVec2D> { // , XPathfinder<CustomVec2D> {
+public class GridSurface implements Navigatable<CustomVec2D> {
   public final Tile[][] tiles;
   public final Map<String, HashSet<CustomVec2D>> tileTypes = new HashMap<>();
   public final Set<CustomVec2D> frontierCandidates = new HashSet<>();
@@ -333,7 +333,6 @@ public class GridSurface implements Navigatable<CustomVec2D> { // , XPathfinder<
     return null;
   }
 
-  //  @Override
   public Path<CustomVec2D> findPath(CustomVec2D from, CustomVec2D to) {
     return findPaths(from, Collections.singletonList(to)).get(0);
   }
@@ -466,19 +465,16 @@ public class GridSurface implements Navigatable<CustomVec2D> { // , XPathfinder<
   }
 
   /** When true then the pathfinder will consider all nodes in the graph to have been seen. */
-  //  @Override
   public boolean usingPerfectMemoryPathfinding() {
     return perfect_memory_pathfinding;
   }
 
   /** When true then the pathfinder will consider all nodes in the graph to have been seen. */
-  //  @Override
   public void setPerfectMemoryPathfinding(Boolean flag) {
     perfect_memory_pathfinding = flag;
   }
 
   /** Mark all vertices as "unseen". */
-  //  @Override
   public void wipeOutMemory() {
     for (Tile[] row : tiles) {
       for (Tile t : row) {

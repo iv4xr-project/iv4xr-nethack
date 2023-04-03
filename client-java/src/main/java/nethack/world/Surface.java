@@ -47,7 +47,7 @@ public class Surface extends GridSurface {
         } else if (isFrontier) {
           colorString = "\033[103m";
         } else if (isVisible) {
-          colorString = "\033[1;32m";
+          colorString = "\033[0;32m";
         } else if (isSeen) {
           colorString = "\033[0;34m";
         } else {

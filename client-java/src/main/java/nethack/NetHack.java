@@ -187,6 +187,8 @@ public class NetHack {
         command = Command.fromStroke("-r");
       } else if (command.commandEnum == CommandEnum.COMMAND_WIELD) {
         command = Command.fromStroke("-w");
+      } else if (command.commandEnum == CommandEnum.COMMAND_DROP) {
+        command = Command.fromStroke("-d");
       }
 
       if (command.commandEnum == CommandEnum.ADDITIONAL_ASCII) {

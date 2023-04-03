@@ -187,7 +187,6 @@ public class HierarchicalNavigation implements Navigatable<CustomVec3D> {
       return null;
     }
 
-    System.out.printf("Found shortest %s", shortestPath);
     return shortestPath;
   }
 

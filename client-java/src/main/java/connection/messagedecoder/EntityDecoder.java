@@ -34,8 +34,6 @@ public class EntityDecoder extends Decoder {
 
   private static EntityType toEntityType(int glyph) {
     switch (glyph) {
-        //      case 5913: // White :
-        //        return EntityType.STATUE;
       case 2389:
         return EntityType.SINK;
       case 2381:
