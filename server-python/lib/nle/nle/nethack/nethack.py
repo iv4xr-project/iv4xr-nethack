@@ -35,6 +35,7 @@ OBSERVATION_DESC = {
     "flags": dict(shape=DUNGEON_SHAPE, dtype=np.uint8),
     "m_x": dict(shape=DUNGEON_SHAPE, dtype=np.uint8),
     # "m_y": dict(shape=DUNGEON_SHAPE, dtype=np.uint8),
+
     "glyphs": dict(shape=DUNGEON_SHAPE, dtype=np.int16),
     "chars": dict(shape=DUNGEON_SHAPE, dtype=np.uint8),
     "colors": dict(shape=DUNGEON_SHAPE, dtype=np.uint8),

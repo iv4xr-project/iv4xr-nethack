@@ -200,8 +200,8 @@ class NLE(gym.Env):
         max_episode_steps=5000,
         # GERARD
         observation_keys=(
-            "tiles", # GERARD: tiles
-            "flags", # GERARD: flags
+            "tiles",
+            "flags",
             "glyphs",
             "m_x",
             "chars",

@@ -51,6 +51,11 @@ struct nle_monst {
   short movement;
 };
 
+typedef struct {
+  unsigned char tile;
+  unsigned char flag;
+} tile;
+
 typedef struct nle_observation {
     int action;
     int done;

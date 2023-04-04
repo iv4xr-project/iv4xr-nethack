@@ -80,11 +80,11 @@ bool in_getlin = false;
 int
 shuffled_glyph(int glyph)
 {
-// GERARD: un-shuffle glyph
-//    if glyph_is_normal_object (glyph) {
-//        return GLYPH_OBJ_OFF + objects[glyph_to_obj(glyph)].oc_descr_idx;
-//    }
-    return glyph;
+  // GERARD: un-shuffle glyph
+  // if glyph_is_normal_object (glyph) {
+  //   return GLYPH_OBJ_OFF + objects[glyph_to_obj(glyph)].oc_descr_idx;
+  // }
+  return glyph;
 }
 
 class ScopedStack
@@ -247,17 +247,19 @@ class NetHackRL
 std::unique_ptr<NetHackRL> NetHackRL::instance =
     std::unique_ptr<NetHackRL>(nullptr);
 
-NetHackRL::NetHackRL(int &argc, char **argv) : glyphs_(), tiles_(), flags_(), m_x_(), blstats_() // m_y_(), blstats_{} // GERARD
+// GERARD
+NetHackRL::NetHackRL(int &argc, char **argv) : glyphs_(), tiles_(), flags_(), m_x_(), blstats_()
 {
     // create base window
     // (done in tty_init_nhwindows before this NetHackRL object got created).
     assert(BASE_WINDOW == 0);
     windows_.emplace_back(new rl_window({ NHW_BASE }));
     glyphs_.fill(nul_glyph);
+
     // GERARD
     tiles_.fill(MAX_TYPE);
     flags_.fill(0);
-    m_x_.fill(MAX_TYPE);
+    m_x_.fill(0);
     // m_y_.fill(8);
 }
 
@@ -319,7 +321,7 @@ NetHackRL::fill_obs(nle_obs *obs)
         if (obs->flags)
             std::memset(obs->flags, 0, flags_.size());
         if (obs->m_x)
-            std::memset(obs->m_x, MAX_TYPE, m_x_.size());
+            std::memset(obs->m_x, 0, m_x_.size());
         // if (obs->m_y)
         //     std::memset(obs->m_y, 0, m_y_.size());
 
@@ -509,9 +511,16 @@ NetHackRL::store_glyph(XCHAR_P x, XCHAR_P y, int glyph)
     // GERARD
     tiles_[offset] = levl[x][y].typ;
     flags_[offset] = levl[x][y].flags;
+    if (level.monsters[x][y]) {
+      m_x_[offset] = level.monsters[x][y]->mx;
+    } else {
+      m_x_[offset] = 11;
+    }
+    // m_x_[offset] = level.monsters[x][y]->mx;
     
     // if (level.monsters[x][y]->mx == 0) {
-      m_x_[offset] = 2;//(unsigned char)(level.monsters[i][j]->mx);
+    // m_x_[offset] = 2;//(unsigned char)(level.monsters[i][j]->mx);
+
     // } else {
       // m_x_[offset] = 3;
     // }

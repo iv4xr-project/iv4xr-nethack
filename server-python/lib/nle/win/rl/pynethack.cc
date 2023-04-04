@@ -402,7 +402,7 @@ PYBIND11_MODULE(_pynethack, m)
              py::arg("tiles") = py::none(),
              py::arg("flags") = py::none(),
              py::arg("m_x") = py::none(),
-            //  py::arg("m_y") = py::none(),
+             //  py::arg("m_y") = py::none(),
              py::arg("glyphs") = py::none(),
              py::arg("chars") = py::none(),
              py::arg("colors") = py::none(),
