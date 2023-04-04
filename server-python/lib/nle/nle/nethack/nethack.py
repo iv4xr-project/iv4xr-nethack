@@ -33,7 +33,10 @@ OBSERVATION_DESC = {
     # GERARD
     "tiles": dict(shape=DUNGEON_SHAPE, dtype=np.uint8),
     "flags": dict(shape=DUNGEON_SHAPE, dtype=np.uint8),
-    "m_x": dict(shape=DUNGEON_SHAPE, dtype=np.uint8),
+    
+    "mon_id": dict(shape=DUNGEON_SHAPE, dtype=np.uint32),
+    "mon_permid": dict(shape=DUNGEON_SHAPE, dtype=np.int16),
+    "mon_peaceful": dict(shape=DUNGEON_SHAPE, dtype=np.bool_),
     # "m_y": dict(shape=DUNGEON_SHAPE, dtype=np.uint8),
 
     "glyphs": dict(shape=DUNGEON_SHAPE, dtype=np.int16),

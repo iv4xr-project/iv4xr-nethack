@@ -1,3 +1,4 @@
+#include <stdbool.h>
 
 #ifndef NLEOBS_H
 #define NLEOBS_H
@@ -45,34 +46,27 @@
 /* #define NLE_ALLOW_SEEDING 1 */ /* Set in CMakeLists.txt if not disabled. */
 /* #define NLE_USE_TILES 1 */     /* Set in CMakeLists.txt. */
 
-struct nle_monst {
-  unsigned m_id;
-  short mnum;
-  short movement;
-};
-
-typedef struct {
-  unsigned char tile;
-  unsigned char flag;
-} tile;
-
 typedef struct nle_observation {
     int action;
     int done;
     char in_normal_game;     /* Bool indicating if other obs are set. */
     int how_done;            /* If game is really_done, how it ended. */
     short *glyphs;           /* Size ROWNO * (COLNO - 1) */
+    
     // GERARD
-    unsigned char *tiles;    /* Size ROWNO * (COLNO - 1) */
-    unsigned char *flags;    /* Size ROWNO * (COLNO - 1) */
-    unsigned char *m_x;
-    // unsigned char *m_y;          
+    unsigned char *tiles; /* Size ROWNO * (COLNO - 1) */
+    unsigned char *flags; /* Size ROWNO * (COLNO - 1) */
+    unsigned int *mon_id; /* Size ROWNO * (COLNO - 1) */
+    short *mon_permid;    /* Size ROWNO * (COLNO - 1) */
+    bool *mon_peaceful;   /* Size ROWNO * (COLNO - 1) */
+
     unsigned char *chars;    /* Size ROWNO * (COLNO - 1) */
     unsigned char *colors;   /* Size ROWNO * (COLNO - 1) */
     unsigned char *specials; /* Size ROWNO * (COLNO - 1) */
     long *blstats;           /* Size NLE_BLSTATS_SIZE */
     unsigned char *message;  /* Size NLE_MESSAGE_SIZE */
     int *program_state;      /* Size NLE_PROGRAM_STATE_SIZE */
+
     int *internal;           /* Size NLE_INTERNAL_SIZE */
     short *inv_glyphs;       /* Size NLE_INVENTORY_SIZE */
     unsigned char

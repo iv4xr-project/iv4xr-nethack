@@ -49,17 +49,29 @@ NLE_SPACE_ITEMS = (
         ),
     ),
     (
-        "m_x",
+        "mon_id",
         gym.spaces.Box(
-            low=0, high=255, **nethack.OBSERVATION_DESC["m_x"]
+            low=np.iinfo(np.uint32).min,
+            high=np.iinfo(np.uint32).max,
+            **nethack.OBSERVATION_DESC["mon_id"]
         ),
     ),
-    # (
-    #     "m_y",
-    #     gym.spaces.Box(
-    #         low=0, high=255, **nethack.OBSERVATION_DESC["m_y"]
-    #     ),
-    # ),
+    (
+        "mon_permid",
+        gym.spaces.Box(
+            low=np.iinfo(np.int16).min,
+            high=np.iinfo(np.int16).max,
+            **nethack.OBSERVATION_DESC["mon_permid"]
+        ),
+    ),
+    (
+        "mon_peaceful",
+        gym.spaces.Box(
+            low=0,
+            high=1,
+            **nethack.OBSERVATION_DESC["mon_peaceful"]
+        ),
+    ),
     (
         "glyphs",
         gym.spaces.Box(
@@ -203,7 +215,9 @@ class NLE(gym.Env):
             "tiles",
             "flags",
             "glyphs",
-            "m_x",
+            "mon_id",
+            "mon_permid",
+            "mon_peaceful",
             "chars",
             "colors",
             "specials",
