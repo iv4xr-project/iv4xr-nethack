@@ -45,14 +45,23 @@
 /* #define NLE_ALLOW_SEEDING 1 */ /* Set in CMakeLists.txt if not disabled. */
 /* #define NLE_USE_TILES 1 */     /* Set in CMakeLists.txt. */
 
+struct nle_monst {
+  unsigned m_id;
+  short mnum;
+  short movement;
+};
+
 typedef struct nle_observation {
     int action;
     int done;
     char in_normal_game;     /* Bool indicating if other obs are set. */
     int how_done;            /* If game is really_done, how it ended. */
     short *glyphs;           /* Size ROWNO * (COLNO - 1) */
-    unsigned char *tiles;    /* Size ROWNO * (COLNO - 1) */ // GERARD: tiles
-    unsigned char *flags;    /* Size ROWNO * (COLNO - 1) */ // GERARD: flags
+    // GERARD
+    unsigned char *tiles;    /* Size ROWNO * (COLNO - 1) */
+    unsigned char *flags;    /* Size ROWNO * (COLNO - 1) */
+    unsigned char *m_x;
+    // unsigned char *m_y;          
     unsigned char *chars;    /* Size ROWNO * (COLNO - 1) */
     unsigned char *colors;   /* Size ROWNO * (COLNO - 1) */
     unsigned char *specials; /* Size ROWNO * (COLNO - 1) */

@@ -201,8 +201,10 @@ class Nethack
         ttyrec_ = f;
     }
 
+    // GERARD
     void
-    set_buffers(py::object tiles, py::object flags, // GERARD: tiles GERARD: flags
+    set_buffers(py::object tiles, py::object flags,
+                py::object m_x, // py::object m_y,
                 py::object glyphs, py::object chars, py::object colors,
                 py::object specials, py::object blstats, py::object message,
                 py::object program_state, py::object internal,
@@ -215,10 +217,11 @@ class Nethack
             throw std::runtime_error("set_buffers called after reset()");
 
         std::vector<ssize_t> dungeon{ ROWNO, COLNO - 1 };
-        // GERARD: tiles
+        // GERARD
         obs_.tiles = checked_conversion<uint8_t>(tiles, dungeon);
-        // GERARD: flags
         obs_.flags = checked_conversion<uint8_t>(flags, dungeon);
+        obs_.m_x = checked_conversion<uint8_t>(m_x, dungeon);
+        // obs_.m_y = checked_conversion<uint8_t>(m_y, dungeon);
         obs_.glyphs = checked_conversion<int16_t>(glyphs, dungeon);
         obs_.chars = checked_conversion<uint8_t>(chars, dungeon);
         obs_.colors = checked_conversion<uint8_t>(colors, dungeon);
@@ -248,8 +251,11 @@ class Nethack
         obs_.tty_cursor = checked_conversion<uint8_t>(tty_cursor, { 2 });
         obs_.misc = checked_conversion<int32_t>(misc, { NLE_MISC_SIZE });
 
-        py_buffers_ = { std::move(tiles), // GERARD: tiles
-                        std::move(flags), // GERARD: flags
+        // GERARD
+        py_buffers_ = { std::move(tiles),
+                        std::move(flags),
+                        std::move(m_x),
+                        // std::move(m_y),
                         std::move(glyphs),
                         std::move(chars),
                         std::move(colors),
@@ -392,10 +398,17 @@ PYBIND11_MODULE(_pynethack, m)
         .def("reset", py::overload_cast<>(&Nethack::reset))
         .def("reset", py::overload_cast<std::string>(&Nethack::reset))
         .def("set_buffers", &Nethack::set_buffers,
-             py::arg("tiles") = py::none(), py::arg("flags") = py::none(), // GERARD: tiles GERARD: flags
-             py::arg("glyphs") = py::none(), py::arg("chars") = py::none(),
-             py::arg("colors") = py::none(), py::arg("specials") = py::none(),
-             py::arg("blstats") = py::none(), py::arg("message") = py::none(),
+            // GERARD
+             py::arg("tiles") = py::none(),
+             py::arg("flags") = py::none(),
+             py::arg("m_x") = py::none(),
+            //  py::arg("m_y") = py::none(),
+             py::arg("glyphs") = py::none(),
+             py::arg("chars") = py::none(),
+             py::arg("colors") = py::none(),
+             py::arg("specials") = py::none(),
+             py::arg("blstats") = py::none(),
+             py::arg("message") = py::none(),
              py::arg("program_state") = py::none(),
              py::arg("internal") = py::none(),
              py::arg("inv_glyphs") = py::none(),
@@ -405,7 +418,8 @@ PYBIND11_MODULE(_pynethack, m)
              py::arg("screen_descriptions") = py::none(),
              py::arg("tty_chars") = py::none(),
              py::arg("tty_colors") = py::none(),
-             py::arg("tty_cursor") = py::none(), py::arg("misc") = py::none())
+             py::arg("tty_cursor") = py::none(),
+             py::arg("misc") = py::none())
         .def("close", &Nethack::close)
         .def("set_initial_seeds", &Nethack::set_initial_seeds)
         .def("set_seeds", &Nethack::set_seeds)
@@ -712,8 +726,8 @@ PYBIND11_MODULE(_pynethack, m)
 
     // mn.attr("test1") = py::int_(botl_score());
     // mn.def("test1", []() { py::print(&level); return 1; });
-    mn.attr("test2") = py::int_(level.locations[1][1].glyph);
-    mn.attr("test3") = py::int_(level.locations[1][1].typ);
+    // mn.attr("test2") = py::int_(level.monsters[23][12].m_id);
+    // mn.attr("test3") = py::int_(level.locations[1][1].typ);
 
     py::class_<class_sym>(mn, "class_sym")
         .def_static(

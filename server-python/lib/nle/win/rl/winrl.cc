@@ -196,8 +196,11 @@ class NetHackRL
     std::vector<std::unique_ptr<rl_window> > windows_;
 
     std::array<int16_t, (COLNO - 1) * ROWNO> glyphs_;
-    std::array<uint8_t, (COLNO - 1) * ROWNO> tiles_; // GERARD: tiles
-    std::array<uint8_t, (COLNO - 1) * ROWNO> flags_; // GERARD: flags
+    // GERARD
+    std::array<uint8_t, (COLNO - 1) * ROWNO> tiles_;
+    std::array<uint8_t, (COLNO - 1) * ROWNO> flags_;
+    std::array<uint8_t, (COLNO - 1) * ROWNO> m_x_;
+    // std::array<uint8_t, (COLNO - 1) * ROWNO> m_y_;
 
     /* Output of mapglyph */
     std::array<uint8_t, (COLNO - 1) * ROWNO> chars_;
@@ -244,17 +247,18 @@ class NetHackRL
 std::unique_ptr<NetHackRL> NetHackRL::instance =
     std::unique_ptr<NetHackRL>(nullptr);
 
-NetHackRL::NetHackRL(int &argc, char **argv) : glyphs_(), tiles_(), flags_(), blstats_{} // GERARD: tiles GERARD: flags
+NetHackRL::NetHackRL(int &argc, char **argv) : glyphs_(), tiles_(), flags_(), m_x_(), blstats_() // m_y_(), blstats_{} // GERARD
 {
     // create base window
     // (done in tty_init_nhwindows before this NetHackRL object got created).
     assert(BASE_WINDOW == 0);
     windows_.emplace_back(new rl_window({ NHW_BASE }));
     glyphs_.fill(nul_glyph);
-    // GERARD: tiles
+    // GERARD
     tiles_.fill(MAX_TYPE);
-    // GERARD: flags
     flags_.fill(0);
+    m_x_.fill(MAX_TYPE);
+    // m_y_.fill(8);
 }
 
 void
@@ -309,12 +313,16 @@ NetHackRL::fill_obs(nle_obs *obs)
         obs->in_normal_game = false;
         if (obs->glyphs)
             std::fill_n(obs->glyphs, glyphs_.size(), nul_glyph);
-        // GERARD: tiles
+        // GERARD
         if (obs->tiles)
             std::memset(obs->tiles, MAX_TYPE, tiles_.size());
-        // GERARD: flags
         if (obs->flags)
             std::memset(obs->flags, 0, flags_.size());
+        if (obs->m_x)
+            std::memset(obs->m_x, MAX_TYPE, m_x_.size());
+        // if (obs->m_y)
+        //     std::memset(obs->m_y, 0, m_y_.size());
+
         if (obs->chars)
             std::memset(obs->chars, 0, chars_.size()); /* Or fill with ' '? */
         if (obs->colors)
@@ -336,14 +344,20 @@ NetHackRL::fill_obs(nle_obs *obs)
         std::memcpy(obs->glyphs, glyphs_.data(),
                     sizeof(int16_t) * glyphs_.size());
     }
-    // GERARD: tiles
+    // GERARD
     if (obs->tiles) {
         std::memcpy(obs->tiles, tiles_.data(), tiles_.size());
     }
-    // GERARD: flags
     if (obs->flags) {
         std::memcpy(obs->flags, flags_.data(), flags_.size());
     }
+    if (obs->m_x) {
+        std::memcpy(obs->m_x, m_x_.data(), m_x_.size());
+    }
+    // if (obs->m_y) {
+    //     std::memcpy(obs->m_y, m_y_.data(), m_y_.size());
+    // }
+
     if (obs->chars) {
         std::memcpy(obs->chars, chars_.data(), chars_.size());
     }
@@ -492,10 +506,18 @@ NetHackRL::store_glyph(XCHAR_P x, XCHAR_P y, int glyph)
 
     // TODO: Glyphs might be taken from gbuf[y][x].glyph.
     glyphs_[offset] = shuffled_glyph(glyph);
-    // GERARD: tiles
+    // GERARD
     tiles_[offset] = levl[x][y].typ;
-    // GERARD: flags
     flags_[offset] = levl[x][y].flags;
+    
+    // if (level.monsters[x][y]->mx == 0) {
+      m_x_[offset] = 2;//(unsigned char)(level.monsters[i][j]->mx);
+    // } else {
+      // m_x_[offset] = 3;
+    // }
+
+    // m_x_[offset] =  12;//(unsigned char)(level.monsters[i][j]->mx);
+    // m_y_[offset] = 2; // level.monsters[i][j]->my;
 }
 
 void
@@ -669,16 +691,20 @@ NetHackRL::clear_nhwindow_method(winid wid)
 
     if (wid == WIN_MAP) {
         glyphs_.fill(nul_glyph);
-        // GERARD: tiles
+        // GERARD
         tiles_.fill(MAX_TYPE);
-        // GERARD: tiles
         flags_.fill(0);
+        m_x_.fill(5);
+        // m_y_.fill(6);
+
         // Inspect all tiles with their corresponding type
         for (int x = 1; x < COLNO; x++) {
           for (int y = 0; y < ROWNO; y++) {
             int offset = (x - 1) + y * (COLNO - 1);
             tiles_[offset] = levl[x][y].typ;
             flags_[offset] = levl[x][y].flags;
+            // m_x_[offset] = level.monsters[x][y]->mx;
+            // m_y_[offset] = 4; // level.monsters[x][y]->my;
           }
         }
         chars_.fill(' ');
