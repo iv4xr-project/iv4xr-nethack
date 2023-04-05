@@ -4,7 +4,6 @@ import connection.ObservationMessage;
 import java.io.DataInputStream;
 import java.io.IOException;
 import nethack.object.*;
-import nethack.object.items.Item;
 import nl.uu.cs.aplib.utils.Pair;
 import util.Loggers;
 import util.Stopwatch;
@@ -37,12 +36,7 @@ public class ObservationMessageDecoder extends Decoder {
       observationMessage.monsters = MonsterDecoder.decode(input);
       Loggers.ProfilerLogger.trace("READ MONSTERS TOOK: %fs", stopwatch.split());
 
-      int nr_items = input.readByte();
-      observationMessage.items = new Item[nr_items];
-
-      for (int i = 0; i < nr_items; i++) {
-        observationMessage.items[i] = ItemDecoder.decode(input);
-      }
+      observationMessage.items = ItemDecoder.decode(input);
       Loggers.ProfilerLogger.trace("READ ITEMS TOOK: %f", stopwatch.split());
 
       return observationMessage;

@@ -20,7 +20,18 @@ public class ItemDecoder extends Decoder {
           "^(?<quantity>\\w+)\\s(?:(?<buc>uncursed|cursed|blessed)\\s)?(?:partly"
               + " eaten\\s)?(?:(?<modifier>[\\+-]\\d+)\\s)?(?:(?<name>[^(]*))(?:\\s\\((?<additional>.*)\\))?$");
 
-  public static Item decode(DataInputStream input) {
+  public static Item[] decode(DataInputStream input) throws IOException {
+    int nr_items = input.readByte();
+    Item[] items = new Item[nr_items];
+
+    for (int i = 0; i < nr_items; i++) {
+      items[i] = toItem(input);
+    }
+
+    return items;
+  }
+
+  private static Item toItem(DataInputStream input) {
     try {
       char symbol = input.readChar();
       int itemClass = input.readByte();
