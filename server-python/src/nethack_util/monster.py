@@ -1,4 +1,5 @@
 import re
+import json
 import numpy as np
 from nle import nethack
 
@@ -14,12 +15,14 @@ from src.nethack_util import message, step
 counter = 1
 indexes = np.arange(0, 21 * 79).reshape(21, 79)
 
+
 def glyph_to_is_monster():
     glyphs = np.arange(0, nethack.MAX_GLYPH + 1)
     func = np.vectorize(lambda g: nethack.glyph_is_monster(g))
     return func(glyphs)
 
 MONSTER_GLYPHS = glyph_to_is_monster()
+
 
 def id_monsters(env, obs):
     msg = message.read_obs_msg(obs)
@@ -60,6 +63,7 @@ def id_monsters(env, obs):
         env.render()
 
     return obs, monster_descriptions
+
 
 def to_description(arr):
     func = np.vectorize(lambda t: chr(t))
@@ -128,3 +132,44 @@ def get_cursor_pos(obs) -> (int, int):
     cursor_y, cursor_x = obs['tty_cursor']
     cursor_y -= 1
     return cursor_x, cursor_y
+
+
+def filtered_monster_properties():
+    properties = nethack.permonst.__dict__
+    filtered_properties = []
+    for entry in properties:
+        if type(properties[entry]) != property:
+            continue
+
+        filtered_properties.append(entry)
+
+    return filtered_properties
+
+
+def monster_info():
+    filtered_properties = filtered_monster_properties()
+
+    monst_infos = []
+    for i in range(381):
+        monst_info = nethack.permonst(i)
+        monst_dict = dict()
+        monst_dict["index"] = i
+        for property in filtered_properties:
+            monst_dict[property] = monst_info.__getattribute__(property)
+
+        monst_infos.append(monst_dict)
+
+    return monst_infos
+
+
+def write_monster_info():
+    monst_infos = monster_info()
+
+    # open a file for writing
+    with open("../../data/monster.json", "w") as outfile:
+        # use the json.dump() method to write the list of dictionaries to the file
+        json.dump(monst_infos, outfile, indent=2)
+
+
+if __name__ == "__main__":
+    write_monster_info()
