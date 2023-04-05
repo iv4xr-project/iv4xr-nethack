@@ -155,7 +155,43 @@ def monster_info():
         monst_dict = dict()
         monst_dict["index"] = i
         for property in filtered_properties:
-            monst_dict[property] = monst_info.__getattribute__(property)
+            mapped_property = property
+            if property == "mname":
+                mapped_property = "name"
+            elif property == "mlet":
+                continue
+            elif property == "mlevel":
+                mapped_property = "level"
+            elif property == "mmove":
+                mapped_property = "movementSpeed"
+            elif property == "ac":
+                mapped_property = "armorClass"
+            elif property == "mr":
+                mapped_property = "magicResistance"
+            elif property == "maligntyp":
+                continue
+            elif property == "geno":
+                continue
+            elif property == "cwt":
+                mapped_property = "corpseWeight"
+            elif property == "cnutrit":
+                mapped_property = "corpseNutrition"
+            elif property == "msound":
+                continue
+            elif property == "msize":
+                continue
+            elif property == "mresists":
+                mapped_property = "resistances"
+            elif property == "mconveys":
+                continue
+            elif property == "mflags1" or property == "mflags2" or property == "mflags3":
+                continue
+            elif property == "difficulty":
+                mapped_property = "difficulty"
+            elif property == "mcolor":
+                continue
+
+            monst_dict[mapped_property] = monst_info.__getattribute__(property)
 
         monst_infos.append(monst_dict)
 
