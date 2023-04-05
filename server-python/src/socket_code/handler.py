@@ -161,7 +161,7 @@ def create_env(env_name, save_ttyrec=False):
     max_episode_steps = 10000000
     character = "mon-hum-neu-mal"
     # observation_keys = ("tiles", "glyphs", "chars", "colors", "specials", "blstats", "message", "inv_glyphs", "inv_strs", "inv_letters", "inv_oclasses", "screen_descriptions", "tty_cursor")
-    character = "ran-hum-neu-mal"
+    # character = "ran-hum-neu-mal"
     if save_ttyrec:
         return gym.make(env_name, character=character, max_episode_steps=max_episode_steps, save_ttyrec_every=1000000, savedir="nle-recordings")
     else:
