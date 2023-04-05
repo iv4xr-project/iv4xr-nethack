@@ -29,7 +29,7 @@ import util.CustomVec3D;
  * @author wish
  */
 public class TacticLib {
-  public static Tactic attackAdjacentMonsters() {
+  public static Tactic attackMonsters() {
     return FIRSTof(
         Actions.attack()
             .on(

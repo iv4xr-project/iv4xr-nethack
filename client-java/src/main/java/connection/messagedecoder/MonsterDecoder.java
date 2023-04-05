@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import nethack.object.Monster;
 import util.CustomVec2D;
+import util.Database;
 
 public class MonsterDecoder extends Decoder {
   public static List<Monster> decode(DataInputStream input) throws IOException {
@@ -25,10 +26,17 @@ public class MonsterDecoder extends Decoder {
               monsterData[offset + 5]);
       short permId = parseShort(monsterData[offset + 6], monsterData[offset + 7]);
       boolean isPeaceful = parseBool(monsterData[offset + 8]);
-      Monster monster = new Monster(new CustomVec2D(x, y), id, permId, isPeaceful);
+      Monster monster =
+          new Monster(
+              new CustomVec2D(x, y), id, permId, isPeaceful, Database.getMonsterData(permId));
       monsters.add(monster);
     }
 
     return monsters;
+  }
+
+  static List<Monster> monsters;
+
+  static {
   }
 }

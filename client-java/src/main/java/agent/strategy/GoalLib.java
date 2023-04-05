@@ -25,7 +25,7 @@ public class GoalLib {
             .withTactic(
                 FIRSTof(
                     // Survival
-                    TacticLib.attackAdjacentMonsters(),
+                    TacticLib.attackMonsters(),
                     TacticLib.resolveHungerState(900),
                     Actions.singleCommand(new Command(CommandEnum.MISC_WAIT))
                         .on_(Predicates.outOfCombat_HpCritical)

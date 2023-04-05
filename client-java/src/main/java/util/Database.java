@@ -5,9 +5,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import nethack.object.data.Food;
+import nethack.object.data.MonsterData;
 import nethack.object.data.Weapon;
 import opennlp.tools.stemmer.PorterStemmer;
 import util.JSONConverters.FoodConverter;
@@ -18,8 +18,8 @@ public class Database {
   private static final ObjectMapper mapper = new ObjectMapper();
   private static final PorterStemmer porterStemmer = new PorterStemmer();
   static Map<String, Food> foodMap = new HashMap<>();
-
   static Map<String, Weapon> weaponMap = new HashMap<>();
+  static List<MonsterData> monsterList = new ArrayList<>();
 
   static {
     try {
@@ -34,9 +34,18 @@ public class Database {
       for (Weapon weapon : weapons) {
         weaponMap.put(stemName(weapon.name), weapon);
       }
+
+      String monsterJson = readJsonFromFile("../../../../../../server-python/data/monster");
+      MonsterData[] monsterData = mapper.readValue(monsterJson, MonsterData[].class);
+      monsterList.addAll(Arrays.asList(monsterData));
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  public static MonsterData getMonsterData(int index) {
+    assert index >= 0 && index <= monsterList.size() : "Index must be within the bounds";
+    return monsterList.get(index);
   }
 
   public static Food getFood(String name) {
