@@ -43,6 +43,35 @@ public abstract class Decoder {
     }
   }
 
+  public static int parseInt(byte b1, byte b2, byte b3, byte b4) {
+    int i1 = toPositiveInt(b1);
+    int i2 = toPositiveInt(b2);
+    int i3 = toPositiveInt(b3);
+    int i4 = toPositiveInt(b4);
+    return (i1 << 24) + (i2 << 16) + (i3 << 8) + i4;
+  }
+
+  public static short parseShort(byte b1, byte b2) {
+    int i1 = toPositiveInt(b1);
+    int i2 = toPositiveInt(b2);
+    return (short) ((i1 << 8) + i2);
+  }
+
+  public static boolean parseBool(byte b) {
+    return b == 1;
+  }
+
+  public static char parseChar(byte b) {
+    return (char) b;
+  }
+
+  private static int toPositiveInt(byte b) {
+    if (b >= 0) {
+      return b;
+    }
+    return b & 0xff;
+  }
+
   public static byte readByte(DataInputStream input) {
     try {
       return input.readByte();

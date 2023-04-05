@@ -28,34 +28,14 @@ public class ObservationMessageDecoder extends Decoder {
       observationMessage.message = readString(input);
       Loggers.ProfilerLogger.trace("READ MESSAGE TOOK: %fs", stopwatch.split());
 
-      int bytesPerTile = 4;
-      int nrTiles = input.readShort();
-      byte[] tiles = input.readNBytes(bytesPerTile * nrTiles);
-      int offset = 0;
-      for (int i = 0; i < nrTiles; i++) {
-        int x = tiles[offset];
-        int y = tiles[offset + 1];
-        observationMessage.tiles[y][x] =
-            TileDecoder.decode(x, y, tiles[offset + 2], tiles[offset + 3]);
-        offset += bytesPerTile;
-      }
+      observationMessage.tiles = TileDecoder.decode(input);
       Loggers.ProfilerLogger.trace("READ TILES TOOK: %fs", stopwatch.split());
 
-      offset = 0;
-      int bytesPerEntity = 8;
-      int nrEntities = input.readShort();
-      byte[] entities = input.readNBytes(bytesPerEntity * nrEntities);
-      for (int i = 0; i < nrEntities; i++) {
-        int x = entities[offset];
-        int y = entities[offset + 1];
-        char symbol = (char) entities[offset + 2];
-        int colorCode = entities[offset + 3];
-        int glyph = (entities[offset + 4] << 8) + entities[offset + 5];
-        int id = (entities[offset + 6] << 8) + entities[offset + 7];
-        observationMessage.entities[y][x] = EntityDecoder.decode(symbol, colorCode, glyph, id);
-        offset += bytesPerEntity;
-      }
-      Loggers.ProfilerLogger.trace("READ ENTITIES TOOK: %f", stopwatch.split());
+      observationMessage.entities = EntityDecoder.decode(input);
+      Loggers.ProfilerLogger.trace("READ ENTITIES TOOK: %fs", stopwatch.split());
+
+      observationMessage.monsters = MonsterDecoder.decode(input);
+      Loggers.ProfilerLogger.trace("READ MONSTERS TOOK: %fs", stopwatch.split());
 
       int nr_items = input.readByte();
       observationMessage.items = new Item[nr_items];

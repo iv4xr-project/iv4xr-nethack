@@ -68,17 +68,18 @@ def write_obs(sock, env, obs):
     """
     Encode and send an observation.
     """
-    obs, monster_descriptions = monster.id_monsters(env, obs)
+    # obs, monster_descriptions = monster.id_monsters(env, obs)
     obs, msg = message.concat_all_messages(env, obs)
 
     sock.write(OBS_BYTE)
     sock.write(struct.pack('>27i', *obs['blstats']))
     write_str(sock, msg)
-    # GERARD
-    write_map(sock, obs['chars'], obs['colors'], obs['glyphs'], obs['tiles'], obs['flags'], monster_descriptions)
 
-    nr_items = np.trim_zeros(obs['inv_letters']).shape[0]
-    write_inv(sock, zip(obs['inv_letters'], obs['inv_oclasses'], obs['inv_glyphs'], obs['inv_strs']), nr_items)
+    # GERARD
+    write_tiles(sock, obs['tiles'], obs['flags'])
+    write_entities(sock, obs['chars'], obs['colors'], obs['glyphs']) #, monster_descriptions)
+    write_monsters(sock, obs['mon_id'], obs['mon_permid'], obs['mon_peaceful'])
+    write_inv(sock, obs['inv_letters'], obs['inv_oclasses'], obs['inv_glyphs'], obs['inv_strs'])
 
 
 def write_step(sock, done, info):
@@ -97,20 +98,17 @@ def write_seed(sock, seed):
     sock.flush()
 
 
-def write_inv(sock, inv_items, nr_items):
+def write_inv(sock, inv_letters, inv_oclasses, inv_glyphs, inv_strs):
     """
     Inventory is first a byte with number of items, then byte for
     """
+    nr_items = np.trim_zeros(inv_letters).shape[0]
     sock.write(util.to_byte(nr_items))
-    i = 0
-    for letter, oclass, glyph, strs in inv_items:
-        if i == nr_items:
-            return
-        sock.write(struct.pack(">HBH80B", letter, oclass, glyph, *strs))
-        i += 1
 
+    for i in range(nr_items):
+        sock.write(struct.pack(">HBH80B", inv_letters[i], inv_oclasses[i], inv_glyphs[i], *inv_strs[i]))
 
-def write_map(sock, chars, colors, glyphs, tiles, flags, monster_descriptions):
+def write_tiles(sock, tiles, flags):
     """
     Encode the entire map in bytes
     """
@@ -127,6 +125,12 @@ def write_map(sock, chars, colors, glyphs, tiles, flags, monster_descriptions):
             # GERARD
             sock.write(struct.pack(">BBBB", x, y, tiles[y][x], flags[y][x]))
 
+    sock.flush()
+
+def write_entities(sock, chars, colors, glyphs): #, monster_descriptions):
+    """
+    Encode the entire map in bytes
+    """
     # Write tiles
     nr_entities = np.count_nonzero(glyphs != 2359)
     sock.write(struct.pack(">H", nr_entities))
@@ -138,6 +142,21 @@ def write_map(sock, chars, colors, glyphs, tiles, flags, monster_descriptions):
                 continue
 
             # GERARD
-            sock.write(struct.pack(">BBBBHH", x, y, chars[y][x], colors[y][x], glyphs[y][x], monster_descriptions[y][x]))
+            sock.write(struct.pack(">BBBBH", x, y, chars[y][x], colors[y][x], glyphs[y][x])) #, monster_descriptions[y][x]))
+
+    sock.flush()
+
+def write_monsters(sock, id, permid, peaceful):
+    nr_monsters = np.sum(np.sign(id))
+    sock.write(struct.pack(">B", nr_monsters))
+    sock.flush()
+
+    for y in range(21):
+        for x in range(79):
+            if id[y][x] == 0:
+                continue
+
+            sock.write(struct.pack(">BBiHb", x, y, id[y][x], permid[y][x], peaceful[y][x]))
+            print(f'MONSTER <{x},{y}> id: {id[y][x]} permid: {permid[y][x]} (peaceful={peaceful[y][x]})')
 
     sock.flush()

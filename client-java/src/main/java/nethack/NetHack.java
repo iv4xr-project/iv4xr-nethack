@@ -247,12 +247,13 @@ public class NetHack {
       }
     }
 
+    Level level;
     if (!gameState.dungeon.levelExists(dlvl)) {
-      Level level = new Level(playerPos, stepState.entities, stepState.tiles);
+      level = new Level(playerPos, stepState.entities, stepState.tiles);
       gameState.dungeon.newLevel(level, dlvl, stepState.player);
     } else {
       gameState.dungeon.getLevelNr(dlvl);
-      Level level = gameState.dungeon.getLevel(dlvl);
+      level = gameState.dungeon.getLevel(dlvl);
       level.updateLevel(stepState.player.location.pos, stepState.entities, stepState.tiles);
 
       // Shop door might be around
@@ -260,6 +261,8 @@ public class NetHack {
         level.markShopDoors(stepState.player.location.pos);
       }
     }
+
+    level.monsters = stepState.monsters;
 
     gameState.player = stepState.player;
     assert gameState.player.location.lvl == 0

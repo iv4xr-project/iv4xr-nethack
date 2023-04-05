@@ -1,14 +1,35 @@
 package connection.messagedecoder;
 
 import agent.navigation.surface.Tile;
+import java.io.DataInputStream;
+import java.io.IOException;
+import nethack.world.Level;
 import nethack.world.tiles.*;
 import util.CustomVec2D;
 import util.CustomVec3D;
 
 public class TileDecoder extends Decoder {
-  public static Tile decode(int x, int y, byte tileType, byte flags) {
+  public static Tile[][] decode(DataInputStream input) throws IOException {
+    Tile[][] tiles = new Tile[Level.SIZE.height][Level.SIZE.width];
+
+    int bytesPerTile = 4;
+    short nrTiles = input.readShort();
+    byte[] tilesData = input.readNBytes(bytesPerTile * nrTiles);
+    for (int i = 0, offset = 0; i < nrTiles; i++, offset += bytesPerTile) {
+      byte x = tilesData[offset];
+      byte y = tilesData[offset + 1];
+      byte tile = tilesData[offset + 2];
+      byte flags = tilesData[offset + 3];
+      tiles[y][x] = toTile(x, y, tile, flags);
+    }
+
+    return tiles;
+  }
+
+  private static Tile toTile(int x, int y, byte tileType, byte flags) {
     assert tileType >= 0 && tileType <= 36
         : String.format("TileType value must be >= 0 && <= 35 but value=%d", tileType);
+    //    assert flags > 0 : "flags may not be negative";
     CustomVec3D loc = new CustomVec3D(0, new CustomVec2D(x, y));
 
     // Do not differentiate between all wall types

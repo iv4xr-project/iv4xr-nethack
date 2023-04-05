@@ -5,11 +5,12 @@ import static nl.uu.cs.aplib.AplibEDSL.*;
 import agent.iv4xr.AgentState;
 import agent.navigation.strategy.NavUtils;
 import agent.navigation.surface.Walkable;
-import agent.selector.EntitySelector;
 import agent.selector.ItemSelector;
-import eu.iv4xr.framework.mainConcepts.WorldEntity;
+import agent.selector.MapSelector;
+import agent.selector.Selector;
 import java.util.*;
 import java.util.stream.Collectors;
+import nethack.object.Monster;
 import nethack.object.Player;
 import nethack.object.items.FoodItem;
 import nethack.object.items.Item;
@@ -33,13 +34,19 @@ public class TacticLib {
         Actions.attack()
             .on(
                 (AgentState S) -> {
-                  WorldEntity we =
-                      EntitySelector.adjacentMonster.apply(
-                          new ArrayList<>(S.worldmodel.elements.values()), S);
-                  if (we == null) {
+                  List<CustomVec3D> monsterPositions =
+                      NavUtils.addLevelNr(
+                          S.app().level().monsters.stream()
+                              .filter(monster -> !monster.peaceful)
+                              .map(monster -> monster.pos)
+                              .collect(Collectors.toList()),
+                          S.loc().lvl);
+                  Integer index =
+                      MapSelector.select(monsterPositions, S, Selector.SelectionType.ADJACENT);
+                  if (index == null) {
                     return null;
                   }
-                  return NavUtils.toDirection(S, new CustomVec3D(we.position));
+                  return NavUtils.toDirection(S, monsterPositions.get(index));
                 })
             .lift(),
         Actions.fire()
@@ -54,39 +61,35 @@ public class TacticLib {
                   }
 
                   CustomVec3D agentLoc = S.loc();
-                  List<WorldEntity> wes =
-                      S.getWorldEntities().stream()
+                  List<Monster> monsters =
+                      S.app().level().monsters.stream()
                           .filter(
-                              worldEntity ->
-                                  worldEntity.position != null
-                                      && worldEntity.type.equals("MONSTER")
-                                      && NavUtils.levelNr(worldEntity.position) == agentLoc.lvl
-                                      && CustomVec2D.straightLine(
-                                          agentLoc.pos, new CustomVec2D(worldEntity.position)))
+                              monster ->
+                                  !monster.peaceful
+                                      && CustomVec2D.straightLine(monster.pos, agentLoc.pos))
                           .collect(Collectors.toList());
-                  if (wes.isEmpty()) {
+                  if (monsters.isEmpty()) {
                     return null;
                   }
 
                   // Get closest entity
-                  WorldEntity entity = null;
+                  Monster closestMonster = null;
                   int manhattanDistance = Integer.MAX_VALUE;
 
                   outer:
-                  for (WorldEntity we : wes) {
-                    CustomVec2D entityPos = new CustomVec2D(we.position);
+                  for (Monster monster : monsters) {
                     // Coordinate not visible
-                    if (!S.app().gameState.getLevel().visibleCoordinates.contains(entityPos)) {
+                    if (!S.app().gameState.getLevel().visibleCoordinates.contains(monster.pos)) {
                       continue;
                     }
 
-                    int xSign = Integer.signum(entityPos.x - agentLoc.pos.x);
-                    int ySign = Integer.signum(entityPos.y - agentLoc.pos.y);
+                    int xSign = Integer.signum(monster.pos.x - agentLoc.pos.x);
+                    int ySign = Integer.signum(monster.pos.y - agentLoc.pos.y);
                     CustomVec2D delta = new CustomVec2D(xSign, ySign);
                     CustomVec2D currentPos = agentLoc.pos.add(delta);
                     int currentDistance = 1;
 
-                    while (!currentPos.equals(entityPos)) {
+                    while (!currentPos.equals(monster.pos)) {
                       if (!(S.area().getTile(currentPos) instanceof Walkable)) {
                         continue outer;
                       }
@@ -97,7 +100,7 @@ public class TacticLib {
                       }
                     }
 
-                    entity = we;
+                    closestMonster = monster;
                     manhattanDistance = currentDistance;
                   }
 
@@ -106,9 +109,9 @@ public class TacticLib {
                     return null;
                   }
 
-                  CustomVec2D entityPos = new CustomVec2D(entity.position);
-                  int xSign = Integer.signum(entityPos.x - agentLoc.pos.x);
-                  int ySign = Integer.signum(entityPos.y - agentLoc.pos.y);
+                  CustomVec2D monsterPos = closestMonster.pos;
+                  int xSign = Integer.signum(monsterPos.x - agentLoc.pos.x);
+                  int ySign = Integer.signum(monsterPos.y - agentLoc.pos.y);
                   CustomVec2D delta = new CustomVec2D(xSign, ySign);
                   return NavUtils.toDirection(
                       S, new CustomVec3D(agentLoc.lvl, agentLoc.pos.add(delta)));

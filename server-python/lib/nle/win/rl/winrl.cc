@@ -714,15 +714,15 @@ NetHackRL::clear_nhwindow_method(winid wid)
             tiles_[offset] = levl[x][y].typ;
             flags_[offset] = levl[x][y].flags;
 
-            if (level.monsters[x][y]) {
-              mon_id_[offset] = level.monsters[x][y]->m_id;
-              mon_permid_[offset] = level.monsters[x][y]->mnum;
-              mon_peaceful_[offset] = level.monsters[x][y]->mpeaceful;
-            } else {
-              mon_id_[offset] = 0;
-              mon_permid_[offset] = 0;
-              mon_peaceful_[offset] = 0;
-            }
+            // if (level.monsters[x][y]) {
+            //   mon_id_[offset] = level.monsters[x][y]->m_id;
+            //   mon_permid_[offset] = level.monsters[x][y]->mnum;
+            //   mon_peaceful_[offset] = level.monsters[x][y]->mpeaceful;
+            // } else {
+            //   mon_id_[offset] = 0;
+            //   mon_permid_[offset] = 0;
+            //   mon_peaceful_[offset] = 0;
+            // }
           }
         }
         chars_.fill(' ');

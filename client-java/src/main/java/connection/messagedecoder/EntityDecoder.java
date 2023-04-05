@@ -1,19 +1,40 @@
 package connection.messagedecoder;
 
+import java.io.DataInputStream;
+import java.io.IOException;
 import nethack.enums.Color;
 import nethack.enums.EntityType;
 import nethack.object.Entity;
+import nethack.world.Level;
 import util.Loggers;
 
 // Source: https://studytrails.com/2016/09/12/java-google-json-type-adapter/
 public class EntityDecoder extends Decoder {
-  public static Entity decode(char symbol, int colorCode, int glyph, int id) {
-    Color color = Color.fromValue(colorCode);
-    EntityType type = toEntityType(glyph, symbol, id, color);
-    return new Entity(glyph, symbol, id, type, color);
+  public static Entity[][] decode(DataInputStream input) throws IOException {
+    Entity[][] entities = new Entity[Level.SIZE.height][Level.SIZE.width];
+
+    int bytesPerEntity = 6;
+    int nrEntities = input.readShort();
+    byte[] entitiesData = input.readNBytes(bytesPerEntity * nrEntities);
+    for (int i = 0, offset = 0; i < nrEntities; i++, offset += bytesPerEntity) {
+      byte x = entitiesData[offset];
+      byte y = entitiesData[offset + 1];
+      char symbol = parseChar(entitiesData[offset + 2]);
+      byte colorCode = entitiesData[offset + 3];
+      int glyph = parseShort(entitiesData[offset + 4], entitiesData[offset + 5]);
+      entities[y][x] = toEntity(symbol, colorCode, glyph);
+    }
+
+    return entities;
   }
 
-  private static EntityType toEntityType(int glyph, char symbol, int id, Color color) {
+  private static Entity toEntity(char symbol, int colorCode, int glyph) {
+    Color color = Color.fromValue(colorCode);
+    EntityType type = toEntityType(glyph, symbol, /*id,*/ color);
+    return new Entity(glyph, symbol, /*id,*/ type, color);
+  }
+
+  private static EntityType toEntityType(int glyph, char symbol, /*int id,*/ Color color) {
     EntityType type = toEntityType(glyph);
     if (type != EntityType.UNKNOWN) {
       return type;
@@ -23,7 +44,7 @@ public class EntityDecoder extends Decoder {
       Loggers.EncoderLogger.warn("%s%s%s: %d", color, symbol, Color.RESET, glyph);
     }
 
-    type = toEntityType(symbol, id, color);
+    type = toEntityType(symbol, /*id,*/ color);
     if (type != EntityType.UNKNOWN) {
       return type;
     }
@@ -64,7 +85,7 @@ public class EntityDecoder extends Decoder {
     return EntityType.UNKNOWN;
   }
 
-  private static EntityType toEntityType(char symbol, int id, Color color) {
+  private static EntityType toEntityType(char symbol, /*int id,*/ Color color) {
     // When simply the symbol and color is enough to identify the type
     switch (symbol) {
       case '_':
@@ -137,9 +158,9 @@ public class EntityDecoder extends Decoder {
       return EntityType.MONSTER;
     }
 
-    if (Character.isAlphabetic(symbol) || symbol == ':' || symbol == '\'') {
-      return id == 0 ? EntityType.STATUE : EntityType.MONSTER;
-    }
+    //    if (Character.isAlphabetic(symbol) || symbol == ':' || symbol == '\'') {
+    //      return id == 0 ? EntityType.STATUE : EntityType.MONSTER;
+    //    }
 
     return EntityType.UNKNOWN;
   }

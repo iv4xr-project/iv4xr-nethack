@@ -7,6 +7,7 @@ import java.util.*;
 import nethack.enums.Color;
 import nethack.enums.EntityType;
 import nethack.object.Entity;
+import nethack.object.Monster;
 import nethack.world.tiles.*;
 import util.ColoredStringBuilder;
 import util.CustomVec2D;
@@ -15,6 +16,7 @@ import util.Loggers;
 public class Level {
   public static final Size SIZE = new Size(79, 21);
   public final Entity[][] map = new Entity[SIZE.height][SIZE.width];
+  public List<Monster> monsters = new ArrayList<>();
   public final Map<EntityType, HashSet<CustomVec2D>> entityTypesMap = new HashMap<>();
 
   public Surface surface = new Surface();
