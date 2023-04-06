@@ -2665,5 +2665,509 @@
     "description": "plain",
     "weight": 50,
     "cost": 0
+  },
+  {
+    "index": 381,
+    "name": "novel",
+    "description": "paperback",
+    "weight": 0,
+    "cost": 20
+  },
+  {
+    "index": 382,
+    "name": "Book of the Dead",
+    "description": "papyrus",
+    "weight": 20,
+    "cost": 10000
+  },
+  {
+    "index": 383,
+    "name": "light",
+    "description": "glass",
+    "weight": 7,
+    "cost": 100
+  },
+  {
+    "index": 384,
+    "name": "secret door detection",
+    "description": "balsa",
+    "weight": 7,
+    "cost": 150
+  },
+  {
+    "index": 385,
+    "name": "enlightenment",
+    "description": "crystal",
+    "weight": 7,
+    "cost": 150
+  },
+  {
+    "index": 386,
+    "name": "create monster",
+    "description": "maple",
+    "weight": 7,
+    "cost": 200
+  },
+  {
+    "index": 387,
+    "name": "wishing",
+    "description": "pine",
+    "weight": 7,
+    "cost": 500
+  },
+  {
+    "index": 388,
+    "name": "nothing",
+    "description": "oak",
+    "weight": 7,
+    "cost": 100
+  },
+  {
+    "index": 389,
+    "name": "striking",
+    "description": "ebony",
+    "weight": 7,
+    "cost": 150
+  },
+  {
+    "index": 390,
+    "name": "make invisible",
+    "description": "marble",
+    "weight": 7,
+    "cost": 150
+  },
+  {
+    "index": 391,
+    "name": "slow monster",
+    "description": "tin",
+    "weight": 7,
+    "cost": 150
+  },
+  {
+    "index": 392,
+    "name": "speed monster",
+    "description": "brass",
+    "weight": 7,
+    "cost": 150
+  },
+  {
+    "index": 393,
+    "name": "undead turning",
+    "description": "copper",
+    "weight": 7,
+    "cost": 150
+  },
+  {
+    "index": 394,
+    "name": "polymorph",
+    "description": "silver",
+    "weight": 7,
+    "cost": 200
+  },
+  {
+    "index": 395,
+    "name": "cancellation",
+    "description": "platinum",
+    "weight": 7,
+    "cost": 200
+  },
+  {
+    "index": 396,
+    "name": "teleportation",
+    "description": "iridium",
+    "weight": 7,
+    "cost": 200
+  },
+  {
+    "index": 397,
+    "name": "opening",
+    "description": "zinc",
+    "weight": 7,
+    "cost": 150
+  },
+  {
+    "index": 398,
+    "name": "locking",
+    "description": "aluminum",
+    "weight": 7,
+    "cost": 150
+  },
+  {
+    "index": 399,
+    "name": "probing",
+    "description": "uranium",
+    "weight": 7,
+    "cost": 150
+  },
+  {
+    "index": 400,
+    "name": "digging",
+    "description": "iron",
+    "weight": 7,
+    "cost": 150
+  },
+  {
+    "index": 401,
+    "name": "magic missile",
+    "description": "steel",
+    "weight": 7,
+    "cost": 150
+  },
+  {
+    "index": 402,
+    "name": "fire",
+    "description": "hexagonal",
+    "weight": 7,
+    "cost": 175
+  },
+  {
+    "index": 403,
+    "name": "cold",
+    "description": "short",
+    "weight": 7,
+    "cost": 175
+  },
+  {
+    "index": 404,
+    "name": "sleep",
+    "description": "runed",
+    "weight": 7,
+    "cost": 175
+  },
+  {
+    "index": 405,
+    "name": "death",
+    "description": "long",
+    "weight": 7,
+    "cost": 500
+  },
+  {
+    "index": 406,
+    "name": "lightning",
+    "description": "curved",
+    "weight": 7,
+    "cost": 175
+  },
+  {
+    "index": 407,
+    "name": null,
+    "description": "forked",
+    "weight": 7,
+    "cost": 150
+  },
+  {
+    "index": 408,
+    "name": null,
+    "description": "spiked",
+    "weight": 7,
+    "cost": 150
+  },
+  {
+    "index": 409,
+    "name": null,
+    "description": "jeweled",
+    "weight": 7,
+    "cost": 150
+  },
+  {
+    "index": 410,
+    "name": "gold piece",
+    "description": null,
+    "weight": 1,
+    "cost": 1
+  },
+  {
+    "index": 411,
+    "name": "dilithium crystal",
+    "description": "white",
+    "weight": 1,
+    "cost": 4500
+  },
+  {
+    "index": 412,
+    "name": "diamond",
+    "description": "white",
+    "weight": 1,
+    "cost": 4000
+  },
+  {
+    "index": 413,
+    "name": "ruby",
+    "description": "red",
+    "weight": 1,
+    "cost": 3500
+  },
+  {
+    "index": 414,
+    "name": "jacinth",
+    "description": "orange",
+    "weight": 1,
+    "cost": 3250
+  },
+  {
+    "index": 415,
+    "name": "sapphire",
+    "description": "blue",
+    "weight": 1,
+    "cost": 3000
+  },
+  {
+    "index": 416,
+    "name": "black opal",
+    "description": "black",
+    "weight": 1,
+    "cost": 2500
+  },
+  {
+    "index": 417,
+    "name": "emerald",
+    "description": "green",
+    "weight": 1,
+    "cost": 2500
+  },
+  {
+    "index": 418,
+    "name": "turquoise",
+    "description": "green",
+    "weight": 1,
+    "cost": 2000
+  },
+  {
+    "index": 419,
+    "name": "citrine",
+    "description": "yellow",
+    "weight": 1,
+    "cost": 1500
+  },
+  {
+    "index": 420,
+    "name": "aquamarine",
+    "description": "green",
+    "weight": 1,
+    "cost": 1500
+  },
+  {
+    "index": 421,
+    "name": "amber",
+    "description": "yellowish brown",
+    "weight": 1,
+    "cost": 1000
+  },
+  {
+    "index": 422,
+    "name": "topaz",
+    "description": "yellowish brown",
+    "weight": 1,
+    "cost": 900
+  },
+  {
+    "index": 423,
+    "name": "jet",
+    "description": "black",
+    "weight": 1,
+    "cost": 850
+  },
+  {
+    "index": 424,
+    "name": "opal",
+    "description": "white",
+    "weight": 1,
+    "cost": 800
+  },
+  {
+    "index": 425,
+    "name": "chrysoberyl",
+    "description": "yellow",
+    "weight": 1,
+    "cost": 700
+  },
+  {
+    "index": 426,
+    "name": "garnet",
+    "description": "red",
+    "weight": 1,
+    "cost": 700
+  },
+  {
+    "index": 427,
+    "name": "amethyst",
+    "description": "violet",
+    "weight": 1,
+    "cost": 600
+  },
+  {
+    "index": 428,
+    "name": "jasper",
+    "description": "red",
+    "weight": 1,
+    "cost": 500
+  },
+  {
+    "index": 429,
+    "name": "fluorite",
+    "description": "violet",
+    "weight": 1,
+    "cost": 400
+  },
+  {
+    "index": 430,
+    "name": "obsidian",
+    "description": "black",
+    "weight": 1,
+    "cost": 200
+  },
+  {
+    "index": 431,
+    "name": "agate",
+    "description": "orange",
+    "weight": 1,
+    "cost": 200
+  },
+  {
+    "index": 432,
+    "name": "jade",
+    "description": "green",
+    "weight": 1,
+    "cost": 300
+  },
+  {
+    "index": 433,
+    "name": "worthless piece of white glass",
+    "description": "white",
+    "weight": 1,
+    "cost": 0
+  },
+  {
+    "index": 434,
+    "name": "worthless piece of blue glass",
+    "description": "blue",
+    "weight": 1,
+    "cost": 0
+  },
+  {
+    "index": 435,
+    "name": "worthless piece of red glass",
+    "description": "red",
+    "weight": 1,
+    "cost": 0
+  },
+  {
+    "index": 436,
+    "name": "worthless piece of yellowish brown glass",
+    "description": "yellowish brown",
+    "weight": 1,
+    "cost": 0
+  },
+  {
+    "index": 437,
+    "name": "worthless piece of orange glass",
+    "description": "orange",
+    "weight": 1,
+    "cost": 0
+  },
+  {
+    "index": 438,
+    "name": "worthless piece of yellow glass",
+    "description": "yellow",
+    "weight": 1,
+    "cost": 0
+  },
+  {
+    "index": 439,
+    "name": "worthless piece of black glass",
+    "description": "black",
+    "weight": 1,
+    "cost": 0
+  },
+  {
+    "index": 440,
+    "name": "worthless piece of green glass",
+    "description": "green",
+    "weight": 1,
+    "cost": 0
+  },
+  {
+    "index": 441,
+    "name": "worthless piece of violet glass",
+    "description": "violet",
+    "weight": 1,
+    "cost": 0
+  },
+  {
+    "index": 442,
+    "name": "luckstone",
+    "description": "gray",
+    "weight": 10,
+    "cost": 60
+  },
+  {
+    "index": 443,
+    "name": "loadstone",
+    "description": "gray",
+    "weight": 500,
+    "cost": 1
+  },
+  {
+    "index": 444,
+    "name": "touchstone",
+    "description": "gray",
+    "weight": 10,
+    "cost": 45
+  },
+  {
+    "index": 445,
+    "name": "flint",
+    "description": "gray",
+    "weight": 10,
+    "cost": 1
+  },
+  {
+    "index": 446,
+    "name": "rock",
+    "description": null,
+    "weight": 10,
+    "cost": 0
+  },
+  {
+    "index": 447,
+    "name": "boulder",
+    "description": null,
+    "weight": 6000,
+    "cost": 0
+  },
+  {
+    "index": 448,
+    "name": "statue",
+    "description": null,
+    "weight": 2500,
+    "cost": 0
+  },
+  {
+    "index": 449,
+    "name": "heavy iron ball",
+    "description": null,
+    "weight": 480,
+    "cost": 10
+  },
+  {
+    "index": 450,
+    "name": "iron chain",
+    "description": null,
+    "weight": 120,
+    "cost": 0
+  },
+  {
+    "index": 451,
+    "name": "blinding venom",
+    "description": "splash of venom",
+    "weight": 1,
+    "cost": 0
+  },
+  {
+    "index": 452,
+    "name": "acid venom",
+    "description": "splash of venom",
+    "weight": 1,
+    "cost": 0
   }
 ]

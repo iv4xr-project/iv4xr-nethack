@@ -19,7 +19,7 @@ def object_info():
     filtered_properties = filtered_object_properties()
 
     object_infos = []
-    for i in range(381):
+    for i in range(nethack.NUM_OBJECTS):
         object_info = nethack.objclass(i)
         object_dict = dict()
         object_dict["index"] = i
