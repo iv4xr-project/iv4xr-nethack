@@ -287,6 +287,16 @@ public class GridSurface implements Navigatable<CustomVec2D> {
     for (CustomVec2D frontierPosition : frontierCandidates) {
       List<CustomVec2D> pNeighbors =
           NavUtils.neighbourCoordinates(frontierPosition, hierarchicalMap.size, true);
+
+      Tile frontier = getTile(frontierPosition);
+      if (frontier instanceof Door) {
+        Door door = (Door) frontier;
+        if (door.isShopDoor) {
+          cannotBeFrontier.add(frontierPosition);
+          continue;
+        }
+      }
+
       boolean isFrontier = false;
       for (CustomVec2D n : pNeighbors) {
         Tile tile = getTile(n);

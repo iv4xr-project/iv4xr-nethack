@@ -224,6 +224,7 @@ public class NetHack {
 
     // Need to set new stats before setting the level
     gameState.stats = stepState.stats;
+    assert !stepState.message.contains("You attack thin air.") : "Is there a monster not updated?";
     gameState.message = stepState.message;
     // Remember last position of player before setting
     if (gameState.player != null) {

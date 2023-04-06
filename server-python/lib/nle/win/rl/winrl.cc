@@ -346,6 +346,27 @@ NetHackRL::fill_obs(nle_obs *obs)
     }
     obs->in_normal_game = true;
 
+    // GERARD
+    // Update all tiles with the true values
+    for (int x = 1; x < COLNO; x++) {
+      for (int y = 0; y < ROWNO; y++) {
+        int offset = (x - 1) + y * (COLNO - 1);
+        // glyphs_[offset] = levl[x][y].glyph;
+        tiles_[offset] = levl[x][y].typ;
+        flags_[offset] = levl[x][y].flags;
+
+        if (level.monsters[x][y]) {
+          mon_id_[offset] = level.monsters[x][y]->m_id;
+          mon_permid_[offset] = level.monsters[x][y]->mnum;
+          mon_peaceful_[offset] = level.monsters[x][y]->mpeaceful;
+        } else {
+          mon_id_[offset] = 0;
+          mon_permid_[offset] = 0;
+          mon_peaceful_[offset] = 0;
+        }
+      }
+    }
+
     if (obs->glyphs) {
         std::memcpy(obs->glyphs, glyphs_.data(),
                     sizeof(int16_t) * glyphs_.size());
@@ -514,8 +535,9 @@ NetHackRL::store_glyph(XCHAR_P x, XCHAR_P y, int glyph)
     size_t offset = j * (COLNO - 1) + i;
 
     // TODO: Glyphs might be taken from gbuf[y][x].glyph.
-    glyphs_[offset] = shuffled_glyph(glyph);
     // GERARD
+    glyphs_[offset] = shuffled_glyph(glyph);
+    // glyphs_[offset] = levl[x][y].glyph;
     tiles_[offset] = levl[x][y].typ;
     flags_[offset] = levl[x][y].flags;
     if (level.monsters[x][y]) {
