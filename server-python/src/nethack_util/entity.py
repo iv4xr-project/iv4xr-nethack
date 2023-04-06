@@ -26,10 +26,15 @@ def object_info():
         object_dict["name"] = nethack.OBJ_NAME(object_info)
         object_dict["description"] = nethack.OBJ_DESCR(object_info)
         for property in filtered_properties:
+            mapped_property = property
             if property == "oc_name_idx" or property == "oc_descr_idx" or property == "oc_oprop" or property == "oc_class" or property == "oc_delay" or property == "oc_color" or property == "oc_prob":
                 continue
 
-            mapped_property = property
+            if property == "oc_weight":
+                mapped_property = "weight"
+            elif property == "oc_cost":
+                mapped_property = "cost"
+
             object_dict[mapped_property] = object_info.__getattribute__(property)
 
         object_infos.append(object_dict)
