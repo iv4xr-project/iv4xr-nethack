@@ -36,7 +36,6 @@ public abstract class Selector<T> {
   public enum SelectionType {
     FIRST,
     LAST,
-    //    CLOSEST,
     SHORTEST,
     FARTHEST,
     STRAIGHT_ADJACENT,

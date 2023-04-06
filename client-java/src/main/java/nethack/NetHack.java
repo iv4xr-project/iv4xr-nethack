@@ -253,20 +253,29 @@ public class NetHack {
 
     Level level;
     if (!gameState.dungeon.levelExists(dlvl)) {
-      level = new Level(playerPos, stepState.symbols, stepState.tiles);
+      level =
+          new Level(
+              playerPos,
+              stepState.symbols,
+              stepState.tiles,
+              stepState.monsters,
+              stepState.entities);
       gameState.dungeon.newLevel(level, dlvl, stepState.player);
     } else {
       gameState.dungeon.getLevelNr(dlvl);
       level = gameState.dungeon.getLevel(dlvl);
-      level.updateLevel(stepState.player.location.pos, stepState.symbols, stepState.tiles);
+      level.updateLevel(
+          stepState.player.location.pos,
+          stepState.symbols,
+          stepState.tiles,
+          stepState.monsters,
+          stepState.entities);
 
       // Shop door might be around
       if (gameState.message.contains("You read: \"")) {
         level.markShopDoors(stepState.player.location.pos);
       }
     }
-
-    level.monsters = stepState.monsters;
 
     gameState.player = stepState.player;
     assert gameState.player.location.lvl == 0

@@ -2,7 +2,6 @@ package nethack.object;
 
 import nethack.enums.Color;
 import nethack.enums.SymbolType;
-import util.CustomVec2D;
 
 // Source: https://www.baeldung.com/java-enum-values
 // Actions listed at: /python-server/lib/nle/nle/nethack/actions.py
@@ -19,10 +18,6 @@ public class Symbol {
     this.type = type;
   }
 
-  public String createId(CustomVec2D pos) {
-    return String.format("%s_%d", type.name(), glyph /*, id*/);
-  }
-
   @Override
   public boolean equals(Object obj) {
     if (obj == null) {
@@ -33,8 +28,8 @@ public class Symbol {
       Symbol other = (Symbol) obj;
       return glyph == other.glyph
           && symbol == other.symbol
-          && other.color.equals(color)
-          && type == other.type;
+          && type == other.type
+          && other.color.equals(color);
     }
     return false;
   }

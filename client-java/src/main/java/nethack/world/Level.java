@@ -23,19 +23,32 @@ public class Level {
   public List<Entity> entities = new ArrayList<>();
   public final Map<EntityClass, HashSet<CustomVec2D>> entityTypesMap = new HashMap<>();
 
-  public Surface surface = new Surface();
-
   public final List<Tile> changedTiles = new ArrayList<>();
   public final List<CustomVec2D> changedMapCoordinates = new ArrayList<>();
+  public final List<Entity> changedEntities = new ArrayList<>();
+
+  public Surface surface = new Surface();
   public Set<CustomVec2D> visibleCoordinates = new HashSet<>();
 
-  public Level(CustomVec2D playerPos, Symbol[][] entities, Tile[][] tiles) {
-    updateLevel(playerPos, entities, tiles);
+  public Level(
+      CustomVec2D playerPos,
+      Symbol[][] symbols,
+      Tile[][] tiles,
+      List<Monster> monsters,
+      List<Entity> entities) {
+    updateLevel(playerPos, symbols, tiles, monsters, entities);
   }
 
-  public void updateLevel(CustomVec2D playerPos, Symbol[][] newSymbols, Tile[][] newTiles) {
+  public void updateLevel(
+      CustomVec2D playerPos,
+      Symbol[][] newSymbols,
+      Tile[][] newTiles,
+      List<Monster> monsters,
+      List<Entity> entities) {
     updateSymbols(newSymbols);
     updateTiles(newTiles);
+    this.monsters = monsters;
+    this.entities = entities;
     updateVisibility(playerPos);
     markShops();
   }
@@ -257,34 +270,6 @@ public class Level {
 
   @Override
   public String toString() {
-    //    ColoredStringBuilder csb = new ColoredStringBuilder();
-    //    String[] game = gameState.toString().split(System.lineSeparator());
-    //    String[] navigation = area().toString().split(System.lineSeparator());
-    //
-    //    String tripleFormatString =
-    //            String.format(
-    //                    "%%-%ds %%-%ds %%-%ds%n", Level.SIZE.width, Level.SIZE.width,
-    // Level.SIZE.width);
-    //    String doubleFormatString =
-    //            String.format("%%-%ds %%-%ds%n", 2 * Level.SIZE.width + 1, Level.SIZE.width);
-    //    int n = Level.SIZE.height;
-    //
-    //    csb.appendf(doubleFormatString, game[0], hierarchicalMap[0]);
-    //
-    //    for (int i = 0; i < n; i++) {
-    //      csb.appendf(tripleFormatString, game[i + 1], navigation[i], hierarchicalMap[i + 1]);
-    //    }
-    //
-    //    csb.appendf(doubleFormatString, game[n + 1], hierarchicalMap[n + 1]);
-    //    csb.appendf(
-    //            String.format("%%-%ds %%-%ds%n", Level.SIZE.width * 2 + 40, Level.SIZE.width),
-    //            game[n + 2],
-    //            hierarchicalMap[n + 2]);
-    //    csb.appendf(tripleFormatString, "", "", hierarchicalMap[n + 3]);
-    //    System.out.print(csb);
-
-    //    return surface.toString();
-
     ColoredStringBuilder csb = new ColoredStringBuilder();
     for (int y = 0; y < SIZE.height; y++) {
       for (int x = 0; x < SIZE.width; x++) {

@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 import nethack.NetHack;
 import nethack.enums.SymbolType;
 import nethack.object.Player;
-import nethack.object.Symbol;
 import nethack.object.Turn;
 import nethack.world.Level;
 import nethack.world.Surface;
@@ -109,9 +108,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
         Loggers.WOMLogger.debug("%s [%s]", we.id, we.type);
         continue;
       } else {
-        Loggers.WOMLogger.debug(
-            "%d <%d,%d> %s [%s]",
-            (int) we.position.z, (int) we.position.x, (int) we.position.y, we.id, we.type);
+        Loggers.WOMLogger.debug("%s %s [%s]", new CustomVec3D(we.position), we.id, we.type);
       }
       if (we.id.equals(Player.ID) || we.id.equals("aux")) {
         continue;
@@ -123,16 +120,16 @@ public class AgentState extends Iv4xrAgentState<Void> {
         continue;
       }
 
-      Symbol e = level.getSymbol(entityPosition);
-      if (e == null) {
-        continue;
-      }
-
-      String id = e.createId(entityPosition);
-      if (!id.equals(we.id)) {
-        Loggers.WOMLogger.debug("REMOVE: %s [%s]", we.id, we.type);
-        idsToRemove.add(we.id);
-      }
+      //      Symbol e = level.getSymbol(entityPosition);
+      //      if (e == null) {
+      //        continue;
+      //      }
+      //
+      //      String id = e.createId(entityPosition);
+      //      if (!id.equals(we.id)) {
+      //        Loggers.WOMLogger.debug("REMOVE: %s [%s]", we.id, we.type);
+      //        idsToRemove.add(we.id);
+      //      }
     }
 
     // Separate loop since it changes the map

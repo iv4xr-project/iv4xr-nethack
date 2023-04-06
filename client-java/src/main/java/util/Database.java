@@ -57,7 +57,6 @@ public class Database {
   public static EntityInfo getEntityInfo(int index) {
     assert index >= 0;
     if (index >= entityList.size()) {
-      Loggers.ConnectionLogger.warn("Entity index %d out of length %d", index, entityList.size());
       return null;
     }
 

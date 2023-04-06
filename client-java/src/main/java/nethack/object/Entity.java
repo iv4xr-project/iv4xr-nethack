@@ -26,4 +26,13 @@ public class Entity {
     this.createTurn = createTurn;
     this.quantity = quantity;
   }
+
+  public String toId() {
+    return String.format("%s_%d", entityClass, id);
+  }
+
+  public String toString() {
+    return String.format(
+        "%s (%d) %s (%d %s) T=%s", pos, id, entityClass, quantity, entityInfo, createTurn);
+  }
 }

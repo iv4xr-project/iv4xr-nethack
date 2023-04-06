@@ -9,6 +9,8 @@ import nethack.object.Entity;
 import nethack.object.Turn;
 import nethack.object.info.EntityInfo;
 import util.CustomVec2D;
+import util.Database;
+import util.Loggers;
 
 public class EntityDecoder extends Decoder {
   public static List<Entity> decode(DataInputStream input) throws IOException {
@@ -27,12 +29,18 @@ public class EntityDecoder extends Decoder {
               entityData[offset + 4],
               entityData[offset + 5]);
       EntityClass entityClass = toEntityClass(entityData[offset + 6]);
-      EntityInfo entityInfo = null;
+      short entityIndex = parseShort(entityData[offset + 7], entityData[offset + 8]);
+      EntityInfo entityInfo = Database.getEntityInfo(entityIndex);
       Turn createdTurn = new Turn(parseShort(entityData[offset + 9], entityData[offset + 10]), 0);
       int quantity = parseShort(entityData[offset + 11], entityData[offset + 12]);
       Entity entity =
           new Entity(new CustomVec2D(x, y), id, entityClass, entityInfo, createdTurn, quantity);
+      if (entity.entityInfo == null) {
+        Loggers.DecoderLogger.warn("index:%s no info (%s)", entityIndex, entity);
+      }
+
       entities.add(entity);
+      System.out.println(entity);
     }
 
     return entities;
