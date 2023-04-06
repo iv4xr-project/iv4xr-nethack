@@ -73,6 +73,15 @@ NLE_SPACE_ITEMS = (
         ),
     ),
     (
+        "obj_id",
+        gym.spaces.Box(
+            low=np.iinfo(np.uint32).min,
+            high=np.iinfo(np.uint32).max,
+            **nethack.OBSERVATION_DESC["obj_id"]
+        ),
+    ),
+
+    (
         "glyphs",
         gym.spaces.Box(
             low=0, high=nethack.MAX_GLYPH, **nethack.OBSERVATION_DESC["glyphs"]
@@ -218,6 +227,7 @@ class NLE(gym.Env):
             "mon_id",
             "mon_permid",
             "mon_peaceful",
+            "obj_id",
             "chars",
             "colors",
             "specials",

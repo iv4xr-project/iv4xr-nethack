@@ -38,12 +38,12 @@ def object_info():
 
 
 def write_object_info():
-    monst_infos = object_info()
+    objects_info = object_info()
 
     # open a file for writing
     with open("../../data/object.json", "w") as outfile:
         # use the json.dump() method to write the list of dictionaries to the file
-        json.dump(monst_infos, outfile, indent=2)
+        json.dump(objects_info, outfile, indent=2)
 
 
 if __name__ == "__main__":

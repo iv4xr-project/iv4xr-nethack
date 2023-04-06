@@ -205,6 +205,7 @@ class Nethack
     void
     set_buffers(py::object tiles, py::object flags,
                 py::object mon_id, py::object mon_permid, py::object mon_peaceful,
+                py::object obj_id,
                 py::object glyphs, py::object chars, py::object colors,
                 py::object specials, py::object blstats, py::object message,
                 py::object program_state, py::object internal,
@@ -223,6 +224,7 @@ class Nethack
         obs_.mon_id = checked_conversion<uint32_t>(mon_id, dungeon);
         obs_.mon_permid = checked_conversion<int16_t>(mon_permid, dungeon);
         obs_.mon_peaceful = checked_conversion<bool>(mon_peaceful, dungeon);
+        obs_.obj_id = checked_conversion<uint32_t>(obj_id, dungeon);
         
         obs_.glyphs = checked_conversion<int16_t>(glyphs, dungeon);
         obs_.chars = checked_conversion<uint8_t>(chars, dungeon);
@@ -259,6 +261,7 @@ class Nethack
                         std::move(mon_id),
                         std::move(mon_permid),
                         std::move(mon_peaceful),
+                        std::move(obj_id),
                         std::move(glyphs),
                         std::move(chars),
                         std::move(colors),
@@ -407,6 +410,7 @@ PYBIND11_MODULE(_pynethack, m)
              py::arg("mon_id") = py::none(),
              py::arg("mon_permid") = py::none(),
              py::arg("mon_peaceful") = py::none(),
+             py::arg("obj_id") = py::none(),
              py::arg("glyphs") = py::none(),
              py::arg("chars") = py::none(),
              py::arg("colors") = py::none(),
