@@ -14,7 +14,7 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import nethack.enums.EntityType;
+import nethack.enums.SymbolType;
 import nethack.world.Level;
 import nethack.world.tiles.Secret;
 import nethack.world.tiles.Stair;
@@ -27,7 +27,7 @@ public class Predicates {
   public static final Predicate<AgentState> outOfCombat_HpCritical =
       S -> {
         WorldEntity player = S.worldmodel.elements.get(S.worldmodel.agentId);
-        if (S.nextToEntity(EntityType.MONSTER, true)) {
+        if (S.nextToEntity(SymbolType.MONSTER, true)) {
           return false;
         }
         int hp = (int) player.properties.get("hp");
@@ -80,7 +80,7 @@ public class Predicates {
         return ((Stair) t).climbType == Climbable.ClimbType.Down;
       };
 
-  public static List<WorldEntity> findOfType(@NotNull AgentState S, EntityType type) {
+  public static List<WorldEntity> findOfType(@NotNull AgentState S, SymbolType type) {
     return S.worldmodel.elements.values().stream()
         .filter(x -> Objects.equals(x.type, type.name()))
         .collect(Collectors.toList());

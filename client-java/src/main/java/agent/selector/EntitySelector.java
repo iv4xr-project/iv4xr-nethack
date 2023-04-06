@@ -8,36 +8,31 @@ import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import nethack.enums.EntityType;
+import nethack.enums.EntityClass;
 import util.CustomVec3D;
 
 public class EntitySelector extends Selector<WorldEntity> {
   public static final EntitySelector money =
-      new EntitySelector(SelectionType.SHORTEST, EntityType.GOLD, false);
+      new EntitySelector(SelectionType.SHORTEST, EntityClass.COIN, false);
   public static final EntitySelector potion =
-      new EntitySelector(SelectionType.SHORTEST, EntityType.POTION, false);
-  public static final EntitySelector adjacentMonster =
-      new EntitySelector(SelectionType.ADJACENT, EntityType.MONSTER, false);
-  public static final EntitySelector closestMonster =
-      new EntitySelector(SelectionType.SHORTEST, EntityType.MONSTER, false);
-
+      new EntitySelector(SelectionType.SHORTEST, EntityClass.POTION, false);
   public static final EntitySelector food =
-      new EntitySelector(SelectionType.SHORTEST, EntityType.EDIBLE, false);
+      new EntitySelector(SelectionType.SHORTEST, EntityClass.FOOD, false);
 
-  final EntityType entityType;
+  final EntityClass entityClass;
 
   public EntitySelector(
       SelectionType selectionType,
-      EntityType entityType,
+      EntityClass entityClass,
       Predicate<WorldEntity> predicate,
       boolean adjacent) {
     super(selectionType, predicate, adjacent);
-    this.entityType = entityType;
+    this.entityClass = entityClass;
   }
 
-  public EntitySelector(SelectionType selectionType, EntityType entityType, boolean adjacent) {
+  public EntitySelector(SelectionType selectionType, EntityClass entityClass, boolean adjacent) {
     super(selectionType, adjacent);
-    this.entityType = entityType;
+    this.entityClass = entityClass;
   }
 
   @Override
@@ -57,19 +52,12 @@ public class EntitySelector extends Selector<WorldEntity> {
       return null;
     }
     return entities.get(index);
-    //    if (selectionType == SelectionType.ADJACENT) {
-    //      var entity =
-    //          entities.stream()
-    //              .filter(e -> CustomVec3D.adjacent(new CustomVec3D(e.position), S.loc(), true))
-    //              .findFirst();
-    //      return entity.orElse(null);
-    //    }
   }
 
   private List<WorldEntity> filter(List<WorldEntity> entities, AgentState S) {
     Stream<WorldEntity> stream = entities.stream();
-    if (entityType != null) {
-      stream = stream.filter(we -> Objects.equals(we.type, entityType.name()));
+    if (entityClass != null) {
+      stream = stream.filter(we -> Objects.equals(we.type, entityClass.name()));
     }
     if (predicate != null) {
       stream = stream.filter(we -> predicate.test(we));
@@ -85,6 +73,6 @@ public class EntitySelector extends Selector<WorldEntity> {
   @Override
   public String toString() {
     return String.format(
-        "EntitySelector: %s %s (hasPredicate=%b)", selectionType, entityType, predicate != null);
+        "EntitySelector: %s %s (hasPredicate=%b)", selectionType, entityClass, predicate != null);
   }
 }

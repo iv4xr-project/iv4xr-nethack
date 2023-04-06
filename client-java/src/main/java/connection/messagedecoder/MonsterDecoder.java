@@ -28,15 +28,10 @@ public class MonsterDecoder extends Decoder {
       boolean isPeaceful = parseBool(monsterData[offset + 8]);
       Monster monster =
           new Monster(
-              new CustomVec2D(x, y), id, permId, isPeaceful, Database.getMonsterData(permId));
+              new CustomVec2D(x, y), id, permId, isPeaceful, Database.getMonsterInfo(permId));
       monsters.add(monster);
     }
 
     return monsters;
-  }
-
-  static List<Monster> monsters;
-
-  static {
   }
 }

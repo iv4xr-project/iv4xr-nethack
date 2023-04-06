@@ -1,5 +1,5 @@
 Item	Cost	Wgt	Prob	Nutr	Nutr/Wgt	Time	Nutr/Time	Conduct
-food ration	45	20	380	800	40	5	160	vegan
+foodInfo ration	45	20	380	800	40	5	160	vegan
 cram ration	35	15	20	600	40	3	200	vegan
 C-ration	20	10	0	300	30	1	300	vegan
 K-ration	25	10	0	400	40	1	400	vegan

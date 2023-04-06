@@ -58,7 +58,7 @@ The Orb of Detection	2500 zm	150	16.7	Invisibility	0	Archeologist quest artifact
 The Orb of Fate	2500 zm	150	16.7	Level teleport	0	Valkyrie quest artifact	No
 expensive camera	200 zm	12	16.7	Scare monsters	15		No
 figurine	80 zm	50	1.6	Summons a monster	25		Yes
-horn of plenty	50 zm	18	2.78	Produces food or some potions	2		Yes
+horn of plenty	50 zm	18	2.78	Produces foodInfo or some potions	2		Yes
 magic marker	50 zm	2	25	Writes scrolls and spellbooks	15	30-99 charges	Yes
 mirror	10 zm	13	.77	Nymph and foocubus control, Luck management, scare monsters	45		No
 The Magic Mirror of Merlin	1500 zm	13	115.385		0	Knight quest artifact	No

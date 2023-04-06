@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import nethack.enums.BUC;
-import nethack.enums.ItemType;
+import nethack.enums.EntityClass;
 import nethack.object.items.FoodItem;
 import nethack.object.items.Item;
 import nethack.object.items.WeaponItem;
@@ -39,7 +39,7 @@ public class ItemDecoder extends Decoder {
       byte[] chars = input.readNBytes(80);
 
       // Interpret values
-      ItemType type = ItemType.values()[itemClass];
+      EntityClass type = EntityClass.values()[itemClass];
       String description = new String(chars, StandardCharsets.UTF_8).replaceAll("\0", "");
 
       Map<String, Object> info = descriptionInterpreter(description);
@@ -49,10 +49,10 @@ public class ItemDecoder extends Decoder {
       String name = (String) info.get("name");
       String additional = (String) info.get("additional");
 
-      if (type == ItemType.FOOD) {
+      if (type == EntityClass.FOOD) {
         return new FoodItem(
             symbol, type, itemGlyph, description, quantity, buc, Database.getFood(name));
-      } else if (type == ItemType.WEAPON) {
+      } else if (type == EntityClass.WEAPON) {
         return new WeaponItem(
             symbol,
             type,

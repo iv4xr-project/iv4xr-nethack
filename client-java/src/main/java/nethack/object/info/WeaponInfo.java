@@ -1,6 +1,6 @@
-package nethack.object.data;
+package nethack.object.info;
 
-public class Weapon {
+public class WeaponInfo {
   public String name;
   public String skill;
   public Integer cost;
@@ -11,7 +11,7 @@ public class Weapon {
   public String material;
   public String appearance;
 
-  private Weapon() {}
+  private WeaponInfo() {}
 
   public enum WeaponMaterial {
     IRON,

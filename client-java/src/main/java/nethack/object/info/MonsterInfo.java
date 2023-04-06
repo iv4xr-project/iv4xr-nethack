@@ -1,6 +1,6 @@
-package nethack.object.data;
+package nethack.object.info;
 
-public class MonsterData {
+public class MonsterInfo {
   public int index;
   public String name;
   public int level;
@@ -12,5 +12,5 @@ public class MonsterData {
   public int resistances;
   public int difficulty;
 
-  public MonsterData() {}
+  public MonsterInfo() {}
 }

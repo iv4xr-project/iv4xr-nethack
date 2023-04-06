@@ -1,16 +1,16 @@
 package nethack.object.items;
 
-import nethack.enums.ItemType;
+import nethack.enums.EntityClass;
 
 public class Item {
   // Additional information possibly at: server-python\lib\nle\build\include\onames.h
   public final char symbol;
-  public final ItemType type;
+  public final EntityClass type;
   public final int glyph;
   public final String description;
   public int quantity;
 
-  public Item(char symbol, ItemType type, int glyph, String description, int quantity) {
+  public Item(char symbol, EntityClass type, int glyph, String description, int quantity) {
     this.symbol = symbol;
     this.type = type;
     this.description = description;
@@ -20,7 +20,7 @@ public class Item {
 
   @Override
   public String toString() {
-    String formatStr = "%s %-" + ItemType.maxLength() + "s (%4d) %s";
+    String formatStr = "%s %-" + EntityClass.maxLength() + "s (%4d) %s";
     return String.format(formatStr, symbol, type, glyph, description);
   }
 }

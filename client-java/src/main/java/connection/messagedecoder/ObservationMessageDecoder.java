@@ -30,11 +30,14 @@ public class ObservationMessageDecoder extends Decoder {
       observationMessage.tiles = TileDecoder.decode(input);
       Loggers.ProfilerLogger.trace("READ TILES TOOK: %fs", stopwatch.split());
 
-      observationMessage.entities = EntityDecoder.decode(input);
+      observationMessage.symbols = SymbolDecoder.decode(input);
       Loggers.ProfilerLogger.trace("READ ENTITIES TOOK: %fs", stopwatch.split());
 
       observationMessage.monsters = MonsterDecoder.decode(input);
       Loggers.ProfilerLogger.trace("READ MONSTERS TOOK: %fs", stopwatch.split());
+
+      observationMessage.entities = EntityDecoder.decode(input);
+      Loggers.ProfilerLogger.trace("READ ENTITIES TOOK: %fs", stopwatch.split());
 
       observationMessage.items = ItemDecoder.decode(input);
       Loggers.ProfilerLogger.trace("READ ITEMS TOOK: %f", stopwatch.split());

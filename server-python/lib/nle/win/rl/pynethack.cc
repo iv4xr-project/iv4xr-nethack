@@ -205,7 +205,8 @@ class Nethack
     void
     set_buffers(py::object tiles, py::object flags,
                 py::object mon_id, py::object mon_permid, py::object mon_peaceful,
-                py::object obj_id,
+                py::object obj_id, py::object obj_class, py::object obj_type,
+                py::object obj_age, py::object obj_quan, py::object obj_qual,
                 py::object glyphs, py::object chars, py::object colors,
                 py::object specials, py::object blstats, py::object message,
                 py::object program_state, py::object internal,
@@ -222,10 +223,15 @@ class Nethack
         obs_.tiles = checked_conversion<uint8_t>(tiles, dungeon);
         obs_.flags = checked_conversion<uint8_t>(flags, dungeon);
         obs_.mon_id = checked_conversion<uint32_t>(mon_id, dungeon);
-        obs_.mon_permid = checked_conversion<int16_t>(mon_permid, dungeon);
+        obs_.mon_permid = checked_conversion<uint16_t>(mon_permid, dungeon);
         obs_.mon_peaceful = checked_conversion<bool>(mon_peaceful, dungeon);
         obs_.obj_id = checked_conversion<uint32_t>(obj_id, dungeon);
-        
+        obs_.obj_class = checked_conversion<uint8_t>(obj_class, dungeon);
+        obs_.obj_type = checked_conversion<uint16_t>(obj_type, dungeon);
+        obs_.obj_age = checked_conversion<uint16_t>(obj_age, dungeon);
+        obs_.obj_quan = checked_conversion<uint16_t>(obj_quan, dungeon);
+        obs_.obj_qual = checked_conversion<uint8_t>(obj_qual, dungeon);
+
         obs_.glyphs = checked_conversion<int16_t>(glyphs, dungeon);
         obs_.chars = checked_conversion<uint8_t>(chars, dungeon);
         obs_.colors = checked_conversion<uint8_t>(colors, dungeon);
@@ -262,6 +268,11 @@ class Nethack
                         std::move(mon_permid),
                         std::move(mon_peaceful),
                         std::move(obj_id),
+                        std::move(obj_class),
+                        std::move(obj_type),
+                        std::move(obj_age),
+                        std::move(obj_quan),
+                        std::move(obj_qual),
                         std::move(glyphs),
                         std::move(chars),
                         std::move(colors),
@@ -411,6 +422,11 @@ PYBIND11_MODULE(_pynethack, m)
              py::arg("mon_permid") = py::none(),
              py::arg("mon_peaceful") = py::none(),
              py::arg("obj_id") = py::none(),
+             py::arg("obj_class") = py::none(),
+             py::arg("obj_type") = py::none(),
+             py::arg("obj_age") = py::none(),
+             py::arg("obj_quan") = py::none(),
+             py::arg("obj_qual") = py::none(),
              py::arg("glyphs") = py::none(),
              py::arg("chars") = py::none(),
              py::arg("colors") = py::none(),

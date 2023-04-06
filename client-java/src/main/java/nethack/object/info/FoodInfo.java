@@ -1,6 +1,6 @@
-package nethack.object.data;
+package nethack.object.info;
 
-public class Food {
+public class FoodInfo {
   public String name;
   public Integer weight;
   public Integer cost;
@@ -10,7 +10,7 @@ public class Food {
   public Double nutritionPerConsumeTime;
   public FoodConduct foodConduct;
 
-  private Food() {}
+  private FoodInfo() {}
 
   public enum FoodConduct {
     MEAT,

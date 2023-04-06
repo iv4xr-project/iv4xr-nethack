@@ -1,18 +1,24 @@
 package nethack.object.items;
 
 import nethack.enums.BUC;
-import nethack.enums.ItemType;
-import nethack.object.data.Food;
+import nethack.enums.EntityClass;
+import nethack.object.info.FoodInfo;
 
 public class FoodItem extends Item implements BUCStatus, Weighable {
   public BUC buc;
-  public Food food;
+  public FoodInfo foodInfo;
 
   public FoodItem(
-      char symbol, ItemType type, int glyph, String description, int quantity, BUC buc, Food food) {
+      char symbol,
+      EntityClass type,
+      int glyph,
+      String description,
+      int quantity,
+      BUC buc,
+      FoodInfo foodInfo) {
     super(symbol, type, glyph, description, quantity);
     this.buc = buc;
-    this.food = food;
+    this.foodInfo = foodInfo;
   }
 
   @Override
@@ -22,6 +28,6 @@ public class FoodItem extends Item implements BUCStatus, Weighable {
 
   @Override
   public int getWeight() {
-    return food.weight * quantity;
+    return foodInfo.weight * quantity;
   }
 }

@@ -3,13 +3,13 @@ mail	0	0	2	stamped
 identify	20	18%	14	random
 light	50	9%	8	random
 blank paper2	60	2.8%	0	unlabeled
-enchant weapon	60	8%	16	random
+enchant weaponInfo	60	8%	16	random
 enchant armor	80	6.3%	16	random
 remove curse	80	6.5%	16	random
 confuse monster	100	5.3%	12	random
 destroy armor	100	4.5%	10	random
 fire	100	3%	8	random
-food detection	100	2.5%	8	random
+foodInfo detection	100	2.5%	8	random
 gold detection	100	3.3%	8	random
 magic mapping	100	4.5%	8	random
 scare monster	100	3.5%	20	random

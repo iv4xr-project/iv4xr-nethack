@@ -6,26 +6,29 @@ import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import nethack.enums.ItemType;
+import nethack.enums.EntityClass;
 import nethack.object.items.Item;
 
 public class ItemSelector extends Selector<Item> {
   public static final ItemSelector inventoryFood =
-      new ItemSelector(SelectionType.FIRST, ItemType.FOOD);
+      new ItemSelector(SelectionType.FIRST, EntityClass.FOOD);
   public static final ItemSelector inventoryQuivered =
       new ItemSelector(
-          SelectionType.FIRST, ItemType.WEAPON, item -> item.description.contains("(in quiver)"));
+          SelectionType.FIRST,
+          EntityClass.WEAPON,
+          item -> item.description.contains("(in quiver)"));
 
-  final ItemType itemType;
+  final EntityClass entityClass;
 
-  public ItemSelector(SelectionType selectionType, ItemType itemType, Predicate<Item> predicate) {
+  public ItemSelector(
+      SelectionType selectionType, EntityClass entityClass, Predicate<Item> predicate) {
     super(selectionType, predicate, false);
-    this.itemType = itemType;
+    this.entityClass = entityClass;
   }
 
-  public ItemSelector(SelectionType selectionType, ItemType itemType) {
+  public ItemSelector(SelectionType selectionType, EntityClass entityClass) {
     super(selectionType, false);
-    this.itemType = itemType;
+    this.entityClass = entityClass;
   }
 
   @Override
@@ -53,8 +56,8 @@ public class ItemSelector extends Selector<Item> {
 
   private List<Item> filter(List<Item> items, AgentState S) {
     Stream<Item> stream = items.stream();
-    if (itemType != null) {
-      stream = stream.filter(i -> i != null && Objects.equals(i.type, itemType));
+    if (entityClass != null) {
+      stream = stream.filter(i -> i != null && Objects.equals(i.type, entityClass));
     }
     if (predicate != null) {
       stream = stream.filter(i -> i != null && predicate.test(i));
@@ -65,6 +68,6 @@ public class ItemSelector extends Selector<Item> {
   @Override
   public String toString() {
     return String.format(
-        "ItemSelector: %s %s (hasPredicate=%b)", selectionType, itemType, predicate != null);
+        "ItemSelector: %s %s (hasPredicate=%b)", selectionType, entityClass, predicate != null);
   }
 }

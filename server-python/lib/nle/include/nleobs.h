@@ -57,12 +57,15 @@ typedef struct nle_observation {
     unsigned char *tiles;    /* Size ROWNO * (COLNO - 1) */
     unsigned char *flags;    /* Size ROWNO * (COLNO - 1) */
     unsigned int *mon_id;    /* Size ROWNO * (COLNO - 1) */
-    short *mon_permid;       /* Size ROWNO * (COLNO - 1) */
+    unsigned short *mon_permid;       /* Size ROWNO * (COLNO - 1) */
     bool *mon_peaceful;      /* Size ROWNO * (COLNO - 1) */
-    unsigned int *obj_id;    /* Size ROWNO * (COLNO - 1) */
-    unsigned int *obj_type;  /* Size ROWNO * (COLNO - 1) */
-    unsigned int *obj_class; /* Size ROWNO * (COLNO - 1) */
-    unsigned int *obj_age;   /* Size ROWNO * (COLNO - 1) */
+
+    unsigned int *obj_id;     /* Size ROWNO * (COLNO - 1) */
+    unsigned char *obj_class; /* Size ROWNO * (COLNO - 1) */
+    unsigned short *obj_type; /* Size ROWNO * (COLNO - 1) */
+    unsigned short *obj_age;  /* Size ROWNO * (COLNO - 1) */
+    unsigned short *obj_quan; /* Size ROWNO * (COLNO - 1) */
+    unsigned char *obj_qual;  /* Size ROWNO * (COLNO - 1) */
 
     unsigned char *chars;    /* Size ROWNO * (COLNO - 1) */
     unsigned char *colors;   /* Size ROWNO * (COLNO - 1) */

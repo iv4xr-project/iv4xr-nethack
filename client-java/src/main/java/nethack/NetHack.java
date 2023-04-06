@@ -224,7 +224,10 @@ public class NetHack {
 
     // Need to set new stats before setting the level
     gameState.stats = stepState.stats;
-    assert !stepState.message.contains("You attack thin air.") : "Is there a monster not updated?";
+    if (stepState.message.contains("You attack thin air.")) {
+      Loggers.NetHackLogger.warn("Is there a monster not updated?");
+    }
+
     gameState.message = stepState.message;
     // Remember last position of player before setting
     if (gameState.player != null) {
@@ -250,12 +253,12 @@ public class NetHack {
 
     Level level;
     if (!gameState.dungeon.levelExists(dlvl)) {
-      level = new Level(playerPos, stepState.entities, stepState.tiles);
+      level = new Level(playerPos, stepState.symbols, stepState.tiles);
       gameState.dungeon.newLevel(level, dlvl, stepState.player);
     } else {
       gameState.dungeon.getLevelNr(dlvl);
       level = gameState.dungeon.getLevel(dlvl);
-      level.updateLevel(stepState.player.location.pos, stepState.entities, stepState.tiles);
+      level.updateLevel(stepState.player.location.pos, stepState.symbols, stepState.tiles);
 
       // Shop door might be around
       if (gameState.message.contains("You read: \"")) {

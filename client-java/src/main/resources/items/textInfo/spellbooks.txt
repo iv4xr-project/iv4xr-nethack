@@ -15,7 +15,7 @@ Spellbook of turn undead	6	beam	1.62%	31.4%	50
 Divination
 Spellbook of detect monsters	1	non-directional	4.37%	15.0%	3	S
 Spellbook of light	1	non-directional	4.58%	15.7%	3
-Spellbook of detect food	2	non-directional	3.05%	12.8%	5	S
+Spellbook of detect foodInfo	2	non-directional	3.05%	12.8%	5	S
 Spellbook of clairvoyance	3	non-directional	1.52%	16.5%	8	S
 Spellbook of detect unseen	3	non-directional	2.03%	8.6%	10
 Spellbook of identify	3	non-directional	2.03%	8.6%	14	S

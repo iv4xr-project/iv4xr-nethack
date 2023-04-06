@@ -35,9 +35,14 @@ OBSERVATION_DESC = {
     "flags": dict(shape=DUNGEON_SHAPE, dtype=np.uint8),
     
     "mon_id": dict(shape=DUNGEON_SHAPE, dtype=np.uint32),
-    "mon_permid": dict(shape=DUNGEON_SHAPE, dtype=np.int16),
+    "mon_permid": dict(shape=DUNGEON_SHAPE, dtype=np.uint16),
     "mon_peaceful": dict(shape=DUNGEON_SHAPE, dtype=np.bool_),
     "obj_id": dict(shape=DUNGEON_SHAPE, dtype=np.uint32),
+    "obj_class": dict(shape=DUNGEON_SHAPE, dtype=np.uint8),
+    "obj_type": dict(shape=DUNGEON_SHAPE, dtype=np.uint16),
+    "obj_age": dict(shape=DUNGEON_SHAPE, dtype=np.uint16),
+    "obj_quan": dict(shape=DUNGEON_SHAPE, dtype=np.uint16),
+    "obj_qual": dict(shape=DUNGEON_SHAPE, dtype=np.uint8),
 
     "glyphs": dict(shape=DUNGEON_SHAPE, dtype=np.int16),
     "chars": dict(shape=DUNGEON_SHAPE, dtype=np.uint8),

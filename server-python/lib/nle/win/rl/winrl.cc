@@ -203,6 +203,11 @@ class NetHackRL
     std::array<int16_t, (COLNO - 1) * ROWNO> mon_permid_;
     std::array<bool, (COLNO - 1) * ROWNO> mon_peaceful_;
     std::array<uint32_t, (COLNO - 1) * ROWNO> obj_id_;
+    std::array<uint8_t, (COLNO - 1) * ROWNO> obj_class_;
+    std::array<uint16_t, (COLNO - 1) * ROWNO> obj_type_;
+    std::array<uint16_t, (COLNO - 1) * ROWNO> obj_age_;
+    std::array<uint16_t, (COLNO - 1) * ROWNO> obj_quan_;
+    std::array<uint8_t, (COLNO - 1) * ROWNO> obj_qual_;
 
     /* Output of mapglyph */
     std::array<uint8_t, (COLNO - 1) * ROWNO> chars_;
@@ -250,7 +255,7 @@ std::unique_ptr<NetHackRL> NetHackRL::instance =
     std::unique_ptr<NetHackRL>(nullptr);
 
 // GERARD
-NetHackRL::NetHackRL(int &argc, char **argv) : glyphs_(), tiles_(), flags_(), mon_id_(), mon_permid_(), mon_peaceful_(), obj_id_(), blstats_()
+NetHackRL::NetHackRL(int &argc, char **argv) : glyphs_(), tiles_(), flags_(), mon_id_(), mon_permid_(), mon_peaceful_(), obj_id_(), obj_class_(), obj_type_(), obj_age_(), obj_quan_(), obj_qual_(), blstats_()
 {
     // create base window
     // (done in tty_init_nhwindows before this NetHackRL object got created).
@@ -265,6 +270,11 @@ NetHackRL::NetHackRL(int &argc, char **argv) : glyphs_(), tiles_(), flags_(), mo
     mon_permid_.fill(0);
     mon_peaceful_.fill(0);
     obj_id_.fill(0);
+    obj_class_.fill(0);
+    obj_type_.fill(0);
+    obj_age_.fill(0);
+    obj_quan_.fill(0);
+    obj_qual_.fill(0);
 }
 
 void
@@ -332,6 +342,16 @@ NetHackRL::fill_obs(nle_obs *obs)
             std::memset(obs->mon_peaceful, 0, sizeof(bool) * mon_peaceful_.size());
         if (obs->obj_id)
             std::memset(obs->obj_id, 0, sizeof(uint32_t) * obj_id_.size());
+        if (obs->obj_class)
+            std::memset(obs->obj_class, 0, obj_class_.size());
+        if (obs->obj_type)
+            std::memset(obs->obj_type, 0, sizeof(int16_t) * obj_type_.size());
+        if (obs->obj_age)
+            std::memset(obs->obj_age, 0, sizeof(int16_t) * obj_age_.size());
+        if (obs->obj_quan)
+            std::memset(obs->obj_quan, 0, sizeof(int16_t) * obj_quan_.size());
+        if (obs->obj_qual)
+            std::memset(obs->obj_qual, 0, obj_qual_.size());
 
         if (obs->chars)
             std::memset(obs->chars, 0, chars_.size()); /* Or fill with ' '? */
@@ -370,10 +390,19 @@ NetHackRL::fill_obs(nle_obs *obs)
         }
 
         if (level.objects[x][y]) {
-          // obj_id_[offset] = level.objects[x][y]->o_id;
-          obj_id_[offset] = level.objects[x][y]->otyp;
+          obj_id_[offset] = level.objects[x][y]->o_id;      // unique id of object
+          obj_class_[offset] = level.objects[x][y]->oclass; // class of object
+          obj_type_[offset] = level.objects[x][y]->otyp;    // object.json type
+          obj_age_[offset] = level.objects[x][y]->age;      // turn at which it was created
+          obj_quan_[offset] = level.objects[x][y]->quan;    // quantity
+          obj_qual_[offset] = level.objects[x][y]->spe;     // quality of weapon, charges of wand left etc
         } else {
           obj_id_[offset] = 0;
+          obj_class_[offset] = 0;
+          obj_type_[offset] = 0;
+          obj_quan_[offset] = 0;
+          obj_age_[offset] = 0;
+          obj_qual_[offset] = 0;
         }
       }
     }
@@ -383,24 +412,28 @@ NetHackRL::fill_obs(nle_obs *obs)
                     sizeof(int16_t) * glyphs_.size());
     }
     // GERARD
-    if (obs->tiles) {
+    if (obs->tiles)
         std::memcpy(obs->tiles, tiles_.data(), tiles_.size());
-    }
-    if (obs->flags) {
+    if (obs->flags)
         std::memcpy(obs->flags, flags_.data(), flags_.size());
-    }
-    if (obs->mon_id) {
+    if (obs->mon_id)
         std::memcpy(obs->mon_id, mon_id_.data(), sizeof(uint32_t) * mon_id_.size());
-    }
-    if (obs->mon_permid) {
+    if (obs->mon_permid)
         std::memcpy(obs->mon_permid, mon_permid_.data(), sizeof(int16_t) * mon_permid_.size());
-    }
-    if (obs->mon_peaceful) {
+    if (obs->mon_peaceful)
         std::memcpy(obs->mon_peaceful, mon_peaceful_.data(), sizeof(bool) * mon_peaceful_.size());
-    }
-    if (obs->obj_id) {
+    if (obs->obj_id)
         std::memcpy(obs->obj_id, obj_id_.data(), sizeof(uint32_t) * obj_id_.size());
-    }
+    if (obs->obj_class)
+        std::memcpy(obs->obj_class, obj_class_.data(), obj_class_.size());
+    if (obs->obj_type)
+        std::memcpy(obs->obj_type, obj_type_.data(), sizeof(int16_t) * obj_type_.size());
+    if (obs->obj_age)
+        std::memcpy(obs->obj_age, obj_age_.data(), sizeof(int16_t) * obj_age_.size());
+    if (obs->obj_quan)
+        std::memcpy(obs->obj_quan, obj_quan_.data(), sizeof(int16_t) * obj_quan_.size());
+    if (obs->obj_qual)
+        std::memcpy(obs->obj_qual, obj_qual_.data(), obj_qual_.size());
 
     if (obs->chars) {
         std::memcpy(obs->chars, chars_.data(), chars_.size());
@@ -743,6 +776,11 @@ NetHackRL::clear_nhwindow_method(winid wid)
         mon_permid_.fill(0);
         mon_peaceful_.fill(0);
         obj_id_.fill(0);
+        obj_class_.fill(0);
+        obj_type_.fill(0);
+        obj_age_.fill(0);
+        obj_quan_.fill(0);
+        obj_qual_.fill(0);
 
         // Inspect all tiles with their corresponding type
         for (int x = 1; x < COLNO; x++) {
@@ -750,16 +788,6 @@ NetHackRL::clear_nhwindow_method(winid wid)
             int offset = (x - 1) + y * (COLNO - 1);
             tiles_[offset] = levl[x][y].typ;
             flags_[offset] = levl[x][y].flags;
-
-            // if (level.monsters[x][y]) {
-            //   mon_id_[offset] = level.monsters[x][y]->m_id;
-            //   mon_permid_[offset] = level.monsters[x][y]->mnum;
-            //   mon_peaceful_[offset] = level.monsters[x][y]->mpeaceful;
-            // } else {
-            //   mon_id_[offset] = 0;
-            //   mon_permid_[offset] = 0;
-            //   mon_peaceful_[offset] = 0;
-            // }
           }
         }
         chars_.fill(' ');

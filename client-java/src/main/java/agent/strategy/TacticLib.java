@@ -152,7 +152,7 @@ public class TacticLib {
                           .filter(item -> item instanceof FoodItem)
                           .sorted(
                               Comparator.comparingDouble(
-                                  item -> ((FoodItem) item).food.nutritionPerWeight))
+                                  item -> ((FoodItem) item).foodInfo.nutritionPerWeight))
                           .collect(Collectors.toList());
                   if (items.isEmpty()) {
                     return null;

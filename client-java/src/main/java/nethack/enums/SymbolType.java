@@ -2,7 +2,7 @@ package nethack.enums;
 
 import java.io.Serializable;
 
-public enum EntityType implements Serializable {
+public enum SymbolType implements Serializable {
   ALTAR,
   AMULET,
   ARMOR,

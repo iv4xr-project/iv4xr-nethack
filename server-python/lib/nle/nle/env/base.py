@@ -80,6 +80,46 @@ NLE_SPACE_ITEMS = (
             **nethack.OBSERVATION_DESC["obj_id"]
         ),
     ),
+    (
+        "obj_class",
+        gym.spaces.Box(
+            low=0,
+            high=255,
+            **nethack.OBSERVATION_DESC["obj_class"]
+        ),
+    ),
+    (
+        "obj_type",
+        gym.spaces.Box(
+            low=np.iinfo(np.uint16).min,
+            high=np.iinfo(np.uint16).max,
+            **nethack.OBSERVATION_DESC["obj_type"]
+        ),
+    ),
+    (
+        "obj_age",
+        gym.spaces.Box(
+            low=np.iinfo(np.uint16).min,
+            high=np.iinfo(np.uint16).max,
+            **nethack.OBSERVATION_DESC["obj_age"]
+        ),
+    ),
+    (
+        "obj_quan",
+        gym.spaces.Box(
+            low=np.iinfo(np.uint16).min,
+            high=np.iinfo(np.uint16).max,
+            **nethack.OBSERVATION_DESC["obj_quan"]
+        ),
+    ),
+    (
+        "obj_qual",
+        gym.spaces.Box(
+            low=0,
+            high=255,
+            **nethack.OBSERVATION_DESC["obj_qual"]
+        ),
+    ),
 
     (
         "glyphs",
@@ -228,6 +268,11 @@ class NLE(gym.Env):
             "mon_permid",
             "mon_peaceful",
             "obj_id",
+            "obj_class",
+            "obj_type",
+            "obj_age",
+            "obj_quan",
+            "obj_qual",
             "chars",
             "colors",
             "specials",

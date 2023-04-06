@@ -9,10 +9,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import nethack.NetHack;
-import nethack.enums.EntityType;
+import nethack.enums.SymbolType;
 import nethack.object.Command;
-import nethack.object.Entity;
 import nethack.object.Player;
+import nethack.object.Symbol;
 import nethack.world.Level;
 import util.CustomVec2D;
 import util.CustomVec3D;
@@ -26,24 +26,24 @@ import util.Loggers;
  */
 public class AgentEnv extends Iv4xrEnvironment {
   // Ignores all dungeon features
-  private static final Set<EntityType> ignoredTypes =
+  private static final Set<SymbolType> ignoredTypes =
       new HashSet<>(
           Arrays.asList(
-              EntityType.WALL,
-              EntityType.DOOR,
-              EntityType.CORRIDOR,
-              EntityType.FLOOR,
-              EntityType.ICE,
-              EntityType.VOID,
-              EntityType.DOORWAY,
-              EntityType.STAIRS_UP,
-              EntityType.STAIRS_DOWN,
-              EntityType.SINK,
-              EntityType.TREE,
-              EntityType.LAVA,
-              EntityType.WATER,
-              EntityType.THRONE,
-              EntityType.FOUNTAIN));
+              SymbolType.WALL,
+              SymbolType.DOOR,
+              SymbolType.CORRIDOR,
+              SymbolType.FLOOR,
+              SymbolType.ICE,
+              SymbolType.VOID,
+              SymbolType.DOORWAY,
+              SymbolType.STAIRS_UP,
+              SymbolType.STAIRS_DOWN,
+              SymbolType.SINK,
+              SymbolType.TREE,
+              SymbolType.LAVA,
+              SymbolType.WATER,
+              SymbolType.THRONE,
+              SymbolType.FOUNTAIN));
   public final NetHack app;
 
   public AgentEnv(NetHack app) {
@@ -65,10 +65,10 @@ public class AgentEnv extends Iv4xrEnvironment {
 
     // Add changed coordinates
     Level level = app.level();
-    for (CustomVec2D pos : level.changedEntities) {
-      Entity e = level.getEntity(pos);
+    for (CustomVec2D pos : level.changedMapCoordinates) {
+      Symbol e = level.getSymbol(pos);
       // Unimportant types, and player is updated separately
-      if (e == null || ignoredTypes.contains(e.type) || e.type == EntityType.PLAYER) {
+      if (e == null || ignoredTypes.contains(e.type) || e.type == SymbolType.PLAYER) {
         continue;
       }
 
@@ -92,14 +92,14 @@ public class AgentEnv extends Iv4xrEnvironment {
   }
 
   WorldEntity toWorldEntity(Player p) {
-    WorldEntity we = new WorldEntity(Player.ID, EntityType.PLAYER.name(), true);
+    WorldEntity we = new WorldEntity(Player.ID, SymbolType.PLAYER.name(), true);
     we.properties.put("hp", app.gameState.player.hp);
     we.properties.put("hpmax", app.gameState.player.hpMax);
     we.position = p.location.toVec3();
     return we;
   }
 
-  WorldEntity toWorldEntity(Entity e, CustomVec3D loc) {
+  WorldEntity toWorldEntity(Symbol e, CustomVec3D loc) {
     String id = e.createId(loc.pos);
     WorldEntity we = new WorldEntity(id, e.type.name(), true);
     we.position = loc.toVec3();
@@ -114,17 +114,17 @@ public class AgentEnv extends Iv4xrEnvironment {
 
     // Part of the map that has updates that might be relevant to the map navigation state
     Level level = app.level();
-    List<CustomVec2D> changedCoordinates_ = level.changedEntities;
+    List<CustomVec2D> changedCoordinates_ = level.changedMapCoordinates;
     Serializable[] changedCoordinates = new Serializable[changedCoordinates_.size()];
     int k = 0;
     for (CustomVec2D pos : changedCoordinates_) {
-      Entity e = level.getEntity(pos);
+      Symbol e = level.getSymbol(pos);
       if (e == null) {
         continue;
       }
 
-      EntityType entityType = e.type;
-      Serializable[] entry = {pos, entityType};
+      SymbolType symbolType = e.type;
+      Serializable[] entry = {pos, symbolType};
       changedCoordinates[k++] = entry;
     }
     aux.properties.put("changedCoordinates", changedCoordinates);

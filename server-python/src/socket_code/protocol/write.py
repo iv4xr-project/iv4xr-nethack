@@ -75,10 +75,19 @@ def write_obs(sock, env, obs):
     sock.write(struct.pack('>27i', *obs['blstats']))
     write_str(sock, msg)
 
+    for y in range(21):
+        for x in range(79):
+            val = obs['obj_id'][y][x]
+            if val == 0:
+                continue
+
+            print(f"ENTITY <{x},{y}> id:{val} class:{obs['obj_class'][y][x]} type:{obs['obj_type'][y][x]} age:{obs['obj_age'][y][x]} quant:{obs['obj_quan'][y][x]}")
+
     # GERARD
     write_tiles(sock, obs['tiles'], obs['flags'])
-    write_entities(sock, obs['chars'], obs['colors'], obs['glyphs']) #, monster_descriptions)
+    write_map(sock, obs['chars'], obs['colors'], obs['glyphs'])
     write_monsters(sock, obs['mon_id'], obs['mon_permid'], obs['mon_peaceful'])
+    write_entities(sock, obs['obj_id'], obs['obj_class'], obs['obj_type'], obs['obj_age'], obs['obj_quan'])
     write_inv(sock, obs['inv_letters'], obs['inv_oclasses'], obs['inv_glyphs'], obs['inv_strs'])
 
 
@@ -122,12 +131,11 @@ def write_tiles(sock, tiles, flags):
             if tiles[y][x] == 0:
                 continue
 
-            # GERARD
             sock.write(struct.pack(">BBBB", x, y, tiles[y][x], flags[y][x]))
 
     sock.flush()
 
-def write_entities(sock, chars, colors, glyphs): #, monster_descriptions):
+def write_map(sock, chars, colors, glyphs):
     """
     Encode the entire map in bytes
     """
@@ -141,22 +149,37 @@ def write_entities(sock, chars, colors, glyphs): #, monster_descriptions):
             if glyphs[y][x] == 2359:
                 continue
 
-            # GERARD
-            sock.write(struct.pack(">BBBBH", x, y, chars[y][x], colors[y][x], glyphs[y][x])) #, monster_descriptions[y][x]))
+            sock.write(struct.pack(">BBBBH", x, y, chars[y][x], colors[y][x], glyphs[y][x]))
 
     sock.flush()
 
-def write_monsters(sock, id, permid, peaceful):
-    nr_monsters = np.sum(np.sign(id))
+def write_monsters(sock, ids, perm_ids, peaceful):
+    nr_monsters = np.sum(np.sign(ids))
     sock.write(struct.pack(">B", nr_monsters))
     sock.flush()
 
     for y in range(21):
         for x in range(79):
-            if id[y][x] == 0:
+            if ids[y][x] == 0:
                 continue
 
-            sock.write(struct.pack(">BBiHb", x, y, id[y][x], permid[y][x], peaceful[y][x]))
-            print(f'MONSTER <{x},{y}> id: {id[y][x]} permid: {permid[y][x]} (peaceful={peaceful[y][x]})')
+            sock.write(struct.pack(">BBiHb", x, y, ids[y][x], perm_ids[y][x], peaceful[y][x]))
+            # print(f'MONSTER <{x},{y}> id: {id[y][x]} permid: {permid[y][x]} (peaceful={peaceful[y][x]})')
+
+    sock.flush()
+
+
+def write_entities(sock, ids, classes, types, ages, quantities):
+    nr_entities = np.sum(np.sign(ids))
+    sock.write(struct.pack(">B", nr_entities))
+    sock.flush()
+
+    for y in range(21):
+        for x in range(79):
+            if ids[y][x] == 0:
+                continue
+
+            sock.write(struct.pack(">BBiBHHH", x, y, ids[y][x], classes[y][x], types[y][x], ages[y][x], quantities[y][x]))
+            print(f"ENTITY <{x},{y}> id:{ids[y][x]} class:{classes[y][x]} type:{types[y][x]} age:{ages[y][x]} quant:{quantities[y][x]}")
 
     sock.flush()

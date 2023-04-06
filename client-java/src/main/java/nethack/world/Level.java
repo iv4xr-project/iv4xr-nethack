@@ -4,10 +4,13 @@ import agent.navigation.hpastar.Size;
 import agent.navigation.strategy.NavUtils;
 import agent.navigation.surface.Tile;
 import java.util.*;
+import java.util.stream.Collectors;
 import nethack.enums.Color;
-import nethack.enums.EntityType;
+import nethack.enums.EntityClass;
+import nethack.enums.SymbolType;
 import nethack.object.Entity;
 import nethack.object.Monster;
+import nethack.object.Symbol;
 import nethack.world.tiles.*;
 import util.ColoredStringBuilder;
 import util.CustomVec2D;
@@ -15,22 +18,23 @@ import util.Loggers;
 
 public class Level {
   public static final Size SIZE = new Size(79, 21);
-  public final Entity[][] map = new Entity[SIZE.height][SIZE.width];
+  public final Symbol[][] map = new Symbol[SIZE.height][SIZE.width];
   public List<Monster> monsters = new ArrayList<>();
-  public final Map<EntityType, HashSet<CustomVec2D>> entityTypesMap = new HashMap<>();
+  public List<Entity> entities = new ArrayList<>();
+  public final Map<EntityClass, HashSet<CustomVec2D>> entityTypesMap = new HashMap<>();
 
   public Surface surface = new Surface();
 
   public final List<Tile> changedTiles = new ArrayList<>();
-  public final List<CustomVec2D> changedEntities = new ArrayList<>();
+  public final List<CustomVec2D> changedMapCoordinates = new ArrayList<>();
   public Set<CustomVec2D> visibleCoordinates = new HashSet<>();
 
-  public Level(CustomVec2D playerPos, Entity[][] entities, Tile[][] tiles) {
+  public Level(CustomVec2D playerPos, Symbol[][] entities, Tile[][] tiles) {
     updateLevel(playerPos, entities, tiles);
   }
 
-  public void updateLevel(CustomVec2D playerPos, Entity[][] newEntities, Tile[][] newTiles) {
-    updateEntities(newEntities);
+  public void updateLevel(CustomVec2D playerPos, Symbol[][] newSymbols, Tile[][] newTiles) {
+    updateSymbols(newSymbols);
     updateTiles(newTiles);
     updateVisibility(playerPos);
     markShops();
@@ -46,31 +50,25 @@ public class Level {
     }
   }
 
-  private void updateEntities(Entity[][] entities) {
-    changedEntities.clear();
+  private void updateSymbols(Symbol[][] symbols) {
+    changedMapCoordinates.clear();
 
     // If it is a subsequent observation, only give coordinates of fields that changed
     for (int x = 0; x < SIZE.width; x++) {
       for (int y = 0; y < SIZE.height; y++) {
         CustomVec2D pos = new CustomVec2D(x, y);
-        Entity prevEntity = getEntity(pos);
-        Entity newEntity = entities[y][x];
-        if (Objects.equals(prevEntity, newEntity)) {
+        Symbol prevSymbol = getSymbol(pos);
+        Symbol newSymbol = symbols[y][x];
+        if (Objects.equals(prevSymbol, newSymbol)) {
           continue;
         }
 
-        // Remove old entity
-        if (prevEntity != null) {
-          assert entityTypesMap.containsKey(prevEntity.type);
-          entityTypesMap.get(prevEntity.type).remove(pos);
-        }
-
-        setEntity(pos, newEntity);
-        changedEntities.add(pos);
+        setSymbol(pos, newSymbol);
+        changedMapCoordinates.add(pos);
       }
     }
 
-    Loggers.NetHackLogger.debug("%d entity(s) changes in the level", changedEntities.size());
+    Loggers.NetHackLogger.debug("%d entity(s) changes in the level", changedMapCoordinates.size());
   }
 
   private void updateTiles(Tile[][] tiles) {
@@ -80,8 +78,8 @@ public class Level {
     for (int x = 0; x < SIZE.width; x++) {
       for (int y = 0; y < SIZE.height; y++) {
         CustomVec2D pos = new CustomVec2D(x, y);
-        Entity entity = getEntity(pos);
-        if (entity != null && entity.type == EntityType.BOULDER) {
+        Symbol symbol = getSymbol(pos);
+        if (symbol != null && symbol.type == SymbolType.BOULDER) {
           if (!(surface.getTile(pos) instanceof Boulder)) {
             changedTiles.add(new Boulder(tiles[y][x].loc));
           }
@@ -93,7 +91,7 @@ public class Level {
 
     surface.updateTiles(changedTiles);
 
-    Loggers.NetHackLogger.debug("%d tile(s) changes in the level", changedEntities.size());
+    Loggers.NetHackLogger.debug("%d tile(s) changes in the level", changedMapCoordinates.size());
   }
 
   private void updateVisibility(CustomVec2D agentPosition) {
@@ -102,12 +100,12 @@ public class Level {
     Set<CustomVec2D> visibleFloors = new HashSet<>();
     for (int x = 0; x < SIZE.width; x++) {
       for (int y = 0; y < SIZE.height; y++) {
-        Entity e = getEntity(x, y);
+        Symbol e = getSymbol(x, y);
         if (e == null) {
           continue;
         }
 
-        if (e.type == EntityType.FLOOR && e.color == Color.GRAY) {
+        if (e.type == SymbolType.FLOOR && e.color == Color.GRAY) {
           visibleFloors.add(new CustomVec2D(x, y));
         }
       }
@@ -145,8 +143,8 @@ public class Level {
       if (!(t instanceof Viewable)) {
         continue;
       }
-      Entity entity = getEntity(nextPos);
-      if (entity == null) {
+      Symbol symbol = getSymbol(nextPos);
+      if (symbol == null) {
         continue;
       }
 
@@ -158,14 +156,14 @@ public class Level {
             .noneMatch(
                 pos ->
                     surface.getTile(pos) instanceof Floor
-                        && getEntity(pos) != null
-                        && getEntity(pos).color != Color.TRANSPARENT)) {
+                        && getSymbol(pos) != null
+                        && getSymbol(pos).color != Color.TRANSPARENT)) {
           continue;
         }
       }
 
       // Unlit floor
-      if (entity.color == Color.TRANSPARENT && entity.type == EntityType.FLOOR) {
+      if (symbol.color == Color.TRANSPARENT && symbol.type == SymbolType.FLOOR) {
         continue;
       }
 
@@ -180,13 +178,18 @@ public class Level {
   }
 
   private void markShops() {
-    if (!entityTypesMap.containsKey(EntityType.SHOPKEEPER)) {
+    List<CustomVec2D> shopkeepers =
+        monsters.stream()
+            .filter(monster -> monster.monsterInfo.name.equals("shopkeeper"))
+            .map(monster -> monster.pos)
+            .collect(Collectors.toList());
+    if (shopkeepers.isEmpty()) {
       return;
     }
 
     // No shopkeepers
     Set<CustomVec2D> processedCoordinates = new HashSet<>();
-    Queue<CustomVec2D> queue = new LinkedList<>(entityTypesMap.get(EntityType.SHOPKEEPER));
+    Queue<CustomVec2D> queue = new LinkedList<>(shopkeepers);
     while (!queue.isEmpty()) {
       CustomVec2D nextPos = queue.remove();
       // Already processed
@@ -230,26 +233,26 @@ public class Level {
     }
   }
 
-  public Entity getEntity(CustomVec2D p) {
-    return getEntity(p.x, p.y);
+  public Symbol getSymbol(CustomVec2D p) {
+    return getSymbol(p.x, p.y);
   }
 
-  public Entity getEntity(int x, int y) {
+  public Symbol getSymbol(int x, int y) {
     return map[y][x];
   }
 
-  public void setEntity(CustomVec2D p, Entity entity) {
-    map[p.y][p.x] = entity;
+  public void setSymbol(CustomVec2D p, Symbol symbol) {
+    map[p.y][p.x] = symbol;
 
-    if (entity == null) {
+    if (symbol == null) {
       return;
     }
 
-    if (!entityTypesMap.containsKey(entity.type)) {
-      entityTypesMap.put(entity.type, new HashSet<>());
-    }
+    //    if (!entityTypesMap.containsKey(symbol.type)) {
+    //      entityTypesMap.put(symbol.type, new HashSet<>());
+    //    }
 
-    entityTypesMap.get(entity.type).add(p);
+    //    entityTypesMap.get(symbol.type).add(p);
   }
 
   @Override
@@ -285,12 +288,12 @@ public class Level {
     ColoredStringBuilder csb = new ColoredStringBuilder();
     for (int y = 0; y < SIZE.height; y++) {
       for (int x = 0; x < SIZE.width; x++) {
-        Entity entity = getEntity(x, y);
-        if (entity == null) {
+        Symbol symbol = getSymbol(x, y);
+        if (symbol == null) {
           csb.append(' ');
         } else {
-          csb.setColor(entity.color);
-          csb.append(entity.symbol);
+          csb.setColor(symbol.color);
+          csb.append(symbol.symbol);
         }
       }
       csb.resetColor();

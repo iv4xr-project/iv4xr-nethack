@@ -2,20 +2,18 @@ package agent.iv4xr;
 
 import agent.navigation.HierarchicalNavigation;
 import agent.navigation.strategy.NavUtils;
-import agent.navigation.surface.*;
 import eu.iv4xr.framework.extensions.pathfinding.Navigatable;
 import eu.iv4xr.framework.mainConcepts.Iv4xrAgentState;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import java.util.*;
 import java.util.stream.Collectors;
 import nethack.NetHack;
-import nethack.enums.EntityType;
-import nethack.object.Entity;
+import nethack.enums.SymbolType;
 import nethack.object.Player;
+import nethack.object.Symbol;
 import nethack.object.Turn;
 import nethack.world.Level;
 import nethack.world.Surface;
-import nethack.world.tiles.*;
 import nl.uu.cs.aplib.mainConcepts.Environment;
 import util.ColoredStringBuilder;
 import util.CustomVec2D;
@@ -125,7 +123,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
         continue;
       }
 
-      Entity e = level.getEntity(entityPosition);
+      Symbol e = level.getSymbol(entityPosition);
       if (e == null) {
         continue;
       }
@@ -162,7 +160,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
    * Return a list of entities with a certain type which are currently adjacent to the agent that
    * owns this state.
    */
-  public List<WorldEntity> adjacentEntities(EntityType type, boolean allowDiagonally) {
+  public List<WorldEntity> adjacentEntities(SymbolType type, boolean allowDiagonally) {
     CustomVec3D agentLoc = loc();
     List<WorldEntity> ms =
         worldmodel.elements.values().stream()
@@ -182,8 +180,8 @@ public class AgentState extends Iv4xrAgentState<Void> {
     return ms;
   }
 
-  public boolean nextToEntity(EntityType entityType, boolean allowDiagonally) {
-    return !adjacentEntities(entityType, allowDiagonally).isEmpty();
+  public boolean nextToEntity(SymbolType symbolType, boolean allowDiagonally) {
+    return !adjacentEntities(symbolType, allowDiagonally).isEmpty();
   }
 
   public boolean nextToEntity(String entityId, boolean allowDiagonally) {

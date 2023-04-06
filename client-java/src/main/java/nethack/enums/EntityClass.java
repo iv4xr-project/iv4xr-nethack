@@ -1,7 +1,7 @@
 package nethack.enums;
 
 // Source: server-python\lib\nle\include\objclass.h
-public enum ItemType {
+public enum EntityClass {
   RANDOM,
   ILLOBJ, // Strange object
   WEAPON,
@@ -12,19 +12,18 @@ public enum ItemType {
   FOOD,
   POTION,
   SCROLL,
-  SPBOOK,
+  SPELL_BOOK,
   WAND,
   COIN,
   GEM,
   ROCK,
   BALL,
   CHAIN,
-  VENOM,
-  NONE;
+  VENOM;
 
   public static int maxLength() {
     int maxLength = 0;
-    for (ItemType type : ItemType.values()) {
+    for (EntityClass type : EntityClass.values()) {
       maxLength = Math.max(maxLength, type.name().length());
     }
     return maxLength;

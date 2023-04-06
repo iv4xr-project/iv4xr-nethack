@@ -9,8 +9,9 @@ public class ObservationMessage {
   public Stats stats;
   public Player player;
   public String message;
-  public Entity[][] entities;
+  public Symbol[][] symbols;
   public Tile[][] tiles;
   public Item[] items;
   public List<Monster> monsters;
+  public List<Entity> entities;
 }

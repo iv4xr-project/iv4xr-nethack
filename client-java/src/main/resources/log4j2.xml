@@ -13,7 +13,7 @@
         </File>
         <File name="LogToSeedFile" fileName="logs/seed.log">
             <PatternLayout>
-                <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+                <Pattern>%d %c{1.} %m%n</Pattern>
             </PatternLayout>
         </File>
         <File name="LogToReplayFile" fileName="logs/replay.log" append="false">

@@ -2,166 +2,83 @@ package connection.messagedecoder;
 
 import java.io.DataInputStream;
 import java.io.IOException;
-import nethack.enums.Color;
-import nethack.enums.EntityType;
+import java.util.ArrayList;
+import java.util.List;
+import nethack.enums.EntityClass;
 import nethack.object.Entity;
-import nethack.world.Level;
-import util.Loggers;
+import nethack.object.Turn;
+import nethack.object.info.EntityInfo;
+import util.CustomVec2D;
 
-// Source: https://studytrails.com/2016/09/12/java-google-json-type-adapter/
 public class EntityDecoder extends Decoder {
-  public static Entity[][] decode(DataInputStream input) throws IOException {
-    Entity[][] entities = new Entity[Level.SIZE.height][Level.SIZE.width];
+  public static List<Entity> decode(DataInputStream input) throws IOException {
+    int nrEntities = input.readByte();
+    List<Entity> entities = new ArrayList<>(nrEntities);
 
-    int bytesPerEntity = 6;
-    int nrEntities = input.readShort();
-    byte[] entitiesData = input.readNBytes(bytesPerEntity * nrEntities);
+    int bytesPerEntity = 13;
+    byte[] entityData = input.readNBytes(bytesPerEntity * nrEntities);
     for (int i = 0, offset = 0; i < nrEntities; i++, offset += bytesPerEntity) {
-      byte x = entitiesData[offset];
-      byte y = entitiesData[offset + 1];
-      char symbol = parseChar(entitiesData[offset + 2]);
-      byte colorCode = entitiesData[offset + 3];
-      int glyph = parseShort(entitiesData[offset + 4], entitiesData[offset + 5]);
-      entities[y][x] = toEntity(symbol, colorCode, glyph);
+      byte x = entityData[offset];
+      byte y = entityData[offset + 1];
+      int id =
+          parseInt(
+              entityData[offset + 2],
+              entityData[offset + 3],
+              entityData[offset + 4],
+              entityData[offset + 5]);
+      EntityClass entityClass = toEntityClass(entityData[offset + 6]);
+      EntityInfo entityInfo = null;
+      Turn createdTurn = new Turn(parseShort(entityData[offset + 9], entityData[offset + 10]), 0);
+      int quantity = parseShort(entityData[offset + 11], entityData[offset + 12]);
+      Entity entity =
+          new Entity(new CustomVec2D(x, y), id, entityClass, entityInfo, createdTurn, quantity);
+      entities.add(entity);
     }
 
     return entities;
   }
 
-  private static Entity toEntity(char symbol, int colorCode, int glyph) {
-    Color color = Color.fromValue(colorCode);
-    EntityType type = toEntityType(glyph, symbol, /*id,*/ color);
-    return new Entity(glyph, symbol, /*id,*/ type, color);
-  }
-
-  private static EntityType toEntityType(int glyph, char symbol, /*int id,*/ Color color) {
-    EntityType type = toEntityType(glyph);
-    if (type != EntityType.UNKNOWN) {
-      return type;
+  private static EntityClass toEntityClass(byte value) {
+    switch (value) {
+      case 0:
+        return EntityClass.RANDOM;
+      case 1:
+        return EntityClass.ILLOBJ;
+      case 2:
+        return EntityClass.WEAPON;
+      case 3:
+        return EntityClass.ARMOR;
+      case 4:
+        return EntityClass.RING;
+      case 5:
+        return EntityClass.AMULET;
+      case 6:
+        return EntityClass.TOOL;
+      case 7:
+        return EntityClass.FOOD;
+      case 8:
+        return EntityClass.POTION;
+      case 9:
+        return EntityClass.SCROLL;
+      case 10:
+        return EntityClass.SPELL_BOOK;
+      case 11:
+        return EntityClass.WAND;
+      case 12:
+        return EntityClass.COIN;
+      case 13:
+        return EntityClass.GEM;
+      case 14:
+        return EntityClass.ROCK;
+      case 15:
+        return EntityClass.BALL;
+      case 16:
+        return EntityClass.CHAIN;
+      case 17:
+        return EntityClass.VENOM;
     }
 
-    if (symbol == '@') {
-      Loggers.EncoderLogger.warn("%s%s%s: %d", color, symbol, Color.RESET, glyph);
-    }
-
-    type = toEntityType(symbol, /*id,*/ color);
-    if (type != EntityType.UNKNOWN) {
-      return type;
-    }
-
-    Loggers.EncoderLogger.warn("%s%s%s: %d UNKNOWN", color, symbol, Color.RESET, glyph);
-    return EntityType.UNKNOWN;
-  }
-
-  private static EntityType toEntityType(int glyph) {
-    switch (glyph) {
-      case 2389:
-        return EntityType.SINK;
-      case 2381:
-      case 2380:
-        return EntityType.CORRIDOR;
-      case 2379:
-      case 2378:
-        return EntityType.FLOOR;
-      case 2377:
-        return EntityType.TREE;
-      case 2374: // Door in vertical wall
-      case 2375: // Door in horizontal wall
-        return EntityType.DOOR;
-      case 2371:
-        return EntityType.DOORWAY;
-      case 2359:
-        return EntityType.VOID;
-        //      case 397: // Pet dog
-        //        return EntityType.PET;
-      case 333: // Player
-        return EntityType.PLAYER;
-      case 267:
-        return EntityType.SHOPKEEPER;
-      case 16: // Same character as pet dog, but not the PET
-        return EntityType.MONSTER;
-    }
-
-    return EntityType.UNKNOWN;
-  }
-
-  private static EntityType toEntityType(char symbol, /*int id,*/ Color color) {
-    // When simply the symbol and color is enough to identify the type
-    switch (symbol) {
-      case '_':
-        return EntityType.ALTAR;
-      case '"':
-        return EntityType.AMULET;
-      case ']':
-        return EntityType.STRANGE_OBJECT;
-      case '[':
-        return EntityType.ARMOR;
-      case '0':
-        return EntityType.BALL;
-      case '`':
-        return EntityType.BOULDER;
-      case '#':
-        return color == Color.CYAN ? EntityType.PRISON_BARS : EntityType.UNKNOWN;
-      case '+':
-        return EntityType.SPELLBOOK;
-        // DOORWAY;
-      case '%':
-        return EntityType.EDIBLE;
-      case '.':
-        return color == Color.BLUE_BRIGHT ? EntityType.ICE : EntityType.FLOOR;
-      case '{':
-        return EntityType.FOUNTAIN;
-        // GEM/ROCK
-      case '|':
-      case '-':
-        if (color == Color.BROWN) return EntityType.DOOR;
-        if (color == Color.WHITE) return EntityType.GRAVE;
-        return EntityType.WALL;
-      case '$':
-        return EntityType.GOLD;
-      case '@':
-        return EntityType.HUMAN;
-      case '(':
-        return EntityType.ITEM;
-        //      case 'f':
-        //        return color == Color.WHITE ? EntityType.PET : EntityType.MONSTER;
-        //      case 'u':
-        //        return color == Color.BROWN ? EntityType.PET : EntityType.MONSTER;
-      case '~':
-        return color == Color.RED ? EntityType.LAVA : EntityType.WATER;
-      case '!':
-        return EntityType.POTION;
-      case '=':
-        return EntityType.RING;
-      case '?':
-        return EntityType.SCROLL;
-      case '>':
-        return EntityType.STAIRS_DOWN;
-      case '<':
-        return EntityType.STAIRS_UP;
-        // SPIDERWEB
-      case '\\':
-        return EntityType.THRONE;
-      case '^':
-        return color == Color.MAGENTA ? EntityType.PORTAL : EntityType.TRAP;
-      case ' ':
-        return EntityType.VOID;
-      case '/':
-        return EntityType.WAND;
-      case ')':
-        return EntityType.WEAPON;
-      case '*':
-        return EntityType.ROCK;
-    }
-
-    if (symbol == 'I' && color == Color.TRANSPARENT) {
-      return EntityType.MONSTER;
-    }
-
-    //    if (Character.isAlphabetic(symbol) || symbol == ':' || symbol == '\'') {
-    //      return id == 0 ? EntityType.STATUE : EntityType.MONSTER;
-    //    }
-
-    return EntityType.UNKNOWN;
+    throw new RuntimeException(
+        String.format("Unknown class, value should be >= 0 and < 18 but was %d", value));
   }
 }

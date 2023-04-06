@@ -6,9 +6,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
-import nethack.object.data.Food;
-import nethack.object.data.MonsterData;
-import nethack.object.data.Weapon;
+import nethack.object.info.EntityInfo;
+import nethack.object.info.FoodInfo;
+import nethack.object.info.MonsterInfo;
+import nethack.object.info.WeaponInfo;
 import opennlp.tools.stemmer.PorterStemmer;
 import util.JSONConverters.FoodConverter;
 import util.JSONConverters.JSONConverter;
@@ -17,42 +18,57 @@ import util.JSONConverters.WeaponConverter;
 public class Database {
   private static final ObjectMapper mapper = new ObjectMapper();
   private static final PorterStemmer porterStemmer = new PorterStemmer();
-  static Map<String, Food> foodMap = new HashMap<>();
-  static Map<String, Weapon> weaponMap = new HashMap<>();
-  static List<MonsterData> monsterList = new ArrayList<>();
+  static Map<String, FoodInfo> foodMap = new HashMap<>();
+  static Map<String, WeaponInfo> weaponMap = new HashMap<>();
+  static List<MonsterInfo> monsterList = new ArrayList<>();
+  static List<EntityInfo> entityList = new ArrayList<>();
 
   static {
     try {
       String jsonString = readJsonFromFile(new FoodConverter().getFileName());
-      Food[] foods = mapper.readValue(jsonString, Food[].class);
-      for (Food food : foods) {
-        foodMap.put(stemName(food.name), food);
+      FoodInfo[] foodInfos = mapper.readValue(jsonString, FoodInfo[].class);
+      for (FoodInfo foodInfo : foodInfos) {
+        foodMap.put(stemName(foodInfo.name), foodInfo);
       }
 
       String weaponJson = readJsonFromFile(new WeaponConverter().getFileName());
-      Weapon[] weapons = mapper.readValue(weaponJson, Weapon[].class);
-      for (Weapon weapon : weapons) {
-        weaponMap.put(stemName(weapon.name), weapon);
+      WeaponInfo[] weaponInfos = mapper.readValue(weaponJson, WeaponInfo[].class);
+      for (WeaponInfo weaponInfo : weaponInfos) {
+        weaponMap.put(stemName(weaponInfo.name), weaponInfo);
       }
 
       String monsterJson = readJsonFromFile("../../../../../../server-python/data/monster");
-      MonsterData[] monsterData = mapper.readValue(monsterJson, MonsterData[].class);
+      MonsterInfo[] monsterData = mapper.readValue(monsterJson, MonsterInfo[].class);
       monsterList.addAll(Arrays.asList(monsterData));
+
+      String entityJson = readJsonFromFile("../../../../../../server-python/data/entity");
+      EntityInfo[] entityData = mapper.readValue(entityJson, EntityInfo[].class);
+      entityList.addAll(Arrays.asList(entityData));
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
   }
 
-  public static MonsterData getMonsterData(int index) {
+  public static MonsterInfo getMonsterInfo(int index) {
     assert index >= 0 && index <= monsterList.size() : "Index must be within the bounds";
     return monsterList.get(index);
   }
 
-  public static Food getFood(String name) {
+  public static EntityInfo getEntityInfo(int index) {
+    assert index >= 0;
+    if (index >= entityList.size()) {
+      Loggers.ConnectionLogger.warn("Entity index %d out of length %d", index, entityList.size());
+      return null;
+    }
+
+    return entityList.get(index);
+  }
+
+  public static FoodInfo getFood(String name) {
     return foodMap.get(stemName(name));
   }
 
-  public static Weapon getWeapon(String name) {
+  public static WeaponInfo getWeapon(String name) {
     return weaponMap.get(stemName(name));
   }
 
