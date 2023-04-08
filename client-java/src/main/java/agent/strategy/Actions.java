@@ -82,7 +82,7 @@ public class Actions {
         .do1(
             (AgentState S) -> {
               Loggers.GoalLogger.info("command: %s", command);
-              WorldModel newwom = WorldModels.performCommands(S, command);
+              WorldModel newwom = WorldModels.performCommands(S, List.of(command));
               return new Pair<>(S, newwom);
             });
   }
@@ -93,26 +93,9 @@ public class Actions {
             (AgentState S) -> {
               Loggers.GoalLogger.info("searchWalls");
               Sounds.search();
-              WorldModel newwom = WorldModels.performCommands(S, new Command(COMMAND_SEARCH));
+              WorldModel newwom =
+                  WorldModels.performCommands(S, List.of(new Command(COMMAND_SEARCH)));
               return new Pair<>(S, newwom);
-              //            })
-              //        .on(
-              //            (AgentState S) -> {
-              //              Surface surface = S.area();
-              //              List<CustomVec2D> neighbours =
-              //                  NavUtils.neighbourCoordinates(
-              //                      NavUtils.loc2(S.worldmodel.position), Level.SIZE, true);
-              //              List<Wall> walls = new ArrayList<>();
-              //              for (CustomVec2D neighbour : neighbours) {
-              //                Tile t = surface.getTile(neighbour);
-              //                if (t instanceof Wall) {
-              //                  walls.add((Wall) t);
-              //                }
-              //              }
-              //              if (walls.isEmpty()) {
-              //                return null;
-              //              }
-              //              return walls;
             });
   }
 
@@ -136,7 +119,8 @@ public class Actions {
               Loggers.GoalLogger.info(">>> pray");
               WorldModel newWom =
                   WorldModels.performCommands(
-                      S, new Command(COMMAND_PRAY), new Command("y"), new Command(MISC_MORE));
+                      S,
+                      List.of(new Command(COMMAND_PRAY), new Command("y"), new Command(MISC_MORE)));
               S.app().gameState.player.lastPrayerTurn =
                   Optional.of(S.app().gameState.stats.turn.time);
               return new Pair<>(S, newWom);

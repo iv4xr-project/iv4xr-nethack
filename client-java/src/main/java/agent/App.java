@@ -89,7 +89,7 @@ public class App {
     while (G.getStatus().inProgress()) {
       List<Command> commands = netHack.waitCommands(true);
       if (commands != null) {
-        NetHack.StepType stepType = netHack.step(commands.toArray(new Command[] {}));
+        NetHack.StepType stepType = netHack.step(commands);
         if (stepType == NetHack.StepType.Terminated) {
           break;
         } else if (stepType != NetHack.StepType.Valid) {

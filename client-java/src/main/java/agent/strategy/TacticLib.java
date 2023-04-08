@@ -6,8 +6,7 @@ import agent.iv4xr.AgentState;
 import agent.navigation.strategy.NavUtils;
 import agent.navigation.surface.Walkable;
 import agent.selector.ItemSelector;
-import agent.selector.MapSelector;
-import agent.selector.Selector;
+import agent.selector.MonsterSelector;
 import java.util.*;
 import java.util.stream.Collectors;
 import nethack.object.Monster;
@@ -34,19 +33,12 @@ public class TacticLib {
         Actions.attack()
             .on(
                 (AgentState S) -> {
-                  List<CustomVec3D> monsterPositions =
-                      NavUtils.addLevelNr(
-                          S.app().level().monsters.stream()
-                              .filter(monster -> !monster.peaceful)
-                              .map(monster -> monster.pos)
-                              .collect(Collectors.toList()),
-                          S.loc().lvl);
-                  Integer index =
-                      MapSelector.select(monsterPositions, S, Selector.SelectionType.ADJACENT);
-                  if (index == null) {
+                  Monster monster =
+                      MonsterSelector.adjacentAggressive.apply(S.app().level().monsters, S);
+                  if (monster == null) {
                     return null;
                   }
-                  return NavUtils.toDirection(S, monsterPositions.get(index));
+                  return NavUtils.toDirection(S, monster.loc);
                 })
             .lift(),
         Actions.fire()
@@ -61,13 +53,7 @@ public class TacticLib {
                   }
 
                   CustomVec3D agentLoc = S.loc();
-                  List<Monster> monsters =
-                      S.app().level().monsters.stream()
-                          .filter(
-                              monster ->
-                                  !monster.peaceful
-                                      && CustomVec2D.straightLine(monster.pos, agentLoc.pos))
-                          .collect(Collectors.toList());
+                  List<Monster> monsters = S.app().level().monsters;
                   if (monsters.isEmpty()) {
                     return null;
                   }
@@ -121,8 +107,8 @@ public class TacticLib {
 
   public static Tactic resolveHungerState(int prayerTimeOut) {
     return FIRSTof(
-        //      NavTactic.navigateToWorldEntity(new EntitySelector(Selector.SelectionType.CLOSEST,
-        // EntityType.EDIBLE)),
+        //        interactWorldEntity(EntitySelector.food, List.of(new
+        // Command(CommandEnum.COMMAND_EAT), new Command("y"))),
         Actions.pray()
             .on(
                 (AgentState S) -> {

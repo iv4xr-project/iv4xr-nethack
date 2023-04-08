@@ -77,7 +77,7 @@ public class Replay {
     NetHack nethack = new NetHack(client, replay.character, replay.seed);
     for (Pair<Turn, List<Command>> action : replay.actions) {
       assert nethack.gameState.stats.turn.equals(action.fst) : "TURN WAS DIFFERENT";
-      nethack.step(action.snd.toArray(new Command[] {}));
+      nethack.step(action.snd);
     }
 
     // Render and then loop

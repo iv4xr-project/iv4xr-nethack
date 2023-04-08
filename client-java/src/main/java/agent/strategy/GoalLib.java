@@ -7,6 +7,7 @@ import agent.navigation.strategy.NavTactic;
 import agent.selector.EntitySelector;
 import agent.selector.TileSelector;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
+import java.util.List;
 import nethack.enums.CommandEnum;
 import nethack.object.Command;
 import nl.uu.cs.aplib.mainConcepts.Goal;
@@ -36,7 +37,8 @@ public class GoalLib {
                     Actions.openDoor().on(Predicates.get_closedDoor()).lift(),
 
                     // Collect money and potions
-                    NavTactic.navigateToWorldEntity(EntitySelector.money),
+                    NavTactic.interactWorldEntity(
+                        EntitySelector.money, List.of(new Command(CommandEnum.COMMAND_PICKUP))),
                     //                    NavTactic.pickupWorldEntity(EntitySelector.potion),
 
                     // Navigation

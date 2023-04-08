@@ -33,7 +33,7 @@ public class ItemSelector extends Selector<Item> {
 
   @Override
   public Item apply(List<Item> items, AgentState S) {
-    return select(filter(items, S), S);
+    return select(filter(items), S);
   }
 
   @Override
@@ -54,7 +54,7 @@ public class ItemSelector extends Selector<Item> {
     throw new IllegalArgumentException("Not valid");
   }
 
-  private List<Item> filter(List<Item> items, AgentState S) {
+  public List<Item> filter(List<Item> items) {
     Stream<Item> stream = items.stream();
     if (entityClass != null) {
       stream = stream.filter(i -> i != null && Objects.equals(i.type, entityClass));

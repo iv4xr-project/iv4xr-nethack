@@ -256,16 +256,6 @@ public class Level {
 
   public void setSymbol(CustomVec2D p, Symbol symbol) {
     map[p.y][p.x] = symbol;
-
-    if (symbol == null) {
-      return;
-    }
-
-    //    if (!entityTypesMap.containsKey(symbol.type)) {
-    //      entityTypesMap.put(symbol.type, new HashSet<>());
-    //    }
-
-    //    entityTypesMap.get(symbol.type).add(p);
   }
 
   @Override

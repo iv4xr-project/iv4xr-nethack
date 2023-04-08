@@ -58,7 +58,7 @@ public class AgentEnv extends Iv4xrEnvironment {
     return wom;
   }
 
-  public WorldModel commands(Command... commands) {
+  public WorldModel commands(List<Command> commands) {
     app.step(commands);
     return observe(Player.ID);
   }

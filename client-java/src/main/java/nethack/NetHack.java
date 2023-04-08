@@ -52,7 +52,7 @@ public class NetHack {
   public void loop() {
     while (!gameState.done) {
       List<Command> commands = waitCommands(false);
-      StepType stepType = step(commands.toArray(new Command[] {}));
+      StepType stepType = step(commands);
       if (stepType == StepType.Terminated) {
         break;
       } else if (stepType == StepType.Valid) {
@@ -111,11 +111,11 @@ public class NetHack {
     }
   }
 
-  public StepType step(Command... commands) {
+  public StepType step(List<Command> commands) {
     Stopwatch stopwatch = new Stopwatch(true);
-    assert commands.length > 0 : "Must at least provide one command";
+    assert !commands.isEmpty() : "Must at least provide one command";
     Map<Boolean, List<Command>> split =
-        Arrays.stream(commands)
+        commands.stream()
             .collect(Collectors.partitioningBy(command -> command.commandEnum.handleByClient()));
 
     StepType stepType = stepServerSideCommand(split.getOrDefault(false, new ArrayList<>()));
@@ -231,12 +231,20 @@ public class NetHack {
     } else {
       lvlNr = gameState.dungeon.levels.size();
     }
+
+    // Set level numbers for tiles, monsters, and entities
     for (int y = 0; y < Level.SIZE.height; y++) {
       for (int x = 0; x < Level.SIZE.width; x++) {
         if (stepState.tiles[y][x] != null) {
           stepState.tiles[y][x].loc.lvl = lvlNr;
         }
       }
+    }
+    for (Entity e : stepState.entities) {
+      e.loc.lvl = lvlNr;
+    }
+    for (Monster m : stepState.monsters) {
+      m.loc.lvl = lvlNr;
     }
 
     Level level;

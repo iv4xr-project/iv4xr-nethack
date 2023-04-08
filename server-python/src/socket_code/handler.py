@@ -128,7 +128,7 @@ def handle_reset(sock):
     # Create the environment object
     CURRENT_ENV = read.read_string(sock)
     CURRENT_CHARACTER = read.read_string(sock)
-    env = create_env()
+    env = create_env(spawn_monsters=False)
 
     # Set the seed
     core = read.read_string(sock)
@@ -142,16 +142,17 @@ def handle_reset(sock):
     return env
 
 
-def create_env(save_ttyrec: bool = False):
+def create_env(save_ttyrec: bool = False, spawn_monsters: bool = True):
     # Settings can be found in: server-python\lib\nle\nle\env\base.py line: 168
     max_episode_steps = 10000000
     # character = "mon-hum-neu-mal"
     # character = "ran-hum-neu-mal"
     # character = "val-hum-neu-fem"
+    print(spawn_monsters)
     if save_ttyrec:
-        return gym.make(CURRENT_ENV, character=CURRENT_CHARACTER, max_episode_steps=max_episode_steps, save_ttyrec_every=1000000, savedir="nle-recordings")
+        return gym.make(CURRENT_ENV, character=CURRENT_CHARACTER, max_episode_steps=max_episode_steps, save_ttyrec_every=1000000, savedir="nle-recordings", spawn_monsters=spawn_monsters)
     else:
-        return gym.make(CURRENT_ENV, character=CURRENT_CHARACTER, max_episode_steps=max_episode_steps)
+        return gym.make(CURRENT_ENV, character=CURRENT_CHARACTER, max_episode_steps=max_episode_steps, spawn_monsters=spawn_monsters)
 
 
 def handle_get_seed(sock, env):

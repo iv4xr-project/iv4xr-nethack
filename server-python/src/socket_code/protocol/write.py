@@ -159,7 +159,7 @@ def write_monsters(sock, ids, perm_ids, peaceful):
                 continue
 
             sock.write(struct.pack(">BBiHb", x, y, ids[y][x], perm_ids[y][x], peaceful[y][x]))
-            # print(f'MONSTER <{x},{y}> id: {id[y][x]} permid: {permid[y][x]} (peaceful={peaceful[y][x]})')
+            # print(f'MONSTER <{x},{y}> id: {ids[y][x]} permid: {perm_ids[y][x]} (peaceful={peaceful[y][x]})')
 
     sock.flush()
 

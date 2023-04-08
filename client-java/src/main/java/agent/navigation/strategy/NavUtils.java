@@ -164,7 +164,7 @@ public class NavUtils {
       }
     }
 
-    return S.env().commands(command);
+    return S.env().commands(List.of(command));
   }
 
   public static WorldModel moveTo(AgentState state, Vec3 targetPosition) {

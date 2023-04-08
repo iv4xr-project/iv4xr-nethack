@@ -8,13 +8,13 @@ import agent.navigation.surface.Tile;
 import agent.selector.EntitySelector;
 import agent.selector.TileSelector;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import nethack.enums.SymbolType;
+import nethack.object.Entity;
 import nethack.world.Level;
 import nethack.world.tiles.Secret;
 import nethack.world.tiles.Stair;
@@ -66,9 +66,8 @@ public class Predicates {
 
   public static Predicate<AgentState> on_potion =
       S -> {
-        WorldEntity entity =
-            EntitySelector.potion.apply(new ArrayList<>(S.worldmodel.elements.values()), S);
-        return entity != null && new CustomVec3D(entity.position).equals(S.loc());
+        Entity entity = EntitySelector.potion.apply(S.app().level().entities, S);
+        return entity != null && entity.loc.equals(S.loc());
       };
 
   public static Predicate<AgentState> on_stairs_down =

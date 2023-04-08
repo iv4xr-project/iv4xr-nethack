@@ -98,14 +98,14 @@ public class TileSelector extends Selector<Tile> {
   public Tile select(List<Tile> tiles, AgentState S) {
     List<CustomVec3D> coordinates =
         tiles.stream().map(tile -> tile.loc).collect(Collectors.toList());
-    Integer index = MapSelector.select(coordinates, S, selectionType);
+    Integer index = selectIndex(coordinates, S);
     if (index == null) {
       return null;
     }
     return tiles.get(index);
   }
 
-  private List<Tile> filter(List<Tile> tiles) {
+  public List<Tile> filter(List<Tile> tiles) {
     if (tileClass == null && predicate == null) {
       return tiles;
     }

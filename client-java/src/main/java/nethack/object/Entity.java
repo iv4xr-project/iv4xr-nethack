@@ -3,8 +3,10 @@ package nethack.object;
 import nethack.enums.EntityClass;
 import nethack.object.info.EntityInfo;
 import util.CustomVec2D;
+import util.CustomVec3D;
 
 public class Entity {
+  public CustomVec3D loc;
   public CustomVec2D pos;
   public int id;
   public EntityClass entityClass;
@@ -19,6 +21,7 @@ public class Entity {
       EntityInfo entityInfo,
       Turn createTurn,
       int quantity) {
+    this.loc = new CustomVec3D(0, pos);
     this.pos = pos;
     this.id = id;
     this.entityClass = entityClass;
