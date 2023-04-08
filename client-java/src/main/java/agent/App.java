@@ -31,7 +31,7 @@ public class App {
     if (collectCoverage) {
       commander.sendResetCoverage();
     }
-    NetHack nethack = new NetHack(commander, Config.getSeed());
+    NetHack nethack = new NetHack(commander, Config.getCharacter(), Config.getSeed());
     AgentEnv env = new AgentEnv(nethack);
     AgentState state = new AgentState();
     GoalStructure G = GoalLib.explore();

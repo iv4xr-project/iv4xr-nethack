@@ -58,7 +58,7 @@ public class Config {
       return new Turn(1000000);
     }
 
-    int[] startTurn = config.get(int[].class, "START_TURN");
+    int[] startTurn = config.get(int[].class, "START_TURN", new int[0]);
     if (startTurn.length == 0) {
       return Turn.startTurn;
     }

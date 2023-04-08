@@ -18,6 +18,7 @@ import nl.uu.cs.aplib.utils.Pair;
 
 public class Replay {
   public Seed seed;
+  public String character;
   public List<Pair<Turn, List<Command>>> actions = new ArrayList<>();
 
   static final Pattern pattern = Pattern.compile("(\\d+)\\((\\d+)\\):\\[(.*)\\]");
@@ -25,6 +26,7 @@ public class Replay {
   public Replay(String fileName) {
     try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
       replaySeed(br.readLine());
+      replayCharacter(br.readLine());
       replayActions(br);
     } catch (IOException e) {
       e.printStackTrace();
@@ -37,6 +39,12 @@ public class Replay {
     String[] items = splitLine[1].split(" ");
     assert items.length == 2;
     seed = new Seed(items[0], items[1], false);
+  }
+
+  private void replayCharacter(String line) {
+    String[] splitLine = line.split(":");
+    assert Objects.equals(splitLine[0], "CHARACTER") : "Second line must be character";
+    character = splitLine[1];
   }
 
   private void replayActions(BufferedReader reader) throws IOException {
@@ -66,7 +74,7 @@ public class Replay {
     Replay replay = new Replay(fileName);
 
     SocketClient client = new SocketClient();
-    NetHack nethack = new NetHack(client, replay.seed);
+    NetHack nethack = new NetHack(client, replay.character, replay.seed);
     for (Pair<Turn, List<Command>> action : replay.actions) {
       assert nethack.gameState.stats.turn.equals(action.fst) : "TURN WAS DIFFERENT";
       nethack.step(action.snd.toArray(new Command[] {}));

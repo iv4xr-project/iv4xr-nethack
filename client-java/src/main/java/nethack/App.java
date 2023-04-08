@@ -16,13 +16,13 @@ public class App {
   }
 
   private static void playGame(SocketClient client) {
-    NetHack nethack = new NetHack(client, Config.getSeed());
+    NetHack nethack = new NetHack(client, Config.getCharacter(), Config.getSeed());
     nethack.loop();
     nethack.close();
   }
 
   private static void goThroughGame(SocketClient client) {
-    NetHack nethack = new NetHack(client, Config.getSeed());
+    NetHack nethack = new NetHack(client, Config.getCharacter(), Config.getSeed());
 
     // Eternally go through new seeds
     while (true) {

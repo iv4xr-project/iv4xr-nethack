@@ -75,14 +75,6 @@ def write_obs(sock, env, obs):
     sock.write(struct.pack('>27i', *obs['blstats']))
     write_str(sock, msg)
 
-    for y in range(21):
-        for x in range(79):
-            val = obs['obj_id'][y][x]
-            if val == 0:
-                continue
-
-            print(f"ENTITY <{x},{y}> id:{val} class:{obs['obj_class'][y][x]} type:{obs['obj_type'][y][x]} age:{obs['obj_age'][y][x]} quant:{obs['obj_quan'][y][x]}")
-
     # GERARD
     write_tiles(sock, obs['tiles'], obs['flags'])
     write_map(sock, obs['chars'], obs['colors'], obs['glyphs'])
@@ -183,6 +175,6 @@ def write_entities(sock, ids, classes, types, ages, quantities):
                 continue
 
             sock.write(struct.pack(">BBiBHHH", x, y, ids[y][x], classes[y][x], types[y][x], ages[y][x], quantities[y][x]))
-            print(f"ENTITY <{x},{y}> id:{ids[y][x]} class:{classes[y][x]} type:{types[y][x]} age:{ages[y][x]} quant:{quantities[y][x]}")
+            # print(f"ENTITY <{x},{y}> id:{ids[y][x]} class:{classes[y][x]} type:{types[y][x]} age:{ages[y][x]} quant:{quantities[y][x]}")
 
     sock.flush()

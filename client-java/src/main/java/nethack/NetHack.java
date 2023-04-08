@@ -14,15 +14,16 @@ import util.Stopwatch;
 
 public class NetHack {
   public final GameState gameState = new GameState();
-  public GameMode gameMode;
+  public GameMode gameMode = GameMode.NetHack;
   public Seed seed;
+  public String character;
   SocketClient client;
 
-  public NetHack(SocketClient client, Seed seed) {
+  public NetHack(SocketClient client, String character, Seed seed) {
     Loggers.NetHackLogger.info("Initialize game");
     assert seed != null : "Must create game with a seed";
     this.client = client;
-    this.gameMode = GameMode.NetHack;
+    this.character = character;
     System.out.printf("Init game with seed: %s%n", seed);
     setSeed(seed);
   }
@@ -41,7 +42,8 @@ public class NetHack {
   public void reset() {
     Loggers.SeedLogger.info("New seed is:" + seed);
     Loggers.ReplayLogger.info("SEED:%s", seed.shortString());
-    client.sendReset(gameMode.toString(), Player.character, seed);
+    Loggers.ReplayLogger.info("CHARACTER:%s", character);
+    client.sendReset(gameMode.toString(), character, seed);
     StepState stepState = client.readStepState();
     updateGameState(stepState);
     render();
