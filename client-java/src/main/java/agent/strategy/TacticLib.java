@@ -52,13 +52,14 @@ public class TacticLib {
                     return null;
                   }
 
-                  CustomVec3D agentLoc = S.loc();
-                  List<Monster> monsters = S.app().level().monsters;
+                  // Only count aggressive monsters
+                  List<Monster> monsters = MonsterSelector.empty.filter(S.app().level().monsters);
                   if (monsters.isEmpty()) {
                     return null;
                   }
 
                   // Get closest entity
+                  CustomVec3D agentLoc = S.loc();
                   Monster closestMonster = null;
                   int manhattanDistance = Integer.MAX_VALUE;
 

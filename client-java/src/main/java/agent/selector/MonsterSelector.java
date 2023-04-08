@@ -11,7 +11,7 @@ import util.CustomVec3D;
 public class MonsterSelector extends Selector<Monster> {
   public static final MonsterSelector adjacentAggressive =
       new MonsterSelector(SelectionType.ADJACENT, null, monster -> !monster.peaceful, false);
-
+  public static final MonsterSelector empty = new MonsterSelector(null, null, false);
   final String monsterName;
 
   public MonsterSelector(
