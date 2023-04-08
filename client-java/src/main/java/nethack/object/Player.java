@@ -5,10 +5,12 @@ import nethack.enums.Alignment;
 import nethack.enums.Encumbrance;
 import nethack.enums.HungerState;
 import util.ColoredStringBuilder;
+import util.Config;
 import util.CustomVec3D;
 
 public class Player {
   public static final String ID = "player";
+  public static final String character = Config.getCharacter();
   public Inventory inventory;
   public CustomVec3D previousLocation;
   public CustomVec3D location;

@@ -114,22 +114,15 @@ public class AgentState extends Iv4xrAgentState<Void> {
         continue;
       }
 
-      CustomVec2D entityPosition = NavUtils.loc2(we.position);
-      // If it is not inside the visibility then do not update.
-      if (!visibleCoordinates.contains(entityPosition)) {
+      if (loc().lvl != NavUtils.levelNr(we.position)) {
         continue;
       }
 
-      //      Symbol e = level.getSymbol(entityPosition);
-      //      if (e == null) {
-      //        continue;
-      //      }
-      //
-      //      String id = e.createId(entityPosition);
-      //      if (!id.equals(we.id)) {
-      //        Loggers.WOMLogger.debug("REMOVE: %s [%s]", we.id, we.type);
-      //        idsToRemove.add(we.id);
-      //      }
+      // Item is gone from worldEntities
+      if (env().app.gameState.getLevel().entities.stream()
+          .noneMatch(entity -> entity.toId().equals(we.id))) {
+        idsToRemove.add(we.id);
+      }
     }
 
     // Separate loop since it changes the map

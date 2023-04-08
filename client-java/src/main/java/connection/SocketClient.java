@@ -65,15 +65,11 @@ public class SocketClient {
     return (System.nanoTime() - startTimeNano) / 1000000f;
   }
 
-  public void sendSetSeed(Seed seed) {
-    writeBit(Encoder.EncoderBit.SetSeedBit);
-    SeedEncoder.encode(writer, seed);
-    flush();
-  }
-
-  public void sendReset(String gameMode) {
+  public void sendReset(String gameMode, String character, Seed seed) {
     writeBit(Encoder.EncoderBit.ResetBit);
     Encoder.writeString(writer, gameMode);
+    Encoder.writeString(writer, character);
+    SeedEncoder.encode(writer, seed);
     flush();
   }
 

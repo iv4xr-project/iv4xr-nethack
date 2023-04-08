@@ -5,7 +5,6 @@ from src.socket_code.protocol.util import ProtoException
 import struct
 
 RESET_BYTE = 1
-SET_SEED_BYTE = 2
 GET_SEED_BYTE = 3
 RENDER_BYTE = 4
 CLOSE_BYTE = 5

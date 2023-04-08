@@ -40,7 +40,6 @@ public class EntityDecoder extends Decoder {
       }
 
       entities.add(entity);
-      System.out.println(entity);
     }
 
     return entities;

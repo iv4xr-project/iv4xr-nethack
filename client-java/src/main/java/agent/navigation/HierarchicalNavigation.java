@@ -17,7 +17,7 @@ import eu.iv4xr.framework.extensions.pathfinding.Navigatable;
 import java.util.*;
 import java.util.stream.Collectors;
 import nl.uu.cs.aplib.utils.Pair;
-import org.apache.commons.lang.NotImplementedException;
+import org.apache.commons.lang3.NotImplementedException;
 import util.CustomVec2D;
 import util.CustomVec3D;
 import util.Loggers;

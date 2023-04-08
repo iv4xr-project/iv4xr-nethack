@@ -96,6 +96,7 @@ def write_step(sock, done, info):
     logging.info("WRITE Step")
     sock.write(STEP_BYTE)
     sock.write(to_bool(done))
+    sock.flush()
 
 
 def write_seed(sock, seed):
@@ -116,6 +117,8 @@ def write_inv(sock, inv_letters, inv_oclasses, inv_glyphs, inv_strs):
 
     for i in range(nr_items):
         sock.write(struct.pack(">HBH80B", inv_letters[i], inv_oclasses[i], inv_glyphs[i], *inv_strs[i]))
+
+    sock.flush()
 
 def write_tiles(sock, tiles, flags):
     """

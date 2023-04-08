@@ -18,26 +18,13 @@ public class NetHack {
   public Seed seed;
   SocketClient client;
 
-  public NetHack(SocketClient client) {
-    init(client, GameMode.NetHackChallenge);
-    reset();
-  }
-
   public NetHack(SocketClient client, Seed seed) {
     Loggers.NetHackLogger.info("Initialize game");
-    if (seed == null) {
-      init(client, GameMode.NetHackChallenge);
-      reset();
-    } else {
-      init(client, GameMode.NetHack);
-      System.out.printf("Init game with seed: %s%n", seed);
-      setSeed(seed);
-    }
-  }
-
-  private void init(SocketClient client, GameMode gameMode) {
+    assert seed != null : "Must create game with a seed";
     this.client = client;
-    this.gameMode = gameMode;
+    this.gameMode = GameMode.NetHack;
+    System.out.printf("Init game with seed: %s%n", seed);
+    setSeed(seed);
   }
 
   public Seed getSeed() {
@@ -47,15 +34,14 @@ public class NetHack {
   }
 
   public void setSeed(Seed seed) {
-    gameMode = GameMode.NetHack;
-    Loggers.SeedLogger.info("New seed is:" + seed);
-    Loggers.ReplayLogger.info("SEED:%s", seed.shortString());
-    client.sendSetSeed(seed);
+    this.seed = seed;
     reset();
   }
 
   public void reset() {
-    client.sendReset(gameMode.toString());
+    Loggers.SeedLogger.info("New seed is:" + seed);
+    Loggers.ReplayLogger.info("SEED:%s", seed.shortString());
+    client.sendReset(gameMode.toString(), Player.character, seed);
     StepState stepState = client.readStepState();
     updateGameState(stepState);
     render();

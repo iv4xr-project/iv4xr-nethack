@@ -52,7 +52,8 @@ def main():
         logging.error('%s gave error: %s' % (options.addr, str(exc)))
 
 
-CURRENT_ENV = None # "NetHackChallenge-v0"
+CURRENT_ENV = "NetHack-v0"
+CURRENT_CHARACTER = "mon-hum-neu-mal"
 
 
 def handle(sock):
@@ -82,10 +83,7 @@ def handle(sock):
             match message_bit:
                 case read.RESET_BYTE:
                     logging.debug("Reset")
-                    env = handle_reset(sock, env, None)
-                case read.SET_SEED_BYTE:
-                    logging.debug("Set seed")
-                    env = handle_set_seed(sock, env)
+                    env = handle_reset(sock)
                 case read.GET_SEED_BYTE:
                     logging.debug("Get seed")
                     handle_get_seed(sock, env)
@@ -121,59 +119,45 @@ def handle(sock):
             env.close()
 
 
-def handle_reset(sock, env, desired_env):
+def handle_reset(sock):
     """
     Reset the environment and send the result.
     """
-    global CURRENT_ENV
+    global CURRENT_ENV, CURRENT_CHARACTER
 
-    if not desired_env:
-        desired_env = read.read_string(sock)
-    if desired_env != CURRENT_ENV:
-        CURRENT_ENV = desired_env
-        env = create_env(CURRENT_ENV)
+    # Create the environment object
+    CURRENT_ENV = read.read_string(sock)
+    CURRENT_CHARACTER = read.read_string(sock)
+    env = create_env()
 
-    write.write_obs(sock, env, env.reset())
-    write.write_step(sock, False, None)
-    sock.flush()
-    return env
-
-
-def handle_set_seed(sock, env):
-    """
-    Set the seed of the next run
-    """
-    global CURRENT_ENV
-    if CURRENT_ENV != "NetHack-v0":
-        logging.info(f"Env changed to {CURRENT_ENV} for seeding")
-        CURRENT_ENV = "NetHack-v0"
-        env = create_env(CURRENT_ENV)
-
+    # Set the seed
     core = read.read_string(sock)
     disp = read.read_string(sock)
     reseed = read.read_bool(sock)
     env.seed(int(core), int(disp), reseed)
+
+    # Write the observation
+    write.write_obs(sock, env, env.reset())
+    write.write_step(sock, False, None)
     return env
 
 
-def create_env(env_name, save_ttyrec=False):
+def create_env(save_ttyrec: bool = False):
     # Settings can be found in: server-python\lib\nle\nle\env\base.py line: 168
     max_episode_steps = 10000000
-    character = "mon-hum-neu-mal"
-    # observation_keys = ("tiles", "glyphs", "chars", "colors", "specials", "blstats", "message", "inv_glyphs", "inv_strs", "inv_letters", "inv_oclasses", "screen_descriptions", "tty_cursor")
+    # character = "mon-hum-neu-mal"
     # character = "ran-hum-neu-mal"
-    character = "val-hum-neu-fem"
+    # character = "val-hum-neu-fem"
     if save_ttyrec:
-        return gym.make(env_name, character=character, max_episode_steps=max_episode_steps, save_ttyrec_every=1000000, savedir="nle-recordings")
+        return gym.make(CURRENT_ENV, character=CURRENT_CHARACTER, max_episode_steps=max_episode_steps, save_ttyrec_every=1000000, savedir="nle-recordings")
     else:
-        return gym.make(env_name, character=character, max_episode_steps=max_episode_steps)
+        return gym.make(CURRENT_ENV, character=CURRENT_CHARACTER, max_episode_steps=max_episode_steps)
 
 
 def handle_get_seed(sock, env):
     assert CURRENT_ENV == "NetHack-v0"
     seed = env.get_seeds()
     write.write_seed(sock, seed)
-    sock.flush()
 
 
 def handle_steps(sock, env):
@@ -189,7 +173,6 @@ def handle_steps(sock, env):
 
     write.write_obs(sock, env, obs)
     write.write_step(sock, done, None)
-    sock.flush()
 
 
 def handle_save_coverage(sock):

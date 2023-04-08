@@ -33,6 +33,7 @@ The configurations that are possible are as follows:
 | PORT             | 5001                          | Port to connect to on the server                                                                          |
 | SEED             | -                             | Seed to use for the game run, if empty the seed is random. Pattern expected are two comma separated longs |
 | START_TURN       | 1, 0                          | If set, automatically forwards to the given turn. The pattern is the same as the SEED field               |
+| CHARACTER        | mon-hum-neu-mal               | Type of character formatted like <class>-<race>-<alignment>-<gender>                                      |
 | AUTO_PLAY        | false                         | Whether continue loop until game is done                                                                  |
 | COLLECT_COVERAGE | false                         | Whether coverage of the run should be gathered                                                            |
 | GENERATE_HTML    | false                         | Whether an html report also will be created to have a more user friendly overview                         |

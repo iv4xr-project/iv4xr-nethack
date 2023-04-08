@@ -6,7 +6,7 @@ package agent.navigation.hpastar.graph;
 
 import agent.navigation.hpastar.Cluster;
 import agent.navigation.hpastar.infrastructure.Id;
-import org.apache.commons.lang.NotImplementedException;
+import org.apache.commons.lang3.NotImplementedException;
 import util.ColoredStringBuilder;
 import util.CustomVec2D;
 
