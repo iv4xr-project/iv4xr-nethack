@@ -34,6 +34,8 @@ def object_info():
                 mapped_property = "weight"
             elif property == "oc_cost":
                 mapped_property = "cost"
+            elif property == "oc_subtyp":
+                mapped_property = "subtype"
 
             object_dict[mapped_property] = object_info.__getattribute__(property)
 

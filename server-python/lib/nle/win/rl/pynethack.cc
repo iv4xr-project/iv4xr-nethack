@@ -713,46 +713,6 @@ PYBIND11_MODULE(_pynethack, m)
 #endif
         ;
 
-    // // Bind the struct definition
-    // py::class_<dlevel_t>(mn, "dlevel_t")
-    //   //  .def(py::init<>())
-    //    .def_readonly("locations", &dlevel_t::locations)
-    // //    .def_readonly("objects", &dlevel_t::objects)
-    // //    .def_readonly("monsters", &dlevel_t::monsters)
-    // //    .def_readonly("objlist", &dlevel_t::objlist)
-    // //    .def_readonly("buriedobjlist", &dlevel_t::buriedobjlist)
-    // //    .def_readonly("monlist", &dlevel_t::monlist)
-    // //    .def_readonly("damagelist", &dlevel_t::damagelist)
-    // //    .def_readonly("bonesinfo", &dlevel_t::bonesinfo)
-    // //    .def_readonly("flags", &dlevel_t::flags);
-
-    // mn.def("level", &level, py::return_value_policy::reference);
-
-    // // Bind the struct definition
-    // py::class_<rm>(m, "rm")
-    //     .def(py::init<>())
-    //     .def_readwrite("glyph", &rm::glyph)
-    //     .def_readwrite("typ", &rm::typ);
-
-    // Bind the locations array
-    // mn.def_property_readonly("locations", []() {
-    mn.def("locations", []() {
-        py::list rows;
-        for (int i = 0; i < ROWNO; i++) {
-            py::list row;
-            for (int j = 0; j < COLNO; j++) {
-              row.append(level.locations[j][i].glyph);
-            }
-            rows.append(row);
-        }
-        return rows;
-    });
-
-    // mn.attr("test1") = py::int_(botl_score());
-    // mn.def("test1", []() { py::print(&level); return 1; });
-    // mn.attr("test2") = py::int_(level.monsters[23][12].m_id);
-    // mn.attr("test3") = py::int_(level.locations[1][1].typ);
-
     py::class_<class_sym>(mn, "class_sym")
         .def_static(
             "from_mlet",
@@ -852,6 +812,7 @@ PYBIND11_MODULE(_pynethack, m)
         .def_readonly("oc_weight",
                       &objclass::oc_weight) /* encumbrance (1 cn = 0.1 lb.) */
         .def_readonly("oc_cost", &objclass::oc_cost) /* base cost in shops */
+        .def_readonly("oc_subtyp", &objclass::oc_subtyp)
         /* And much more, see objclass.h. */;
 
     mn.def("OBJ_NAME", [](const objclass &obj) { return OBJ_NAME(obj); });

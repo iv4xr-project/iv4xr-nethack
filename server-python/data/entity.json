@@ -4,3170 +4,3623 @@
     "name": "strange object",
     "description": null,
     "weight": 0,
-    "cost": 0
+    "cost": 0,
+    "subtype": 0
   },
   {
     "index": 1,
     "name": "arrow",
     "description": null,
     "weight": 1,
-    "cost": 2
+    "cost": 2,
+    "subtype": -21
   },
   {
     "index": 2,
     "name": "elven arrow",
     "description": "runed arrow",
     "weight": 1,
-    "cost": 2
+    "cost": 2,
+    "subtype": -21
   },
   {
     "index": 3,
     "name": "orcish arrow",
     "description": "crude arrow",
     "weight": 1,
-    "cost": 2
+    "cost": 2,
+    "subtype": -21
   },
   {
     "index": 4,
     "name": "silver arrow",
     "description": null,
     "weight": 1,
-    "cost": 5
+    "cost": 5,
+    "subtype": -21
   },
   {
     "index": 5,
     "name": "ya",
     "description": "bamboo arrow",
     "weight": 1,
-    "cost": 4
+    "cost": 4,
+    "subtype": -21
   },
   {
     "index": 6,
     "name": "crossbow bolt",
     "description": null,
     "weight": 1,
-    "cost": 2
+    "cost": 2,
+    "subtype": -23
   },
   {
     "index": 7,
     "name": "dart",
     "description": null,
     "weight": 1,
-    "cost": 2
+    "cost": 2,
+    "subtype": -24
   },
   {
     "index": 8,
     "name": "shuriken",
     "description": "throwing star",
     "weight": 1,
-    "cost": 5
+    "cost": 5,
+    "subtype": -25
   },
   {
     "index": 9,
     "name": "boomerang",
     "description": null,
     "weight": 5,
-    "cost": 20
+    "cost": 20,
+    "subtype": -26
   },
   {
     "index": 10,
     "name": "spear",
     "description": null,
     "weight": 30,
-    "cost": 3
+    "cost": 3,
+    "subtype": 18
   },
   {
     "index": 11,
     "name": "elven spear",
     "description": "runed spear",
     "weight": 30,
-    "cost": 3
+    "cost": 3,
+    "subtype": 18
   },
   {
     "index": 12,
     "name": "orcish spear",
     "description": "crude spear",
     "weight": 30,
-    "cost": 3
+    "cost": 3,
+    "subtype": 18
   },
   {
     "index": 13,
     "name": "dwarvish spear",
     "description": "stout spear",
     "weight": 35,
-    "cost": 3
+    "cost": 3,
+    "subtype": 18
   },
   {
     "index": 14,
     "name": "silver spear",
     "description": null,
     "weight": 36,
-    "cost": 40
+    "cost": 40,
+    "subtype": 18
   },
   {
     "index": 15,
     "name": "javelin",
     "description": "throwing spear",
     "weight": 20,
-    "cost": 3
+    "cost": 3,
+    "subtype": 18
   },
   {
     "index": 16,
     "name": "trident",
     "description": null,
     "weight": 25,
-    "cost": 5
+    "cost": 5,
+    "subtype": 19
   },
   {
     "index": 17,
     "name": "dagger",
     "description": null,
     "weight": 10,
-    "cost": 4
+    "cost": 4,
+    "subtype": 1
   },
   {
     "index": 18,
     "name": "elven dagger",
     "description": "runed dagger",
     "weight": 10,
-    "cost": 4
+    "cost": 4,
+    "subtype": 1
   },
   {
     "index": 19,
     "name": "orcish dagger",
     "description": "crude dagger",
     "weight": 10,
-    "cost": 4
+    "cost": 4,
+    "subtype": 1
   },
   {
     "index": 20,
     "name": "silver dagger",
     "description": null,
     "weight": 12,
-    "cost": 40
+    "cost": 40,
+    "subtype": 1
   },
   {
     "index": 21,
     "name": "athame",
     "description": null,
     "weight": 10,
-    "cost": 4
+    "cost": 4,
+    "subtype": 1
   },
   {
     "index": 22,
     "name": "scalpel",
     "description": null,
     "weight": 5,
-    "cost": 6
+    "cost": 6,
+    "subtype": 2
   },
   {
     "index": 23,
     "name": "knife",
     "description": null,
     "weight": 5,
-    "cost": 4
+    "cost": 4,
+    "subtype": 2
   },
   {
     "index": 24,
     "name": "stiletto",
     "description": null,
     "weight": 5,
-    "cost": 4
+    "cost": 4,
+    "subtype": 2
   },
   {
     "index": 25,
     "name": "worm tooth",
     "description": null,
     "weight": 20,
-    "cost": 2
+    "cost": 2,
+    "subtype": 2
   },
   {
     "index": 26,
     "name": "crysknife",
     "description": null,
     "weight": 20,
-    "cost": 100
+    "cost": 100,
+    "subtype": 2
   },
   {
     "index": 27,
     "name": "axe",
     "description": null,
     "weight": 60,
-    "cost": 8
+    "cost": 8,
+    "subtype": 3
   },
   {
     "index": 28,
     "name": "battle-axe",
     "description": "double-headed axe",
     "weight": 120,
-    "cost": 40
+    "cost": 40,
+    "subtype": 3
   },
   {
     "index": 29,
     "name": "short sword",
     "description": null,
     "weight": 30,
-    "cost": 10
+    "cost": 10,
+    "subtype": 5
   },
   {
     "index": 30,
     "name": "elven short sword",
     "description": "runed short sword",
     "weight": 30,
-    "cost": 10
+    "cost": 10,
+    "subtype": 5
   },
   {
     "index": 31,
     "name": "orcish short sword",
     "description": "crude short sword",
     "weight": 30,
-    "cost": 10
+    "cost": 10,
+    "subtype": 5
   },
   {
     "index": 32,
     "name": "dwarvish short sword",
     "description": "broad short sword",
     "weight": 30,
-    "cost": 10
+    "cost": 10,
+    "subtype": 5
   },
   {
     "index": 33,
     "name": "scimitar",
     "description": "curved sword",
     "weight": 40,
-    "cost": 15
+    "cost": 15,
+    "subtype": 9
   },
   {
     "index": 34,
     "name": "silver saber",
     "description": null,
     "weight": 40,
-    "cost": 75
+    "cost": 75,
+    "subtype": 10
   },
   {
     "index": 35,
     "name": "broadsword",
     "description": null,
     "weight": 70,
-    "cost": 10
+    "cost": 10,
+    "subtype": 6
   },
   {
     "index": 36,
     "name": "elven broadsword",
     "description": "runed broadsword",
     "weight": 70,
-    "cost": 10
+    "cost": 10,
+    "subtype": 6
   },
   {
     "index": 37,
     "name": "long sword",
     "description": null,
     "weight": 40,
-    "cost": 15
+    "cost": 15,
+    "subtype": 7
   },
   {
     "index": 38,
     "name": "two-handed sword",
     "description": null,
     "weight": 150,
-    "cost": 50
+    "cost": 50,
+    "subtype": 8
   },
   {
     "index": 39,
     "name": "katana",
     "description": "samurai sword",
     "weight": 40,
-    "cost": 80
+    "cost": 80,
+    "subtype": 7
   },
   {
     "index": 40,
     "name": "tsurugi",
     "description": "long samurai sword",
     "weight": 60,
-    "cost": 500
+    "cost": 500,
+    "subtype": 8
   },
   {
     "index": 41,
     "name": "runesword",
     "description": "runed broadsword",
     "weight": 40,
-    "cost": 300
+    "cost": 300,
+    "subtype": 6
   },
   {
     "index": 42,
     "name": "partisan",
     "description": "vulgar polearm",
     "weight": 80,
-    "cost": 10
+    "cost": 10,
+    "subtype": 17
   },
   {
     "index": 43,
     "name": "ranseur",
     "description": "hilted polearm",
     "weight": 50,
-    "cost": 6
+    "cost": 6,
+    "subtype": 17
   },
   {
     "index": 44,
     "name": "spetum",
     "description": "forked polearm",
     "weight": 50,
-    "cost": 5
+    "cost": 5,
+    "subtype": 17
   },
   {
     "index": 45,
     "name": "glaive",
     "description": "single-edged polearm",
     "weight": 75,
-    "cost": 6
+    "cost": 6,
+    "subtype": 17
   },
   {
     "index": 46,
     "name": "lance",
     "description": null,
     "weight": 180,
-    "cost": 10
+    "cost": 10,
+    "subtype": 20
   },
   {
     "index": 47,
     "name": "halberd",
     "description": "angled poleaxe",
     "weight": 150,
-    "cost": 10
+    "cost": 10,
+    "subtype": 17
   },
   {
     "index": 48,
     "name": "bardiche",
     "description": "long poleaxe",
     "weight": 120,
-    "cost": 7
+    "cost": 7,
+    "subtype": 17
   },
   {
     "index": 49,
     "name": "voulge",
     "description": "pole cleaver",
     "weight": 125,
-    "cost": 5
+    "cost": 5,
+    "subtype": 17
   },
   {
     "index": 50,
     "name": "dwarvish mattock",
     "description": "broad pick",
     "weight": 120,
-    "cost": 50
+    "cost": 50,
+    "subtype": 4
   },
   {
     "index": 51,
     "name": "fauchard",
     "description": "pole sickle",
     "weight": 60,
-    "cost": 5
+    "cost": 5,
+    "subtype": 17
   },
   {
     "index": 52,
     "name": "guisarme",
     "description": "pruning hook",
     "weight": 80,
-    "cost": 5
+    "cost": 5,
+    "subtype": 17
   },
   {
     "index": 53,
     "name": "bill-guisarme",
     "description": "hooked polearm",
     "weight": 120,
-    "cost": 7
+    "cost": 7,
+    "subtype": 17
   },
   {
     "index": 54,
     "name": "lucern hammer",
     "description": "pronged polearm",
     "weight": 150,
-    "cost": 7
+    "cost": 7,
+    "subtype": 17
   },
   {
     "index": 55,
     "name": "bec de corbin",
     "description": "beaked polearm",
     "weight": 100,
-    "cost": 8
+    "cost": 8,
+    "subtype": 17
   },
   {
     "index": 56,
     "name": "mace",
     "description": null,
     "weight": 30,
-    "cost": 5
+    "cost": 5,
+    "subtype": 12
   },
   {
     "index": 57,
     "name": "morning star",
     "description": null,
     "weight": 120,
-    "cost": 10
+    "cost": 10,
+    "subtype": 13
   },
   {
     "index": 58,
     "name": "war hammer",
     "description": null,
     "weight": 50,
-    "cost": 5
+    "cost": 5,
+    "subtype": 15
   },
   {
     "index": 59,
     "name": "club",
     "description": null,
     "weight": 30,
-    "cost": 3
+    "cost": 3,
+    "subtype": 11
   },
   {
     "index": 60,
     "name": "rubber hose",
     "description": null,
     "weight": 20,
-    "cost": 3
+    "cost": 3,
+    "subtype": 27
   },
   {
     "index": 61,
     "name": "quarterstaff",
     "description": "staff",
     "weight": 40,
-    "cost": 5
+    "cost": 5,
+    "subtype": 16
   },
   {
     "index": 62,
     "name": "aklys",
     "description": "thonged club",
     "weight": 15,
-    "cost": 4
+    "cost": 4,
+    "subtype": 11
   },
   {
     "index": 63,
     "name": "flail",
     "description": null,
     "weight": 15,
-    "cost": 4
+    "cost": 4,
+    "subtype": 14
   },
   {
     "index": 64,
     "name": "bullwhip",
     "description": null,
     "weight": 20,
-    "cost": 4
+    "cost": 4,
+    "subtype": 27
   },
   {
     "index": 65,
     "name": "bow",
     "description": null,
     "weight": 30,
-    "cost": 60
+    "cost": 60,
+    "subtype": 21
   },
   {
     "index": 66,
     "name": "elven bow",
     "description": "runed bow",
     "weight": 30,
-    "cost": 60
+    "cost": 60,
+    "subtype": 21
   },
   {
     "index": 67,
     "name": "orcish bow",
     "description": "crude bow",
     "weight": 30,
-    "cost": 60
+    "cost": 60,
+    "subtype": 21
   },
   {
     "index": 68,
     "name": "yumi",
     "description": "long bow",
     "weight": 30,
-    "cost": 60
+    "cost": 60,
+    "subtype": 21
   },
   {
     "index": 69,
     "name": "sling",
     "description": null,
     "weight": 3,
-    "cost": 20
+    "cost": 20,
+    "subtype": 22
   },
   {
     "index": 70,
     "name": "crossbow",
     "description": null,
     "weight": 50,
-    "cost": 40
+    "cost": 40,
+    "subtype": 23
   },
   {
     "index": 71,
     "name": "elven leather helm",
     "description": "leather hat",
     "weight": 3,
-    "cost": 8
+    "cost": 8,
+    "subtype": 2
   },
   {
     "index": 72,
     "name": "orcish helm",
     "description": "iron skull cap",
     "weight": 30,
-    "cost": 10
+    "cost": 10,
+    "subtype": 2
   },
   {
     "index": 73,
     "name": "dwarvish iron helm",
     "description": "hard hat",
     "weight": 40,
-    "cost": 20
+    "cost": 20,
+    "subtype": 2
   },
   {
     "index": 74,
     "name": "fedora",
     "description": null,
     "weight": 3,
-    "cost": 1
+    "cost": 1,
+    "subtype": 2
   },
   {
     "index": 75,
     "name": "cornuthaum",
     "description": "conical hat",
     "weight": 4,
-    "cost": 80
+    "cost": 80,
+    "subtype": 2
   },
   {
     "index": 76,
     "name": "dunce cap",
     "description": "conical hat",
     "weight": 4,
-    "cost": 1
+    "cost": 1,
+    "subtype": 2
   },
   {
     "index": 77,
     "name": "dented pot",
     "description": null,
     "weight": 10,
-    "cost": 8
+    "cost": 8,
+    "subtype": 2
   },
   {
     "index": 78,
     "name": "helmet",
     "description": "plumed helmet",
     "weight": 30,
-    "cost": 10
+    "cost": 10,
+    "subtype": 2
   },
   {
     "index": 79,
     "name": "helm of brilliance",
     "description": "etched helmet",
     "weight": 50,
-    "cost": 50
+    "cost": 50,
+    "subtype": 2
   },
   {
     "index": 80,
     "name": "helm of opposite alignment",
     "description": "crested helmet",
     "weight": 50,
-    "cost": 50
+    "cost": 50,
+    "subtype": 2
   },
   {
     "index": 81,
     "name": "helm of telepathy",
     "description": "visored helmet",
     "weight": 50,
-    "cost": 50
+    "cost": 50,
+    "subtype": 2
   },
   {
     "index": 82,
     "name": "gray dragon scale mail",
     "description": null,
     "weight": 40,
-    "cost": 1200
+    "cost": 1200,
+    "subtype": 0
   },
   {
     "index": 83,
     "name": "silver dragon scale mail",
     "description": null,
     "weight": 40,
-    "cost": 1200
+    "cost": 1200,
+    "subtype": 0
   },
   {
     "index": 84,
     "name": "red dragon scale mail",
     "description": null,
     "weight": 40,
-    "cost": 900
+    "cost": 900,
+    "subtype": 0
   },
   {
     "index": 85,
     "name": "white dragon scale mail",
     "description": null,
     "weight": 40,
-    "cost": 900
+    "cost": 900,
+    "subtype": 0
   },
   {
     "index": 86,
     "name": "orange dragon scale mail",
     "description": null,
     "weight": 40,
-    "cost": 900
+    "cost": 900,
+    "subtype": 0
   },
   {
     "index": 87,
     "name": "black dragon scale mail",
     "description": null,
     "weight": 40,
-    "cost": 1200
+    "cost": 1200,
+    "subtype": 0
   },
   {
     "index": 88,
     "name": "blue dragon scale mail",
     "description": null,
     "weight": 40,
-    "cost": 900
+    "cost": 900,
+    "subtype": 0
   },
   {
     "index": 89,
     "name": "green dragon scale mail",
     "description": null,
     "weight": 40,
-    "cost": 900
+    "cost": 900,
+    "subtype": 0
   },
   {
     "index": 90,
     "name": "yellow dragon scale mail",
     "description": null,
     "weight": 40,
-    "cost": 900
+    "cost": 900,
+    "subtype": 0
   },
   {
     "index": 91,
     "name": "gray dragon scales",
     "description": null,
     "weight": 40,
-    "cost": 700
+    "cost": 700,
+    "subtype": 0
   },
   {
     "index": 92,
     "name": "silver dragon scales",
     "description": null,
     "weight": 40,
-    "cost": 700
+    "cost": 700,
+    "subtype": 0
   },
   {
     "index": 93,
     "name": "red dragon scales",
     "description": null,
     "weight": 40,
-    "cost": 500
+    "cost": 500,
+    "subtype": 0
   },
   {
     "index": 94,
     "name": "white dragon scales",
     "description": null,
     "weight": 40,
-    "cost": 500
+    "cost": 500,
+    "subtype": 0
   },
   {
     "index": 95,
     "name": "orange dragon scales",
     "description": null,
     "weight": 40,
-    "cost": 500
+    "cost": 500,
+    "subtype": 0
   },
   {
     "index": 96,
     "name": "black dragon scales",
     "description": null,
     "weight": 40,
-    "cost": 700
+    "cost": 700,
+    "subtype": 0
   },
   {
     "index": 97,
     "name": "blue dragon scales",
     "description": null,
     "weight": 40,
-    "cost": 500
+    "cost": 500,
+    "subtype": 0
   },
   {
     "index": 98,
     "name": "green dragon scales",
     "description": null,
     "weight": 40,
-    "cost": 500
+    "cost": 500,
+    "subtype": 0
   },
   {
     "index": 99,
     "name": "yellow dragon scales",
     "description": null,
     "weight": 40,
-    "cost": 500
+    "cost": 500,
+    "subtype": 0
   },
   {
     "index": 100,
     "name": "plate mail",
     "description": null,
     "weight": 450,
-    "cost": 600
+    "cost": 600,
+    "subtype": 0
   },
   {
     "index": 101,
     "name": "crystal plate mail",
     "description": null,
     "weight": 450,
-    "cost": 820
+    "cost": 820,
+    "subtype": 0
   },
   {
     "index": 102,
     "name": "bronze plate mail",
     "description": null,
     "weight": 450,
-    "cost": 400
+    "cost": 400,
+    "subtype": 0
   },
   {
     "index": 103,
     "name": "splint mail",
     "description": null,
     "weight": 400,
-    "cost": 80
+    "cost": 80,
+    "subtype": 0
   },
   {
     "index": 104,
     "name": "banded mail",
     "description": null,
     "weight": 350,
-    "cost": 90
+    "cost": 90,
+    "subtype": 0
   },
   {
     "index": 105,
     "name": "dwarvish mithril-coat",
     "description": null,
     "weight": 150,
-    "cost": 240
+    "cost": 240,
+    "subtype": 0
   },
   {
     "index": 106,
     "name": "elven mithril-coat",
     "description": null,
     "weight": 150,
-    "cost": 240
+    "cost": 240,
+    "subtype": 0
   },
   {
     "index": 107,
     "name": "chain mail",
     "description": null,
     "weight": 300,
-    "cost": 75
+    "cost": 75,
+    "subtype": 0
   },
   {
     "index": 108,
     "name": "orcish chain mail",
     "description": "crude chain mail",
     "weight": 300,
-    "cost": 75
+    "cost": 75,
+    "subtype": 0
   },
   {
     "index": 109,
     "name": "scale mail",
     "description": null,
     "weight": 250,
-    "cost": 45
+    "cost": 45,
+    "subtype": 0
   },
   {
     "index": 110,
     "name": "studded leather armor",
     "description": null,
     "weight": 200,
-    "cost": 15
+    "cost": 15,
+    "subtype": 0
   },
   {
     "index": 111,
     "name": "ring mail",
     "description": null,
     "weight": 250,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 112,
     "name": "orcish ring mail",
     "description": "crude ring mail",
     "weight": 250,
-    "cost": 80
+    "cost": 80,
+    "subtype": 0
   },
   {
     "index": 113,
     "name": "leather armor",
     "description": null,
     "weight": 150,
-    "cost": 5
+    "cost": 5,
+    "subtype": 0
   },
   {
     "index": 114,
     "name": "leather jacket",
     "description": null,
     "weight": 30,
-    "cost": 10
+    "cost": 10,
+    "subtype": 0
   },
   {
     "index": 115,
     "name": "Hawaiian shirt",
     "description": null,
     "weight": 5,
-    "cost": 3
+    "cost": 3,
+    "subtype": 6
   },
   {
     "index": 116,
     "name": "T-shirt",
     "description": null,
     "weight": 5,
-    "cost": 2
+    "cost": 2,
+    "subtype": 6
   },
   {
     "index": 117,
     "name": "mummy wrapping",
     "description": null,
     "weight": 3,
-    "cost": 2
+    "cost": 2,
+    "subtype": 5
   },
   {
     "index": 118,
     "name": "elven cloak",
     "description": "faded pall",
     "weight": 10,
-    "cost": 60
+    "cost": 60,
+    "subtype": 5
   },
   {
     "index": 119,
     "name": "orcish cloak",
     "description": "coarse mantelet",
     "weight": 10,
-    "cost": 40
+    "cost": 40,
+    "subtype": 5
   },
   {
     "index": 120,
     "name": "dwarvish cloak",
     "description": "hooded cloak",
     "weight": 10,
-    "cost": 50
+    "cost": 50,
+    "subtype": 5
   },
   {
     "index": 121,
     "name": "oilskin cloak",
     "description": "slippery cloak",
     "weight": 10,
-    "cost": 50
+    "cost": 50,
+    "subtype": 5
   },
   {
     "index": 122,
     "name": "robe",
     "description": null,
     "weight": 15,
-    "cost": 50
+    "cost": 50,
+    "subtype": 5
   },
   {
     "index": 123,
     "name": "alchemy smock",
     "description": "apron",
     "weight": 10,
-    "cost": 50
+    "cost": 50,
+    "subtype": 5
   },
   {
     "index": 124,
     "name": "leather cloak",
     "description": null,
     "weight": 15,
-    "cost": 40
+    "cost": 40,
+    "subtype": 5
   },
   {
     "index": 125,
     "name": "cloak of protection",
     "description": "tattered cape",
     "weight": 10,
-    "cost": 50
+    "cost": 50,
+    "subtype": 5
   },
   {
     "index": 126,
     "name": "cloak of invisibility",
     "description": "opera cloak",
     "weight": 10,
-    "cost": 60
+    "cost": 60,
+    "subtype": 5
   },
   {
     "index": 127,
     "name": "cloak of magic resistance",
     "description": "ornamental cope",
     "weight": 10,
-    "cost": 60
+    "cost": 60,
+    "subtype": 5
   },
   {
     "index": 128,
     "name": "cloak of displacement",
     "description": "piece of cloth",
     "weight": 10,
-    "cost": 50
+    "cost": 50,
+    "subtype": 5
   },
   {
     "index": 129,
     "name": "small shield",
     "description": null,
     "weight": 30,
-    "cost": 3
+    "cost": 3,
+    "subtype": 1
   },
   {
     "index": 130,
     "name": "elven shield",
     "description": "blue and green shield",
     "weight": 40,
-    "cost": 7
+    "cost": 7,
+    "subtype": 1
   },
   {
     "index": 131,
     "name": "Uruk-hai shield",
     "description": "white-handed shield",
     "weight": 50,
-    "cost": 7
+    "cost": 7,
+    "subtype": 1
   },
   {
     "index": 132,
     "name": "orcish shield",
     "description": "red-eyed shield",
     "weight": 50,
-    "cost": 7
+    "cost": 7,
+    "subtype": 1
   },
   {
     "index": 133,
     "name": "large shield",
     "description": null,
     "weight": 100,
-    "cost": 10
+    "cost": 10,
+    "subtype": 1
   },
   {
     "index": 134,
     "name": "dwarvish roundshield",
     "description": "large round shield",
     "weight": 100,
-    "cost": 10
+    "cost": 10,
+    "subtype": 1
   },
   {
     "index": 135,
     "name": "shield of reflection",
     "description": "polished silver shield",
     "weight": 50,
-    "cost": 50
+    "cost": 50,
+    "subtype": 1
   },
   {
     "index": 136,
     "name": "leather gloves",
     "description": "old gloves",
     "weight": 10,
-    "cost": 8
+    "cost": 8,
+    "subtype": 3
   },
   {
     "index": 137,
     "name": "gauntlets of fumbling",
     "description": "padded gloves",
     "weight": 10,
-    "cost": 50
+    "cost": 50,
+    "subtype": 3
   },
   {
     "index": 138,
     "name": "gauntlets of power",
     "description": "riding gloves",
     "weight": 30,
-    "cost": 50
+    "cost": 50,
+    "subtype": 3
   },
   {
     "index": 139,
     "name": "gauntlets of dexterity",
     "description": "fencing gloves",
     "weight": 10,
-    "cost": 50
+    "cost": 50,
+    "subtype": 3
   },
   {
     "index": 140,
     "name": "low boots",
     "description": "walking shoes",
     "weight": 10,
-    "cost": 8
+    "cost": 8,
+    "subtype": 4
   },
   {
     "index": 141,
     "name": "iron shoes",
     "description": "hard shoes",
     "weight": 50,
-    "cost": 16
+    "cost": 16,
+    "subtype": 4
   },
   {
     "index": 142,
     "name": "high boots",
     "description": "jackboots",
     "weight": 20,
-    "cost": 12
+    "cost": 12,
+    "subtype": 4
   },
   {
     "index": 143,
     "name": "speed boots",
     "description": "combat boots",
     "weight": 20,
-    "cost": 50
+    "cost": 50,
+    "subtype": 4
   },
   {
     "index": 144,
     "name": "water walking boots",
     "description": "jungle boots",
     "weight": 15,
-    "cost": 50
+    "cost": 50,
+    "subtype": 4
   },
   {
     "index": 145,
     "name": "jumping boots",
     "description": "hiking boots",
     "weight": 20,
-    "cost": 50
+    "cost": 50,
+    "subtype": 4
   },
   {
     "index": 146,
     "name": "elven boots",
     "description": "mud boots",
     "weight": 15,
-    "cost": 8
+    "cost": 8,
+    "subtype": 4
   },
   {
     "index": 147,
     "name": "kicking boots",
     "description": "buckled boots",
     "weight": 50,
-    "cost": 8
+    "cost": 8,
+    "subtype": 4
   },
   {
     "index": 148,
     "name": "fumble boots",
     "description": "riding boots",
     "weight": 20,
-    "cost": 30
+    "cost": 30,
+    "subtype": 4
   },
   {
     "index": 149,
     "name": "levitation boots",
     "description": "snow boots",
     "weight": 15,
-    "cost": 30
+    "cost": 30,
+    "subtype": 4
   },
   {
     "index": 150,
     "name": "adornment",
     "description": "wooden",
     "weight": 3,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 151,
     "name": "gain strength",
     "description": "granite",
     "weight": 3,
-    "cost": 150
+    "cost": 150,
+    "subtype": 0
   },
   {
     "index": 152,
     "name": "gain constitution",
     "description": "opal",
     "weight": 3,
-    "cost": 150
+    "cost": 150,
+    "subtype": 0
   },
   {
     "index": 153,
     "name": "increase accuracy",
     "description": "clay",
     "weight": 3,
-    "cost": 150
+    "cost": 150,
+    "subtype": 0
   },
   {
     "index": 154,
     "name": "increase damage",
     "description": "coral",
     "weight": 3,
-    "cost": 150
+    "cost": 150,
+    "subtype": 0
   },
   {
     "index": 155,
     "name": "protection",
     "description": "black onyx",
     "weight": 3,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 156,
     "name": "regeneration",
     "description": "moonstone",
     "weight": 3,
-    "cost": 200
+    "cost": 200,
+    "subtype": 0
   },
   {
     "index": 157,
     "name": "searching",
     "description": "tiger eye",
     "weight": 3,
-    "cost": 200
+    "cost": 200,
+    "subtype": 0
   },
   {
     "index": 158,
     "name": "stealth",
     "description": "jade",
     "weight": 3,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 159,
     "name": "sustain ability",
     "description": "bronze",
     "weight": 3,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 160,
     "name": "levitation",
     "description": "agate",
     "weight": 3,
-    "cost": 200
+    "cost": 200,
+    "subtype": 0
   },
   {
     "index": 161,
     "name": "hunger",
     "description": "topaz",
     "weight": 3,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 162,
     "name": "aggravate monster",
     "description": "sapphire",
     "weight": 3,
-    "cost": 150
+    "cost": 150,
+    "subtype": 0
   },
   {
     "index": 163,
     "name": "conflict",
     "description": "ruby",
     "weight": 3,
-    "cost": 300
+    "cost": 300,
+    "subtype": 0
   },
   {
     "index": 164,
     "name": "warning",
     "description": "diamond",
     "weight": 3,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 165,
     "name": "poison resistance",
     "description": "pearl",
     "weight": 3,
-    "cost": 150
+    "cost": 150,
+    "subtype": 0
   },
   {
     "index": 166,
     "name": "fire resistance",
     "description": "iron",
     "weight": 3,
-    "cost": 200
+    "cost": 200,
+    "subtype": 0
   },
   {
     "index": 167,
     "name": "cold resistance",
     "description": "brass",
     "weight": 3,
-    "cost": 150
+    "cost": 150,
+    "subtype": 0
   },
   {
     "index": 168,
     "name": "shock resistance",
     "description": "copper",
     "weight": 3,
-    "cost": 150
+    "cost": 150,
+    "subtype": 0
   },
   {
     "index": 169,
     "name": "free action",
     "description": "twisted",
     "weight": 3,
-    "cost": 200
+    "cost": 200,
+    "subtype": 0
   },
   {
     "index": 170,
     "name": "slow digestion",
     "description": "steel",
     "weight": 3,
-    "cost": 200
+    "cost": 200,
+    "subtype": 0
   },
   {
     "index": 171,
     "name": "teleportation",
     "description": "silver",
     "weight": 3,
-    "cost": 200
+    "cost": 200,
+    "subtype": 0
   },
   {
     "index": 172,
     "name": "teleport control",
     "description": "gold",
     "weight": 3,
-    "cost": 300
+    "cost": 300,
+    "subtype": 0
   },
   {
     "index": 173,
     "name": "polymorph",
     "description": "ivory",
     "weight": 3,
-    "cost": 300
+    "cost": 300,
+    "subtype": 0
   },
   {
     "index": 174,
     "name": "polymorph control",
     "description": "emerald",
     "weight": 3,
-    "cost": 300
+    "cost": 300,
+    "subtype": 0
   },
   {
     "index": 175,
     "name": "invisibility",
     "description": "wire",
     "weight": 3,
-    "cost": 150
+    "cost": 150,
+    "subtype": 0
   },
   {
     "index": 176,
     "name": "see invisible",
     "description": "engagement",
     "weight": 3,
-    "cost": 150
+    "cost": 150,
+    "subtype": 0
   },
   {
     "index": 177,
     "name": "protection from shape changers",
     "description": "shiny",
     "weight": 3,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 178,
     "name": "amulet of ESP",
     "description": "circular",
     "weight": 20,
-    "cost": 150
+    "cost": 150,
+    "subtype": 0
   },
   {
     "index": 179,
     "name": "amulet of life saving",
     "description": "spherical",
     "weight": 20,
-    "cost": 150
+    "cost": 150,
+    "subtype": 0
   },
   {
     "index": 180,
     "name": "amulet of strangulation",
     "description": "oval",
     "weight": 20,
-    "cost": 150
+    "cost": 150,
+    "subtype": 0
   },
   {
     "index": 181,
     "name": "amulet of restful sleep",
     "description": "triangular",
     "weight": 20,
-    "cost": 150
+    "cost": 150,
+    "subtype": 0
   },
   {
     "index": 182,
     "name": "amulet versus poison",
     "description": "pyramidal",
     "weight": 20,
-    "cost": 150
+    "cost": 150,
+    "subtype": 0
   },
   {
     "index": 183,
     "name": "amulet of change",
     "description": "square",
     "weight": 20,
-    "cost": 150
+    "cost": 150,
+    "subtype": 0
   },
   {
     "index": 184,
     "name": "amulet of unchanging",
     "description": "concave",
     "weight": 20,
-    "cost": 150
+    "cost": 150,
+    "subtype": 0
   },
   {
     "index": 185,
     "name": "amulet of reflection",
     "description": "hexagonal",
     "weight": 20,
-    "cost": 150
+    "cost": 150,
+    "subtype": 0
   },
   {
     "index": 186,
     "name": "amulet of magical breathing",
     "description": "octagonal",
     "weight": 20,
-    "cost": 150
+    "cost": 150,
+    "subtype": 0
   },
   {
     "index": 187,
     "name": "cheap plastic imitation of the Amulet of Yendor",
     "description": "Amulet of Yendor",
     "weight": 20,
-    "cost": 0
+    "cost": 0,
+    "subtype": 0
   },
   {
     "index": 188,
     "name": "Amulet of Yendor",
     "description": "Amulet of Yendor",
     "weight": 20,
-    "cost": 30000
+    "cost": 30000,
+    "subtype": 0
   },
   {
     "index": 189,
     "name": "large box",
     "description": null,
     "weight": 350,
-    "cost": 8
+    "cost": 8,
+    "subtype": 0
   },
   {
     "index": 190,
     "name": "chest",
     "description": null,
     "weight": 600,
-    "cost": 16
+    "cost": 16,
+    "subtype": 0
   },
   {
     "index": 191,
     "name": "ice box",
     "description": null,
     "weight": 900,
-    "cost": 42
+    "cost": 42,
+    "subtype": 0
   },
   {
     "index": 192,
     "name": "sack",
     "description": "bag",
     "weight": 15,
-    "cost": 2
+    "cost": 2,
+    "subtype": 0
   },
   {
     "index": 193,
     "name": "oilskin sack",
     "description": "bag",
     "weight": 15,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 194,
     "name": "bag of holding",
     "description": "bag",
     "weight": 15,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 195,
     "name": "bag of tricks",
     "description": "bag",
     "weight": 15,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 196,
     "name": "skeleton key",
     "description": "key",
     "weight": 3,
-    "cost": 10
+    "cost": 10,
+    "subtype": 0
   },
   {
     "index": 197,
     "name": "lock pick",
     "description": null,
     "weight": 4,
-    "cost": 20
+    "cost": 20,
+    "subtype": 0
   },
   {
     "index": 198,
     "name": "credit card",
     "description": null,
     "weight": 1,
-    "cost": 10
+    "cost": 10,
+    "subtype": 0
   },
   {
     "index": 199,
     "name": "tallow candle",
     "description": "candle",
     "weight": 2,
-    "cost": 10
+    "cost": 10,
+    "subtype": 0
   },
   {
     "index": 200,
     "name": "wax candle",
     "description": "candle",
     "weight": 2,
-    "cost": 20
+    "cost": 20,
+    "subtype": 0
   },
   {
     "index": 201,
     "name": "brass lantern",
     "description": null,
     "weight": 30,
-    "cost": 12
+    "cost": 12,
+    "subtype": 0
   },
   {
     "index": 202,
     "name": "oil lamp",
     "description": "lamp",
     "weight": 20,
-    "cost": 10
+    "cost": 10,
+    "subtype": 0
   },
   {
     "index": 203,
     "name": "magic lamp",
     "description": "lamp",
     "weight": 20,
-    "cost": 50
+    "cost": 50,
+    "subtype": 0
   },
   {
     "index": 204,
     "name": "expensive camera",
     "description": null,
     "weight": 12,
-    "cost": 200
+    "cost": 200,
+    "subtype": 0
   },
   {
     "index": 205,
     "name": "mirror",
     "description": "looking glass",
     "weight": 13,
-    "cost": 10
+    "cost": 10,
+    "subtype": 0
   },
   {
     "index": 206,
     "name": "crystal ball",
     "description": "glass orb",
     "weight": 150,
-    "cost": 60
+    "cost": 60,
+    "subtype": 0
   },
   {
     "index": 207,
     "name": "lenses",
     "description": null,
     "weight": 3,
-    "cost": 80
+    "cost": 80,
+    "subtype": 0
   },
   {
     "index": 208,
     "name": "blindfold",
     "description": null,
     "weight": 2,
-    "cost": 20
+    "cost": 20,
+    "subtype": 0
   },
   {
     "index": 209,
     "name": "towel",
     "description": null,
     "weight": 2,
-    "cost": 50
+    "cost": 50,
+    "subtype": 0
   },
   {
     "index": 210,
     "name": "saddle",
     "description": null,
     "weight": 200,
-    "cost": 150
+    "cost": 150,
+    "subtype": 0
   },
   {
     "index": 211,
     "name": "leash",
     "description": null,
     "weight": 12,
-    "cost": 20
+    "cost": 20,
+    "subtype": 0
   },
   {
     "index": 212,
     "name": "stethoscope",
     "description": null,
     "weight": 4,
-    "cost": 75
+    "cost": 75,
+    "subtype": 0
   },
   {
     "index": 213,
     "name": "tinning kit",
     "description": null,
     "weight": 100,
-    "cost": 30
+    "cost": 30,
+    "subtype": 0
   },
   {
     "index": 214,
     "name": "tin opener",
     "description": null,
     "weight": 4,
-    "cost": 30
+    "cost": 30,
+    "subtype": 0
   },
   {
     "index": 215,
     "name": "can of grease",
     "description": null,
     "weight": 15,
-    "cost": 20
+    "cost": 20,
+    "subtype": 0
   },
   {
     "index": 216,
     "name": "figurine",
     "description": null,
     "weight": 50,
-    "cost": 80
+    "cost": 80,
+    "subtype": 0
   },
   {
     "index": 217,
     "name": "magic marker",
     "description": null,
     "weight": 2,
-    "cost": 50
+    "cost": 50,
+    "subtype": 0
   },
   {
     "index": 218,
     "name": "land mine",
     "description": null,
     "weight": 300,
-    "cost": 180
+    "cost": 180,
+    "subtype": 0
   },
   {
     "index": 219,
     "name": "beartrap",
     "description": null,
     "weight": 200,
-    "cost": 60
+    "cost": 60,
+    "subtype": 0
   },
   {
     "index": 220,
     "name": "tin whistle",
     "description": "whistle",
     "weight": 3,
-    "cost": 10
+    "cost": 10,
+    "subtype": 0
   },
   {
     "index": 221,
     "name": "magic whistle",
     "description": "whistle",
     "weight": 3,
-    "cost": 10
+    "cost": 10,
+    "subtype": 0
   },
   {
     "index": 222,
     "name": "wooden flute",
     "description": "flute",
     "weight": 5,
-    "cost": 12
+    "cost": 12,
+    "subtype": 0
   },
   {
     "index": 223,
     "name": "magic flute",
     "description": "flute",
     "weight": 5,
-    "cost": 36
+    "cost": 36,
+    "subtype": 0
   },
   {
     "index": 224,
     "name": "tooled horn",
     "description": "horn",
     "weight": 18,
-    "cost": 15
+    "cost": 15,
+    "subtype": 0
   },
   {
     "index": 225,
     "name": "frost horn",
     "description": "horn",
     "weight": 18,
-    "cost": 50
+    "cost": 50,
+    "subtype": 0
   },
   {
     "index": 226,
     "name": "fire horn",
     "description": "horn",
     "weight": 18,
-    "cost": 50
+    "cost": 50,
+    "subtype": 0
   },
   {
     "index": 227,
     "name": "horn of plenty",
     "description": "horn",
     "weight": 18,
-    "cost": 50
+    "cost": 50,
+    "subtype": 0
   },
   {
     "index": 228,
     "name": "wooden harp",
     "description": "harp",
     "weight": 30,
-    "cost": 50
+    "cost": 50,
+    "subtype": 0
   },
   {
     "index": 229,
     "name": "magic harp",
     "description": "harp",
     "weight": 30,
-    "cost": 50
+    "cost": 50,
+    "subtype": 0
   },
   {
     "index": 230,
     "name": "bell",
     "description": null,
     "weight": 30,
-    "cost": 50
+    "cost": 50,
+    "subtype": 0
   },
   {
     "index": 231,
     "name": "bugle",
     "description": null,
     "weight": 10,
-    "cost": 15
+    "cost": 15,
+    "subtype": 0
   },
   {
     "index": 232,
     "name": "leather drum",
     "description": "drum",
     "weight": 25,
-    "cost": 25
+    "cost": 25,
+    "subtype": 0
   },
   {
     "index": 233,
     "name": "drum of earthquake",
     "description": "drum",
     "weight": 25,
-    "cost": 25
+    "cost": 25,
+    "subtype": 0
   },
   {
     "index": 234,
     "name": "pick-axe",
     "description": null,
     "weight": 100,
-    "cost": 50
+    "cost": 50,
+    "subtype": 4
   },
   {
     "index": 235,
     "name": "grappling hook",
     "description": "iron hook",
     "weight": 30,
-    "cost": 50
+    "cost": 50,
+    "subtype": 14
   },
   {
     "index": 236,
     "name": "unicorn horn",
     "description": null,
     "weight": 20,
-    "cost": 100
+    "cost": 100,
+    "subtype": 28
   },
   {
     "index": 237,
     "name": "Candelabrum of Invocation",
     "description": "candelabrum",
     "weight": 10,
-    "cost": 5000
+    "cost": 5000,
+    "subtype": 0
   },
   {
     "index": 238,
     "name": "Bell of Opening",
     "description": "silver bell",
     "weight": 10,
-    "cost": 5000
+    "cost": 5000,
+    "subtype": 0
   },
   {
     "index": 239,
     "name": "tripe ration",
     "description": null,
     "weight": 10,
-    "cost": 15
+    "cost": 15,
+    "subtype": 0
   },
   {
     "index": 240,
     "name": "corpse",
     "description": null,
     "weight": 0,
-    "cost": 5
+    "cost": 5,
+    "subtype": 0
   },
   {
     "index": 241,
     "name": "egg",
     "description": null,
     "weight": 1,
-    "cost": 9
+    "cost": 9,
+    "subtype": 0
   },
   {
     "index": 242,
     "name": "meatball",
     "description": null,
     "weight": 1,
-    "cost": 5
+    "cost": 5,
+    "subtype": 0
   },
   {
     "index": 243,
     "name": "meat stick",
     "description": null,
     "weight": 1,
-    "cost": 5
+    "cost": 5,
+    "subtype": 0
   },
   {
     "index": 244,
     "name": "huge chunk of meat",
     "description": null,
     "weight": 400,
-    "cost": 105
+    "cost": 105,
+    "subtype": 0
   },
   {
     "index": 245,
     "name": "meat ring",
     "description": null,
     "weight": 5,
-    "cost": 1
+    "cost": 1,
+    "subtype": 0
   },
   {
     "index": 246,
     "name": "glob of gray ooze",
     "description": null,
     "weight": 20,
-    "cost": 6
+    "cost": 6,
+    "subtype": 0
   },
   {
     "index": 247,
     "name": "glob of brown pudding",
     "description": null,
     "weight": 20,
-    "cost": 6
+    "cost": 6,
+    "subtype": 0
   },
   {
     "index": 248,
     "name": "glob of green slime",
     "description": null,
     "weight": 20,
-    "cost": 6
+    "cost": 6,
+    "subtype": 0
   },
   {
     "index": 249,
     "name": "glob of black pudding",
     "description": null,
     "weight": 20,
-    "cost": 6
+    "cost": 6,
+    "subtype": 0
   },
   {
     "index": 250,
     "name": "kelp frond",
     "description": null,
     "weight": 1,
-    "cost": 6
+    "cost": 6,
+    "subtype": 0
   },
   {
     "index": 251,
     "name": "eucalyptus leaf",
     "description": null,
     "weight": 1,
-    "cost": 6
+    "cost": 6,
+    "subtype": 0
   },
   {
     "index": 252,
     "name": "apple",
     "description": null,
     "weight": 2,
-    "cost": 7
+    "cost": 7,
+    "subtype": 0
   },
   {
     "index": 253,
     "name": "orange",
     "description": null,
     "weight": 2,
-    "cost": 9
+    "cost": 9,
+    "subtype": 0
   },
   {
     "index": 254,
     "name": "pear",
     "description": null,
     "weight": 2,
-    "cost": 7
+    "cost": 7,
+    "subtype": 0
   },
   {
     "index": 255,
     "name": "melon",
     "description": null,
     "weight": 5,
-    "cost": 10
+    "cost": 10,
+    "subtype": 0
   },
   {
     "index": 256,
     "name": "banana",
     "description": null,
     "weight": 2,
-    "cost": 9
+    "cost": 9,
+    "subtype": 0
   },
   {
     "index": 257,
     "name": "carrot",
     "description": null,
     "weight": 2,
-    "cost": 7
+    "cost": 7,
+    "subtype": 0
   },
   {
     "index": 258,
     "name": "sprig of wolfsbane",
     "description": null,
     "weight": 1,
-    "cost": 7
+    "cost": 7,
+    "subtype": 0
   },
   {
     "index": 259,
     "name": "clove of garlic",
     "description": null,
     "weight": 1,
-    "cost": 7
+    "cost": 7,
+    "subtype": 0
   },
   {
     "index": 260,
     "name": "slime mold",
     "description": null,
     "weight": 5,
-    "cost": 17
+    "cost": 17,
+    "subtype": 0
   },
   {
     "index": 261,
     "name": "lump of royal jelly",
     "description": null,
     "weight": 2,
-    "cost": 15
+    "cost": 15,
+    "subtype": 0
   },
   {
     "index": 262,
     "name": "cream pie",
     "description": null,
     "weight": 10,
-    "cost": 10
+    "cost": 10,
+    "subtype": 0
   },
   {
     "index": 263,
     "name": "candy bar",
     "description": null,
     "weight": 2,
-    "cost": 10
+    "cost": 10,
+    "subtype": 0
   },
   {
     "index": 264,
     "name": "fortune cookie",
     "description": null,
     "weight": 1,
-    "cost": 7
+    "cost": 7,
+    "subtype": 0
   },
   {
     "index": 265,
     "name": "pancake",
     "description": null,
     "weight": 2,
-    "cost": 15
+    "cost": 15,
+    "subtype": 0
   },
   {
     "index": 266,
     "name": "lembas wafer",
     "description": null,
     "weight": 5,
-    "cost": 45
+    "cost": 45,
+    "subtype": 0
   },
   {
     "index": 267,
     "name": "cram ration",
     "description": null,
     "weight": 15,
-    "cost": 35
+    "cost": 35,
+    "subtype": 0
   },
   {
     "index": 268,
     "name": "food ration",
     "description": null,
     "weight": 20,
-    "cost": 45
+    "cost": 45,
+    "subtype": 0
   },
   {
     "index": 269,
     "name": "K-ration",
     "description": null,
     "weight": 10,
-    "cost": 25
+    "cost": 25,
+    "subtype": 0
   },
   {
     "index": 270,
     "name": "C-ration",
     "description": null,
     "weight": 10,
-    "cost": 20
+    "cost": 20,
+    "subtype": 0
   },
   {
     "index": 271,
     "name": "tin",
     "description": null,
     "weight": 10,
-    "cost": 5
+    "cost": 5,
+    "subtype": 0
   },
   {
     "index": 272,
     "name": "gain ability",
     "description": "ruby",
     "weight": 20,
-    "cost": 300
+    "cost": 300,
+    "subtype": 0
   },
   {
     "index": 273,
     "name": "restore ability",
     "description": "pink",
     "weight": 20,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 274,
     "name": "confusion",
     "description": "orange",
     "weight": 20,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 275,
     "name": "blindness",
     "description": "yellow",
     "weight": 20,
-    "cost": 150
+    "cost": 150,
+    "subtype": 0
   },
   {
     "index": 276,
     "name": "paralysis",
     "description": "emerald",
     "weight": 20,
-    "cost": 300
+    "cost": 300,
+    "subtype": 0
   },
   {
     "index": 277,
     "name": "speed",
     "description": "dark green",
     "weight": 20,
-    "cost": 200
+    "cost": 200,
+    "subtype": 0
   },
   {
     "index": 278,
     "name": "levitation",
     "description": "cyan",
     "weight": 20,
-    "cost": 200
+    "cost": 200,
+    "subtype": 0
   },
   {
     "index": 279,
     "name": "hallucination",
     "description": "sky blue",
     "weight": 20,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 280,
     "name": "invisibility",
     "description": "brilliant blue",
     "weight": 20,
-    "cost": 150
+    "cost": 150,
+    "subtype": 0
   },
   {
     "index": 281,
     "name": "see invisible",
     "description": "magenta",
     "weight": 20,
-    "cost": 50
+    "cost": 50,
+    "subtype": 0
   },
   {
     "index": 282,
     "name": "healing",
     "description": "purple-red",
     "weight": 20,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 283,
     "name": "extra healing",
     "description": "puce",
     "weight": 20,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 284,
     "name": "gain level",
     "description": "milky",
     "weight": 20,
-    "cost": 300
+    "cost": 300,
+    "subtype": 0
   },
   {
     "index": 285,
     "name": "enlightenment",
     "description": "swirly",
     "weight": 20,
-    "cost": 200
+    "cost": 200,
+    "subtype": 0
   },
   {
     "index": 286,
     "name": "monster detection",
     "description": "bubbly",
     "weight": 20,
-    "cost": 150
+    "cost": 150,
+    "subtype": 0
   },
   {
     "index": 287,
     "name": "object detection",
     "description": "smoky",
     "weight": 20,
-    "cost": 150
+    "cost": 150,
+    "subtype": 0
   },
   {
     "index": 288,
     "name": "gain energy",
     "description": "cloudy",
     "weight": 20,
-    "cost": 150
+    "cost": 150,
+    "subtype": 0
   },
   {
     "index": 289,
     "name": "sleeping",
     "description": "effervescent",
     "weight": 20,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 290,
     "name": "full healing",
     "description": "black",
     "weight": 20,
-    "cost": 200
+    "cost": 200,
+    "subtype": 0
   },
   {
     "index": 291,
     "name": "polymorph",
     "description": "golden",
     "weight": 20,
-    "cost": 200
+    "cost": 200,
+    "subtype": 0
   },
   {
     "index": 292,
     "name": "booze",
     "description": "brown",
     "weight": 20,
-    "cost": 50
+    "cost": 50,
+    "subtype": 0
   },
   {
     "index": 293,
     "name": "sickness",
     "description": "fizzy",
     "weight": 20,
-    "cost": 50
+    "cost": 50,
+    "subtype": 0
   },
   {
     "index": 294,
     "name": "fruit juice",
     "description": "dark",
     "weight": 20,
-    "cost": 50
+    "cost": 50,
+    "subtype": 0
   },
   {
     "index": 295,
     "name": "acid",
     "description": "white",
     "weight": 20,
-    "cost": 250
+    "cost": 250,
+    "subtype": 0
   },
   {
     "index": 296,
     "name": "oil",
     "description": "murky",
     "weight": 20,
-    "cost": 250
+    "cost": 250,
+    "subtype": 0
   },
   {
     "index": 297,
     "name": "water",
     "description": "clear",
     "weight": 20,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 298,
     "name": "enchant armor",
     "description": "ZELGO MER",
     "weight": 5,
-    "cost": 80
+    "cost": 80,
+    "subtype": 0
   },
   {
     "index": 299,
     "name": "destroy armor",
     "description": "JUYED AWK YACC",
     "weight": 5,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 300,
     "name": "confuse monster",
     "description": "NR 9",
     "weight": 5,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 301,
     "name": "scare monster",
     "description": "XIXAXA XOXAXA XUXAXA",
     "weight": 5,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 302,
     "name": "remove curse",
     "description": "PRATYAVAYAH",
     "weight": 5,
-    "cost": 80
+    "cost": 80,
+    "subtype": 0
   },
   {
     "index": 303,
     "name": "enchant weapon",
     "description": "DAIYEN FOOELS",
     "weight": 5,
-    "cost": 60
+    "cost": 60,
+    "subtype": 0
   },
   {
     "index": 304,
     "name": "create monster",
     "description": "LEP GEX VEN ZEA",
     "weight": 5,
-    "cost": 200
+    "cost": 200,
+    "subtype": 0
   },
   {
     "index": 305,
     "name": "taming",
     "description": "PRIRUTSENIE",
     "weight": 5,
-    "cost": 200
+    "cost": 200,
+    "subtype": 0
   },
   {
     "index": 306,
     "name": "genocide",
     "description": "ELBIB YLOH",
     "weight": 5,
-    "cost": 300
+    "cost": 300,
+    "subtype": 0
   },
   {
     "index": 307,
     "name": "light",
     "description": "VERR YED HORRE",
     "weight": 5,
-    "cost": 50
+    "cost": 50,
+    "subtype": 0
   },
   {
     "index": 308,
     "name": "teleportation",
     "description": "VENZAR BORGAVVE",
     "weight": 5,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 309,
     "name": "gold detection",
     "description": "THARR",
     "weight": 5,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 310,
     "name": "food detection",
     "description": "YUM YUM",
     "weight": 5,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 311,
     "name": "identify",
     "description": "KERNOD WEL",
     "weight": 5,
-    "cost": 20
+    "cost": 20,
+    "subtype": 0
   },
   {
     "index": 312,
     "name": "magic mapping",
     "description": "ELAM EBOW",
     "weight": 5,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 313,
     "name": "amnesia",
     "description": "DUAM XNAHT",
     "weight": 5,
-    "cost": 200
+    "cost": 200,
+    "subtype": 0
   },
   {
     "index": 314,
     "name": "fire",
     "description": "ANDOVA BEGARIN",
     "weight": 5,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 315,
     "name": "earth",
     "description": "KIRJE",
     "weight": 5,
-    "cost": 200
+    "cost": 200,
+    "subtype": 0
   },
   {
     "index": 316,
     "name": "punishment",
     "description": "VE FORBRYDERNE",
     "weight": 5,
-    "cost": 300
+    "cost": 300,
+    "subtype": 0
   },
   {
     "index": 317,
     "name": "charging",
     "description": "HACKEM MUCHE",
     "weight": 5,
-    "cost": 300
+    "cost": 300,
+    "subtype": 0
   },
   {
     "index": 318,
     "name": "stinking cloud",
     "description": "VELOX NEB",
     "weight": 5,
-    "cost": 300
+    "cost": 300,
+    "subtype": 0
   },
   {
     "index": 319,
     "name": null,
     "description": "FOOBIE BLETCH",
     "weight": 5,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 320,
     "name": null,
     "description": "TEMOV",
     "weight": 5,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 321,
     "name": null,
     "description": "GARVEN DEH",
     "weight": 5,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 322,
     "name": null,
     "description": "READ ME",
     "weight": 5,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 323,
     "name": null,
     "description": "ETAOIN SHRDLU",
     "weight": 5,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 324,
     "name": null,
     "description": "LOREM IPSUM",
     "weight": 5,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 325,
     "name": null,
     "description": "FNORD",
     "weight": 5,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 326,
     "name": null,
     "description": "KO BATE",
     "weight": 5,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 327,
     "name": null,
     "description": "ABRA KA DABRA",
     "weight": 5,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 328,
     "name": null,
     "description": "ASHPD SODALG",
     "weight": 5,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 329,
     "name": null,
     "description": "ZLORFIK",
     "weight": 5,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 330,
     "name": null,
     "description": "GNIK SISI VLE",
     "weight": 5,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 331,
     "name": null,
     "description": "HAPAX LEGOMENON",
     "weight": 5,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 332,
     "name": null,
     "description": "EIRIS SAZUN IDISI",
     "weight": 5,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 333,
     "name": null,
     "description": "PHOL ENDE WODAN",
     "weight": 5,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 334,
     "name": null,
     "description": "GHOTI",
     "weight": 5,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 335,
     "name": null,
     "description": "MAPIRO MAHAMA DIROMAT",
     "weight": 5,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 336,
     "name": null,
     "description": "VAS CORP BET MANI",
     "weight": 5,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 337,
     "name": null,
     "description": "XOR OTA",
     "weight": 5,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 338,
     "name": null,
     "description": "STRC PRST SKRZ KRK",
     "weight": 5,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 339,
     "name": "blank paper",
     "description": "unlabeled",
     "weight": 5,
-    "cost": 60
+    "cost": 60,
+    "subtype": 0
   },
   {
     "index": 340,
     "name": "dig",
     "description": "parchment",
     "weight": 50,
-    "cost": 500
+    "cost": 500,
+    "subtype": 35
   },
   {
     "index": 341,
     "name": "magic missile",
     "description": "vellum",
     "weight": 50,
-    "cost": 200
+    "cost": 200,
+    "subtype": 29
   },
   {
     "index": 342,
     "name": "fireball",
     "description": "ragged",
     "weight": 50,
-    "cost": 400
+    "cost": 400,
+    "subtype": 29
   },
   {
     "index": 343,
     "name": "cone of cold",
     "description": "dog eared",
     "weight": 50,
-    "cost": 400
+    "cost": 400,
+    "subtype": 29
   },
   {
     "index": 344,
     "name": "sleep",
     "description": "mottled",
     "weight": 50,
-    "cost": 100
+    "cost": 100,
+    "subtype": 32
   },
   {
     "index": 345,
     "name": "finger of death",
     "description": "stained",
     "weight": 50,
-    "cost": 700
+    "cost": 700,
+    "subtype": 29
   },
   {
     "index": 346,
     "name": "light",
     "description": "cloth",
     "weight": 50,
-    "cost": 100
+    "cost": 100,
+    "subtype": 31
   },
   {
     "index": 347,
     "name": "detect monsters",
     "description": "leathery",
     "weight": 50,
-    "cost": 100
+    "cost": 100,
+    "subtype": 31
   },
   {
     "index": 348,
     "name": "healing",
     "description": "white",
     "weight": 50,
-    "cost": 100
+    "cost": 100,
+    "subtype": 30
   },
   {
     "index": 349,
     "name": "knock",
     "description": "pink",
     "weight": 50,
-    "cost": 100
+    "cost": 100,
+    "subtype": 35
   },
   {
     "index": 350,
     "name": "force bolt",
     "description": "red",
     "weight": 50,
-    "cost": 100
+    "cost": 100,
+    "subtype": 29
   },
   {
     "index": 351,
     "name": "confuse monster",
     "description": "orange",
     "weight": 50,
-    "cost": 200
+    "cost": 200,
+    "subtype": 32
   },
   {
     "index": 352,
     "name": "cure blindness",
     "description": "yellow",
     "weight": 50,
-    "cost": 200
+    "cost": 200,
+    "subtype": 30
   },
   {
     "index": 353,
     "name": "drain life",
     "description": "velvet",
     "weight": 50,
-    "cost": 200
+    "cost": 200,
+    "subtype": 29
   },
   {
     "index": 354,
     "name": "slow monster",
     "description": "light green",
     "weight": 50,
-    "cost": 200
+    "cost": 200,
+    "subtype": 32
   },
   {
     "index": 355,
     "name": "wizard lock",
     "description": "dark green",
     "weight": 50,
-    "cost": 200
+    "cost": 200,
+    "subtype": 35
   },
   {
     "index": 356,
     "name": "create monster",
     "description": "turquoise",
     "weight": 50,
-    "cost": 200
+    "cost": 200,
+    "subtype": 33
   },
   {
     "index": 357,
     "name": "detect food",
     "description": "cyan",
     "weight": 50,
-    "cost": 200
+    "cost": 200,
+    "subtype": 31
   },
   {
     "index": 358,
     "name": "cause fear",
     "description": "light blue",
     "weight": 50,
-    "cost": 300
+    "cost": 300,
+    "subtype": 32
   },
   {
     "index": 359,
     "name": "clairvoyance",
     "description": "dark blue",
     "weight": 50,
-    "cost": 300
+    "cost": 300,
+    "subtype": 31
   },
   {
     "index": 360,
     "name": "cure sickness",
     "description": "indigo",
     "weight": 50,
-    "cost": 300
+    "cost": 300,
+    "subtype": 30
   },
   {
     "index": 361,
     "name": "charm monster",
     "description": "magenta",
     "weight": 50,
-    "cost": 300
+    "cost": 300,
+    "subtype": 32
   },
   {
     "index": 362,
     "name": "haste self",
     "description": "purple",
     "weight": 50,
-    "cost": 300
+    "cost": 300,
+    "subtype": 34
   },
   {
     "index": 363,
     "name": "detect unseen",
     "description": "violet",
     "weight": 50,
-    "cost": 300
+    "cost": 300,
+    "subtype": 31
   },
   {
     "index": 364,
     "name": "levitation",
     "description": "tan",
     "weight": 50,
-    "cost": 400
+    "cost": 400,
+    "subtype": 34
   },
   {
     "index": 365,
     "name": "extra healing",
     "description": "plaid",
     "weight": 50,
-    "cost": 300
+    "cost": 300,
+    "subtype": 30
   },
   {
     "index": 366,
     "name": "restore ability",
     "description": "light brown",
     "weight": 50,
-    "cost": 400
+    "cost": 400,
+    "subtype": 30
   },
   {
     "index": 367,
     "name": "invisibility",
     "description": "dark brown",
     "weight": 50,
-    "cost": 400
+    "cost": 400,
+    "subtype": 34
   },
   {
     "index": 368,
     "name": "detect treasure",
     "description": "gray",
     "weight": 50,
-    "cost": 400
+    "cost": 400,
+    "subtype": 31
   },
   {
     "index": 369,
     "name": "remove curse",
     "description": "wrinkled",
     "weight": 50,
-    "cost": 300
+    "cost": 300,
+    "subtype": 33
   },
   {
     "index": 370,
     "name": "magic mapping",
     "description": "dusty",
     "weight": 50,
-    "cost": 500
+    "cost": 500,
+    "subtype": 31
   },
   {
     "index": 371,
     "name": "identify",
     "description": "bronze",
     "weight": 50,
-    "cost": 300
+    "cost": 300,
+    "subtype": 31
   },
   {
     "index": 372,
     "name": "turn undead",
     "description": "copper",
     "weight": 50,
-    "cost": 600
+    "cost": 600,
+    "subtype": 33
   },
   {
     "index": 373,
     "name": "polymorph",
     "description": "silver",
     "weight": 50,
-    "cost": 600
+    "cost": 600,
+    "subtype": 35
   },
   {
     "index": 374,
     "name": "teleport away",
     "description": "gold",
     "weight": 50,
-    "cost": 600
+    "cost": 600,
+    "subtype": 34
   },
   {
     "index": 375,
     "name": "create familiar",
     "description": "glittering",
     "weight": 50,
-    "cost": 600
+    "cost": 600,
+    "subtype": 33
   },
   {
     "index": 376,
     "name": "cancellation",
     "description": "shining",
     "weight": 50,
-    "cost": 700
+    "cost": 700,
+    "subtype": 35
   },
   {
     "index": 377,
     "name": "protection",
     "description": "dull",
     "weight": 50,
-    "cost": 100
+    "cost": 100,
+    "subtype": 33
   },
   {
     "index": 378,
     "name": "jumping",
     "description": "thin",
     "weight": 50,
-    "cost": 100
+    "cost": 100,
+    "subtype": 34
   },
   {
     "index": 379,
     "name": "stone to flesh",
     "description": "thick",
     "weight": 50,
-    "cost": 300
+    "cost": 300,
+    "subtype": 30
   },
   {
     "index": 380,
     "name": "blank paper",
     "description": "plain",
     "weight": 50,
-    "cost": 0
+    "cost": 0,
+    "subtype": 0
   },
   {
     "index": 381,
     "name": "novel",
     "description": "paperback",
     "weight": 0,
-    "cost": 20
+    "cost": 20,
+    "subtype": 0
   },
   {
     "index": 382,
     "name": "Book of the Dead",
     "description": "papyrus",
     "weight": 20,
-    "cost": 10000
+    "cost": 10000,
+    "subtype": 0
   },
   {
     "index": 383,
     "name": "light",
     "description": "glass",
     "weight": 7,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 384,
     "name": "secret door detection",
     "description": "balsa",
     "weight": 7,
-    "cost": 150
+    "cost": 150,
+    "subtype": 0
   },
   {
     "index": 385,
     "name": "enlightenment",
     "description": "crystal",
     "weight": 7,
-    "cost": 150
+    "cost": 150,
+    "subtype": 0
   },
   {
     "index": 386,
     "name": "create monster",
     "description": "maple",
     "weight": 7,
-    "cost": 200
+    "cost": 200,
+    "subtype": 0
   },
   {
     "index": 387,
     "name": "wishing",
     "description": "pine",
     "weight": 7,
-    "cost": 500
+    "cost": 500,
+    "subtype": 0
   },
   {
     "index": 388,
     "name": "nothing",
     "description": "oak",
     "weight": 7,
-    "cost": 100
+    "cost": 100,
+    "subtype": 0
   },
   {
     "index": 389,
     "name": "striking",
     "description": "ebony",
     "weight": 7,
-    "cost": 150
+    "cost": 150,
+    "subtype": 0
   },
   {
     "index": 390,
     "name": "make invisible",
     "description": "marble",
     "weight": 7,
-    "cost": 150
+    "cost": 150,
+    "subtype": 0
   },
   {
     "index": 391,
     "name": "slow monster",
     "description": "tin",
     "weight": 7,
-    "cost": 150
+    "cost": 150,
+    "subtype": 0
   },
   {
     "index": 392,
     "name": "speed monster",
     "description": "brass",
     "weight": 7,
-    "cost": 150
+    "cost": 150,
+    "subtype": 0
   },
   {
     "index": 393,
     "name": "undead turning",
     "description": "copper",
     "weight": 7,
-    "cost": 150
+    "cost": 150,
+    "subtype": 0
   },
   {
     "index": 394,
     "name": "polymorph",
     "description": "silver",
     "weight": 7,
-    "cost": 200
+    "cost": 200,
+    "subtype": 0
   },
   {
     "index": 395,
     "name": "cancellation",
     "description": "platinum",
     "weight": 7,
-    "cost": 200
+    "cost": 200,
+    "subtype": 0
   },
   {
     "index": 396,
     "name": "teleportation",
     "description": "iridium",
     "weight": 7,
-    "cost": 200
+    "cost": 200,
+    "subtype": 0
   },
   {
     "index": 397,
     "name": "opening",
     "description": "zinc",
     "weight": 7,
-    "cost": 150
+    "cost": 150,
+    "subtype": 0
   },
   {
     "index": 398,
     "name": "locking",
     "description": "aluminum",
     "weight": 7,
-    "cost": 150
+    "cost": 150,
+    "subtype": 0
   },
   {
     "index": 399,
     "name": "probing",
     "description": "uranium",
     "weight": 7,
-    "cost": 150
+    "cost": 150,
+    "subtype": 0
   },
   {
     "index": 400,
     "name": "digging",
     "description": "iron",
     "weight": 7,
-    "cost": 150
+    "cost": 150,
+    "subtype": 0
   },
   {
     "index": 401,
     "name": "magic missile",
     "description": "steel",
     "weight": 7,
-    "cost": 150
+    "cost": 150,
+    "subtype": 0
   },
   {
     "index": 402,
     "name": "fire",
     "description": "hexagonal",
     "weight": 7,
-    "cost": 175
+    "cost": 175,
+    "subtype": 0
   },
   {
     "index": 403,
     "name": "cold",
     "description": "short",
     "weight": 7,
-    "cost": 175
+    "cost": 175,
+    "subtype": 0
   },
   {
     "index": 404,
     "name": "sleep",
     "description": "runed",
     "weight": 7,
-    "cost": 175
+    "cost": 175,
+    "subtype": 0
   },
   {
     "index": 405,
     "name": "death",
     "description": "long",
     "weight": 7,
-    "cost": 500
+    "cost": 500,
+    "subtype": 0
   },
   {
     "index": 406,
     "name": "lightning",
     "description": "curved",
     "weight": 7,
-    "cost": 175
+    "cost": 175,
+    "subtype": 0
   },
   {
     "index": 407,
     "name": null,
     "description": "forked",
     "weight": 7,
-    "cost": 150
+    "cost": 150,
+    "subtype": 0
   },
   {
     "index": 408,
     "name": null,
     "description": "spiked",
     "weight": 7,
-    "cost": 150
+    "cost": 150,
+    "subtype": 0
   },
   {
     "index": 409,
     "name": null,
     "description": "jeweled",
     "weight": 7,
-    "cost": 150
+    "cost": 150,
+    "subtype": 0
   },
   {
     "index": 410,
     "name": "gold piece",
     "description": null,
     "weight": 1,
-    "cost": 1
+    "cost": 1,
+    "subtype": 0
   },
   {
     "index": 411,
     "name": "dilithium crystal",
     "description": "white",
     "weight": 1,
-    "cost": 4500
+    "cost": 4500,
+    "subtype": -22
   },
   {
     "index": 412,
     "name": "diamond",
     "description": "white",
     "weight": 1,
-    "cost": 4000
+    "cost": 4000,
+    "subtype": -22
   },
   {
     "index": 413,
     "name": "ruby",
     "description": "red",
     "weight": 1,
-    "cost": 3500
+    "cost": 3500,
+    "subtype": -22
   },
   {
     "index": 414,
     "name": "jacinth",
     "description": "orange",
     "weight": 1,
-    "cost": 3250
+    "cost": 3250,
+    "subtype": -22
   },
   {
     "index": 415,
     "name": "sapphire",
     "description": "blue",
     "weight": 1,
-    "cost": 3000
+    "cost": 3000,
+    "subtype": -22
   },
   {
     "index": 416,
     "name": "black opal",
     "description": "black",
     "weight": 1,
-    "cost": 2500
+    "cost": 2500,
+    "subtype": -22
   },
   {
     "index": 417,
     "name": "emerald",
     "description": "green",
     "weight": 1,
-    "cost": 2500
+    "cost": 2500,
+    "subtype": -22
   },
   {
     "index": 418,
     "name": "turquoise",
     "description": "green",
     "weight": 1,
-    "cost": 2000
+    "cost": 2000,
+    "subtype": -22
   },
   {
     "index": 419,
     "name": "citrine",
     "description": "yellow",
     "weight": 1,
-    "cost": 1500
+    "cost": 1500,
+    "subtype": -22
   },
   {
     "index": 420,
     "name": "aquamarine",
     "description": "green",
     "weight": 1,
-    "cost": 1500
+    "cost": 1500,
+    "subtype": -22
   },
   {
     "index": 421,
     "name": "amber",
     "description": "yellowish brown",
     "weight": 1,
-    "cost": 1000
+    "cost": 1000,
+    "subtype": -22
   },
   {
     "index": 422,
     "name": "topaz",
     "description": "yellowish brown",
     "weight": 1,
-    "cost": 900
+    "cost": 900,
+    "subtype": -22
   },
   {
     "index": 423,
     "name": "jet",
     "description": "black",
     "weight": 1,
-    "cost": 850
+    "cost": 850,
+    "subtype": -22
   },
   {
     "index": 424,
     "name": "opal",
     "description": "white",
     "weight": 1,
-    "cost": 800
+    "cost": 800,
+    "subtype": -22
   },
   {
     "index": 425,
     "name": "chrysoberyl",
     "description": "yellow",
     "weight": 1,
-    "cost": 700
+    "cost": 700,
+    "subtype": -22
   },
   {
     "index": 426,
     "name": "garnet",
     "description": "red",
     "weight": 1,
-    "cost": 700
+    "cost": 700,
+    "subtype": -22
   },
   {
     "index": 427,
     "name": "amethyst",
     "description": "violet",
     "weight": 1,
-    "cost": 600
+    "cost": 600,
+    "subtype": -22
   },
   {
     "index": 428,
     "name": "jasper",
     "description": "red",
     "weight": 1,
-    "cost": 500
+    "cost": 500,
+    "subtype": -22
   },
   {
     "index": 429,
     "name": "fluorite",
     "description": "violet",
     "weight": 1,
-    "cost": 400
+    "cost": 400,
+    "subtype": -22
   },
   {
     "index": 430,
     "name": "obsidian",
     "description": "black",
     "weight": 1,
-    "cost": 200
+    "cost": 200,
+    "subtype": -22
   },
   {
     "index": 431,
     "name": "agate",
     "description": "orange",
     "weight": 1,
-    "cost": 200
+    "cost": 200,
+    "subtype": -22
   },
   {
     "index": 432,
     "name": "jade",
     "description": "green",
     "weight": 1,
-    "cost": 300
+    "cost": 300,
+    "subtype": -22
   },
   {
     "index": 433,
     "name": "worthless piece of white glass",
     "description": "white",
     "weight": 1,
-    "cost": 0
+    "cost": 0,
+    "subtype": -22
   },
   {
     "index": 434,
     "name": "worthless piece of blue glass",
     "description": "blue",
     "weight": 1,
-    "cost": 0
+    "cost": 0,
+    "subtype": -22
   },
   {
     "index": 435,
     "name": "worthless piece of red glass",
     "description": "red",
     "weight": 1,
-    "cost": 0
+    "cost": 0,
+    "subtype": -22
   },
   {
     "index": 436,
     "name": "worthless piece of yellowish brown glass",
     "description": "yellowish brown",
     "weight": 1,
-    "cost": 0
+    "cost": 0,
+    "subtype": -22
   },
   {
     "index": 437,
     "name": "worthless piece of orange glass",
     "description": "orange",
     "weight": 1,
-    "cost": 0
+    "cost": 0,
+    "subtype": -22
   },
   {
     "index": 438,
     "name": "worthless piece of yellow glass",
     "description": "yellow",
     "weight": 1,
-    "cost": 0
+    "cost": 0,
+    "subtype": -22
   },
   {
     "index": 439,
     "name": "worthless piece of black glass",
     "description": "black",
     "weight": 1,
-    "cost": 0
+    "cost": 0,
+    "subtype": -22
   },
   {
     "index": 440,
     "name": "worthless piece of green glass",
     "description": "green",
     "weight": 1,
-    "cost": 0
+    "cost": 0,
+    "subtype": -22
   },
   {
     "index": 441,
     "name": "worthless piece of violet glass",
     "description": "violet",
     "weight": 1,
-    "cost": 0
+    "cost": 0,
+    "subtype": -22
   },
   {
     "index": 442,
     "name": "luckstone",
     "description": "gray",
     "weight": 10,
-    "cost": 60
+    "cost": 60,
+    "subtype": -22
   },
   {
     "index": 443,
     "name": "loadstone",
     "description": "gray",
     "weight": 500,
-    "cost": 1
+    "cost": 1,
+    "subtype": -22
   },
   {
     "index": 444,
     "name": "touchstone",
     "description": "gray",
     "weight": 10,
-    "cost": 45
+    "cost": 45,
+    "subtype": -22
   },
   {
     "index": 445,
     "name": "flint",
     "description": "gray",
     "weight": 10,
-    "cost": 1
+    "cost": 1,
+    "subtype": -22
   },
   {
     "index": 446,
     "name": "rock",
     "description": null,
     "weight": 10,
-    "cost": 0
+    "cost": 0,
+    "subtype": -22
   },
   {
     "index": 447,
     "name": "boulder",
     "description": null,
     "weight": 6000,
-    "cost": 0
+    "cost": 0,
+    "subtype": 0
   },
   {
     "index": 448,
     "name": "statue",
     "description": null,
     "weight": 2500,
-    "cost": 0
+    "cost": 0,
+    "subtype": 0
   },
   {
     "index": 449,
     "name": "heavy iron ball",
     "description": null,
     "weight": 480,
-    "cost": 10
+    "cost": 10,
+    "subtype": 0
   },
   {
     "index": 450,
     "name": "iron chain",
     "description": null,
     "weight": 120,
-    "cost": 0
+    "cost": 0,
+    "subtype": 0
   },
   {
     "index": 451,
     "name": "blinding venom",
     "description": "splash of venom",
     "weight": 1,
-    "cost": 0
+    "cost": 0,
+    "subtype": 0
   },
   {
     "index": 452,
     "name": "acid venom",
     "description": "splash of venom",
     "weight": 1,
-    "cost": 0
+    "cost": 0,
+    "subtype": 0
   }
 ]
