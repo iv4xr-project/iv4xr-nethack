@@ -3,12 +3,16 @@ package agent.strategy;
 import static nl.uu.cs.aplib.AplibEDSL.*;
 
 import agent.iv4xr.AgentState;
+import agent.navigation.strategy.NavTactic;
 import agent.navigation.strategy.NavUtils;
 import agent.navigation.surface.Walkable;
+import agent.selector.EntitySelector;
 import agent.selector.ItemSelector;
 import agent.selector.MonsterSelector;
 import java.util.*;
 import java.util.stream.Collectors;
+import nethack.enums.CommandEnum;
+import nethack.object.Command;
 import nethack.object.Monster;
 import nethack.object.Player;
 import nethack.object.items.FoodItem;
@@ -53,7 +57,8 @@ public class TacticLib {
                   }
 
                   // Only count aggressive monsters
-                  List<Monster> monsters = MonsterSelector.empty.filter(S.app().level().monsters);
+                  List<Monster> monsters =
+                      MonsterSelector.aggressive.filter(S.app().level().monsters, S);
                   if (monsters.isEmpty()) {
                     return null;
                   }
@@ -108,8 +113,6 @@ public class TacticLib {
 
   public static Tactic resolveHungerState(int prayerTimeOut) {
     return FIRSTof(
-        //        interactWorldEntity(EntitySelector.food, List.of(new
-        // Command(CommandEnum.COMMAND_EAT), new Command("y"))),
         Actions.pray()
             .on(
                 (AgentState S) -> {
@@ -125,6 +128,13 @@ public class TacticLib {
                   return null;
                 })
             .lift(),
+        NavTactic.interactWorldEntity(
+            EntitySelector.freshCorpse.globalPredicate(
+                S -> S.app().gameState.player.hungerState.wantsFood()),
+            List.of(
+                new Command(CommandEnum.COMMAND_EAT),
+                new Command("y"),
+                new Command(CommandEnum.MISC_MORE))),
         Actions.eatItem()
             .on(
                 (AgentState S) -> {

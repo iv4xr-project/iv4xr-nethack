@@ -1,7 +1,9 @@
 package agent.selector;
 
 import agent.iv4xr.AgentState;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -10,34 +12,49 @@ import nethack.object.Entity;
 import util.CustomVec3D;
 
 public class EntitySelector extends Selector<Entity> {
-  public static final EntitySelector money =
-      new EntitySelector(SelectionType.SHORTEST, EntityClass.COIN, false);
-  public static final EntitySelector potion =
-      new EntitySelector(SelectionType.SHORTEST, EntityClass.POTION, false);
-  public static final EntitySelector food =
-      new EntitySelector(SelectionType.SHORTEST, EntityClass.FOOD, false);
-  //  public static final EntitySelector freshCorpse =
-  //          new EntitySelector(SelectionType.SHORTEST, EntityClass.FOOD, worldEntity ->)
+  public static final EntitySelector money = new EntitySelector().ofClass(EntityClass.COIN);
+  public static final EntitySelector potion = new EntitySelector().ofClass(EntityClass.POTION);
+  public static final EntitySelector food = new EntitySelector().ofClass(EntityClass.FOOD);
+  public static final EntitySelector freshCorpse =
+      new EntitySelector()
+          .ofClass(EntityClass.FOOD)
+          .predicate(
+              (entity, S) ->
+                  entity.entityInfo.name.equals("corpse")
+                      && (S.app().gameState.stats.turn.turnNr - entity.createTurn.turnNr < 50));
 
-  final EntityClass entityClass;
+  EntityClass entityClass;
 
-  public EntitySelector(
-      SelectionType selectionType,
-      EntityClass entityClass,
-      Predicate<Entity> predicate,
-      boolean adjacent) {
-    super(selectionType, predicate, adjacent);
+  public EntitySelector() {}
+
+  public EntitySelector ofClass(EntityClass entityClass) {
     this.entityClass = entityClass;
+    return this;
   }
 
-  public EntitySelector(SelectionType selectionType, EntityClass entityClass, boolean adjacent) {
-    super(selectionType, adjacent);
-    this.entityClass = entityClass;
+  public EntitySelector selectionType(SelectionType selectionType) {
+    super.selectionType(selectionType);
+    return this;
+  }
+
+  public EntitySelector sameLvl(boolean onlySameLevel) {
+    super.sameLvl(onlySameLevel);
+    return this;
+  }
+
+  public EntitySelector predicate(BiPredicate<Entity, AgentState> predicate) {
+    super.predicate(predicate);
+    return this;
+  }
+
+  public EntitySelector globalPredicate(Predicate<AgentState> predicate) {
+    super.globalPredicate(predicate);
+    return this;
   }
 
   @Override
   public Entity apply(List<Entity> entities, AgentState S) {
-    List<Entity> filteredEntities = filter(entities);
+    List<Entity> filteredEntities = filter(entities, S);
     return select(filteredEntities, S);
   }
 
@@ -52,13 +69,17 @@ public class EntitySelector extends Selector<Entity> {
     return entities.get(index);
   }
 
-  public List<Entity> filter(List<Entity> entities) {
+  public List<Entity> filter(List<Entity> entities, AgentState S) {
+    if (globalPredicate != null && !globalPredicate.test(S)) {
+      return new ArrayList<>();
+    }
+
     Stream<Entity> stream = entities.stream();
     if (entityClass != null) {
       stream = stream.filter(we -> we.entityClass == entityClass);
     }
     if (predicate != null) {
-      stream = stream.filter(we -> predicate.test(we));
+      stream = stream.filter(we -> predicate.test(we, S));
     }
     return stream.collect(Collectors.toList());
   }

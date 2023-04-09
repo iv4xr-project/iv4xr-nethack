@@ -1,96 +1,98 @@
 package agent.selector;
 
 import agent.iv4xr.AgentState;
-import agent.navigation.strategy.NavUtils;
-import agent.navigation.surface.*;
+import agent.navigation.surface.Climbable;
+import agent.navigation.surface.Tile;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import nethack.world.Surface;
 import nethack.world.tiles.Door;
 import nethack.world.tiles.Stair;
-import nethack.world.tiles.Wall;
 import util.CustomVec2D;
 import util.CustomVec3D;
 
 public class TileSelector extends Selector<Tile> {
-  public static final TileSelector adjacentWallSelector =
-      new TileSelector(
-          SelectionType.SHORTEST,
-          Wall.class,
-          t -> {
-            Wall w = (Wall) t;
-            return w.timesSearched < 10;
-          },
-          true);
-
+  // Was adjacent
+  //  public static final TileSelector adjacentWallSelector =
+  //      new TileSelector().ofClass(Wall.class).predicate((tile, S) -> ((Wall)tile).timesSearched <
+  // 10);
   public static final TileSelector adjacentClosedDoorSelector =
-      new TileSelector(
-          SelectionType.STRAIGHT_ADJACENT,
-          Door.class,
-          t -> {
-            Door d = (Door) t;
-            return (d.closed || d.locked) && !d.isShopDoor;
-          },
-          false);
-
+      new TileSelector()
+          .selectionType(SelectionType.STRAIGHT_ADJACENT)
+          .ofClass(Door.class)
+          .predicate(
+              (tile, S) -> {
+                Door d = (Door) tile;
+                return (d.closed || d.locked) && !d.isShopDoor;
+              });
   public static final TileSelector stairDown =
-      new TileSelector(
-          SelectionType.FIRST,
-          Stair.class,
-          t -> {
-            return ((Stair) t).getClimbType() == Climbable.ClimbType.Down;
-          },
-          false);
+      new TileSelector()
+          .selectionType(SelectionType.FIRST)
+          .ofClass(Stair.class)
+          .predicate((tile, S) -> ((Stair) tile).getClimbType() == Climbable.ClimbType.Down);
 
-  final Class tileClass;
+  Class tileClass;
 
-  public TileSelector(
-      SelectionType selectionType, Class tileClass, Predicate<Tile> predicate, boolean adjacent) {
-    super(selectionType, predicate, adjacent);
+  public TileSelector() {}
+
+  public TileSelector ofClass(Class tileClass) {
     this.tileClass = tileClass;
+    return this;
+  }
+
+  public TileSelector selectionType(SelectionType selectionType) {
+    super.selectionType(selectionType);
+    return this;
+  }
+
+  public TileSelector sameLvl(boolean onlySameLevel) {
+    super.sameLvl(onlySameLevel);
+    return this;
+  }
+
+  public TileSelector predicate(BiPredicate<Tile, AgentState> predicate) {
+    super.predicate(predicate);
+    return this;
+  }
+
+  public TileSelector globalPredicate(Predicate<AgentState> predicate) {
+    super.globalPredicate(predicate);
+    return this;
   }
 
   public Tile apply(AgentState S) {
     List<Tile> coordinates = new ArrayList<>();
-    int lvl = S.loc().lvl;
     Surface surface = S.area();
-    if (tileClass != null) {
-      HashSet<CustomVec2D> tilesOfType = surface.getCoordinatesOfTileType(tileClass);
-      if (tilesOfType == null) {
-        return null;
-      }
-      for (CustomVec2D pos : tilesOfType) {
-        coordinates.add(surface.getTile(pos));
-      }
-    } else {
-      for (Tile[] row : surface.tiles) {
-        for (Tile tile : row) {
-          if (tile != null) {
-            coordinates.add(surface.getTile(tile.pos));
-          }
-        }
-      }
+    assert tileClass != null : "Tile must be of a certain class";
+    HashSet<CustomVec2D> tilesOfType = surface.getCoordinatesOfTileType(tileClass);
+    if (tilesOfType == null) {
+      return null;
     }
+    for (CustomVec2D pos : tilesOfType) {
+      coordinates.add(surface.getTile(pos));
+    }
+
     return apply(coordinates, S);
   }
 
   @Override
   public Tile apply(List<Tile> coordinates, AgentState S) {
-    List<Tile> filteredTiles = filter(coordinates);
-    if (adjacent) {
-      List<CustomVec3D> tileLocations =
-          filteredTiles.stream().map(tile -> tile.loc).collect(Collectors.toList());
-      tileLocations = NavUtils.adjacentPositions(tileLocations, S);
-      filteredTiles =
-          tileLocations.stream()
-              .map(loc -> S.hierarchicalNav().getTile(loc))
-              .collect(Collectors.toList());
-    }
+    List<Tile> filteredTiles = filter(coordinates, S);
+    //    if (adjacent) {
+    //      List<CustomVec3D> tileLocations =
+    //          filteredTiles.stream().map(tile -> tile.loc).collect(Collectors.toList());
+    //      tileLocations = NavUtils.adjacentPositions(tileLocations, S);
+    //      filteredTiles =
+    //          tileLocations.stream()
+    //              .map(loc -> S.hierarchicalNav().getTile(loc))
+    //              .collect(Collectors.toList());
+    //    }
     return select(filteredTiles, S);
   }
 
@@ -105,20 +107,17 @@ public class TileSelector extends Selector<Tile> {
     return tiles.get(index);
   }
 
-  public List<Tile> filter(List<Tile> tiles) {
-    if (tileClass == null && predicate == null) {
-      return tiles;
+  public List<Tile> filter(List<Tile> tiles, AgentState S) {
+    if (globalPredicate != null && !globalPredicate.test(S)) {
+      return new ArrayList<>();
     }
 
-    Stream<Tile> stream;
-    if (tileClass != null && predicate != null) {
-      stream =
-          tiles.stream()
-              .filter(tile -> Objects.equals(tileClass, tile.getClass()) && predicate.test(tile));
-    } else if (tileClass != null) {
+    Stream<Tile> stream = tiles.stream();
+    if (tileClass != null) {
       stream = tiles.stream().filter(tile -> Objects.equals(tileClass, tile.getClass()));
-    } else {
-      stream = tiles.stream().filter(tile -> predicate.test(tile));
+    }
+    if (predicate != null) {
+      stream = tiles.stream().filter(tile -> predicate.test(tile, S));
     }
     return stream.collect(Collectors.toList());
   }

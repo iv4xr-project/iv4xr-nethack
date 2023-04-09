@@ -10,6 +10,7 @@ import agent.selector.TileSelector;
 import agent.strategy.WorldModels;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import java.util.List;
+import java.util.function.Predicate;
 import nethack.object.Command;
 import nethack.object.Entity;
 import nethack.world.Level;
@@ -52,14 +53,23 @@ public class NavTactic {
   }
 
   public static Tactic interactWorldEntity(EntitySelector entitySelector, List<Command> commands) {
-    return action("navAndInteract")
+    return interactWorldEntity(entitySelector, commands, null);
+  }
+
+  public static Tactic interactWorldEntity(
+      EntitySelector entitySelector, List<Command> commands, Predicate<AgentState> on) {
+    return action(String.format("navAndInteract %s %s", entitySelector, commands))
         .do2(
             (AgentState S) ->
                 (Path<CustomVec3D> path) -> {
                   if (path.atLocation()) {
                     WorldModel newWom = WorldModels.performCommands(S, commands);
-                    Entity e = entitySelector.apply(S.app().level().entities, S);
-                    newWom.elements.remove(e.id);
+                    //                                Entity e =
+                    // entitySelector.apply(S.app().level().entities, S);
+                    //                                if (e == null) {
+                    //                                  return;
+                    //                                }
+                    //                                newWom.elements.remove(e.toId());
                     return new Pair<>(S, newWom);
                   } else {
                     return new Pair<>(S, NavUtils.moveTo(S, path.nextNode()));
@@ -67,6 +77,9 @@ public class NavTactic {
                 })
         .on(
             (AgentState S) -> {
+              if (on != null && !on.test(S)) {
+                return null;
+              }
               Entity e = entitySelector.apply(S.app().level().entities, S);
               if (e == null) {
                 return null;

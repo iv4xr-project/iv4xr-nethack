@@ -1,8 +1,10 @@
 package agent.selector;
 
 import agent.iv4xr.AgentState;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -10,30 +12,48 @@ import nethack.enums.EntityClass;
 import nethack.object.items.Item;
 
 public class ItemSelector extends Selector<Item> {
-  public static final ItemSelector inventoryFood =
-      new ItemSelector(SelectionType.FIRST, EntityClass.FOOD);
+  public static final ItemSelector inventoryFood = new ItemSelector().ofClass(EntityClass.FOOD);
   public static final ItemSelector inventoryQuivered =
-      new ItemSelector(
-          SelectionType.FIRST,
-          EntityClass.WEAPON,
-          item -> item.description.contains("(in quiver)"));
+      new ItemSelector()
+          .ofClass(EntityClass.WEAPON)
+          .predicate((item, S) -> item.description.contains("(in quiver)"));
 
-  final EntityClass entityClass;
+  EntityClass entityClass;
 
-  public ItemSelector(
-      SelectionType selectionType, EntityClass entityClass, Predicate<Item> predicate) {
-    super(selectionType, predicate, false);
-    this.entityClass = entityClass;
+  public ItemSelector() {
+    // Default selectionType is first for items
+    this.selectionType = SelectionType.FIRST;
   }
 
-  public ItemSelector(SelectionType selectionType, EntityClass entityClass) {
-    super(selectionType, false);
+  public ItemSelector ofClass(EntityClass entityClass) {
     this.entityClass = entityClass;
+    return this;
+  }
+
+  public ItemSelector selectionType(SelectionType selectionType) {
+
+    super.selectionType(selectionType);
+    return this;
+  }
+
+  public ItemSelector sameLvl(boolean onlySameLevel) {
+    super.sameLvl(onlySameLevel);
+    return this;
+  }
+
+  public ItemSelector predicate(BiPredicate<Item, AgentState> predicate) {
+    super.predicate(predicate);
+    return this;
+  }
+
+  public ItemSelector globalPredicate(Predicate<AgentState> predicate) {
+    super.globalPredicate(predicate);
+    return this;
   }
 
   @Override
   public Item apply(List<Item> items, AgentState S) {
-    return select(filter(items), S);
+    return select(filter(items, S), S);
   }
 
   @Override
@@ -54,13 +74,17 @@ public class ItemSelector extends Selector<Item> {
     throw new IllegalArgumentException("Not valid");
   }
 
-  public List<Item> filter(List<Item> items) {
+  public List<Item> filter(List<Item> items, AgentState S) {
+    if (globalPredicate != null && !globalPredicate.test(S)) {
+      return new ArrayList<>();
+    }
+
     Stream<Item> stream = items.stream();
     if (entityClass != null) {
       stream = stream.filter(i -> i != null && Objects.equals(i.type, entityClass));
     }
     if (predicate != null) {
-      stream = stream.filter(i -> i != null && predicate.test(i));
+      stream = stream.filter(i -> i != null && predicate.test(i, S));
     }
     return stream.collect(Collectors.toList());
   }

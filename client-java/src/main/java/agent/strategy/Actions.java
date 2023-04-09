@@ -4,16 +4,20 @@ import static nethack.enums.CommandEnum.*;
 import static nl.uu.cs.aplib.AplibEDSL.action;
 
 import agent.iv4xr.AgentState;
+import agent.navigation.hpastar.search.Path;
 import agent.navigation.hpastar.smoother.Direction;
 import agent.navigation.strategy.NavUtils;
+import agent.selector.EntitySelector;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import java.util.*;
 import nethack.object.Command;
+import nethack.object.Entity;
 import nethack.object.items.Item;
 import nethack.world.tiles.Door;
 import nl.uu.cs.aplib.mainConcepts.Action;
 import nl.uu.cs.aplib.utils.Pair;
 import util.CustomVec2D;
+import util.CustomVec3D;
 import util.Loggers;
 import util.Sounds;
 
@@ -125,5 +129,30 @@ public class Actions {
                   Optional.of(S.app().gameState.stats.turn.time);
               return new Pair<>(S, newWom);
             });
+  }
+
+  public static Action interactWorldEntity(EntitySelector entitySelector, List<Command> commands) {
+    return action("navAndInteract")
+        .do2(
+            (AgentState S) ->
+                (Path<CustomVec3D> path) -> {
+                  if (path.atLocation()) {
+                    WorldModel newWom = WorldModels.performCommands(S, commands);
+                    Entity e = entitySelector.apply(S.app().level().entities, S);
+                    newWom.elements.remove(e.toId());
+                    return new Pair<>(S, newWom);
+                  } else {
+                    return new Pair<>(S, NavUtils.moveTo(S, path.nextNode()));
+                  }
+                });
+    //            .on(
+    //                    (AgentState S) -> {
+    //                      Entity e = entitySelector.apply(S.app().level().entities, S);
+    //                      if (e == null) {
+    //                        return null;
+    //                      }
+    //                      return NavUtils.adjustedFindPath(S, S.loc(), e.loc);
+    //                    })
+    //            .lift();
   }
 }

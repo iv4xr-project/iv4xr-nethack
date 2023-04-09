@@ -3,40 +3,44 @@ package agent.selector;
 import agent.iv4xr.AgentState;
 import agent.navigation.hpastar.search.Path;
 import java.util.List;
+import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import util.CustomVec3D;
 
 public abstract class Selector<T> {
-  protected final SelectionType selectionType;
-  protected Predicate<T> predicate = null;
-  protected final boolean onlySameLevel = true;
-  protected final boolean adjacent;
+  protected SelectionType selectionType = SelectionType.SHORTEST;
+  protected BiPredicate<T, AgentState> predicate = null;
+  protected Predicate<AgentState> globalPredicate = null;
+  protected boolean onlySameLevel = true;
 
-  public Selector(SelectionType selectionType, Predicate<T> predicate, boolean adjacent) {
-    assert (selectionType != SelectionType.ADJACENT
-                && selectionType != SelectionType.STRAIGHT_ADJACENT)
-            || !adjacent
-        : "Does not make sense to be adjacent to an adjacent square";
+  public Selector() {}
+
+  public Selector<T> selectionType(SelectionType selectionType) {
     this.selectionType = selectionType;
-    this.predicate = predicate;
-    this.adjacent = adjacent;
+    return this;
   }
 
-  public Selector(SelectionType selectionType, boolean adjacent) {
-    assert (selectionType != SelectionType.ADJACENT
-                && selectionType != SelectionType.STRAIGHT_ADJACENT)
-            || !adjacent
-        : "Does not make sense to be adjacent to an adjacent square";
-    this.selectionType = selectionType;
-    this.adjacent = adjacent;
+  public Selector<T> predicate(BiPredicate<T, AgentState> predicate) {
+    this.predicate = predicate;
+    return this;
+  }
+
+  public Selector<T> sameLvl(boolean onlySameLevel) {
+    this.onlySameLevel = onlySameLevel;
+    return this;
+  }
+
+  public Selector<T> globalPredicate(Predicate<AgentState> predicate) {
+    this.globalPredicate = predicate;
+    return this;
   }
 
   public abstract T apply(List<T> elems, AgentState S);
 
   public abstract T select(List<T> elems, AgentState S);
 
-  public abstract List<T> filter(List<T> elems);
+  public abstract List<T> filter(List<T> elems, AgentState S);
 
   public Integer selectIndex(List<CustomVec3D> locations, AgentState S) {
     CustomVec3D agentLoc = S.loc();
