@@ -5,7 +5,7 @@
     "description": null,
     "weight": 0,
     "cost": 0,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 1,
@@ -13,7 +13,9 @@
     "description": null,
     "weight": 1,
     "cost": 2,
-    "subtype": -21
+    "skill": "BOW",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 2,
@@ -21,7 +23,9 @@
     "description": "runed arrow",
     "weight": 1,
     "cost": 2,
-    "subtype": -21
+    "skill": "BOW",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 3,
@@ -29,7 +33,9 @@
     "description": "crude arrow",
     "weight": 1,
     "cost": 2,
-    "subtype": -21
+    "skill": "BOW",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 4,
@@ -37,7 +43,9 @@
     "description": null,
     "weight": 1,
     "cost": 5,
-    "subtype": -21
+    "skill": "BOW",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 5,
@@ -45,7 +53,9 @@
     "description": "bamboo arrow",
     "weight": 1,
     "cost": 4,
-    "subtype": -21
+    "skill": "BOW",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 6,
@@ -53,7 +63,9 @@
     "description": null,
     "weight": 1,
     "cost": 2,
-    "subtype": -23
+    "skill": "CROSSBOW",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 7,
@@ -61,7 +73,8 @@
     "description": null,
     "weight": 1,
     "cost": 2,
-    "subtype": -24
+    "skill": "DART",
+    "missile": true
   },
   {
     "index": 8,
@@ -69,7 +82,8 @@
     "description": "throwing star",
     "weight": 1,
     "cost": 5,
-    "subtype": -25
+    "skill": "SHURIKEN",
+    "missile": true
   },
   {
     "index": 9,
@@ -77,7 +91,8 @@
     "description": null,
     "weight": 5,
     "cost": 20,
-    "subtype": -26
+    "skill": "BOOMERANG",
+    "missile": true
   },
   {
     "index": 10,
@@ -85,7 +100,7 @@
     "description": null,
     "weight": 30,
     "cost": 3,
-    "subtype": 18
+    "skill": "SPEAR"
   },
   {
     "index": 11,
@@ -93,7 +108,7 @@
     "description": "runed spear",
     "weight": 30,
     "cost": 3,
-    "subtype": 18
+    "skill": "SPEAR"
   },
   {
     "index": 12,
@@ -101,7 +116,7 @@
     "description": "crude spear",
     "weight": 30,
     "cost": 3,
-    "subtype": 18
+    "skill": "SPEAR"
   },
   {
     "index": 13,
@@ -109,7 +124,7 @@
     "description": "stout spear",
     "weight": 35,
     "cost": 3,
-    "subtype": 18
+    "skill": "SPEAR"
   },
   {
     "index": 14,
@@ -117,7 +132,7 @@
     "description": null,
     "weight": 36,
     "cost": 40,
-    "subtype": 18
+    "skill": "SPEAR"
   },
   {
     "index": 15,
@@ -125,7 +140,7 @@
     "description": "throwing spear",
     "weight": 20,
     "cost": 3,
-    "subtype": 18
+    "skill": "SPEAR"
   },
   {
     "index": 16,
@@ -133,7 +148,7 @@
     "description": null,
     "weight": 25,
     "cost": 5,
-    "subtype": 19
+    "skill": "TRIDENT"
   },
   {
     "index": 17,
@@ -141,7 +156,7 @@
     "description": null,
     "weight": 10,
     "cost": 4,
-    "subtype": 1
+    "skill": "DAGGER"
   },
   {
     "index": 18,
@@ -149,7 +164,7 @@
     "description": "runed dagger",
     "weight": 10,
     "cost": 4,
-    "subtype": 1
+    "skill": "DAGGER"
   },
   {
     "index": 19,
@@ -157,7 +172,7 @@
     "description": "crude dagger",
     "weight": 10,
     "cost": 4,
-    "subtype": 1
+    "skill": "DAGGER"
   },
   {
     "index": 20,
@@ -165,7 +180,7 @@
     "description": null,
     "weight": 12,
     "cost": 40,
-    "subtype": 1
+    "skill": "DAGGER"
   },
   {
     "index": 21,
@@ -173,7 +188,7 @@
     "description": null,
     "weight": 10,
     "cost": 4,
-    "subtype": 1
+    "skill": "DAGGER"
   },
   {
     "index": 22,
@@ -181,7 +196,7 @@
     "description": null,
     "weight": 5,
     "cost": 6,
-    "subtype": 2
+    "skill": "KNIFE"
   },
   {
     "index": 23,
@@ -189,7 +204,7 @@
     "description": null,
     "weight": 5,
     "cost": 4,
-    "subtype": 2
+    "skill": "KNIFE"
   },
   {
     "index": 24,
@@ -197,7 +212,7 @@
     "description": null,
     "weight": 5,
     "cost": 4,
-    "subtype": 2
+    "skill": "KNIFE"
   },
   {
     "index": 25,
@@ -205,7 +220,7 @@
     "description": null,
     "weight": 20,
     "cost": 2,
-    "subtype": 2
+    "skill": "KNIFE"
   },
   {
     "index": 26,
@@ -213,7 +228,7 @@
     "description": null,
     "weight": 20,
     "cost": 100,
-    "subtype": 2
+    "skill": "KNIFE"
   },
   {
     "index": 27,
@@ -221,7 +236,7 @@
     "description": null,
     "weight": 60,
     "cost": 8,
-    "subtype": 3
+    "skill": "AXE"
   },
   {
     "index": 28,
@@ -229,7 +244,7 @@
     "description": "double-headed axe",
     "weight": 120,
     "cost": 40,
-    "subtype": 3
+    "skill": "AXE"
   },
   {
     "index": 29,
@@ -237,7 +252,7 @@
     "description": null,
     "weight": 30,
     "cost": 10,
-    "subtype": 5
+    "skill": "SHORT_SWORD"
   },
   {
     "index": 30,
@@ -245,7 +260,7 @@
     "description": "runed short sword",
     "weight": 30,
     "cost": 10,
-    "subtype": 5
+    "skill": "SHORT_SWORD"
   },
   {
     "index": 31,
@@ -253,7 +268,7 @@
     "description": "crude short sword",
     "weight": 30,
     "cost": 10,
-    "subtype": 5
+    "skill": "SHORT_SWORD"
   },
   {
     "index": 32,
@@ -261,7 +276,7 @@
     "description": "broad short sword",
     "weight": 30,
     "cost": 10,
-    "subtype": 5
+    "skill": "SHORT_SWORD"
   },
   {
     "index": 33,
@@ -269,7 +284,7 @@
     "description": "curved sword",
     "weight": 40,
     "cost": 15,
-    "subtype": 9
+    "skill": "SCIMITAR"
   },
   {
     "index": 34,
@@ -277,7 +292,7 @@
     "description": null,
     "weight": 40,
     "cost": 75,
-    "subtype": 10
+    "skill": "SABER"
   },
   {
     "index": 35,
@@ -285,7 +300,7 @@
     "description": null,
     "weight": 70,
     "cost": 10,
-    "subtype": 6
+    "skill": "BROAD_SWORD"
   },
   {
     "index": 36,
@@ -293,7 +308,7 @@
     "description": "runed broadsword",
     "weight": 70,
     "cost": 10,
-    "subtype": 6
+    "skill": "BROAD_SWORD"
   },
   {
     "index": 37,
@@ -301,7 +316,7 @@
     "description": null,
     "weight": 40,
     "cost": 15,
-    "subtype": 7
+    "skill": "LONG_SWORD"
   },
   {
     "index": 38,
@@ -309,7 +324,7 @@
     "description": null,
     "weight": 150,
     "cost": 50,
-    "subtype": 8
+    "skill": "TWO_HANDED_SWORD"
   },
   {
     "index": 39,
@@ -317,7 +332,7 @@
     "description": "samurai sword",
     "weight": 40,
     "cost": 80,
-    "subtype": 7
+    "skill": "LONG_SWORD"
   },
   {
     "index": 40,
@@ -325,7 +340,7 @@
     "description": "long samurai sword",
     "weight": 60,
     "cost": 500,
-    "subtype": 8
+    "skill": "TWO_HANDED_SWORD"
   },
   {
     "index": 41,
@@ -333,7 +348,7 @@
     "description": "runed broadsword",
     "weight": 40,
     "cost": 300,
-    "subtype": 6
+    "skill": "BROAD_SWORD"
   },
   {
     "index": 42,
@@ -341,7 +356,7 @@
     "description": "vulgar polearm",
     "weight": 80,
     "cost": 10,
-    "subtype": 17
+    "skill": "POLEARMS"
   },
   {
     "index": 43,
@@ -349,7 +364,7 @@
     "description": "hilted polearm",
     "weight": 50,
     "cost": 6,
-    "subtype": 17
+    "skill": "POLEARMS"
   },
   {
     "index": 44,
@@ -357,7 +372,7 @@
     "description": "forked polearm",
     "weight": 50,
     "cost": 5,
-    "subtype": 17
+    "skill": "POLEARMS"
   },
   {
     "index": 45,
@@ -365,7 +380,7 @@
     "description": "single-edged polearm",
     "weight": 75,
     "cost": 6,
-    "subtype": 17
+    "skill": "POLEARMS"
   },
   {
     "index": 46,
@@ -373,7 +388,7 @@
     "description": null,
     "weight": 180,
     "cost": 10,
-    "subtype": 20
+    "skill": "LANCE"
   },
   {
     "index": 47,
@@ -381,7 +396,7 @@
     "description": "angled poleaxe",
     "weight": 150,
     "cost": 10,
-    "subtype": 17
+    "skill": "POLEARMS"
   },
   {
     "index": 48,
@@ -389,7 +404,7 @@
     "description": "long poleaxe",
     "weight": 120,
     "cost": 7,
-    "subtype": 17
+    "skill": "POLEARMS"
   },
   {
     "index": 49,
@@ -397,7 +412,7 @@
     "description": "pole cleaver",
     "weight": 125,
     "cost": 5,
-    "subtype": 17
+    "skill": "POLEARMS"
   },
   {
     "index": 50,
@@ -405,7 +420,7 @@
     "description": "broad pick",
     "weight": 120,
     "cost": 50,
-    "subtype": 4
+    "skill": "PICK_AXE"
   },
   {
     "index": 51,
@@ -413,7 +428,7 @@
     "description": "pole sickle",
     "weight": 60,
     "cost": 5,
-    "subtype": 17
+    "skill": "POLEARMS"
   },
   {
     "index": 52,
@@ -421,7 +436,7 @@
     "description": "pruning hook",
     "weight": 80,
     "cost": 5,
-    "subtype": 17
+    "skill": "POLEARMS"
   },
   {
     "index": 53,
@@ -429,7 +444,7 @@
     "description": "hooked polearm",
     "weight": 120,
     "cost": 7,
-    "subtype": 17
+    "skill": "POLEARMS"
   },
   {
     "index": 54,
@@ -437,7 +452,7 @@
     "description": "pronged polearm",
     "weight": 150,
     "cost": 7,
-    "subtype": 17
+    "skill": "POLEARMS"
   },
   {
     "index": 55,
@@ -445,7 +460,7 @@
     "description": "beaked polearm",
     "weight": 100,
     "cost": 8,
-    "subtype": 17
+    "skill": "POLEARMS"
   },
   {
     "index": 56,
@@ -453,7 +468,7 @@
     "description": null,
     "weight": 30,
     "cost": 5,
-    "subtype": 12
+    "skill": "MACE"
   },
   {
     "index": 57,
@@ -461,7 +476,7 @@
     "description": null,
     "weight": 120,
     "cost": 10,
-    "subtype": 13
+    "skill": "MORNING_STAR"
   },
   {
     "index": 58,
@@ -469,7 +484,7 @@
     "description": null,
     "weight": 50,
     "cost": 5,
-    "subtype": 15
+    "skill": "HAMMER"
   },
   {
     "index": 59,
@@ -477,7 +492,7 @@
     "description": null,
     "weight": 30,
     "cost": 3,
-    "subtype": 11
+    "skill": "CLUB"
   },
   {
     "index": 60,
@@ -485,7 +500,7 @@
     "description": null,
     "weight": 20,
     "cost": 3,
-    "subtype": 27
+    "skill": "WHIP"
   },
   {
     "index": 61,
@@ -493,7 +508,7 @@
     "description": "staff",
     "weight": 40,
     "cost": 5,
-    "subtype": 16
+    "skill": "QUARTERSTAFF"
   },
   {
     "index": 62,
@@ -501,7 +516,7 @@
     "description": "thonged club",
     "weight": 15,
     "cost": 4,
-    "subtype": 11
+    "skill": "CLUB"
   },
   {
     "index": 63,
@@ -509,7 +524,7 @@
     "description": null,
     "weight": 15,
     "cost": 4,
-    "subtype": 14
+    "skill": "FLAIL"
   },
   {
     "index": 64,
@@ -517,7 +532,7 @@
     "description": null,
     "weight": 20,
     "cost": 4,
-    "subtype": 27
+    "skill": "WHIP"
   },
   {
     "index": 65,
@@ -525,7 +540,8 @@
     "description": null,
     "weight": 30,
     "cost": 60,
-    "subtype": 21
+    "skill": "BOW",
+    "fromLauncher": true
   },
   {
     "index": 66,
@@ -533,7 +549,8 @@
     "description": "runed bow",
     "weight": 30,
     "cost": 60,
-    "subtype": 21
+    "skill": "BOW",
+    "fromLauncher": true
   },
   {
     "index": 67,
@@ -541,7 +558,8 @@
     "description": "crude bow",
     "weight": 30,
     "cost": 60,
-    "subtype": 21
+    "skill": "BOW",
+    "fromLauncher": true
   },
   {
     "index": 68,
@@ -549,7 +567,8 @@
     "description": "long bow",
     "weight": 30,
     "cost": 60,
-    "subtype": 21
+    "skill": "BOW",
+    "fromLauncher": true
   },
   {
     "index": 69,
@@ -557,7 +576,8 @@
     "description": null,
     "weight": 3,
     "cost": 20,
-    "subtype": 22
+    "skill": "SLING",
+    "fromLauncher": true
   },
   {
     "index": 70,
@@ -565,7 +585,8 @@
     "description": null,
     "weight": 50,
     "cost": 40,
-    "subtype": 23
+    "skill": "CROSSBOW",
+    "fromLauncher": true
   },
   {
     "index": 71,
@@ -573,7 +594,7 @@
     "description": "leather hat",
     "weight": 3,
     "cost": 8,
-    "subtype": 2
+    "skill": "KNIFE"
   },
   {
     "index": 72,
@@ -581,7 +602,7 @@
     "description": "iron skull cap",
     "weight": 30,
     "cost": 10,
-    "subtype": 2
+    "skill": "KNIFE"
   },
   {
     "index": 73,
@@ -589,7 +610,7 @@
     "description": "hard hat",
     "weight": 40,
     "cost": 20,
-    "subtype": 2
+    "skill": "KNIFE"
   },
   {
     "index": 74,
@@ -597,7 +618,7 @@
     "description": null,
     "weight": 3,
     "cost": 1,
-    "subtype": 2
+    "skill": "KNIFE"
   },
   {
     "index": 75,
@@ -605,7 +626,7 @@
     "description": "conical hat",
     "weight": 4,
     "cost": 80,
-    "subtype": 2
+    "skill": "KNIFE"
   },
   {
     "index": 76,
@@ -613,7 +634,7 @@
     "description": "conical hat",
     "weight": 4,
     "cost": 1,
-    "subtype": 2
+    "skill": "KNIFE"
   },
   {
     "index": 77,
@@ -621,7 +642,7 @@
     "description": null,
     "weight": 10,
     "cost": 8,
-    "subtype": 2
+    "skill": "KNIFE"
   },
   {
     "index": 78,
@@ -629,7 +650,7 @@
     "description": "plumed helmet",
     "weight": 30,
     "cost": 10,
-    "subtype": 2
+    "skill": "KNIFE"
   },
   {
     "index": 79,
@@ -637,7 +658,7 @@
     "description": "etched helmet",
     "weight": 50,
     "cost": 50,
-    "subtype": 2
+    "skill": "KNIFE"
   },
   {
     "index": 80,
@@ -645,7 +666,7 @@
     "description": "crested helmet",
     "weight": 50,
     "cost": 50,
-    "subtype": 2
+    "skill": "KNIFE"
   },
   {
     "index": 81,
@@ -653,7 +674,7 @@
     "description": "visored helmet",
     "weight": 50,
     "cost": 50,
-    "subtype": 2
+    "skill": "KNIFE"
   },
   {
     "index": 82,
@@ -661,7 +682,7 @@
     "description": null,
     "weight": 40,
     "cost": 1200,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 83,
@@ -669,7 +690,7 @@
     "description": null,
     "weight": 40,
     "cost": 1200,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 84,
@@ -677,7 +698,7 @@
     "description": null,
     "weight": 40,
     "cost": 900,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 85,
@@ -685,7 +706,7 @@
     "description": null,
     "weight": 40,
     "cost": 900,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 86,
@@ -693,7 +714,7 @@
     "description": null,
     "weight": 40,
     "cost": 900,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 87,
@@ -701,7 +722,7 @@
     "description": null,
     "weight": 40,
     "cost": 1200,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 88,
@@ -709,7 +730,7 @@
     "description": null,
     "weight": 40,
     "cost": 900,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 89,
@@ -717,7 +738,7 @@
     "description": null,
     "weight": 40,
     "cost": 900,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 90,
@@ -725,7 +746,7 @@
     "description": null,
     "weight": 40,
     "cost": 900,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 91,
@@ -733,7 +754,7 @@
     "description": null,
     "weight": 40,
     "cost": 700,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 92,
@@ -741,7 +762,7 @@
     "description": null,
     "weight": 40,
     "cost": 700,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 93,
@@ -749,7 +770,7 @@
     "description": null,
     "weight": 40,
     "cost": 500,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 94,
@@ -757,7 +778,7 @@
     "description": null,
     "weight": 40,
     "cost": 500,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 95,
@@ -765,7 +786,7 @@
     "description": null,
     "weight": 40,
     "cost": 500,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 96,
@@ -773,7 +794,7 @@
     "description": null,
     "weight": 40,
     "cost": 700,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 97,
@@ -781,7 +802,7 @@
     "description": null,
     "weight": 40,
     "cost": 500,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 98,
@@ -789,7 +810,7 @@
     "description": null,
     "weight": 40,
     "cost": 500,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 99,
@@ -797,7 +818,7 @@
     "description": null,
     "weight": 40,
     "cost": 500,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 100,
@@ -805,7 +826,7 @@
     "description": null,
     "weight": 450,
     "cost": 600,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 101,
@@ -813,7 +834,7 @@
     "description": null,
     "weight": 450,
     "cost": 820,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 102,
@@ -821,7 +842,7 @@
     "description": null,
     "weight": 450,
     "cost": 400,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 103,
@@ -829,7 +850,7 @@
     "description": null,
     "weight": 400,
     "cost": 80,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 104,
@@ -837,7 +858,7 @@
     "description": null,
     "weight": 350,
     "cost": 90,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 105,
@@ -845,7 +866,7 @@
     "description": null,
     "weight": 150,
     "cost": 240,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 106,
@@ -853,7 +874,7 @@
     "description": null,
     "weight": 150,
     "cost": 240,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 107,
@@ -861,7 +882,7 @@
     "description": null,
     "weight": 300,
     "cost": 75,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 108,
@@ -869,7 +890,7 @@
     "description": "crude chain mail",
     "weight": 300,
     "cost": 75,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 109,
@@ -877,7 +898,7 @@
     "description": null,
     "weight": 250,
     "cost": 45,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 110,
@@ -885,7 +906,7 @@
     "description": null,
     "weight": 200,
     "cost": 15,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 111,
@@ -893,7 +914,7 @@
     "description": null,
     "weight": 250,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 112,
@@ -901,7 +922,7 @@
     "description": "crude ring mail",
     "weight": 250,
     "cost": 80,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 113,
@@ -909,7 +930,7 @@
     "description": null,
     "weight": 150,
     "cost": 5,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 114,
@@ -917,7 +938,7 @@
     "description": null,
     "weight": 30,
     "cost": 10,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 115,
@@ -925,7 +946,7 @@
     "description": null,
     "weight": 5,
     "cost": 3,
-    "subtype": 6
+    "skill": "BROAD_SWORD"
   },
   {
     "index": 116,
@@ -933,7 +954,7 @@
     "description": null,
     "weight": 5,
     "cost": 2,
-    "subtype": 6
+    "skill": "BROAD_SWORD"
   },
   {
     "index": 117,
@@ -941,7 +962,7 @@
     "description": null,
     "weight": 3,
     "cost": 2,
-    "subtype": 5
+    "skill": "SHORT_SWORD"
   },
   {
     "index": 118,
@@ -949,7 +970,7 @@
     "description": "faded pall",
     "weight": 10,
     "cost": 60,
-    "subtype": 5
+    "skill": "SHORT_SWORD"
   },
   {
     "index": 119,
@@ -957,7 +978,7 @@
     "description": "coarse mantelet",
     "weight": 10,
     "cost": 40,
-    "subtype": 5
+    "skill": "SHORT_SWORD"
   },
   {
     "index": 120,
@@ -965,7 +986,7 @@
     "description": "hooded cloak",
     "weight": 10,
     "cost": 50,
-    "subtype": 5
+    "skill": "SHORT_SWORD"
   },
   {
     "index": 121,
@@ -973,7 +994,7 @@
     "description": "slippery cloak",
     "weight": 10,
     "cost": 50,
-    "subtype": 5
+    "skill": "SHORT_SWORD"
   },
   {
     "index": 122,
@@ -981,7 +1002,7 @@
     "description": null,
     "weight": 15,
     "cost": 50,
-    "subtype": 5
+    "skill": "SHORT_SWORD"
   },
   {
     "index": 123,
@@ -989,7 +1010,7 @@
     "description": "apron",
     "weight": 10,
     "cost": 50,
-    "subtype": 5
+    "skill": "SHORT_SWORD"
   },
   {
     "index": 124,
@@ -997,7 +1018,7 @@
     "description": null,
     "weight": 15,
     "cost": 40,
-    "subtype": 5
+    "skill": "SHORT_SWORD"
   },
   {
     "index": 125,
@@ -1005,7 +1026,7 @@
     "description": "tattered cape",
     "weight": 10,
     "cost": 50,
-    "subtype": 5
+    "skill": "SHORT_SWORD"
   },
   {
     "index": 126,
@@ -1013,7 +1034,7 @@
     "description": "opera cloak",
     "weight": 10,
     "cost": 60,
-    "subtype": 5
+    "skill": "SHORT_SWORD"
   },
   {
     "index": 127,
@@ -1021,7 +1042,7 @@
     "description": "ornamental cope",
     "weight": 10,
     "cost": 60,
-    "subtype": 5
+    "skill": "SHORT_SWORD"
   },
   {
     "index": 128,
@@ -1029,7 +1050,7 @@
     "description": "piece of cloth",
     "weight": 10,
     "cost": 50,
-    "subtype": 5
+    "skill": "SHORT_SWORD"
   },
   {
     "index": 129,
@@ -1037,7 +1058,7 @@
     "description": null,
     "weight": 30,
     "cost": 3,
-    "subtype": 1
+    "skill": "DAGGER"
   },
   {
     "index": 130,
@@ -1045,7 +1066,7 @@
     "description": "blue and green shield",
     "weight": 40,
     "cost": 7,
-    "subtype": 1
+    "skill": "DAGGER"
   },
   {
     "index": 131,
@@ -1053,7 +1074,7 @@
     "description": "white-handed shield",
     "weight": 50,
     "cost": 7,
-    "subtype": 1
+    "skill": "DAGGER"
   },
   {
     "index": 132,
@@ -1061,7 +1082,7 @@
     "description": "red-eyed shield",
     "weight": 50,
     "cost": 7,
-    "subtype": 1
+    "skill": "DAGGER"
   },
   {
     "index": 133,
@@ -1069,7 +1090,7 @@
     "description": null,
     "weight": 100,
     "cost": 10,
-    "subtype": 1
+    "skill": "DAGGER"
   },
   {
     "index": 134,
@@ -1077,7 +1098,7 @@
     "description": "large round shield",
     "weight": 100,
     "cost": 10,
-    "subtype": 1
+    "skill": "DAGGER"
   },
   {
     "index": 135,
@@ -1085,7 +1106,7 @@
     "description": "polished silver shield",
     "weight": 50,
     "cost": 50,
-    "subtype": 1
+    "skill": "DAGGER"
   },
   {
     "index": 136,
@@ -1093,7 +1114,7 @@
     "description": "old gloves",
     "weight": 10,
     "cost": 8,
-    "subtype": 3
+    "skill": "AXE"
   },
   {
     "index": 137,
@@ -1101,7 +1122,7 @@
     "description": "padded gloves",
     "weight": 10,
     "cost": 50,
-    "subtype": 3
+    "skill": "AXE"
   },
   {
     "index": 138,
@@ -1109,7 +1130,7 @@
     "description": "riding gloves",
     "weight": 30,
     "cost": 50,
-    "subtype": 3
+    "skill": "AXE"
   },
   {
     "index": 139,
@@ -1117,7 +1138,7 @@
     "description": "fencing gloves",
     "weight": 10,
     "cost": 50,
-    "subtype": 3
+    "skill": "AXE"
   },
   {
     "index": 140,
@@ -1125,7 +1146,7 @@
     "description": "walking shoes",
     "weight": 10,
     "cost": 8,
-    "subtype": 4
+    "skill": "PICK_AXE"
   },
   {
     "index": 141,
@@ -1133,7 +1154,7 @@
     "description": "hard shoes",
     "weight": 50,
     "cost": 16,
-    "subtype": 4
+    "skill": "PICK_AXE"
   },
   {
     "index": 142,
@@ -1141,7 +1162,7 @@
     "description": "jackboots",
     "weight": 20,
     "cost": 12,
-    "subtype": 4
+    "skill": "PICK_AXE"
   },
   {
     "index": 143,
@@ -1149,7 +1170,7 @@
     "description": "combat boots",
     "weight": 20,
     "cost": 50,
-    "subtype": 4
+    "skill": "PICK_AXE"
   },
   {
     "index": 144,
@@ -1157,7 +1178,7 @@
     "description": "jungle boots",
     "weight": 15,
     "cost": 50,
-    "subtype": 4
+    "skill": "PICK_AXE"
   },
   {
     "index": 145,
@@ -1165,7 +1186,7 @@
     "description": "hiking boots",
     "weight": 20,
     "cost": 50,
-    "subtype": 4
+    "skill": "PICK_AXE"
   },
   {
     "index": 146,
@@ -1173,7 +1194,7 @@
     "description": "mud boots",
     "weight": 15,
     "cost": 8,
-    "subtype": 4
+    "skill": "PICK_AXE"
   },
   {
     "index": 147,
@@ -1181,7 +1202,7 @@
     "description": "buckled boots",
     "weight": 50,
     "cost": 8,
-    "subtype": 4
+    "skill": "PICK_AXE"
   },
   {
     "index": 148,
@@ -1189,7 +1210,7 @@
     "description": "riding boots",
     "weight": 20,
     "cost": 30,
-    "subtype": 4
+    "skill": "PICK_AXE"
   },
   {
     "index": 149,
@@ -1197,7 +1218,7 @@
     "description": "snow boots",
     "weight": 15,
     "cost": 30,
-    "subtype": 4
+    "skill": "PICK_AXE"
   },
   {
     "index": 150,
@@ -1205,7 +1226,7 @@
     "description": "wooden",
     "weight": 3,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 151,
@@ -1213,7 +1234,7 @@
     "description": "granite",
     "weight": 3,
     "cost": 150,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 152,
@@ -1221,7 +1242,7 @@
     "description": "opal",
     "weight": 3,
     "cost": 150,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 153,
@@ -1229,7 +1250,7 @@
     "description": "clay",
     "weight": 3,
     "cost": 150,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 154,
@@ -1237,7 +1258,7 @@
     "description": "coral",
     "weight": 3,
     "cost": 150,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 155,
@@ -1245,7 +1266,7 @@
     "description": "black onyx",
     "weight": 3,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 156,
@@ -1253,7 +1274,7 @@
     "description": "moonstone",
     "weight": 3,
     "cost": 200,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 157,
@@ -1261,7 +1282,7 @@
     "description": "tiger eye",
     "weight": 3,
     "cost": 200,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 158,
@@ -1269,7 +1290,7 @@
     "description": "jade",
     "weight": 3,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 159,
@@ -1277,7 +1298,7 @@
     "description": "bronze",
     "weight": 3,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 160,
@@ -1285,7 +1306,7 @@
     "description": "agate",
     "weight": 3,
     "cost": 200,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 161,
@@ -1293,7 +1314,7 @@
     "description": "topaz",
     "weight": 3,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 162,
@@ -1301,7 +1322,7 @@
     "description": "sapphire",
     "weight": 3,
     "cost": 150,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 163,
@@ -1309,7 +1330,7 @@
     "description": "ruby",
     "weight": 3,
     "cost": 300,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 164,
@@ -1317,7 +1338,7 @@
     "description": "diamond",
     "weight": 3,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 165,
@@ -1325,7 +1346,7 @@
     "description": "pearl",
     "weight": 3,
     "cost": 150,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 166,
@@ -1333,7 +1354,7 @@
     "description": "iron",
     "weight": 3,
     "cost": 200,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 167,
@@ -1341,7 +1362,7 @@
     "description": "brass",
     "weight": 3,
     "cost": 150,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 168,
@@ -1349,7 +1370,7 @@
     "description": "copper",
     "weight": 3,
     "cost": 150,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 169,
@@ -1357,7 +1378,7 @@
     "description": "twisted",
     "weight": 3,
     "cost": 200,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 170,
@@ -1365,7 +1386,7 @@
     "description": "steel",
     "weight": 3,
     "cost": 200,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 171,
@@ -1373,7 +1394,7 @@
     "description": "silver",
     "weight": 3,
     "cost": 200,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 172,
@@ -1381,7 +1402,7 @@
     "description": "gold",
     "weight": 3,
     "cost": 300,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 173,
@@ -1389,7 +1410,7 @@
     "description": "ivory",
     "weight": 3,
     "cost": 300,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 174,
@@ -1397,7 +1418,7 @@
     "description": "emerald",
     "weight": 3,
     "cost": 300,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 175,
@@ -1405,7 +1426,7 @@
     "description": "wire",
     "weight": 3,
     "cost": 150,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 176,
@@ -1413,7 +1434,7 @@
     "description": "engagement",
     "weight": 3,
     "cost": 150,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 177,
@@ -1421,7 +1442,7 @@
     "description": "shiny",
     "weight": 3,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 178,
@@ -1429,7 +1450,7 @@
     "description": "circular",
     "weight": 20,
     "cost": 150,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 179,
@@ -1437,7 +1458,7 @@
     "description": "spherical",
     "weight": 20,
     "cost": 150,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 180,
@@ -1445,7 +1466,7 @@
     "description": "oval",
     "weight": 20,
     "cost": 150,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 181,
@@ -1453,7 +1474,7 @@
     "description": "triangular",
     "weight": 20,
     "cost": 150,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 182,
@@ -1461,7 +1482,7 @@
     "description": "pyramidal",
     "weight": 20,
     "cost": 150,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 183,
@@ -1469,7 +1490,7 @@
     "description": "square",
     "weight": 20,
     "cost": 150,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 184,
@@ -1477,7 +1498,7 @@
     "description": "concave",
     "weight": 20,
     "cost": 150,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 185,
@@ -1485,7 +1506,7 @@
     "description": "hexagonal",
     "weight": 20,
     "cost": 150,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 186,
@@ -1493,7 +1514,7 @@
     "description": "octagonal",
     "weight": 20,
     "cost": 150,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 187,
@@ -1501,7 +1522,7 @@
     "description": "Amulet of Yendor",
     "weight": 20,
     "cost": 0,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 188,
@@ -1509,7 +1530,7 @@
     "description": "Amulet of Yendor",
     "weight": 20,
     "cost": 30000,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 189,
@@ -1517,7 +1538,7 @@
     "description": null,
     "weight": 350,
     "cost": 8,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 190,
@@ -1525,7 +1546,7 @@
     "description": null,
     "weight": 600,
     "cost": 16,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 191,
@@ -1533,7 +1554,7 @@
     "description": null,
     "weight": 900,
     "cost": 42,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 192,
@@ -1541,7 +1562,7 @@
     "description": "bag",
     "weight": 15,
     "cost": 2,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 193,
@@ -1549,7 +1570,7 @@
     "description": "bag",
     "weight": 15,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 194,
@@ -1557,7 +1578,7 @@
     "description": "bag",
     "weight": 15,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 195,
@@ -1565,7 +1586,7 @@
     "description": "bag",
     "weight": 15,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 196,
@@ -1573,7 +1594,7 @@
     "description": "key",
     "weight": 3,
     "cost": 10,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 197,
@@ -1581,7 +1602,7 @@
     "description": null,
     "weight": 4,
     "cost": 20,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 198,
@@ -1589,7 +1610,7 @@
     "description": null,
     "weight": 1,
     "cost": 10,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 199,
@@ -1597,7 +1618,7 @@
     "description": "candle",
     "weight": 2,
     "cost": 10,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 200,
@@ -1605,7 +1626,7 @@
     "description": "candle",
     "weight": 2,
     "cost": 20,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 201,
@@ -1613,7 +1634,7 @@
     "description": null,
     "weight": 30,
     "cost": 12,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 202,
@@ -1621,7 +1642,7 @@
     "description": "lamp",
     "weight": 20,
     "cost": 10,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 203,
@@ -1629,7 +1650,7 @@
     "description": "lamp",
     "weight": 20,
     "cost": 50,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 204,
@@ -1637,7 +1658,7 @@
     "description": null,
     "weight": 12,
     "cost": 200,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 205,
@@ -1645,7 +1666,7 @@
     "description": "looking glass",
     "weight": 13,
     "cost": 10,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 206,
@@ -1653,7 +1674,7 @@
     "description": "glass orb",
     "weight": 150,
     "cost": 60,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 207,
@@ -1661,7 +1682,7 @@
     "description": null,
     "weight": 3,
     "cost": 80,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 208,
@@ -1669,7 +1690,7 @@
     "description": null,
     "weight": 2,
     "cost": 20,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 209,
@@ -1677,7 +1698,7 @@
     "description": null,
     "weight": 2,
     "cost": 50,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 210,
@@ -1685,7 +1706,7 @@
     "description": null,
     "weight": 200,
     "cost": 150,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 211,
@@ -1693,7 +1714,7 @@
     "description": null,
     "weight": 12,
     "cost": 20,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 212,
@@ -1701,7 +1722,7 @@
     "description": null,
     "weight": 4,
     "cost": 75,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 213,
@@ -1709,7 +1730,7 @@
     "description": null,
     "weight": 100,
     "cost": 30,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 214,
@@ -1717,7 +1738,7 @@
     "description": null,
     "weight": 4,
     "cost": 30,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 215,
@@ -1725,7 +1746,7 @@
     "description": null,
     "weight": 15,
     "cost": 20,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 216,
@@ -1733,7 +1754,7 @@
     "description": null,
     "weight": 50,
     "cost": 80,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 217,
@@ -1741,7 +1762,7 @@
     "description": null,
     "weight": 2,
     "cost": 50,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 218,
@@ -1749,7 +1770,7 @@
     "description": null,
     "weight": 300,
     "cost": 180,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 219,
@@ -1757,7 +1778,7 @@
     "description": null,
     "weight": 200,
     "cost": 60,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 220,
@@ -1765,7 +1786,7 @@
     "description": "whistle",
     "weight": 3,
     "cost": 10,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 221,
@@ -1773,7 +1794,7 @@
     "description": "whistle",
     "weight": 3,
     "cost": 10,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 222,
@@ -1781,7 +1802,7 @@
     "description": "flute",
     "weight": 5,
     "cost": 12,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 223,
@@ -1789,7 +1810,7 @@
     "description": "flute",
     "weight": 5,
     "cost": 36,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 224,
@@ -1797,7 +1818,7 @@
     "description": "horn",
     "weight": 18,
     "cost": 15,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 225,
@@ -1805,7 +1826,7 @@
     "description": "horn",
     "weight": 18,
     "cost": 50,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 226,
@@ -1813,7 +1834,7 @@
     "description": "horn",
     "weight": 18,
     "cost": 50,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 227,
@@ -1821,7 +1842,7 @@
     "description": "horn",
     "weight": 18,
     "cost": 50,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 228,
@@ -1829,7 +1850,7 @@
     "description": "harp",
     "weight": 30,
     "cost": 50,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 229,
@@ -1837,7 +1858,7 @@
     "description": "harp",
     "weight": 30,
     "cost": 50,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 230,
@@ -1845,7 +1866,7 @@
     "description": null,
     "weight": 30,
     "cost": 50,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 231,
@@ -1853,7 +1874,7 @@
     "description": null,
     "weight": 10,
     "cost": 15,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 232,
@@ -1861,7 +1882,7 @@
     "description": "drum",
     "weight": 25,
     "cost": 25,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 233,
@@ -1869,7 +1890,7 @@
     "description": "drum",
     "weight": 25,
     "cost": 25,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 234,
@@ -1877,7 +1898,7 @@
     "description": null,
     "weight": 100,
     "cost": 50,
-    "subtype": 4
+    "skill": "PICK_AXE"
   },
   {
     "index": 235,
@@ -1885,7 +1906,7 @@
     "description": "iron hook",
     "weight": 30,
     "cost": 50,
-    "subtype": 14
+    "skill": "FLAIL"
   },
   {
     "index": 236,
@@ -1893,7 +1914,7 @@
     "description": null,
     "weight": 20,
     "cost": 100,
-    "subtype": 28
+    "skill": "UNICORN_HORN"
   },
   {
     "index": 237,
@@ -1901,7 +1922,7 @@
     "description": "candelabrum",
     "weight": 10,
     "cost": 5000,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 238,
@@ -1909,7 +1930,7 @@
     "description": "silver bell",
     "weight": 10,
     "cost": 5000,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 239,
@@ -1917,7 +1938,7 @@
     "description": null,
     "weight": 10,
     "cost": 15,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 240,
@@ -1925,7 +1946,7 @@
     "description": null,
     "weight": 0,
     "cost": 5,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 241,
@@ -1933,7 +1954,7 @@
     "description": null,
     "weight": 1,
     "cost": 9,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 242,
@@ -1941,7 +1962,7 @@
     "description": null,
     "weight": 1,
     "cost": 5,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 243,
@@ -1949,7 +1970,7 @@
     "description": null,
     "weight": 1,
     "cost": 5,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 244,
@@ -1957,7 +1978,7 @@
     "description": null,
     "weight": 400,
     "cost": 105,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 245,
@@ -1965,7 +1986,7 @@
     "description": null,
     "weight": 5,
     "cost": 1,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 246,
@@ -1973,7 +1994,7 @@
     "description": null,
     "weight": 20,
     "cost": 6,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 247,
@@ -1981,7 +2002,7 @@
     "description": null,
     "weight": 20,
     "cost": 6,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 248,
@@ -1989,7 +2010,7 @@
     "description": null,
     "weight": 20,
     "cost": 6,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 249,
@@ -1997,7 +2018,7 @@
     "description": null,
     "weight": 20,
     "cost": 6,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 250,
@@ -2005,7 +2026,7 @@
     "description": null,
     "weight": 1,
     "cost": 6,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 251,
@@ -2013,7 +2034,7 @@
     "description": null,
     "weight": 1,
     "cost": 6,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 252,
@@ -2021,7 +2042,7 @@
     "description": null,
     "weight": 2,
     "cost": 7,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 253,
@@ -2029,7 +2050,7 @@
     "description": null,
     "weight": 2,
     "cost": 9,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 254,
@@ -2037,7 +2058,7 @@
     "description": null,
     "weight": 2,
     "cost": 7,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 255,
@@ -2045,7 +2066,7 @@
     "description": null,
     "weight": 5,
     "cost": 10,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 256,
@@ -2053,7 +2074,7 @@
     "description": null,
     "weight": 2,
     "cost": 9,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 257,
@@ -2061,7 +2082,7 @@
     "description": null,
     "weight": 2,
     "cost": 7,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 258,
@@ -2069,7 +2090,7 @@
     "description": null,
     "weight": 1,
     "cost": 7,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 259,
@@ -2077,7 +2098,7 @@
     "description": null,
     "weight": 1,
     "cost": 7,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 260,
@@ -2085,7 +2106,7 @@
     "description": null,
     "weight": 5,
     "cost": 17,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 261,
@@ -2093,7 +2114,7 @@
     "description": null,
     "weight": 2,
     "cost": 15,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 262,
@@ -2101,7 +2122,7 @@
     "description": null,
     "weight": 10,
     "cost": 10,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 263,
@@ -2109,7 +2130,7 @@
     "description": null,
     "weight": 2,
     "cost": 10,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 264,
@@ -2117,7 +2138,7 @@
     "description": null,
     "weight": 1,
     "cost": 7,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 265,
@@ -2125,7 +2146,7 @@
     "description": null,
     "weight": 2,
     "cost": 15,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 266,
@@ -2133,7 +2154,7 @@
     "description": null,
     "weight": 5,
     "cost": 45,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 267,
@@ -2141,7 +2162,7 @@
     "description": null,
     "weight": 15,
     "cost": 35,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 268,
@@ -2149,7 +2170,7 @@
     "description": null,
     "weight": 20,
     "cost": 45,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 269,
@@ -2157,7 +2178,7 @@
     "description": null,
     "weight": 10,
     "cost": 25,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 270,
@@ -2165,7 +2186,7 @@
     "description": null,
     "weight": 10,
     "cost": 20,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 271,
@@ -2173,7 +2194,7 @@
     "description": null,
     "weight": 10,
     "cost": 5,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 272,
@@ -2181,7 +2202,7 @@
     "description": "ruby",
     "weight": 20,
     "cost": 300,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 273,
@@ -2189,7 +2210,7 @@
     "description": "pink",
     "weight": 20,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 274,
@@ -2197,7 +2218,7 @@
     "description": "orange",
     "weight": 20,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 275,
@@ -2205,7 +2226,7 @@
     "description": "yellow",
     "weight": 20,
     "cost": 150,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 276,
@@ -2213,7 +2234,7 @@
     "description": "emerald",
     "weight": 20,
     "cost": 300,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 277,
@@ -2221,7 +2242,7 @@
     "description": "dark green",
     "weight": 20,
     "cost": 200,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 278,
@@ -2229,7 +2250,7 @@
     "description": "cyan",
     "weight": 20,
     "cost": 200,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 279,
@@ -2237,7 +2258,7 @@
     "description": "sky blue",
     "weight": 20,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 280,
@@ -2245,7 +2266,7 @@
     "description": "brilliant blue",
     "weight": 20,
     "cost": 150,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 281,
@@ -2253,7 +2274,7 @@
     "description": "magenta",
     "weight": 20,
     "cost": 50,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 282,
@@ -2261,7 +2282,7 @@
     "description": "purple-red",
     "weight": 20,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 283,
@@ -2269,7 +2290,7 @@
     "description": "puce",
     "weight": 20,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 284,
@@ -2277,7 +2298,7 @@
     "description": "milky",
     "weight": 20,
     "cost": 300,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 285,
@@ -2285,7 +2306,7 @@
     "description": "swirly",
     "weight": 20,
     "cost": 200,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 286,
@@ -2293,7 +2314,7 @@
     "description": "bubbly",
     "weight": 20,
     "cost": 150,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 287,
@@ -2301,7 +2322,7 @@
     "description": "smoky",
     "weight": 20,
     "cost": 150,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 288,
@@ -2309,7 +2330,7 @@
     "description": "cloudy",
     "weight": 20,
     "cost": 150,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 289,
@@ -2317,7 +2338,7 @@
     "description": "effervescent",
     "weight": 20,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 290,
@@ -2325,7 +2346,7 @@
     "description": "black",
     "weight": 20,
     "cost": 200,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 291,
@@ -2333,7 +2354,7 @@
     "description": "golden",
     "weight": 20,
     "cost": 200,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 292,
@@ -2341,7 +2362,7 @@
     "description": "brown",
     "weight": 20,
     "cost": 50,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 293,
@@ -2349,7 +2370,7 @@
     "description": "fizzy",
     "weight": 20,
     "cost": 50,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 294,
@@ -2357,7 +2378,7 @@
     "description": "dark",
     "weight": 20,
     "cost": 50,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 295,
@@ -2365,7 +2386,7 @@
     "description": "white",
     "weight": 20,
     "cost": 250,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 296,
@@ -2373,7 +2394,7 @@
     "description": "murky",
     "weight": 20,
     "cost": 250,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 297,
@@ -2381,7 +2402,7 @@
     "description": "clear",
     "weight": 20,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 298,
@@ -2389,7 +2410,7 @@
     "description": "ZELGO MER",
     "weight": 5,
     "cost": 80,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 299,
@@ -2397,7 +2418,7 @@
     "description": "JUYED AWK YACC",
     "weight": 5,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 300,
@@ -2405,7 +2426,7 @@
     "description": "NR 9",
     "weight": 5,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 301,
@@ -2413,7 +2434,7 @@
     "description": "XIXAXA XOXAXA XUXAXA",
     "weight": 5,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 302,
@@ -2421,7 +2442,7 @@
     "description": "PRATYAVAYAH",
     "weight": 5,
     "cost": 80,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 303,
@@ -2429,7 +2450,7 @@
     "description": "DAIYEN FOOELS",
     "weight": 5,
     "cost": 60,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 304,
@@ -2437,7 +2458,7 @@
     "description": "LEP GEX VEN ZEA",
     "weight": 5,
     "cost": 200,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 305,
@@ -2445,7 +2466,7 @@
     "description": "PRIRUTSENIE",
     "weight": 5,
     "cost": 200,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 306,
@@ -2453,7 +2474,7 @@
     "description": "ELBIB YLOH",
     "weight": 5,
     "cost": 300,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 307,
@@ -2461,7 +2482,7 @@
     "description": "VERR YED HORRE",
     "weight": 5,
     "cost": 50,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 308,
@@ -2469,7 +2490,7 @@
     "description": "VENZAR BORGAVVE",
     "weight": 5,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 309,
@@ -2477,7 +2498,7 @@
     "description": "THARR",
     "weight": 5,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 310,
@@ -2485,7 +2506,7 @@
     "description": "YUM YUM",
     "weight": 5,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 311,
@@ -2493,7 +2514,7 @@
     "description": "KERNOD WEL",
     "weight": 5,
     "cost": 20,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 312,
@@ -2501,7 +2522,7 @@
     "description": "ELAM EBOW",
     "weight": 5,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 313,
@@ -2509,7 +2530,7 @@
     "description": "DUAM XNAHT",
     "weight": 5,
     "cost": 200,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 314,
@@ -2517,7 +2538,7 @@
     "description": "ANDOVA BEGARIN",
     "weight": 5,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 315,
@@ -2525,7 +2546,7 @@
     "description": "KIRJE",
     "weight": 5,
     "cost": 200,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 316,
@@ -2533,7 +2554,7 @@
     "description": "VE FORBRYDERNE",
     "weight": 5,
     "cost": 300,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 317,
@@ -2541,7 +2562,7 @@
     "description": "HACKEM MUCHE",
     "weight": 5,
     "cost": 300,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 318,
@@ -2549,7 +2570,7 @@
     "description": "VELOX NEB",
     "weight": 5,
     "cost": 300,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 319,
@@ -2557,7 +2578,7 @@
     "description": "FOOBIE BLETCH",
     "weight": 5,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 320,
@@ -2565,7 +2586,7 @@
     "description": "TEMOV",
     "weight": 5,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 321,
@@ -2573,7 +2594,7 @@
     "description": "GARVEN DEH",
     "weight": 5,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 322,
@@ -2581,7 +2602,7 @@
     "description": "READ ME",
     "weight": 5,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 323,
@@ -2589,7 +2610,7 @@
     "description": "ETAOIN SHRDLU",
     "weight": 5,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 324,
@@ -2597,7 +2618,7 @@
     "description": "LOREM IPSUM",
     "weight": 5,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 325,
@@ -2605,7 +2626,7 @@
     "description": "FNORD",
     "weight": 5,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 326,
@@ -2613,7 +2634,7 @@
     "description": "KO BATE",
     "weight": 5,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 327,
@@ -2621,7 +2642,7 @@
     "description": "ABRA KA DABRA",
     "weight": 5,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 328,
@@ -2629,7 +2650,7 @@
     "description": "ASHPD SODALG",
     "weight": 5,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 329,
@@ -2637,7 +2658,7 @@
     "description": "ZLORFIK",
     "weight": 5,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 330,
@@ -2645,7 +2666,7 @@
     "description": "GNIK SISI VLE",
     "weight": 5,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 331,
@@ -2653,7 +2674,7 @@
     "description": "HAPAX LEGOMENON",
     "weight": 5,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 332,
@@ -2661,7 +2682,7 @@
     "description": "EIRIS SAZUN IDISI",
     "weight": 5,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 333,
@@ -2669,7 +2690,7 @@
     "description": "PHOL ENDE WODAN",
     "weight": 5,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 334,
@@ -2677,7 +2698,7 @@
     "description": "GHOTI",
     "weight": 5,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 335,
@@ -2685,7 +2706,7 @@
     "description": "MAPIRO MAHAMA DIROMAT",
     "weight": 5,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 336,
@@ -2693,7 +2714,7 @@
     "description": "VAS CORP BET MANI",
     "weight": 5,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 337,
@@ -2701,7 +2722,7 @@
     "description": "XOR OTA",
     "weight": 5,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 338,
@@ -2709,7 +2730,7 @@
     "description": "STRC PRST SKRZ KRK",
     "weight": 5,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 339,
@@ -2717,7 +2738,7 @@
     "description": "unlabeled",
     "weight": 5,
     "cost": 60,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 340,
@@ -2725,7 +2746,7 @@
     "description": "parchment",
     "weight": 50,
     "cost": 500,
-    "subtype": 35
+    "skill": "MATTER_SPELL"
   },
   {
     "index": 341,
@@ -2733,7 +2754,7 @@
     "description": "vellum",
     "weight": 50,
     "cost": 200,
-    "subtype": 29
+    "skill": "ATTACK_SPELL"
   },
   {
     "index": 342,
@@ -2741,7 +2762,7 @@
     "description": "ragged",
     "weight": 50,
     "cost": 400,
-    "subtype": 29
+    "skill": "ATTACK_SPELL"
   },
   {
     "index": 343,
@@ -2749,7 +2770,7 @@
     "description": "dog eared",
     "weight": 50,
     "cost": 400,
-    "subtype": 29
+    "skill": "ATTACK_SPELL"
   },
   {
     "index": 344,
@@ -2757,7 +2778,7 @@
     "description": "mottled",
     "weight": 50,
     "cost": 100,
-    "subtype": 32
+    "skill": "ENCHANTMENT_SPELL"
   },
   {
     "index": 345,
@@ -2765,7 +2786,7 @@
     "description": "stained",
     "weight": 50,
     "cost": 700,
-    "subtype": 29
+    "skill": "ATTACK_SPELL"
   },
   {
     "index": 346,
@@ -2773,7 +2794,7 @@
     "description": "cloth",
     "weight": 50,
     "cost": 100,
-    "subtype": 31
+    "skill": "DIVINATION_SPELL"
   },
   {
     "index": 347,
@@ -2781,7 +2802,7 @@
     "description": "leathery",
     "weight": 50,
     "cost": 100,
-    "subtype": 31
+    "skill": "DIVINATION_SPELL"
   },
   {
     "index": 348,
@@ -2789,7 +2810,7 @@
     "description": "white",
     "weight": 50,
     "cost": 100,
-    "subtype": 30
+    "skill": "HEALING_SPELL"
   },
   {
     "index": 349,
@@ -2797,7 +2818,7 @@
     "description": "pink",
     "weight": 50,
     "cost": 100,
-    "subtype": 35
+    "skill": "MATTER_SPELL"
   },
   {
     "index": 350,
@@ -2805,7 +2826,7 @@
     "description": "red",
     "weight": 50,
     "cost": 100,
-    "subtype": 29
+    "skill": "ATTACK_SPELL"
   },
   {
     "index": 351,
@@ -2813,7 +2834,7 @@
     "description": "orange",
     "weight": 50,
     "cost": 200,
-    "subtype": 32
+    "skill": "ENCHANTMENT_SPELL"
   },
   {
     "index": 352,
@@ -2821,7 +2842,7 @@
     "description": "yellow",
     "weight": 50,
     "cost": 200,
-    "subtype": 30
+    "skill": "HEALING_SPELL"
   },
   {
     "index": 353,
@@ -2829,7 +2850,7 @@
     "description": "velvet",
     "weight": 50,
     "cost": 200,
-    "subtype": 29
+    "skill": "ATTACK_SPELL"
   },
   {
     "index": 354,
@@ -2837,7 +2858,7 @@
     "description": "light green",
     "weight": 50,
     "cost": 200,
-    "subtype": 32
+    "skill": "ENCHANTMENT_SPELL"
   },
   {
     "index": 355,
@@ -2845,7 +2866,7 @@
     "description": "dark green",
     "weight": 50,
     "cost": 200,
-    "subtype": 35
+    "skill": "MATTER_SPELL"
   },
   {
     "index": 356,
@@ -2853,7 +2874,7 @@
     "description": "turquoise",
     "weight": 50,
     "cost": 200,
-    "subtype": 33
+    "skill": "CLERIC_SPELL"
   },
   {
     "index": 357,
@@ -2861,7 +2882,7 @@
     "description": "cyan",
     "weight": 50,
     "cost": 200,
-    "subtype": 31
+    "skill": "DIVINATION_SPELL"
   },
   {
     "index": 358,
@@ -2869,7 +2890,7 @@
     "description": "light blue",
     "weight": 50,
     "cost": 300,
-    "subtype": 32
+    "skill": "ENCHANTMENT_SPELL"
   },
   {
     "index": 359,
@@ -2877,7 +2898,7 @@
     "description": "dark blue",
     "weight": 50,
     "cost": 300,
-    "subtype": 31
+    "skill": "DIVINATION_SPELL"
   },
   {
     "index": 360,
@@ -2885,7 +2906,7 @@
     "description": "indigo",
     "weight": 50,
     "cost": 300,
-    "subtype": 30
+    "skill": "HEALING_SPELL"
   },
   {
     "index": 361,
@@ -2893,7 +2914,7 @@
     "description": "magenta",
     "weight": 50,
     "cost": 300,
-    "subtype": 32
+    "skill": "ENCHANTMENT_SPELL"
   },
   {
     "index": 362,
@@ -2901,7 +2922,7 @@
     "description": "purple",
     "weight": 50,
     "cost": 300,
-    "subtype": 34
+    "skill": "ESCAPE_SPELL"
   },
   {
     "index": 363,
@@ -2909,7 +2930,7 @@
     "description": "violet",
     "weight": 50,
     "cost": 300,
-    "subtype": 31
+    "skill": "DIVINATION_SPELL"
   },
   {
     "index": 364,
@@ -2917,7 +2938,7 @@
     "description": "tan",
     "weight": 50,
     "cost": 400,
-    "subtype": 34
+    "skill": "ESCAPE_SPELL"
   },
   {
     "index": 365,
@@ -2925,7 +2946,7 @@
     "description": "plaid",
     "weight": 50,
     "cost": 300,
-    "subtype": 30
+    "skill": "HEALING_SPELL"
   },
   {
     "index": 366,
@@ -2933,7 +2954,7 @@
     "description": "light brown",
     "weight": 50,
     "cost": 400,
-    "subtype": 30
+    "skill": "HEALING_SPELL"
   },
   {
     "index": 367,
@@ -2941,7 +2962,7 @@
     "description": "dark brown",
     "weight": 50,
     "cost": 400,
-    "subtype": 34
+    "skill": "ESCAPE_SPELL"
   },
   {
     "index": 368,
@@ -2949,7 +2970,7 @@
     "description": "gray",
     "weight": 50,
     "cost": 400,
-    "subtype": 31
+    "skill": "DIVINATION_SPELL"
   },
   {
     "index": 369,
@@ -2957,7 +2978,7 @@
     "description": "wrinkled",
     "weight": 50,
     "cost": 300,
-    "subtype": 33
+    "skill": "CLERIC_SPELL"
   },
   {
     "index": 370,
@@ -2965,7 +2986,7 @@
     "description": "dusty",
     "weight": 50,
     "cost": 500,
-    "subtype": 31
+    "skill": "DIVINATION_SPELL"
   },
   {
     "index": 371,
@@ -2973,7 +2994,7 @@
     "description": "bronze",
     "weight": 50,
     "cost": 300,
-    "subtype": 31
+    "skill": "DIVINATION_SPELL"
   },
   {
     "index": 372,
@@ -2981,7 +3002,7 @@
     "description": "copper",
     "weight": 50,
     "cost": 600,
-    "subtype": 33
+    "skill": "CLERIC_SPELL"
   },
   {
     "index": 373,
@@ -2989,7 +3010,7 @@
     "description": "silver",
     "weight": 50,
     "cost": 600,
-    "subtype": 35
+    "skill": "MATTER_SPELL"
   },
   {
     "index": 374,
@@ -2997,7 +3018,7 @@
     "description": "gold",
     "weight": 50,
     "cost": 600,
-    "subtype": 34
+    "skill": "ESCAPE_SPELL"
   },
   {
     "index": 375,
@@ -3005,7 +3026,7 @@
     "description": "glittering",
     "weight": 50,
     "cost": 600,
-    "subtype": 33
+    "skill": "CLERIC_SPELL"
   },
   {
     "index": 376,
@@ -3013,7 +3034,7 @@
     "description": "shining",
     "weight": 50,
     "cost": 700,
-    "subtype": 35
+    "skill": "MATTER_SPELL"
   },
   {
     "index": 377,
@@ -3021,7 +3042,7 @@
     "description": "dull",
     "weight": 50,
     "cost": 100,
-    "subtype": 33
+    "skill": "CLERIC_SPELL"
   },
   {
     "index": 378,
@@ -3029,7 +3050,7 @@
     "description": "thin",
     "weight": 50,
     "cost": 100,
-    "subtype": 34
+    "skill": "ESCAPE_SPELL"
   },
   {
     "index": 379,
@@ -3037,7 +3058,7 @@
     "description": "thick",
     "weight": 50,
     "cost": 300,
-    "subtype": 30
+    "skill": "HEALING_SPELL"
   },
   {
     "index": 380,
@@ -3045,7 +3066,7 @@
     "description": "plain",
     "weight": 50,
     "cost": 0,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 381,
@@ -3053,7 +3074,7 @@
     "description": "paperback",
     "weight": 0,
     "cost": 20,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 382,
@@ -3061,7 +3082,7 @@
     "description": "papyrus",
     "weight": 20,
     "cost": 10000,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 383,
@@ -3069,7 +3090,7 @@
     "description": "glass",
     "weight": 7,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 384,
@@ -3077,7 +3098,7 @@
     "description": "balsa",
     "weight": 7,
     "cost": 150,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 385,
@@ -3085,7 +3106,7 @@
     "description": "crystal",
     "weight": 7,
     "cost": 150,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 386,
@@ -3093,7 +3114,7 @@
     "description": "maple",
     "weight": 7,
     "cost": 200,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 387,
@@ -3101,7 +3122,7 @@
     "description": "pine",
     "weight": 7,
     "cost": 500,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 388,
@@ -3109,7 +3130,7 @@
     "description": "oak",
     "weight": 7,
     "cost": 100,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 389,
@@ -3117,7 +3138,7 @@
     "description": "ebony",
     "weight": 7,
     "cost": 150,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 390,
@@ -3125,7 +3146,7 @@
     "description": "marble",
     "weight": 7,
     "cost": 150,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 391,
@@ -3133,7 +3154,7 @@
     "description": "tin",
     "weight": 7,
     "cost": 150,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 392,
@@ -3141,7 +3162,7 @@
     "description": "brass",
     "weight": 7,
     "cost": 150,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 393,
@@ -3149,7 +3170,7 @@
     "description": "copper",
     "weight": 7,
     "cost": 150,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 394,
@@ -3157,7 +3178,7 @@
     "description": "silver",
     "weight": 7,
     "cost": 200,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 395,
@@ -3165,7 +3186,7 @@
     "description": "platinum",
     "weight": 7,
     "cost": 200,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 396,
@@ -3173,7 +3194,7 @@
     "description": "iridium",
     "weight": 7,
     "cost": 200,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 397,
@@ -3181,7 +3202,7 @@
     "description": "zinc",
     "weight": 7,
     "cost": 150,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 398,
@@ -3189,7 +3210,7 @@
     "description": "aluminum",
     "weight": 7,
     "cost": 150,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 399,
@@ -3197,7 +3218,7 @@
     "description": "uranium",
     "weight": 7,
     "cost": 150,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 400,
@@ -3205,7 +3226,7 @@
     "description": "iron",
     "weight": 7,
     "cost": 150,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 401,
@@ -3213,7 +3234,7 @@
     "description": "steel",
     "weight": 7,
     "cost": 150,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 402,
@@ -3221,7 +3242,7 @@
     "description": "hexagonal",
     "weight": 7,
     "cost": 175,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 403,
@@ -3229,7 +3250,7 @@
     "description": "short",
     "weight": 7,
     "cost": 175,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 404,
@@ -3237,7 +3258,7 @@
     "description": "runed",
     "weight": 7,
     "cost": 175,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 405,
@@ -3245,7 +3266,7 @@
     "description": "long",
     "weight": 7,
     "cost": 500,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 406,
@@ -3253,7 +3274,7 @@
     "description": "curved",
     "weight": 7,
     "cost": 175,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 407,
@@ -3261,7 +3282,7 @@
     "description": "forked",
     "weight": 7,
     "cost": 150,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 408,
@@ -3269,7 +3290,7 @@
     "description": "spiked",
     "weight": 7,
     "cost": 150,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 409,
@@ -3277,7 +3298,7 @@
     "description": "jeweled",
     "weight": 7,
     "cost": 150,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 410,
@@ -3285,7 +3306,7 @@
     "description": null,
     "weight": 1,
     "cost": 1,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 411,
@@ -3293,7 +3314,9 @@
     "description": "white",
     "weight": 1,
     "cost": 4500,
-    "subtype": -22
+    "skill": "SLING",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 412,
@@ -3301,7 +3324,9 @@
     "description": "white",
     "weight": 1,
     "cost": 4000,
-    "subtype": -22
+    "skill": "SLING",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 413,
@@ -3309,7 +3334,9 @@
     "description": "red",
     "weight": 1,
     "cost": 3500,
-    "subtype": -22
+    "skill": "SLING",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 414,
@@ -3317,7 +3344,9 @@
     "description": "orange",
     "weight": 1,
     "cost": 3250,
-    "subtype": -22
+    "skill": "SLING",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 415,
@@ -3325,7 +3354,9 @@
     "description": "blue",
     "weight": 1,
     "cost": 3000,
-    "subtype": -22
+    "skill": "SLING",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 416,
@@ -3333,7 +3364,9 @@
     "description": "black",
     "weight": 1,
     "cost": 2500,
-    "subtype": -22
+    "skill": "SLING",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 417,
@@ -3341,7 +3374,9 @@
     "description": "green",
     "weight": 1,
     "cost": 2500,
-    "subtype": -22
+    "skill": "SLING",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 418,
@@ -3349,7 +3384,9 @@
     "description": "green",
     "weight": 1,
     "cost": 2000,
-    "subtype": -22
+    "skill": "SLING",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 419,
@@ -3357,7 +3394,9 @@
     "description": "yellow",
     "weight": 1,
     "cost": 1500,
-    "subtype": -22
+    "skill": "SLING",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 420,
@@ -3365,7 +3404,9 @@
     "description": "green",
     "weight": 1,
     "cost": 1500,
-    "subtype": -22
+    "skill": "SLING",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 421,
@@ -3373,7 +3414,9 @@
     "description": "yellowish brown",
     "weight": 1,
     "cost": 1000,
-    "subtype": -22
+    "skill": "SLING",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 422,
@@ -3381,7 +3424,9 @@
     "description": "yellowish brown",
     "weight": 1,
     "cost": 900,
-    "subtype": -22
+    "skill": "SLING",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 423,
@@ -3389,7 +3434,9 @@
     "description": "black",
     "weight": 1,
     "cost": 850,
-    "subtype": -22
+    "skill": "SLING",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 424,
@@ -3397,7 +3444,9 @@
     "description": "white",
     "weight": 1,
     "cost": 800,
-    "subtype": -22
+    "skill": "SLING",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 425,
@@ -3405,7 +3454,9 @@
     "description": "yellow",
     "weight": 1,
     "cost": 700,
-    "subtype": -22
+    "skill": "SLING",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 426,
@@ -3413,7 +3464,9 @@
     "description": "red",
     "weight": 1,
     "cost": 700,
-    "subtype": -22
+    "skill": "SLING",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 427,
@@ -3421,7 +3474,9 @@
     "description": "violet",
     "weight": 1,
     "cost": 600,
-    "subtype": -22
+    "skill": "SLING",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 428,
@@ -3429,7 +3484,9 @@
     "description": "red",
     "weight": 1,
     "cost": 500,
-    "subtype": -22
+    "skill": "SLING",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 429,
@@ -3437,7 +3494,9 @@
     "description": "violet",
     "weight": 1,
     "cost": 400,
-    "subtype": -22
+    "skill": "SLING",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 430,
@@ -3445,7 +3504,9 @@
     "description": "black",
     "weight": 1,
     "cost": 200,
-    "subtype": -22
+    "skill": "SLING",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 431,
@@ -3453,7 +3514,9 @@
     "description": "orange",
     "weight": 1,
     "cost": 200,
-    "subtype": -22
+    "skill": "SLING",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 432,
@@ -3461,7 +3524,9 @@
     "description": "green",
     "weight": 1,
     "cost": 300,
-    "subtype": -22
+    "skill": "SLING",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 433,
@@ -3469,7 +3534,9 @@
     "description": "white",
     "weight": 1,
     "cost": 0,
-    "subtype": -22
+    "skill": "SLING",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 434,
@@ -3477,7 +3544,9 @@
     "description": "blue",
     "weight": 1,
     "cost": 0,
-    "subtype": -22
+    "skill": "SLING",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 435,
@@ -3485,7 +3554,9 @@
     "description": "red",
     "weight": 1,
     "cost": 0,
-    "subtype": -22
+    "skill": "SLING",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 436,
@@ -3493,7 +3564,9 @@
     "description": "yellowish brown",
     "weight": 1,
     "cost": 0,
-    "subtype": -22
+    "skill": "SLING",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 437,
@@ -3501,7 +3574,9 @@
     "description": "orange",
     "weight": 1,
     "cost": 0,
-    "subtype": -22
+    "skill": "SLING",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 438,
@@ -3509,7 +3584,9 @@
     "description": "yellow",
     "weight": 1,
     "cost": 0,
-    "subtype": -22
+    "skill": "SLING",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 439,
@@ -3517,7 +3594,9 @@
     "description": "black",
     "weight": 1,
     "cost": 0,
-    "subtype": -22
+    "skill": "SLING",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 440,
@@ -3525,7 +3604,9 @@
     "description": "green",
     "weight": 1,
     "cost": 0,
-    "subtype": -22
+    "skill": "SLING",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 441,
@@ -3533,7 +3614,9 @@
     "description": "violet",
     "weight": 1,
     "cost": 0,
-    "subtype": -22
+    "skill": "SLING",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 442,
@@ -3541,7 +3624,9 @@
     "description": "gray",
     "weight": 10,
     "cost": 60,
-    "subtype": -22
+    "skill": "SLING",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 443,
@@ -3549,7 +3634,9 @@
     "description": "gray",
     "weight": 500,
     "cost": 1,
-    "subtype": -22
+    "skill": "SLING",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 444,
@@ -3557,7 +3644,9 @@
     "description": "gray",
     "weight": 10,
     "cost": 45,
-    "subtype": -22
+    "skill": "SLING",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 445,
@@ -3565,7 +3654,9 @@
     "description": "gray",
     "weight": 10,
     "cost": 1,
-    "subtype": -22
+    "skill": "SLING",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 446,
@@ -3573,7 +3664,9 @@
     "description": null,
     "weight": 10,
     "cost": 0,
-    "subtype": -22
+    "skill": "SLING",
+    "missile": true,
+    "fromLauncher": true
   },
   {
     "index": 447,
@@ -3581,7 +3674,7 @@
     "description": null,
     "weight": 6000,
     "cost": 0,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 448,
@@ -3589,7 +3682,7 @@
     "description": null,
     "weight": 2500,
     "cost": 0,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 449,
@@ -3597,7 +3690,7 @@
     "description": null,
     "weight": 480,
     "cost": 10,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 450,
@@ -3605,7 +3698,7 @@
     "description": null,
     "weight": 120,
     "cost": 0,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 451,
@@ -3613,7 +3706,7 @@
     "description": "splash of venom",
     "weight": 1,
     "cost": 0,
-    "subtype": 0
+    "skill": "NONE"
   },
   {
     "index": 452,
@@ -3621,6 +3714,6 @@
     "description": "splash of venom",
     "weight": 1,
     "cost": 0,
-    "subtype": 0
+    "skill": "NONE"
   }
 ]
