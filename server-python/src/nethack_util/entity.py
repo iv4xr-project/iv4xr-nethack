@@ -41,14 +41,8 @@ def object_info():
                 value = object_info.__getattribute__(property)
                 abs_value = abs(value)
                 object_dict["skill"] = toSkill(abs_value)
-                if value == 0:
-                    continue
-
-                is_missile = value < 0
-                if is_missile:
-                    object_dict["missile"] = True
-                if launchers.__contains__(abs_value):
-                    object_dict["fromLauncher"] = True
+                object_dict["missile"] = value < 0
+                object_dict["fromLauncher"] = launchers.__contains__(abs_value)
                 continue
 
             object_dict[mapped_property] = object_info.__getattribute__(property)

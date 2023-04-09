@@ -5,7 +5,9 @@
     "description": null,
     "weight": 0,
     "cost": 0,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 1,
@@ -74,7 +76,8 @@
     "weight": 1,
     "cost": 2,
     "skill": "DART",
-    "missile": true
+    "missile": true,
+    "fromLauncher": false
   },
   {
     "index": 8,
@@ -83,7 +86,8 @@
     "weight": 1,
     "cost": 5,
     "skill": "SHURIKEN",
-    "missile": true
+    "missile": true,
+    "fromLauncher": false
   },
   {
     "index": 9,
@@ -92,7 +96,8 @@
     "weight": 5,
     "cost": 20,
     "skill": "BOOMERANG",
-    "missile": true
+    "missile": true,
+    "fromLauncher": false
   },
   {
     "index": 10,
@@ -100,7 +105,9 @@
     "description": null,
     "weight": 30,
     "cost": 3,
-    "skill": "SPEAR"
+    "skill": "SPEAR",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 11,
@@ -108,7 +115,9 @@
     "description": "runed spear",
     "weight": 30,
     "cost": 3,
-    "skill": "SPEAR"
+    "skill": "SPEAR",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 12,
@@ -116,7 +125,9 @@
     "description": "crude spear",
     "weight": 30,
     "cost": 3,
-    "skill": "SPEAR"
+    "skill": "SPEAR",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 13,
@@ -124,7 +135,9 @@
     "description": "stout spear",
     "weight": 35,
     "cost": 3,
-    "skill": "SPEAR"
+    "skill": "SPEAR",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 14,
@@ -132,7 +145,9 @@
     "description": null,
     "weight": 36,
     "cost": 40,
-    "skill": "SPEAR"
+    "skill": "SPEAR",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 15,
@@ -140,7 +155,9 @@
     "description": "throwing spear",
     "weight": 20,
     "cost": 3,
-    "skill": "SPEAR"
+    "skill": "SPEAR",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 16,
@@ -148,7 +165,9 @@
     "description": null,
     "weight": 25,
     "cost": 5,
-    "skill": "TRIDENT"
+    "skill": "TRIDENT",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 17,
@@ -156,7 +175,9 @@
     "description": null,
     "weight": 10,
     "cost": 4,
-    "skill": "DAGGER"
+    "skill": "DAGGER",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 18,
@@ -164,7 +185,9 @@
     "description": "runed dagger",
     "weight": 10,
     "cost": 4,
-    "skill": "DAGGER"
+    "skill": "DAGGER",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 19,
@@ -172,7 +195,9 @@
     "description": "crude dagger",
     "weight": 10,
     "cost": 4,
-    "skill": "DAGGER"
+    "skill": "DAGGER",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 20,
@@ -180,7 +205,9 @@
     "description": null,
     "weight": 12,
     "cost": 40,
-    "skill": "DAGGER"
+    "skill": "DAGGER",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 21,
@@ -188,7 +215,9 @@
     "description": null,
     "weight": 10,
     "cost": 4,
-    "skill": "DAGGER"
+    "skill": "DAGGER",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 22,
@@ -196,7 +225,9 @@
     "description": null,
     "weight": 5,
     "cost": 6,
-    "skill": "KNIFE"
+    "skill": "KNIFE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 23,
@@ -204,7 +235,9 @@
     "description": null,
     "weight": 5,
     "cost": 4,
-    "skill": "KNIFE"
+    "skill": "KNIFE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 24,
@@ -212,7 +245,9 @@
     "description": null,
     "weight": 5,
     "cost": 4,
-    "skill": "KNIFE"
+    "skill": "KNIFE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 25,
@@ -220,7 +255,9 @@
     "description": null,
     "weight": 20,
     "cost": 2,
-    "skill": "KNIFE"
+    "skill": "KNIFE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 26,
@@ -228,7 +265,9 @@
     "description": null,
     "weight": 20,
     "cost": 100,
-    "skill": "KNIFE"
+    "skill": "KNIFE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 27,
@@ -236,7 +275,9 @@
     "description": null,
     "weight": 60,
     "cost": 8,
-    "skill": "AXE"
+    "skill": "AXE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 28,
@@ -244,7 +285,9 @@
     "description": "double-headed axe",
     "weight": 120,
     "cost": 40,
-    "skill": "AXE"
+    "skill": "AXE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 29,
@@ -252,7 +295,9 @@
     "description": null,
     "weight": 30,
     "cost": 10,
-    "skill": "SHORT_SWORD"
+    "skill": "SHORT_SWORD",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 30,
@@ -260,7 +305,9 @@
     "description": "runed short sword",
     "weight": 30,
     "cost": 10,
-    "skill": "SHORT_SWORD"
+    "skill": "SHORT_SWORD",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 31,
@@ -268,7 +315,9 @@
     "description": "crude short sword",
     "weight": 30,
     "cost": 10,
-    "skill": "SHORT_SWORD"
+    "skill": "SHORT_SWORD",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 32,
@@ -276,7 +325,9 @@
     "description": "broad short sword",
     "weight": 30,
     "cost": 10,
-    "skill": "SHORT_SWORD"
+    "skill": "SHORT_SWORD",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 33,
@@ -284,7 +335,9 @@
     "description": "curved sword",
     "weight": 40,
     "cost": 15,
-    "skill": "SCIMITAR"
+    "skill": "SCIMITAR",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 34,
@@ -292,7 +345,9 @@
     "description": null,
     "weight": 40,
     "cost": 75,
-    "skill": "SABER"
+    "skill": "SABER",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 35,
@@ -300,7 +355,9 @@
     "description": null,
     "weight": 70,
     "cost": 10,
-    "skill": "BROAD_SWORD"
+    "skill": "BROAD_SWORD",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 36,
@@ -308,7 +365,9 @@
     "description": "runed broadsword",
     "weight": 70,
     "cost": 10,
-    "skill": "BROAD_SWORD"
+    "skill": "BROAD_SWORD",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 37,
@@ -316,7 +375,9 @@
     "description": null,
     "weight": 40,
     "cost": 15,
-    "skill": "LONG_SWORD"
+    "skill": "LONG_SWORD",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 38,
@@ -324,7 +385,9 @@
     "description": null,
     "weight": 150,
     "cost": 50,
-    "skill": "TWO_HANDED_SWORD"
+    "skill": "TWO_HANDED_SWORD",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 39,
@@ -332,7 +395,9 @@
     "description": "samurai sword",
     "weight": 40,
     "cost": 80,
-    "skill": "LONG_SWORD"
+    "skill": "LONG_SWORD",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 40,
@@ -340,7 +405,9 @@
     "description": "long samurai sword",
     "weight": 60,
     "cost": 500,
-    "skill": "TWO_HANDED_SWORD"
+    "skill": "TWO_HANDED_SWORD",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 41,
@@ -348,7 +415,9 @@
     "description": "runed broadsword",
     "weight": 40,
     "cost": 300,
-    "skill": "BROAD_SWORD"
+    "skill": "BROAD_SWORD",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 42,
@@ -356,7 +425,9 @@
     "description": "vulgar polearm",
     "weight": 80,
     "cost": 10,
-    "skill": "POLEARMS"
+    "skill": "POLEARMS",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 43,
@@ -364,7 +435,9 @@
     "description": "hilted polearm",
     "weight": 50,
     "cost": 6,
-    "skill": "POLEARMS"
+    "skill": "POLEARMS",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 44,
@@ -372,7 +445,9 @@
     "description": "forked polearm",
     "weight": 50,
     "cost": 5,
-    "skill": "POLEARMS"
+    "skill": "POLEARMS",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 45,
@@ -380,7 +455,9 @@
     "description": "single-edged polearm",
     "weight": 75,
     "cost": 6,
-    "skill": "POLEARMS"
+    "skill": "POLEARMS",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 46,
@@ -388,7 +465,9 @@
     "description": null,
     "weight": 180,
     "cost": 10,
-    "skill": "LANCE"
+    "skill": "LANCE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 47,
@@ -396,7 +475,9 @@
     "description": "angled poleaxe",
     "weight": 150,
     "cost": 10,
-    "skill": "POLEARMS"
+    "skill": "POLEARMS",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 48,
@@ -404,7 +485,9 @@
     "description": "long poleaxe",
     "weight": 120,
     "cost": 7,
-    "skill": "POLEARMS"
+    "skill": "POLEARMS",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 49,
@@ -412,7 +495,9 @@
     "description": "pole cleaver",
     "weight": 125,
     "cost": 5,
-    "skill": "POLEARMS"
+    "skill": "POLEARMS",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 50,
@@ -420,7 +505,9 @@
     "description": "broad pick",
     "weight": 120,
     "cost": 50,
-    "skill": "PICK_AXE"
+    "skill": "PICK_AXE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 51,
@@ -428,7 +515,9 @@
     "description": "pole sickle",
     "weight": 60,
     "cost": 5,
-    "skill": "POLEARMS"
+    "skill": "POLEARMS",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 52,
@@ -436,7 +525,9 @@
     "description": "pruning hook",
     "weight": 80,
     "cost": 5,
-    "skill": "POLEARMS"
+    "skill": "POLEARMS",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 53,
@@ -444,7 +535,9 @@
     "description": "hooked polearm",
     "weight": 120,
     "cost": 7,
-    "skill": "POLEARMS"
+    "skill": "POLEARMS",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 54,
@@ -452,7 +545,9 @@
     "description": "pronged polearm",
     "weight": 150,
     "cost": 7,
-    "skill": "POLEARMS"
+    "skill": "POLEARMS",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 55,
@@ -460,7 +555,9 @@
     "description": "beaked polearm",
     "weight": 100,
     "cost": 8,
-    "skill": "POLEARMS"
+    "skill": "POLEARMS",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 56,
@@ -468,7 +565,9 @@
     "description": null,
     "weight": 30,
     "cost": 5,
-    "skill": "MACE"
+    "skill": "MACE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 57,
@@ -476,7 +575,9 @@
     "description": null,
     "weight": 120,
     "cost": 10,
-    "skill": "MORNING_STAR"
+    "skill": "MORNING_STAR",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 58,
@@ -484,7 +585,9 @@
     "description": null,
     "weight": 50,
     "cost": 5,
-    "skill": "HAMMER"
+    "skill": "HAMMER",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 59,
@@ -492,7 +595,9 @@
     "description": null,
     "weight": 30,
     "cost": 3,
-    "skill": "CLUB"
+    "skill": "CLUB",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 60,
@@ -500,7 +605,9 @@
     "description": null,
     "weight": 20,
     "cost": 3,
-    "skill": "WHIP"
+    "skill": "WHIP",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 61,
@@ -508,7 +615,9 @@
     "description": "staff",
     "weight": 40,
     "cost": 5,
-    "skill": "QUARTERSTAFF"
+    "skill": "QUARTERSTAFF",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 62,
@@ -516,7 +625,9 @@
     "description": "thonged club",
     "weight": 15,
     "cost": 4,
-    "skill": "CLUB"
+    "skill": "CLUB",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 63,
@@ -524,7 +635,9 @@
     "description": null,
     "weight": 15,
     "cost": 4,
-    "skill": "FLAIL"
+    "skill": "FLAIL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 64,
@@ -532,7 +645,9 @@
     "description": null,
     "weight": 20,
     "cost": 4,
-    "skill": "WHIP"
+    "skill": "WHIP",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 65,
@@ -541,6 +656,7 @@
     "weight": 30,
     "cost": 60,
     "skill": "BOW",
+    "missile": false,
     "fromLauncher": true
   },
   {
@@ -550,6 +666,7 @@
     "weight": 30,
     "cost": 60,
     "skill": "BOW",
+    "missile": false,
     "fromLauncher": true
   },
   {
@@ -559,6 +676,7 @@
     "weight": 30,
     "cost": 60,
     "skill": "BOW",
+    "missile": false,
     "fromLauncher": true
   },
   {
@@ -568,6 +686,7 @@
     "weight": 30,
     "cost": 60,
     "skill": "BOW",
+    "missile": false,
     "fromLauncher": true
   },
   {
@@ -577,6 +696,7 @@
     "weight": 3,
     "cost": 20,
     "skill": "SLING",
+    "missile": false,
     "fromLauncher": true
   },
   {
@@ -586,6 +706,7 @@
     "weight": 50,
     "cost": 40,
     "skill": "CROSSBOW",
+    "missile": false,
     "fromLauncher": true
   },
   {
@@ -594,7 +715,9 @@
     "description": "leather hat",
     "weight": 3,
     "cost": 8,
-    "skill": "KNIFE"
+    "skill": "KNIFE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 72,
@@ -602,7 +725,9 @@
     "description": "iron skull cap",
     "weight": 30,
     "cost": 10,
-    "skill": "KNIFE"
+    "skill": "KNIFE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 73,
@@ -610,7 +735,9 @@
     "description": "hard hat",
     "weight": 40,
     "cost": 20,
-    "skill": "KNIFE"
+    "skill": "KNIFE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 74,
@@ -618,7 +745,9 @@
     "description": null,
     "weight": 3,
     "cost": 1,
-    "skill": "KNIFE"
+    "skill": "KNIFE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 75,
@@ -626,7 +755,9 @@
     "description": "conical hat",
     "weight": 4,
     "cost": 80,
-    "skill": "KNIFE"
+    "skill": "KNIFE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 76,
@@ -634,7 +765,9 @@
     "description": "conical hat",
     "weight": 4,
     "cost": 1,
-    "skill": "KNIFE"
+    "skill": "KNIFE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 77,
@@ -642,7 +775,9 @@
     "description": null,
     "weight": 10,
     "cost": 8,
-    "skill": "KNIFE"
+    "skill": "KNIFE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 78,
@@ -650,7 +785,9 @@
     "description": "plumed helmet",
     "weight": 30,
     "cost": 10,
-    "skill": "KNIFE"
+    "skill": "KNIFE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 79,
@@ -658,7 +795,9 @@
     "description": "etched helmet",
     "weight": 50,
     "cost": 50,
-    "skill": "KNIFE"
+    "skill": "KNIFE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 80,
@@ -666,7 +805,9 @@
     "description": "crested helmet",
     "weight": 50,
     "cost": 50,
-    "skill": "KNIFE"
+    "skill": "KNIFE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 81,
@@ -674,7 +815,9 @@
     "description": "visored helmet",
     "weight": 50,
     "cost": 50,
-    "skill": "KNIFE"
+    "skill": "KNIFE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 82,
@@ -682,7 +825,9 @@
     "description": null,
     "weight": 40,
     "cost": 1200,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 83,
@@ -690,7 +835,9 @@
     "description": null,
     "weight": 40,
     "cost": 1200,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 84,
@@ -698,7 +845,9 @@
     "description": null,
     "weight": 40,
     "cost": 900,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 85,
@@ -706,7 +855,9 @@
     "description": null,
     "weight": 40,
     "cost": 900,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 86,
@@ -714,7 +865,9 @@
     "description": null,
     "weight": 40,
     "cost": 900,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 87,
@@ -722,7 +875,9 @@
     "description": null,
     "weight": 40,
     "cost": 1200,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 88,
@@ -730,7 +885,9 @@
     "description": null,
     "weight": 40,
     "cost": 900,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 89,
@@ -738,7 +895,9 @@
     "description": null,
     "weight": 40,
     "cost": 900,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 90,
@@ -746,7 +905,9 @@
     "description": null,
     "weight": 40,
     "cost": 900,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 91,
@@ -754,7 +915,9 @@
     "description": null,
     "weight": 40,
     "cost": 700,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 92,
@@ -762,7 +925,9 @@
     "description": null,
     "weight": 40,
     "cost": 700,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 93,
@@ -770,7 +935,9 @@
     "description": null,
     "weight": 40,
     "cost": 500,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 94,
@@ -778,7 +945,9 @@
     "description": null,
     "weight": 40,
     "cost": 500,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 95,
@@ -786,7 +955,9 @@
     "description": null,
     "weight": 40,
     "cost": 500,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 96,
@@ -794,7 +965,9 @@
     "description": null,
     "weight": 40,
     "cost": 700,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 97,
@@ -802,7 +975,9 @@
     "description": null,
     "weight": 40,
     "cost": 500,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 98,
@@ -810,7 +985,9 @@
     "description": null,
     "weight": 40,
     "cost": 500,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 99,
@@ -818,7 +995,9 @@
     "description": null,
     "weight": 40,
     "cost": 500,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 100,
@@ -826,7 +1005,9 @@
     "description": null,
     "weight": 450,
     "cost": 600,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 101,
@@ -834,7 +1015,9 @@
     "description": null,
     "weight": 450,
     "cost": 820,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 102,
@@ -842,7 +1025,9 @@
     "description": null,
     "weight": 450,
     "cost": 400,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 103,
@@ -850,7 +1035,9 @@
     "description": null,
     "weight": 400,
     "cost": 80,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 104,
@@ -858,7 +1045,9 @@
     "description": null,
     "weight": 350,
     "cost": 90,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 105,
@@ -866,7 +1055,9 @@
     "description": null,
     "weight": 150,
     "cost": 240,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 106,
@@ -874,7 +1065,9 @@
     "description": null,
     "weight": 150,
     "cost": 240,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 107,
@@ -882,7 +1075,9 @@
     "description": null,
     "weight": 300,
     "cost": 75,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 108,
@@ -890,7 +1085,9 @@
     "description": "crude chain mail",
     "weight": 300,
     "cost": 75,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 109,
@@ -898,7 +1095,9 @@
     "description": null,
     "weight": 250,
     "cost": 45,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 110,
@@ -906,7 +1105,9 @@
     "description": null,
     "weight": 200,
     "cost": 15,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 111,
@@ -914,7 +1115,9 @@
     "description": null,
     "weight": 250,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 112,
@@ -922,7 +1125,9 @@
     "description": "crude ring mail",
     "weight": 250,
     "cost": 80,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 113,
@@ -930,7 +1135,9 @@
     "description": null,
     "weight": 150,
     "cost": 5,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 114,
@@ -938,7 +1145,9 @@
     "description": null,
     "weight": 30,
     "cost": 10,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 115,
@@ -946,7 +1155,9 @@
     "description": null,
     "weight": 5,
     "cost": 3,
-    "skill": "BROAD_SWORD"
+    "skill": "BROAD_SWORD",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 116,
@@ -954,7 +1165,9 @@
     "description": null,
     "weight": 5,
     "cost": 2,
-    "skill": "BROAD_SWORD"
+    "skill": "BROAD_SWORD",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 117,
@@ -962,7 +1175,9 @@
     "description": null,
     "weight": 3,
     "cost": 2,
-    "skill": "SHORT_SWORD"
+    "skill": "SHORT_SWORD",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 118,
@@ -970,7 +1185,9 @@
     "description": "faded pall",
     "weight": 10,
     "cost": 60,
-    "skill": "SHORT_SWORD"
+    "skill": "SHORT_SWORD",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 119,
@@ -978,7 +1195,9 @@
     "description": "coarse mantelet",
     "weight": 10,
     "cost": 40,
-    "skill": "SHORT_SWORD"
+    "skill": "SHORT_SWORD",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 120,
@@ -986,7 +1205,9 @@
     "description": "hooded cloak",
     "weight": 10,
     "cost": 50,
-    "skill": "SHORT_SWORD"
+    "skill": "SHORT_SWORD",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 121,
@@ -994,7 +1215,9 @@
     "description": "slippery cloak",
     "weight": 10,
     "cost": 50,
-    "skill": "SHORT_SWORD"
+    "skill": "SHORT_SWORD",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 122,
@@ -1002,7 +1225,9 @@
     "description": null,
     "weight": 15,
     "cost": 50,
-    "skill": "SHORT_SWORD"
+    "skill": "SHORT_SWORD",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 123,
@@ -1010,7 +1235,9 @@
     "description": "apron",
     "weight": 10,
     "cost": 50,
-    "skill": "SHORT_SWORD"
+    "skill": "SHORT_SWORD",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 124,
@@ -1018,7 +1245,9 @@
     "description": null,
     "weight": 15,
     "cost": 40,
-    "skill": "SHORT_SWORD"
+    "skill": "SHORT_SWORD",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 125,
@@ -1026,7 +1255,9 @@
     "description": "tattered cape",
     "weight": 10,
     "cost": 50,
-    "skill": "SHORT_SWORD"
+    "skill": "SHORT_SWORD",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 126,
@@ -1034,7 +1265,9 @@
     "description": "opera cloak",
     "weight": 10,
     "cost": 60,
-    "skill": "SHORT_SWORD"
+    "skill": "SHORT_SWORD",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 127,
@@ -1042,7 +1275,9 @@
     "description": "ornamental cope",
     "weight": 10,
     "cost": 60,
-    "skill": "SHORT_SWORD"
+    "skill": "SHORT_SWORD",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 128,
@@ -1050,7 +1285,9 @@
     "description": "piece of cloth",
     "weight": 10,
     "cost": 50,
-    "skill": "SHORT_SWORD"
+    "skill": "SHORT_SWORD",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 129,
@@ -1058,7 +1295,9 @@
     "description": null,
     "weight": 30,
     "cost": 3,
-    "skill": "DAGGER"
+    "skill": "DAGGER",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 130,
@@ -1066,7 +1305,9 @@
     "description": "blue and green shield",
     "weight": 40,
     "cost": 7,
-    "skill": "DAGGER"
+    "skill": "DAGGER",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 131,
@@ -1074,7 +1315,9 @@
     "description": "white-handed shield",
     "weight": 50,
     "cost": 7,
-    "skill": "DAGGER"
+    "skill": "DAGGER",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 132,
@@ -1082,7 +1325,9 @@
     "description": "red-eyed shield",
     "weight": 50,
     "cost": 7,
-    "skill": "DAGGER"
+    "skill": "DAGGER",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 133,
@@ -1090,7 +1335,9 @@
     "description": null,
     "weight": 100,
     "cost": 10,
-    "skill": "DAGGER"
+    "skill": "DAGGER",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 134,
@@ -1098,7 +1345,9 @@
     "description": "large round shield",
     "weight": 100,
     "cost": 10,
-    "skill": "DAGGER"
+    "skill": "DAGGER",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 135,
@@ -1106,7 +1355,9 @@
     "description": "polished silver shield",
     "weight": 50,
     "cost": 50,
-    "skill": "DAGGER"
+    "skill": "DAGGER",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 136,
@@ -1114,7 +1365,9 @@
     "description": "old gloves",
     "weight": 10,
     "cost": 8,
-    "skill": "AXE"
+    "skill": "AXE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 137,
@@ -1122,7 +1375,9 @@
     "description": "padded gloves",
     "weight": 10,
     "cost": 50,
-    "skill": "AXE"
+    "skill": "AXE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 138,
@@ -1130,7 +1385,9 @@
     "description": "riding gloves",
     "weight": 30,
     "cost": 50,
-    "skill": "AXE"
+    "skill": "AXE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 139,
@@ -1138,7 +1395,9 @@
     "description": "fencing gloves",
     "weight": 10,
     "cost": 50,
-    "skill": "AXE"
+    "skill": "AXE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 140,
@@ -1146,7 +1405,9 @@
     "description": "walking shoes",
     "weight": 10,
     "cost": 8,
-    "skill": "PICK_AXE"
+    "skill": "PICK_AXE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 141,
@@ -1154,7 +1415,9 @@
     "description": "hard shoes",
     "weight": 50,
     "cost": 16,
-    "skill": "PICK_AXE"
+    "skill": "PICK_AXE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 142,
@@ -1162,7 +1425,9 @@
     "description": "jackboots",
     "weight": 20,
     "cost": 12,
-    "skill": "PICK_AXE"
+    "skill": "PICK_AXE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 143,
@@ -1170,7 +1435,9 @@
     "description": "combat boots",
     "weight": 20,
     "cost": 50,
-    "skill": "PICK_AXE"
+    "skill": "PICK_AXE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 144,
@@ -1178,7 +1445,9 @@
     "description": "jungle boots",
     "weight": 15,
     "cost": 50,
-    "skill": "PICK_AXE"
+    "skill": "PICK_AXE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 145,
@@ -1186,7 +1455,9 @@
     "description": "hiking boots",
     "weight": 20,
     "cost": 50,
-    "skill": "PICK_AXE"
+    "skill": "PICK_AXE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 146,
@@ -1194,7 +1465,9 @@
     "description": "mud boots",
     "weight": 15,
     "cost": 8,
-    "skill": "PICK_AXE"
+    "skill": "PICK_AXE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 147,
@@ -1202,7 +1475,9 @@
     "description": "buckled boots",
     "weight": 50,
     "cost": 8,
-    "skill": "PICK_AXE"
+    "skill": "PICK_AXE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 148,
@@ -1210,7 +1485,9 @@
     "description": "riding boots",
     "weight": 20,
     "cost": 30,
-    "skill": "PICK_AXE"
+    "skill": "PICK_AXE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 149,
@@ -1218,7 +1495,9 @@
     "description": "snow boots",
     "weight": 15,
     "cost": 30,
-    "skill": "PICK_AXE"
+    "skill": "PICK_AXE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 150,
@@ -1226,7 +1505,9 @@
     "description": "wooden",
     "weight": 3,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 151,
@@ -1234,7 +1515,9 @@
     "description": "granite",
     "weight": 3,
     "cost": 150,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 152,
@@ -1242,7 +1525,9 @@
     "description": "opal",
     "weight": 3,
     "cost": 150,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 153,
@@ -1250,7 +1535,9 @@
     "description": "clay",
     "weight": 3,
     "cost": 150,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 154,
@@ -1258,7 +1545,9 @@
     "description": "coral",
     "weight": 3,
     "cost": 150,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 155,
@@ -1266,7 +1555,9 @@
     "description": "black onyx",
     "weight": 3,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 156,
@@ -1274,7 +1565,9 @@
     "description": "moonstone",
     "weight": 3,
     "cost": 200,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 157,
@@ -1282,7 +1575,9 @@
     "description": "tiger eye",
     "weight": 3,
     "cost": 200,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 158,
@@ -1290,7 +1585,9 @@
     "description": "jade",
     "weight": 3,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 159,
@@ -1298,7 +1595,9 @@
     "description": "bronze",
     "weight": 3,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 160,
@@ -1306,7 +1605,9 @@
     "description": "agate",
     "weight": 3,
     "cost": 200,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 161,
@@ -1314,7 +1615,9 @@
     "description": "topaz",
     "weight": 3,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 162,
@@ -1322,7 +1625,9 @@
     "description": "sapphire",
     "weight": 3,
     "cost": 150,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 163,
@@ -1330,7 +1635,9 @@
     "description": "ruby",
     "weight": 3,
     "cost": 300,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 164,
@@ -1338,7 +1645,9 @@
     "description": "diamond",
     "weight": 3,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 165,
@@ -1346,7 +1655,9 @@
     "description": "pearl",
     "weight": 3,
     "cost": 150,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 166,
@@ -1354,7 +1665,9 @@
     "description": "iron",
     "weight": 3,
     "cost": 200,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 167,
@@ -1362,7 +1675,9 @@
     "description": "brass",
     "weight": 3,
     "cost": 150,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 168,
@@ -1370,7 +1685,9 @@
     "description": "copper",
     "weight": 3,
     "cost": 150,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 169,
@@ -1378,7 +1695,9 @@
     "description": "twisted",
     "weight": 3,
     "cost": 200,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 170,
@@ -1386,7 +1705,9 @@
     "description": "steel",
     "weight": 3,
     "cost": 200,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 171,
@@ -1394,7 +1715,9 @@
     "description": "silver",
     "weight": 3,
     "cost": 200,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 172,
@@ -1402,7 +1725,9 @@
     "description": "gold",
     "weight": 3,
     "cost": 300,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 173,
@@ -1410,7 +1735,9 @@
     "description": "ivory",
     "weight": 3,
     "cost": 300,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 174,
@@ -1418,7 +1745,9 @@
     "description": "emerald",
     "weight": 3,
     "cost": 300,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 175,
@@ -1426,7 +1755,9 @@
     "description": "wire",
     "weight": 3,
     "cost": 150,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 176,
@@ -1434,7 +1765,9 @@
     "description": "engagement",
     "weight": 3,
     "cost": 150,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 177,
@@ -1442,7 +1775,9 @@
     "description": "shiny",
     "weight": 3,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 178,
@@ -1450,7 +1785,9 @@
     "description": "circular",
     "weight": 20,
     "cost": 150,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 179,
@@ -1458,7 +1795,9 @@
     "description": "spherical",
     "weight": 20,
     "cost": 150,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 180,
@@ -1466,7 +1805,9 @@
     "description": "oval",
     "weight": 20,
     "cost": 150,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 181,
@@ -1474,7 +1815,9 @@
     "description": "triangular",
     "weight": 20,
     "cost": 150,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 182,
@@ -1482,7 +1825,9 @@
     "description": "pyramidal",
     "weight": 20,
     "cost": 150,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 183,
@@ -1490,7 +1835,9 @@
     "description": "square",
     "weight": 20,
     "cost": 150,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 184,
@@ -1498,7 +1845,9 @@
     "description": "concave",
     "weight": 20,
     "cost": 150,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 185,
@@ -1506,7 +1855,9 @@
     "description": "hexagonal",
     "weight": 20,
     "cost": 150,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 186,
@@ -1514,7 +1865,9 @@
     "description": "octagonal",
     "weight": 20,
     "cost": 150,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 187,
@@ -1522,7 +1875,9 @@
     "description": "Amulet of Yendor",
     "weight": 20,
     "cost": 0,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 188,
@@ -1530,7 +1885,9 @@
     "description": "Amulet of Yendor",
     "weight": 20,
     "cost": 30000,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 189,
@@ -1538,7 +1895,9 @@
     "description": null,
     "weight": 350,
     "cost": 8,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 190,
@@ -1546,7 +1905,9 @@
     "description": null,
     "weight": 600,
     "cost": 16,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 191,
@@ -1554,7 +1915,9 @@
     "description": null,
     "weight": 900,
     "cost": 42,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 192,
@@ -1562,7 +1925,9 @@
     "description": "bag",
     "weight": 15,
     "cost": 2,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 193,
@@ -1570,7 +1935,9 @@
     "description": "bag",
     "weight": 15,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 194,
@@ -1578,7 +1945,9 @@
     "description": "bag",
     "weight": 15,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 195,
@@ -1586,7 +1955,9 @@
     "description": "bag",
     "weight": 15,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 196,
@@ -1594,7 +1965,9 @@
     "description": "key",
     "weight": 3,
     "cost": 10,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 197,
@@ -1602,7 +1975,9 @@
     "description": null,
     "weight": 4,
     "cost": 20,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 198,
@@ -1610,7 +1985,9 @@
     "description": null,
     "weight": 1,
     "cost": 10,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 199,
@@ -1618,7 +1995,9 @@
     "description": "candle",
     "weight": 2,
     "cost": 10,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 200,
@@ -1626,7 +2005,9 @@
     "description": "candle",
     "weight": 2,
     "cost": 20,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 201,
@@ -1634,7 +2015,9 @@
     "description": null,
     "weight": 30,
     "cost": 12,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 202,
@@ -1642,7 +2025,9 @@
     "description": "lamp",
     "weight": 20,
     "cost": 10,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 203,
@@ -1650,7 +2035,9 @@
     "description": "lamp",
     "weight": 20,
     "cost": 50,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 204,
@@ -1658,7 +2045,9 @@
     "description": null,
     "weight": 12,
     "cost": 200,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 205,
@@ -1666,7 +2055,9 @@
     "description": "looking glass",
     "weight": 13,
     "cost": 10,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 206,
@@ -1674,7 +2065,9 @@
     "description": "glass orb",
     "weight": 150,
     "cost": 60,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 207,
@@ -1682,7 +2075,9 @@
     "description": null,
     "weight": 3,
     "cost": 80,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 208,
@@ -1690,7 +2085,9 @@
     "description": null,
     "weight": 2,
     "cost": 20,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 209,
@@ -1698,7 +2095,9 @@
     "description": null,
     "weight": 2,
     "cost": 50,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 210,
@@ -1706,7 +2105,9 @@
     "description": null,
     "weight": 200,
     "cost": 150,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 211,
@@ -1714,7 +2115,9 @@
     "description": null,
     "weight": 12,
     "cost": 20,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 212,
@@ -1722,7 +2125,9 @@
     "description": null,
     "weight": 4,
     "cost": 75,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 213,
@@ -1730,7 +2135,9 @@
     "description": null,
     "weight": 100,
     "cost": 30,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 214,
@@ -1738,7 +2145,9 @@
     "description": null,
     "weight": 4,
     "cost": 30,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 215,
@@ -1746,7 +2155,9 @@
     "description": null,
     "weight": 15,
     "cost": 20,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 216,
@@ -1754,7 +2165,9 @@
     "description": null,
     "weight": 50,
     "cost": 80,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 217,
@@ -1762,7 +2175,9 @@
     "description": null,
     "weight": 2,
     "cost": 50,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 218,
@@ -1770,7 +2185,9 @@
     "description": null,
     "weight": 300,
     "cost": 180,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 219,
@@ -1778,7 +2195,9 @@
     "description": null,
     "weight": 200,
     "cost": 60,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 220,
@@ -1786,7 +2205,9 @@
     "description": "whistle",
     "weight": 3,
     "cost": 10,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 221,
@@ -1794,7 +2215,9 @@
     "description": "whistle",
     "weight": 3,
     "cost": 10,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 222,
@@ -1802,7 +2225,9 @@
     "description": "flute",
     "weight": 5,
     "cost": 12,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 223,
@@ -1810,7 +2235,9 @@
     "description": "flute",
     "weight": 5,
     "cost": 36,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 224,
@@ -1818,7 +2245,9 @@
     "description": "horn",
     "weight": 18,
     "cost": 15,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 225,
@@ -1826,7 +2255,9 @@
     "description": "horn",
     "weight": 18,
     "cost": 50,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 226,
@@ -1834,7 +2265,9 @@
     "description": "horn",
     "weight": 18,
     "cost": 50,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 227,
@@ -1842,7 +2275,9 @@
     "description": "horn",
     "weight": 18,
     "cost": 50,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 228,
@@ -1850,7 +2285,9 @@
     "description": "harp",
     "weight": 30,
     "cost": 50,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 229,
@@ -1858,7 +2295,9 @@
     "description": "harp",
     "weight": 30,
     "cost": 50,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 230,
@@ -1866,7 +2305,9 @@
     "description": null,
     "weight": 30,
     "cost": 50,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 231,
@@ -1874,7 +2315,9 @@
     "description": null,
     "weight": 10,
     "cost": 15,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 232,
@@ -1882,7 +2325,9 @@
     "description": "drum",
     "weight": 25,
     "cost": 25,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 233,
@@ -1890,7 +2335,9 @@
     "description": "drum",
     "weight": 25,
     "cost": 25,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 234,
@@ -1898,7 +2345,9 @@
     "description": null,
     "weight": 100,
     "cost": 50,
-    "skill": "PICK_AXE"
+    "skill": "PICK_AXE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 235,
@@ -1906,7 +2355,9 @@
     "description": "iron hook",
     "weight": 30,
     "cost": 50,
-    "skill": "FLAIL"
+    "skill": "FLAIL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 236,
@@ -1914,7 +2365,9 @@
     "description": null,
     "weight": 20,
     "cost": 100,
-    "skill": "UNICORN_HORN"
+    "skill": "UNICORN_HORN",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 237,
@@ -1922,7 +2375,9 @@
     "description": "candelabrum",
     "weight": 10,
     "cost": 5000,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 238,
@@ -1930,7 +2385,9 @@
     "description": "silver bell",
     "weight": 10,
     "cost": 5000,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 239,
@@ -1938,7 +2395,9 @@
     "description": null,
     "weight": 10,
     "cost": 15,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 240,
@@ -1946,7 +2405,9 @@
     "description": null,
     "weight": 0,
     "cost": 5,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 241,
@@ -1954,7 +2415,9 @@
     "description": null,
     "weight": 1,
     "cost": 9,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 242,
@@ -1962,7 +2425,9 @@
     "description": null,
     "weight": 1,
     "cost": 5,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 243,
@@ -1970,7 +2435,9 @@
     "description": null,
     "weight": 1,
     "cost": 5,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 244,
@@ -1978,7 +2445,9 @@
     "description": null,
     "weight": 400,
     "cost": 105,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 245,
@@ -1986,7 +2455,9 @@
     "description": null,
     "weight": 5,
     "cost": 1,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 246,
@@ -1994,7 +2465,9 @@
     "description": null,
     "weight": 20,
     "cost": 6,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 247,
@@ -2002,7 +2475,9 @@
     "description": null,
     "weight": 20,
     "cost": 6,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 248,
@@ -2010,7 +2485,9 @@
     "description": null,
     "weight": 20,
     "cost": 6,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 249,
@@ -2018,7 +2495,9 @@
     "description": null,
     "weight": 20,
     "cost": 6,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 250,
@@ -2026,7 +2505,9 @@
     "description": null,
     "weight": 1,
     "cost": 6,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 251,
@@ -2034,7 +2515,9 @@
     "description": null,
     "weight": 1,
     "cost": 6,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 252,
@@ -2042,7 +2525,9 @@
     "description": null,
     "weight": 2,
     "cost": 7,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 253,
@@ -2050,7 +2535,9 @@
     "description": null,
     "weight": 2,
     "cost": 9,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 254,
@@ -2058,7 +2545,9 @@
     "description": null,
     "weight": 2,
     "cost": 7,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 255,
@@ -2066,7 +2555,9 @@
     "description": null,
     "weight": 5,
     "cost": 10,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 256,
@@ -2074,7 +2565,9 @@
     "description": null,
     "weight": 2,
     "cost": 9,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 257,
@@ -2082,7 +2575,9 @@
     "description": null,
     "weight": 2,
     "cost": 7,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 258,
@@ -2090,7 +2585,9 @@
     "description": null,
     "weight": 1,
     "cost": 7,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 259,
@@ -2098,7 +2595,9 @@
     "description": null,
     "weight": 1,
     "cost": 7,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 260,
@@ -2106,7 +2605,9 @@
     "description": null,
     "weight": 5,
     "cost": 17,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 261,
@@ -2114,7 +2615,9 @@
     "description": null,
     "weight": 2,
     "cost": 15,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 262,
@@ -2122,7 +2625,9 @@
     "description": null,
     "weight": 10,
     "cost": 10,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 263,
@@ -2130,7 +2635,9 @@
     "description": null,
     "weight": 2,
     "cost": 10,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 264,
@@ -2138,7 +2645,9 @@
     "description": null,
     "weight": 1,
     "cost": 7,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 265,
@@ -2146,7 +2655,9 @@
     "description": null,
     "weight": 2,
     "cost": 15,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 266,
@@ -2154,7 +2665,9 @@
     "description": null,
     "weight": 5,
     "cost": 45,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 267,
@@ -2162,7 +2675,9 @@
     "description": null,
     "weight": 15,
     "cost": 35,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 268,
@@ -2170,7 +2685,9 @@
     "description": null,
     "weight": 20,
     "cost": 45,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 269,
@@ -2178,7 +2695,9 @@
     "description": null,
     "weight": 10,
     "cost": 25,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 270,
@@ -2186,7 +2705,9 @@
     "description": null,
     "weight": 10,
     "cost": 20,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 271,
@@ -2194,7 +2715,9 @@
     "description": null,
     "weight": 10,
     "cost": 5,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 272,
@@ -2202,7 +2725,9 @@
     "description": "ruby",
     "weight": 20,
     "cost": 300,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 273,
@@ -2210,7 +2735,9 @@
     "description": "pink",
     "weight": 20,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 274,
@@ -2218,7 +2745,9 @@
     "description": "orange",
     "weight": 20,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 275,
@@ -2226,7 +2755,9 @@
     "description": "yellow",
     "weight": 20,
     "cost": 150,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 276,
@@ -2234,7 +2765,9 @@
     "description": "emerald",
     "weight": 20,
     "cost": 300,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 277,
@@ -2242,7 +2775,9 @@
     "description": "dark green",
     "weight": 20,
     "cost": 200,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 278,
@@ -2250,7 +2785,9 @@
     "description": "cyan",
     "weight": 20,
     "cost": 200,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 279,
@@ -2258,7 +2795,9 @@
     "description": "sky blue",
     "weight": 20,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 280,
@@ -2266,7 +2805,9 @@
     "description": "brilliant blue",
     "weight": 20,
     "cost": 150,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 281,
@@ -2274,7 +2815,9 @@
     "description": "magenta",
     "weight": 20,
     "cost": 50,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 282,
@@ -2282,7 +2825,9 @@
     "description": "purple-red",
     "weight": 20,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 283,
@@ -2290,7 +2835,9 @@
     "description": "puce",
     "weight": 20,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 284,
@@ -2298,7 +2845,9 @@
     "description": "milky",
     "weight": 20,
     "cost": 300,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 285,
@@ -2306,7 +2855,9 @@
     "description": "swirly",
     "weight": 20,
     "cost": 200,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 286,
@@ -2314,7 +2865,9 @@
     "description": "bubbly",
     "weight": 20,
     "cost": 150,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 287,
@@ -2322,7 +2875,9 @@
     "description": "smoky",
     "weight": 20,
     "cost": 150,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 288,
@@ -2330,7 +2885,9 @@
     "description": "cloudy",
     "weight": 20,
     "cost": 150,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 289,
@@ -2338,7 +2895,9 @@
     "description": "effervescent",
     "weight": 20,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 290,
@@ -2346,7 +2905,9 @@
     "description": "black",
     "weight": 20,
     "cost": 200,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 291,
@@ -2354,7 +2915,9 @@
     "description": "golden",
     "weight": 20,
     "cost": 200,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 292,
@@ -2362,7 +2925,9 @@
     "description": "brown",
     "weight": 20,
     "cost": 50,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 293,
@@ -2370,7 +2935,9 @@
     "description": "fizzy",
     "weight": 20,
     "cost": 50,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 294,
@@ -2378,7 +2945,9 @@
     "description": "dark",
     "weight": 20,
     "cost": 50,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 295,
@@ -2386,7 +2955,9 @@
     "description": "white",
     "weight": 20,
     "cost": 250,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 296,
@@ -2394,7 +2965,9 @@
     "description": "murky",
     "weight": 20,
     "cost": 250,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 297,
@@ -2402,7 +2975,9 @@
     "description": "clear",
     "weight": 20,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 298,
@@ -2410,7 +2985,9 @@
     "description": "ZELGO MER",
     "weight": 5,
     "cost": 80,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 299,
@@ -2418,7 +2995,9 @@
     "description": "JUYED AWK YACC",
     "weight": 5,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 300,
@@ -2426,7 +3005,9 @@
     "description": "NR 9",
     "weight": 5,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 301,
@@ -2434,7 +3015,9 @@
     "description": "XIXAXA XOXAXA XUXAXA",
     "weight": 5,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 302,
@@ -2442,7 +3025,9 @@
     "description": "PRATYAVAYAH",
     "weight": 5,
     "cost": 80,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 303,
@@ -2450,7 +3035,9 @@
     "description": "DAIYEN FOOELS",
     "weight": 5,
     "cost": 60,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 304,
@@ -2458,7 +3045,9 @@
     "description": "LEP GEX VEN ZEA",
     "weight": 5,
     "cost": 200,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 305,
@@ -2466,7 +3055,9 @@
     "description": "PRIRUTSENIE",
     "weight": 5,
     "cost": 200,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 306,
@@ -2474,7 +3065,9 @@
     "description": "ELBIB YLOH",
     "weight": 5,
     "cost": 300,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 307,
@@ -2482,7 +3075,9 @@
     "description": "VERR YED HORRE",
     "weight": 5,
     "cost": 50,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 308,
@@ -2490,7 +3085,9 @@
     "description": "VENZAR BORGAVVE",
     "weight": 5,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 309,
@@ -2498,7 +3095,9 @@
     "description": "THARR",
     "weight": 5,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 310,
@@ -2506,7 +3105,9 @@
     "description": "YUM YUM",
     "weight": 5,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 311,
@@ -2514,7 +3115,9 @@
     "description": "KERNOD WEL",
     "weight": 5,
     "cost": 20,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 312,
@@ -2522,7 +3125,9 @@
     "description": "ELAM EBOW",
     "weight": 5,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 313,
@@ -2530,7 +3135,9 @@
     "description": "DUAM XNAHT",
     "weight": 5,
     "cost": 200,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 314,
@@ -2538,7 +3145,9 @@
     "description": "ANDOVA BEGARIN",
     "weight": 5,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 315,
@@ -2546,7 +3155,9 @@
     "description": "KIRJE",
     "weight": 5,
     "cost": 200,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 316,
@@ -2554,7 +3165,9 @@
     "description": "VE FORBRYDERNE",
     "weight": 5,
     "cost": 300,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 317,
@@ -2562,7 +3175,9 @@
     "description": "HACKEM MUCHE",
     "weight": 5,
     "cost": 300,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 318,
@@ -2570,7 +3185,9 @@
     "description": "VELOX NEB",
     "weight": 5,
     "cost": 300,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 319,
@@ -2578,7 +3195,9 @@
     "description": "FOOBIE BLETCH",
     "weight": 5,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 320,
@@ -2586,7 +3205,9 @@
     "description": "TEMOV",
     "weight": 5,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 321,
@@ -2594,7 +3215,9 @@
     "description": "GARVEN DEH",
     "weight": 5,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 322,
@@ -2602,7 +3225,9 @@
     "description": "READ ME",
     "weight": 5,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 323,
@@ -2610,7 +3235,9 @@
     "description": "ETAOIN SHRDLU",
     "weight": 5,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 324,
@@ -2618,7 +3245,9 @@
     "description": "LOREM IPSUM",
     "weight": 5,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 325,
@@ -2626,7 +3255,9 @@
     "description": "FNORD",
     "weight": 5,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 326,
@@ -2634,7 +3265,9 @@
     "description": "KO BATE",
     "weight": 5,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 327,
@@ -2642,7 +3275,9 @@
     "description": "ABRA KA DABRA",
     "weight": 5,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 328,
@@ -2650,7 +3285,9 @@
     "description": "ASHPD SODALG",
     "weight": 5,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 329,
@@ -2658,7 +3295,9 @@
     "description": "ZLORFIK",
     "weight": 5,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 330,
@@ -2666,7 +3305,9 @@
     "description": "GNIK SISI VLE",
     "weight": 5,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 331,
@@ -2674,7 +3315,9 @@
     "description": "HAPAX LEGOMENON",
     "weight": 5,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 332,
@@ -2682,7 +3325,9 @@
     "description": "EIRIS SAZUN IDISI",
     "weight": 5,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 333,
@@ -2690,7 +3335,9 @@
     "description": "PHOL ENDE WODAN",
     "weight": 5,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 334,
@@ -2698,7 +3345,9 @@
     "description": "GHOTI",
     "weight": 5,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 335,
@@ -2706,7 +3355,9 @@
     "description": "MAPIRO MAHAMA DIROMAT",
     "weight": 5,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 336,
@@ -2714,7 +3365,9 @@
     "description": "VAS CORP BET MANI",
     "weight": 5,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 337,
@@ -2722,7 +3375,9 @@
     "description": "XOR OTA",
     "weight": 5,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 338,
@@ -2730,7 +3385,9 @@
     "description": "STRC PRST SKRZ KRK",
     "weight": 5,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 339,
@@ -2738,7 +3395,9 @@
     "description": "unlabeled",
     "weight": 5,
     "cost": 60,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 340,
@@ -2746,7 +3405,9 @@
     "description": "parchment",
     "weight": 50,
     "cost": 500,
-    "skill": "MATTER_SPELL"
+    "skill": "MATTER_SPELL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 341,
@@ -2754,7 +3415,9 @@
     "description": "vellum",
     "weight": 50,
     "cost": 200,
-    "skill": "ATTACK_SPELL"
+    "skill": "ATTACK_SPELL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 342,
@@ -2762,7 +3425,9 @@
     "description": "ragged",
     "weight": 50,
     "cost": 400,
-    "skill": "ATTACK_SPELL"
+    "skill": "ATTACK_SPELL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 343,
@@ -2770,7 +3435,9 @@
     "description": "dog eared",
     "weight": 50,
     "cost": 400,
-    "skill": "ATTACK_SPELL"
+    "skill": "ATTACK_SPELL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 344,
@@ -2778,7 +3445,9 @@
     "description": "mottled",
     "weight": 50,
     "cost": 100,
-    "skill": "ENCHANTMENT_SPELL"
+    "skill": "ENCHANTMENT_SPELL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 345,
@@ -2786,7 +3455,9 @@
     "description": "stained",
     "weight": 50,
     "cost": 700,
-    "skill": "ATTACK_SPELL"
+    "skill": "ATTACK_SPELL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 346,
@@ -2794,7 +3465,9 @@
     "description": "cloth",
     "weight": 50,
     "cost": 100,
-    "skill": "DIVINATION_SPELL"
+    "skill": "DIVINATION_SPELL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 347,
@@ -2802,7 +3475,9 @@
     "description": "leathery",
     "weight": 50,
     "cost": 100,
-    "skill": "DIVINATION_SPELL"
+    "skill": "DIVINATION_SPELL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 348,
@@ -2810,7 +3485,9 @@
     "description": "white",
     "weight": 50,
     "cost": 100,
-    "skill": "HEALING_SPELL"
+    "skill": "HEALING_SPELL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 349,
@@ -2818,7 +3495,9 @@
     "description": "pink",
     "weight": 50,
     "cost": 100,
-    "skill": "MATTER_SPELL"
+    "skill": "MATTER_SPELL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 350,
@@ -2826,7 +3505,9 @@
     "description": "red",
     "weight": 50,
     "cost": 100,
-    "skill": "ATTACK_SPELL"
+    "skill": "ATTACK_SPELL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 351,
@@ -2834,7 +3515,9 @@
     "description": "orange",
     "weight": 50,
     "cost": 200,
-    "skill": "ENCHANTMENT_SPELL"
+    "skill": "ENCHANTMENT_SPELL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 352,
@@ -2842,7 +3525,9 @@
     "description": "yellow",
     "weight": 50,
     "cost": 200,
-    "skill": "HEALING_SPELL"
+    "skill": "HEALING_SPELL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 353,
@@ -2850,7 +3535,9 @@
     "description": "velvet",
     "weight": 50,
     "cost": 200,
-    "skill": "ATTACK_SPELL"
+    "skill": "ATTACK_SPELL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 354,
@@ -2858,7 +3545,9 @@
     "description": "light green",
     "weight": 50,
     "cost": 200,
-    "skill": "ENCHANTMENT_SPELL"
+    "skill": "ENCHANTMENT_SPELL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 355,
@@ -2866,7 +3555,9 @@
     "description": "dark green",
     "weight": 50,
     "cost": 200,
-    "skill": "MATTER_SPELL"
+    "skill": "MATTER_SPELL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 356,
@@ -2874,7 +3565,9 @@
     "description": "turquoise",
     "weight": 50,
     "cost": 200,
-    "skill": "CLERIC_SPELL"
+    "skill": "CLERIC_SPELL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 357,
@@ -2882,7 +3575,9 @@
     "description": "cyan",
     "weight": 50,
     "cost": 200,
-    "skill": "DIVINATION_SPELL"
+    "skill": "DIVINATION_SPELL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 358,
@@ -2890,7 +3585,9 @@
     "description": "light blue",
     "weight": 50,
     "cost": 300,
-    "skill": "ENCHANTMENT_SPELL"
+    "skill": "ENCHANTMENT_SPELL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 359,
@@ -2898,7 +3595,9 @@
     "description": "dark blue",
     "weight": 50,
     "cost": 300,
-    "skill": "DIVINATION_SPELL"
+    "skill": "DIVINATION_SPELL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 360,
@@ -2906,7 +3605,9 @@
     "description": "indigo",
     "weight": 50,
     "cost": 300,
-    "skill": "HEALING_SPELL"
+    "skill": "HEALING_SPELL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 361,
@@ -2914,7 +3615,9 @@
     "description": "magenta",
     "weight": 50,
     "cost": 300,
-    "skill": "ENCHANTMENT_SPELL"
+    "skill": "ENCHANTMENT_SPELL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 362,
@@ -2922,7 +3625,9 @@
     "description": "purple",
     "weight": 50,
     "cost": 300,
-    "skill": "ESCAPE_SPELL"
+    "skill": "ESCAPE_SPELL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 363,
@@ -2930,7 +3635,9 @@
     "description": "violet",
     "weight": 50,
     "cost": 300,
-    "skill": "DIVINATION_SPELL"
+    "skill": "DIVINATION_SPELL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 364,
@@ -2938,7 +3645,9 @@
     "description": "tan",
     "weight": 50,
     "cost": 400,
-    "skill": "ESCAPE_SPELL"
+    "skill": "ESCAPE_SPELL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 365,
@@ -2946,7 +3655,9 @@
     "description": "plaid",
     "weight": 50,
     "cost": 300,
-    "skill": "HEALING_SPELL"
+    "skill": "HEALING_SPELL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 366,
@@ -2954,7 +3665,9 @@
     "description": "light brown",
     "weight": 50,
     "cost": 400,
-    "skill": "HEALING_SPELL"
+    "skill": "HEALING_SPELL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 367,
@@ -2962,7 +3675,9 @@
     "description": "dark brown",
     "weight": 50,
     "cost": 400,
-    "skill": "ESCAPE_SPELL"
+    "skill": "ESCAPE_SPELL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 368,
@@ -2970,7 +3685,9 @@
     "description": "gray",
     "weight": 50,
     "cost": 400,
-    "skill": "DIVINATION_SPELL"
+    "skill": "DIVINATION_SPELL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 369,
@@ -2978,7 +3695,9 @@
     "description": "wrinkled",
     "weight": 50,
     "cost": 300,
-    "skill": "CLERIC_SPELL"
+    "skill": "CLERIC_SPELL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 370,
@@ -2986,7 +3705,9 @@
     "description": "dusty",
     "weight": 50,
     "cost": 500,
-    "skill": "DIVINATION_SPELL"
+    "skill": "DIVINATION_SPELL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 371,
@@ -2994,7 +3715,9 @@
     "description": "bronze",
     "weight": 50,
     "cost": 300,
-    "skill": "DIVINATION_SPELL"
+    "skill": "DIVINATION_SPELL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 372,
@@ -3002,7 +3725,9 @@
     "description": "copper",
     "weight": 50,
     "cost": 600,
-    "skill": "CLERIC_SPELL"
+    "skill": "CLERIC_SPELL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 373,
@@ -3010,7 +3735,9 @@
     "description": "silver",
     "weight": 50,
     "cost": 600,
-    "skill": "MATTER_SPELL"
+    "skill": "MATTER_SPELL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 374,
@@ -3018,7 +3745,9 @@
     "description": "gold",
     "weight": 50,
     "cost": 600,
-    "skill": "ESCAPE_SPELL"
+    "skill": "ESCAPE_SPELL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 375,
@@ -3026,7 +3755,9 @@
     "description": "glittering",
     "weight": 50,
     "cost": 600,
-    "skill": "CLERIC_SPELL"
+    "skill": "CLERIC_SPELL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 376,
@@ -3034,7 +3765,9 @@
     "description": "shining",
     "weight": 50,
     "cost": 700,
-    "skill": "MATTER_SPELL"
+    "skill": "MATTER_SPELL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 377,
@@ -3042,7 +3775,9 @@
     "description": "dull",
     "weight": 50,
     "cost": 100,
-    "skill": "CLERIC_SPELL"
+    "skill": "CLERIC_SPELL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 378,
@@ -3050,7 +3785,9 @@
     "description": "thin",
     "weight": 50,
     "cost": 100,
-    "skill": "ESCAPE_SPELL"
+    "skill": "ESCAPE_SPELL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 379,
@@ -3058,7 +3795,9 @@
     "description": "thick",
     "weight": 50,
     "cost": 300,
-    "skill": "HEALING_SPELL"
+    "skill": "HEALING_SPELL",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 380,
@@ -3066,7 +3805,9 @@
     "description": "plain",
     "weight": 50,
     "cost": 0,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 381,
@@ -3074,7 +3815,9 @@
     "description": "paperback",
     "weight": 0,
     "cost": 20,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 382,
@@ -3082,7 +3825,9 @@
     "description": "papyrus",
     "weight": 20,
     "cost": 10000,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 383,
@@ -3090,7 +3835,9 @@
     "description": "glass",
     "weight": 7,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 384,
@@ -3098,7 +3845,9 @@
     "description": "balsa",
     "weight": 7,
     "cost": 150,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 385,
@@ -3106,7 +3855,9 @@
     "description": "crystal",
     "weight": 7,
     "cost": 150,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 386,
@@ -3114,7 +3865,9 @@
     "description": "maple",
     "weight": 7,
     "cost": 200,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 387,
@@ -3122,7 +3875,9 @@
     "description": "pine",
     "weight": 7,
     "cost": 500,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 388,
@@ -3130,7 +3885,9 @@
     "description": "oak",
     "weight": 7,
     "cost": 100,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 389,
@@ -3138,7 +3895,9 @@
     "description": "ebony",
     "weight": 7,
     "cost": 150,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 390,
@@ -3146,7 +3905,9 @@
     "description": "marble",
     "weight": 7,
     "cost": 150,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 391,
@@ -3154,7 +3915,9 @@
     "description": "tin",
     "weight": 7,
     "cost": 150,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 392,
@@ -3162,7 +3925,9 @@
     "description": "brass",
     "weight": 7,
     "cost": 150,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 393,
@@ -3170,7 +3935,9 @@
     "description": "copper",
     "weight": 7,
     "cost": 150,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 394,
@@ -3178,7 +3945,9 @@
     "description": "silver",
     "weight": 7,
     "cost": 200,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 395,
@@ -3186,7 +3955,9 @@
     "description": "platinum",
     "weight": 7,
     "cost": 200,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 396,
@@ -3194,7 +3965,9 @@
     "description": "iridium",
     "weight": 7,
     "cost": 200,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 397,
@@ -3202,7 +3975,9 @@
     "description": "zinc",
     "weight": 7,
     "cost": 150,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 398,
@@ -3210,7 +3985,9 @@
     "description": "aluminum",
     "weight": 7,
     "cost": 150,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 399,
@@ -3218,7 +3995,9 @@
     "description": "uranium",
     "weight": 7,
     "cost": 150,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 400,
@@ -3226,7 +4005,9 @@
     "description": "iron",
     "weight": 7,
     "cost": 150,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 401,
@@ -3234,7 +4015,9 @@
     "description": "steel",
     "weight": 7,
     "cost": 150,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 402,
@@ -3242,7 +4025,9 @@
     "description": "hexagonal",
     "weight": 7,
     "cost": 175,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 403,
@@ -3250,7 +4035,9 @@
     "description": "short",
     "weight": 7,
     "cost": 175,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 404,
@@ -3258,7 +4045,9 @@
     "description": "runed",
     "weight": 7,
     "cost": 175,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 405,
@@ -3266,7 +4055,9 @@
     "description": "long",
     "weight": 7,
     "cost": 500,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 406,
@@ -3274,7 +4065,9 @@
     "description": "curved",
     "weight": 7,
     "cost": 175,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 407,
@@ -3282,7 +4075,9 @@
     "description": "forked",
     "weight": 7,
     "cost": 150,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 408,
@@ -3290,7 +4085,9 @@
     "description": "spiked",
     "weight": 7,
     "cost": 150,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 409,
@@ -3298,7 +4095,9 @@
     "description": "jeweled",
     "weight": 7,
     "cost": 150,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 410,
@@ -3306,7 +4105,9 @@
     "description": null,
     "weight": 1,
     "cost": 1,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 411,
@@ -3674,7 +4475,9 @@
     "description": null,
     "weight": 6000,
     "cost": 0,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 448,
@@ -3682,7 +4485,9 @@
     "description": null,
     "weight": 2500,
     "cost": 0,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 449,
@@ -3690,7 +4495,9 @@
     "description": null,
     "weight": 480,
     "cost": 10,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 450,
@@ -3698,7 +4505,9 @@
     "description": null,
     "weight": 120,
     "cost": 0,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 451,
@@ -3706,7 +4515,9 @@
     "description": "splash of venom",
     "weight": 1,
     "cost": 0,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   },
   {
     "index": 452,
@@ -3714,6 +4525,8 @@
     "description": "splash of venom",
     "weight": 1,
     "cost": 0,
-    "skill": "NONE"
+    "skill": "NONE",
+    "missile": false,
+    "fromLauncher": false
   }
 ]
