@@ -383,7 +383,7 @@ NetHackRL::fill_obs(nle_obs *obs)
         // glyphs_[offset] = levl[x][y].glyph;
         til_type_[offset] = levl[x][y].typ;
         til_flags_[offset] = levl[x][y].flags;
-        til_lit_[offset] = levl[x][y].lit;
+        til_lit_[offset] = viz_array[y][x] & IN_SIGHT; //levl[x][y].lit;
 
         if (level.monsters[x][y]) {
           mon_id_[offset] = level.monsters[x][y]->m_id;
@@ -778,15 +778,15 @@ NetHackRL::clear_nhwindow_method(winid wid)
         obj_quan_.fill(0);
         obj_qual_.fill(0);
 
-        // Inspect all tiles with their corresponding type
-        for (int x = 1; x < COLNO; x++) {
-          for (int y = 0; y < ROWNO; y++) {
-            int offset = (x - 1) + y * (COLNO - 1);
-            til_type_[offset] = levl[x][y].typ;
-            til_flags_[offset] = levl[x][y].flags;
-            til_lit_[offset] = levl[x][y].lit;
-          }
-        }
+        // // Inspect all tiles with their corresponding type
+        // for (int x = 1; x < COLNO; x++) {
+        //   for (int y = 0; y < ROWNO; y++) {
+        //     int offset = (x - 1) + y * (COLNO - 1);
+        //     til_type_[offset] = levl[x][y].typ;
+        //     til_flags_[offset] = levl[x][y].flags;
+        //     til_lit_[offset] = levl[x][y].lit;
+        //   }
+        // }
         chars_.fill(' ');
         colors_.fill(0);
         specials_.fill(0);
