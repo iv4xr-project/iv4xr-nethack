@@ -148,17 +148,6 @@ public class Level {
     }
   }
 
-  private void resetVisibility() {
-    // First reset visibility of all tiles to false
-    for (Tile[] row : surface.tiles) {
-      for (Tile t : row) {
-        if (t instanceof Viewable) {
-          ((Viewable) t).setVisibility(false);
-        }
-      }
-    }
-  }
-
   public Symbol getSymbol(CustomVec2D p) {
     return getSymbol(p.x, p.y);
   }

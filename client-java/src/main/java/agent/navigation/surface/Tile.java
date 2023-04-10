@@ -18,15 +18,6 @@ public abstract class Tile {
 
   public abstract Tile updatedTile(Tile newTile);
 
-  //  public Tile updatedTile(Tile newTile) {
-  //  {
-  //    if (this.getClass() != newTile.getClass()) {
-  //      return newTile;
-  //    }
-  //    setSeen(getSeen() || newTile.getSeen());
-  //    return this;
-  //  }
-
   public void setSeen(boolean seen) {
     this.seen = seen;
   }

@@ -163,7 +163,6 @@ def write_monsters(sock, ids, perm_ids, peaceful):
                 continue
 
             sock.write(struct.pack(">BBiHb", x, y, ids[y][x], perm_ids[y][x], peaceful[y][x]))
-            # print(f'MONSTER <{x},{y}> id: {ids[y][x]} permid: {perm_ids[y][x]} (peaceful={peaceful[y][x]})')
 
     sock.flush()
 
@@ -179,6 +178,5 @@ def write_entities(sock, ids, classes, types, ages, quantities):
                 continue
 
             sock.write(struct.pack(">BBiBHHH", x, y, ids[y][x], classes[y][x], types[y][x], ages[y][x], quantities[y][x]))
-            # print(f"ENTITY <{x},{y}> id:{ids[y][x]} class:{classes[y][x]} type:{types[y][x]} age:{ages[y][x]} quant:{quantities[y][x]}")
 
     sock.flush()
