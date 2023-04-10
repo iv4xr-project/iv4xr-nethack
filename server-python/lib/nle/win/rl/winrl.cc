@@ -197,8 +197,10 @@ class NetHackRL
 
     std::array<int16_t, (COLNO - 1) * ROWNO> glyphs_;
     // GERARD
-    std::array<uint8_t, (COLNO - 1) * ROWNO> tiles_;
-    std::array<uint8_t, (COLNO - 1) * ROWNO> flags_;
+    std::array<uint8_t, (COLNO - 1) * ROWNO> til_type_;
+    std::array<uint8_t, (COLNO - 1) * ROWNO> til_flags_;
+    std::array<bool, (COLNO - 1) * ROWNO> til_lit_;
+
     std::array<uint32_t, (COLNO - 1) * ROWNO> mon_id_;
     std::array<int16_t, (COLNO - 1) * ROWNO> mon_permid_;
     std::array<bool, (COLNO - 1) * ROWNO> mon_peaceful_;
@@ -255,7 +257,7 @@ std::unique_ptr<NetHackRL> NetHackRL::instance =
     std::unique_ptr<NetHackRL>(nullptr);
 
 // GERARD
-NetHackRL::NetHackRL(int &argc, char **argv) : glyphs_(), tiles_(), flags_(), mon_id_(), mon_permid_(), mon_peaceful_(), obj_id_(), obj_class_(), obj_type_(), obj_age_(), obj_quan_(), obj_qual_(), blstats_()
+NetHackRL::NetHackRL(int &argc, char **argv) : glyphs_(), til_type_(), til_flags_(), til_lit_(), mon_id_(), mon_permid_(), mon_peaceful_(), obj_id_(), obj_class_(), obj_type_(), obj_age_(), obj_quan_(), obj_qual_(), blstats_()
 {
     // create base window
     // (done in tty_init_nhwindows before this NetHackRL object got created).
@@ -264,8 +266,9 @@ NetHackRL::NetHackRL(int &argc, char **argv) : glyphs_(), tiles_(), flags_(), mo
     glyphs_.fill(nul_glyph);
 
     // GERARD
-    tiles_.fill(MAX_TYPE);
-    flags_.fill(0);
+    til_type_.fill(MAX_TYPE);
+    til_flags_.fill(0);
+    til_lit_.fill(0);
     mon_id_.fill(0);
     mon_permid_.fill(0);
     mon_peaceful_.fill(0);
@@ -330,10 +333,12 @@ NetHackRL::fill_obs(nle_obs *obs)
         if (obs->glyphs)
             std::fill_n(obs->glyphs, glyphs_.size(), nul_glyph);
         // GERARD
-        if (obs->tiles)
-            std::memset(obs->tiles, MAX_TYPE, tiles_.size());
-        if (obs->flags)
-            std::memset(obs->flags, 0, flags_.size());
+        if (obs->til_type)
+            std::memset(obs->til_type, MAX_TYPE, til_type_.size());
+        if (obs->til_flags)
+            std::memset(obs->til_flags, 0, til_flags_.size());
+        if (obs->til_lit)
+            std::memset(obs->til_lit, 0,  sizeof(bool) * til_lit_.size());
         if (obs->mon_id)
             std::memset(obs->mon_id, 0, sizeof(uint32_t) * mon_id_.size());
         if (obs->mon_permid)
@@ -376,8 +381,9 @@ NetHackRL::fill_obs(nle_obs *obs)
       for (int y = 0; y < ROWNO; y++) {
         int offset = (x - 1) + y * (COLNO - 1);
         // glyphs_[offset] = levl[x][y].glyph;
-        tiles_[offset] = levl[x][y].typ;
-        flags_[offset] = levl[x][y].flags;
+        til_type_[offset] = levl[x][y].typ;
+        til_flags_[offset] = levl[x][y].flags;
+        til_lit_[offset] = levl[x][y].lit;
 
         if (level.monsters[x][y]) {
           mon_id_[offset] = level.monsters[x][y]->m_id;
@@ -412,10 +418,12 @@ NetHackRL::fill_obs(nle_obs *obs)
                     sizeof(int16_t) * glyphs_.size());
     }
     // GERARD
-    if (obs->tiles)
-        std::memcpy(obs->tiles, tiles_.data(), tiles_.size());
-    if (obs->flags)
-        std::memcpy(obs->flags, flags_.data(), flags_.size());
+    if (obs->til_type)
+        std::memcpy(obs->til_type, til_type_.data(), til_type_.size());
+    if (obs->til_flags)
+        std::memcpy(obs->til_flags, til_flags_.data(), til_flags_.size());
+    if (obs->til_lit)
+        std::memcpy(obs->til_lit, til_lit_.data(), sizeof(bool) * til_lit_.size());
     if (obs->mon_id)
         std::memcpy(obs->mon_id, mon_id_.data(), sizeof(uint32_t) * mon_id_.size());
     if (obs->mon_permid)
@@ -582,20 +590,7 @@ NetHackRL::store_glyph(XCHAR_P x, XCHAR_P y, int glyph)
     size_t offset = j * (COLNO - 1) + i;
 
     // TODO: Glyphs might be taken from gbuf[y][x].glyph.
-    // GERARD
     glyphs_[offset] = shuffled_glyph(glyph);
-    // glyphs_[offset] = levl[x][y].glyph;
-    // tiles_[offset] = levl[x][y].typ;
-    // flags_[offset] = levl[x][y].flags;
-    // if (level.monsters[x][y]) {
-    //   mon_id_[offset] = level.monsters[x][y]->m_id;
-    //   mon_permid_[offset] = level.monsters[x][y]->mnum;
-    //   mon_peaceful_[offset] = level.monsters[x][y]->mpeaceful;
-    // } else {
-    //   mon_id_[offset] = 0;
-    //   mon_permid_[offset] = 0;
-    //   mon_peaceful_[offset] = 0;
-    // }
 }
 
 void
@@ -770,8 +765,9 @@ NetHackRL::clear_nhwindow_method(winid wid)
     if (wid == WIN_MAP) {
         glyphs_.fill(nul_glyph);
         // GERARD
-        tiles_.fill(MAX_TYPE);
-        flags_.fill(0);
+        til_type_.fill(MAX_TYPE);
+        til_flags_.fill(0);
+        til_lit_.fill(0);
         mon_id_.fill(0);
         mon_permid_.fill(0);
         mon_peaceful_.fill(0);
@@ -786,8 +782,9 @@ NetHackRL::clear_nhwindow_method(winid wid)
         for (int x = 1; x < COLNO; x++) {
           for (int y = 0; y < ROWNO; y++) {
             int offset = (x - 1) + y * (COLNO - 1);
-            tiles_[offset] = levl[x][y].typ;
-            flags_[offset] = levl[x][y].flags;
+            til_type_[offset] = levl[x][y].typ;
+            til_flags_[offset] = levl[x][y].flags;
+            til_lit_[offset] = levl[x][y].lit;
           }
         }
         chars_.fill(' ');

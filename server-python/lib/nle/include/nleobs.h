@@ -51,22 +51,24 @@ typedef struct nle_observation {
     int done;
     char in_normal_game;     /* Bool indicating if other obs are set. */
     int how_done;            /* If game is really_done, how it ended. */
-    short *glyphs;           /* Size ROWNO * (COLNO - 1) */
     
     // GERARD
-    unsigned char *tiles;    /* Size ROWNO * (COLNO - 1) */
-    unsigned char *flags;    /* Size ROWNO * (COLNO - 1) */
-    unsigned int *mon_id;    /* Size ROWNO * (COLNO - 1) */
-    unsigned short *mon_permid;       /* Size ROWNO * (COLNO - 1) */
-    bool *mon_peaceful;      /* Size ROWNO * (COLNO - 1) */
+    unsigned char *til_type;    /* Size ROWNO * (COLNO - 1) */
+    unsigned char *til_flags;   /* Size ROWNO * (COLNO - 1) */
+    bool *til_lit;              /* Size ROWNO * (COLNO - 1) */
 
-    unsigned int *obj_id;     /* Size ROWNO * (COLNO - 1) */
-    unsigned char *obj_class; /* Size ROWNO * (COLNO - 1) */
-    unsigned short *obj_type; /* Size ROWNO * (COLNO - 1) */
-    unsigned short *obj_age;  /* Size ROWNO * (COLNO - 1) */
-    unsigned short *obj_quan; /* Size ROWNO * (COLNO - 1) */
-    unsigned char *obj_qual;  /* Size ROWNO * (COLNO - 1) */
+    unsigned int *mon_id;       /* Size ROWNO * (COLNO - 1) */
+    unsigned short *mon_permid; /* Size ROWNO * (COLNO - 1) */
+    bool *mon_peaceful;         /* Size ROWNO * (COLNO - 1) */
 
+    unsigned int *obj_id;       /* Size ROWNO * (COLNO - 1) */
+    unsigned char *obj_class;   /* Size ROWNO * (COLNO - 1) */
+    unsigned short *obj_type;   /* Size ROWNO * (COLNO - 1) */
+    unsigned short *obj_age;    /* Size ROWNO * (COLNO - 1) */
+    unsigned short *obj_quan;   /* Size ROWNO * (COLNO - 1) */
+    unsigned char *obj_qual;    /* Size ROWNO * (COLNO - 1) */
+
+    short *glyphs;           /* Size ROWNO * (COLNO - 1) */
     unsigned char *chars;    /* Size ROWNO * (COLNO - 1) */
     unsigned char *colors;   /* Size ROWNO * (COLNO - 1) */
     unsigned char *specials; /* Size ROWNO * (COLNO - 1) */

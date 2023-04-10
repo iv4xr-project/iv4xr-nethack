@@ -76,7 +76,7 @@ def write_obs(sock, env, obs):
     write_str(sock, msg)
 
     # GERARD
-    write_tiles(sock, obs['tiles'], obs['flags'])
+    write_tiles(sock, obs['til_type'], obs['til_flags'])
     write_map(sock, obs['chars'], obs['colors'], obs['glyphs'])
     write_monsters(sock, obs['mon_id'], obs['mon_permid'], obs['mon_peaceful'])
     write_entities(sock, obs['obj_id'], obs['obj_class'], obs['obj_type'], obs['obj_age'], obs['obj_quan'])

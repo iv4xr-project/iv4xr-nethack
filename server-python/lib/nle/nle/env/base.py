@@ -37,15 +37,23 @@ SKIP_EXCEPTIONS = (b"eat", b"attack", b"direction?", b"pray")
 # GERARD
 NLE_SPACE_ITEMS = (
     (
-        "tiles",
+        "til_type",
         gym.spaces.Box(
-            low=0, high=nethack.MAX_TYPE, **nethack.OBSERVATION_DESC["tiles"]
+            low=0, high=nethack.MAX_TYPE, **nethack.OBSERVATION_DESC["til_type"]
         ),
     ),
     (
-        "flags",
+        "til_flags",
         gym.spaces.Box(
-            low=0, high=255, **nethack.OBSERVATION_DESC["flags"]
+            low=0, high=255, **nethack.OBSERVATION_DESC["til_flags"]
+        ),
+    ),
+    (
+        "til_lit",
+        gym.spaces.Box(
+            low=0,
+            high=1,
+            **nethack.OBSERVATION_DESC["til_lit"]
         ),
     ),
     (
@@ -259,11 +267,11 @@ class NLE(gym.Env):
         savedir=None,
         character="mon-hum-neu-mal",
         max_episode_steps=5000,
-        # GERARD
         observation_keys=(
-            "tiles",
-            "flags",
-            "glyphs",
+            # GERARD
+            "til_type",
+            "til_flags",
+            "til_lit",
             "mon_id",
             "mon_permid",
             "mon_peaceful",
@@ -273,6 +281,8 @@ class NLE(gym.Env):
             "obj_age",
             "obj_quan",
             "obj_qual",
+
+            "glyphs",
             "chars",
             "colors",
             "specials",

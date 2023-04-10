@@ -31,12 +31,14 @@ TERMINAL_SHAPE = (_pynethack.nethack.NLE_TERM_LI, _pynethack.nethack.NLE_TERM_CO
 
 OBSERVATION_DESC = {
     # GERARD
-    "tiles": dict(shape=DUNGEON_SHAPE, dtype=np.uint8),
-    "flags": dict(shape=DUNGEON_SHAPE, dtype=np.uint8),
+    "til_type": dict(shape=DUNGEON_SHAPE, dtype=np.uint8),
+    "til_flags": dict(shape=DUNGEON_SHAPE, dtype=np.uint8),
+    "til_lit": dict(shape=DUNGEON_SHAPE, dtype=np.bool_),
     
     "mon_id": dict(shape=DUNGEON_SHAPE, dtype=np.uint32),
     "mon_permid": dict(shape=DUNGEON_SHAPE, dtype=np.uint16),
     "mon_peaceful": dict(shape=DUNGEON_SHAPE, dtype=np.bool_),
+
     "obj_id": dict(shape=DUNGEON_SHAPE, dtype=np.uint32),
     "obj_class": dict(shape=DUNGEON_SHAPE, dtype=np.uint8),
     "obj_type": dict(shape=DUNGEON_SHAPE, dtype=np.uint16),

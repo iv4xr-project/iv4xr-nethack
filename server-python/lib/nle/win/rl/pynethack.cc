@@ -203,7 +203,7 @@ class Nethack
 
     // GERARD
     void
-    set_buffers(py::object tiles, py::object flags,
+    set_buffers(py::object til_type, py::object til_flags, py::object til_lit,
                 py::object mon_id, py::object mon_permid, py::object mon_peaceful,
                 py::object obj_id, py::object obj_class, py::object obj_type,
                 py::object obj_age, py::object obj_quan, py::object obj_qual,
@@ -220,8 +220,9 @@ class Nethack
 
         std::vector<ssize_t> dungeon{ ROWNO, COLNO - 1 };
         // GERARD
-        obs_.tiles = checked_conversion<uint8_t>(tiles, dungeon);
-        obs_.flags = checked_conversion<uint8_t>(flags, dungeon);
+        obs_.til_type = checked_conversion<uint8_t>(til_type, dungeon);
+        obs_.til_flags = checked_conversion<uint8_t>(til_flags, dungeon);
+        obs_.til_lit = checked_conversion<bool>(til_lit, dungeon);
         obs_.mon_id = checked_conversion<uint32_t>(mon_id, dungeon);
         obs_.mon_permid = checked_conversion<uint16_t>(mon_permid, dungeon);
         obs_.mon_peaceful = checked_conversion<bool>(mon_peaceful, dungeon);
@@ -262,8 +263,9 @@ class Nethack
         obs_.misc = checked_conversion<int32_t>(misc, { NLE_MISC_SIZE });
 
         // GERARD
-        py_buffers_ = { std::move(tiles),
-                        std::move(flags),
+        py_buffers_ = { std::move(til_type),
+                        std::move(til_flags),
+                        std::move(til_lit),
                         std::move(mon_id),
                         std::move(mon_permid),
                         std::move(mon_peaceful),
@@ -416,8 +418,9 @@ PYBIND11_MODULE(_pynethack, m)
         .def("reset", py::overload_cast<std::string>(&Nethack::reset))
         .def("set_buffers", &Nethack::set_buffers,
             // GERARD
-             py::arg("tiles") = py::none(),
-             py::arg("flags") = py::none(),
+             py::arg("til_type") = py::none(),
+             py::arg("til_flags") = py::none(),
+             py::arg("til_lit") = py::none(),
              py::arg("mon_id") = py::none(),
              py::arg("mon_permid") = py::none(),
              py::arg("mon_peaceful") = py::none(),
