@@ -55,7 +55,7 @@ typedef struct nle_observation {
     // GERARD
     unsigned char *til_type;    /* Size ROWNO * (COLNO - 1) */
     unsigned char *til_flags;   /* Size ROWNO * (COLNO - 1) */
-    bool *til_lit;              /* Size ROWNO * (COLNO - 1) */
+    bool *til_visible;              /* Size ROWNO * (COLNO - 1) */
 
     unsigned int *mon_id;       /* Size ROWNO * (COLNO - 1) */
     unsigned short *mon_permid; /* Size ROWNO * (COLNO - 1) */

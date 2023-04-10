@@ -44,11 +44,21 @@ public class Air extends Tile implements Walkable, Viewable {
     return WalkableType.Diagonal;
   }
 
+  public Tile updatedTile(Tile newTile) {
+    if (!(newTile instanceof Air)) {
+      return newTile;
+    }
+    setSeen(getSeen() || newTile.getSeen());
+    setVisibility(((Air) newTile).getVisibility());
+    return this;
+  }
+
   public boolean equals(Object o) {
     if (!(o instanceof Air)) {
       return false;
     }
 
-    return loc.equals(((Air) o).loc);
+    Air other = (Air) o;
+    return loc.equals(other.loc) && getVisibility() == other.getVisibility();
   }
 }

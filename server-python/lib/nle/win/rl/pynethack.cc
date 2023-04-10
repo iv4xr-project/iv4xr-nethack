@@ -203,7 +203,7 @@ class Nethack
 
     // GERARD
     void
-    set_buffers(py::object til_type, py::object til_flags, py::object til_lit,
+    set_buffers(py::object til_type, py::object til_flags, py::object til_visible,
                 py::object mon_id, py::object mon_permid, py::object mon_peaceful,
                 py::object obj_id, py::object obj_class, py::object obj_type,
                 py::object obj_age, py::object obj_quan, py::object obj_qual,
@@ -222,7 +222,7 @@ class Nethack
         // GERARD
         obs_.til_type = checked_conversion<uint8_t>(til_type, dungeon);
         obs_.til_flags = checked_conversion<uint8_t>(til_flags, dungeon);
-        obs_.til_lit = checked_conversion<bool>(til_lit, dungeon);
+        obs_.til_visible = checked_conversion<bool>(til_visible, dungeon);
         obs_.mon_id = checked_conversion<uint32_t>(mon_id, dungeon);
         obs_.mon_permid = checked_conversion<uint16_t>(mon_permid, dungeon);
         obs_.mon_peaceful = checked_conversion<bool>(mon_peaceful, dungeon);
@@ -265,7 +265,7 @@ class Nethack
         // GERARD
         py_buffers_ = { std::move(til_type),
                         std::move(til_flags),
-                        std::move(til_lit),
+                        std::move(til_visible),
                         std::move(mon_id),
                         std::move(mon_permid),
                         std::move(mon_peaceful),
@@ -420,7 +420,7 @@ PYBIND11_MODULE(_pynethack, m)
             // GERARD
              py::arg("til_type") = py::none(),
              py::arg("til_flags") = py::none(),
-             py::arg("til_lit") = py::none(),
+             py::arg("til_visible") = py::none(),
              py::arg("mon_id") = py::none(),
              py::arg("mon_permid") = py::none(),
              py::arg("mon_peaceful") = py::none(),

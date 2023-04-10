@@ -43,11 +43,21 @@ public class Throne extends Tile implements Walkable, Viewable {
     return WalkableType.Diagonal;
   }
 
+  public Tile updatedTile(Tile newTile) {
+    if (!(newTile instanceof Throne)) {
+      return newTile;
+    }
+    setSeen(getSeen() || newTile.getSeen());
+    setVisibility(((Throne) newTile).getVisibility());
+    return this;
+  }
+
   public boolean equals(Object o) {
     if (!(o instanceof Throne)) {
       return false;
     }
 
-    return loc.equals(((Throne) o).loc);
+    Throne throne = (Throne) o;
+    return loc.equals(throne.loc) && getVisibility() == throne.getVisibility();
   }
 }

@@ -30,34 +30,8 @@ public class Door extends Tile implements Walkable, Viewable, Secret {
     this.trapped = trapped;
   }
 
-  public Tile updatedTile(Tile newTile) {
-    if (getClass() != newTile.getClass()) {
-      return newTile;
-    }
-    Door door = ((Door) newTile);
-    seen = door.getSeen() || seen;
-    setIsSecret(door.getIsSecret());
-    return this;
-  }
-
   public char toChar() {
     return isOpen ? 'O' : 'X';
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (!(o instanceof Door)) {
-      return false;
-    }
-
-    Door door = (Door) o;
-    return loc.equals(door.loc)
-        && broken == door.broken
-        && isOpen == door.isOpen
-        && closed == door.closed
-        && locked == door.locked
-        && trapped == door.trapped
-        && isSecret == door.isSecret;
   }
 
   @Override
@@ -96,5 +70,33 @@ public class Door extends Tile implements Walkable, Viewable, Secret {
   @Override
   public void setIsSecret(boolean isSecret) {
     this.isSecret = isSecret;
+  }
+
+  public Tile updatedTile(Tile newTile) {
+    if (!(newTile instanceof Door)) {
+      return newTile;
+    }
+    Door door = ((Door) newTile);
+    seen = door.getSeen() || getSeen();
+    setIsSecret(door.getIsSecret());
+    setVisibility(door.isVisible());
+    return this;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (!(o instanceof Door)) {
+      return false;
+    }
+
+    Door door = (Door) o;
+    return loc.equals(door.loc)
+        && getVisibility() == door.getVisibility()
+        && broken == door.broken
+        && isOpen == door.isOpen
+        && closed == door.closed
+        && locked == door.locked
+        && trapped == door.trapped
+        && isSecret == door.isSecret;
   }
 }

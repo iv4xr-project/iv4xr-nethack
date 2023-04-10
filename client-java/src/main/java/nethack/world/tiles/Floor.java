@@ -50,27 +50,29 @@ public class Floor extends Tile implements Walkable, Viewable, Shop {
     return isShop;
   }
 
+  public Tile updatedTile(Tile newTile) {
+    if (!(newTile instanceof Floor)) {
+      return newTile;
+    }
+
+    Floor floor = (Floor) newTile;
+    isShop = floor.isShop || isShop;
+    setSeen(getSeen() || newTile.getSeen());
+    setVisibility(floor.getVisibility());
+    return this;
+  }
+
   public boolean equals(Object o) {
     if (!(o instanceof Floor)) {
       return false;
     }
 
     Floor f = (Floor) o;
-    return loc.equals(f.loc);
+    return loc.equals(f.loc) && getVisibility() == f.getVisibility();
   }
 
   @Override
   public int hashCode() {
     return super.hashCode();
-  }
-
-  public Floor updatedTile(Floor newTile) {
-    if (getClass() != newTile.getClass()) {
-      return newTile;
-    }
-    seen = newTile.getSeen() || seen;
-    isShop = newTile.isShop || isShop;
-    resetVisibility();
-    return this;
   }
 }

@@ -12,7 +12,7 @@ public class TileDecoder extends Decoder {
   public static Tile[][] decode(DataInputStream input) throws IOException {
     Tile[][] tiles = new Tile[Level.SIZE.height][Level.SIZE.width];
 
-    int bytesPerTile = 4;
+    int bytesPerTile = 5;
     short nrTiles = input.readShort();
     byte[] tilesData = input.readNBytes(bytesPerTile * nrTiles);
     for (int i = 0, offset = 0; i < nrTiles; i++, offset += bytesPerTile) {
@@ -20,21 +20,23 @@ public class TileDecoder extends Decoder {
       byte y = tilesData[offset + 1];
       byte tile = tilesData[offset + 2];
       byte flags = tilesData[offset + 3];
-      tiles[y][x] = toTile(x, y, tile, flags);
+      boolean visible = parseBool(tilesData[offset + 4]);
+      tiles[y][x] = toTile(x, y, tile, flags, visible);
     }
 
     return tiles;
   }
 
-  private static Tile toTile(int x, int y, byte tileType, byte flags) {
+  // A definition of tiles and their color is in lib/nle/src/drawing.c
+  private static Tile toTile(int x, int y, byte tileType, byte flags, boolean visible) {
     assert tileType >= 0 && tileType <= 36
         : String.format("TileType value must be >= 0 && <= 35 but value=%d", tileType);
-    //    assert flags > 0 : "flags may not be negative";
     CustomVec3D loc = new CustomVec3D(0, new CustomVec2D(x, y));
 
+    Tile tile = null;
     // Do not differentiate between all wall types
     if (tileType >= 1 && tileType <= 12) {
-      return new Wall(loc);
+      tile = new Wall(loc);
     } else if (tileType == 36) {
       return null;
     }
@@ -43,7 +45,8 @@ public class TileDecoder extends Decoder {
       case 0: // Stone
         return null;
       case 13:
-        return new Tree(loc);
+        tile = new Tree(loc);
+        break;
       case 14: // Secret door
       case 22: // Door
         boolean broken = (flags & 1) != 0;
@@ -55,52 +58,71 @@ public class TileDecoder extends Decoder {
         if (tileType == 14) {
           door.setSecret();
         }
-        return door;
+        tile = door;
+        break;
       case 15: // Secret corridor
       case 23: // Corridor
         Corridor corridor = new Corridor(loc);
         if (tileType == 15) {
           corridor.setSecret();
         }
-        return corridor;
+        tile = corridor;
+        break;
       case 16: // Pool
-        return new Pool(loc);
+        tile = new Pool(loc);
+        break;
       case 17: // Moat
-        return new Moat(loc);
+        tile = new Moat(loc);
+        break;
       case 18:
-        return new Water(loc);
+        tile = new Water(loc);
+        break;
       case 19: // Drawbridge up
         return null;
       case 20:
-        return new Lava(loc);
+        tile = new Lava(loc);
+        break;
       case 21:
-        return new IronBars(loc);
+        tile = new IronBars(loc);
+        break;
       case 24:
-        return new Floor(loc);
+        tile = new Floor(loc);
+        break;
       case 25: // Stair
       case 26: // Ladder
         assert flags == 1 || flags == 2;
-        return new Stair(loc, flags == 1);
+        tile = new Stair(loc, flags == 1);
+        break;
       case 27:
-        return new Fountain(loc);
+        tile = new Fountain(loc);
+        break;
       case 28:
-        return new Throne(loc);
+        tile = new Throne(loc);
+        break;
       case 29:
-        return new Sink(loc);
+        tile = new Sink(loc);
+        break;
       case 30: // Grave
-        return new Grave(loc);
+        tile = new Grave(loc);
+        break;
       case 31: // Altar
-        return new Altar(loc);
+        tile = new Altar(loc);
+        break;
       case 32: // Ice
-        return new Ice(loc);
+        tile = new Ice(loc);
+        break;
       case 33: // Drawbridge down
         return null;
       case 34: // Air
-        return new Air(loc);
+        tile = new Air(loc);
+        break;
       case 35: // Cloud
-        return new Cloud(loc);
+        tile = new Cloud(loc);
+        break;
     }
 
-    throw new IllegalArgumentException(String.format("TileType %d invalid", tileType));
+    assert tile != null && tile instanceof Viewable;
+    ((Viewable) tile).setVisibility(visible);
+    return tile;
   }
 }

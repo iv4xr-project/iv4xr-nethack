@@ -49,11 +49,11 @@ NLE_SPACE_ITEMS = (
         ),
     ),
     (
-        "til_lit",
+        "til_visible",
         gym.spaces.Box(
             low=0,
             high=1,
-            **nethack.OBSERVATION_DESC["til_lit"]
+            **nethack.OBSERVATION_DESC["til_visible"]
         ),
     ),
     (
@@ -271,7 +271,7 @@ class NLE(gym.Env):
             # GERARD
             "til_type",
             "til_flags",
-            "til_lit",
+            "til_visible",
             "mon_id",
             "mon_permid",
             "mon_peaceful",

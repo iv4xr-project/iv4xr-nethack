@@ -32,11 +32,21 @@ public class Lava extends Tile implements Viewable {
     this.isVisible = isVisible;
   }
 
+  public Tile updatedTile(Tile newTile) {
+    if (!(newTile instanceof Lava)) {
+      return newTile;
+    }
+    setSeen(getSeen() || newTile.getSeen());
+    setVisibility(((Lava) newTile).getVisibility());
+    return this;
+  }
+
   public boolean equals(Object o) {
     if (!(o instanceof Lava)) {
       return false;
     }
 
-    return loc.equals(((Lava) o).loc);
+    Lava lava = (Lava) o;
+    return loc.equals(lava.loc) && getVisibility() == lava.getVisibility();
   }
 }

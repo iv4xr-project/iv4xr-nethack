@@ -33,11 +33,21 @@ public class Boulder extends Tile implements Viewable {
     this.isVisible = isVisible;
   }
 
+  public Tile updatedTile(Tile newTile) {
+    if (!(newTile instanceof Boulder)) {
+      return newTile;
+    }
+    setSeen(getSeen() || newTile.getSeen());
+    setVisibility(((Boulder) newTile).getVisibility());
+    return this;
+  }
+
   public boolean equals(Object o) {
     if (!(o instanceof Boulder)) {
       return false;
     }
 
-    return loc.equals(((Boulder) o).loc);
+    Boulder other = (Boulder) o;
+    return loc.equals(other.loc) && getVisibility() == other.getVisibility();
   }
 }

@@ -43,11 +43,21 @@ public class Water extends Tile implements Walkable, Viewable {
     return WalkableType.Diagonal;
   }
 
+  public Tile updatedTile(Tile newTile) {
+    if (!(newTile instanceof Water)) {
+      return newTile;
+    }
+    setSeen(getSeen() || newTile.getSeen());
+    setVisibility(((Water) newTile).getVisibility());
+    return this;
+  }
+
   public boolean equals(Object o) {
     if (!(o instanceof Water)) {
       return false;
     }
 
-    return loc.equals(((Water) o).loc);
+    Water water = (Water) o;
+    return loc.equals(water.loc) && getVisibility() == water.getVisibility();
   }
 }

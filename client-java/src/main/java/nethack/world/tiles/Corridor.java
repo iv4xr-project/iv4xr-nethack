@@ -34,15 +34,6 @@ public class Corridor extends Tile implements Walkable, Viewable, Secret {
     this.isVisible = isVisible;
   }
 
-  public Corridor updatedTile(Corridor newTile) {
-    if (getClass() != newTile.getClass()) {
-      return newTile;
-    }
-    seen = ((Corridor) newTile).getSeen() || seen;
-    setIsSecret(((Corridor) newTile).getIsSecret());
-    return this;
-  }
-
   @Override
   public boolean isWalkable() {
     return true;
@@ -53,15 +44,6 @@ public class Corridor extends Tile implements Walkable, Viewable, Secret {
     return WalkableType.Diagonal;
   }
 
-  public boolean equals(Object o) {
-    if (!(o instanceof Corridor)) {
-      return false;
-    }
-
-    Corridor corridor = (Corridor) o;
-    return loc.equals(corridor.loc) && isSecret == corridor.isSecret;
-  }
-
   @Override
   public boolean getIsSecret() {
     return isSecret;
@@ -70,5 +52,26 @@ public class Corridor extends Tile implements Walkable, Viewable, Secret {
   @Override
   public void setIsSecret(boolean isSecret) {
     this.isSecret = isSecret;
+  }
+
+  public Tile updatedTile(Tile newTile) {
+    if (!(newTile instanceof Corridor)) {
+      return newTile;
+    }
+    setSeen(getSeen() || newTile.getSeen());
+    setIsSecret(((Corridor) newTile).getIsSecret());
+    setVisibility(((Corridor) newTile).getVisibility());
+    return this;
+  }
+
+  public boolean equals(Object o) {
+    if (!(o instanceof Corridor)) {
+      return false;
+    }
+
+    Corridor corridor = (Corridor) o;
+    return loc.equals(corridor.loc)
+        && isSecret == corridor.isSecret
+        && getVisibility() == corridor.getVisibility();
   }
 }

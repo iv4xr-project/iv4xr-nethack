@@ -33,11 +33,21 @@ public class IronBars extends Tile implements Viewable {
     this.isVisible = isVisible;
   }
 
+  public Tile updatedTile(Tile newTile) {
+    if (!(newTile instanceof IronBars)) {
+      return newTile;
+    }
+    setSeen(getSeen() || newTile.getSeen());
+    setVisibility(((IronBars) newTile).getVisibility());
+    return this;
+  }
+
   public boolean equals(Object o) {
     if (!(o instanceof IronBars)) {
       return false;
     }
 
-    return loc.equals(((IronBars) o).loc);
+    IronBars ironBars = (IronBars) o;
+    return loc.equals(ironBars.loc) && getVisibility() == ironBars.getVisibility();
   }
 }

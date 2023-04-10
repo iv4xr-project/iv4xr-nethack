@@ -33,7 +33,7 @@ OBSERVATION_DESC = {
     # GERARD
     "til_type": dict(shape=DUNGEON_SHAPE, dtype=np.uint8),
     "til_flags": dict(shape=DUNGEON_SHAPE, dtype=np.uint8),
-    "til_lit": dict(shape=DUNGEON_SHAPE, dtype=np.bool_),
+    "til_visible": dict(shape=DUNGEON_SHAPE, dtype=np.bool_),
     
     "mon_id": dict(shape=DUNGEON_SHAPE, dtype=np.uint32),
     "mon_permid": dict(shape=DUNGEON_SHAPE, dtype=np.uint16),

@@ -45,11 +45,21 @@ public class Cloud extends Tile implements Walkable, Viewable {
     return WalkableType.Diagonal;
   }
 
+  public Tile updatedTile(Tile newTile) {
+    if (!(newTile instanceof Cloud)) {
+      return newTile;
+    }
+    setSeen(getSeen() || newTile.getSeen());
+    setVisibility(((Cloud) newTile).getVisibility());
+    return this;
+  }
+
   public boolean equals(Object o) {
     if (!(o instanceof Cloud)) {
       return false;
     }
 
-    return loc.equals(((Cloud) o).loc);
+    Cloud other = (Cloud) o;
+    return loc.equals(other.loc) && getVisibility() == other.getVisibility();
   }
 }

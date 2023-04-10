@@ -44,11 +44,21 @@ public class Ice extends Tile implements Walkable, Viewable {
     return WalkableType.Diagonal;
   }
 
+  public Tile updatedTile(Tile newTile) {
+    if (!(newTile instanceof Ice)) {
+      return newTile;
+    }
+    setSeen(getSeen() || newTile.getSeen());
+    setVisibility(((Ice) newTile).getVisibility());
+    return this;
+  }
+
   public boolean equals(Object o) {
     if (!(o instanceof Ice)) {
       return false;
     }
 
-    return loc.equals(((Ice) o).loc);
+    Ice ice = (Ice) o;
+    return loc.equals(ice.loc) && getVisibility() == ice.getVisibility();
   }
 }

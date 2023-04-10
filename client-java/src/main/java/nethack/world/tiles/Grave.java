@@ -43,11 +43,21 @@ public class Grave extends Tile implements Walkable, Viewable {
     return WalkableType.Diagonal;
   }
 
+  public Tile updatedTile(Tile newTile) {
+    if (!(newTile instanceof Grave)) {
+      return newTile;
+    }
+    setSeen(getSeen() || newTile.getSeen());
+    setVisibility(((Grave) newTile).getVisibility());
+    return this;
+  }
+
   public boolean equals(Object o) {
     if (!(o instanceof Grave)) {
       return false;
     }
 
-    return loc.equals(((Grave) o).loc);
+    Grave grave = (Grave) o;
+    return loc.equals(grave.loc) && getVisibility() == grave.getVisibility();
   }
 }

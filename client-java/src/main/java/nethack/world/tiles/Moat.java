@@ -43,11 +43,21 @@ public class Moat extends Tile implements Walkable, Viewable {
     return WalkableType.Diagonal;
   }
 
+  public Tile updatedTile(Tile newTile) {
+    if (!(newTile instanceof Moat)) {
+      return newTile;
+    }
+    setSeen(getSeen() || newTile.getSeen());
+    setVisibility(((Moat) newTile).getVisibility());
+    return this;
+  }
+
   public boolean equals(Object o) {
     if (!(o instanceof Moat)) {
       return false;
     }
 
-    return loc.equals(((Moat) o).loc);
+    Moat moat = (Moat) o;
+    return loc.equals(moat.loc) && getVisibility() == moat.getVisibility();
   }
 }

@@ -43,11 +43,21 @@ public class Fountain extends Tile implements Walkable, Viewable {
     return WalkableType.Diagonal;
   }
 
+  public Tile updatedTile(Tile newTile) {
+    if (!(newTile instanceof Fountain)) {
+      return newTile;
+    }
+    setSeen(getSeen() || newTile.getSeen());
+    setVisibility(((Fountain) newTile).getVisibility());
+    return this;
+  }
+
   public boolean equals(Object o) {
     if (!(o instanceof Fountain)) {
       return false;
     }
 
-    return loc.equals(((Fountain) o).loc);
+    Fountain fountain = (Fountain) o;
+    return loc.equals(fountain.loc) && getVisibility() == fountain.getVisibility();
   }
 }

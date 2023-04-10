@@ -52,11 +52,22 @@ public class Stair extends Tile implements Climbable, Walkable, Viewable {
     return climbType;
   }
 
+  public Tile updatedTile(Tile newTile) {
+    if (!(newTile instanceof Stair)) {
+      return newTile;
+    }
+
+    setSeen(getSeen() || newTile.getSeen());
+    setVisibility(((Stair) newTile).getVisibility());
+    return this;
+  }
+
   public boolean equals(Object o) {
     if (!(o instanceof Stair)) {
       return false;
     }
 
-    return loc.equals(((Stair) o).loc);
+    Stair stair = (Stair) o;
+    return loc.equals(stair.loc) && getVisibility() == stair.getVisibility();
   }
 }

@@ -3,6 +3,7 @@ Low-level API for protocol-specific encoding/decoding.
 """
 import logging
 import struct
+import sys
 
 import numpy as np
 from src.nethack_util import monster
@@ -76,7 +77,10 @@ def write_obs(sock, env, obs):
     write_str(sock, msg)
 
     # GERARD
-    write_tiles(sock, obs['til_type'], obs['til_flags'])
+    write_tiles(sock, obs['til_type'], obs['til_flags'], obs['til_visible'])
+    np.set_printoptions(threshold=sys.maxsize, linewidth=10000)
+    print(obs['til_visible'].astype(int))
+
     write_map(sock, obs['chars'], obs['colors'], obs['glyphs'])
     write_monsters(sock, obs['mon_id'], obs['mon_permid'], obs['mon_peaceful'])
     write_entities(sock, obs['obj_id'], obs['obj_class'], obs['obj_type'], obs['obj_age'], obs['obj_quan'])
@@ -112,7 +116,7 @@ def write_inv(sock, inv_letters, inv_oclasses, inv_glyphs, inv_strs):
 
     sock.flush()
 
-def write_tiles(sock, tiles, flags):
+def write_tiles(sock, tiles, flags, visible):
     """
     Encode the entire map in bytes
     """
@@ -126,7 +130,7 @@ def write_tiles(sock, tiles, flags):
             if tiles[y][x] == 0:
                 continue
 
-            sock.write(struct.pack(">BBBB", x, y, tiles[y][x], flags[y][x]))
+            sock.write(struct.pack(">BBBBb", x, y, tiles[y][x], flags[y][x], visible[y][x]))
 
     sock.flush()
 

@@ -43,11 +43,21 @@ public class Altar extends Tile implements Walkable, Viewable {
     return WalkableType.Diagonal;
   }
 
+  public Tile updatedTile(Tile newTile) {
+    if (!(newTile instanceof Altar)) {
+      return newTile;
+    }
+    setSeen(getSeen() || newTile.getSeen());
+    setVisibility(((Altar) newTile).getVisibility());
+    return this;
+  }
+
   public boolean equals(Object o) {
     if (!(o instanceof Altar)) {
       return false;
     }
 
-    return loc.equals(((Altar) o).loc);
+    Altar other = (Altar) o;
+    return loc.equals(other.loc) && getVisibility() == other.getVisibility();
   }
 }

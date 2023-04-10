@@ -16,13 +16,16 @@ public abstract class Tile {
 
   public abstract char toChar();
 
-  public Tile updatedTile(Tile newTile) {
-    if (this.getClass() != newTile.getClass()) {
-      return newTile;
-    }
-    newTile.setSeen(newTile.getSeen() || getSeen());
-    return this;
-  }
+  public abstract Tile updatedTile(Tile newTile);
+
+  //  public Tile updatedTile(Tile newTile) {
+  //  {
+  //    if (this.getClass() != newTile.getClass()) {
+  //      return newTile;
+  //    }
+  //    setSeen(getSeen() || newTile.getSeen());
+  //    return this;
+  //  }
 
   public void setSeen(boolean seen) {
     this.seen = seen;
@@ -40,15 +43,15 @@ public abstract class Tile {
     setSeen(false);
   }
 
-  @Override
-  public boolean equals(Object o) {
-    if (!(o instanceof Tile)) {
-      return false;
-    }
-
-    Tile t = (Tile) o;
-    return loc.equals(t.loc);
-  }
+  public abstract boolean equals(Object o);
+  //  {
+  //    if (!(o instanceof Tile)) {
+  //      return false;
+  //    }
+  //
+  //    Tile t = (Tile) o;
+  //    return loc.equals(t.loc);
+  //  }
 
   @Override
   public int hashCode() {

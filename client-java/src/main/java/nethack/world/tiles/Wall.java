@@ -34,11 +34,21 @@ public class Wall extends Tile implements Viewable {
     this.isVisible = isVisible;
   }
 
+  public Tile updatedTile(Tile newTile) {
+    if (this.getClass() != newTile.getClass()) {
+      return newTile;
+    }
+    setSeen(getSeen() || newTile.getSeen());
+    setVisibility(((Wall) newTile).getVisibility());
+    return this;
+  }
+
   public boolean equals(Object o) {
     if (!(o instanceof Wall)) {
       return false;
     }
 
-    return loc.equals(((Wall) o).loc);
+    Wall wall = (Wall) o;
+    return loc.equals(wall.loc) && getVisibility() == wall.getVisibility();
   }
 }

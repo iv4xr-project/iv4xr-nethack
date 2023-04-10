@@ -1,5 +1,6 @@
 package util;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -41,6 +42,7 @@ public class Database {
       MonsterInfo[] monsterData = mapper.readValue(monsterJson, MonsterInfo[].class);
       monsterList.addAll(Arrays.asList(monsterData));
 
+      mapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
       String entityJson = readJsonFromFile("../../../../../../server-python/data/entity");
       EntityInfo[] entityData = mapper.readValue(entityJson, EntityInfo[].class);
       entityList.addAll(Arrays.asList(entityData));

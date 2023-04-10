@@ -43,11 +43,21 @@ public class Pool extends Tile implements Walkable, Viewable {
     return WalkableType.Diagonal;
   }
 
+  public Tile updatedTile(Tile newTile) {
+    if (!(newTile instanceof Pool)) {
+      return newTile;
+    }
+    setSeen(getSeen() || newTile.getSeen());
+    setVisibility(((Pool) newTile).getVisibility());
+    return this;
+  }
+
   public boolean equals(Object o) {
     if (!(o instanceof Pool)) {
       return false;
     }
 
-    return loc.equals(((Pool) o).loc);
+    Pool pool = (Pool) o;
+    return loc.equals(pool.loc) && getVisibility() == pool.getVisibility();
   }
 }

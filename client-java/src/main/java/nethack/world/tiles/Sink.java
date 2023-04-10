@@ -43,11 +43,21 @@ public class Sink extends Tile implements Walkable, Viewable {
     return WalkableType.Diagonal;
   }
 
+  public Tile updatedTile(Tile newTile) {
+    if (!(newTile instanceof Sink)) {
+      return newTile;
+    }
+    setSeen(getSeen() || newTile.getSeen());
+    setVisibility(((Sink) newTile).getVisibility());
+    return this;
+  }
+
   public boolean equals(Object o) {
     if (!(o instanceof Sink)) {
       return false;
     }
 
-    return loc.equals(((Sink) o).loc);
+    Sink sink = (Sink) o;
+    return loc.equals(sink.loc) && getVisibility() == sink.getVisibility();
   }
 }

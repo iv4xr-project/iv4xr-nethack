@@ -33,11 +33,21 @@ public class Tree extends Tile implements Viewable {
     this.isVisible = isVisible;
   }
 
+  public Tile updatedTile(Tile newTile) {
+    if (!(newTile instanceof Tree)) {
+      return newTile;
+    }
+    setSeen(getSeen() || newTile.getSeen());
+    setVisibility(((Tree) newTile).getVisibility());
+    return this;
+  }
+
   public boolean equals(Object o) {
     if (!(o instanceof Tree)) {
       return false;
     }
 
-    return loc.equals(((Tree) o).loc);
+    Tree tree = (Tree) o;
+    return loc.equals(tree.loc) && getVisibility() == tree.getVisibility();
   }
 }
