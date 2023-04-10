@@ -21,6 +21,7 @@ def glyph_to_is_monster():
     func = np.vectorize(lambda g: nethack.glyph_is_monster(g))
     return func(glyphs)
 
+
 MONSTER_GLYPHS = glyph_to_is_monster()
 
 
@@ -159,6 +160,8 @@ def monster_info():
             if property == "mname":
                 mapped_property = "name"
             elif property == "mlet":
+                mapped_property = "monsterType"
+                monst_dict[mapped_property] = to_monster_type(int.from_bytes(monst_info.mlet[0].encode(), 'little'))
                 continue
             elif property == "mlevel":
                 mapped_property = "level"
@@ -205,6 +208,130 @@ def write_monster_info():
     with open("../../data/monster.json", "w") as outfile:
         # use the json.dump() method to write the list of dictionaries to the file
         json.dump(monst_infos, outfile, indent=2)
+
+
+def to_monster_type(value):
+    match value:
+        case 1:
+            return "ANT"
+        case 2:
+            return "BLOB"
+        case 3:
+            return "COCKATRICE"
+        case 4:
+            return "DOG"
+        case 5:
+            return "EYE"
+        case 6:
+            return "FELINE"
+        case 7:
+            return "GREMLIN"
+        case 8:
+            return "HUMANOID"
+        case 9:
+            return "IMP"
+        case 10:
+            return "JELLY"
+        case 11:
+            return "KOBOLD"
+        case 12:
+            return "LEPRECHAUN"
+        case 13:
+            return "MIMIC"
+        case 14:
+            return "NYMPH"
+        case 15:
+            return "ORC"
+        case 16:
+            return "PIERCER"
+        case 17:
+            return "QUADRUPED"
+        case 18:
+            return "RODENT"
+        case 19:
+            return "SPIDER"
+        case 20:
+            return "TRAPPER"
+        case 21:
+            return "UNICORN"
+        case 22:
+            return "VORTEX"
+        case 23:
+            return "WORM"
+        case 24:
+            return "XAN"
+        case 25:
+            return "LIGHT"
+        case 26:
+            return "ZRUTY"
+        case 27:
+            return "ANGEL"
+        case 28:
+            return "BAT"
+        case 29:
+            return "CENTAUR"
+        case 30:
+            return "DRAGON"
+        case 31:
+            return "ELEMENTAL"
+        case 32:
+            return "FUNGUS"
+        case 33:
+            return "GNOME"
+        case 34:
+            return "GIANT"
+        case 35:
+            return "invisible"
+        case 36:
+            return "JABBERWOCK"
+        case 37:
+            return "KOP"
+        case 38:
+            return "LICH"
+        case 39:
+            return "MUMMY"
+        case 40:
+            return "NAGA"
+        case 41:
+            return "OGRE"
+        case 42:
+            return "PUDDING"
+        case 43:
+            return "QUANTMECH"
+        case 44:
+            return "RUSTMONST"
+        case 45:
+            return "SNAKE"
+        case 46:
+            return "TROLL"
+        case 47:
+            return "UMBER"
+        case 48:
+            return "VAMPIRE"
+        case 49:
+            return "WRAITH"
+        case 50:
+            return "XORN"
+        case 51:
+            return "YETI"
+        case 52:
+            return "ZOMBIE"
+        case 53:
+            return "HUMAN"
+        case 54:
+            return "GHOST"
+        case 55:
+            return "GOLEM"
+        case 56:
+            return "DEMON"
+        case 57:
+            return "EEL"
+        case 58:
+            return "LIZARD"
+        case 59:
+            return "WORM_TAIL"
+        case 60:
+            return "MIMIC_DEF"
 
 
 if __name__ == "__main__":

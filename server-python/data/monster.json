@@ -2,6 +2,7 @@
   {
     "index": 0,
     "name": "giant ant",
+    "monsterType": "ANT",
     "level": 2,
     "movementSpeed": 18,
     "armorClass": 3,
@@ -14,6 +15,7 @@
   {
     "index": 1,
     "name": "killer bee",
+    "monsterType": "ANT",
     "level": 1,
     "movementSpeed": 18,
     "armorClass": -1,
@@ -26,6 +28,7 @@
   {
     "index": 2,
     "name": "soldier ant",
+    "monsterType": "ANT",
     "level": 3,
     "movementSpeed": 18,
     "armorClass": 3,
@@ -38,6 +41,7 @@
   {
     "index": 3,
     "name": "fire ant",
+    "monsterType": "ANT",
     "level": 3,
     "movementSpeed": 18,
     "armorClass": 3,
@@ -50,6 +54,7 @@
   {
     "index": 4,
     "name": "giant beetle",
+    "monsterType": "ANT",
     "level": 5,
     "movementSpeed": 6,
     "armorClass": 4,
@@ -62,6 +67,7 @@
   {
     "index": 5,
     "name": "queen bee",
+    "monsterType": "ANT",
     "level": 9,
     "movementSpeed": 24,
     "armorClass": -4,
@@ -74,6 +80,7 @@
   {
     "index": 6,
     "name": "acid blob",
+    "monsterType": "BLOB",
     "level": 1,
     "movementSpeed": 3,
     "armorClass": 8,
@@ -86,6 +93,7 @@
   {
     "index": 7,
     "name": "quivering blob",
+    "monsterType": "BLOB",
     "level": 5,
     "movementSpeed": 1,
     "armorClass": 8,
@@ -98,6 +106,7 @@
   {
     "index": 8,
     "name": "gelatinous cube",
+    "monsterType": "BLOB",
     "level": 6,
     "movementSpeed": 6,
     "armorClass": 8,
@@ -110,6 +119,7 @@
   {
     "index": 9,
     "name": "chickatrice",
+    "monsterType": "COCKATRICE",
     "level": 4,
     "movementSpeed": 4,
     "armorClass": 8,
@@ -122,6 +132,7 @@
   {
     "index": 10,
     "name": "cockatrice",
+    "monsterType": "COCKATRICE",
     "level": 5,
     "movementSpeed": 6,
     "armorClass": 6,
@@ -134,6 +145,7 @@
   {
     "index": 11,
     "name": "pyrolisk",
+    "monsterType": "COCKATRICE",
     "level": 6,
     "movementSpeed": 6,
     "armorClass": 6,
@@ -146,6 +158,7 @@
   {
     "index": 12,
     "name": "jackal",
+    "monsterType": "DOG",
     "level": 0,
     "movementSpeed": 12,
     "armorClass": 7,
@@ -158,6 +171,7 @@
   {
     "index": 13,
     "name": "fox",
+    "monsterType": "DOG",
     "level": 0,
     "movementSpeed": 15,
     "armorClass": 7,
@@ -170,6 +184,7 @@
   {
     "index": 14,
     "name": "coyote",
+    "monsterType": "DOG",
     "level": 1,
     "movementSpeed": 12,
     "armorClass": 7,
@@ -182,6 +197,7 @@
   {
     "index": 15,
     "name": "werejackal",
+    "monsterType": "DOG",
     "level": 2,
     "movementSpeed": 12,
     "armorClass": 7,
@@ -194,6 +210,7 @@
   {
     "index": 16,
     "name": "little dog",
+    "monsterType": "DOG",
     "level": 2,
     "movementSpeed": 18,
     "armorClass": 6,
@@ -206,6 +223,7 @@
   {
     "index": 17,
     "name": "dingo",
+    "monsterType": "DOG",
     "level": 4,
     "movementSpeed": 16,
     "armorClass": 5,
@@ -218,6 +236,7 @@
   {
     "index": 18,
     "name": "dog",
+    "monsterType": "DOG",
     "level": 4,
     "movementSpeed": 16,
     "armorClass": 5,
@@ -230,6 +249,7 @@
   {
     "index": 19,
     "name": "large dog",
+    "monsterType": "DOG",
     "level": 6,
     "movementSpeed": 15,
     "armorClass": 4,
@@ -242,6 +262,7 @@
   {
     "index": 20,
     "name": "wolf",
+    "monsterType": "DOG",
     "level": 5,
     "movementSpeed": 12,
     "armorClass": 4,
@@ -254,6 +275,7 @@
   {
     "index": 21,
     "name": "werewolf",
+    "monsterType": "DOG",
     "level": 5,
     "movementSpeed": 12,
     "armorClass": 4,
@@ -266,6 +288,7 @@
   {
     "index": 22,
     "name": "winter wolf cub",
+    "monsterType": "DOG",
     "level": 5,
     "movementSpeed": 12,
     "armorClass": 4,
@@ -278,6 +301,7 @@
   {
     "index": 23,
     "name": "warg",
+    "monsterType": "DOG",
     "level": 7,
     "movementSpeed": 12,
     "armorClass": 4,
@@ -290,6 +314,7 @@
   {
     "index": 24,
     "name": "winter wolf",
+    "monsterType": "DOG",
     "level": 7,
     "movementSpeed": 12,
     "armorClass": 4,
@@ -302,6 +327,7 @@
   {
     "index": 25,
     "name": "hell hound pup",
+    "monsterType": "DOG",
     "level": 7,
     "movementSpeed": 12,
     "armorClass": 4,
@@ -314,6 +340,7 @@
   {
     "index": 26,
     "name": "hell hound",
+    "monsterType": "DOG",
     "level": 12,
     "movementSpeed": 14,
     "armorClass": 2,
@@ -326,6 +353,7 @@
   {
     "index": 27,
     "name": "gas spore",
+    "monsterType": "EYE",
     "level": 1,
     "movementSpeed": 3,
     "armorClass": 10,
@@ -338,6 +366,7 @@
   {
     "index": 28,
     "name": "floating eye",
+    "monsterType": "EYE",
     "level": 2,
     "movementSpeed": 1,
     "armorClass": 9,
@@ -350,6 +379,7 @@
   {
     "index": 29,
     "name": "freezing sphere",
+    "monsterType": "EYE",
     "level": 6,
     "movementSpeed": 13,
     "armorClass": 4,
@@ -362,6 +392,7 @@
   {
     "index": 30,
     "name": "flaming sphere",
+    "monsterType": "EYE",
     "level": 6,
     "movementSpeed": 13,
     "armorClass": 4,
@@ -374,6 +405,7 @@
   {
     "index": 31,
     "name": "shocking sphere",
+    "monsterType": "EYE",
     "level": 6,
     "movementSpeed": 13,
     "armorClass": 4,
@@ -386,6 +418,7 @@
   {
     "index": 32,
     "name": "kitten",
+    "monsterType": "FELINE",
     "level": 2,
     "movementSpeed": 18,
     "armorClass": 6,
@@ -398,6 +431,7 @@
   {
     "index": 33,
     "name": "housecat",
+    "monsterType": "FELINE",
     "level": 4,
     "movementSpeed": 16,
     "armorClass": 5,
@@ -410,6 +444,7 @@
   {
     "index": 34,
     "name": "jaguar",
+    "monsterType": "FELINE",
     "level": 4,
     "movementSpeed": 15,
     "armorClass": 6,
@@ -422,6 +457,7 @@
   {
     "index": 35,
     "name": "lynx",
+    "monsterType": "FELINE",
     "level": 5,
     "movementSpeed": 15,
     "armorClass": 6,
@@ -434,6 +470,7 @@
   {
     "index": 36,
     "name": "panther",
+    "monsterType": "FELINE",
     "level": 5,
     "movementSpeed": 15,
     "armorClass": 6,
@@ -446,6 +483,7 @@
   {
     "index": 37,
     "name": "large cat",
+    "monsterType": "FELINE",
     "level": 6,
     "movementSpeed": 15,
     "armorClass": 4,
@@ -458,6 +496,7 @@
   {
     "index": 38,
     "name": "tiger",
+    "monsterType": "FELINE",
     "level": 6,
     "movementSpeed": 12,
     "armorClass": 6,
@@ -470,6 +509,7 @@
   {
     "index": 39,
     "name": "gremlin",
+    "monsterType": "GREMLIN",
     "level": 5,
     "movementSpeed": 12,
     "armorClass": 2,
@@ -482,6 +522,7 @@
   {
     "index": 40,
     "name": "gargoyle",
+    "monsterType": "GREMLIN",
     "level": 6,
     "movementSpeed": 10,
     "armorClass": -4,
@@ -494,6 +535,7 @@
   {
     "index": 41,
     "name": "winged gargoyle",
+    "monsterType": "GREMLIN",
     "level": 9,
     "movementSpeed": 15,
     "armorClass": -2,
@@ -506,6 +548,7 @@
   {
     "index": 42,
     "name": "hobbit",
+    "monsterType": "HUMANOID",
     "level": 1,
     "movementSpeed": 9,
     "armorClass": 10,
@@ -518,6 +561,7 @@
   {
     "index": 43,
     "name": "dwarf",
+    "monsterType": "HUMANOID",
     "level": 2,
     "movementSpeed": 6,
     "armorClass": 10,
@@ -530,6 +574,7 @@
   {
     "index": 44,
     "name": "bugbear",
+    "monsterType": "HUMANOID",
     "level": 3,
     "movementSpeed": 9,
     "armorClass": 5,
@@ -542,6 +587,7 @@
   {
     "index": 45,
     "name": "dwarf lord",
+    "monsterType": "HUMANOID",
     "level": 4,
     "movementSpeed": 6,
     "armorClass": 10,
@@ -554,6 +600,7 @@
   {
     "index": 46,
     "name": "dwarf king",
+    "monsterType": "HUMANOID",
     "level": 6,
     "movementSpeed": 6,
     "armorClass": 10,
@@ -566,6 +613,7 @@
   {
     "index": 47,
     "name": "mind flayer",
+    "monsterType": "HUMANOID",
     "level": 9,
     "movementSpeed": 12,
     "armorClass": 5,
@@ -578,6 +626,7 @@
   {
     "index": 48,
     "name": "master mind flayer",
+    "monsterType": "HUMANOID",
     "level": 13,
     "movementSpeed": 12,
     "armorClass": 0,
@@ -590,6 +639,7 @@
   {
     "index": 49,
     "name": "manes",
+    "monsterType": "IMP",
     "level": 1,
     "movementSpeed": 3,
     "armorClass": 7,
@@ -602,6 +652,7 @@
   {
     "index": 50,
     "name": "homunculus",
+    "monsterType": "IMP",
     "level": 2,
     "movementSpeed": 12,
     "armorClass": 6,
@@ -614,6 +665,7 @@
   {
     "index": 51,
     "name": "imp",
+    "monsterType": "IMP",
     "level": 3,
     "movementSpeed": 12,
     "armorClass": 2,
@@ -626,6 +678,7 @@
   {
     "index": 52,
     "name": "lemure",
+    "monsterType": "IMP",
     "level": 3,
     "movementSpeed": 3,
     "armorClass": 7,
@@ -638,6 +691,7 @@
   {
     "index": 53,
     "name": "quasit",
+    "monsterType": "IMP",
     "level": 3,
     "movementSpeed": 15,
     "armorClass": 2,
@@ -650,6 +704,7 @@
   {
     "index": 54,
     "name": "tengu",
+    "monsterType": "IMP",
     "level": 6,
     "movementSpeed": 13,
     "armorClass": 5,
@@ -662,6 +717,7 @@
   {
     "index": 55,
     "name": "blue jelly",
+    "monsterType": "JELLY",
     "level": 4,
     "movementSpeed": 0,
     "armorClass": 8,
@@ -674,6 +730,7 @@
   {
     "index": 56,
     "name": "spotted jelly",
+    "monsterType": "JELLY",
     "level": 5,
     "movementSpeed": 0,
     "armorClass": 8,
@@ -686,6 +743,7 @@
   {
     "index": 57,
     "name": "ochre jelly",
+    "monsterType": "JELLY",
     "level": 6,
     "movementSpeed": 3,
     "armorClass": 8,
@@ -698,6 +756,7 @@
   {
     "index": 58,
     "name": "kobold",
+    "monsterType": "KOBOLD",
     "level": 0,
     "movementSpeed": 6,
     "armorClass": 10,
@@ -710,6 +769,7 @@
   {
     "index": 59,
     "name": "large kobold",
+    "monsterType": "KOBOLD",
     "level": 1,
     "movementSpeed": 6,
     "armorClass": 10,
@@ -722,6 +782,7 @@
   {
     "index": 60,
     "name": "kobold lord",
+    "monsterType": "KOBOLD",
     "level": 2,
     "movementSpeed": 6,
     "armorClass": 10,
@@ -734,6 +795,7 @@
   {
     "index": 61,
     "name": "kobold shaman",
+    "monsterType": "KOBOLD",
     "level": 2,
     "movementSpeed": 6,
     "armorClass": 6,
@@ -746,6 +808,7 @@
   {
     "index": 62,
     "name": "leprechaun",
+    "monsterType": "LEPRECHAUN",
     "level": 5,
     "movementSpeed": 15,
     "armorClass": 8,
@@ -758,6 +821,7 @@
   {
     "index": 63,
     "name": "small mimic",
+    "monsterType": "MIMIC",
     "level": 7,
     "movementSpeed": 3,
     "armorClass": 7,
@@ -770,6 +834,7 @@
   {
     "index": 64,
     "name": "large mimic",
+    "monsterType": "MIMIC",
     "level": 8,
     "movementSpeed": 3,
     "armorClass": 7,
@@ -782,6 +847,7 @@
   {
     "index": 65,
     "name": "giant mimic",
+    "monsterType": "MIMIC",
     "level": 9,
     "movementSpeed": 3,
     "armorClass": 7,
@@ -794,6 +860,7 @@
   {
     "index": 66,
     "name": "wood nymph",
+    "monsterType": "NYMPH",
     "level": 3,
     "movementSpeed": 12,
     "armorClass": 9,
@@ -806,6 +873,7 @@
   {
     "index": 67,
     "name": "water nymph",
+    "monsterType": "NYMPH",
     "level": 3,
     "movementSpeed": 12,
     "armorClass": 9,
@@ -818,6 +886,7 @@
   {
     "index": 68,
     "name": "mountain nymph",
+    "monsterType": "NYMPH",
     "level": 3,
     "movementSpeed": 12,
     "armorClass": 9,
@@ -830,6 +899,7 @@
   {
     "index": 69,
     "name": "goblin",
+    "monsterType": "ORC",
     "level": 0,
     "movementSpeed": 6,
     "armorClass": 10,
@@ -842,6 +912,7 @@
   {
     "index": 70,
     "name": "hobgoblin",
+    "monsterType": "ORC",
     "level": 1,
     "movementSpeed": 9,
     "armorClass": 10,
@@ -854,6 +925,7 @@
   {
     "index": 71,
     "name": "orc",
+    "monsterType": "ORC",
     "level": 1,
     "movementSpeed": 9,
     "armorClass": 10,
@@ -866,6 +938,7 @@
   {
     "index": 72,
     "name": "hill orc",
+    "monsterType": "ORC",
     "level": 2,
     "movementSpeed": 9,
     "armorClass": 10,
@@ -878,6 +951,7 @@
   {
     "index": 73,
     "name": "Mordor orc",
+    "monsterType": "ORC",
     "level": 3,
     "movementSpeed": 5,
     "armorClass": 10,
@@ -890,6 +964,7 @@
   {
     "index": 74,
     "name": "Uruk-hai",
+    "monsterType": "ORC",
     "level": 3,
     "movementSpeed": 7,
     "armorClass": 10,
@@ -902,6 +977,7 @@
   {
     "index": 75,
     "name": "orc shaman",
+    "monsterType": "ORC",
     "level": 3,
     "movementSpeed": 9,
     "armorClass": 5,
@@ -914,6 +990,7 @@
   {
     "index": 76,
     "name": "orc-captain",
+    "monsterType": "ORC",
     "level": 5,
     "movementSpeed": 5,
     "armorClass": 10,
@@ -926,6 +1003,7 @@
   {
     "index": 77,
     "name": "rock piercer",
+    "monsterType": "PIERCER",
     "level": 3,
     "movementSpeed": 1,
     "armorClass": 3,
@@ -938,6 +1016,7 @@
   {
     "index": 78,
     "name": "iron piercer",
+    "monsterType": "PIERCER",
     "level": 5,
     "movementSpeed": 1,
     "armorClass": 0,
@@ -950,6 +1029,7 @@
   {
     "index": 79,
     "name": "glass piercer",
+    "monsterType": "PIERCER",
     "level": 7,
     "movementSpeed": 1,
     "armorClass": 0,
@@ -962,6 +1042,7 @@
   {
     "index": 80,
     "name": "rothe",
+    "monsterType": "QUADRUPED",
     "level": 2,
     "movementSpeed": 9,
     "armorClass": 7,
@@ -974,6 +1055,7 @@
   {
     "index": 81,
     "name": "mumak",
+    "monsterType": "QUADRUPED",
     "level": 5,
     "movementSpeed": 9,
     "armorClass": 0,
@@ -986,6 +1068,7 @@
   {
     "index": 82,
     "name": "leocrotta",
+    "monsterType": "QUADRUPED",
     "level": 6,
     "movementSpeed": 18,
     "armorClass": 4,
@@ -998,6 +1081,7 @@
   {
     "index": 83,
     "name": "wumpus",
+    "monsterType": "QUADRUPED",
     "level": 8,
     "movementSpeed": 3,
     "armorClass": 2,
@@ -1010,6 +1094,7 @@
   {
     "index": 84,
     "name": "titanothere",
+    "monsterType": "QUADRUPED",
     "level": 12,
     "movementSpeed": 12,
     "armorClass": 6,
@@ -1022,6 +1107,7 @@
   {
     "index": 85,
     "name": "baluchitherium",
+    "monsterType": "QUADRUPED",
     "level": 14,
     "movementSpeed": 12,
     "armorClass": 5,
@@ -1034,6 +1120,7 @@
   {
     "index": 86,
     "name": "mastodon",
+    "monsterType": "QUADRUPED",
     "level": 20,
     "movementSpeed": 12,
     "armorClass": 5,
@@ -1046,6 +1133,7 @@
   {
     "index": 87,
     "name": "sewer rat",
+    "monsterType": "RODENT",
     "level": 0,
     "movementSpeed": 12,
     "armorClass": 7,
@@ -1058,6 +1146,7 @@
   {
     "index": 88,
     "name": "giant rat",
+    "monsterType": "RODENT",
     "level": 1,
     "movementSpeed": 10,
     "armorClass": 7,
@@ -1070,6 +1159,7 @@
   {
     "index": 89,
     "name": "rabid rat",
+    "monsterType": "RODENT",
     "level": 2,
     "movementSpeed": 12,
     "armorClass": 6,
@@ -1082,6 +1172,7 @@
   {
     "index": 90,
     "name": "wererat",
+    "monsterType": "RODENT",
     "level": 2,
     "movementSpeed": 12,
     "armorClass": 6,
@@ -1094,6 +1185,7 @@
   {
     "index": 91,
     "name": "rock mole",
+    "monsterType": "RODENT",
     "level": 3,
     "movementSpeed": 3,
     "armorClass": 0,
@@ -1106,6 +1198,7 @@
   {
     "index": 92,
     "name": "woodchuck",
+    "monsterType": "RODENT",
     "level": 3,
     "movementSpeed": 3,
     "armorClass": 0,
@@ -1118,6 +1211,7 @@
   {
     "index": 93,
     "name": "cave spider",
+    "monsterType": "SPIDER",
     "level": 1,
     "movementSpeed": 12,
     "armorClass": 3,
@@ -1130,6 +1224,7 @@
   {
     "index": 94,
     "name": "centipede",
+    "monsterType": "SPIDER",
     "level": 2,
     "movementSpeed": 4,
     "armorClass": 3,
@@ -1142,6 +1237,7 @@
   {
     "index": 95,
     "name": "giant spider",
+    "monsterType": "SPIDER",
     "level": 5,
     "movementSpeed": 15,
     "armorClass": 4,
@@ -1154,6 +1250,7 @@
   {
     "index": 96,
     "name": "scorpion",
+    "monsterType": "SPIDER",
     "level": 5,
     "movementSpeed": 15,
     "armorClass": 3,
@@ -1166,6 +1263,7 @@
   {
     "index": 97,
     "name": "lurker above",
+    "monsterType": "TRAPPER",
     "level": 10,
     "movementSpeed": 3,
     "armorClass": 3,
@@ -1178,6 +1276,7 @@
   {
     "index": 98,
     "name": "trapper",
+    "monsterType": "TRAPPER",
     "level": 12,
     "movementSpeed": 3,
     "armorClass": 3,
@@ -1190,6 +1289,7 @@
   {
     "index": 99,
     "name": "pony",
+    "monsterType": "UNICORN",
     "level": 3,
     "movementSpeed": 16,
     "armorClass": 6,
@@ -1202,6 +1302,7 @@
   {
     "index": 100,
     "name": "white unicorn",
+    "monsterType": "UNICORN",
     "level": 4,
     "movementSpeed": 24,
     "armorClass": 2,
@@ -1214,6 +1315,7 @@
   {
     "index": 101,
     "name": "gray unicorn",
+    "monsterType": "UNICORN",
     "level": 4,
     "movementSpeed": 24,
     "armorClass": 2,
@@ -1226,6 +1328,7 @@
   {
     "index": 102,
     "name": "black unicorn",
+    "monsterType": "UNICORN",
     "level": 4,
     "movementSpeed": 24,
     "armorClass": 2,
@@ -1238,6 +1341,7 @@
   {
     "index": 103,
     "name": "horse",
+    "monsterType": "UNICORN",
     "level": 5,
     "movementSpeed": 20,
     "armorClass": 5,
@@ -1250,6 +1354,7 @@
   {
     "index": 104,
     "name": "warhorse",
+    "monsterType": "UNICORN",
     "level": 7,
     "movementSpeed": 24,
     "armorClass": 4,
@@ -1262,6 +1367,7 @@
   {
     "index": 105,
     "name": "fog cloud",
+    "monsterType": "VORTEX",
     "level": 3,
     "movementSpeed": 1,
     "armorClass": 0,
@@ -1274,6 +1380,7 @@
   {
     "index": 106,
     "name": "dust vortex",
+    "monsterType": "VORTEX",
     "level": 4,
     "movementSpeed": 20,
     "armorClass": 2,
@@ -1286,6 +1393,7 @@
   {
     "index": 107,
     "name": "ice vortex",
+    "monsterType": "VORTEX",
     "level": 5,
     "movementSpeed": 20,
     "armorClass": 2,
@@ -1298,6 +1406,7 @@
   {
     "index": 108,
     "name": "energy vortex",
+    "monsterType": "VORTEX",
     "level": 6,
     "movementSpeed": 20,
     "armorClass": 2,
@@ -1310,6 +1419,7 @@
   {
     "index": 109,
     "name": "steam vortex",
+    "monsterType": "VORTEX",
     "level": 7,
     "movementSpeed": 22,
     "armorClass": 2,
@@ -1322,6 +1432,7 @@
   {
     "index": 110,
     "name": "fire vortex",
+    "monsterType": "VORTEX",
     "level": 8,
     "movementSpeed": 22,
     "armorClass": 2,
@@ -1334,6 +1445,7 @@
   {
     "index": 111,
     "name": "baby long worm",
+    "monsterType": "WORM",
     "level": 5,
     "movementSpeed": 3,
     "armorClass": 5,
@@ -1346,6 +1458,7 @@
   {
     "index": 112,
     "name": "baby purple worm",
+    "monsterType": "WORM",
     "level": 8,
     "movementSpeed": 3,
     "armorClass": 5,
@@ -1358,6 +1471,7 @@
   {
     "index": 113,
     "name": "long worm",
+    "monsterType": "WORM",
     "level": 9,
     "movementSpeed": 3,
     "armorClass": 5,
@@ -1370,6 +1484,7 @@
   {
     "index": 114,
     "name": "purple worm",
+    "monsterType": "WORM",
     "level": 15,
     "movementSpeed": 9,
     "armorClass": 6,
@@ -1382,6 +1497,7 @@
   {
     "index": 115,
     "name": "grid bug",
+    "monsterType": "XAN",
     "level": 0,
     "movementSpeed": 12,
     "armorClass": 9,
@@ -1394,6 +1510,7 @@
   {
     "index": 116,
     "name": "xan",
+    "monsterType": "XAN",
     "level": 7,
     "movementSpeed": 18,
     "armorClass": -4,
@@ -1406,6 +1523,7 @@
   {
     "index": 117,
     "name": "yellow light",
+    "monsterType": "LIGHT",
     "level": 3,
     "movementSpeed": 15,
     "armorClass": 0,
@@ -1418,6 +1536,7 @@
   {
     "index": 118,
     "name": "black light",
+    "monsterType": "LIGHT",
     "level": 5,
     "movementSpeed": 15,
     "armorClass": 0,
@@ -1430,6 +1549,7 @@
   {
     "index": 119,
     "name": "zruty",
+    "monsterType": "ZRUTY",
     "level": 9,
     "movementSpeed": 8,
     "armorClass": 3,
@@ -1442,6 +1562,7 @@
   {
     "index": 120,
     "name": "couatl",
+    "monsterType": "ANGEL",
     "level": 8,
     "movementSpeed": 10,
     "armorClass": 5,
@@ -1454,6 +1575,7 @@
   {
     "index": 121,
     "name": "Aleax",
+    "monsterType": "ANGEL",
     "level": 10,
     "movementSpeed": 8,
     "armorClass": 0,
@@ -1466,6 +1588,7 @@
   {
     "index": 122,
     "name": "Angel",
+    "monsterType": "ANGEL",
     "level": 14,
     "movementSpeed": 10,
     "armorClass": -4,
@@ -1478,6 +1601,7 @@
   {
     "index": 123,
     "name": "ki-rin",
+    "monsterType": "ANGEL",
     "level": 16,
     "movementSpeed": 18,
     "armorClass": -5,
@@ -1490,6 +1614,7 @@
   {
     "index": 124,
     "name": "Archon",
+    "monsterType": "ANGEL",
     "level": 19,
     "movementSpeed": 16,
     "armorClass": -6,
@@ -1502,6 +1627,7 @@
   {
     "index": 125,
     "name": "bat",
+    "monsterType": "BAT",
     "level": 0,
     "movementSpeed": 22,
     "armorClass": 8,
@@ -1514,6 +1640,7 @@
   {
     "index": 126,
     "name": "giant bat",
+    "monsterType": "BAT",
     "level": 2,
     "movementSpeed": 22,
     "armorClass": 7,
@@ -1526,6 +1653,7 @@
   {
     "index": 127,
     "name": "raven",
+    "monsterType": "BAT",
     "level": 4,
     "movementSpeed": 20,
     "armorClass": 6,
@@ -1538,6 +1666,7 @@
   {
     "index": 128,
     "name": "vampire bat",
+    "monsterType": "BAT",
     "level": 5,
     "movementSpeed": 20,
     "armorClass": 6,
@@ -1550,6 +1679,7 @@
   {
     "index": 129,
     "name": "plains centaur",
+    "monsterType": "CENTAUR",
     "level": 4,
     "movementSpeed": 18,
     "armorClass": 4,
@@ -1562,6 +1692,7 @@
   {
     "index": 130,
     "name": "forest centaur",
+    "monsterType": "CENTAUR",
     "level": 5,
     "movementSpeed": 18,
     "armorClass": 3,
@@ -1574,6 +1705,7 @@
   {
     "index": 131,
     "name": "mountain centaur",
+    "monsterType": "CENTAUR",
     "level": 6,
     "movementSpeed": 20,
     "armorClass": 2,
@@ -1586,6 +1718,7 @@
   {
     "index": 132,
     "name": "baby gray dragon",
+    "monsterType": "DRAGON",
     "level": 12,
     "movementSpeed": 9,
     "armorClass": 2,
@@ -1598,6 +1731,7 @@
   {
     "index": 133,
     "name": "baby silver dragon",
+    "monsterType": "DRAGON",
     "level": 12,
     "movementSpeed": 9,
     "armorClass": 2,
@@ -1610,6 +1744,7 @@
   {
     "index": 134,
     "name": "baby red dragon",
+    "monsterType": "DRAGON",
     "level": 12,
     "movementSpeed": 9,
     "armorClass": 2,
@@ -1622,6 +1757,7 @@
   {
     "index": 135,
     "name": "baby white dragon",
+    "monsterType": "DRAGON",
     "level": 12,
     "movementSpeed": 9,
     "armorClass": 2,
@@ -1634,6 +1770,7 @@
   {
     "index": 136,
     "name": "baby orange dragon",
+    "monsterType": "DRAGON",
     "level": 12,
     "movementSpeed": 9,
     "armorClass": 2,
@@ -1646,6 +1783,7 @@
   {
     "index": 137,
     "name": "baby black dragon",
+    "monsterType": "DRAGON",
     "level": 12,
     "movementSpeed": 9,
     "armorClass": 2,
@@ -1658,6 +1796,7 @@
   {
     "index": 138,
     "name": "baby blue dragon",
+    "monsterType": "DRAGON",
     "level": 12,
     "movementSpeed": 9,
     "armorClass": 2,
@@ -1670,6 +1809,7 @@
   {
     "index": 139,
     "name": "baby green dragon",
+    "monsterType": "DRAGON",
     "level": 12,
     "movementSpeed": 9,
     "armorClass": 2,
@@ -1682,6 +1822,7 @@
   {
     "index": 140,
     "name": "baby yellow dragon",
+    "monsterType": "DRAGON",
     "level": 12,
     "movementSpeed": 9,
     "armorClass": 2,
@@ -1694,6 +1835,7 @@
   {
     "index": 141,
     "name": "gray dragon",
+    "monsterType": "DRAGON",
     "level": 15,
     "movementSpeed": 9,
     "armorClass": -1,
@@ -1706,6 +1848,7 @@
   {
     "index": 142,
     "name": "silver dragon",
+    "monsterType": "DRAGON",
     "level": 15,
     "movementSpeed": 9,
     "armorClass": -1,
@@ -1718,6 +1861,7 @@
   {
     "index": 143,
     "name": "red dragon",
+    "monsterType": "DRAGON",
     "level": 15,
     "movementSpeed": 9,
     "armorClass": -1,
@@ -1730,6 +1874,7 @@
   {
     "index": 144,
     "name": "white dragon",
+    "monsterType": "DRAGON",
     "level": 15,
     "movementSpeed": 9,
     "armorClass": -1,
@@ -1742,6 +1887,7 @@
   {
     "index": 145,
     "name": "orange dragon",
+    "monsterType": "DRAGON",
     "level": 15,
     "movementSpeed": 9,
     "armorClass": -1,
@@ -1754,6 +1900,7 @@
   {
     "index": 146,
     "name": "black dragon",
+    "monsterType": "DRAGON",
     "level": 15,
     "movementSpeed": 9,
     "armorClass": -1,
@@ -1766,6 +1913,7 @@
   {
     "index": 147,
     "name": "blue dragon",
+    "monsterType": "DRAGON",
     "level": 15,
     "movementSpeed": 9,
     "armorClass": -1,
@@ -1778,6 +1926,7 @@
   {
     "index": 148,
     "name": "green dragon",
+    "monsterType": "DRAGON",
     "level": 15,
     "movementSpeed": 9,
     "armorClass": -1,
@@ -1790,6 +1939,7 @@
   {
     "index": 149,
     "name": "yellow dragon",
+    "monsterType": "DRAGON",
     "level": 15,
     "movementSpeed": 9,
     "armorClass": -1,
@@ -1802,6 +1952,7 @@
   {
     "index": 150,
     "name": "stalker",
+    "monsterType": "ELEMENTAL",
     "level": 8,
     "movementSpeed": 12,
     "armorClass": 3,
@@ -1814,6 +1965,7 @@
   {
     "index": 151,
     "name": "air elemental",
+    "monsterType": "ELEMENTAL",
     "level": 8,
     "movementSpeed": 36,
     "armorClass": 2,
@@ -1826,6 +1978,7 @@
   {
     "index": 152,
     "name": "fire elemental",
+    "monsterType": "ELEMENTAL",
     "level": 8,
     "movementSpeed": 12,
     "armorClass": 2,
@@ -1838,6 +1991,7 @@
   {
     "index": 153,
     "name": "earth elemental",
+    "monsterType": "ELEMENTAL",
     "level": 8,
     "movementSpeed": 6,
     "armorClass": 2,
@@ -1850,6 +2004,7 @@
   {
     "index": 154,
     "name": "water elemental",
+    "monsterType": "ELEMENTAL",
     "level": 8,
     "movementSpeed": 6,
     "armorClass": 2,
@@ -1862,6 +2017,7 @@
   {
     "index": 155,
     "name": "lichen",
+    "monsterType": "FUNGUS",
     "level": 0,
     "movementSpeed": 1,
     "armorClass": 9,
@@ -1874,6 +2030,7 @@
   {
     "index": 156,
     "name": "brown mold",
+    "monsterType": "FUNGUS",
     "level": 1,
     "movementSpeed": 0,
     "armorClass": 9,
@@ -1886,6 +2043,7 @@
   {
     "index": 157,
     "name": "yellow mold",
+    "monsterType": "FUNGUS",
     "level": 1,
     "movementSpeed": 0,
     "armorClass": 9,
@@ -1898,6 +2056,7 @@
   {
     "index": 158,
     "name": "green mold",
+    "monsterType": "FUNGUS",
     "level": 1,
     "movementSpeed": 0,
     "armorClass": 9,
@@ -1910,6 +2069,7 @@
   {
     "index": 159,
     "name": "red mold",
+    "monsterType": "FUNGUS",
     "level": 1,
     "movementSpeed": 0,
     "armorClass": 9,
@@ -1922,6 +2082,7 @@
   {
     "index": 160,
     "name": "shrieker",
+    "monsterType": "FUNGUS",
     "level": 3,
     "movementSpeed": 1,
     "armorClass": 7,
@@ -1934,6 +2095,7 @@
   {
     "index": 161,
     "name": "violet fungus",
+    "monsterType": "FUNGUS",
     "level": 3,
     "movementSpeed": 1,
     "armorClass": 7,
@@ -1946,6 +2108,7 @@
   {
     "index": 162,
     "name": "gnome",
+    "monsterType": "GNOME",
     "level": 1,
     "movementSpeed": 6,
     "armorClass": 10,
@@ -1958,6 +2121,7 @@
   {
     "index": 163,
     "name": "gnome lord",
+    "monsterType": "GNOME",
     "level": 3,
     "movementSpeed": 8,
     "armorClass": 10,
@@ -1970,6 +2134,7 @@
   {
     "index": 164,
     "name": "gnomish wizard",
+    "monsterType": "GNOME",
     "level": 3,
     "movementSpeed": 10,
     "armorClass": 4,
@@ -1982,6 +2147,7 @@
   {
     "index": 165,
     "name": "gnome king",
+    "monsterType": "GNOME",
     "level": 5,
     "movementSpeed": 10,
     "armorClass": 10,
@@ -1994,6 +2160,7 @@
   {
     "index": 166,
     "name": "giant",
+    "monsterType": "GIANT",
     "level": 6,
     "movementSpeed": 6,
     "armorClass": 0,
@@ -2006,6 +2173,7 @@
   {
     "index": 167,
     "name": "stone giant",
+    "monsterType": "GIANT",
     "level": 6,
     "movementSpeed": 6,
     "armorClass": 0,
@@ -2018,6 +2186,7 @@
   {
     "index": 168,
     "name": "hill giant",
+    "monsterType": "GIANT",
     "level": 8,
     "movementSpeed": 10,
     "armorClass": 6,
@@ -2030,6 +2199,7 @@
   {
     "index": 169,
     "name": "fire giant",
+    "monsterType": "GIANT",
     "level": 9,
     "movementSpeed": 12,
     "armorClass": 4,
@@ -2042,6 +2212,7 @@
   {
     "index": 170,
     "name": "frost giant",
+    "monsterType": "GIANT",
     "level": 10,
     "movementSpeed": 12,
     "armorClass": 3,
@@ -2054,6 +2225,7 @@
   {
     "index": 171,
     "name": "ettin",
+    "monsterType": "GIANT",
     "level": 10,
     "movementSpeed": 12,
     "armorClass": 3,
@@ -2066,6 +2238,7 @@
   {
     "index": 172,
     "name": "storm giant",
+    "monsterType": "GIANT",
     "level": 16,
     "movementSpeed": 12,
     "armorClass": 3,
@@ -2078,6 +2251,7 @@
   {
     "index": 173,
     "name": "titan",
+    "monsterType": "GIANT",
     "level": 16,
     "movementSpeed": 18,
     "armorClass": -3,
@@ -2090,6 +2264,7 @@
   {
     "index": 174,
     "name": "minotaur",
+    "monsterType": "GIANT",
     "level": 15,
     "movementSpeed": 15,
     "armorClass": 6,
@@ -2102,6 +2277,7 @@
   {
     "index": 175,
     "name": "jabberwock",
+    "monsterType": "JABBERWOCK",
     "level": 15,
     "movementSpeed": 12,
     "armorClass": -2,
@@ -2114,6 +2290,7 @@
   {
     "index": 176,
     "name": "Keystone Kop",
+    "monsterType": "KOP",
     "level": 1,
     "movementSpeed": 6,
     "armorClass": 10,
@@ -2126,6 +2303,7 @@
   {
     "index": 177,
     "name": "Kop Sergeant",
+    "monsterType": "KOP",
     "level": 2,
     "movementSpeed": 8,
     "armorClass": 10,
@@ -2138,6 +2316,7 @@
   {
     "index": 178,
     "name": "Kop Lieutenant",
+    "monsterType": "KOP",
     "level": 3,
     "movementSpeed": 10,
     "armorClass": 10,
@@ -2150,6 +2329,7 @@
   {
     "index": 179,
     "name": "Kop Kaptain",
+    "monsterType": "KOP",
     "level": 4,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -2162,6 +2342,7 @@
   {
     "index": 180,
     "name": "lich",
+    "monsterType": "LICH",
     "level": 11,
     "movementSpeed": 6,
     "armorClass": 0,
@@ -2174,6 +2355,7 @@
   {
     "index": 181,
     "name": "demilich",
+    "monsterType": "LICH",
     "level": 14,
     "movementSpeed": 9,
     "armorClass": -2,
@@ -2186,6 +2368,7 @@
   {
     "index": 182,
     "name": "master lich",
+    "monsterType": "LICH",
     "level": 17,
     "movementSpeed": 9,
     "armorClass": -4,
@@ -2198,6 +2381,7 @@
   {
     "index": 183,
     "name": "arch-lich",
+    "monsterType": "LICH",
     "level": 25,
     "movementSpeed": 9,
     "armorClass": -6,
@@ -2210,6 +2394,7 @@
   {
     "index": 184,
     "name": "kobold mummy",
+    "monsterType": "MUMMY",
     "level": 3,
     "movementSpeed": 8,
     "armorClass": 6,
@@ -2222,6 +2407,7 @@
   {
     "index": 185,
     "name": "gnome mummy",
+    "monsterType": "MUMMY",
     "level": 4,
     "movementSpeed": 10,
     "armorClass": 6,
@@ -2234,6 +2420,7 @@
   {
     "index": 186,
     "name": "orc mummy",
+    "monsterType": "MUMMY",
     "level": 5,
     "movementSpeed": 10,
     "armorClass": 5,
@@ -2246,6 +2433,7 @@
   {
     "index": 187,
     "name": "dwarf mummy",
+    "monsterType": "MUMMY",
     "level": 5,
     "movementSpeed": 10,
     "armorClass": 5,
@@ -2258,6 +2446,7 @@
   {
     "index": 188,
     "name": "elf mummy",
+    "monsterType": "MUMMY",
     "level": 6,
     "movementSpeed": 12,
     "armorClass": 4,
@@ -2270,6 +2459,7 @@
   {
     "index": 189,
     "name": "human mummy",
+    "monsterType": "MUMMY",
     "level": 6,
     "movementSpeed": 12,
     "armorClass": 4,
@@ -2282,6 +2472,7 @@
   {
     "index": 190,
     "name": "ettin mummy",
+    "monsterType": "MUMMY",
     "level": 7,
     "movementSpeed": 12,
     "armorClass": 4,
@@ -2294,6 +2485,7 @@
   {
     "index": 191,
     "name": "giant mummy",
+    "monsterType": "MUMMY",
     "level": 8,
     "movementSpeed": 14,
     "armorClass": 3,
@@ -2306,6 +2498,7 @@
   {
     "index": 192,
     "name": "red naga hatchling",
+    "monsterType": "NAGA",
     "level": 3,
     "movementSpeed": 10,
     "armorClass": 6,
@@ -2318,6 +2511,7 @@
   {
     "index": 193,
     "name": "black naga hatchling",
+    "monsterType": "NAGA",
     "level": 3,
     "movementSpeed": 10,
     "armorClass": 6,
@@ -2330,6 +2524,7 @@
   {
     "index": 194,
     "name": "golden naga hatchling",
+    "monsterType": "NAGA",
     "level": 3,
     "movementSpeed": 10,
     "armorClass": 6,
@@ -2342,6 +2537,7 @@
   {
     "index": 195,
     "name": "guardian naga hatchling",
+    "monsterType": "NAGA",
     "level": 3,
     "movementSpeed": 10,
     "armorClass": 6,
@@ -2354,6 +2550,7 @@
   {
     "index": 196,
     "name": "red naga",
+    "monsterType": "NAGA",
     "level": 6,
     "movementSpeed": 12,
     "armorClass": 4,
@@ -2366,6 +2563,7 @@
   {
     "index": 197,
     "name": "black naga",
+    "monsterType": "NAGA",
     "level": 8,
     "movementSpeed": 14,
     "armorClass": 2,
@@ -2378,6 +2576,7 @@
   {
     "index": 198,
     "name": "golden naga",
+    "monsterType": "NAGA",
     "level": 10,
     "movementSpeed": 14,
     "armorClass": 2,
@@ -2390,6 +2589,7 @@
   {
     "index": 199,
     "name": "guardian naga",
+    "monsterType": "NAGA",
     "level": 12,
     "movementSpeed": 16,
     "armorClass": 0,
@@ -2402,6 +2602,7 @@
   {
     "index": 200,
     "name": "ogre",
+    "monsterType": "OGRE",
     "level": 5,
     "movementSpeed": 10,
     "armorClass": 5,
@@ -2414,6 +2615,7 @@
   {
     "index": 201,
     "name": "ogre lord",
+    "monsterType": "OGRE",
     "level": 7,
     "movementSpeed": 12,
     "armorClass": 3,
@@ -2426,6 +2628,7 @@
   {
     "index": 202,
     "name": "ogre king",
+    "monsterType": "OGRE",
     "level": 9,
     "movementSpeed": 14,
     "armorClass": 4,
@@ -2438,6 +2641,7 @@
   {
     "index": 203,
     "name": "gray ooze",
+    "monsterType": "PUDDING",
     "level": 3,
     "movementSpeed": 1,
     "armorClass": 8,
@@ -2450,6 +2654,7 @@
   {
     "index": 204,
     "name": "brown pudding",
+    "monsterType": "PUDDING",
     "level": 5,
     "movementSpeed": 3,
     "armorClass": 8,
@@ -2462,6 +2667,7 @@
   {
     "index": 205,
     "name": "green slime",
+    "monsterType": "PUDDING",
     "level": 6,
     "movementSpeed": 6,
     "armorClass": 6,
@@ -2474,6 +2680,7 @@
   {
     "index": 206,
     "name": "black pudding",
+    "monsterType": "PUDDING",
     "level": 10,
     "movementSpeed": 6,
     "armorClass": 6,
@@ -2486,6 +2693,7 @@
   {
     "index": 207,
     "name": "quantum mechanic",
+    "monsterType": "QUANTMECH",
     "level": 7,
     "movementSpeed": 12,
     "armorClass": 3,
@@ -2498,6 +2706,7 @@
   {
     "index": 208,
     "name": "rust monster",
+    "monsterType": "RUSTMONST",
     "level": 5,
     "movementSpeed": 18,
     "armorClass": 2,
@@ -2510,6 +2719,7 @@
   {
     "index": 209,
     "name": "disenchanter",
+    "monsterType": "RUSTMONST",
     "level": 12,
     "movementSpeed": 12,
     "armorClass": -10,
@@ -2522,6 +2732,7 @@
   {
     "index": 210,
     "name": "garter snake",
+    "monsterType": "SNAKE",
     "level": 1,
     "movementSpeed": 8,
     "armorClass": 8,
@@ -2534,6 +2745,7 @@
   {
     "index": 211,
     "name": "snake",
+    "monsterType": "SNAKE",
     "level": 4,
     "movementSpeed": 15,
     "armorClass": 3,
@@ -2546,6 +2758,7 @@
   {
     "index": 212,
     "name": "water moccasin",
+    "monsterType": "SNAKE",
     "level": 4,
     "movementSpeed": 15,
     "armorClass": 3,
@@ -2558,6 +2771,7 @@
   {
     "index": 213,
     "name": "python",
+    "monsterType": "SNAKE",
     "level": 6,
     "movementSpeed": 3,
     "armorClass": 5,
@@ -2570,6 +2784,7 @@
   {
     "index": 214,
     "name": "pit viper",
+    "monsterType": "SNAKE",
     "level": 6,
     "movementSpeed": 15,
     "armorClass": 2,
@@ -2582,6 +2797,7 @@
   {
     "index": 215,
     "name": "cobra",
+    "monsterType": "SNAKE",
     "level": 6,
     "movementSpeed": 18,
     "armorClass": 2,
@@ -2594,6 +2810,7 @@
   {
     "index": 216,
     "name": "troll",
+    "monsterType": "TROLL",
     "level": 7,
     "movementSpeed": 12,
     "armorClass": 4,
@@ -2606,6 +2823,7 @@
   {
     "index": 217,
     "name": "ice troll",
+    "monsterType": "TROLL",
     "level": 9,
     "movementSpeed": 10,
     "armorClass": 2,
@@ -2618,6 +2836,7 @@
   {
     "index": 218,
     "name": "rock troll",
+    "monsterType": "TROLL",
     "level": 9,
     "movementSpeed": 12,
     "armorClass": 0,
@@ -2630,6 +2849,7 @@
   {
     "index": 219,
     "name": "water troll",
+    "monsterType": "TROLL",
     "level": 11,
     "movementSpeed": 14,
     "armorClass": 4,
@@ -2642,6 +2862,7 @@
   {
     "index": 220,
     "name": "Olog-hai",
+    "monsterType": "TROLL",
     "level": 13,
     "movementSpeed": 12,
     "armorClass": -4,
@@ -2654,6 +2875,7 @@
   {
     "index": 221,
     "name": "umber hulk",
+    "monsterType": "UMBER",
     "level": 9,
     "movementSpeed": 6,
     "armorClass": 2,
@@ -2666,6 +2888,7 @@
   {
     "index": 222,
     "name": "vampire",
+    "monsterType": "VAMPIRE",
     "level": 10,
     "movementSpeed": 12,
     "armorClass": 1,
@@ -2678,6 +2901,7 @@
   {
     "index": 223,
     "name": "vampire lord",
+    "monsterType": "VAMPIRE",
     "level": 12,
     "movementSpeed": 14,
     "armorClass": 0,
@@ -2690,6 +2914,7 @@
   {
     "index": 224,
     "name": "Vlad the Impaler",
+    "monsterType": "VAMPIRE",
     "level": 28,
     "movementSpeed": 26,
     "armorClass": -6,
@@ -2702,6 +2927,7 @@
   {
     "index": 225,
     "name": "barrow wight",
+    "monsterType": "WRAITH",
     "level": 3,
     "movementSpeed": 12,
     "armorClass": 5,
@@ -2714,6 +2940,7 @@
   {
     "index": 226,
     "name": "wraith",
+    "monsterType": "WRAITH",
     "level": 6,
     "movementSpeed": 12,
     "armorClass": 4,
@@ -2726,6 +2953,7 @@
   {
     "index": 227,
     "name": "Nazgul",
+    "monsterType": "WRAITH",
     "level": 13,
     "movementSpeed": 12,
     "armorClass": 0,
@@ -2738,6 +2966,7 @@
   {
     "index": 228,
     "name": "xorn",
+    "monsterType": "XORN",
     "level": 8,
     "movementSpeed": 9,
     "armorClass": -2,
@@ -2750,6 +2979,7 @@
   {
     "index": 229,
     "name": "monkey",
+    "monsterType": "YETI",
     "level": 2,
     "movementSpeed": 12,
     "armorClass": 6,
@@ -2762,6 +2992,7 @@
   {
     "index": 230,
     "name": "ape",
+    "monsterType": "YETI",
     "level": 4,
     "movementSpeed": 12,
     "armorClass": 6,
@@ -2774,6 +3005,7 @@
   {
     "index": 231,
     "name": "owlbear",
+    "monsterType": "YETI",
     "level": 5,
     "movementSpeed": 12,
     "armorClass": 5,
@@ -2786,6 +3018,7 @@
   {
     "index": 232,
     "name": "yeti",
+    "monsterType": "YETI",
     "level": 5,
     "movementSpeed": 15,
     "armorClass": 6,
@@ -2798,6 +3031,7 @@
   {
     "index": 233,
     "name": "carnivorous ape",
+    "monsterType": "YETI",
     "level": 6,
     "movementSpeed": 12,
     "armorClass": 6,
@@ -2810,6 +3044,7 @@
   {
     "index": 234,
     "name": "sasquatch",
+    "monsterType": "YETI",
     "level": 7,
     "movementSpeed": 15,
     "armorClass": 6,
@@ -2822,6 +3057,7 @@
   {
     "index": 235,
     "name": "kobold zombie",
+    "monsterType": "ZOMBIE",
     "level": 0,
     "movementSpeed": 6,
     "armorClass": 10,
@@ -2834,6 +3070,7 @@
   {
     "index": 236,
     "name": "gnome zombie",
+    "monsterType": "ZOMBIE",
     "level": 1,
     "movementSpeed": 6,
     "armorClass": 10,
@@ -2846,6 +3083,7 @@
   {
     "index": 237,
     "name": "orc zombie",
+    "monsterType": "ZOMBIE",
     "level": 2,
     "movementSpeed": 6,
     "armorClass": 9,
@@ -2858,6 +3096,7 @@
   {
     "index": 238,
     "name": "dwarf zombie",
+    "monsterType": "ZOMBIE",
     "level": 2,
     "movementSpeed": 6,
     "armorClass": 9,
@@ -2870,6 +3109,7 @@
   {
     "index": 239,
     "name": "elf zombie",
+    "monsterType": "ZOMBIE",
     "level": 3,
     "movementSpeed": 6,
     "armorClass": 9,
@@ -2882,6 +3122,7 @@
   {
     "index": 240,
     "name": "human zombie",
+    "monsterType": "ZOMBIE",
     "level": 4,
     "movementSpeed": 6,
     "armorClass": 8,
@@ -2894,6 +3135,7 @@
   {
     "index": 241,
     "name": "ettin zombie",
+    "monsterType": "ZOMBIE",
     "level": 6,
     "movementSpeed": 8,
     "armorClass": 6,
@@ -2906,6 +3148,7 @@
   {
     "index": 242,
     "name": "ghoul",
+    "monsterType": "ZOMBIE",
     "level": 3,
     "movementSpeed": 6,
     "armorClass": 10,
@@ -2918,6 +3161,7 @@
   {
     "index": 243,
     "name": "giant zombie",
+    "monsterType": "ZOMBIE",
     "level": 8,
     "movementSpeed": 8,
     "armorClass": 6,
@@ -2930,6 +3174,7 @@
   {
     "index": 244,
     "name": "skeleton",
+    "monsterType": "ZOMBIE",
     "level": 12,
     "movementSpeed": 8,
     "armorClass": 4,
@@ -2942,6 +3187,7 @@
   {
     "index": 245,
     "name": "straw golem",
+    "monsterType": "GOLEM",
     "level": 3,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -2954,6 +3200,7 @@
   {
     "index": 246,
     "name": "paper golem",
+    "monsterType": "GOLEM",
     "level": 3,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -2966,6 +3213,7 @@
   {
     "index": 247,
     "name": "rope golem",
+    "monsterType": "GOLEM",
     "level": 4,
     "movementSpeed": 9,
     "armorClass": 8,
@@ -2978,6 +3226,7 @@
   {
     "index": 248,
     "name": "gold golem",
+    "monsterType": "GOLEM",
     "level": 5,
     "movementSpeed": 9,
     "armorClass": 6,
@@ -2990,6 +3239,7 @@
   {
     "index": 249,
     "name": "leather golem",
+    "monsterType": "GOLEM",
     "level": 6,
     "movementSpeed": 6,
     "armorClass": 6,
@@ -3002,6 +3252,7 @@
   {
     "index": 250,
     "name": "wood golem",
+    "monsterType": "GOLEM",
     "level": 7,
     "movementSpeed": 3,
     "armorClass": 4,
@@ -3014,6 +3265,7 @@
   {
     "index": 251,
     "name": "flesh golem",
+    "monsterType": "GOLEM",
     "level": 9,
     "movementSpeed": 8,
     "armorClass": 9,
@@ -3026,6 +3278,7 @@
   {
     "index": 252,
     "name": "clay golem",
+    "monsterType": "GOLEM",
     "level": 11,
     "movementSpeed": 7,
     "armorClass": 7,
@@ -3038,6 +3291,7 @@
   {
     "index": 253,
     "name": "stone golem",
+    "monsterType": "GOLEM",
     "level": 14,
     "movementSpeed": 6,
     "armorClass": 5,
@@ -3050,6 +3304,7 @@
   {
     "index": 254,
     "name": "glass golem",
+    "monsterType": "GOLEM",
     "level": 16,
     "movementSpeed": 6,
     "armorClass": 1,
@@ -3062,6 +3317,7 @@
   {
     "index": 255,
     "name": "iron golem",
+    "monsterType": "GOLEM",
     "level": 18,
     "movementSpeed": 6,
     "armorClass": 3,
@@ -3074,6 +3330,7 @@
   {
     "index": 256,
     "name": "human",
+    "monsterType": "HUMAN",
     "level": 0,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -3086,6 +3343,7 @@
   {
     "index": 257,
     "name": "wererat",
+    "monsterType": "HUMAN",
     "level": 2,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -3098,6 +3356,7 @@
   {
     "index": 258,
     "name": "werejackal",
+    "monsterType": "HUMAN",
     "level": 2,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -3110,6 +3369,7 @@
   {
     "index": 259,
     "name": "werewolf",
+    "monsterType": "HUMAN",
     "level": 5,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -3122,6 +3382,7 @@
   {
     "index": 260,
     "name": "elf",
+    "monsterType": "HUMAN",
     "level": 10,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -3134,6 +3395,7 @@
   {
     "index": 261,
     "name": "Woodland-elf",
+    "monsterType": "HUMAN",
     "level": 4,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -3146,6 +3408,7 @@
   {
     "index": 262,
     "name": "Green-elf",
+    "monsterType": "HUMAN",
     "level": 5,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -3158,6 +3421,7 @@
   {
     "index": 263,
     "name": "Grey-elf",
+    "monsterType": "HUMAN",
     "level": 6,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -3170,6 +3434,7 @@
   {
     "index": 264,
     "name": "elf-lord",
+    "monsterType": "HUMAN",
     "level": 8,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -3182,6 +3447,7 @@
   {
     "index": 265,
     "name": "Elvenking",
+    "monsterType": "HUMAN",
     "level": 9,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -3194,6 +3460,7 @@
   {
     "index": 266,
     "name": "doppelganger",
+    "monsterType": "HUMAN",
     "level": 9,
     "movementSpeed": 12,
     "armorClass": 5,
@@ -3206,6 +3473,7 @@
   {
     "index": 267,
     "name": "shopkeeper",
+    "monsterType": "HUMAN",
     "level": 12,
     "movementSpeed": 18,
     "armorClass": 0,
@@ -3218,6 +3486,7 @@
   {
     "index": 268,
     "name": "guard",
+    "monsterType": "HUMAN",
     "level": 12,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -3230,6 +3499,7 @@
   {
     "index": 269,
     "name": "prisoner",
+    "monsterType": "HUMAN",
     "level": 12,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -3242,6 +3512,7 @@
   {
     "index": 270,
     "name": "Oracle",
+    "monsterType": "HUMAN",
     "level": 12,
     "movementSpeed": 0,
     "armorClass": 0,
@@ -3254,6 +3525,7 @@
   {
     "index": 271,
     "name": "aligned priest",
+    "monsterType": "HUMAN",
     "level": 12,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -3266,6 +3538,7 @@
   {
     "index": 272,
     "name": "high priest",
+    "monsterType": "HUMAN",
     "level": 25,
     "movementSpeed": 15,
     "armorClass": 7,
@@ -3278,6 +3551,7 @@
   {
     "index": 273,
     "name": "soldier",
+    "monsterType": "HUMAN",
     "level": 6,
     "movementSpeed": 10,
     "armorClass": 10,
@@ -3290,6 +3564,7 @@
   {
     "index": 274,
     "name": "sergeant",
+    "monsterType": "HUMAN",
     "level": 8,
     "movementSpeed": 10,
     "armorClass": 10,
@@ -3302,6 +3577,7 @@
   {
     "index": 275,
     "name": "nurse",
+    "monsterType": "HUMAN",
     "level": 11,
     "movementSpeed": 6,
     "armorClass": 0,
@@ -3314,6 +3590,7 @@
   {
     "index": 276,
     "name": "lieutenant",
+    "monsterType": "HUMAN",
     "level": 10,
     "movementSpeed": 10,
     "armorClass": 10,
@@ -3326,6 +3603,7 @@
   {
     "index": 277,
     "name": "captain",
+    "monsterType": "HUMAN",
     "level": 12,
     "movementSpeed": 10,
     "armorClass": 10,
@@ -3338,6 +3616,7 @@
   {
     "index": 278,
     "name": "watchman",
+    "monsterType": "HUMAN",
     "level": 6,
     "movementSpeed": 10,
     "armorClass": 10,
@@ -3350,6 +3629,7 @@
   {
     "index": 279,
     "name": "watch captain",
+    "monsterType": "HUMAN",
     "level": 10,
     "movementSpeed": 10,
     "armorClass": 10,
@@ -3362,6 +3642,7 @@
   {
     "index": 280,
     "name": "Medusa",
+    "monsterType": "HUMAN",
     "level": 20,
     "movementSpeed": 12,
     "armorClass": 2,
@@ -3374,6 +3655,7 @@
   {
     "index": 281,
     "name": "Wizard of Yendor",
+    "monsterType": "HUMAN",
     "level": 30,
     "movementSpeed": 12,
     "armorClass": -8,
@@ -3386,6 +3668,7 @@
   {
     "index": 282,
     "name": "Croesus",
+    "monsterType": "HUMAN",
     "level": 20,
     "movementSpeed": 15,
     "armorClass": 0,
@@ -3398,6 +3681,7 @@
   {
     "index": 283,
     "name": "ghost",
+    "monsterType": "GHOST",
     "level": 10,
     "movementSpeed": 3,
     "armorClass": -5,
@@ -3410,6 +3694,7 @@
   {
     "index": 284,
     "name": "shade",
+    "monsterType": "GHOST",
     "level": 12,
     "movementSpeed": 10,
     "armorClass": 10,
@@ -3422,6 +3707,7 @@
   {
     "index": 285,
     "name": "water demon",
+    "monsterType": "DEMON",
     "level": 8,
     "movementSpeed": 12,
     "armorClass": -4,
@@ -3434,6 +3720,7 @@
   {
     "index": 286,
     "name": "succubus",
+    "monsterType": "DEMON",
     "level": 6,
     "movementSpeed": 12,
     "armorClass": 0,
@@ -3446,6 +3733,7 @@
   {
     "index": 287,
     "name": "horned devil",
+    "monsterType": "DEMON",
     "level": 6,
     "movementSpeed": 9,
     "armorClass": -5,
@@ -3458,6 +3746,7 @@
   {
     "index": 288,
     "name": "incubus",
+    "monsterType": "DEMON",
     "level": 6,
     "movementSpeed": 12,
     "armorClass": 0,
@@ -3470,6 +3759,7 @@
   {
     "index": 289,
     "name": "erinys",
+    "monsterType": "DEMON",
     "level": 7,
     "movementSpeed": 12,
     "armorClass": 2,
@@ -3482,6 +3772,7 @@
   {
     "index": 290,
     "name": "barbed devil",
+    "monsterType": "DEMON",
     "level": 8,
     "movementSpeed": 12,
     "armorClass": 0,
@@ -3494,6 +3785,7 @@
   {
     "index": 291,
     "name": "marilith",
+    "monsterType": "DEMON",
     "level": 7,
     "movementSpeed": 12,
     "armorClass": -6,
@@ -3506,6 +3798,7 @@
   {
     "index": 292,
     "name": "vrock",
+    "monsterType": "DEMON",
     "level": 8,
     "movementSpeed": 12,
     "armorClass": 0,
@@ -3518,6 +3811,7 @@
   {
     "index": 293,
     "name": "hezrou",
+    "monsterType": "DEMON",
     "level": 9,
     "movementSpeed": 6,
     "armorClass": -2,
@@ -3530,6 +3824,7 @@
   {
     "index": 294,
     "name": "bone devil",
+    "monsterType": "DEMON",
     "level": 9,
     "movementSpeed": 15,
     "armorClass": -1,
@@ -3542,6 +3837,7 @@
   {
     "index": 295,
     "name": "ice devil",
+    "monsterType": "DEMON",
     "level": 11,
     "movementSpeed": 6,
     "armorClass": -4,
@@ -3554,6 +3850,7 @@
   {
     "index": 296,
     "name": "nalfeshnee",
+    "monsterType": "DEMON",
     "level": 11,
     "movementSpeed": 9,
     "armorClass": -1,
@@ -3566,6 +3863,7 @@
   {
     "index": 297,
     "name": "pit fiend",
+    "monsterType": "DEMON",
     "level": 13,
     "movementSpeed": 6,
     "armorClass": -3,
@@ -3578,6 +3876,7 @@
   {
     "index": 298,
     "name": "sandestin",
+    "monsterType": "DEMON",
     "level": 13,
     "movementSpeed": 12,
     "armorClass": 4,
@@ -3590,6 +3889,7 @@
   {
     "index": 299,
     "name": "balrog",
+    "monsterType": "DEMON",
     "level": 16,
     "movementSpeed": 5,
     "armorClass": -2,
@@ -3602,6 +3902,7 @@
   {
     "index": 300,
     "name": "Juiblex",
+    "monsterType": "DEMON",
     "level": 50,
     "movementSpeed": 3,
     "armorClass": -7,
@@ -3614,6 +3915,7 @@
   {
     "index": 301,
     "name": "Yeenoghu",
+    "monsterType": "DEMON",
     "level": 56,
     "movementSpeed": 18,
     "armorClass": -5,
@@ -3626,6 +3928,7 @@
   {
     "index": 302,
     "name": "Orcus",
+    "monsterType": "DEMON",
     "level": 66,
     "movementSpeed": 9,
     "armorClass": -6,
@@ -3638,6 +3941,7 @@
   {
     "index": 303,
     "name": "Geryon",
+    "monsterType": "DEMON",
     "level": 72,
     "movementSpeed": 3,
     "armorClass": -3,
@@ -3650,6 +3954,7 @@
   {
     "index": 304,
     "name": "Dispater",
+    "monsterType": "DEMON",
     "level": 78,
     "movementSpeed": 15,
     "armorClass": -2,
@@ -3662,6 +3967,7 @@
   {
     "index": 305,
     "name": "Baalzebub",
+    "monsterType": "DEMON",
     "level": 89,
     "movementSpeed": 9,
     "armorClass": -5,
@@ -3674,6 +3980,7 @@
   {
     "index": 306,
     "name": "Asmodeus",
+    "monsterType": "DEMON",
     "level": 105,
     "movementSpeed": 12,
     "armorClass": -7,
@@ -3686,6 +3993,7 @@
   {
     "index": 307,
     "name": "Demogorgon",
+    "monsterType": "DEMON",
     "level": 106,
     "movementSpeed": 15,
     "armorClass": -8,
@@ -3698,6 +4006,7 @@
   {
     "index": 308,
     "name": "Death",
+    "monsterType": "DEMON",
     "level": 30,
     "movementSpeed": 12,
     "armorClass": -5,
@@ -3710,6 +4019,7 @@
   {
     "index": 309,
     "name": "Pestilence",
+    "monsterType": "DEMON",
     "level": 30,
     "movementSpeed": 12,
     "armorClass": -5,
@@ -3722,6 +4032,7 @@
   {
     "index": 310,
     "name": "Famine",
+    "monsterType": "DEMON",
     "level": 30,
     "movementSpeed": 12,
     "armorClass": -5,
@@ -3734,6 +4045,7 @@
   {
     "index": 311,
     "name": "djinni",
+    "monsterType": "DEMON",
     "level": 7,
     "movementSpeed": 12,
     "armorClass": 4,
@@ -3746,6 +4058,7 @@
   {
     "index": 312,
     "name": "jellyfish",
+    "monsterType": "EEL",
     "level": 3,
     "movementSpeed": 3,
     "armorClass": 6,
@@ -3758,6 +4071,7 @@
   {
     "index": 313,
     "name": "piranha",
+    "monsterType": "EEL",
     "level": 5,
     "movementSpeed": 12,
     "armorClass": 4,
@@ -3770,6 +4084,7 @@
   {
     "index": 314,
     "name": "shark",
+    "monsterType": "EEL",
     "level": 7,
     "movementSpeed": 12,
     "armorClass": 2,
@@ -3782,6 +4097,7 @@
   {
     "index": 315,
     "name": "giant eel",
+    "monsterType": "EEL",
     "level": 5,
     "movementSpeed": 9,
     "armorClass": -1,
@@ -3794,6 +4110,7 @@
   {
     "index": 316,
     "name": "electric eel",
+    "monsterType": "EEL",
     "level": 7,
     "movementSpeed": 10,
     "armorClass": -3,
@@ -3806,6 +4123,7 @@
   {
     "index": 317,
     "name": "kraken",
+    "monsterType": "EEL",
     "level": 20,
     "movementSpeed": 3,
     "armorClass": 6,
@@ -3818,6 +4136,7 @@
   {
     "index": 318,
     "name": "newt",
+    "monsterType": "LIZARD",
     "level": 0,
     "movementSpeed": 6,
     "armorClass": 8,
@@ -3830,6 +4149,7 @@
   {
     "index": 319,
     "name": "gecko",
+    "monsterType": "LIZARD",
     "level": 1,
     "movementSpeed": 6,
     "armorClass": 8,
@@ -3842,6 +4162,7 @@
   {
     "index": 320,
     "name": "iguana",
+    "monsterType": "LIZARD",
     "level": 2,
     "movementSpeed": 6,
     "armorClass": 7,
@@ -3854,6 +4175,7 @@
   {
     "index": 321,
     "name": "baby crocodile",
+    "monsterType": "LIZARD",
     "level": 3,
     "movementSpeed": 6,
     "armorClass": 7,
@@ -3866,6 +4188,7 @@
   {
     "index": 322,
     "name": "lizard",
+    "monsterType": "LIZARD",
     "level": 5,
     "movementSpeed": 6,
     "armorClass": 6,
@@ -3878,6 +4201,7 @@
   {
     "index": 323,
     "name": "chameleon",
+    "monsterType": "LIZARD",
     "level": 6,
     "movementSpeed": 5,
     "armorClass": 6,
@@ -3890,6 +4214,7 @@
   {
     "index": 324,
     "name": "crocodile",
+    "monsterType": "LIZARD",
     "level": 6,
     "movementSpeed": 9,
     "armorClass": 5,
@@ -3902,6 +4227,7 @@
   {
     "index": 325,
     "name": "salamander",
+    "monsterType": "LIZARD",
     "level": 8,
     "movementSpeed": 12,
     "armorClass": -1,
@@ -3914,6 +4240,7 @@
   {
     "index": 326,
     "name": "long worm tail",
+    "monsterType": "WORM_TAIL",
     "level": 0,
     "movementSpeed": 0,
     "armorClass": 0,
@@ -3926,6 +4253,7 @@
   {
     "index": 327,
     "name": "archeologist",
+    "monsterType": "HUMAN",
     "level": 10,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -3938,6 +4266,7 @@
   {
     "index": 328,
     "name": "barbarian",
+    "monsterType": "HUMAN",
     "level": 10,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -3950,6 +4279,7 @@
   {
     "index": 329,
     "name": "caveman",
+    "monsterType": "HUMAN",
     "level": 10,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -3962,6 +4292,7 @@
   {
     "index": 330,
     "name": "cavewoman",
+    "monsterType": "HUMAN",
     "level": 10,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -3974,6 +4305,7 @@
   {
     "index": 331,
     "name": "healer",
+    "monsterType": "HUMAN",
     "level": 10,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -3986,6 +4318,7 @@
   {
     "index": 332,
     "name": "knight",
+    "monsterType": "HUMAN",
     "level": 10,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -3998,6 +4331,7 @@
   {
     "index": 333,
     "name": "monk",
+    "monsterType": "HUMAN",
     "level": 10,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -4010,6 +4344,7 @@
   {
     "index": 334,
     "name": "priest",
+    "monsterType": "HUMAN",
     "level": 10,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -4022,6 +4357,7 @@
   {
     "index": 335,
     "name": "priestess",
+    "monsterType": "HUMAN",
     "level": 10,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -4034,6 +4370,7 @@
   {
     "index": 336,
     "name": "ranger",
+    "monsterType": "HUMAN",
     "level": 10,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -4046,6 +4383,7 @@
   {
     "index": 337,
     "name": "rogue",
+    "monsterType": "HUMAN",
     "level": 10,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -4058,6 +4396,7 @@
   {
     "index": 338,
     "name": "samurai",
+    "monsterType": "HUMAN",
     "level": 10,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -4070,6 +4409,7 @@
   {
     "index": 339,
     "name": "tourist",
+    "monsterType": "HUMAN",
     "level": 10,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -4082,6 +4422,7 @@
   {
     "index": 340,
     "name": "valkyrie",
+    "monsterType": "HUMAN",
     "level": 10,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -4094,6 +4435,7 @@
   {
     "index": 341,
     "name": "wizard",
+    "monsterType": "HUMAN",
     "level": 10,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -4106,6 +4448,7 @@
   {
     "index": 342,
     "name": "Lord Carnarvon",
+    "monsterType": "HUMAN",
     "level": 20,
     "movementSpeed": 12,
     "armorClass": 0,
@@ -4118,6 +4461,7 @@
   {
     "index": 343,
     "name": "Pelias",
+    "monsterType": "HUMAN",
     "level": 20,
     "movementSpeed": 12,
     "armorClass": 0,
@@ -4130,6 +4474,7 @@
   {
     "index": 344,
     "name": "Shaman Karnov",
+    "monsterType": "HUMAN",
     "level": 20,
     "movementSpeed": 12,
     "armorClass": 0,
@@ -4142,6 +4487,7 @@
   {
     "index": 345,
     "name": "Hippocrates",
+    "monsterType": "HUMAN",
     "level": 20,
     "movementSpeed": 12,
     "armorClass": 0,
@@ -4154,6 +4500,7 @@
   {
     "index": 346,
     "name": "King Arthur",
+    "monsterType": "HUMAN",
     "level": 20,
     "movementSpeed": 12,
     "armorClass": 0,
@@ -4166,6 +4513,7 @@
   {
     "index": 347,
     "name": "Grand Master",
+    "monsterType": "HUMAN",
     "level": 25,
     "movementSpeed": 12,
     "armorClass": 0,
@@ -4178,6 +4526,7 @@
   {
     "index": 348,
     "name": "Arch Priest",
+    "monsterType": "HUMAN",
     "level": 25,
     "movementSpeed": 12,
     "armorClass": 7,
@@ -4190,6 +4539,7 @@
   {
     "index": 349,
     "name": "Orion",
+    "monsterType": "HUMAN",
     "level": 20,
     "movementSpeed": 12,
     "armorClass": 0,
@@ -4202,6 +4552,7 @@
   {
     "index": 350,
     "name": "Master of Thieves",
+    "monsterType": "HUMAN",
     "level": 20,
     "movementSpeed": 12,
     "armorClass": 0,
@@ -4214,6 +4565,7 @@
   {
     "index": 351,
     "name": "Lord Sato",
+    "monsterType": "HUMAN",
     "level": 20,
     "movementSpeed": 12,
     "armorClass": 0,
@@ -4226,6 +4578,7 @@
   {
     "index": 352,
     "name": "Twoflower",
+    "monsterType": "HUMAN",
     "level": 20,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -4238,6 +4591,7 @@
   {
     "index": 353,
     "name": "Norn",
+    "monsterType": "HUMAN",
     "level": 20,
     "movementSpeed": 12,
     "armorClass": 0,
@@ -4250,6 +4604,7 @@
   {
     "index": 354,
     "name": "Neferet the Green",
+    "monsterType": "HUMAN",
     "level": 20,
     "movementSpeed": 12,
     "armorClass": 0,
@@ -4262,6 +4617,7 @@
   {
     "index": 355,
     "name": "Minion of Huhetotl",
+    "monsterType": "DEMON",
     "level": 16,
     "movementSpeed": 12,
     "armorClass": -2,
@@ -4274,6 +4630,7 @@
   {
     "index": 356,
     "name": "Thoth Amon",
+    "monsterType": "HUMAN",
     "level": 16,
     "movementSpeed": 12,
     "armorClass": 0,
@@ -4286,6 +4643,7 @@
   {
     "index": 357,
     "name": "Chromatic Dragon",
+    "monsterType": "DRAGON",
     "level": 16,
     "movementSpeed": 12,
     "armorClass": 0,
@@ -4298,6 +4656,7 @@
   {
     "index": 358,
     "name": "Cyclops",
+    "monsterType": "GIANT",
     "level": 18,
     "movementSpeed": 12,
     "armorClass": 0,
@@ -4310,6 +4669,7 @@
   {
     "index": 359,
     "name": "Ixoth",
+    "monsterType": "DRAGON",
     "level": 15,
     "movementSpeed": 12,
     "armorClass": -1,
@@ -4322,6 +4682,7 @@
   {
     "index": 360,
     "name": "Master Kaen",
+    "monsterType": "HUMAN",
     "level": 25,
     "movementSpeed": 12,
     "armorClass": -10,
@@ -4334,6 +4695,7 @@
   {
     "index": 361,
     "name": "Nalzok",
+    "monsterType": "DEMON",
     "level": 16,
     "movementSpeed": 12,
     "armorClass": -2,
@@ -4346,6 +4708,7 @@
   {
     "index": 362,
     "name": "Scorpius",
+    "monsterType": "SPIDER",
     "level": 15,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -4358,6 +4721,7 @@
   {
     "index": 363,
     "name": "Master Assassin",
+    "monsterType": "HUMAN",
     "level": 15,
     "movementSpeed": 12,
     "armorClass": 0,
@@ -4370,6 +4734,7 @@
   {
     "index": 364,
     "name": "Ashikaga Takauji",
+    "monsterType": "HUMAN",
     "level": 15,
     "movementSpeed": 12,
     "armorClass": 0,
@@ -4382,6 +4747,7 @@
   {
     "index": 365,
     "name": "Lord Surtur",
+    "monsterType": "GIANT",
     "level": 15,
     "movementSpeed": 12,
     "armorClass": 2,
@@ -4394,6 +4760,7 @@
   {
     "index": 366,
     "name": "Dark One",
+    "monsterType": "HUMAN",
     "level": 15,
     "movementSpeed": 12,
     "armorClass": 0,
@@ -4406,6 +4773,7 @@
   {
     "index": 367,
     "name": "student",
+    "monsterType": "HUMAN",
     "level": 5,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -4418,6 +4786,7 @@
   {
     "index": 368,
     "name": "chieftain",
+    "monsterType": "HUMAN",
     "level": 5,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -4430,6 +4799,7 @@
   {
     "index": 369,
     "name": "neanderthal",
+    "monsterType": "HUMAN",
     "level": 5,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -4442,6 +4812,7 @@
   {
     "index": 370,
     "name": "attendant",
+    "monsterType": "HUMAN",
     "level": 5,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -4454,6 +4825,7 @@
   {
     "index": 371,
     "name": "page",
+    "monsterType": "HUMAN",
     "level": 5,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -4466,6 +4838,7 @@
   {
     "index": 372,
     "name": "abbot",
+    "monsterType": "HUMAN",
     "level": 5,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -4478,6 +4851,7 @@
   {
     "index": 373,
     "name": "acolyte",
+    "monsterType": "HUMAN",
     "level": 5,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -4490,6 +4864,7 @@
   {
     "index": 374,
     "name": "hunter",
+    "monsterType": "HUMAN",
     "level": 5,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -4502,6 +4877,7 @@
   {
     "index": 375,
     "name": "thug",
+    "monsterType": "HUMAN",
     "level": 5,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -4514,6 +4890,7 @@
   {
     "index": 376,
     "name": "ninja",
+    "monsterType": "HUMAN",
     "level": 5,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -4526,6 +4903,7 @@
   {
     "index": 377,
     "name": "roshi",
+    "monsterType": "HUMAN",
     "level": 5,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -4538,6 +4916,7 @@
   {
     "index": 378,
     "name": "guide",
+    "monsterType": "HUMAN",
     "level": 5,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -4550,6 +4929,7 @@
   {
     "index": 379,
     "name": "warrior",
+    "monsterType": "HUMAN",
     "level": 5,
     "movementSpeed": 12,
     "armorClass": 10,
@@ -4562,6 +4942,7 @@
   {
     "index": 380,
     "name": "apprentice",
+    "monsterType": "HUMAN",
     "level": 5,
     "movementSpeed": 12,
     "armorClass": 10,
