@@ -2,16 +2,13 @@ package connection.messagedecoder;
 
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import nethack.enums.BUC;
-import nethack.enums.EntityClass;
-import nethack.object.items.FoodItem;
+import nethack.object.info.EntityInfo;
 import nethack.object.items.Item;
-import nethack.object.items.WeaponItem;
 import util.Database;
 
 public class ItemDecoder extends Decoder {
@@ -33,14 +30,12 @@ public class ItemDecoder extends Decoder {
 
   private static Item toItem(DataInputStream input) {
     try {
-      char symbol = input.readChar();
-      int itemClass = input.readByte();
+      char symbol = parseChar(input.readByte()); // input.readChar();
       int itemGlyph = input.readShort();
-      byte[] chars = input.readNBytes(80);
 
       // Interpret values
-      EntityClass type = EntityClass.values()[itemClass];
-      String description = new String(chars, StandardCharsets.UTF_8).replaceAll("\0", "");
+      String description = readString(input, 80);
+      description = description.replaceAll("\0", "");
 
       Map<String, Object> info = descriptionInterpreter(description);
       int quantity = (int) info.get("quantity");
@@ -48,23 +43,24 @@ public class ItemDecoder extends Decoder {
       int modifier = (int) info.get("modifier");
       String name = (String) info.get("name");
       String additional = (String) info.get("additional");
+      EntityInfo entityInfo = Database.getEntityInfoFromGlyph(itemGlyph);
 
-      if (type == EntityClass.FOOD) {
-        return new FoodItem(
-            symbol, type, itemGlyph, description, quantity, buc, Database.getFood(name));
-      } else if (type == EntityClass.WEAPON) {
-        return new WeaponItem(
-            symbol,
-            type,
-            itemGlyph,
-            description,
-            quantity,
-            buc,
-            Database.getWeapon(name),
-            modifier);
-      }
+      //      if (type == EntityClass.FOOD) {
+      //        return new FoodItem(
+      //            symbol, type, itemGlyph, description, quantity, buc, Database.getFood(name));
+      //      } else if (type == EntityClass.WEAPON) {
+      //        return new WeaponItem(
+      //            symbol,
+      //            type,
+      //            itemGlyph,
+      //            description,
+      //            quantity,
+      //            buc,
+      //            Database.getWeapon(name),
+      //            modifier);
+      //      }
 
-      return new Item(symbol, type, itemGlyph, description, quantity);
+      return new Item(symbol, entityInfo, itemGlyph, description, quantity);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }

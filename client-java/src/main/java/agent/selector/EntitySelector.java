@@ -76,7 +76,7 @@ public class EntitySelector extends Selector<Entity> {
 
     Stream<Entity> stream = entities.stream();
     if (entityClass != null) {
-      stream = stream.filter(we -> we.entityClass == entityClass);
+      stream = stream.filter(we -> we.entityInfo.entityClass == entityClass);
     }
     if (predicate != null) {
       stream = stream.filter(we -> predicate.test(we, S));

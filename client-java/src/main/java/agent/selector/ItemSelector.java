@@ -81,7 +81,8 @@ public class ItemSelector extends Selector<Item> {
 
     Stream<Item> stream = items.stream();
     if (entityClass != null) {
-      stream = stream.filter(i -> i != null && Objects.equals(i.type, entityClass));
+      stream =
+          stream.filter(i -> i != null && Objects.equals(i.entityInfo.entityClass, entityClass));
     }
     if (predicate != null) {
       stream = stream.filter(i -> i != null && predicate.test(i, S));

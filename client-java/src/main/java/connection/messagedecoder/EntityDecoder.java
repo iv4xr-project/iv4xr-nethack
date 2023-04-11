@@ -17,7 +17,7 @@ public class EntityDecoder extends Decoder {
     int nrEntities = input.readByte();
     List<Entity> entities = new ArrayList<>(nrEntities);
 
-    int bytesPerEntity = 13;
+    int bytesPerEntity = 12;
     byte[] entityData = input.readNBytes(bytesPerEntity * nrEntities);
     for (int i = 0, offset = 0; i < nrEntities; i++, offset += bytesPerEntity) {
       byte x = entityData[offset];
@@ -28,13 +28,11 @@ public class EntityDecoder extends Decoder {
               entityData[offset + 3],
               entityData[offset + 4],
               entityData[offset + 5]);
-      EntityClass entityClass = toEntityClass(entityData[offset + 6]);
-      short entityIndex = parseShort(entityData[offset + 7], entityData[offset + 8]);
+      short entityIndex = parseShort(entityData[offset + 6], entityData[offset + 7]);
       EntityInfo entityInfo = Database.getEntityInfo(entityIndex);
-      Turn createdTurn = new Turn(parseShort(entityData[offset + 9], entityData[offset + 10]), 0);
-      int quantity = parseShort(entityData[offset + 11], entityData[offset + 12]);
-      Entity entity =
-          new Entity(new CustomVec2D(x, y), id, entityClass, entityInfo, createdTurn, quantity);
+      Turn createdTurn = new Turn(parseShort(entityData[offset + 8], entityData[offset + 9]), 0);
+      int quantity = parseShort(entityData[offset + 10], entityData[offset + 11]);
+      Entity entity = new Entity(new CustomVec2D(x, y), id, entityInfo, createdTurn, quantity);
       if (entity.entityInfo == null) {
         Loggers.DecoderLogger.warn("index:%s no info (%s)", entityIndex, entity);
       }

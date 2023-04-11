@@ -21,6 +21,7 @@ public class Database {
   private static final PorterStemmer porterStemmer = new PorterStemmer();
   static Map<String, FoodInfo> foodMap = new HashMap<>();
   static Map<String, WeaponInfo> weaponMap = new HashMap<>();
+  static Map<Integer, Integer> glyphToObjectMap = new HashMap<>();
   static List<MonsterInfo> monsterList = new ArrayList<>();
   static List<EntityInfo> entityList = new ArrayList<>();
 
@@ -36,6 +37,12 @@ public class Database {
       WeaponInfo[] weaponInfos = mapper.readValue(weaponJson, WeaponInfo[].class);
       for (WeaponInfo weaponInfo : weaponInfos) {
         weaponMap.put(stemName(weaponInfo.name), weaponInfo);
+      }
+
+      String glyphToObjectJson = readJsonFromFile("../../../../../../server-python/data/mapping");
+      Integer[] glyphToObjects = mapper.readValue(glyphToObjectJson, Integer[].class);
+      for (int i = 0; i < glyphToObjects.length; i++) {
+        glyphToObjectMap.put(i, glyphToObjects[i]);
       }
 
       String monsterJson = readJsonFromFile("../../../../../../server-python/data/monster");
@@ -63,6 +70,12 @@ public class Database {
     }
 
     return entityList.get(index);
+  }
+
+  public static EntityInfo getEntityInfoFromGlyph(int glyph) {
+    int objectIndex = glyphToObjectMap.get(glyph);
+    assert objectIndex != 5976 : "Object index invalid";
+    return getEntityInfo(objectIndex);
   }
 
   public static FoodInfo getFood(String name) {

@@ -2,8 +2,6 @@ package connection.messagedecoder;
 
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.util.Arrays;
 import nethack.enums.Alignment;
 import nethack.enums.Encumbrance;
 import nethack.enums.HungerState;
@@ -22,10 +20,13 @@ public class StatsDecoder extends Decoder {
       throw new RuntimeException(e);
     }
     int[] blStats = new int[27];
-    for (int i = 0; i < blStats.length; i++) {
-      byte[] arr = Arrays.copyOfRange(byteInformation, i * 4, i * 4 + 4);
-      ByteBuffer bb = ByteBuffer.wrap(arr);
-      blStats[i] = bb.getInt();
+    for (int i = 0, offset = 0; i < blStats.length; i++, offset += 4) {
+      blStats[i] =
+          parseInt(
+              byteInformation[offset],
+              byteInformation[offset + 1],
+              byteInformation[offset + 2],
+              byteInformation[offset + 3]);
     }
 
     return inPair(blStats);

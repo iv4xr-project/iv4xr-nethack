@@ -1,7 +1,6 @@
 package connection.messagedecoder;
 
 import java.io.DataInputStream;
-import java.io.EOFException;
 import java.io.IOException;
 
 public abstract class Decoder {
@@ -18,23 +17,26 @@ public abstract class Decoder {
 
   public static String readString(DataInputStream input) {
     try {
-      int length = input.readShort();
+      int length = input.readByte();
 
       // String with no length
       if (length == 0) {
         return "";
       }
 
+      return readString(input, length);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  public static String readString(DataInputStream input, int length) {
+    try {
       char[] chars = new char[length];
-      byte[] bytes = input.readNBytes(length * 2);
+      byte[] bytes = input.readNBytes(length);
 
       for (int i = 0; i < length; i++) {
-        int offset = i * 2;
-
-        int ch1 = bytes[offset];
-        int ch2 = bytes[offset + 1];
-        if ((ch1 | ch2) < 0) throw new EOFException();
-        chars[i] = (char) ((ch1 << 8) + ch2);
+        chars[i] = parseChar(bytes[i]);
       }
 
       return String.valueOf(chars);

@@ -72,7 +72,7 @@ public class AgentEnv extends Iv4xrEnvironment {
   }
 
   WorldEntity toWorldEntity(Entity e, CustomVec3D loc) {
-    WorldEntity we = new WorldEntity(e.toId(), e.entityClass.name(), true);
+    WorldEntity we = new WorldEntity(e.toId(), e.entityInfo.entityClass.name(), true);
     we.position = loc.toVec3();
     return we;
   }

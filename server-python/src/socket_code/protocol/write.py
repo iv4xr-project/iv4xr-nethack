@@ -50,8 +50,8 @@ def string_to_bytes(ints: np.array, trim=False):
     if trim:
         ints = np.trim_zeros(ints)
 
-    length_byte = to_2byte(ints.shape[0])
-    return length_byte + to_2byte(ints)
+    length_byte = util.to_byte(ints.shape[0])
+    return length_byte + util.to_byte(ints)
 
 
 def write_null_byte(sock):
@@ -60,9 +60,9 @@ def write_null_byte(sock):
 
 
 def write_str(sock, string: str):
-    sock.write(to_2byte(np.array([len(string)])))
+    sock.write(util.to_byte(np.array([len(string)])))
     chars = np.array(list(map(lambda c: ord(c), string)))
-    sock.write(to_2byte(chars))
+    sock.write(util.to_byte(chars))
 
 
 def write_obs(sock, env, obs):
@@ -74,14 +74,15 @@ def write_obs(sock, env, obs):
 
     sock.write(OBS_BYTE)
     sock.write(struct.pack('>27i', *obs['blstats']))
+    print(len(msg), ':', msg)
     write_str(sock, msg)
 
     # GERARD
     write_tiles(sock, obs['til_type'], obs['til_flags'], obs['til_visible'])
     write_map(sock, obs['chars'], obs['colors'], obs['glyphs'])
     write_monsters(sock, obs['mon_id'], obs['mon_permid'], obs['mon_peaceful'])
-    write_entities(sock, obs['obj_id'], obs['obj_class'], obs['obj_type'], obs['obj_age'], obs['obj_quan'])
-    write_inv(sock, obs['inv_letters'], obs['inv_oclasses'], obs['inv_glyphs'], obs['inv_strs'])
+    write_entities(sock, obs['obj_id'], obs['obj_type'], obs['obj_age'], obs['obj_quan'])
+    write_inv(sock, obs['inv_letters'], obs['inv_glyphs'], obs['inv_strs'])
 
 
 def write_step(sock, done, info):
@@ -101,7 +102,7 @@ def write_seed(sock, seed):
     sock.flush()
 
 
-def write_inv(sock, inv_letters, inv_oclasses, inv_glyphs, inv_strs):
+def write_inv(sock, inv_letters, inv_glyphs, inv_strs):
     """
     Inventory is first a byte with number of items, then byte for
     """
@@ -109,7 +110,7 @@ def write_inv(sock, inv_letters, inv_oclasses, inv_glyphs, inv_strs):
     sock.write(util.to_byte(nr_items))
 
     for i in range(nr_items):
-        sock.write(struct.pack(">HBH80B", inv_letters[i], inv_oclasses[i], inv_glyphs[i], *inv_strs[i]))
+        sock.write(struct.pack(">BH80B", inv_letters[i], inv_glyphs[i], *inv_strs[i]))
 
     sock.flush()
 
@@ -164,7 +165,7 @@ def write_monsters(sock, ids, perm_ids, peaceful):
     sock.flush()
 
 
-def write_entities(sock, ids, classes, types, ages, quantities):
+def write_entities(sock, ids, types, ages, quantities):
     nr_entities = np.sum(np.sign(ids))
     sock.write(struct.pack(">B", nr_entities))
     sock.flush()
@@ -174,6 +175,6 @@ def write_entities(sock, ids, classes, types, ages, quantities):
             if ids[y][x] == 0:
                 continue
 
-            sock.write(struct.pack(">BBiBHHH", x, y, ids[y][x], classes[y][x], types[y][x], ages[y][x], quantities[y][x]))
+            sock.write(struct.pack(">BBiHHH", x, y, ids[y][x], types[y][x], ages[y][x], quantities[y][x]))
 
     sock.flush()
