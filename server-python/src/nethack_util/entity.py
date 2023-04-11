@@ -213,7 +213,10 @@ def write_object_info():
 if __name__ == "__main__":
     write_object_info()
 
-    glyph_arr = np.arange(nethack.MAX_GLYPH)
-    obj_ind_arr = np.zeros(nethack.MAX_GLYPH)
+    glyph_arr = range(nethack.MAX_GLYPH)
+    obj_ind_arr = [0] * nethack.MAX_GLYPH
     for i in glyph_arr:
         obj_ind_arr[i] = nethack.glyph_to_obj(i)
+
+    with open('../../data/mapping.json', 'w') as f:
+        json.dump(obj_ind_arr, f, indent=2)
