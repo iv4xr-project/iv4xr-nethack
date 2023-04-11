@@ -77,6 +77,10 @@ public class App {
       bar.updateTurn(gameState.stats.turn, desiredTurn);
     }
     stopwatch.printTotal("Running automatic loop");
+    System.out.printf(
+        "Steps per second: %f (%fs)%n",
+        gameState.stats.turn.time / stopwatch.total(),
+        stopwatch.total() / gameState.stats.turn.time);
     Sounds.setSound(Config.getSoundState());
     state.updateState(Player.ID);
     state.render();

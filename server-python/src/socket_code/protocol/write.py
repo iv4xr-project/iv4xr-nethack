@@ -74,7 +74,6 @@ def write_obs(sock, env, obs):
 
     sock.write(OBS_BYTE)
     sock.write(struct.pack('>27i', *obs['blstats']))
-    print(len(msg), ':', msg)
     write_str(sock, msg)
 
     # GERARD

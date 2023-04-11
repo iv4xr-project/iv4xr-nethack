@@ -86,7 +86,7 @@ public class Level {
 
     List<Entity> boulders =
         entities.stream()
-            .filter(entity -> entity.entityInfo.entityClass == EntityClass.ROCK)
+            .filter(entity -> entity.entityInfo.name.equals("Boulder"))
             .collect(Collectors.toList());
     // If it is a subsequent observation, only give coordinates of fields that changed
     for (int x = 0; x < SIZE.width; x++) {
