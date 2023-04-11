@@ -30,26 +30,91 @@ def object_info():
 
         for property in filtered_properties:
             mapped_property = property
-            if property == "oc_name_idx" or property == "oc_descr_idx" or property == "oc_oprop" or property == "oc_class" or property == "oc_delay" or property == "oc_color" or property == "oc_prob":
+            if property == "oc_name_idx" or property == "oc_descr_idx" or property == "oc_oprop" or property == "oc_delay" or property == "oc_color" or property == "oc_prob":
                 continue
 
             if property == "oc_weight":
                 mapped_property = "weight"
+            elif property == "oc_class":
+                object_dict["entityClass"] = toEntityClass(int.from_bytes(object_info.oc_class[0].encode(), 'little'))
+                continue
             elif property == "oc_cost":
                 mapped_property = "cost"
             elif property == "oc_subtyp":
                 value = object_info.__getattribute__(property)
-                abs_value = abs(value)
-                object_dict["skill"] = toSkill(abs_value)
-                object_dict["missile"] = value < 0
-                object_dict["fromLauncher"] = launchers.__contains__(abs_value)
+                if int.from_bytes(object_info.oc_class[0].encode(), 'little') != 3:
+                  abs_value = abs(value)
+                  object_dict["skill"] = toSkill(abs_value)
+                  object_dict["missile"] = value < 0
+                  object_dict["fromLauncher"] = launchers.__contains__(abs_value)
+                else:
+                  object_dict["armorType"] = getArmor(value)
                 continue
+
 
             object_dict[mapped_property] = object_info.__getattribute__(property)
 
         object_infos.append(object_dict)
 
     return object_infos
+
+
+def toEntityClass(value: int):
+  match value:
+    case 0:
+      return "RANDOM"
+    case 1:
+      return "ILLOBJ"
+    case 2:
+      return "WEAPON"
+    case 3:
+      return "ARMOR"
+    case 4:
+      return "RING"
+    case 5:
+      return "AMULET"
+    case 6:
+      return "TOOL"
+    case 7:
+      return "FOOD"
+    case 8:
+      return "POTION"
+    case 9:
+      return "SCROLL"
+    case 10:
+      return "SPELL_BOOK"
+    case 11:
+      return "WAND"
+    case 12:
+      return "COIN"
+    case 13:
+      return "GEM"
+    case 14:
+      return "ROCK"
+    case 15:
+      return "BALL"
+    case 16:
+      return "CHAIN"
+    case 17:
+      return "VENOM"
+
+
+def getArmor(value: int):
+    match value:
+        case 0:
+            return "SUIT"
+        case 1:
+            return "SHIELD"
+        case 2:
+            return "HELM"
+        case 3:
+            return "GLOVES"
+        case 4:
+            return "BOOTS"
+        case 5:
+            return "CLOAK"
+        case 6:
+            return "SHIRT"
 
 
 def toSkill(value: int):

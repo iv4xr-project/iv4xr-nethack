@@ -78,9 +78,6 @@ def write_obs(sock, env, obs):
 
     # GERARD
     write_tiles(sock, obs['til_type'], obs['til_flags'], obs['til_visible'])
-    np.set_printoptions(threshold=sys.maxsize, linewidth=10000)
-    print(obs['til_visible'].astype(int))
-
     write_map(sock, obs['chars'], obs['colors'], obs['glyphs'])
     write_monsters(sock, obs['mon_id'], obs['mon_permid'], obs['mon_peaceful'])
     write_entities(sock, obs['obj_id'], obs['obj_class'], obs['obj_type'], obs['obj_age'], obs['obj_quan'])
