@@ -32,7 +32,7 @@ public class WandConverter extends JSONConverter {
         ObjectNode charges = mapper.createObjectNode();
         charges.put("min", Integer.parseInt(chargesString[0]));
         charges.put("max", Integer.parseInt(chargesString[1]));
-        objectNode.put("Charges", charges);
+        objectNode.set("Charges", charges);
       }
       objectNode.put("Relative probability", Double.parseDouble(fields[3].replace("%", "")));
       objectNode.put("Type", fields[4]);

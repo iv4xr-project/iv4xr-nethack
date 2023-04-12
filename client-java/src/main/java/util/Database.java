@@ -11,14 +11,12 @@ import nethack.object.info.EntityInfo;
 import nethack.object.info.FoodInfo;
 import nethack.object.info.MonsterInfo;
 import nethack.object.info.WeaponInfo;
-import opennlp.tools.stemmer.PorterStemmer;
 import util.JSONConverters.FoodConverter;
 import util.JSONConverters.JSONConverter;
 import util.JSONConverters.WeaponConverter;
 
 public class Database {
   private static final ObjectMapper mapper = new ObjectMapper();
-  private static final PorterStemmer porterStemmer = new PorterStemmer();
   static Map<String, FoodInfo> foodMap = new HashMap<>();
   static Map<String, WeaponInfo> weaponMap = new HashMap<>();
   static Map<Integer, Integer> glyphToObjectMap = new HashMap<>();
@@ -30,13 +28,13 @@ public class Database {
       String jsonString = readJsonFromFile(new FoodConverter().getFileName());
       FoodInfo[] foodInfos = mapper.readValue(jsonString, FoodInfo[].class);
       for (FoodInfo foodInfo : foodInfos) {
-        foodMap.put(stemName(foodInfo.name), foodInfo);
+        foodMap.put(foodInfo.name, foodInfo);
       }
 
       String weaponJson = readJsonFromFile(new WeaponConverter().getFileName());
       WeaponInfo[] weaponInfos = mapper.readValue(weaponJson, WeaponInfo[].class);
       for (WeaponInfo weaponInfo : weaponInfos) {
-        weaponMap.put(stemName(weaponInfo.name), weaponInfo);
+        weaponMap.put(weaponInfo.name, weaponInfo);
       }
 
       String glyphToObjectJson = readJsonFromFile("../../../../../../server-python/data/mapping");
@@ -79,11 +77,11 @@ public class Database {
   }
 
   public static FoodInfo getFood(String name) {
-    return foodMap.get(stemName(name));
+    return foodMap.get(name);
   }
 
   public static WeaponInfo getWeapon(String name) {
-    return weaponMap.get(stemName(name));
+    return weaponMap.get(name);
   }
 
   public static String readJsonFromFile(String fileName) {
@@ -101,19 +99,6 @@ public class Database {
     }
 
     return jsonData.toString();
-  }
-
-  public static String stemName(String name) {
-    String[] comps = name.split(" ");
-    StringBuilder sb = new StringBuilder();
-    for (int i = 0; i < comps.length; i++) {
-      if (i != 0) {
-        sb.append(" ");
-      }
-      sb.append(porterStemmer.stem(comps[i]));
-    }
-
-    return sb.toString();
   }
 
   public static void main(String[] args) {}

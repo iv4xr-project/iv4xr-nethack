@@ -777,16 +777,6 @@ NetHackRL::clear_nhwindow_method(winid wid)
         obj_age_.fill(0);
         obj_quan_.fill(0);
         obj_qual_.fill(0);
-
-        // // Inspect all tiles with their corresponding type
-        // for (int x = 1; x < COLNO; x++) {
-        //   for (int y = 0; y < ROWNO; y++) {
-        //     int offset = (x - 1) + y * (COLNO - 1);
-        //     til_type_[offset] = levl[x][y].typ;
-        //     til_flags_[offset] = levl[x][y].flags;
-        //     til_visible_[offset] = levl[x][y].lit;
-        //   }
-        // }
         chars_.fill(' ');
         colors_.fill(0);
         specials_.fill(0);

@@ -7,8 +7,11 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import nethack.enums.BUC;
+import nethack.enums.EntityClass;
 import nethack.object.info.EntityInfo;
+import nethack.object.items.FoodItem;
 import nethack.object.items.Item;
+import nethack.object.items.WeaponItem;
 import util.Database;
 
 public class ItemDecoder extends Decoder {
@@ -30,7 +33,7 @@ public class ItemDecoder extends Decoder {
 
   private static Item toItem(DataInputStream input) {
     try {
-      char symbol = parseChar(input.readByte()); // input.readChar();
+      char symbol = parseChar(input.readByte());
       int itemGlyph = input.readShort();
 
       // Interpret values
@@ -41,24 +44,30 @@ public class ItemDecoder extends Decoder {
       int quantity = (int) info.get("quantity");
       BUC buc = (BUC) info.get("buc");
       int modifier = (int) info.get("modifier");
-      String name = (String) info.get("name");
+      //      String name = (String) info.get("name");
       String additional = (String) info.get("additional");
       EntityInfo entityInfo = Database.getEntityInfoFromGlyph(itemGlyph);
 
-      //      if (type == EntityClass.FOOD) {
-      //        return new FoodItem(
-      //            symbol, type, itemGlyph, description, quantity, buc, Database.getFood(name));
-      //      } else if (type == EntityClass.WEAPON) {
-      //        return new WeaponItem(
-      //            symbol,
-      //            type,
-      //            itemGlyph,
-      //            description,
-      //            quantity,
-      //            buc,
-      //            Database.getWeapon(name),
-      //            modifier);
-      //      }
+      if (entityInfo.entityClass == EntityClass.FOOD) {
+        return new FoodItem(
+            symbol,
+            entityInfo,
+            itemGlyph,
+            description,
+            quantity,
+            buc,
+            Database.getFood(entityInfo.name));
+      } else if (entityInfo.entityClass == EntityClass.WEAPON) {
+        return new WeaponItem(
+            symbol,
+            entityInfo,
+            itemGlyph,
+            description,
+            quantity,
+            buc,
+            Database.getWeapon(entityInfo.name),
+            modifier);
+      }
 
       return new Item(symbol, entityInfo, itemGlyph, description, quantity);
     } catch (IOException e) {

@@ -6,7 +6,7 @@ package agent.navigation.hpastar.infrastructure;
 
 import org.jetbrains.annotations.NotNull;
 
-public class Id<T> implements IId, Comparable {
+public class Id<T> implements IId, Comparable<Id<T>> {
   public int getIdValue() {
     return _value;
   }
@@ -41,9 +41,7 @@ public class Id<T> implements IId, Comparable {
   }
 
   @Override
-  public int compareTo(@NotNull Object o) {
-    assert o instanceof Id : "Cannot compare with items that are not Id";
-    Id<T> idObj = (Id<T>) o;
-    return Integer.compare(_value, idObj.getIdValue());
+  public int compareTo(@NotNull Id<T> o) {
+    return Integer.compare(_value, o.getIdValue());
   }
 }

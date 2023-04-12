@@ -20,7 +20,7 @@ public class Item {
 
   @Override
   public String toString() {
-    String formatStr = "%s %s (%4d) %s";
-    return String.format(formatStr, symbol, entityInfo, glyph, description);
+    String formatStr = "%s %s (%s)";
+    return String.format(formatStr, symbol, description, entityInfo);
   }
 }

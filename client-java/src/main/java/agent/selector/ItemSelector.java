@@ -31,7 +31,6 @@ public class ItemSelector extends Selector<Item> {
   }
 
   public ItemSelector selectionType(SelectionType selectionType) {
-
     super.selectionType(selectionType);
     return this;
   }
