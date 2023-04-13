@@ -59,7 +59,7 @@ public class Replay {
       List<Command> commands = new ArrayList<>();
       for (String commandString : items) {
         if (commandString.contains("ASCII")) {
-          commands.add(new Command(commandString.split(" ")[1]));
+          commands.add(new Command(commandString.split(" ")[1].charAt(0)));
         } else {
           commands.add(new Command(CommandEnum.valueOf(commandString)));
         }

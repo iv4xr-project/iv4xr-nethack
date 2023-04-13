@@ -35,6 +35,19 @@ public class Actions {
                 });
   }
 
+  public static Action wield() {
+    return action("wield weapon")
+        .do2(
+            (AgentState S) ->
+                (Item item) -> {
+                  Loggers.GoalLogger.info(">>> wield weapon %s", item);
+                  WorldModel newWom =
+                      WorldModels.performCommands(
+                          S, List.of(new Command(COMMAND_WIELD), new Command(item.symbol)));
+                  return new Pair<>(S, newWom);
+                });
+  }
+
   // Construct an action that would fire in a direction.
   public static Action fire() {
     return action("fire")
@@ -124,7 +137,7 @@ public class Actions {
               WorldModel newWom =
                   WorldModels.performCommands(
                       S,
-                      List.of(new Command(COMMAND_PRAY), new Command("y"), new Command(MISC_MORE)));
+                      List.of(new Command(COMMAND_PRAY), new Command('y'), new Command(MISC_MORE)));
               S.app().gameState.player.lastPrayerTurn =
                   Optional.of(S.app().gameState.stats.turn.time);
               return new Pair<>(S, newWom);
@@ -145,14 +158,5 @@ public class Actions {
                     return new Pair<>(S, NavUtils.moveTo(S, path.nextNode()));
                   }
                 });
-    //            .on(
-    //                    (AgentState S) -> {
-    //                      Entity e = entitySelector.apply(S.app().level().entities, S);
-    //                      if (e == null) {
-    //                        return null;
-    //                      }
-    //                      return NavUtils.adjustedFindPath(S, S.loc(), e.loc);
-    //                    })
-    //            .lift();
   }
 }

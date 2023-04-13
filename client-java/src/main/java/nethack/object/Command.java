@@ -11,11 +11,17 @@ public class Command {
     this.stroke = commandEnum.stroke;
   }
 
-  public Command(String stroke) {
+  //  public Command(String stroke) {
+  //    commandEnum = CommandEnum.ADDITIONAL_ASCII;
+  //    assert !stroke.startsWith("-") : "Stroke may not start with -";
+  //    assert stroke.length() == 1 : "Max length of stroke is 1";
+  //    this.stroke = stroke;
+  //  }
+
+  public Command(char character) {
     commandEnum = CommandEnum.ADDITIONAL_ASCII;
-    assert !stroke.startsWith("-") : "Stroke may not start with -";
-    assert stroke.length() == 1 : "Max length of stroke is 1";
-    this.stroke = stroke;
+    assert character != '-' : "Command must not be - it is special character";
+    this.stroke = String.valueOf(character);
   }
 
   public static Command fromStroke(String stroke) {
@@ -23,7 +29,7 @@ public class Command {
     if (commandEnum != null) {
       return new Command(commandEnum);
     } else if (stroke.startsWith("-")) {
-      return new Command(stroke.substring(1));
+      return new Command(stroke.charAt(1));
     } else {
       return null;
     }
@@ -42,8 +48,8 @@ public class Command {
   }
 
   public static void main(String[] args) {
-    Command a = new Command("a");
-    Command b = new Command("b");
+    Command a = new Command('a');
+    Command b = new Command('b');
     assert !a.stroke.equals(b.stroke);
     System.out.print(a.stroke);
     System.out.print(b.stroke);

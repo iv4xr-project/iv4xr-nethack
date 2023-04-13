@@ -54,7 +54,7 @@ public class Door extends Tile implements Walkable, Viewable, Secret {
 
   @Override
   public boolean isWalkable() {
-    return isSeeThrough();
+    return isSeeThrough() && !isSecret();
   }
 
   @Override

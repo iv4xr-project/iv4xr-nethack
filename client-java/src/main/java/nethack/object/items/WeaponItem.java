@@ -8,6 +8,7 @@ public class WeaponItem extends Item implements BUCStatus, Weighable {
   public BUC buc;
   public WeaponInfo weaponInfo;
   public int modifier;
+  public boolean wielded;
 
   public WeaponItem(
       char symbol,
@@ -22,6 +23,9 @@ public class WeaponItem extends Item implements BUCStatus, Weighable {
     this.buc = buc;
     this.weaponInfo = weaponInfo;
     this.modifier = modifier;
+    this.wielded =
+        (description.contains("wielded") || description.contains("in hand"))
+            && description.contains("not");
   }
 
   @Override

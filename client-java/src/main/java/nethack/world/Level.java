@@ -26,7 +26,6 @@ public class Level {
   public final List<Entity> changedEntities = new ArrayList<>();
 
   public Surface surface = new Surface();
-  public Set<CustomVec2D> visibleCoordinates = new HashSet<>();
 
   public Level(
       CustomVec2D playerPos,

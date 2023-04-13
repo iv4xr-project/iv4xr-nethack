@@ -98,7 +98,6 @@ public class AgentState extends Iv4xrAgentState<Void> {
     // Update visibility cone
     CustomVec2D playerPos = NavUtils.loc2(worldmodel.position);
     Level level = env().app.gameState.getLevel();
-    Set<CustomVec2D> visibleCoordinates = level.visibleCoordinates;
 
     // Remove all entities that are in vision range but can't be seen.
     List<String> idsToRemove = new ArrayList<>();

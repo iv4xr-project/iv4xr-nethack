@@ -35,14 +35,6 @@ public abstract class Tile {
   }
 
   public abstract boolean equals(Object o);
-  //  {
-  //    if (!(o instanceof Tile)) {
-  //      return false;
-  //    }
-  //
-  //    Tile t = (Tile) o;
-  //    return loc.equals(t.loc);
-  //  }
 
   @Override
   public int hashCode() {

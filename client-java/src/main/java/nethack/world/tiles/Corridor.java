@@ -36,7 +36,7 @@ public class Corridor extends Tile implements Walkable, Viewable, Secret {
 
   @Override
   public boolean isWalkable() {
-    return true;
+    return !isSecret();
   }
 
   @Override

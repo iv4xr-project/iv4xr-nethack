@@ -9,6 +9,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import nethack.enums.EntityClass;
+import nethack.enums.Skill;
 import nethack.object.items.Item;
 
 public class ItemSelector extends Selector<Item> {
@@ -17,6 +18,22 @@ public class ItemSelector extends Selector<Item> {
       new ItemSelector()
           .ofClass(EntityClass.WEAPON)
           .predicate((item, S) -> item.description.contains("(in quiver)"));
+  public static final ItemSelector meleeWeapon =
+      new ItemSelector()
+          .ofClass(EntityClass.WEAPON)
+          .predicate(
+              (item, S) ->
+                  item.entityInfo.skill != Skill.BOW
+                      && item.entityInfo.skill != Skill.CROSSBOW
+                      && item.entityInfo.skill != Skill.DAGGER);
+  public static final ItemSelector rangedWeapon =
+      new ItemSelector()
+          .ofClass(EntityClass.WEAPON)
+          .predicate(
+              (item, S) ->
+                  item.entityInfo.skill == Skill.BOW
+                      || item.entityInfo.skill == Skill.CROSSBOW
+                      || item.entityInfo.skill == Skill.DAGGER);
 
   EntityClass entityClass;
 
