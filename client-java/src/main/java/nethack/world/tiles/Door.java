@@ -31,12 +31,7 @@ public class Door extends Tile implements Walkable, Viewable, Secret {
   }
 
   public char toChar() {
-    return isOpen ? 'O' : 'X';
-  }
-
-  @Override
-  public boolean isSeeThrough() {
-    return isOpen || broken;
+    return isWalkable() ? 'O' : 'X';
   }
 
   @Override
@@ -54,7 +49,16 @@ public class Door extends Tile implements Walkable, Viewable, Secret {
 
   @Override
   public boolean isWalkable() {
-    return isSeeThrough() && !isSecret();
+    if (isSecret()) {
+      return false;
+    }
+    if (broken) {
+      return true;
+    }
+    if (!isOpen && !closed && !locked && !trapped) {
+      return true;
+    }
+    return isOpen;
   }
 
   @Override
@@ -77,9 +81,14 @@ public class Door extends Tile implements Walkable, Viewable, Secret {
       return newTile;
     }
     Door door = ((Door) newTile);
-    seen = door.getSeen() || getSeen();
+    setSeen(door.getSeen() || getSeen());
     setIsSecret(door.getIsSecret());
     setVisibility(door.isVisible());
+    broken = door.broken;
+    isOpen = door.isOpen;
+    closed = door.closed;
+    locked = door.locked;
+    trapped = door.trapped;
     return this;
   }
 

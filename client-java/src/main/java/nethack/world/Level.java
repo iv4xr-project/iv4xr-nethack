@@ -77,6 +77,12 @@ public class Level {
       }
     }
 
+    for (int x = 0; x < SIZE.width; x++) {
+      for (int y = 0; y < SIZE.height; y++) {
+        CustomVec2D pos = new CustomVec2D(x, y);
+      }
+    }
+
     Loggers.NetHackLogger.debug("%d entity(s) changes in the level", changedMapCoordinates.size());
   }
 
@@ -104,7 +110,6 @@ public class Level {
     }
 
     surface.updateTiles(changedTiles);
-
     Loggers.NetHackLogger.debug("%d tile(s) changes in the level", changedMapCoordinates.size());
   }
 

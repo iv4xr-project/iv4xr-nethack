@@ -84,11 +84,6 @@ public class TacticLib {
                   List<Item> rangedWeapons =
                       rangedWeapon.filter(
                           Arrays.asList(S.app().gameState.player.inventory.items), S);
-                  // Dagger doesn't need to be readied
-                  if (rangedWeapons.stream()
-                      .anyMatch(rangedWeapon -> rangedWeapon.entityInfo.skill == Skill.DAGGER)) {
-                    return null;
-                  }
 
                   boolean hasCrossbowAmmo =
                       rangedWeapons.stream()
@@ -138,6 +133,12 @@ public class TacticLib {
                     }
                   }
 
+                  // Dagger doesn't need to be readied
+                  if (rangedWeapons.stream()
+                      .anyMatch(rangedWeapon -> rangedWeapon.entityInfo.skill == Skill.DAGGER)) {
+                    return null;
+                  }
+
                   // Has no ranged weapon, so subsequently also cannot fire
                   return null;
                 })
@@ -149,15 +150,6 @@ public class TacticLib {
                   List<Item> rangedWeapons =
                       rangedWeapon.filter(
                           Arrays.asList(S.app().gameState.player.inventory.items), S);
-                  Optional<Item> maybeDagger =
-                      rangedWeapons.stream()
-                          .filter(rangedWeapon -> rangedWeapon.entityInfo.skill == Skill.DAGGER)
-                          .findFirst();
-
-                  // Character has a dagger to throw
-                  if (maybeDagger.isPresent()) {
-                    fireItem = maybeDagger.get();
-                  }
 
                   if (fireItem == null) {
                     boolean hasCrossbowAmmo =
@@ -200,6 +192,18 @@ public class TacticLib {
                       if (bow.isPresent()) {
                         fireItem = bow.get();
                       }
+                    }
+                  }
+
+                  if (fireItem == null) {
+                    Optional<Item> maybeDagger =
+                        rangedWeapons.stream()
+                            .filter(rangedWeapon -> rangedWeapon.entityInfo.skill == Skill.DAGGER)
+                            .findFirst();
+
+                    // Character has a dagger to throw
+                    if (maybeDagger.isPresent()) {
+                      fireItem = maybeDagger.get();
                     }
                   }
 

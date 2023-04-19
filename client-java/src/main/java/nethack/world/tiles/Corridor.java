@@ -17,11 +17,6 @@ public class Corridor extends Tile implements Walkable, Viewable, Secret {
   }
 
   @Override
-  public boolean isSeeThrough() {
-    return false;
-  }
-
-  @Override
   public boolean getVisibility() {
     return isVisible;
   }

@@ -17,11 +17,6 @@ public class Ice extends Tile implements Walkable, Viewable {
   }
 
   @Override
-  public boolean isSeeThrough() {
-    return true;
-  }
-
-  @Override
   public boolean getVisibility() {
     if (isVisible) {
       markAsSeen();

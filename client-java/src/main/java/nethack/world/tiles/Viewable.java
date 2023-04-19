@@ -1,8 +1,6 @@
 package nethack.world.tiles;
 
 public interface Viewable {
-  public boolean isSeeThrough();
-
   public default boolean isVisible() {
     return getVisibility();
   }

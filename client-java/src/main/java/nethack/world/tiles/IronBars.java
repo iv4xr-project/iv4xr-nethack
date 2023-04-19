@@ -16,11 +16,6 @@ public class IronBars extends Tile implements Viewable {
   }
 
   @Override
-  public boolean isSeeThrough() {
-    return true;
-  }
-
-  @Override
   public boolean getVisibility() {
     return isVisible;
   }

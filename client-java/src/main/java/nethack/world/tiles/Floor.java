@@ -18,11 +18,6 @@ public class Floor extends Tile implements Walkable, Viewable, Shop {
   }
 
   @Override
-  public boolean isSeeThrough() {
-    return true;
-  }
-
-  @Override
   public boolean getVisibility() {
     return isVisible;
   }

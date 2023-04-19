@@ -16,11 +16,6 @@ public class Tree extends Tile implements Viewable {
   }
 
   @Override
-  public boolean isSeeThrough() {
-    return false;
-  }
-
-  @Override
   public boolean getVisibility() {
     return isVisible;
   }

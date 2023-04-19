@@ -15,11 +15,6 @@ public class Lava extends Tile implements Viewable {
   }
 
   @Override
-  public boolean isSeeThrough() {
-    return true;
-  }
-
-  @Override
   public boolean getVisibility() {
     return isVisible;
   }

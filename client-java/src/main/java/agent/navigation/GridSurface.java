@@ -19,6 +19,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import nethack.enums.Color;
 import nethack.world.tiles.Door;
+import nethack.world.tiles.Viewable;
 import util.ColoredStringBuilder;
 import util.CustomVec2D;
 
@@ -38,7 +39,7 @@ import util.CustomVec2D;
 public class GridSurface implements Navigatable<CustomVec2D> {
   public final Tile[][] tiles;
   public final Map<String, HashSet<CustomVec2D>> tileTypes = new HashMap<>();
-  public final Set<CustomVec2D> frontierCandidates = new HashSet<>();
+  public final Set<CustomVec2D> frontiers = new HashSet<>();
   public final HierarchicalMap hierarchicalMap;
 
   /**
@@ -188,7 +189,6 @@ public class GridSurface implements Navigatable<CustomVec2D> {
     // Some state stuff might need to be remembered
     Tile newTile = prevTile.updatedTile(tile);
     replaceTile(prevTile, newTile);
-    tiles[tile.pos.y][tile.pos.x] = tile;
     if (tile instanceof Walkable != prevTile instanceof Walkable) {
       return true;
     }
@@ -261,10 +261,6 @@ public class GridSurface implements Navigatable<CustomVec2D> {
     Tile t = getTile(p);
     assert t != null;
     t.seen = true;
-    // Add as frontier if it is walkable
-    if (t instanceof Walkable) {
-      frontierCandidates.add(p);
-    }
   }
 
   public boolean isWalkable(CustomVec2D pos) {
@@ -282,47 +278,52 @@ public class GridSurface implements Navigatable<CustomVec2D> {
    * frontiers are reachable.
    */
   public List<CustomVec2D> getFrontier() {
-    List<CustomVec2D> frontiers = new LinkedList<>();
-    List<CustomVec2D> cannotBeFrontier = new LinkedList<>();
-    for (CustomVec2D frontierPosition : frontierCandidates) {
-      List<CustomVec2D> pNeighbors =
-          NavUtils.neighbourCoordinates(frontierPosition, hierarchicalMap.size, true);
+    List<CustomVec2D> removingFrontiers = new ArrayList<>(frontiers.size());
 
-      Tile frontier = getTile(frontierPosition);
-      if (frontier instanceof Door) {
-        Door door = (Door) frontier;
-        if (door.isShopDoor) {
-          cannotBeFrontier.add(frontierPosition);
-          continue;
-        }
-      }
-
-      boolean isFrontier = false;
-      for (CustomVec2D n : pNeighbors) {
-        Tile tile = getTile(n);
-        if (tile == null) {
-          continue;
-        }
-
-        if (tile instanceof Door) {
-          Door door = (Door) tile;
-          if (door.isShopDoor) {
-            cannotBeFrontier.add(door.pos);
-          }
-        }
-
-        if (!hasBeenSeen(n)) {
-          frontiers.add(frontierPosition);
-          isFrontier = true;
-          break;
-        }
-      }
-      if (!isFrontier) {
-        cannotBeFrontier.add(frontierPosition);
+    for (CustomVec2D frontier : frontiers) {
+      Tile tile = getTile(frontier);
+      List<CustomVec2D> neighbours = neighbourCoordinates(frontier, true);
+      if (neighbours.stream().allMatch(pos -> getTile(pos) == null || getTile(pos).seen)) {
+        removingFrontiers.add(frontier);
       }
     }
-    cannotBeFrontier.forEach(frontierCandidates::remove);
-    return frontiers;
+
+    removingFrontiers.forEach(frontiers::remove);
+
+    for (int x = 0; x < hierarchicalMap.size.width; x++) {
+      for (int y = 0; y < hierarchicalMap.size.height; y++) {
+        CustomVec2D pos = new CustomVec2D(x, y);
+        if (frontiers.contains(pos)) {
+          continue;
+        }
+        Tile tile = getTile(pos);
+        if (tile == null || !tile.seen || !(tile instanceof Walkable)) {
+          continue;
+        }
+
+        // Shop doors also are not frontiers
+        if (tile instanceof Door && ((Door) tile).isShopDoor) {
+          continue;
+        }
+
+        Viewable viewable = (Viewable) tile;
+        if (!viewable.isVisible()) {
+          continue;
+        }
+
+        List<CustomVec2D> neighbours = neighbourCoordinates(pos, true);
+        if (neighbours.stream()
+            .anyMatch(
+                neighbourPos ->
+                    getTile(neighbourPos) != null
+                        && !getTile(neighbourPos).seen
+                        && getTile(neighbourPos) instanceof Walkable)) {
+          frontiers.add(pos);
+        }
+      }
+    }
+
+    return new ArrayList<>(frontiers);
   }
 
   public Path<CustomVec2D> explore(CustomVec2D startingLocation, CustomVec2D heuristicLocation) {
@@ -501,7 +502,6 @@ public class GridSurface implements Navigatable<CustomVec2D> {
         }
       }
     }
-    frontierCandidates.clear();
   }
   // endregion
 

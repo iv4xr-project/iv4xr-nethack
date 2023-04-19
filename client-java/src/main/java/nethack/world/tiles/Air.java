@@ -17,11 +17,6 @@ public class Air extends Tile implements Walkable, Viewable {
   }
 
   @Override
-  public boolean isSeeThrough() {
-    return true;
-  }
-
-  @Override
   public boolean getVisibility() {
     return isVisible;
   }

@@ -383,7 +383,7 @@ NetHackRL::fill_obs(nle_obs *obs)
         // glyphs_[offset] = levl[x][y].glyph;
         til_type_[offset] = levl[x][y].typ;
         til_flags_[offset] = levl[x][y].flags;
-        til_visible_[offset] = viz_array[y][x] & IN_SIGHT; //levl[x][y].lit;
+        til_visible_[offset] = viz_array[y][x] & IN_SIGHT;
 
         if (level.monsters[x][y]) {
           mon_id_[offset] = level.monsters[x][y]->m_id;
