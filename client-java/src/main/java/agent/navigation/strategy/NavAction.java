@@ -4,7 +4,9 @@ import static nl.uu.cs.aplib.AplibEDSL.action;
 
 import agent.iv4xr.AgentState;
 import agent.navigation.hpastar.search.Path;
-import eu.iv4xr.framework.mainConcepts.WorldEntity;
+import agent.selector.EntitySelector;
+import agent.selector.Selector;
+import nethack.object.Entity;
 import nl.uu.cs.aplib.mainConcepts.Action;
 import nl.uu.cs.aplib.utils.Pair;
 import util.CustomVec3D;
@@ -35,13 +37,12 @@ public class NavAction {
                 })
         .on(
             (AgentState S) -> {
-              WorldEntity e = S.worldmodel.elements.get(targetId);
+              Entity e = S.worldmodel.getElement(targetId);
               if (e == null) {
                 Loggers.NavLogger.debug("Entity does not exist");
                 return null;
               }
-              return NavUtils.nextLoc(
-                  NavUtils.adjustedFindPath(S, S.loc(), new CustomVec3D(e.position)));
+              return NavUtils.nextLoc(NavUtils.adjustedFindPath(S, S.loc(), e.loc));
             });
   }
 
@@ -66,17 +67,21 @@ public class NavAction {
                 })
         .on(
             (AgentState S) -> {
-              WorldEntity e = S.worldmodel.elements.get(targetId);
+              Entity e = S.worldmodel.getElement(targetId);
               if (e == null) {
                 Loggers.NavLogger.debug("Element not found");
                 return null;
               }
-              if (S.nextToEntity(targetId, allowDiagonally)) {
+              EntitySelector nextToEntity =
+                  new EntitySelector()
+                      .selectionType(Selector.SelectionType.ADJACENT)
+                      .predicate((tempE, ignore) -> tempE.getId().equals(targetId));
+              Entity adjacentEntity = nextToEntity.apply(S.worldmodel.getCurrentElements(), S);
+              if (adjacentEntity != null) {
                 Loggers.NavLogger.debug("Next to item id:%s", targetId);
                 return null;
               }
-              return NavUtils.nextLoc(
-                  NavUtils.adjustedFindPath(S, S.loc(), new CustomVec3D(e.position)));
+              return NavUtils.nextLoc(NavUtils.adjustedFindPath(S, S.loc(), e.loc));
             });
   }
 

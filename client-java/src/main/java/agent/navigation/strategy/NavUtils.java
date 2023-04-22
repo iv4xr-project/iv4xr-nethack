@@ -18,6 +18,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import nethack.enums.CommandEnum;
 import nethack.object.Command;
+import nethack.object.Entity;
 import nethack.object.Player;
 import nethack.world.tiles.Stair;
 import util.CustomVec2D;
@@ -122,34 +123,7 @@ public class NavUtils {
     return (int) loc.z;
   }
 
-  /**
-   * Give the straight-line distance-square between two entities, if they are in the same maze; else
-   * the distance is the difference between mazeIds times some large multiplier (1000000).
-   */
-  public static float distanceBetweenEntities(WorldEntity e1, WorldEntity e2) {
-    int e1_level = levelNr(e1.position);
-    int e2_level = levelNr(e2.position);
-
-    if (e1_level == e2_level) {
-      Vec3 p1 = e1.position.copy();
-      Vec3 p2 = e2.position.copy();
-      p1.z = 0;
-      p2.z = 0;
-      return Vec3.distSq(p1, p2);
-    }
-    return Math.abs(e1_level - e2_level) * 1000000;
-  }
-
-  /**
-   * Give the straight-line distance-square between the agent that owns the given state and the
-   * given entity e, if they are in the same maze; else the distance is the difference between their
-   * mazeIds times some large multiplier (1000000).
-   */
-  public static float distanceToAgent(AgentState S, WorldEntity e) {
-    return distanceBetweenEntities(S.worldmodel.elements.get(Player.ID), e);
-  }
-
-  public static WorldModel moveTo(AgentState S, CustomVec3D targetTile) {
+  public static WorldModel<Player, Entity> moveTo(AgentState S, CustomVec3D targetTile) {
     Command command;
     if (S.loc().lvl == targetTile.lvl) {
       command = Direction.getCommand(toDirection(S, targetTile));
@@ -167,7 +141,7 @@ public class NavUtils {
     return S.env().commands(List.of(command));
   }
 
-  public static WorldModel moveTo(AgentState state, Vec3 targetPosition) {
+  public static WorldModel<Player, Entity> moveTo(AgentState state, Vec3 targetPosition) {
     return moveTo(state, new CustomVec3D(targetPosition));
   }
 

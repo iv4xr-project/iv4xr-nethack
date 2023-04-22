@@ -10,6 +10,8 @@ import eu.iv4xr.framework.mainConcepts.WorldModel;
 import java.util.List;
 import nethack.enums.CommandEnum;
 import nethack.object.Command;
+import nethack.object.Entity;
+import nethack.object.Player;
 import nl.uu.cs.aplib.mainConcepts.Goal;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
 import nl.uu.cs.aplib.utils.Pair;
@@ -19,7 +21,7 @@ public class GoalLib {
     Goal G =
         goal("Main")
             .toSolve(
-                (Pair<AgentState, WorldModel> proposal) -> {
+                (Pair<AgentState, WorldModel<Player, Entity>> proposal) -> {
                   return proposal.fst.app().gameState.done;
                   //                  return tacticLib.explorationExhausted(proposal.fst);
                 })

@@ -51,7 +51,7 @@ public class GameState {
         player.alignment.name(),
         stats.score);
     csb.appendf(
-        "Dlvl:%d(%d) %s$:%s%d %sHP:%s%d(%d) %sPw:%s%d(%d) %sAC:%s%d Xp:%d/%d T:%d(%d)"
+        "Dlvl:%d(%d) %s$:%s%d %sHP:%s%d(%d) %sPw:%s%d(%d) %sAC:%s%d Xp:%d/%d T:%s"
             + " \uD83C\uDF54:%s \uD83D\uDCAA:%s \uD83D\uDE03:%s%n",
         stats.dlvl.depth,
         stats.dlvl.dungeonNumber,
@@ -71,8 +71,7 @@ public class GameState {
         player.armorClass,
         player.experienceLevel,
         player.experiencePoints,
-        stats.turn.time,
-        stats.turn.step,
+        stats.turn,
         player.hungerState,
         player.encumbrance,
         player.conditions);

@@ -101,7 +101,7 @@ public class App {
         }
       } else {
         agent.update();
-        Loggers.AgentLogger.debug("agent @%s", state.worldmodel.position);
+        Loggers.AgentLogger.debug("agent @%s", state.worldmodel.player.current.location);
       }
 
       // Need to update state for render

@@ -12,6 +12,7 @@ import eu.iv4xr.framework.mainConcepts.WorldModel;
 import java.util.*;
 import nethack.object.Command;
 import nethack.object.Entity;
+import nethack.object.Player;
 import nethack.object.items.Item;
 import nethack.world.tiles.Door;
 import nl.uu.cs.aplib.mainConcepts.Action;
@@ -30,7 +31,7 @@ public class Actions {
                 (Direction direction) -> {
                   Sounds.attack();
                   Loggers.GoalLogger.info(">>> attackMonster %s", direction);
-                  WorldModel newWom = WorldModels.forceAttack(S, direction);
+                  WorldModel<Player, Entity> newWom = WorldModels.forceAttack(S, direction);
                   return new Pair<>(S, newWom);
                 });
   }
@@ -41,7 +42,7 @@ public class Actions {
             (AgentState S) ->
                 (Item item) -> {
                   Loggers.GoalLogger.info(">>> wield weapon %s", item);
-                  WorldModel newWom =
+                  WorldModel<Player, Entity> newWom =
                       WorldModels.performCommands(
                           S, List.of(new Command(COMMAND_WIELD), new Command(item.symbol)));
                   return new Pair<>(S, newWom);
@@ -56,7 +57,7 @@ public class Actions {
                 (Direction direction) -> {
                   Sounds.fire();
                   Loggers.GoalLogger.info(">>> fire %s", direction);
-                  WorldModel newWom = WorldModels.fire(S, direction);
+                  WorldModel<Player, Entity> newWom = WorldModels.fire(S, direction);
                   return new Pair<>(S, newWom);
                 });
   }
@@ -69,7 +70,7 @@ public class Actions {
                 (Direction direction) -> {
                   CustomVec2D doorPos = NavUtils.posInDirection(S.loc().pos, direction);
                   Door d = (Door) S.area().getTile(doorPos);
-                  WorldModel newWom;
+                  WorldModel<Player, Entity> newWom;
                   if (d.locked) {
                     Sounds.door_kick();
                     Loggers.GoalLogger.info("kick @%s", direction);
@@ -89,7 +90,7 @@ public class Actions {
             (AgentState S) ->
                 (Item item) -> {
                   Loggers.GoalLogger.info(">>> Quaff: %s", item);
-                  WorldModel newWom = WorldModels.quaffItem(S, item.symbol);
+                  WorldModel<Player, Entity> newWom = WorldModels.quaffItem(S, item.symbol);
                   return new Pair<>(S, newWom);
                 });
   }
@@ -99,8 +100,8 @@ public class Actions {
         .do1(
             (AgentState S) -> {
               Loggers.GoalLogger.info("command: %s", command);
-              WorldModel newwom = WorldModels.performCommands(S, List.of(command));
-              return new Pair<>(S, newwom);
+              WorldModel<Player, Entity> newWom = WorldModels.performCommands(S, List.of(command));
+              return new Pair<>(S, newWom);
             });
   }
 
@@ -110,9 +111,9 @@ public class Actions {
             (AgentState S) -> {
               Loggers.GoalLogger.info("searchWalls");
               Sounds.search();
-              WorldModel newwom =
+              WorldModel<Player, Entity> newWom =
                   WorldModels.performCommands(S, List.of(new Command(COMMAND_SEARCH)));
-              return new Pair<>(S, newwom);
+              return new Pair<>(S, newWom);
             });
   }
 
@@ -123,7 +124,7 @@ public class Actions {
                 (Item item) -> {
                   Sounds.eat();
                   Loggers.GoalLogger.info(">>> eatFood: %s", item);
-                  WorldModel newWom = WorldModels.eatItem(S, item.symbol);
+                  WorldModel<Player, Entity> newWom = WorldModels.eatItem(S, item.symbol);
                   return new Pair<>(S, newWom);
                 });
   }
@@ -134,7 +135,7 @@ public class Actions {
         .do1(
             (AgentState S) -> {
               Loggers.GoalLogger.info(">>> pray");
-              WorldModel newWom =
+              WorldModel<Player, Entity> newWom =
                   WorldModels.performCommands(
                       S,
                       List.of(new Command(COMMAND_PRAY), new Command('y'), new Command(MISC_MORE)));
@@ -150,9 +151,9 @@ public class Actions {
             (AgentState S) ->
                 (Path<CustomVec3D> path) -> {
                   if (path.atLocation()) {
-                    WorldModel newWom = WorldModels.performCommands(S, commands);
+                    WorldModel<Player, Entity> newWom = WorldModels.performCommands(S, commands);
                     Entity e = entitySelector.apply(S.app().level().entities, S);
-                    newWom.elements.remove(e.toId());
+                    newWom.removeElement(e.getId());
                     return new Pair<>(S, newWom);
                   } else {
                     return new Pair<>(S, NavUtils.moveTo(S, path.nextNode()));

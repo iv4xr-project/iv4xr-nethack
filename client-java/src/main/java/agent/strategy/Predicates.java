@@ -6,15 +6,13 @@ import agent.navigation.strategy.NavUtils;
 import agent.navigation.surface.Climbable;
 import agent.navigation.surface.Tile;
 import agent.selector.EntitySelector;
+import agent.selector.MonsterSelector;
 import agent.selector.TileSelector;
-import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import nethack.enums.SymbolType;
 import nethack.object.Entity;
+import nethack.object.Player;
 import nethack.world.Level;
 import nethack.world.tiles.Secret;
 import nethack.world.tiles.Stair;
@@ -26,14 +24,12 @@ import util.CustomVec3D;
 public class Predicates {
   public static final Predicate<AgentState> outOfCombat_HpCritical =
       S -> {
-        WorldEntity player = S.worldmodel.elements.get(S.worldmodel.agentId);
-        if (S.nextToEntity(SymbolType.MONSTER, true)) {
+        Player player = S.worldmodel.player.current;
+        if (!MonsterSelector.adjacentAggressive.filter(S.app().level().monsters, S).isEmpty()) {
           return false;
         }
-        int hp = (int) player.properties.get("hp");
-        int hpMax = (int) player.properties.get("hpmax");
-        float hpPercentage = (float) hp / (float) hpMax;
-        return hp < 5 || hpPercentage < 0.40;
+        float hpPercentage = (float) player.hp / (float) player.hpMax;
+        return player.hp < 5 && player.hpMax >= 5 || hpPercentage < 0.40;
       };
 
   @Contract(pure = true)
@@ -72,16 +68,10 @@ public class Predicates {
 
   public static Predicate<AgentState> on_stairs_down =
       S -> {
-        Tile t = S.area().getTile(NavUtils.loc2(S.worldmodel.position));
+        Tile t = S.area().getTile(S.loc().pos);
         if (!(t instanceof Stair)) {
           return false;
         }
         return ((Stair) t).climbType == Climbable.ClimbType.Down;
       };
-
-  public static List<WorldEntity> findOfType(@NotNull AgentState S, SymbolType type) {
-    return S.worldmodel.elements.values().stream()
-        .filter(x -> Objects.equals(x.type, type.name()))
-        .collect(Collectors.toList());
-  }
 }

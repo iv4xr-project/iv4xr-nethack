@@ -1,14 +1,11 @@
 package agent.iv4xr;
 
 import agent.navigation.HierarchicalNavigation;
-import agent.navigation.strategy.NavUtils;
 import eu.iv4xr.framework.extensions.pathfinding.Navigatable;
 import eu.iv4xr.framework.mainConcepts.Iv4xrAgentState;
-import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import java.util.*;
-import java.util.stream.Collectors;
 import nethack.NetHack;
-import nethack.enums.SymbolType;
+import nethack.object.Entity;
 import nethack.object.Player;
 import nethack.object.Turn;
 import nethack.world.Level;
@@ -26,7 +23,7 @@ import util.Loggers;
  *
  * @author wish
  */
-public class AgentState extends Iv4xrAgentState<Void> {
+public class AgentState extends Iv4xrAgentState<Void, Player, Entity> {
   Turn previousTurn;
 
   @Override
@@ -42,8 +39,8 @@ public class AgentState extends Iv4xrAgentState<Void> {
     return app().gameState.getLevel().surface;
   }
 
-  public List<WorldEntity> getWorldEntities() {
-    return new ArrayList<>(worldmodel.elements.values());
+  public List<Entity> getWorldEntities() {
+    return worldmodel.getCurrentElements();
   }
 
   public HierarchicalNavigation hierarchicalNav() {
@@ -51,7 +48,7 @@ public class AgentState extends Iv4xrAgentState<Void> {
   }
 
   public CustomVec3D loc() {
-    return new CustomVec3D(worldmodel.position);
+    return worldmodel.player.current.location;
   }
 
   /** We are not going to keep a Nav-graph, but will instead keep a layered-nav-graphs. */
@@ -70,10 +67,6 @@ public class AgentState extends Iv4xrAgentState<Void> {
   public AgentState setEnvironment(Environment env) {
     super.setEnvironment(env);
     return this;
-  }
-
-  public WorldEntity auxState() {
-    return worldmodel.elements.get("aux");
   }
 
   @Override
@@ -96,95 +89,35 @@ public class AgentState extends Iv4xrAgentState<Void> {
 
   private void updateEntities() {
     // Update visibility cone
-    CustomVec2D playerPos = NavUtils.loc2(worldmodel.position);
+    CustomVec2D playerPos = loc().pos;
     Level level = env().app.gameState.getLevel();
 
     // Remove all entities that are in vision range but can't be seen.
     List<String> idsToRemove = new ArrayList<>();
     Loggers.WOMLogger.info("WOM contains %d elements", worldmodel.elements.size());
-    for (WorldEntity we : worldmodel.elements.values()) {
-      if (we.position == null) {
-        Loggers.WOMLogger.debug("%s [%s]", we.id, we.type);
-        continue;
-      } else {
-        Loggers.WOMLogger.debug("%s %s [%s]", new CustomVec3D(we.position), we.id, we.type);
-      }
-      if (we.id.equals(Player.ID) || we.id.equals("aux")) {
-        continue;
-      }
-
-      if (loc().lvl != NavUtils.levelNr(we.position)) {
+    for (Entity we : getWorldEntities()) {
+      if (loc().lvl != we.loc.lvl) {
         continue;
       }
 
       // Item is gone from worldEntities
       if (env().app.gameState.getLevel().entities.stream()
-          .noneMatch(entity -> entity.toId().equals(we.id))) {
-        idsToRemove.add(we.id);
+          .noneMatch(entity -> entity.getId().equals(we.getId()))) {
+        idsToRemove.add(we.getId());
       }
     }
 
     // Separate loop since it changes the map
     for (String id : idsToRemove) {
-      worldmodel.elements.remove(id);
+      worldmodel.removeElement(id);
     }
-  }
-
-  /** Return the game status (as registered in this state). */
-  public boolean gameStatus() {
-    WorldEntity aux = worldmodel.elements.get("aux");
-    return (boolean) aux.properties.get("status");
   }
 
   /** Check if the agent that owns this state is alive in the game (its hp>0). */
   public boolean agentIsAlive() {
-    WorldEntity a = worldmodel.elements.get(worldmodel.agentId);
-    assert a != null;
-    Integer hp = (Integer) a.properties.get("hp");
-    assert hp != null;
-    return hp > 0;
-  }
-
-  /**
-   * Return a list of entities with a certain type which are currently adjacent to the agent that
-   * owns this state.
-   */
-  public List<WorldEntity> adjacentEntities(SymbolType type, boolean allowDiagonally) {
-    CustomVec3D agentLoc = loc();
-    List<WorldEntity> ms =
-        worldmodel.elements.values().stream()
-            .filter(
-                e ->
-                    Objects.equals(e.type, type.name())
-                        && NavUtils.levelNr(worldmodel.position) == NavUtils.levelNr(e.position)
-                        && CustomVec3D.adjacent(
-                            agentLoc, new CustomVec3D(e.position), allowDiagonally))
-            .collect(Collectors.toList());
-
-    if (!ms.isEmpty()) {
-      Loggers.AgentLogger.debug(
-          "Found %d %s nearby (diagonal=%b)", ms.size(), type.name(), allowDiagonally);
-    }
-
-    return ms;
-  }
-
-  public boolean nextToEntity(SymbolType symbolType, boolean allowDiagonally) {
-    return !adjacentEntities(symbolType, allowDiagonally).isEmpty();
-  }
-
-  public boolean nextToEntity(String entityId, boolean allowDiagonally) {
-    CustomVec3D playerLoc = loc();
-    List<WorldEntity> ms =
-        worldmodel.elements.values().stream()
-            .filter(
-                e ->
-                    e.position != null
-                        && Objects.equals(e.id, entityId)
-                        && CustomVec3D.adjacent(
-                            playerLoc, new CustomVec3D(e.position), allowDiagonally))
-            .collect(Collectors.toList());
-    return !ms.isEmpty();
+    Player player = worldmodel.player.current;
+    assert player != null;
+    return player.hp > 0;
   }
 
   public void render() {
