@@ -4,3 +4,8 @@
 *.pyc
 *.out
 *.ll
+
+llvm/
+llvm-build/
+zips/
+SRCMutation/build/

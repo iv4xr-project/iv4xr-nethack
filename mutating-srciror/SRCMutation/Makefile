@@ -15,36 +15,36 @@ PLUGIN_LDFLAGS := -shared
 # These are required when compiling vs. a source distribution of Clang. For
 # binary distributions llvm-config --cxxflags gives the right path.
 CLANG_INCLUDES := \
-  -I$(LLVM_SRC_PATH)/include \
-  -I$(LLVM_BUILD_PATH)/include \
-  -I$(LLVM_SRC_PATH)/tools/clang/include \
-  -I$(LLVM_BUILD_PATH)/tools/clang/include
+	-I$(LLVM_SRC_PATH)/include \
+	-I$(LLVM_BUILD_PATH)/include \
+	-I$(LLVM_SRC_PATH)/tools/clang/include \
+	-I$(LLVM_BUILD_PATH)/tools/clang/include
 
 # List of Clang libraries to link. The proper -L will be provided by the
 # call to llvm-config
 CLANG_LIBS := \
-  -Wl,--start-group \
-  -lclangAST \
-  -lclangAnalysis \
-  -lclangBasic \
-  -lclangDriver \
-  -lclangEdit \
-  -lclangFrontend \
-  -lclangFrontendTool \
-  -lclangLex \
-  -lclangParse \
-  -lclangSema \
-  -lclangEdit \
-  -lclangASTMatchers \
-  -lclangRewrite \
-  -lclangRewriteFrontend \
-  -lclangStaticAnalyzerFrontend \
-  -lclangStaticAnalyzerCheckers \
-  -lclangStaticAnalyzerCore \
-  -lclangSerialization \
-  -lclangToolingCore \
-  -lclangTooling \
-  -Wl,--end-group
+	-Wl,--start-group \
+	-lclangAST \
+	-lclangAnalysis \
+	-lclangBasic \
+	-lclangDriver \
+	-lclangEdit \
+	-lclangFrontend \
+	-lclangFrontendTool \
+	-lclangLex \
+	-lclangParse \
+	-lclangSema \
+	-lclangEdit \
+	-lclangASTMatchers \
+	-lclangRewrite \
+	-lclangRewriteFrontend \
+	-lclangStaticAnalyzerFrontend \
+	-lclangStaticAnalyzerCheckers \
+	-lclangStaticAnalyzerCore \
+	-lclangSerialization \
+	-lclangToolingCore \
+	-lclangTooling \
+	-Wl,--end-group
 
 # Internal paths in this project: where to find sources, and where to put
 # build artifacts.
@@ -53,22 +53,22 @@ BUILDDIR := build
 
 .PHONY: all
 all: make_builddir \
-  emit_build_config \
-  $(BUILDDIR)/mutator \
+	emit_build_config \
+	$(BUILDDIR)/mutator \
 
 
 .PHONY: emit_build_config
 emit_build_config: make_builddir
-  @echo $(LLVM_BIN_PATH) > $(BUILDDIR)/_build_config
+	@echo $(LLVM_BIN_PATH) > $(BUILDDIR)/_build_config
 
 .PHONY: make_builddir
 make_builddir:
-  @test -d $(BUILDDIR) || mkdir $(BUILDDIR)
+	@test -d $(BUILDDIR) || mkdir $(BUILDDIR)
 
 $(BUILDDIR)/mutator: $(SRC_CLANG_DIR)/mutator.cpp
-  $(CXX) $(CXXFLAGS) $(LLVM_CXXFLAGS) $(CLANG_INCLUDES) $^ \
-    $(CLANG_LIBS) $(LLVM_LDFLAGS) -o $@
+	$(CXX) $(CXXFLAGS) $(LLVM_CXXFLAGS) $(CLANG_INCLUDES) $^ \
+		$(CLANG_LIBS) $(LLVM_LDFLAGS) -o $@
 
 .PHONY: clean
 clean:
-  rm -rf $(BUILDDIR)/* *.dot test/*.pyc test/__pycache__
+	rm -rf $(BUILDDIR)/* *.dot test/*.pyc test/__pycache__
