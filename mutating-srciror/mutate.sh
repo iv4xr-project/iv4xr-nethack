@@ -88,6 +88,7 @@ paths=(
     "$NETHACK_DIR/win/rl"
     "$NETHACK_DIR/build/include"
     "$NETHACK_DIR/build/src"
+    "$NETHACK_DIR/build/util"
     "/usr/include"
     # "/usr/lib/gcc/x86_64-linux-gnu/11/"
 )
@@ -101,7 +102,7 @@ for path in "${paths[@]}"; do
     # Check if the path is a directory and exists
     if [[ -d "$path" ]]; then
         include_opts+=" -I${path}"
-        # library_opts+=" -L${path}"
+        library_opts+=" -L${path}"
     fi
 done
 
@@ -109,15 +110,16 @@ done
 library_opts+=" -L/usr/lib/gcc/x86_64-linux-gnu/11/"
 library_opts+=" -L/usr/lib/x86_64-linux-gnu/"
 
-# # Print the include and library options
-# echo "Include options: ${include_opts}"
-# echo "Library options: ${library_opts}"
+# Print the include and library options
+echo "Include options: ${include_opts}"
+echo "Library options: ${library_opts}"
 
 # # Example clang command with include and library options
 # clang_cmd="clang -c myfile.c ${include_opts} ${library_opts} -o myfile.o"
 # echo "Example clang command: ${clang_cmd}"
 
-python3 $BASEDIR/PythonWrappers/mutationClang $FILE_PATH ${include_opts} ${library_opts} -o test
+python3 $BASEDIR/PythonWrappers/mutationClang $FILE_PATH -B/usr/lib/gcc/x86_64-linux-gnu/11/ ${include_opts} ${library_opts}
+# python3 $BASEDIR/PythonWrappers/mutationClang $FILE_PATH --sysroot=/usr/lib/gcc/x86_64-linux-gnu/12 -L"$NETHACK_DIR"/src -I"$NETHACK_DIR"/src -I"$NETHACK_DIR"/src/share -I"$NETHACK_DIR"/sys/unix -I"$NETHACK_DIR"/win/tty -I"$NETHACK_DIR"/win/rl -I"$NETHACK_DIR"/include -I"$NETHACK_DIR"/build/include -I"$NETHACK_DIR"/build/src -I/usr/include -I/usr/lib/gcc/x86_64-linux-gnu/12/ -L"$NETHACK_DIR"/src/share -L"$NETHACK_DIR"/sys/unix -L"$NETHACK_DIR"/win/tty -L"$NETHACK_DIR"/win/rl -L"$NETHACK_DIR"/include -L"$NETHACK_DIR"/build/include -L"$NETHACK_DIR"/build/src -L/usr/include -L/usr/lib/gcc/x86_64-linux-gnu/12/ -o test -v
 
 # Remove trap
 trap - EXIT
