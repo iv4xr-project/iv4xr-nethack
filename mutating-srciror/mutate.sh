@@ -10,6 +10,9 @@ trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
 BASEDIR=$(cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P)
 cd "$BASEDIR"
 
+NETHACK_DIR=$(realpath "$(dirname "$BASEDIR")/server-python/lib/nle")
+FILE_PATH=$(realpath "$NETHACK_DIR/src/$1")
+
 # Function to expand a range of numbers
 expand_range() {
     local start end range result
@@ -29,6 +32,11 @@ expand_range() {
 # Check if input is provided as an argument
 if [ $# -lt 2 ]; then
     echo "Usage: $0 <filename> <range_and_values>"
+    exit 1
+fi
+
+if [ ! -f "$FILE_PATH" ]; then
+    echo "File does not exist: $FILE_PATH"
     exit 1
 fi
 
@@ -65,15 +73,13 @@ done
 mapfile -t sorted_values < <(echo "${!unique_values[@]}" | tr ' ' '\n' | sort -n)
 
 # Join the sorted values with commas
-sorted_values=$(IFS=,; echo "${sorted_values[*]}")
+sorted_values_string=$(IFS=,; echo "${sorted_values[*]}")
 
 # ############ Settings for SCRIROR ############
 sh reset.sh
 rm -rf ~/.srciror
 mkdir ~/.srciror
-NETHACK_DIR=$(realpath "$(dirname "$BASEDIR")/server-python/lib/nle")
-FILE_PATH=$(realpath "$NETHACK_DIR/src/$1")
-echo "$FILE_PATH:$sorted_values" > ~/.srciror/coverage
+echo "$FILE_PATH:$sorted_values_string" > ~/.srciror/coverage
 
 export SRCIROR_LLVM_BIN=$BASEDIR/llvm-build/Release+Asserts/bin
 export SRCIROR_LLVM_INCLUDES=$BASEDIR/llvm-build/Release+Asserts/lib/clang/3.8.0/include
