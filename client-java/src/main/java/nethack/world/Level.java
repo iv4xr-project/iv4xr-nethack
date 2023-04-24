@@ -89,19 +89,26 @@ public class Level {
   private void updateTiles(Tile[][] tiles) {
     changedTiles.clear();
 
-    List<Entity> boulders =
+    Set<CustomVec2D> bouldersPositions =
         entities.stream()
-            .filter(entity -> entity.entityInfo.name.equals("Boulder"))
-            .collect(Collectors.toList());
+            .filter(entity -> entity.entityInfo.name.equalsIgnoreCase("boulder"))
+            .map(entity -> entity.pos)
+            .collect(Collectors.toSet());
     // If it is a subsequent observation, only give coordinates of fields that changed
     for (int x = 0; x < SIZE.width; x++) {
       for (int y = 0; y < SIZE.height; y++) {
         CustomVec2D pos = new CustomVec2D(x, y);
         Symbol symbol = getSymbol(pos);
-        boolean hasBoulder = boulders.stream().anyMatch(boulder -> boulder.pos.equals(pos));
+        boolean hasBoulder = bouldersPositions.contains(pos);
         if (hasBoulder) {
-          if (!(surface.getTile(pos) instanceof Boulder)) {
-            changedTiles.add(new Boulder(tiles[y][x].loc));
+          Tile tile = surface.getTile(pos);
+          if (!(tile instanceof Boulder)) {
+            Boulder boulder = new Boulder(tiles[y][x].loc);
+            changedTiles.add(boulder);
+            boulder.setVisibility(((Viewable) tiles[y][x]).getVisibility());
+          }
+          if (tile != null) {
+            ((Viewable) tile).setVisibility(((Viewable) tiles[y][x]).getVisibility());
           }
         } else if (!Objects.equals(surface.getTile(pos), tiles[y][x])) {
           changedTiles.add(tiles[y][x]);
