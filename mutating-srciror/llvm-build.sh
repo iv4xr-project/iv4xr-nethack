@@ -1,5 +1,4 @@
 #!/bin/bash
-
 export PYTHON=/usr/bin/python3
 
 ZIPS_DIR=zips

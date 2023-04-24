@@ -224,7 +224,7 @@ bool applyReplacement(const Replacement &Replace, Rewriter &Rewrite) {
 }
 
 
-void Mutate(Replacements& repl, std::string NamePrefix, std::string NameSuffix, std::string tool, std::string ext, std::string srcDir, SourceManager& SourceMgr, CompilerInstance& TheCompInst, FileManager& FileMgr){
+void Mutate(Replacements& repl, std::string NamePrefix, std::string tool, std::string ext, std::string srcDir, SourceManager& SourceMgr, CompilerInstance& TheCompInst, FileManager& FileMgr){
   int x = 0;
   for (auto &r : repl) {
     x++;
@@ -244,16 +244,16 @@ void Mutate(Replacements& repl, std::string NamePrefix, std::string NameSuffix, 
 
         applyReplacement(r, TheRewriter);
         const RewriteBuffer *RewriteBuf = TheRewriter.getRewriteBufferFor(SourceMgr.getMainFileID());
+        SourceLocation startLoc = SourceMgr.getLocForStartOfFile(SourceMgr.getMainFileID());
+        SourceLocation mutloc = startLoc.getLocWithOffset(r.getOffset());
+        int lineNumber = SourceMgr.getSpellingLineNumber(mutloc);
         std::ofstream out_file;
-        std::string outFileName = srcDir + "/" + tool + ".mut." + NamePrefix + std::to_string(x) + "." + std::to_string(r.getOffset()) + "." + NameSuffix + ext;
+        std::string outFileName = srcDir + "/" + tool + "." + NamePrefix + "." + std::to_string(lineNumber) + "." + std::to_string(x) + "-" + std::to_string(r.getOffset()) + ".mut" + ext;
         if (access(outFileName.c_str(), F_OK) == -1) {
           out_file.open(outFileName);
           out_file << std::string(RewriteBuf->begin(), RewriteBuf->end());
           out_file.close();
-          SourceLocation startLoc = SourceMgr.getLocForStartOfFile(SourceMgr.getMainFileID());
-          SourceLocation mutloc = startLoc.getLocWithOffset(r.getOffset());
-          int lineNumber = SourceMgr.getSpellingLineNumber(mutloc);
-          printf("line: %i %s\n", lineNumber, (tool + ".mut." + NamePrefix + std::to_string(x) + "." + std::to_string(r.getOffset()) + "." + NameSuffix + ext).c_str());    // Outputting where mutants are
+          printf("line: %i %s\n", lineNumber, (tool + "." + NamePrefix + "." + std::to_string(lineNumber) + "." + std::to_string(x) + "-" + std::to_string(r.getOffset()) + ".mut" + ext).c_str());    // Outputting where mutants are
         }
         else {
           printf("ERROR IN GENERATING MUTANTS: we have a name overlap for %s\n", outFileName.c_str());
@@ -404,35 +404,35 @@ int main(int argc, const char **argv) {
     failed = 1;
   }
   else {
-    Mutate(AORTool.getReplacements(), "binaryop_for_", "60", CurrTool, Ext, SrcDir, SourceMgr, TheCompInst, FileMgr);
+    Mutate(AORTool.getReplacements(), "num_expr", CurrTool, Ext, SrcDir, SourceMgr, TheCompInst, FileMgr);
   }
   //-----
   if (int Result = RORTool.run(newFrontendActionFactory(&RORFinder).get())) {
     failed = 1;
   }
   else {
-    Mutate(RORTool.getReplacements(), "binaryop_for_", "61", CurrTool, Ext, SrcDir, SourceMgr, TheCompInst, FileMgr);
+    Mutate(RORTool.getReplacements(), "num_expr_compare", CurrTool, Ext, SrcDir, SourceMgr, TheCompInst, FileMgr);
   }
   //-----
   if (int Result = ICRTool.run(newFrontendActionFactory(&ICRFinder).get())) {
     failed = 1;
   }
   else {
-    Mutate(ICRTool.getReplacements(), "const_for_", "const", CurrTool, Ext, SrcDir, SourceMgr, TheCompInst, FileMgr);
+    Mutate(ICRTool.getReplacements(), "num_const", CurrTool, Ext, SrcDir, SourceMgr, TheCompInst, FileMgr);
   }
   //-----
   if (int Result = LCRTool.run(newFrontendActionFactory(&LCRFinder).get())) {
     failed = 1;
   }
   else {
-    Mutate(LCRTool.getReplacements(), "binaryop_for_", "62", CurrTool, Ext, SrcDir, SourceMgr, TheCompInst, FileMgr);
+    Mutate(LCRTool.getReplacements(), "bool_expr", CurrTool, Ext, SrcDir, SourceMgr, TheCompInst, FileMgr);
   }
   //-----
   if (int Result = OCNGTool.run(newFrontendActionFactory(&OCNGFinder).get())) {
     failed = 1;
   }
   else {
-    Mutate(OCNGTool.getReplacements(), "binaryop_for_", "ocng", CurrTool, Ext, SrcDir, SourceMgr, TheCompInst, FileMgr);
+    Mutate(OCNGTool.getReplacements(), "bool_guard_while_if", CurrTool, Ext, SrcDir, SourceMgr, TheCompInst, FileMgr);
   }
 
   return failed;
