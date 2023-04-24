@@ -15,15 +15,15 @@ def mutate(compiler, ext, mutator, args, compiler_include_flags, src_indices):
         cov_info = getCoverageInfo(src_file)
 
         if not cov_info:
-            print("no coverage info for the file: " + src_file + ", so assume wants to mutate all")
+            # print("no coverage info for the file: " + src_file + ", so assume wants to mutate all")
             cov_info = "all"
         command = mutator + " " + src_file + " -coverage_info=" +  cov_info + " -- " + " ".join(args) + ' -I'  + compiler_include_flags.strip()
-        print("THE ACTUAL COMMAND IS: " + command)
+        # print("THE ACTUAL COMMAND IS: " + command)
         out, err, my_time = executeCommand(command.split(), True)
 
 
 def getCoverageInfo(src_file):
-    print("THE CURRENT DIRECTORY IS: " + os.getcwd())
+    # print("THE CURRENT DIRECTORY IS: " + os.getcwd())
     file_name = os.path.basename(src_file) + ".cov"
     cov_file = os.path.join(getSummaryDir(), "coverage")    # Assume only one big coverage file, because only one tool at a time
     if not os.path.isfile(cov_file):
@@ -57,7 +57,7 @@ def main():
     if '-fstack-usage' in args: # TODO: What is -fstack-usage?
         args.remove('-fstack-usage')
     compiler = clang
-    print('logging compile flags: ' + ' '.join(args))
+    # print('logging compile flags: ' + ' '.join(args))
 
     # if the build system is checking for the version flags, we don't mess it up, just delegate to the compiler
     if "--version" in args or "-V" in args:
@@ -70,8 +70,6 @@ def main():
         ext = ".c"
         mutate(compiler, ext, mutator, args, compiler_include_flags, c_indices)
 
-    print('Looking to compile the original: ' + str([compiler] + args))
-    out, err, my_time = executeCommand([compiler] + args, True)
     return 1
 
 if __name__ == '__main__':

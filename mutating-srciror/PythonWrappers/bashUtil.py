@@ -24,8 +24,8 @@ def executeCommand(args, debug=False):
     error = decode(err)
     if debug == True:
         print (str(args))
-        print (out)
-        print (error)
+        if out: print (out)
+        if error: print (error)
     exec_time = str(end_time - start_time)
     return out, error, exec_time
 
