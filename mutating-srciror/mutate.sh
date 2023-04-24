@@ -110,6 +110,7 @@ for path in "${paths[@]}"; do
 done
 
 # Command which mutates the source files
+cp "$FILE_PATH" "${FILE_PATH%.c}.orig.c"
 python3 "$BASEDIR"/PythonWrappers/mutationClang "$FILE_PATH" "${include_opts}"
 
 # Remove trap

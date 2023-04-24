@@ -10,7 +10,13 @@ trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
 BASEDIR=$(cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P)
 cd "$BASEDIR"
 
-find .. -name "*.mut.*" -delete
+NLE_DIR=$(dirname "$BASEDIR")/server-python/lib/nle
+find "$NLE_DIR" -name "*.mut.*" -delete
+find "$NLE_DIR" -name "*.orig.c" | while IFS= read -r file
+do
+  echo "restored: ${file%.orig.c}.c"
+  mv "$file" "${file%.orig.c}.c"
+done
 
 # Remove trap
 trap - EXIT
