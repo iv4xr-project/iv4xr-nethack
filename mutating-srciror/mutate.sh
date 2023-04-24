@@ -10,9 +10,6 @@ trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
 BASEDIR=$(cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P)
 cd "$BASEDIR"
 
-# Delete mutate files
-find .. -name "*.mut.*" -delete
-
 # Function to expand a range of numbers
 expand_range() {
     local start end range result
@@ -30,13 +27,13 @@ expand_range() {
 }
 
 # Check if input is provided as an argument
-if [ $# -lt 1 ]; then
-    echo "Usage: $0 <range_and_values>"
+if [ $# -lt 2 ]; then
+    echo "Usage: $0 <filename> <range_and_values>"
     exit 1
 fi
 
 # Get the input from the first argument
-INPUT=$1
+INPUT=$2
 
 # Replace all occurrences of 'to' with '-'
 INPUT=${INPUT//to/-}
@@ -65,23 +62,24 @@ for value in "${VALUES[@]}"; do
 done
 
 # Sort the unique values
-sorted_values=($(echo "${!unique_values[@]}" | tr ' ' '\n' | sort -n))
+mapfile -t sorted_values < <(echo "${!unique_values[@]}" | tr ' ' '\n' | sort -n)
 
 # Join the sorted values with commas
 sorted_values=$(IFS=,; echo "${sorted_values[*]}")
-echo "$sorted_values"
 
+# ############ Settings for SCRIROR ############
+sh reset.sh
 rm -rf ~/.srciror
 mkdir ~/.srciror
-NETHACK_DIR=$(realpath "../server-python/lib/nle")
-FILE_PATH=$(realpath "$NETHACK_DIR/src/potion.c")
+NETHACK_DIR=$(realpath "$(dirname "$BASEDIR")/server-python/lib/nle")
+FILE_PATH=$(realpath "$NETHACK_DIR/src/$1")
 echo "$FILE_PATH:$sorted_values" > ~/.srciror/coverage
 
 export SRCIROR_LLVM_BIN=$BASEDIR/llvm-build/Release+Asserts/bin
 export SRCIROR_LLVM_INCLUDES=$BASEDIR/llvm-build/Release+Asserts/lib/clang/3.8.0/include
 export SRCIROR_SRC_MUTATOR=$BASEDIR/SRCMutation/build/mutator
 
-# List of paths
+# List of paths to include
 paths=(
     "$NETHACK_DIR/include"
     "$NETHACK_DIR/src"
@@ -105,7 +103,8 @@ for path in "${paths[@]}"; do
     fi
 done
 
-python3 $BASEDIR/PythonWrappers/mutationClang $FILE_PATH ${include_opts}
+# Command which mutates the source files
+python3 "$BASEDIR"/PythonWrappers/mutationClang "$FILE_PATH" "${include_opts}"
 
 # Remove trap
 trap - EXIT
