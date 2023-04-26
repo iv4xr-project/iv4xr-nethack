@@ -1,10 +1,9 @@
-@REM @echo off
+@echo off
 setlocal
 
 @REM Change to the directory containing the repository
 SET BASEDIR=%~dp0
 SET BASEDIR=%BASEDIR:~0,-1%
-echo %BASEDIR%
 cd /d %BASEDIR%\client-java
 
 @REM Compile the jar and package it up, then run App.java in background
@@ -14,21 +13,16 @@ start cmd /C "java -ea -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.s
 @REM Store the process ID (PID) of the Java process
 set java_pid=%errorlevel%
 
-wsl ~ -d Ubuntu-22.04 -e bash -c "bash /mnt/c/Users/gerard/MegaDrive/Documents/M2-Thesis/Code/iv4xr-nethack/mutating-srciror/run-server-mutating.sh"
+@REM Convert the Windows-style path to a WSL-compatible path
+for /f "usebackq delims=" %%I in (`wsl wslpath -a %BASEDIR:\=/%`) do set WSL_BASEDIR=%%I
 
-@REM Loop until the Java process has started
-@REM :loop
-@REM tasklist /FI "PID eq %java_pid%" | findstr /c:"java.exe" >nul
-@REM if errorlevel 1 goto loop
-
-@REM Execute start.sh
-@REM call server-python/wsl-start.sh
-
-@REM Clean up by killing the Java process
-@REM taskkill /F /PID %java_pid%
+@REM WSL run mutation testing
+wsl ~ -d Ubuntu-22.04 -e bash -c "bash %WSL_BASEDIR%/mutating-srciror/run-server-mutating.sh"
 
 Check for error
 if %errorlevel% neq 0 (
   echo An error occurred!
   pause
 )
+
+endlocal
