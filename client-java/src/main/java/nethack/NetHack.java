@@ -196,8 +196,11 @@ public class NetHack {
       }
     }
 
-    StepState stepState = client.sendStepBytes(msg);
+    // Keep copy of previous state, serialization is the chosen solution
     previousGameState = SerializationUtils.clone(gameState);
+
+    // Update state with the result received from the socket
+    StepState stepState = client.sendStepBytes(msg);
     updateGameState(stepState);
     return StepType.Valid;
   }
