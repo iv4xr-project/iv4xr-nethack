@@ -3,6 +3,7 @@
 #
 
 nethack-server-env/
+*.flag
 
 sandbox/
 .idea/

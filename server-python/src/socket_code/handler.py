@@ -35,7 +35,6 @@ def main():
     parser = ArgumentParser()
     parser.add_argument('--addr', action='store', type=str, dest='addr')
     parser.add_argument('--fd', action='store', type=int, dest='fd')
-    parser.add_argument('--universe', action='store_true', dest='universe')
     parser.add_argument('--setup', action='store', type=str, dest='setup_code')
     options = parser.parse_args()
 

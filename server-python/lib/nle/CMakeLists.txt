@@ -106,6 +106,10 @@ file(
   "win/tty/*.c"
   "win/rl/winrl.cc")
 
+# Exclude specific file patterns from the source files, these are mutations
+file(GLOB NETHACK_SRC_EXCLUDE "src/*.mut.c" "src/*.orig.c")
+list(REMOVE_ITEM NETHACK_SRC ${NETHACK_SRC_EXCLUDE})
+
 # terminal emulator library
 add_library(tmt STATIC "third_party/libtmt/tmt.c")
 set_target_properties(tmt PROPERTIES C_STANDARD 11)

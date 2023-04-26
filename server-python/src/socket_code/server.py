@@ -7,23 +7,21 @@ import sys
 import subprocess
 import socket
 import logging
-
-if sys.version_info >= (3, 0):
-    import socketserver
-else:
-    import SocketServer as socketserver
+import socketserver
 
 
-def serve(port=5001, universe=False, setup_code=''):
+def serve(port=5001, setup_code='', exit_on_done=False):
     """
     Run a server on the given port.
     """
     logging.info(f"Starting server (port={port})")
     server = Server(('127.0.0.1', port), Handler)
-    server.universe = universe
     server.setup_code = setup_code
+    server.exit_on_done = exit_on_done
     logging.info(f"Listening on port {port}...")
     server.serve_forever()
+    logging.info(f"Closing server...")
+    server.server_close()
 
 
 class Server(socketserver.ThreadingMixIn, socketserver.TCPServer):
@@ -31,8 +29,8 @@ class Server(socketserver.ThreadingMixIn, socketserver.TCPServer):
     The connection server.
     """
     allow_reuse_address = True
-    universe = False
     setup_code = ''
+    exit_on_done = False
 
 
 class Handler(socketserver.BaseRequestHandler):
@@ -49,11 +47,8 @@ class Handler(socketserver.BaseRequestHandler):
             '--fd',
             str(self.request.fileno()),
             '--setup',
-            str(self.server.setup_code)
+            str(self.server.setup_code),
         ]
-
-        if self.server.universe:
-            args.append('--universe')
 
         logging.debug(f'Initialize handler with command: {"".join(args)}')
         # Greatly reduces latency on Linux.
@@ -77,3 +72,7 @@ class Handler(socketserver.BaseRequestHandler):
             proc.wait()
         finally:
             logging.info(f"Disconnected from {self.client_address}")
+
+            if self.server.exit_on_done:
+                logging.info(f"Init closing server due to flag")
+                self.server.shutdown()

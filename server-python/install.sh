@@ -19,11 +19,23 @@ cd "$BASEDIR"
 #   sudo apt install -y bison flex libbz2-dev
 # fi
 
-python3 -m venv nethack-server-env
+# Check if virtual environment exists
+if [ ! -d "nethack-server-env" ]; then
+  echo "Creating virtual environment..."
+  python3 -m venv nethack-server-env
+fi
+
 # shellcheck disable=SC1091
 source nethack-server-env/bin/activate
+
+# Check if requirements have been installed
+if [ ! -f "requirements_installed.flag" ]; then
+  echo "Installing requirements..."
+  pip install -r requirements.txt
+  touch "requirements_installed.flag"
+fi
+
 pip install -e ./lib/nle
-pip install -r requirements.txt
 
 # Remove trap
 trap - EXIT

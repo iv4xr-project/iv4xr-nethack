@@ -179,6 +179,7 @@ public class NetHack {
         command = Command.fromStroke("-d");
       }
 
+      assert command != null : "Command cannot be null";
       if (command.commandEnum == CommandEnum.ADDITIONAL_ASCII) {
         msg[i * 2 + 2] = 0;
         msg[i * 2 + 3] = (byte) command.stroke.charAt(0);

@@ -16,10 +16,10 @@ def main():
     parser = ArgumentParser()
     parser.add_argument('-p', '--port', action='store', type=int,
                         dest='port', default=5001)
-    parser.add_argument('-u', '--universe', action='store_true',
-                        dest='universe')
     parser.add_argument('-s', '--setup', action='store', type=str,
                         dest='setup_code')
+    parser.add_argument('-e', '--exit_on_done', action='store_true',
+                        dest='exit_on_done', default=False, help='Flag to exit server on handler done')
     options = parser.parse_args()
     server.serve(**vars(options))
 

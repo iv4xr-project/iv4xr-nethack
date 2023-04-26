@@ -119,17 +119,29 @@ public:
       long long Value = std::strtoll(ValueStr.c_str(), &endptr, 10);
       int Size = ValueStr.size();
       std::vector<std::string> Values;
+      // if (Value == 1) {
+      //   Values.insert(Values.end(), {"(-1)", "0", "2"});
+      // }
+      // else if (Value == -1) {
+      //   Values.insert(Values.end(), {"1", "0", "(-2)"});
+      // }
+      // else if (Value == 0) {
+      //   Values.insert(Values.end(), {"1", "(-1)"});
+      // }
+      // else {
+      //   Values.insert(Values.end(), {"0", "1", "(-1)", "-(" + std::to_string(Value) + ")", std::to_string(Value + 1), std::to_string(Value - 1)});
+      // }
       if (Value == 1) {
-        Values.insert(Values.end(), {"(-1)", "0", "2"});
+        Values.insert(Values.end(), {"-1", "0", "2"});
       }
       else if (Value == -1) {
-        Values.insert(Values.end(), {"1", "0", "(-2)"});
+        Values.insert(Values.end(), {"1", "0", "-2"});
       }
       else if (Value == 0) {
-        Values.insert(Values.end(), {"1", "(-1)"});
+        Values.insert(Values.end(), {"1", "-1"});
       }
       else {
-        Values.insert(Values.end(), {"0", "1", "(-1)", "-(" + std::to_string(Value) + ")", std::to_string(Value + 1), std::to_string(Value - 1)});
+        Values.insert(Values.end(), {"0", "1", "-1", "-" + std::to_string(Value), std::to_string(Value + 1), std::to_string(Value - 1)});
       }
       for (std::string MutationVal : Values) {
         // printf("subsituting for the value: %s\n", MutationVal.c_str());
