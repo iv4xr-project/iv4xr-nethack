@@ -1,11 +1,12 @@
 package nethack.object;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import nethack.enums.Condition;
 import util.ColoredStringBuilder;
 
-public class Conditions {
+public class Conditions implements Serializable {
   private Set<Condition> conditions = new HashSet<>();
 
   public Conditions(Set<Condition> conditions) {

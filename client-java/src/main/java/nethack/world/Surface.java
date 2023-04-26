@@ -2,6 +2,7 @@ package nethack.world;
 
 import agent.navigation.GridSurface;
 import agent.navigation.surface.Tile;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import nethack.enums.Color;
@@ -11,7 +12,7 @@ import nethack.world.tiles.Viewable;
 import util.ColoredStringBuilder;
 import util.CustomVec2D;
 
-public class Surface extends GridSurface {
+public class Surface extends GridSurface implements Serializable {
   public Surface() {
     super(Level.SIZE, 8);
 

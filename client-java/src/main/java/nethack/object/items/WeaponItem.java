@@ -1,10 +1,11 @@
 package nethack.object.items;
 
+import java.io.Serializable;
 import nethack.enums.BUC;
 import nethack.object.info.EntityInfo;
 import nethack.object.info.WeaponInfo;
 
-public class WeaponItem extends Item implements BUCStatus, Weighable {
+public class WeaponItem extends Item implements BUCStatus, Weighable, Serializable {
   public BUC buc;
   public WeaponInfo weaponInfo;
   public int modifier;

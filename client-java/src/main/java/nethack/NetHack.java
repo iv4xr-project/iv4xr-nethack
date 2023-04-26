@@ -8,11 +8,13 @@ import nethack.enums.CommandEnum;
 import nethack.enums.GameMode;
 import nethack.object.*;
 import nethack.world.Level;
+import org.apache.commons.lang3.SerializationUtils;
 import util.CustomVec2D;
 import util.Loggers;
 import util.Stopwatch;
 
 public class NetHack {
+  public GameState previousGameState = null;
   public final GameState gameState = new GameState();
   public GameMode gameMode = GameMode.NetHack;
   public Seed seed;
@@ -195,6 +197,7 @@ public class NetHack {
     }
 
     StepState stepState = client.sendStepBytes(msg);
+    previousGameState = SerializationUtils.clone(gameState);
     updateGameState(stepState);
     return StepType.Valid;
   }

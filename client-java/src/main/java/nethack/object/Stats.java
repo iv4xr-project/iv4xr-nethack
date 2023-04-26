@@ -1,8 +1,9 @@
 package nethack.object;
 
+import java.io.Serializable;
 import util.ColoredStringBuilder;
 
-public class Stats {
+public class Stats implements Serializable {
   public int score;
   public int monsterLevel;
   public Turn turn;

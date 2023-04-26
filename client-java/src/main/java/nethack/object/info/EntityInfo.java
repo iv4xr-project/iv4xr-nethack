@@ -1,10 +1,11 @@
 package nethack.object.info;
 
+import java.io.Serializable;
 import nethack.enums.ArmorType;
 import nethack.enums.EntityClass;
 import nethack.enums.Skill;
 
-public class EntityInfo {
+public class EntityInfo implements Serializable {
   public int index;
   public String name;
   public String description;

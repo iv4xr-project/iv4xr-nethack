@@ -1,8 +1,9 @@
 package nethack.object.info;
 
+import java.io.Serializable;
 import nethack.enums.MonsterType;
 
-public class MonsterInfo {
+public class MonsterInfo implements Serializable {
   public int index;
   public String name;
   public MonsterType monsterType;

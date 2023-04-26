@@ -15,6 +15,7 @@ import agent.navigation.strategy.NavUtils;
 import agent.navigation.surface.*;
 import eu.iv4xr.framework.extensions.pathfinding.Navigatable;
 import eu.iv4xr.framework.extensions.pathfinding.XPathfinder;
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 import nethack.enums.Color;
@@ -36,20 +37,20 @@ import util.CustomVec2D;
  *
  * @author Wish
  */
-public class GridSurface implements Navigatable<CustomVec2D> {
+public class GridSurface implements Navigatable<CustomVec2D>, Serializable {
   public final Tile[][] tiles;
   public final Map<String, HashSet<CustomVec2D>> tileTypes = new HashMap<>();
   public final Set<CustomVec2D> frontiers = new HashSet<>();
-  public final HierarchicalMap hierarchicalMap;
+  public final transient HierarchicalMap hierarchicalMap;
 
   /**
    * If true, the pathfinder will assume that the whole NavGraph has been "seen", so no vertex would
    * count as unreachable because it is still unseen. This essentially turns off memory-based path
    * finding. The default of this flag is false.
    */
-  private boolean perfect_memory_pathfinding = true;
+  private transient boolean perfect_memory_pathfinding = true;
 
-  public final ConcreteMap concreteMap;
+  public final transient ConcreteMap concreteMap;
 
   public GridSurface(Size size, int clusterSize) {
     tiles = new Tile[size.height][size.width];

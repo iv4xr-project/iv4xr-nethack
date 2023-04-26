@@ -1,5 +1,6 @@
 package nethack.object;
 
+import java.io.Serializable;
 import java.util.Random;
 
 // From Python documentation:
@@ -15,7 +16,7 @@ import java.util.Random;
 // flag enables or disables this behavior. If set to True, trajectories
 // won't be reproducible.
 
-public class Seed {
+public class Seed implements Serializable {
   public final boolean reseed;
   public final String disp;
   public final String core;

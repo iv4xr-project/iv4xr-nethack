@@ -4,6 +4,7 @@ import agent.navigation.HierarchicalNavigation;
 import agent.navigation.hpastar.graph.AbstractNode;
 import agent.navigation.hpastar.infrastructure.Constants;
 import agent.navigation.hpastar.infrastructure.Id;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,8 +12,10 @@ import java.util.Map;
 import nethack.object.Dlvl;
 import nethack.object.Player;
 
-public class Dungeon {
-  public HierarchicalNavigation hierarchicalNav = new HierarchicalNavigation(new Surface());
+public class Dungeon implements Serializable {
+  // Transient will prevent the object from being serialized
+  public transient HierarchicalNavigation hierarchicalNav =
+      new HierarchicalNavigation(new Surface());
   public final List<Level> levels = new ArrayList<>();
   public final Map<Dlvl, Integer> indexes = new HashMap<>();
 

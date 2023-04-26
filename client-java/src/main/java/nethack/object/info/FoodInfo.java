@@ -1,6 +1,8 @@
 package nethack.object.info;
 
-public class FoodInfo {
+import java.io.Serializable;
+
+public class FoodInfo implements Serializable {
   public String name;
   public Integer weight;
   public Integer cost;

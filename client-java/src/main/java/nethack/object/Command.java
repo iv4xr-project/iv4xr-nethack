@@ -11,13 +11,6 @@ public class Command {
     this.stroke = commandEnum.stroke;
   }
 
-  //  public Command(String stroke) {
-  //    commandEnum = CommandEnum.ADDITIONAL_ASCII;
-  //    assert !stroke.startsWith("-") : "Stroke may not start with -";
-  //    assert stroke.length() == 1 : "Max length of stroke is 1";
-  //    this.stroke = stroke;
-  //  }
-
   public Command(char character) {
     commandEnum = CommandEnum.ADDITIONAL_ASCII;
     assert character != '-' : "Command must not be - it is special character";

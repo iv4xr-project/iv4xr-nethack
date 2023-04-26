@@ -1,11 +1,12 @@
 package nethack.object;
 
+import java.io.Serializable;
 import nethack.enums.Color;
 import nethack.world.Dungeon;
 import nethack.world.Level;
 import util.ColoredStringBuilder;
 
-public class GameState {
+public class GameState implements Serializable {
   public Stats stats;
   public Player player;
   public String message;

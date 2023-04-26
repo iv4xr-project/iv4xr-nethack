@@ -1,9 +1,10 @@
 package nethack.object;
 
+import java.io.Serializable;
 import nethack.object.items.Item;
 import util.ColoredStringBuilder;
 
-public class Inventory {
+public class Inventory implements Serializable {
   public static final int MAX_SIZE = 55;
   public Item[] items;
 

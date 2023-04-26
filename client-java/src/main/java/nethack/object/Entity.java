@@ -1,11 +1,12 @@
 package nethack.object;
 
 import eu.iv4xr.framework.mainConcepts.IWorldEntity;
+import java.io.Serializable;
 import nethack.object.info.EntityInfo;
 import util.CustomVec2D;
 import util.CustomVec3D;
 
-public class Entity implements IWorldEntity {
+public class Entity implements IWorldEntity, Serializable {
   public CustomVec3D loc;
   public CustomVec2D pos;
   public int id;

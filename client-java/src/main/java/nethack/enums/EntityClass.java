@@ -1,7 +1,9 @@
 package nethack.enums;
 
+import java.io.Serializable;
+
 // Source: server-python\lib\nle\include\objclass.h
-public enum EntityClass {
+public enum EntityClass implements Serializable {
   RANDOM,
   ILLOBJ, // Strange object
   WEAPON,

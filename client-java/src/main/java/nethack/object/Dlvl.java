@@ -1,8 +1,9 @@
 package nethack.object;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Dlvl {
+public class Dlvl implements Serializable {
   public final int depth;
   public final int dungeonNumber;
 

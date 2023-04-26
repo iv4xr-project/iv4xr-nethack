@@ -1,7 +1,9 @@
 package nethack.enums;
 
+import java.io.Serializable;
+
 // Definitions found in lib/nle/include/skills.h
-public enum Skill {
+public enum Skill implements Serializable {
   NONE,
 
   /* Weapon Skills -- Stephen White

@@ -139,8 +139,7 @@ public class Actions {
                   WorldModels.performCommands(
                       S,
                       List.of(new Command(COMMAND_PRAY), new Command('y'), new Command(MISC_MORE)));
-              S.app().gameState.player.lastPrayerTurn =
-                  Optional.of(S.app().gameState.stats.turn.time);
+              S.app().gameState.player.lastPrayerTurn = S.app().gameState.stats.turn.time;
               return new Pair<>(S, newWom);
             });
   }

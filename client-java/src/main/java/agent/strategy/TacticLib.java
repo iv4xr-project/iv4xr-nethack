@@ -278,9 +278,9 @@ public class TacticLib {
                   if (!player.hungerState.wantsFood()) {
                     return null;
                   }
-                  Optional<Integer> lastPrayerTurn = player.lastPrayerTurn;
-                  if (lastPrayerTurn.isEmpty()
-                      || lastPrayerTurn.get() - S.app().gameState.stats.turn.time > prayerTimeOut) {
+                  Integer lastPrayerTurn = player.lastPrayerTurn;
+                  if (lastPrayerTurn == null
+                      || lastPrayerTurn - S.app().gameState.stats.turn.time > prayerTimeOut) {
                     return true;
                   }
                   return null;

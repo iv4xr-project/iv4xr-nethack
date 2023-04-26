@@ -1,8 +1,9 @@
 package nethack.object;
 
+import java.io.Serializable;
 import org.jetbrains.annotations.NotNull;
 
-public class Turn implements Comparable<Turn> {
+public class Turn implements Comparable<Turn>, Serializable {
   public int time = 1;
   public int step = 0;
   public int turnNr = 0;

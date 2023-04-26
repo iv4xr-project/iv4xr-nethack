@@ -1,10 +1,11 @@
 package nethack.object;
 
+import java.io.Serializable;
 import nethack.object.info.MonsterInfo;
 import util.CustomVec2D;
 import util.CustomVec3D;
 
-public class Monster {
+public class Monster implements Serializable {
   public CustomVec3D loc;
   public CustomVec2D pos;
   public int id;

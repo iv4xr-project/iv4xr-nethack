@@ -1,10 +1,11 @@
 package agent.navigation.surface;
 
+import java.io.Serializable;
 import java.util.Objects;
 import util.CustomVec2D;
 import util.CustomVec3D;
 
-public abstract class Tile {
+public abstract class Tile implements Serializable {
   public CustomVec3D loc;
   public final CustomVec2D pos;
   public boolean seen = false;

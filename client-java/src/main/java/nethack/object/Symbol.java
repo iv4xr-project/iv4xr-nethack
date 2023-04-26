@@ -1,10 +1,11 @@
 package nethack.object;
 
+import java.io.Serializable;
 import nethack.enums.Color;
 
 // Source: https://www.baeldung.com/java-enum-values
 // Actions listed at: /python-server/lib/nle/nle/nethack/actions.py
-public class Symbol {
+public class Symbol implements Serializable {
   public final int glyph;
   public final Color color;
   public final char symbol;

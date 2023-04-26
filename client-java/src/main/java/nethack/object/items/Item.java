@@ -1,8 +1,9 @@
 package nethack.object.items;
 
+import java.io.Serializable;
 import nethack.object.info.EntityInfo;
 
-public class Item {
+public class Item implements Serializable {
   // Additional information possibly at: server-python\lib\nle\build\include\onames.h
   public final char symbol;
   public final EntityInfo entityInfo;

@@ -2,14 +2,15 @@ package nethack.object;
 
 import eu.iv4xr.framework.mainConcepts.IPlayer;
 import eu.iv4xr.framework.spatial.Vec3;
-import java.util.Optional;
+import java.io.Serializable;
+import java.util.Objects;
 import nethack.enums.Alignment;
 import nethack.enums.Encumbrance;
 import nethack.enums.HungerState;
 import util.ColoredStringBuilder;
 import util.CustomVec3D;
 
-public class Player implements IPlayer {
+public class Player implements IPlayer, Serializable {
   public static final String ID = "player";
   public long lastStutterTimestamp = 0;
   public Inventory inventory;
@@ -33,7 +34,7 @@ public class Player implements IPlayer {
   public Encumbrance encumbrance;
   public Conditions conditions;
   public Alignment alignment;
-  public Optional<Integer> lastPrayerTurn = Optional.empty();
+  public Integer lastPrayerTurn = null;
 
   public Player() {}
 
@@ -91,7 +92,7 @@ public class Player implements IPlayer {
         && encumbrance.equals(p.encumbrance)
         && conditions.equals(p.conditions)
         && alignment.equals(p.alignment)
-        && lastPrayerTurn.equals(p.lastPrayerTurn);
+        && Objects.equals(lastPrayerTurn, p.lastPrayerTurn);
   }
 
   @Override

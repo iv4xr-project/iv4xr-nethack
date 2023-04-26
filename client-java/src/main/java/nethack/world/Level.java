@@ -3,6 +3,7 @@ package nethack.world;
 import agent.navigation.hpastar.Size;
 import agent.navigation.strategy.NavUtils;
 import agent.navigation.surface.Tile;
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 import nethack.enums.EntityClass;
@@ -14,7 +15,7 @@ import util.ColoredStringBuilder;
 import util.CustomVec2D;
 import util.Loggers;
 
-public class Level {
+public class Level implements Serializable {
   public static final Size SIZE = new Size(79, 21);
   public final Symbol[][] map = new Symbol[SIZE.height][SIZE.width];
   public List<Monster> monsters = new ArrayList<>();

@@ -4,9 +4,10 @@
 
 package agent.navigation.hpastar;
 
+import java.io.Serializable;
 import util.CustomVec2D;
 
-public class Size {
+public class Size implements Serializable {
   public final int height;
   public final int width;
 

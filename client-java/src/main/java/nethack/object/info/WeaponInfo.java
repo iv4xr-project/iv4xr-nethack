@@ -1,6 +1,8 @@
 package nethack.object.info;
 
-public class WeaponInfo {
+import java.io.Serializable;
+
+public class WeaponInfo implements Serializable {
   public String name;
   public String skill;
   public Integer cost;
