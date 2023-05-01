@@ -33,7 +33,7 @@ public class Id<T> implements IId, Comparable<Id<T>> {
   }
 
   public Id<T> from(int value) {
-    return new Id<T>(value);
+    return new Id<>(value);
   }
 
   public String toString() {

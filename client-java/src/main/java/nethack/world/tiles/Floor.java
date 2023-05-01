@@ -46,11 +46,10 @@ public class Floor extends Tile implements Walkable, Viewable, Shop {
   }
 
   public Tile updatedTile(Tile newTile) {
-    if (!(newTile instanceof Floor)) {
+    if (!(newTile instanceof Floor floor)) {
       return newTile;
     }
 
-    Floor floor = (Floor) newTile;
     isShop = floor.isShop || isShop;
     setSeen(getSeen() || newTile.getSeen());
     setVisibility(floor.getVisibility());
@@ -58,11 +57,10 @@ public class Floor extends Tile implements Walkable, Viewable, Shop {
   }
 
   public boolean equals(Object o) {
-    if (!(o instanceof Floor)) {
+    if (!(o instanceof Floor f)) {
       return false;
     }
 
-    Floor f = (Floor) o;
     return loc.equals(f.loc) && getVisibility() == f.getVisibility();
   }
 

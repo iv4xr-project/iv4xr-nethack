@@ -5,8 +5,10 @@ import static nl.uu.cs.aplib.AplibEDSL.*;
 import agent.iv4xr.AgentState;
 import agent.navigation.strategy.NavTactic;
 import agent.selector.EntitySelector;
+import agent.selector.ItemSelector;
 import agent.selector.TileSelector;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
+import java.util.Arrays;
 import java.util.List;
 import nethack.enums.CommandEnum;
 import nethack.object.Command;
@@ -39,9 +41,17 @@ public class GoalLib {
                     Actions.openDoor().on(Predicates.get_closedDoor()).lift(),
 
                     // Collect money and potions
+                    Actions.quaffItem()
+                        .on(
+                            (AgentState S) ->
+                                ItemSelector.hallucinationPotion.apply(
+                                    Arrays.asList(S.worldmodel.player.current.inventory.items), S))
+                        .lift(),
+                    NavTactic.interactWorldEntity(
+                        EntitySelector.hallucinationPotion,
+                        List.of(new Command(CommandEnum.COMMAND_PICKUP))),
                     NavTactic.interactWorldEntity(
                         EntitySelector.money, List.of(new Command(CommandEnum.COMMAND_PICKUP))),
-                    //                    NavTactic.pickupWorldEntity(EntitySelector.potion),
 
                     // Navigation
                     NavTactic.explore(),

@@ -22,8 +22,7 @@ public class Symbol implements Serializable {
       return false;
     }
 
-    if (obj instanceof Symbol) {
-      Symbol other = (Symbol) obj;
+    if (obj instanceof Symbol other) {
       return glyph == other.glyph && symbol == other.symbol && other.color.equals(color);
     }
     return false;

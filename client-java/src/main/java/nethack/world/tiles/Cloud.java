@@ -50,11 +50,10 @@ public class Cloud extends Tile implements Walkable, Viewable {
   }
 
   public boolean equals(Object o) {
-    if (!(o instanceof Cloud)) {
+    if (!(o instanceof Cloud other)) {
       return false;
     }
 
-    Cloud other = (Cloud) o;
     return loc.equals(other.loc) && getVisibility() == other.getVisibility();
   }
 }

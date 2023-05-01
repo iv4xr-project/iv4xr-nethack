@@ -48,11 +48,10 @@ public class Pool extends Tile implements Walkable, Viewable {
   }
 
   public boolean equals(Object o) {
-    if (!(o instanceof Pool)) {
+    if (!(o instanceof Pool pool)) {
       return false;
     }
 
-    Pool pool = (Pool) o;
     return loc.equals(pool.loc) && getVisibility() == pool.getVisibility();
   }
 }

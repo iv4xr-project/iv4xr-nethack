@@ -56,5 +56,5 @@ public enum Skill implements Serializable {
   TWO_WEAPON_COMBAT, /* pair of weapons, one in each hand */
   RIDING, /* How well you control your steed */
 
-  NUM_SKILLS;
+  NUM_SKILLS
 }

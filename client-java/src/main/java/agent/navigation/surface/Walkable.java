@@ -6,13 +6,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 public interface Walkable {
-  public default boolean isWalkable() {
+  default boolean isWalkable() {
     return getWalkableType() != null;
   }
 
-  public WalkableType getWalkableType();
+  WalkableType getWalkableType();
 
-  public default Set<Direction> movementDirections() {
+  default Set<Direction> movementDirections() {
     WalkableType walkableType = getWalkableType();
     assert walkableType != WalkableType.Custom : "No default implementation for custom";
 
@@ -33,7 +33,7 @@ public interface Walkable {
     }
   }
 
-  public enum WalkableType {
+  enum WalkableType {
     Straight,
     Diagonal,
     Custom,

@@ -38,11 +38,10 @@ public class Tree extends Tile implements Viewable {
   }
 
   public boolean equals(Object o) {
-    if (!(o instanceof Tree)) {
+    if (!(o instanceof Tree tree)) {
       return false;
     }
 
-    Tree tree = (Tree) o;
     return loc.equals(tree.loc) && getVisibility() == tree.getVisibility();
   }
 }

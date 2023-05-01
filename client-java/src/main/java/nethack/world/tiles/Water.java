@@ -48,11 +48,10 @@ public class Water extends Tile implements Walkable, Viewable {
   }
 
   public boolean equals(Object o) {
-    if (!(o instanceof Water)) {
+    if (!(o instanceof Water water)) {
       return false;
     }
 
-    Water water = (Water) o;
     return loc.equals(water.loc) && getVisibility() == water.getVisibility();
   }
 }

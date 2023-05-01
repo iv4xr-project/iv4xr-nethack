@@ -43,59 +43,33 @@ public enum TileType {
       return WALL;
     }
 
-    switch (value) {
-      case 0:
-        return STONE;
-      case 13:
-        return TREE;
-      case 14:
-        return SECRET_DOOR;
-      case 15:
-        return SECRET_CORRIDOR;
-      case 16:
-        return POOL;
-      case 17:
-        return MOAT;
-      case 18:
-        return WATER;
-      case 19:
-        return DRAWBRIDGE_UP;
-      case 20:
-        return LAVA_POOL;
-      case 21:
-        return IRON_BARS;
-      case 22:
-        return DOOR;
-      case 23:
-        return CORRIDOR;
-      case 24:
-        return ROOM;
-      case 25:
-        return STAIRS;
-      case 26:
-        return LADDER;
-      case 27:
-        return FOUNTAIN;
-      case 28:
-        return THRONE;
-      case 29:
-        return SINK;
-      case 30:
-        return GRAVE;
-      case 31:
-        return ALTAR;
-      case 32:
-        return ICE;
-      case 33:
-        return DRAWBRIDGE_DOWN;
-      case 34:
-        return AIR;
-      case 35:
-        return CLOUD;
-      case 36:
-        return NOTHING;
-      default:
-        throw new IllegalArgumentException("Invalid value for TileType");
-    }
+    return switch (value) {
+      case 0 -> STONE;
+      case 13 -> TREE;
+      case 14 -> SECRET_DOOR;
+      case 15 -> SECRET_CORRIDOR;
+      case 16 -> POOL;
+      case 17 -> MOAT;
+      case 18 -> WATER;
+      case 19 -> DRAWBRIDGE_UP;
+      case 20 -> LAVA_POOL;
+      case 21 -> IRON_BARS;
+      case 22 -> DOOR;
+      case 23 -> CORRIDOR;
+      case 24 -> ROOM;
+      case 25 -> STAIRS;
+      case 26 -> LADDER;
+      case 27 -> FOUNTAIN;
+      case 28 -> THRONE;
+      case 29 -> SINK;
+      case 30 -> GRAVE;
+      case 31 -> ALTAR;
+      case 32 -> ICE;
+      case 33 -> DRAWBRIDGE_DOWN;
+      case 34 -> AIR;
+      case 35 -> CLOUD;
+      case 36 -> NOTHING;
+      default -> throw new IllegalArgumentException("Invalid value for TileType");
+    };
   }
 }

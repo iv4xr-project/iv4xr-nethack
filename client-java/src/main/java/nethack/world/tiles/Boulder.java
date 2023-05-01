@@ -38,11 +38,10 @@ public class Boulder extends Tile implements Viewable {
   }
 
   public boolean equals(Object o) {
-    if (!(o instanceof Boulder)) {
+    if (!(o instanceof Boulder other)) {
       return false;
     }
 
-    Boulder other = (Boulder) o;
     return loc.equals(other.loc) && getVisibility() == other.getVisibility();
   }
 }

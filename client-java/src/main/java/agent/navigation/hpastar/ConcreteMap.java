@@ -70,23 +70,23 @@ public class ConcreteMap implements IMap<ConcreteNode> {
     int diffX = Math.abs(targetX - startX);
     int diffY = Math.abs(targetY - startY);
     switch (navType) {
-      case Hex:
-        {
-          // Vancouver distance
-          // See P.Yap: Grid-based Path-Finding (LNAI 2338 pp.44-55)
-          int correction = 0;
-          if (diffX % 2 != 0) {
-            if (targetY < startY) correction = targetX % 2;
-            else if (targetY > startY) correction = startX % 2;
-          }
-
-          // TODO: Check formula is indeed wrong
-          // Note: formula in paper is wrong, corrected below.
-          return Math.max(0, diffY - diffX / 2 - correction) + diffX;
+      case Hex -> {
+        // Vancouver distance
+        // See P.Yap: Grid-based Path-Finding (LNAI 2338 pp.44-55)
+        int correction = 0;
+        if (diffX % 2 != 0) {
+          if (targetY < startY) correction = targetX % 2;
+          else if (targetY > startY) correction = startX % 2;
         }
-      case OctileUnicost:
+
+        // TODO: Check formula is indeed wrong
+        // Note: formula in paper is wrong, corrected below.
+        return Math.max(0, diffY - diffX / 2 - correction) + diffX;
+      }
+      case OctileUnicost -> {
         return Math.max(diffX, diffY) * Constants.COST_ONE;
-      case Octile:
+      }
+      case Octile -> {
         int maxDiff;
         int minDiff;
         if (diffX > diffY) {
@@ -97,10 +97,13 @@ public class ConcreteMap implements IMap<ConcreteNode> {
           minDiff = diffX;
         }
         return (minDiff * Constants.COST_ONE * 34) / 24 + (maxDiff - minDiff) * Constants.COST_ONE;
-      case Tile:
+      }
+      case Tile -> {
         return (diffX + diffY) * Constants.COST_ONE;
-      default:
+      }
+      default -> {
         return 0;
+      }
     }
   }
 
@@ -112,7 +115,7 @@ public class ConcreteMap implements IMap<ConcreteNode> {
       Id<ConcreteNode> targetNodeId = edge.targetNodeId;
       ConcreteNodeInfo targetNodeInfo = graph.getNodeInfo(targetNodeId);
       if (canJump(targetNodeInfo.position, nodeInfo.position) /*&& !targetNodeInfo.isObstacle*/) {
-        result.add(new Connection<ConcreteNode>(targetNodeId, edge.info.cost));
+        result.add(new Connection<>(targetNodeId, edge.info.cost));
       }
     }
     return result;

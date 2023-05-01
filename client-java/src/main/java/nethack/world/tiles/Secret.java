@@ -9,7 +9,7 @@ public interface Secret {
 
   void setIsSecret(boolean isSecret);
 
-  public default void setSecret() {
+  default void setSecret() {
     setIsSecret(true);
   }
 }

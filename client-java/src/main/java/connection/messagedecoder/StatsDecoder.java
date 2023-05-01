@@ -62,6 +62,6 @@ public class StatsDecoder extends Decoder {
     player.conditions = Conditions.fromValue(values[25]);
     player.alignment = Alignment.fromValue(values[26]);
 
-    return new Pair<Stats, Player>(stats, player);
+    return new Pair<>(stats, player);
   }
 }

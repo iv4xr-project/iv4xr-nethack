@@ -1,11 +1,12 @@
 package util;
 
 import eu.iv4xr.framework.spatial.Vec3;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
 public class CustomVec3D implements Serializable {
-  private static final long serialVersionUID = 1L;
+  @Serial private static final long serialVersionUID = 1L;
   public CustomVec2D pos;
   public int lvl;
 
@@ -37,10 +38,9 @@ public class CustomVec3D implements Serializable {
   }
 
   public boolean equals(Object o) {
-    if (!(o instanceof CustomVec3D)) {
+    if (!(o instanceof CustomVec3D o_)) {
       return false;
     } else {
-      CustomVec3D o_ = (CustomVec3D) o;
       return this.lvl == o_.lvl && pos.equals(o_.pos);
     }
   }

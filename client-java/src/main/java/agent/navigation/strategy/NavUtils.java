@@ -62,26 +62,17 @@ public class NavUtils {
   }
 
   public static CustomVec2D posInDirection(CustomVec2D pos, Direction direction) {
-    switch (direction) {
-      case North:
-        return new CustomVec2D(pos.x, pos.y - 1);
-      case South:
-        return new CustomVec2D(pos.x, pos.y + 1);
-      case East:
-        return new CustomVec2D(pos.x + 1, pos.y);
-      case West:
-        return new CustomVec2D(pos.x - 1, pos.y);
-      case NorthEast:
-        return new CustomVec2D(pos.x + 1, pos.y - 1);
-      case NorthWest:
-        return new CustomVec2D(pos.x - 1, pos.y - 1);
-      case SouthEast:
-        return new CustomVec2D(pos.x + 1, pos.y + 1);
-      case SouthWest:
-        return new CustomVec2D(pos.x - 1, pos.y + 1);
-      default:
-        throw new IllegalArgumentException("Direction does not exist");
-    }
+    return switch (direction) {
+      case North -> new CustomVec2D(pos.x, pos.y - 1);
+      case South -> new CustomVec2D(pos.x, pos.y + 1);
+      case East -> new CustomVec2D(pos.x + 1, pos.y);
+      case West -> new CustomVec2D(pos.x - 1, pos.y);
+      case NorthEast -> new CustomVec2D(pos.x + 1, pos.y - 1);
+      case NorthWest -> new CustomVec2D(pos.x - 1, pos.y - 1);
+      case SouthEast -> new CustomVec2D(pos.x + 1, pos.y + 1);
+      case SouthWest -> new CustomVec2D(pos.x - 1, pos.y + 1);
+      default -> throw new IllegalArgumentException("Direction does not exist");
+    };
   }
 
   public static CustomVec2D loc2(Vec3 pos) {

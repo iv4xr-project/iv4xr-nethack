@@ -33,7 +33,7 @@ public enum PotionAppearance {
 
   private final String value;
 
-  private PotionAppearance(String appearanceString) {
+  PotionAppearance(String appearanceString) {
     value = appearanceString;
   }
 

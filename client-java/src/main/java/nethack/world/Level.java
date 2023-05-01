@@ -126,7 +126,7 @@ public class Level implements Serializable {
         monsters.stream()
             .filter(monster -> monster.monsterInfo.name.equals("shopkeeper"))
             .map(monster -> monster.pos)
-            .collect(Collectors.toList());
+            .toList();
     if (shopkeepers.isEmpty()) {
       return;
     }
@@ -143,10 +143,9 @@ public class Level implements Serializable {
       processedCoordinates.add(nextPos);
 
       Tile t = surface.getTile(nextPos);
-      if (!(t instanceof Floor)) {
+      if (!(t instanceof Floor f)) {
         continue;
       }
-      Floor f = (Floor) t;
       // Tile was already marked as shop
       if (f.isShop()) {
         continue;

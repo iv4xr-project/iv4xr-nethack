@@ -34,7 +34,7 @@ public enum WandAppearance {
 
   private final String value;
 
-  private WandAppearance(String appearanceString) {
+  WandAppearance(String appearanceString) {
     value = appearanceString;
   }
 

@@ -36,7 +36,7 @@ public class Loggers {
   }
 
   // Test out logger colors
-  public static void main(String[] args) throws Exception {
+  public static void main(String[] args) {
     // Set level to ALL beforehand
     // Source:
     // https://stackoverflow.com/questions/23434252/programmatically-change-log-level-in-log4j2

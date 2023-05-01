@@ -10,7 +10,7 @@ public abstract class Decoder {
     SeedBit(3);
     public final byte value;
 
-    private DecoderBit(int value) {
+    DecoderBit(int value) {
       this.value = (byte) value;
     }
   }

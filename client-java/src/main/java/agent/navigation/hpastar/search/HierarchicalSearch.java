@@ -16,6 +16,7 @@ import agent.navigation.hpastar.graph.ConcreteNode;
 import agent.navigation.hpastar.infrastructure.Id;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import util.Loggers;
 
 public class HierarchicalSearch {
@@ -49,7 +50,7 @@ public class HierarchicalSearch {
       AbstractNodeInfo nodeInfo = map.abstractGraph.getNodeInfo(startNodeId);
       map.setCurrentClusterByPositionAndLevel(nodeInfo.position, level + 1);
       AbstractEdgeInfo edgeInfo = map.abstractGraph.getEdges(startNodeId).get(targetNodeId).info;
-      idPath = new IdPath<AbstractNode>(edgeInfo.innerLowerLevelPath, edgeInfo.cost);
+      idPath = new IdPath<>(edgeInfo.innerLowerLevelPath, edgeInfo.cost);
     } else {
       map.setAllMapAsCurrentCluster();
       AStar<AbstractNode> search = new AStar<>(map, startNodeId, targetNodeId);
@@ -89,7 +90,7 @@ public class HierarchicalSearch {
           && calculatedPaths < maxPathsToRefine) {
         List<AbstractPathNode> interNodePath =
             getPath(map, path.get(i - 1).id, path.get(i).id, level - 1, false);
-        for (int j = 1; j < interNodePath.size(); j++) {
+        for (int j = 1; j < Objects.requireNonNull(interNodePath).size(); j++) {
           refinedAbstractPath.add(interNodePath.get(j));
         }
         calculatedPaths++;

@@ -1,11 +1,10 @@
 package agent.navigation.hpastar.search;
-;
+
 import agent.navigation.hpastar.Connection;
 import agent.navigation.hpastar.infrastructure.IMap;
 import agent.navigation.hpastar.infrastructure.Id;
 import java.util.*;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class AStar<TNode> {
   private final Function<Id<TNode>, Boolean> isGoal;
@@ -25,8 +24,8 @@ public class AStar<TNode> {
     this.map = map;
     int estimatedCost = calculateHeuristic.apply(startNodeId);
     AStarNode<TNode> startNode = new AStarNode<>(startNodeId, 0, estimatedCost, CellStatus.Open);
-    openQueue.add(new Priotisable<Id<TNode>>(startNodeId, startNode.f));
-    nodeLookup = new NodeLookup<TNode>(map.getNrNodes());
+    openQueue.add(new Priotisable<>(startNodeId, startNode.f));
+    nodeLookup = new NodeLookup<>(map.getNrNodes());
     nodeLookup.setNodeValue(startNodeId, startNode);
   }
 
@@ -57,7 +56,7 @@ public class AStar<TNode> {
     var node = nodeLookup.getNodeValue(nodeId.item);
     processNeighbours(nodeId.item, node);
     nodeLookup.setNodeValue(
-        nodeId.item, new AStarNode<TNode>(node.parent, node.g, node.h, CellStatus.Closed));
+        nodeId.item, new AStarNode<>(node.parent, node.g, node.h, CellStatus.Closed));
     return nodeId.item;
   }
 
@@ -75,9 +74,9 @@ public class AStar<TNode> {
           continue;
         }
 
-        targetAStarNode = new AStarNode<TNode>(nodeId, gCost, targetAStarNode.h, CellStatus.Open);
+        targetAStarNode = new AStarNode<>(nodeId, gCost, targetAStarNode.h, CellStatus.Open);
         List<Priotisable<Id<TNode>>> items =
-            openQueue.stream().filter(i -> i.item.equals(neighbour)).collect(Collectors.toList());
+            openQueue.stream().filter(i -> i.item.equals(neighbour)).toList();
         assert items.size() == 1;
         Priotisable<Id<TNode>> item = items.get(0);
         openQueue.remove(item);
@@ -110,7 +109,7 @@ public class AStar<TNode> {
 
     pathNodes.add(currentNode);
     Collections.reverse(pathNodes);
-    return new IdPath<TNode>(pathNodes, pathCost);
+    return new IdPath<>(pathNodes, pathCost);
   }
 
   /**
@@ -118,20 +117,14 @@ public class AStar<TNode> {
    *
    * @param <T> The type to wrap around.
    */
-  static class Priotisable<T> {
-    public final float priority;
-    public final T item;
-
+  record Priotisable<T>(T item, float priority) {
     /**
      * Wrap around an item to add a priority on which can be sorted.
      *
      * @param item: The item to wrap around.
      * @param priority: The priority on which can be sorted.
      */
-    public Priotisable(T item, float priority) {
-      this.item = item;
-      this.priority = priority;
-    }
+    Priotisable {}
   }
 
   static class PriotisableComperator<T> implements Comparator<Priotisable<T>> {

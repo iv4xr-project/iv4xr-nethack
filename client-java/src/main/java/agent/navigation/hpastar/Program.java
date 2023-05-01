@@ -33,52 +33,53 @@ import util.Stopwatch;
 public class Program {
 
   public static class ExamplePassability implements IPassability {
-    private final String map =
-        "\r\n"
-            + "                    0000000000000000000100000000000000000000\r\n"
-            + "                    0111111111111111111111111111111111111110\r\n"
-            + "                    0000000000000000000100000000000000000000\r\n"
-            + "                    0000000000000000000100000000000000000000\r\n"
-            + "                    0000000000000000000100000000000000000000\r\n"
-            + "                    0000000000000000000100000000000000000000\r\n"
-            + "                    0000000000000000000100000000000000000000\r\n"
-            + "                    0001000000000000000100000000000000000000\r\n"
-            + "                    0001000000000000000100000000000000000000\r\n"
-            + "                    0001000000000000000100000000000000000000\r\n"
-            + "                    0001000000000000000100000000000000000000\r\n"
-            + "                    0001000000000000000100000000000000000000\r\n"
-            + "                    0001000000000000000100000000000000000000\r\n"
-            + "                    0000000000000000000100000000000000000000\r\n"
-            + "                    0000000000000000000100000000000000000000\r\n"
-            + "                    0000000000000000000100000000000000000000\r\n"
-            + "                    0000000000000000000100000000000000000000\r\n"
-            + "                    0000000000000000000100000000000000000000\r\n"
-            + "                    0000000000000000000100000000000000000000\r\n"
-            + "                    0111111111111111111100000000000000000000\r\n"
-            + "                    0000000000000000000100000000000000000000\r\n"
-            + "                    0000000000000000000100000000000000000000\r\n"
-            + "                    0000000000000000000100000000000000000000\r\n"
-            + "                    0000000000000000000100000000000000000000\r\n"
-            + "                    0000000000000000000100000000000000000000\r\n"
-            + "                    0000000000000000000100000000000000000000\r\n"
-            + "                    0000000000000000000100000000000000000000\r\n"
-            + "                    0000000000000000000100000000000000000000\r\n"
-            + "                    0000000000000000000100000000000000000000\r\n"
-            + "                    0000000000000000000100000000000000000000\r\n"
-            + "                    0000000000000000000100000000000000000000\r\n"
-            + "                    0000000000000000000100000000000000000000\r\n"
-            + "                    0000000000000000000100000000000000000000\r\n"
-            + "                    0000000000000000000100000000000000000000\r\n"
-            + "                    0000000000000000000100000000000000000000\r\n"
-            + "                    0000000000000000000100000000000000000000\r\n"
-            + "                    0000000000000000000100000000000000000000\r\n"
-            + "                    0000000000000000000100000000000000000000\r\n"
-            + "                    0111111111111111111111111111111111111110\r\n"
-            + "                    0000000000000000000000000000000000000000\r\n"
-            + "                ";
 
     public ExamplePassability() {
       obstacles = new boolean[40][40];
+      String map =
+          """
+              \r
+                                  0000000000000000000100000000000000000000\r
+                                  0111111111111111111111111111111111111110\r
+                                  0000000000000000000100000000000000000000\r
+                                  0000000000000000000100000000000000000000\r
+                                  0000000000000000000100000000000000000000\r
+                                  0000000000000000000100000000000000000000\r
+                                  0000000000000000000100000000000000000000\r
+                                  0001000000000000000100000000000000000000\r
+                                  0001000000000000000100000000000000000000\r
+                                  0001000000000000000100000000000000000000\r
+                                  0001000000000000000100000000000000000000\r
+                                  0001000000000000000100000000000000000000\r
+                                  0001000000000000000100000000000000000000\r
+                                  0000000000000000000100000000000000000000\r
+                                  0000000000000000000100000000000000000000\r
+                                  0000000000000000000100000000000000000000\r
+                                  0000000000000000000100000000000000000000\r
+                                  0000000000000000000100000000000000000000\r
+                                  0000000000000000000100000000000000000000\r
+                                  0111111111111111111100000000000000000000\r
+                                  0000000000000000000100000000000000000000\r
+                                  0000000000000000000100000000000000000000\r
+                                  0000000000000000000100000000000000000000\r
+                                  0000000000000000000100000000000000000000\r
+                                  0000000000000000000100000000000000000000\r
+                                  0000000000000000000100000000000000000000\r
+                                  0000000000000000000100000000000000000000\r
+                                  0000000000000000000100000000000000000000\r
+                                  0000000000000000000100000000000000000000\r
+                                  0000000000000000000100000000000000000000\r
+                                  0000000000000000000100000000000000000000\r
+                                  0000000000000000000100000000000000000000\r
+                                  0000000000000000000100000000000000000000\r
+                                  0000000000000000000100000000000000000000\r
+                                  0000000000000000000100000000000000000000\r
+                                  0000000000000000000100000000000000000000\r
+                                  0000000000000000000100000000000000000000\r
+                                  0000000000000000000100000000000000000000\r
+                                  0111111111111111111111111111111111111110\r
+                                  0000000000000000000000000000000000000000\r
+                             \s""";
       char[][] charlines =
           (char[][])
               Arrays.stream(map.split("\n")).map(String::trim).map(String::toCharArray).toArray();
@@ -171,15 +172,14 @@ public class Program {
         hierarchicalSearchPath.stream()
             .map(
                 p -> {
-                  if (p instanceof ConcretePathNode) {
-                    ConcretePathNode concretePathNode = (ConcretePathNode) p;
+                  if (p instanceof ConcretePathNode concretePathNode) {
                     return concreteMap.graph.getNodeInfo(concretePathNode.id).position;
                   }
 
                   AbstractPathNode abstractPathNode = (AbstractPathNode) p;
                   return absTiling.abstractGraph.getNodeInfo(abstractPathNode.id).position;
                 })
-            .collect(Collectors.toList());
+            .toList();
 
     ColoredStringBuilder csb = new ColoredStringBuilder();
     csb.appendf("Regular search: %d ms%n", regularSearchTime);
@@ -214,15 +214,14 @@ public class Program {
         hierarchicalSearchPath.stream()
             .map(
                 p -> {
-                  if (p instanceof ConcretePathNode) {
-                    ConcretePathNode concretePathNode = (ConcretePathNode) p;
+                  if (p instanceof ConcretePathNode concretePathNode) {
                     return concreteMap.graph.getNodeInfo(concretePathNode.id).position;
                   }
 
                   AbstractPathNode abstractPathNode = (AbstractPathNode) p;
                   return absTiling.abstractGraph.getNodeInfo(abstractPathNode.id).position;
                 })
-            .collect(Collectors.toList());
+            .toList();
 
     ColoredStringBuilder csb = new ColoredStringBuilder();
     csb.appendf("Regular search: %d ms%n", regularSearchTime);
@@ -242,7 +241,7 @@ public class Program {
     Size size = new Size(128, 128);
 
     // IPassability passability = new ExamplePassability();
-    IPassability passability = new FakePassability(size, true);
+    FakePassability passability = new FakePassability(size, true);
     ConcreteMap concreteMap =
         ConcreteMapFactory.createConcreteMap(size, passability, NavType.Octile);
     HierarchicalMapFactory abstractMapFactory = new HierarchicalMapFactory();
@@ -259,32 +258,30 @@ public class Program {
         (positions) -> regularSearch(concreteMap, positions.fst, positions.snd);
 
     Function<List<IPathNode>, List<CustomVec2D>> toPositionPath =
-        (path) -> {
-          return path.stream()
-              .map(
-                  (p) -> {
-                    if (p instanceof ConcretePathNode) {
-                      ConcretePathNode concretePathNode = (ConcretePathNode) p;
-                      return concreteMap.graph.getNodeInfo(concretePathNode.id).position;
-                    }
+        (path) ->
+            path.stream()
+                .map(
+                    (p) -> {
+                      if (p instanceof ConcretePathNode concretePathNode) {
+                        return concreteMap.graph.getNodeInfo(concretePathNode.id).position;
+                      }
 
-                    AbstractPathNode abstractPathNode = (AbstractPathNode) p;
-                    return absTiling.abstractGraph.getNodeInfo(abstractPathNode.id).position;
-                  })
-              .collect(Collectors.toList());
-        };
+                      AbstractPathNode abstractPathNode = (AbstractPathNode) p;
+                      return absTiling.abstractGraph.getNodeInfo(abstractPathNode.id).position;
+                    })
+                .collect(Collectors.toList());
     List<Pair<CustomVec2D, CustomVec2D>> points =
         IntStream.range(0, 2000)
             .mapToObj(
                 i -> {
-                  CustomVec2D pos1 = ((FakePassability) passability).getRandomFreePosition();
-                  CustomVec2D pos2 = ((FakePassability) passability).getRandomFreePosition();
+                  CustomVec2D pos1 = passability.getRandomFreePosition();
+                  CustomVec2D pos2 = passability.getRandomFreePosition();
                   while (Math.abs(pos1.x - pos2.x) + Math.abs(pos1.y - pos2.y) < 10) {
-                    pos2 = ((FakePassability) passability).getRandomFreePosition();
+                    pos2 = passability.getRandomFreePosition();
                   }
-                  return new Pair<CustomVec2D, CustomVec2D>(pos1, pos2);
+                  return new Pair<>(pos1, pos2);
                 })
-            .collect(Collectors.toList());
+            .toList();
 
     List<Function<Pair<CustomVec2D, CustomVec2D>, List<IPathNode>>> searchStrategies =
         new ArrayList<>(2);
@@ -409,11 +406,7 @@ public class Program {
         int x0 = x;
         int y0 = y;
         csb.append(
-            path.stream()
-                    .anyMatch(
-                        (node) -> {
-                          return node.x == x0 && node.x == y0;
-                        })
+            path.stream().anyMatch((node) -> node.x == x0 && node.x == y0)
                 ? 'X'
                 : chars.get(nodeId.getIdValue()));
       }

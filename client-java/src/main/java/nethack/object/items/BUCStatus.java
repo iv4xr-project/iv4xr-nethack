@@ -3,9 +3,9 @@ package nethack.object.items;
 import nethack.enums.BUC;
 
 public interface BUCStatus {
-  public BUC getBUC();
+  BUC getBUC();
 
-  public default boolean hasBUC() {
+  default boolean hasBUC() {
     return getBUC() != BUC.UNKNOWN;
   }
 }

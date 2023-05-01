@@ -29,10 +29,9 @@ public class Turn implements Comparable<Turn>, Serializable {
 
   @Override
   public boolean equals(Object object) {
-    if (!(object instanceof Turn)) {
+    if (!(object instanceof Turn other)) {
       return false;
     }
-    Turn other = (Turn) object;
     return time == other.time && step == other.step;
   }
 

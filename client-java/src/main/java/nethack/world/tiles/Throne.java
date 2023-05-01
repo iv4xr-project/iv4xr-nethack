@@ -48,11 +48,10 @@ public class Throne extends Tile implements Walkable, Viewable {
   }
 
   public boolean equals(Object o) {
-    if (!(o instanceof Throne)) {
+    if (!(o instanceof Throne throne)) {
       return false;
     }
 
-    Throne throne = (Throne) o;
     return loc.equals(throne.loc) && getVisibility() == throne.getVisibility();
   }
 }

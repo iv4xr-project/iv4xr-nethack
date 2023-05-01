@@ -18,7 +18,6 @@ import agent.navigation.hpastar.infrastructure.Id;
 import agent.navigation.hpastar.search.AStar;
 import agent.navigation.hpastar.search.IdPath;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import nethack.enums.Color;
 import util.ColoredStringBuilder;
@@ -53,15 +52,9 @@ public class HierarchicalMap implements IMap<AbstractNode> {
 
   public void setType(NavType navType) {
     switch (navType) {
-      case Tile:
-        type = AbsType.ABSTRACT_TILE;
-        break;
-      case Octile:
-        type = AbsType.ABSTRACT_OCTILE;
-        break;
-      case OctileUnicost:
-        type = AbsType.ABSTRACT_OCTILE_UNICOST;
-        break;
+      case Tile -> type = AbsType.ABSTRACT_TILE;
+      case Octile -> type = AbsType.ABSTRACT_OCTILE;
+      case OctileUnicost -> type = AbsType.ABSTRACT_OCTILE_UNICOST;
     }
   }
 
@@ -242,7 +235,7 @@ public class HierarchicalMap implements IMap<AbstractNode> {
         List<EntrancePoint> entrancesInClusterGroup =
             entrancesInClusterGroupStream
                 .filter((EntrancePoint entrance) -> this.getEntrancePointLevel(entrance) >= tempLvl)
-                .collect(Collectors.toList());
+                .toList();
 
         Optional<EntrancePoint> firstEntrance = entrancesInClusterGroup.stream().findFirst();
         if (firstEntrance.isEmpty()) {
@@ -271,6 +264,7 @@ public class HierarchicalMap implements IMap<AbstractNode> {
       Id<AbstractNode> srcAbstractNodeId, Id<AbstractNode> destAbstractNodeId, int level) {
     AStar<AbstractNode> search = new AStar<>(this, srcAbstractNodeId, destAbstractNodeId);
     IdPath<AbstractNode> idPath = search.findPath();
+    assert idPath != null;
     if (idPath.pathCost >= 0) {
       addEdge(
           srcAbstractNodeId,
@@ -366,7 +360,7 @@ public class HierarchicalMap implements IMap<AbstractNode> {
         cluster.entrancePoints.stream()
             .filter(entrancePoint -> entrancePoint.relativePosition.equals(relPos))
             .map(entrancePoint -> abstractGraph.getNode(entrancePoint.abstractNodeId))
-            .collect(Collectors.toList());
+            .toList();
     for (AbstractNode absNode : absNodes) {
       for (Id<AbstractNode> neighbourNodeId : absNode.edges.keySet()) {
         CustomVec2D neighbourPos = abstractGraph.getNodeInfo(neighbourNodeId).position;
@@ -413,7 +407,7 @@ public class HierarchicalMap implements IMap<AbstractNode> {
             cluster.entrancePoints.stream()
                 .filter(entrancePoint -> entrancePoint.relativePosition.equals(relPos))
                 .map(entrancePoint -> abstractGraph.getNode(entrancePoint.abstractNodeId))
-                .collect(Collectors.toList());
+                .toList();
         for (AbstractNode absNode : absNodes) {
           for (Id<AbstractNode> neighbourNodeId : absNode.edges.keySet()) {
             CustomVec2D neighbourPos = abstractGraph.getNodeInfo(neighbourNodeId).position;

@@ -9,6 +9,7 @@ import java.util.List;
 import nethack.object.Command;
 import nethack.object.Entity;
 import nethack.object.Player;
+import nethack.object.items.Item;
 
 public class WorldModels {
   public static WorldModel<Player, Entity> kick(AgentState state, Direction direction) {
@@ -29,6 +30,13 @@ public class WorldModels {
   public static WorldModel<Player, Entity> fire(AgentState state, Direction direction) {
     Command command = Direction.getCommand(direction);
     return performCommands(state, List.of(new Command(COMMAND_FIRE), command));
+  }
+
+  public static WorldModel<Player, Entity> throwDagger(
+      AgentState state, Item item, Direction direction) {
+    Command command = Direction.getCommand(direction);
+    return performCommands(
+        state, List.of(new Command(COMMAND_THROW), new Command(item.symbol), command));
   }
 
   public static WorldModel<Player, Entity> eatItem(AgentState state, char itemSlot) {

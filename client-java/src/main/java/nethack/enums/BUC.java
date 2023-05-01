@@ -11,15 +11,11 @@ public enum BUC {
       return BUC.UNKNOWN;
     }
 
-    switch (string) {
-      case "blessed":
-        return BUC.BLESSED;
-      case "uncursed":
-        return BUC.UNCURSED;
-      case "cursed":
-        return BUC.CURSED;
-      default:
-        return BUC.UNKNOWN;
-    }
+    return switch (string) {
+      case "blessed" -> BUC.BLESSED;
+      case "uncursed" -> BUC.UNCURSED;
+      case "cursed" -> BUC.CURSED;
+      default -> BUC.UNKNOWN;
+    };
   }
 }

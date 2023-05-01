@@ -39,11 +39,10 @@ public class Wall extends Tile implements Viewable {
   }
 
   public boolean equals(Object o) {
-    if (!(o instanceof Wall)) {
+    if (!(o instanceof Wall wall)) {
       return false;
     }
 
-    Wall wall = (Wall) o;
     return loc.equals(wall.loc) && getVisibility() == wall.getVisibility();
   }
 }

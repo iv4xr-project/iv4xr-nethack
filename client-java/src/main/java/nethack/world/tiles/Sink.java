@@ -48,11 +48,10 @@ public class Sink extends Tile implements Walkable, Viewable {
   }
 
   public boolean equals(Object o) {
-    if (!(o instanceof Sink)) {
+    if (!(o instanceof Sink sink)) {
       return false;
     }
 
-    Sink sink = (Sink) o;
     return loc.equals(sink.loc) && getVisibility() == sink.getVisibility();
   }
 }

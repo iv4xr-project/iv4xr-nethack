@@ -26,10 +26,9 @@ public class EntrancePoint {
 
   @Override
   public boolean equals(Object other) {
-    if (!(other instanceof EntrancePoint)) {
+    if (!(other instanceof EntrancePoint otherEntrance)) {
       return false;
     }
-    EntrancePoint otherEntrance = (EntrancePoint) other;
     return abstractNodeId.equals(otherEntrance.abstractNodeId)
         && relativePosition.equals(otherEntrance.relativePosition);
   }

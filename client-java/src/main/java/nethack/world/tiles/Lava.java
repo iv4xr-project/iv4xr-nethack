@@ -37,11 +37,10 @@ public class Lava extends Tile implements Viewable {
   }
 
   public boolean equals(Object o) {
-    if (!(o instanceof Lava)) {
+    if (!(o instanceof Lava lava)) {
       return false;
     }
 
-    Lava lava = (Lava) o;
     return loc.equals(lava.loc) && getVisibility() == lava.getVisibility();
   }
 }

@@ -11,6 +11,7 @@ public class Door extends Tile implements Walkable, Viewable, Secret {
   public boolean locked;
   public boolean trapped;
   public boolean isShopDoor;
+  private int flags;
 
   public boolean isSecret = false;
   boolean isVisible = false;
@@ -21,13 +22,15 @@ public class Door extends Tile implements Walkable, Viewable, Secret {
       boolean isOpen,
       boolean closed,
       boolean locked,
-      boolean trapped) {
+      boolean trapped,
+      int flags) {
     super(pos);
     this.broken = broken;
     this.isOpen = isOpen;
     this.closed = closed;
     this.locked = locked;
     this.trapped = trapped;
+    this.flags = flags;
   }
 
   public char toChar() {
@@ -77,10 +80,10 @@ public class Door extends Tile implements Walkable, Viewable, Secret {
   }
 
   public Tile updatedTile(Tile newTile) {
-    if (!(newTile instanceof Door)) {
+    if (!(newTile instanceof Door door)) {
       return newTile;
     }
-    Door door = ((Door) newTile);
+
     setSeen(door.getSeen() || getSeen());
     setIsSecret(door.getIsSecret());
     setVisibility(door.isVisible());
@@ -94,11 +97,10 @@ public class Door extends Tile implements Walkable, Viewable, Secret {
 
   @Override
   public boolean equals(Object o) {
-    if (!(o instanceof Door)) {
+    if (!(o instanceof Door door)) {
       return false;
     }
 
-    Door door = (Door) o;
     return loc.equals(door.loc)
         && getVisibility() == door.getVisibility()
         && broken == door.broken

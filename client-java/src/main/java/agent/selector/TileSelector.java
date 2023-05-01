@@ -29,7 +29,7 @@ public class TileSelector extends Selector<Tile> {
           .predicate(
               (tile, S) -> {
                 Door d = (Door) tile;
-                return (d.closed || d.locked) && !d.isShopDoor;
+                return !d.isWalkable() && !d.isShopDoor;
               });
   public static final TileSelector stairDown =
       new TileSelector()

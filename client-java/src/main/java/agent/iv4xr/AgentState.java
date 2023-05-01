@@ -113,13 +113,6 @@ public class AgentState extends Iv4xrAgentState<Void, Player, Entity> {
     }
   }
 
-  /** Check if the agent that owns this state is alive in the game (its hp>0). */
-  public boolean agentIsAlive() {
-    Player player = worldmodel.player.current;
-    assert player != null;
-    return player.hp > 0;
-  }
-
   public void render() {
     ColoredStringBuilder csb = new ColoredStringBuilder();
     String[] navigation = area().toString().split(System.lineSeparator());

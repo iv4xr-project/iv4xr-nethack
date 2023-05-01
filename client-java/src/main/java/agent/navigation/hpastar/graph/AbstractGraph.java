@@ -11,11 +11,7 @@ public class AbstractGraph
     extends Graph<AbstractNode, AbstractNodeInfo, AbstractEdge, AbstractEdgeInfo> {
   public AbstractGraph() {
     super(
-        (Pair<Id<AbstractNode>, AbstractNodeInfo> pair) -> {
-          return new AbstractNode(pair.fst, pair.snd);
-        },
-        (Pair<Id<AbstractNode>, AbstractEdgeInfo> pair) -> {
-          return new AbstractEdge(pair.fst, pair.snd);
-        });
+        (Pair<Id<AbstractNode>, AbstractNodeInfo> pair) -> new AbstractNode(pair.fst, pair.snd),
+        (Pair<Id<AbstractNode>, AbstractEdgeInfo> pair) -> new AbstractEdge(pair.fst, pair.snd));
   }
 }

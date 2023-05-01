@@ -66,11 +66,10 @@ public class Player implements IPlayer, Serializable {
   }
 
   public boolean equals(Object other) {
-    if (!(other instanceof Player)) {
+    if (!(other instanceof Player p)) {
       return false;
     }
 
-    Player p = (Player) other;
     return inventory.equals(p.inventory)
         && previousLocation.equals(p.previousLocation)
         && location.equals(p.location)

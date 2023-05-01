@@ -34,7 +34,7 @@ public enum RingAppearance {
 
   private final String value;
 
-  private RingAppearance(String appearanceString) {
+  RingAppearance(String appearanceString) {
     value = appearanceString;
   }
 

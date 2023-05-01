@@ -1,6 +1,5 @@
 package agent.strategy;
 
-import static agent.selector.ItemSelector.meleeWeapon;
 import static agent.selector.ItemSelector.rangedWeapon;
 import static nl.uu.cs.aplib.AplibEDSL.*;
 
@@ -13,7 +12,6 @@ import agent.selector.EntitySelector;
 import agent.selector.ItemSelector;
 import agent.selector.MonsterSelector;
 import java.util.*;
-import java.util.stream.Collectors;
 import nethack.enums.CommandEnum;
 import nethack.enums.Skill;
 import nethack.object.Command;
@@ -23,6 +21,7 @@ import nethack.object.items.FoodItem;
 import nethack.object.items.Item;
 import nethack.object.items.WeaponItem;
 import nl.uu.cs.aplib.mainConcepts.Tactic;
+import nl.uu.cs.aplib.utils.Pair;
 import util.CustomVec2D;
 import util.CustomVec3D;
 
@@ -151,25 +150,23 @@ public class TacticLib {
                       rangedWeapon.filter(
                           Arrays.asList(S.app().gameState.player.inventory.items), S);
 
-                  if (fireItem == null) {
-                    boolean hasCrossbowAmmo =
+                  boolean hasCrossbowAmmo =
+                      rangedWeapons.stream()
+                          .anyMatch(
+                              rangedWeapon ->
+                                  rangedWeapon.entityInfo.skill == Skill.CROSSBOW
+                                      && rangedWeapon.entityInfo.missile);
+                  if (hasCrossbowAmmo) {
+                    Optional<Item> crossbow =
                         rangedWeapons.stream()
-                            .anyMatch(
-                                rangedWeapon ->
-                                    rangedWeapon.entityInfo.skill == Skill.CROSSBOW
-                                        && rangedWeapon.entityInfo.missile);
-                    if (hasCrossbowAmmo) {
-                      Optional<Item> crossbow =
-                          rangedWeapons.stream()
-                              .filter(
-                                  ranged ->
-                                      ranged.entityInfo.skill == Skill.CROSSBOW
-                                          && !ranged.entityInfo.missile)
-                              .findFirst();
+                            .filter(
+                                ranged ->
+                                    ranged.entityInfo.skill == Skill.CROSSBOW
+                                        && !ranged.entityInfo.missile)
+                            .findFirst();
 
-                      if (crossbow.isPresent()) {
-                        fireItem = crossbow.get();
-                      }
+                    if (crossbow.isPresent()) {
+                      fireItem = crossbow.get();
                     }
                   }
 
@@ -263,8 +260,10 @@ public class TacticLib {
                   int xSign = Integer.signum(monsterPos.x - agentLoc.pos.x);
                   int ySign = Integer.signum(monsterPos.y - agentLoc.pos.y);
                   CustomVec2D delta = new CustomVec2D(xSign, ySign);
-                  return NavUtils.toDirection(
-                      S, new CustomVec3D(agentLoc.lvl, agentLoc.pos.add(delta)));
+                  return new Pair<>(
+                      fireItem,
+                      NavUtils.toDirection(
+                          S, new CustomVec3D(agentLoc.lvl, agentLoc.pos.add(delta))));
                 })
             .lift());
   }
@@ -308,7 +307,7 @@ public class TacticLib {
                           .sorted(
                               Comparator.comparingDouble(
                                   item -> ((FoodItem) item).foodInfo.nutritionPerWeight))
-                          .collect(Collectors.toList());
+                          .toList();
                   if (items.isEmpty()) {
                     return null;
                   }

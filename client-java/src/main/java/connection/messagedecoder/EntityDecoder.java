@@ -45,42 +45,60 @@ public class EntityDecoder extends Decoder {
 
   private static EntityClass toEntityClass(byte value) {
     switch (value) {
-      case 0:
+      case 0 -> {
         return EntityClass.RANDOM;
-      case 1:
+      }
+      case 1 -> {
         return EntityClass.ILLOBJ;
-      case 2:
+      }
+      case 2 -> {
         return EntityClass.WEAPON;
-      case 3:
+      }
+      case 3 -> {
         return EntityClass.ARMOR;
-      case 4:
+      }
+      case 4 -> {
         return EntityClass.RING;
-      case 5:
+      }
+      case 5 -> {
         return EntityClass.AMULET;
-      case 6:
+      }
+      case 6 -> {
         return EntityClass.TOOL;
-      case 7:
+      }
+      case 7 -> {
         return EntityClass.FOOD;
-      case 8:
+      }
+      case 8 -> {
         return EntityClass.POTION;
-      case 9:
+      }
+      case 9 -> {
         return EntityClass.SCROLL;
-      case 10:
+      }
+      case 10 -> {
         return EntityClass.SPELL_BOOK;
-      case 11:
+      }
+      case 11 -> {
         return EntityClass.WAND;
-      case 12:
+      }
+      case 12 -> {
         return EntityClass.COIN;
-      case 13:
+      }
+      case 13 -> {
         return EntityClass.GEM;
-      case 14:
+      }
+      case 14 -> {
         return EntityClass.ROCK;
-      case 15:
+      }
+      case 15 -> {
         return EntityClass.BALL;
-      case 16:
+      }
+      case 16 -> {
         return EntityClass.CHAIN;
-      case 17:
+      }
+      case 17 -> {
         return EntityClass.VENOM;
+      }
     }
 
     throw new RuntimeException(

@@ -38,11 +38,10 @@ public class IronBars extends Tile implements Viewable {
   }
 
   public boolean equals(Object o) {
-    if (!(o instanceof IronBars)) {
+    if (!(o instanceof IronBars ironBars)) {
       return false;
     }
 
-    IronBars ironBars = (IronBars) o;
     return loc.equals(ironBars.loc) && getVisibility() == ironBars.getVisibility();
   }
 }

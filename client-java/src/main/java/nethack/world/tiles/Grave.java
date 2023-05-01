@@ -48,11 +48,10 @@ public class Grave extends Tile implements Walkable, Viewable {
   }
 
   public boolean equals(Object o) {
-    if (!(o instanceof Grave)) {
+    if (!(o instanceof Grave grave)) {
       return false;
     }
 
-    Grave grave = (Grave) o;
     return loc.equals(grave.loc) && getVisibility() == grave.getVisibility();
   }
 }

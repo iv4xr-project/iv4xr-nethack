@@ -10,6 +10,7 @@ import agent.navigation.hpastar.NavType;
 import agent.navigation.hpastar.Size;
 import agent.navigation.hpastar.infrastructure.Constants;
 import agent.navigation.hpastar.utils.RefSupport;
+import java.util.Arrays;
 import util.ColoredStringBuilder;
 import util.CustomVec2D;
 
@@ -24,9 +25,7 @@ public class EmptyPassability implements IPassability {
     // Init everything as obstacle
     obstacles = new boolean[size.height][size.width];
     for (int y = 0; y < size.height; y++) {
-      for (int x = 0; x < size.width; x++) {
-        obstacles[y][x] = true;
-      }
+      Arrays.fill(obstacles[y], true);
     }
 
     canMoveDiagonally = new boolean[size.height][size.width];

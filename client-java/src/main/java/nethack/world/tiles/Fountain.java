@@ -48,11 +48,10 @@ public class Fountain extends Tile implements Walkable, Viewable {
   }
 
   public boolean equals(Object o) {
-    if (!(o instanceof Fountain)) {
+    if (!(o instanceof Fountain fountain)) {
       return false;
     }
 
-    Fountain fountain = (Fountain) o;
     return loc.equals(fountain.loc) && getVisibility() == fountain.getVisibility();
   }
 }

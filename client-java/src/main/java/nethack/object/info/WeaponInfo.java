@@ -24,6 +24,6 @@ public class WeaponInfo implements Serializable {
     METAL,
     SILVER,
     BONE,
-    UNDEFINED;
+    UNDEFINED
   }
 }

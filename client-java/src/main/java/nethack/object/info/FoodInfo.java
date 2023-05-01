@@ -19,6 +19,6 @@ public class FoodInfo implements Serializable {
     VEGETARIAN,
     VEGAN,
     NONE,
-    VARIES;
+    VARIES
   }
 }

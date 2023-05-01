@@ -35,6 +35,11 @@ public class ItemSelector extends Selector<Item> {
                       || item.entityInfo.skill == Skill.CROSSBOW
                       || item.entityInfo.skill == Skill.DAGGER);
 
+  public static final ItemSelector hallucinationPotion =
+      new ItemSelector()
+          .ofClass(EntityClass.POTION)
+          .predicate((item, S) -> item.entityInfo.name.equalsIgnoreCase("hallucination"));
+
   EntityClass entityClass;
 
   public ItemSelector() {

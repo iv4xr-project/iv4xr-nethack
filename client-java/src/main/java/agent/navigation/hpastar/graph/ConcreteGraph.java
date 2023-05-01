@@ -11,11 +11,7 @@ public class ConcreteGraph
     extends Graph<ConcreteNode, ConcreteNodeInfo, ConcreteEdge, ConcreteEdgeInfo> {
   public ConcreteGraph() {
     super(
-        (Pair<Id<ConcreteNode>, ConcreteNodeInfo> pair) -> {
-          return new ConcreteNode(pair.fst, pair.snd);
-        },
-        (Pair<Id<ConcreteNode>, ConcreteEdgeInfo> pair) -> {
-          return new ConcreteEdge(pair.fst, pair.snd);
-        });
+        (Pair<Id<ConcreteNode>, ConcreteNodeInfo> pair) -> new ConcreteNode(pair.fst, pair.snd),
+        (Pair<Id<ConcreteNode>, ConcreteEdgeInfo> pair) -> new ConcreteEdge(pair.fst, pair.snd));
   }
 }

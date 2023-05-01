@@ -60,11 +60,10 @@ public class Corridor extends Tile implements Walkable, Viewable, Secret {
   }
 
   public boolean equals(Object o) {
-    if (!(o instanceof Corridor)) {
+    if (!(o instanceof Corridor corridor)) {
       return false;
     }
 
-    Corridor corridor = (Corridor) o;
     return loc.equals(corridor.loc)
         && isSecret == corridor.isSecret
         && getVisibility() == corridor.getVisibility();

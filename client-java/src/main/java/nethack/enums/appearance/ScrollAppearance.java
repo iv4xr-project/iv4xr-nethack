@@ -48,7 +48,7 @@ public enum ScrollAppearance {
 
   private final String value;
 
-  private ScrollAppearance(String appearanceString) {
+  ScrollAppearance(String appearanceString) {
     value = appearanceString;
   }
 

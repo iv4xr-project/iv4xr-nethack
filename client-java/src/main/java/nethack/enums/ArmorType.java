@@ -7,5 +7,5 @@ public enum ArmorType {
   GLOVES,
   BOOTS,
   CLOAK,
-  SHIRT;
+  SHIRT
 }

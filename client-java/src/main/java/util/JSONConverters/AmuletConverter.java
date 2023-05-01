@@ -24,8 +24,6 @@ public class AmuletConverter extends JSONConverter {
       String[] fields = line.split("\t");
       ObjectNode objectNode = mapper.createObjectNode();
       objectNode.put("Amulet", fields[0]);
-      //      objectNode.put(
-      //          "Relative probability", Double.parseDouble(fields[1].replaceAll("[^\\d.]", "")));
       objectNode.put("cost", 150);
       objectNode.put("weight", 20);
       if (fields.length >= 3) {

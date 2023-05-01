@@ -184,7 +184,7 @@ public class HierarchicalGraph implements IMap<AbstractNode> {
     return getAbsNodeId(new CustomVec3D(lvl, pos));
   }
 
-  public static void main(String[] args) throws Exception {
+  public static void main(String[] args) {
     CustomVec3D from = new CustomVec3D(0, new CustomVec2D(1, 1));
     CustomVec3D to = new CustomVec3D(1, new CustomVec2D(2, 2));
 

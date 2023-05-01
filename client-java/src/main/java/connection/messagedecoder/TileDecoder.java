@@ -42,83 +42,62 @@ public class TileDecoder extends Decoder {
     }
 
     switch (tileType) {
-      case 0: // Stone
+      case 0 -> { // Stone
         return null;
-      case 13:
-        tile = new Tree(loc);
-        break;
-      case 14: // Secret door
-      case 22: // Door
+      }
+      case 13 -> tile = new Tree(loc);
+        // Secret door
+      case 14, 22 -> { // Door
         boolean broken = (flags & 1) != 0;
         boolean isOpen = (flags & 2) != 0;
         boolean closed = (flags & 4) != 0;
         boolean locked = (flags & 8) != 0;
         boolean trapped = (flags & 16) != 0;
-        Door door = new Door(loc, broken, isOpen, closed, locked, trapped);
+        Door door = new Door(loc, broken, isOpen, closed, locked, trapped, flags);
         if (tileType == 14) {
           door.setSecret();
         }
         tile = door;
-        break;
-      case 15: // Secret corridor
-      case 23: // Corridor
+      } // Secret corridor
+      case 15, 23 -> { // Corridor
         Corridor corridor = new Corridor(loc);
         if (tileType == 15) {
           corridor.setSecret();
         }
         tile = corridor;
-        break;
-      case 16: // Pool
-        tile = new Pool(loc);
-        break;
-      case 17: // Moat
-        tile = new Moat(loc);
-        break;
-      case 18:
-        tile = new Water(loc);
-        break;
-      case 19: // Drawbridge up
+      }
+      case 16 -> // Pool
+      tile = new Pool(loc);
+      case 17 -> // Moat
+      tile = new Moat(loc);
+      case 18 -> tile = new Water(loc);
+      case 19 -> { // Drawbridge up
         return null;
-      case 20:
-        tile = new Lava(loc);
-        break;
-      case 21:
-        tile = new IronBars(loc);
-        break;
-      case 24:
-        tile = new Floor(loc);
-        break;
-      case 25: // Stair
-      case 26: // Ladder
+      }
+      case 20 -> tile = new Lava(loc);
+      case 21 -> tile = new IronBars(loc);
+      case 24 -> tile = new Floor(loc);
+        // Stair
+      case 25, 26 -> { // Ladder
         assert flags == 1 || flags == 2;
         tile = new Stair(loc, flags == 1);
-        break;
-      case 27:
-        tile = new Fountain(loc);
-        break;
-      case 28:
-        tile = new Throne(loc);
-        break;
-      case 29:
-        tile = new Sink(loc);
-        break;
-      case 30: // Grave
-        tile = new Grave(loc);
-        break;
-      case 31: // Altar
-        tile = new Altar(loc);
-        break;
-      case 32: // Ice
-        tile = new Ice(loc);
-        break;
-      case 33: // Drawbridge down
+      }
+      case 27 -> tile = new Fountain(loc);
+      case 28 -> tile = new Throne(loc);
+      case 29 -> tile = new Sink(loc);
+      case 30 -> // Grave
+      tile = new Grave(loc);
+      case 31 -> // Altar
+      tile = new Altar(loc);
+      case 32 -> // Ice
+      tile = new Ice(loc);
+      case 33 -> { // Drawbridge down
         return null;
-      case 34: // Air
-        tile = new Air(loc);
-        break;
-      case 35: // Cloud
-        tile = new Cloud(loc);
-        break;
+      }
+      case 34 -> // Air
+      tile = new Air(loc);
+      case 35 -> // Cloud
+      tile = new Cloud(loc);
     }
 
     assert tile != null && tile instanceof Viewable;

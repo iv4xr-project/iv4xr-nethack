@@ -95,9 +95,7 @@ public class GridSurface implements Navigatable<CustomVec2D>, Serializable {
     cluster.resetComputedPaths();
 
     List<Id<AbstractNode>> nodeIds =
-        cluster.entrancePoints.stream()
-            .map(entrancePoint -> entrancePoint.abstractNodeId)
-            .collect(Collectors.toList());
+        cluster.entrancePoints.stream().map(entrancePoint -> entrancePoint.abstractNodeId).toList();
     for (EntrancePoint entrance : cluster.entrancePoints) {
       Id<AbstractNode> abstractNodeId = entrance.abstractNodeId;
       AbstractNode abstractNode = hierarchicalMap.abstractGraph.getNode(abstractNodeId);
@@ -183,7 +181,7 @@ public class GridSurface implements Navigatable<CustomVec2D>, Serializable {
     updatePassibility(tile);
     Tile prevTile = tiles[tile.pos.y][tile.pos.x];
     if (prevTile == null) {
-      replaceTile(prevTile, tile);
+      replaceTile(null, tile);
       return true;
     }
 
@@ -444,8 +442,7 @@ public class GridSurface implements Navigatable<CustomVec2D>, Serializable {
         path.stream()
             .map(
                 (p) -> {
-                  if (p instanceof ConcretePathNode) {
-                    ConcretePathNode concretePathNode = (ConcretePathNode) p;
+                  if (p instanceof ConcretePathNode concretePathNode) {
                     return concreteMap.graph.getNodeInfo(concretePathNode.id).position;
                   }
 

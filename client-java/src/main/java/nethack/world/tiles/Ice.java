@@ -49,11 +49,10 @@ public class Ice extends Tile implements Walkable, Viewable {
   }
 
   public boolean equals(Object o) {
-    if (!(o instanceof Ice)) {
+    if (!(o instanceof Ice ice)) {
       return false;
     }
 
-    Ice ice = (Ice) o;
     return loc.equals(ice.loc) && getVisibility() == ice.getVisibility();
   }
 }

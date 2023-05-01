@@ -1,5 +1,4 @@
 import json
-import numpy as np
 from nle import nethack
 
 
@@ -15,12 +14,12 @@ def filtered_object_properties():
     return filtered_properties
 
 
-def object_info():
+def get_objects_info():
     filtered_properties = filtered_object_properties()
 
     launchers = {21, 22, 23}
 
-    object_infos = []
+    objects_info = []
     for i in range(nethack.NUM_OBJECTS):
         object_info = nethack.objclass(i)
         object_dict = dict()
@@ -28,38 +27,38 @@ def object_info():
         object_dict["name"] = nethack.OBJ_NAME(object_info)
         object_dict["description"] = nethack.OBJ_DESCR(object_info)
 
-        for property in filtered_properties:
-            mapped_property = property
-            if property == "oc_name_idx" or property == "oc_descr_idx" or property == "oc_oprop" or property == "oc_delay" or property == "oc_color" or property == "oc_prob":
+        for prop in filtered_properties:
+            mapped_property = prop
+            if prop == "oc_name_idx" or prop == "oc_descr_idx" or prop == "oc_oprop" or prop == "oc_delay" or prop == "oc_color" or prop == "oc_prob":
                 continue
 
-            if property == "oc_weight":
+            if prop == "oc_weight":
                 mapped_property = "weight"
-            elif property == "oc_class":
-                object_dict["entityClass"] = toEntityClass(int.from_bytes(object_info.oc_class[0].encode(), 'little'))
+            elif prop == "oc_class":
+                object_dict["entityClass"] = to_entity_class(int.from_bytes(object_info.oc_class[0].encode(), 'little'))
                 continue
-            elif property == "oc_cost":
+            elif prop == "oc_cost":
                 mapped_property = "cost"
-            elif property == "oc_subtyp":
-                value = object_info.__getattribute__(property)
+            elif prop == "oc_subtyp":
+                value = object_info.__getattribute__(prop)
                 if int.from_bytes(object_info.oc_class[0].encode(), 'little') != 3:
                   abs_value = abs(value)
-                  object_dict["skill"] = toSkill(abs_value)
+                  object_dict["skill"] = to_skill(abs_value)
                   object_dict["missile"] = value < 0
                   object_dict["fromLauncher"] = launchers.__contains__(abs_value)
                 else:
-                  object_dict["armorType"] = getArmor(value)
+                  object_dict["armorType"] = get_armor(value)
                 continue
 
 
-            object_dict[mapped_property] = object_info.__getattribute__(property)
+            object_dict[mapped_property] = object_info.__getattribute__(prop)
 
-        object_infos.append(object_dict)
+        objects_info.append(object_dict)
 
-    return object_infos
+    return objects_info
 
 
-def toEntityClass(value: int):
+def to_entity_class(value: int):
   match value:
     case 0:
       return "RANDOM"
@@ -99,7 +98,7 @@ def toEntityClass(value: int):
       return "VENOM"
 
 
-def getArmor(value: int):
+def get_armor(value: int):
     match value:
         case 0:
             return "SUIT"
@@ -117,7 +116,7 @@ def getArmor(value: int):
             return "SHIRT"
 
 
-def toSkill(value: int):
+def to_skill(value: int):
     match value:
         case 0:
             return "NONE"
@@ -202,7 +201,7 @@ def toSkill(value: int):
 
 
 def write_object_info():
-    objects_info = object_info()
+    objects_info = get_objects_info()
 
     # open a file for writing
     with open("../../data/entity.json", "w") as outfile:
@@ -210,7 +209,7 @@ def write_object_info():
         json.dump(objects_info, outfile, indent=2)
 
 
-if __name__ == "__main__":
+def main():
     write_object_info()
 
     glyph_arr = range(nethack.MAX_GLYPH)
@@ -220,3 +219,7 @@ if __name__ == "__main__":
 
     with open('../../data/mapping.json', 'w') as f:
         json.dump(obj_ind_arr, f, indent=2)
+
+
+if __name__ == "__main__":
+    main()

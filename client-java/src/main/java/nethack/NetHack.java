@@ -11,7 +11,6 @@ import nethack.world.Level;
 import org.apache.commons.lang3.SerializationUtils;
 import util.CustomVec2D;
 import util.Loggers;
-import util.Stopwatch;
 
 public class NetHack {
   public GameState previousGameState = null;
@@ -114,7 +113,6 @@ public class NetHack {
   }
 
   public StepType step(List<Command> commands) {
-    Stopwatch stopwatch = new Stopwatch(true);
     assert !commands.isEmpty() : "Must at least provide one command";
     Map<Boolean, List<Command>> split =
         commands.stream()
@@ -131,26 +129,17 @@ public class NetHack {
   private void stepClientSideCommands(List<Command> commands) {
     for (Command command : commands) {
       switch (command.commandEnum) {
-        case COMMAND_EXTLIST:
-          CommandEnum.prettyPrintCommands(gameMode);
-          break;
-        case COMMAND_REDRAW:
-          System.out.println(gameState);
-          break;
-        case ADDITIONAL_SHOW_VERBOSE:
-          System.out.print(gameState.verbose());
-          break;
-        case ADDITIONAL_SHOW_SEED:
+        case COMMAND_EXTLIST -> CommandEnum.prettyPrintCommands(gameMode);
+        case COMMAND_REDRAW -> System.out.println(gameState);
+        case ADDITIONAL_SHOW_VERBOSE -> System.out.print(gameState.verbose());
+        case ADDITIONAL_SHOW_SEED -> {
           Seed seed = client.sendGetSeed();
           Loggers.SeedLogger.info(seed);
-          break;
-        case COMMAND_INVENTORY:
-        case COMMAND_INVENTTYPE: // Should do something differently
-          System.out.println(gameState.player.inventory);
-          break;
-        default:
-          throw new IllegalArgumentException(
-              "This client side command does not have logic to handle it");
+        }
+        case COMMAND_INVENTORY, COMMAND_INVENTTYPE -> // Should do something differently
+        System.out.println(gameState.player.inventory);
+        default -> throw new IllegalArgumentException(
+            "This client side command does not have logic to handle it");
       }
     }
   }
@@ -179,6 +168,8 @@ public class NetHack {
         command = Command.fromStroke("-w");
       } else if (command.commandEnum == CommandEnum.COMMAND_DROP) {
         command = Command.fromStroke("-d");
+      } else if (command.commandEnum == CommandEnum.COMMAND_THROW) {
+        command = Command.fromStroke("-t");
       }
 
       assert command != null : "Command cannot be null";
@@ -275,7 +266,9 @@ public class NetHack {
           stepState.entities);
 
       // Shop door might be around
-      if (gameState.message.contains("You read: \"")) {
+      if (gameState.message.matches(
+          ".*You read: \"[C?][l?][o?][s?][e?][d?] [f?][o?][r?]"
+              + " [i?][n?][v?][e?][n?][t?][o?][r?][y?]\"\\..*")) {
         level.markShopDoors(stepState.player.location.pos);
       }
     }
@@ -292,6 +285,6 @@ public class NetHack {
     Invalid,
     Valid,
     Special,
-    Terminated;
+    Terminated
   }
 }

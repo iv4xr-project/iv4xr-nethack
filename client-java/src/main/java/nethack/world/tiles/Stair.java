@@ -58,11 +58,10 @@ public class Stair extends Tile implements Climbable, Walkable, Viewable {
   }
 
   public boolean equals(Object o) {
-    if (!(o instanceof Stair)) {
+    if (!(o instanceof Stair stair)) {
       return false;
     }
 
-    Stair stair = (Stair) o;
     return loc.equals(stair.loc) && getVisibility() == stair.getVisibility();
   }
 }

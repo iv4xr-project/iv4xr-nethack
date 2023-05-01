@@ -1,15 +1,14 @@
 package util;
 
 import eu.iv4xr.framework.spatial.Vec3;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class CustomVec2D implements Serializable {
-  private static final long serialVersionUID = 1L;
+  @Serial private static final long serialVersionUID = 1L;
   public int x;
   public int y;
 
@@ -56,10 +55,9 @@ public class CustomVec2D implements Serializable {
   }
 
   public boolean equals(Object o) {
-    if (!(o instanceof CustomVec2D)) {
+    if (!(o instanceof CustomVec2D o_)) {
       return false;
     } else {
-      CustomVec2D o_ = (CustomVec2D) o;
       return this.x == o_.x && this.y == o_.y;
     }
   }
@@ -88,13 +86,10 @@ public class CustomVec2D implements Serializable {
     }
 
     indexList.sort(
-        new Comparator<Integer>() {
-          @Override
-          public int compare(Integer i1, Integer i2) {
-            int distance1 = manhattanDistances.get(i1);
-            int distance2 = manhattanDistances.get(i2);
-            return Integer.compare(distance1, distance2);
-          }
+        (i1, i2) -> {
+          int distance1 = manhattanDistances.get(i1);
+          int distance2 = manhattanDistances.get(i2);
+          return Integer.compare(distance1, distance2);
         });
 
     List<CustomVec2D> sortedTargets = new ArrayList<>();
@@ -103,9 +98,7 @@ public class CustomVec2D implements Serializable {
     }
 
     List<Integer> sortedDistances =
-        sortedTargets.stream()
-            .map(pos -> CustomVec2D.manhattan(this, pos))
-            .collect(Collectors.toList());
+        sortedTargets.stream().map(pos -> CustomVec2D.manhattan(this, pos)).toList();
     int prevDistance = sortedDistances.get(0);
     for (int distance : sortedDistances) {
       assert prevDistance <= distance;
@@ -122,7 +115,7 @@ public class CustomVec2D implements Serializable {
   }
 
   public static float dist(CustomVec2D p, CustomVec2D q) {
-    return (float) Math.sqrt((double) distSq(p, q));
+    return (float) Math.sqrt(distSq(p, q));
   }
 
   public String toString() {

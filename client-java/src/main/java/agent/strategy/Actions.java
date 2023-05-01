@@ -10,17 +10,17 @@ import agent.navigation.strategy.NavUtils;
 import agent.selector.EntitySelector;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import java.util.*;
+import nethack.enums.Condition;
+import nethack.enums.Skill;
 import nethack.object.Command;
 import nethack.object.Entity;
 import nethack.object.Player;
 import nethack.object.items.Item;
+import nethack.object.items.WeaponItem;
 import nethack.world.tiles.Door;
 import nl.uu.cs.aplib.mainConcepts.Action;
 import nl.uu.cs.aplib.utils.Pair;
-import util.CustomVec2D;
-import util.CustomVec3D;
-import util.Loggers;
-import util.Sounds;
+import util.*;
 
 public class Actions {
   // Construct an action that would attack an adjacent monster.
@@ -54,10 +54,18 @@ public class Actions {
     return action("fire")
         .do2(
             (AgentState S) ->
-                (Direction direction) -> {
+                (Pair<Item, Direction> info) -> {
+                  WeaponItem item = (WeaponItem) info.fst;
+                  Direction direction = info.snd;
                   Sounds.fire();
-                  Loggers.GoalLogger.info(">>> fire %s", direction);
-                  WorldModel<Player, Entity> newWom = WorldModels.fire(S, direction);
+                  Loggers.GoalLogger.info(">>> fire %s %s", item, direction);
+                  WorldModel<Player, Entity> newWom;
+                  // A dagger needs to be thrown instead of firing
+                  if (item.entityInfo.skill == Skill.DAGGER) {
+                    newWom = WorldModels.throwDagger(S, item, direction);
+                  } else {
+                    newWom = WorldModels.fire(S, direction);
+                  }
                   return new Pair<>(S, newWom);
                 });
   }
@@ -71,14 +79,15 @@ public class Actions {
                   CustomVec2D doorPos = NavUtils.posInDirection(S.loc().pos, direction);
                   Door d = (Door) S.area().getTile(doorPos);
                   WorldModel<Player, Entity> newWom;
-                  if (d.locked) {
-                    Sounds.door_kick();
-                    Loggers.GoalLogger.info("kick @%s", direction);
-                    newWom = WorldModels.kick(S, direction);
-                  } else {
+
+                  if (!d.locked) {
                     Sounds.door();
                     Loggers.GoalLogger.info("open door @%s", direction);
                     newWom = WorldModels.open(S, direction);
+                  } else {
+                    Sounds.door_kick();
+                    Loggers.GoalLogger.info("kick @%s", direction);
+                    newWom = WorldModels.kick(S, direction);
                   }
                   return new Pair<>(S, newWom);
                 });
@@ -91,6 +100,17 @@ public class Actions {
                 (Item item) -> {
                   Loggers.GoalLogger.info(">>> Quaff: %s", item);
                   WorldModel<Player, Entity> newWom = WorldModels.quaffItem(S, item.symbol);
+                  if (item.entityInfo.name.equalsIgnoreCase("hallucination")) {
+                    System.out.println("QUAFFED HALLUCINATION");
+                    System.out.println(
+                        S.app()
+                            .previousGameState
+                            .player
+                            .conditions
+                            .hasCondition(Condition.HALLUCINATING));
+                    System.out.println(
+                        S.app().gameState.player.conditions.hasCondition(Condition.HALLUCINATING));
+                  }
                   return new Pair<>(S, newWom);
                 });
   }

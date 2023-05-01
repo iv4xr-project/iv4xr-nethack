@@ -61,11 +61,10 @@ public class Entity implements IWorldEntity, Serializable {
   }
 
   public boolean equals(Object other) {
-    if (!(other instanceof Entity)) {
+    if (!(other instanceof Entity e)) {
       return false;
     }
 
-    Entity e = (Entity) other;
     return loc.equals(e.loc)
         && id == e.id
         && entityInfo.equals(e.entityInfo)

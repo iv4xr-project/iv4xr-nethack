@@ -139,10 +139,7 @@ public class NavTactic {
   // Construct a tactic that would guide the agent to a tile adjacent to the location.
   public static Tactic navigateNextTo(CustomVec3D location, boolean allowDiagonally) {
     return NavAction.navigateTo(location)
-        .on_(
-            (AgentState S) -> {
-              return !CustomVec3D.adjacent(S.loc(), location, allowDiagonally);
-            })
+        .on_((AgentState S) -> !CustomVec3D.adjacent(S.loc(), location, allowDiagonally))
         .lift();
   }
 

@@ -44,9 +44,9 @@ public class SmoothWizard {
 
   public List<IPathNode> smoothConcretePath() {
     List<ConcretePathNode> smoothedConcretePath = new ArrayList<>();
-    for (int index = 0; index < initialPath.size(); index++) {
-      assert initialPath.get(index) instanceof ConcretePathNode;
-      ConcretePathNode pathNode = (ConcretePathNode) initialPath.get(index);
+    for (IPathNode iPathNode : initialPath) {
+      assert iPathNode instanceof ConcretePathNode;
+      ConcretePathNode pathNode = (ConcretePathNode) iPathNode;
       smoothedConcretePath.add(pathNode);
       System.out.print(getPosition(pathNode.id));
     }
@@ -91,10 +91,8 @@ public class SmoothWizard {
 
   private int decideNextNodeToConsider(int index) {
     int newIndex = index;
-    for (int dir = ((Enum) Direction.North).ordinal();
-        dir <= ((Enum) Direction.NorthWest).ordinal();
-        dir++) {
-      if (_concreteMap.navType == NavType.Tile && dir > ((Enum) Direction.West).ordinal()) break;
+    for (int dir = Direction.North.ordinal(); dir <= Direction.NorthWest.ordinal(); dir++) {
+      if (_concreteMap.navType == NavType.Tile && dir > Direction.West.ordinal()) break;
 
       Id<ConcreteNode> seenPathNode =
           advanceThroughDirection(
@@ -164,45 +162,44 @@ public class SmoothWizard {
     int x = nodeInfo.position.x;
     ConcreteGraph tilingGraph = _concreteMap.graph;
     Function<Pair<Integer, Integer>, ConcreteNode> getNode =
-        (coords) -> {
-          return tilingGraph.getNode(_concreteMap.getNodeIdFromPos(coords.fst, coords.snd));
-        };
+        (coords) -> tilingGraph.getNode(_concreteMap.getNodeIdFromPos(coords.fst, coords.snd));
     switch (Direction.values()[direction]) {
-      case North:
+      case North -> {
         if (y == 0) return INVALID_ID;
-
         return getNode.apply(new Pair<>(x, y - 1)).nodeId;
-      case East:
+      }
+      case East -> {
         if (x == _concreteMap.size.width - 1) return INVALID_ID;
-
         return getNode.apply(new Pair<>(x + 1, y)).nodeId;
-      case South:
+      }
+      case South -> {
         if (y == _concreteMap.size.height - 1) return INVALID_ID;
-
         return getNode.apply(new Pair<>(x, y + 1)).nodeId;
-      case West:
+      }
+      case West -> {
         if (x == 0) return INVALID_ID;
-
         return getNode.apply(new Pair<>(x - 1, y)).nodeId;
-      case NorthEast:
+      }
+      case NorthEast -> {
         if (y == 0 || x == _concreteMap.size.width - 1) return INVALID_ID;
-
         return getNode.apply(new Pair<>(x + 1, y - 1)).nodeId;
-      case SouthEast:
+      }
+      case SouthEast -> {
         if (y == _concreteMap.size.height - 1 || x == _concreteMap.size.width - 1)
           return INVALID_ID;
-
         return getNode.apply(new Pair<>(x + 1, y + 1)).nodeId;
-      case SouthWest:
+      }
+      case SouthWest -> {
         if (y == _concreteMap.size.height - 1 || x == 0) return INVALID_ID;
-
         return getNode.apply(new Pair<>(x - 1, y + 1)).nodeId;
-      case NorthWest:
+      }
+      case NorthWest -> {
         if (y == 0 || x == 0) return INVALID_ID;
-
         return getNode.apply(new Pair<>(x - 1, y - 1)).nodeId;
-      default:
+      }
+      default -> {
         return INVALID_ID;
+      }
     }
   }
 }

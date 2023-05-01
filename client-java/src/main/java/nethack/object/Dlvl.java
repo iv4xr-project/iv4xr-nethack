@@ -13,11 +13,10 @@ public class Dlvl implements Serializable {
   }
 
   public boolean equals(Object o) {
-    if (!(o instanceof Dlvl)) {
+    if (!(o instanceof Dlvl other)) {
       return false;
     }
 
-    Dlvl other = (Dlvl) o;
     return depth == other.depth && dungeonNumber == other.dungeonNumber;
   }
 

@@ -47,7 +47,7 @@ public enum SpellbookAppearance {
 
   private final String value;
 
-  private SpellbookAppearance(String appearanceString) {
+  SpellbookAppearance(String appearanceString) {
     value = appearanceString;
   }
 

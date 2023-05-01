@@ -48,11 +48,10 @@ public class Moat extends Tile implements Walkable, Viewable {
   }
 
   public boolean equals(Object o) {
-    if (!(o instanceof Moat)) {
+    if (!(o instanceof Moat moat)) {
       return false;
     }
 
-    Moat moat = (Moat) o;
     return loc.equals(moat.loc) && getVisibility() == moat.getVisibility();
   }
 }

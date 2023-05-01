@@ -3,7 +3,7 @@
 //
 
 package agent.navigation.hpastar.graph;
-;
+
 import agent.navigation.hpastar.infrastructure.Id;
 import java.util.ArrayList;
 import java.util.HashMap;

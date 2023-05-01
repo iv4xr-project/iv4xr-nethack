@@ -16,7 +16,7 @@ public enum AmuletAppearance {
 
   private final String value;
 
-  private AmuletAppearance(String appearanceString) {
+  AmuletAppearance(String appearanceString) {
     value = appearanceString;
   }
 

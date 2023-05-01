@@ -9,9 +9,9 @@ import util.CustomVec2D;
 
 public interface IPassability {
   /** Tells whether for a given position this passability class can enter or not. */
-  public void updateCanMoveDiagonally(CustomVec2D pos, boolean canMoveDiagonally);
+  void updateCanMoveDiagonally(CustomVec2D pos, boolean canMoveDiagonally);
 
-  public void updateObstacle(CustomVec2D pos, boolean isObstacle);
+  void updateObstacle(CustomVec2D pos, boolean isObstacle);
 
   boolean cannotEnter(CustomVec2D pos, RefSupport<Integer> movementCost);
 

@@ -23,6 +23,9 @@ public class EntitySelector extends Selector<Entity> {
                   entity.entityInfo.name.equals("corpse")
                       && (S.app().gameState.stats.turn.turnNr - entity.createTurn.turnNr < 50));
 
+  public static final EntitySelector hallucinationPotion =
+      potion.predicate((entity, S) -> entity.entityInfo.name.equalsIgnoreCase("hallucination"));
+
   EntityClass entityClass;
 
   public EntitySelector() {}

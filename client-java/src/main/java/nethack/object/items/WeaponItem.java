@@ -26,7 +26,7 @@ public class WeaponItem extends Item implements BUCStatus, Weighable, Serializab
     this.modifier = modifier;
     this.wielded =
         (description.contains("wielded") || description.contains("in hand"))
-            && description.contains("not");
+            && !description.contains("not");
   }
 
   @Override

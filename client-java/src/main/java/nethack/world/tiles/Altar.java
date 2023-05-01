@@ -48,11 +48,10 @@ public class Altar extends Tile implements Walkable, Viewable {
   }
 
   public boolean equals(Object o) {
-    if (!(o instanceof Altar)) {
+    if (!(o instanceof Altar other)) {
       return false;
     }
 
-    Altar other = (Altar) o;
     return loc.equals(other.loc) && getVisibility() == other.getVisibility();
   }
 }

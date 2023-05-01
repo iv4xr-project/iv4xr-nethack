@@ -131,21 +131,5 @@ public class App {
                           .position)
               .collect(Collectors.toList()));
     }
-    //
-    //    List<Id<AbstractNode>> nodesIds =
-    //        new ArrayList<>(surface.hierarchicalMap.abstractGraph.nodes.keySet());
-    //    for (Id<AbstractNode> nodeId : nodesIds) {
-    //      AbstractNode node = surface.hierarchicalMap.abstractGraph.getNode(nodeId);
-    //      for (Id<AbstractNode> neighbourId : node.edges.keySet()) {
-    //        AbstractNode neighbour = surface.hierarchicalMap.abstractGraph.getNode(neighbourId);
-    //        assert neighbour.edges.containsKey(nodeId) : "Not bidirectional abs edge";
-    //      }
-    //    }
-    //    System.out.printf("ABS NODES (%d) [", nodesIds.size());
-    //    for (AbstractNode node : surface.hierarchicalMap.abstractGraph.nodes.values()) {
-    //      System.out.printf(" {%s: %s nrEdges:%s}", node.nodeId, node.info.position,
-    // node.edges.size());
-    //    }
-    //    System.out.println("]");
   }
 }

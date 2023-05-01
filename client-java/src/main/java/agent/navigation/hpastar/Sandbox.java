@@ -104,8 +104,7 @@ public class Sandbox {
     return path.stream()
         .map(
             (p) -> {
-              if (p instanceof ConcretePathNode) {
-                ConcretePathNode concretePathNode = (ConcretePathNode) p;
+              if (p instanceof ConcretePathNode concretePathNode) {
                 return concreteMap.graph.getNodeInfo(concretePathNode.id).position;
               }
 

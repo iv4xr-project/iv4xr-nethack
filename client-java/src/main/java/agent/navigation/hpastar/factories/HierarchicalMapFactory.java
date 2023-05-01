@@ -1,5 +1,5 @@
 package agent.navigation.hpastar.factories;
-;
+
 import agent.navigation.hpastar.*;
 import agent.navigation.hpastar.graph.*;
 import agent.navigation.hpastar.infrastructure.Constants;
@@ -164,30 +164,18 @@ public class HierarchicalMapFactory {
     var orientation = entrance.orientation;
     int cost = Constants.COST_ONE;
     switch (type) {
-      case ABSTRACT_TILE:
-      case ABSTRACT_OCTILE_UNICOST:
-        //  Inter-edges: cost 1
-        cost = Constants.COST_ONE;
-        break;
-      case ABSTRACT_OCTILE:
-        int unitCost;
-        switch (orientation) {
-          case Horizontal:
-          case Vertical:
-            unitCost = Constants.COST_ONE;
-            break;
-          case Hdiag2:
-          case Hdiag1:
-          case Vdiag1:
-          case Vdiag2:
-            unitCost = ((Constants.COST_ONE * 34) / 24);
-            break;
-          default:
-            unitCost = -1;
-            break;
-        }
+      case ABSTRACT_TILE, ABSTRACT_OCTILE_UNICOST ->
+      //  Inter-edges: cost 1
+      cost = Constants.COST_ONE;
+      case ABSTRACT_OCTILE -> {
+        int unitCost =
+            switch (orientation) {
+              case Horizontal, Vertical -> Constants.COST_ONE;
+              case Hdiag2, Hdiag1, Vdiag1, Vdiag2 -> ((Constants.COST_ONE * 34) / 24);
+              default -> -1;
+            };
         cost = unitCost;
-        break;
+      }
     }
     Loggers.HPALogger.trace(
         "InterCluster AddEdge: %s -> %s", srcAbstractNodeId, destAbstractNodeId);
@@ -435,7 +423,7 @@ public class HierarchicalMapFactory {
     }
 
     return abstractNodesDict.values().stream()
-        .sorted((node1, node2) -> Integer.compare(node1.id.getIdValue(), node2.id.getIdValue()))
+        .sorted(Comparator.comparingInt(node -> node.id.getIdValue()))
         .collect(Collectors.toList());
   }
 

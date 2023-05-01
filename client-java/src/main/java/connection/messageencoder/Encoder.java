@@ -56,7 +56,7 @@ public abstract class Encoder {
     ResetCoverage(8);
     public byte value = 0;
 
-    private EncoderBit(int bitValue) {
+    EncoderBit(int bitValue) {
       this.value = (byte) bitValue;
     }
   }

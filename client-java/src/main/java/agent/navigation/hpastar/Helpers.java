@@ -8,16 +8,11 @@ import util.CustomVec2D;
 
 public class Helpers {
   public static int getMaxEdges(NavType navType) {
-    switch (navType) {
-      case Hex:
-        return 6;
-      case Octile:
-      case OctileUnicost:
-        return 8;
-      case Tile:
-        return 4;
-    }
-    return 0;
+    return switch (navType) {
+      case Hex -> 6;
+      case Octile, OctileUnicost -> 8;
+      case Tile -> 4;
+    };
   }
 
   public static boolean areAligned(CustomVec2D p1, CustomVec2D p2) {
