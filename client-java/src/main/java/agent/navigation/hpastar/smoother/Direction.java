@@ -27,7 +27,6 @@ public enum Direction {
       case NorthWest -> new Command(CommandEnum.DIRECTION_NW);
       case SouthEast -> new Command(CommandEnum.DIRECTION_SE);
       case SouthWest -> new Command(CommandEnum.DIRECTION_SW);
-      default -> throw new IllegalArgumentException("Direction not known");
     };
   }
 

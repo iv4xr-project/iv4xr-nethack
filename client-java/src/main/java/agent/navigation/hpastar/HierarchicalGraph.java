@@ -120,6 +120,7 @@ public class HierarchicalGraph implements IMap<AbstractNode> {
       Id<AbstractNode> srcAbstractNodeId, Id<AbstractNode> destAbstractNodeId, int level) {
     AStar<AbstractNode> search = new AStar<>(this, srcAbstractNodeId, destAbstractNodeId);
     IdPath<AbstractNode> idPath = search.findPath();
+    assert idPath != null;
     if (idPath.pathCost >= 0) {
       addEdge(
           srcAbstractNodeId,
@@ -195,6 +196,7 @@ public class HierarchicalGraph implements IMap<AbstractNode> {
     Loggers.HPALogger.info("Search: %s -> %s, %s %s", absFromId, absFromId, from, to);
     AStar<AbstractNode> search = new AStar<>(graph, absFromId, absToId);
     IdPath<AbstractNode> abstractNodeIdPath = search.findPath();
+    assert abstractNodeIdPath != null;
     System.out.println(abstractNodeIdPath.pathNodes);
   }
 }

@@ -11,7 +11,7 @@ public class Door extends Tile implements Walkable, Viewable, Secret {
   public boolean locked;
   public boolean trapped;
   public boolean isShopDoor;
-  private int flags;
+  private final int flags;
 
   public boolean isSecret = false;
   boolean isVisible = false;

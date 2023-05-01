@@ -15,10 +15,7 @@ import agent.navigation.hpastar.infrastructure.Constants;
 import agent.navigation.hpastar.infrastructure.Id;
 import agent.navigation.hpastar.search.AStar;
 import agent.navigation.hpastar.search.IdPath;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import nl.uu.cs.aplib.utils.Pair;
 import util.CustomVec2D;
@@ -121,7 +118,7 @@ public class SmoothWizard {
       Id<ConcreteNode> nodeid1, Id<ConcreteNode> nodeid2) {
     AStar<ConcreteNode> search = new AStar<>(_concreteMap, nodeid1, nodeid2);
     IdPath<ConcreteNode> idPath = search.findPath();
-    return idPath.pathNodes;
+    return Objects.requireNonNull(idPath).pathNodes;
   }
 
   /**

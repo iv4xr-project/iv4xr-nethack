@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import nethack.object.Command;
 import nethack.object.Entity;
+import nethack.object.Player;
 import nethack.world.Level;
 import nethack.world.Surface;
 import nl.uu.cs.aplib.mainConcepts.SimpleState;
@@ -63,7 +64,7 @@ public class NavTactic {
             (AgentState S) ->
                 (Path<CustomVec3D> path) -> {
                   if (path.atLocation()) {
-                    WorldModel newWom = WorldModels.performCommands(S, commands);
+                    WorldModel<Player, Entity> newWom = WorldModels.performCommands(S, commands);
                     //                                Entity e =
                     // entitySelector.apply(S.app().level().entities, S);
                     //                                if (e == null) {

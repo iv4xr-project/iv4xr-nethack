@@ -100,6 +100,4 @@ public class Database {
 
     return jsonData.toString();
   }
-
-  public static void main(String[] args) {}
 }

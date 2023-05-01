@@ -42,7 +42,7 @@ public class TileDecoder extends Decoder {
     }
 
     switch (tileType) {
-      case 0 -> { // Stone
+      case 0, 33, 19 -> { // Stone, Drawbridge up?, Drawbridge down?
         return null;
       }
       case 13 -> tile = new Tree(loc);
@@ -71,9 +71,6 @@ public class TileDecoder extends Decoder {
       case 17 -> // Moat
       tile = new Moat(loc);
       case 18 -> tile = new Water(loc);
-      case 19 -> { // Drawbridge up
-        return null;
-      }
       case 20 -> tile = new Lava(loc);
       case 21 -> tile = new IronBars(loc);
       case 24 -> tile = new Floor(loc);
@@ -91,9 +88,7 @@ public class TileDecoder extends Decoder {
       tile = new Altar(loc);
       case 32 -> // Ice
       tile = new Ice(loc);
-      case 33 -> { // Drawbridge down
-        return null;
-      }
+        // Drawbridge down
       case 34 -> // Air
       tile = new Air(loc);
       case 35 -> // Cloud

@@ -81,11 +81,7 @@ public class FakePassability implements IPassability {
   private void noObstaclesInCluster() {
     for (int x = 0; x < size.width; x++) {
       for (int y = 0; y < size.height; y++) {
-        if (y >= 1 && x >= 1 && y <= 9 && x <= 6) {
-          obstacles[x][y] = false;
-        } else {
-          obstacles[x][y] = true;
-        }
+        obstacles[x][y] = y < 1 || x < 1 || y > 9 || x > 6;
       }
     }
   }

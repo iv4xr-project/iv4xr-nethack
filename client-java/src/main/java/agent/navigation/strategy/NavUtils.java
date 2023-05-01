@@ -71,7 +71,6 @@ public class NavUtils {
       case NorthWest -> new CustomVec2D(pos.x - 1, pos.y - 1);
       case SouthEast -> new CustomVec2D(pos.x + 1, pos.y + 1);
       case SouthWest -> new CustomVec2D(pos.x - 1, pos.y + 1);
-      default -> throw new IllegalArgumentException("Direction does not exist");
     };
   }
 

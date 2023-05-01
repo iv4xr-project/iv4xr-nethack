@@ -172,7 +172,6 @@ public class HierarchicalMapFactory {
             switch (orientation) {
               case Horizontal, Vertical -> Constants.COST_ONE;
               case Hdiag2, Hdiag1, Vdiag1, Vdiag2 -> ((Constants.COST_ONE * 34) / 24);
-              default -> -1;
             };
         cost = unitCost;
       }

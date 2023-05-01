@@ -183,10 +183,6 @@ public class HierarchicalNavigation implements Navigatable<CustomVec3D> {
       }
     }
 
-    if (shortestPath == null) {
-      return null;
-    }
-
     return shortestPath;
   }
 

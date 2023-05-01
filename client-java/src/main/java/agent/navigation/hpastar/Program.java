@@ -18,10 +18,7 @@ import agent.navigation.hpastar.search.HierarchicalSearch;
 import agent.navigation.hpastar.search.IdPath;
 import agent.navigation.hpastar.smoother.SmoothWizard;
 import agent.navigation.hpastar.utils.RefSupport;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -341,7 +338,7 @@ public class Program {
             getNode.apply(new Pair<>(startPosition.x, startPosition.y)).nodeId,
             getNode.apply(new Pair<>(endPosition.x, endPosition.y)).nodeId);
     IdPath<ConcreteNode> idPath = searcher.findPath();
-    List<Id<ConcreteNode>> path2 = idPath.pathNodes;
+    List<Id<ConcreteNode>> path2 = Objects.requireNonNull(idPath).pathNodes;
     return path2.stream()
         .map(p -> (IPathNode) new ConcretePathNode(p))
         .collect(Collectors.toList());
