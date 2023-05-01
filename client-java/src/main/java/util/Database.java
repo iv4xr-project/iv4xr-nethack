@@ -11,9 +11,9 @@ import nethack.object.info.EntityInfo;
 import nethack.object.info.FoodInfo;
 import nethack.object.info.MonsterInfo;
 import nethack.object.info.WeaponInfo;
-import util.JSONConverters.FoodConverter;
-import util.JSONConverters.JSONConverter;
-import util.JSONConverters.WeaponConverter;
+import util.jsonConverters.FoodConverter;
+import util.jsonConverters.JSONConverter;
+import util.jsonConverters.WeaponConverter;
 
 public class Database {
   private static final ObjectMapper mapper = new ObjectMapper();

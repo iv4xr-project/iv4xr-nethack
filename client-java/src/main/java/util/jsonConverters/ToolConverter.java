@@ -1,4 +1,4 @@
-package util.JSONConverters;
+package util.jsonConverters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -7,9 +7,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SpellbookConverter extends JSONConverter {
+public class ToolConverter extends JSONConverter {
   public String getFileName() {
-    return "spellbooks";
+    return "tools";
   }
 
   @Override
@@ -23,22 +23,22 @@ public class SpellbookConverter extends JSONConverter {
     // Process each line of the input file
     while ((line = br.readLine()) != null) {
       String[] fields = line.split("\t");
-      if (fields.length <= 1) {
+      if (fields.length <= 2) {
         category = fields[0];
         continue;
       }
       ObjectNode objectNode = mapper.createObjectNode();
       objectNode.put("Category", category);
       objectNode.put("Name", fields[0]);
-      objectNode.put("Spell level", Integer.parseInt(fields[1]));
-      objectNode.put("Direction", fields[2]);
-      objectNode.put("Relative probability", Double.parseDouble(fields[3].replace("%", "")));
-      objectNode.put(
-          "Probability conditional on price", Double.parseDouble(fields[4].replace("%", "")));
-      objectNode.put("Actions to read", Integer.parseInt(fields[5]));
-      if (fields.length > 6) {
-        objectNode.put("Skill changes", fields[6]);
-      }
+      objectNode.put("Cost", Integer.parseInt(fields[1].replace(" zm", "")));
+      objectNode.put("Weight", Integer.parseInt(fields[2]));
+      objectNode.put("Cost:weight ratio", Double.parseDouble(fields[3]));
+      objectNode.put("Use (where not obvious)", fields[4]);
+      //        if (!fields[5].equals("")) {
+      //          objectNode.put("Prob (‰)", Integer.parseInt(fields[5]));
+      //        }
+      objectNode.put("Creation", fields[6]);
+      objectNode.put("Magic?", fields[7].equals("Yes"));
       objectNodes.add(objectNode);
     }
 
