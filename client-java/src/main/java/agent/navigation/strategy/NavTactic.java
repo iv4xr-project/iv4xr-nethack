@@ -7,15 +7,11 @@ import agent.navigation.hpastar.search.Path;
 import agent.navigation.surface.Tile;
 import agent.selector.EntitySelector;
 import agent.selector.TileSelector;
-import agent.strategy.WorldModels;
-import eu.iv4xr.framework.mainConcepts.WorldModel;
 import java.util.List;
 import java.util.function.Predicate;
 import nethack.object.Command;
 import nethack.object.Entity;
-import nethack.object.Player;
 import nethack.world.Level;
-import nethack.world.Surface;
 import nl.uu.cs.aplib.mainConcepts.SimpleState;
 import nl.uu.cs.aplib.mainConcepts.Tactic;
 import nl.uu.cs.aplib.utils.Pair;
@@ -64,14 +60,8 @@ public class NavTactic {
             (AgentState S) ->
                 (Path<CustomVec3D> path) -> {
                   if (path.atLocation()) {
-                    WorldModel<Player, Entity> newWom = WorldModels.performCommands(S, commands);
-                    //                                Entity e =
-                    // entitySelector.apply(S.app().level().entities, S);
-                    //                                if (e == null) {
-                    //                                  return;
-                    //                                }
-                    //                                newWom.elements.remove(e.toId());
-                    return new Pair<>(S, newWom);
+                    S.app().step(commands);
+                    return S.getNewWOM();
                   } else {
                     return new Pair<>(S, NavUtils.moveTo(S, path.nextNode()));
                   }
@@ -119,7 +109,6 @@ public class NavTactic {
               }
 
               CustomVec3D agentLoc = S.loc();
-              Surface surface = S.area();
               List<CustomVec2D> neighbours =
                   NavUtils.neighbourCoordinates(tile.pos, Level.SIZE, allowDiagonal);
               List<CustomVec3D> targets = NavUtils.addLevelNr(neighbours, tile.loc.lvl);

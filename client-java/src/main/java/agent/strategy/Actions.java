@@ -1,6 +1,5 @@
 package agent.strategy;
 
-import static nethack.enums.CommandEnum.*;
 import static nl.uu.cs.aplib.AplibEDSL.action;
 
 import agent.iv4xr.AgentState;
@@ -8,13 +7,10 @@ import agent.navigation.hpastar.search.Path;
 import agent.navigation.hpastar.smoother.Direction;
 import agent.navigation.strategy.NavUtils;
 import agent.selector.EntitySelector;
-import eu.iv4xr.framework.mainConcepts.WorldModel;
 import java.util.*;
-import nethack.enums.Condition;
 import nethack.enums.Skill;
 import nethack.object.Command;
 import nethack.object.Entity;
-import nethack.object.Player;
 import nethack.object.items.Item;
 import nethack.object.items.WeaponItem;
 import nethack.world.tiles.Door;
@@ -29,10 +25,10 @@ public class Actions {
         .do2(
             (AgentState S) ->
                 (Direction direction) -> {
+                  Loggers.GoalLogger.info(">>> fight %s", direction);
                   Sounds.attack();
-                  Loggers.GoalLogger.info(">>> attackMonster %s", direction);
-                  WorldModel<Player, Entity> newWom = WorldModels.forceAttack(S, direction);
-                  return new Pair<>(S, newWom);
+                  S.app().fight(direction);
+                  return S.getNewWOM();
                 });
   }
 
@@ -42,10 +38,8 @@ public class Actions {
             (AgentState S) ->
                 (Item item) -> {
                   Loggers.GoalLogger.info(">>> wield weapon %s", item);
-                  WorldModel<Player, Entity> newWom =
-                      WorldModels.performCommands(
-                          S, List.of(new Command(COMMAND_WIELD), new Command(item.symbol)));
-                  return new Pair<>(S, newWom);
+                  S.app().wield(item);
+                  return S.getNewWOM();
                 });
   }
 
@@ -57,16 +51,15 @@ public class Actions {
                 (Pair<Item, Direction> info) -> {
                   WeaponItem item = (WeaponItem) info.fst;
                   Direction direction = info.snd;
-                  Sounds.fire();
                   Loggers.GoalLogger.info(">>> fire %s %s", item, direction);
-                  WorldModel<Player, Entity> newWom;
+                  Sounds.fire();
                   // A dagger needs to be thrown instead of firing
                   if (item.entityInfo.skill == Skill.DAGGER) {
-                    newWom = WorldModels.throwDagger(S, item, direction);
+                    S.app().throwDagger(item, direction);
                   } else {
-                    newWom = WorldModels.fire(S, direction);
+                    S.app().fire(direction);
                   }
-                  return new Pair<>(S, newWom);
+                  return S.getNewWOM();
                 });
   }
 
@@ -78,18 +71,17 @@ public class Actions {
                 (Direction direction) -> {
                   CustomVec2D doorPos = NavUtils.posInDirection(S.loc().pos, direction);
                   Door d = (Door) S.area().getTile(doorPos);
-                  WorldModel<Player, Entity> newWom;
 
                   if (!d.locked) {
-                    Sounds.door();
                     Loggers.GoalLogger.info("open door @%s", direction);
-                    newWom = WorldModels.open(S, direction);
+                    Sounds.door();
+                    S.app().open(direction);
                   } else {
-                    Sounds.door_kick();
                     Loggers.GoalLogger.info("kick @%s", direction);
-                    newWom = WorldModels.kick(S, direction);
+                    Sounds.door_kick();
+                    S.app().kick(direction);
                   }
-                  return new Pair<>(S, newWom);
+                  return S.getNewWOM();
                 });
   }
 
@@ -99,19 +91,8 @@ public class Actions {
             (AgentState S) ->
                 (Item item) -> {
                   Loggers.GoalLogger.info(">>> Quaff: %s", item);
-                  WorldModel<Player, Entity> newWom = WorldModels.quaffItem(S, item.symbol);
-                  if (item.entityInfo.name.equalsIgnoreCase("hallucination")) {
-                    System.out.println("QUAFFED HALLUCINATION");
-                    System.out.println(
-                        S.app()
-                            .previousGameState
-                            .player
-                            .conditions
-                            .hasCondition(Condition.HALLUCINATING));
-                    System.out.println(
-                        S.app().gameState.player.conditions.hasCondition(Condition.HALLUCINATING));
-                  }
-                  return new Pair<>(S, newWom);
+                  S.app().quaff(item);
+                  return S.getNewWOM();
                 });
   }
 
@@ -120,8 +101,8 @@ public class Actions {
         .do1(
             (AgentState S) -> {
               Loggers.GoalLogger.info("command: %s", command);
-              WorldModel<Player, Entity> newWom = WorldModels.performCommands(S, List.of(command));
-              return new Pair<>(S, newWom);
+              S.app().step(List.of(command));
+              return S.getNewWOM();
             });
   }
 
@@ -131,9 +112,8 @@ public class Actions {
             (AgentState S) -> {
               Loggers.GoalLogger.info("searchWalls");
               Sounds.search();
-              WorldModel<Player, Entity> newWom =
-                  WorldModels.performCommands(S, List.of(new Command(COMMAND_SEARCH)));
-              return new Pair<>(S, newWom);
+              S.app().search();
+              return S.getNewWOM();
             });
   }
 
@@ -144,8 +124,8 @@ public class Actions {
                 (Item item) -> {
                   Sounds.eat();
                   Loggers.GoalLogger.info(">>> eatFood: %s", item);
-                  WorldModel<Player, Entity> newWom = WorldModels.eatItem(S, item.symbol);
-                  return new Pair<>(S, newWom);
+                  S.app().eat(item);
+                  return S.getNewWOM();
                 });
   }
 
@@ -155,12 +135,8 @@ public class Actions {
         .do1(
             (AgentState S) -> {
               Loggers.GoalLogger.info(">>> pray");
-              WorldModel<Player, Entity> newWom =
-                  WorldModels.performCommands(
-                      S,
-                      List.of(new Command(COMMAND_PRAY), new Command('y'), new Command(MISC_MORE)));
-              S.app().gameState.player.lastPrayerTurn = S.app().gameState.stats.turn.time;
-              return new Pair<>(S, newWom);
+              S.app().pray();
+              return S.getNewWOM();
             });
   }
 
@@ -170,13 +146,13 @@ public class Actions {
             (AgentState S) ->
                 (Path<CustomVec3D> path) -> {
                   if (path.atLocation()) {
-                    WorldModel<Player, Entity> newWom = WorldModels.performCommands(S, commands);
+                    S.app().step(commands);
                     Entity e = entitySelector.apply(S.app().level().entities, S);
-                    newWom.removeElement(e.getId());
-                    return new Pair<>(S, newWom);
+                    S.worldmodel.removeElement(e.getId());
                   } else {
-                    return new Pair<>(S, NavUtils.moveTo(S, path.nextNode()));
+                    NavUtils.moveTo(S, path.nextNode());
                   }
+                  return S.getNewWOM();
                 });
   }
 }

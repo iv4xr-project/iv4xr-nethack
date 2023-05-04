@@ -29,14 +29,25 @@ public class SocketClient {
     Pair<String, Integer> info = Config.getConnectionInfo();
     this.host = info.fst;
     this.port = info.snd;
-    int maxWaitTime = 60000;
+
+    do {
+      start();
+    } while (!socketReady() && Config.getAutoRestart());
+
+    assert socketReady()
+        : String.format("Could NOT establish a connection with the host %s:%s.", host, port);
+    Loggers.ConnectionLogger.info("CONNECTED with %s:%d", host, port);
+  }
+
+  public void start() {
+    int maxWaitTimeSeconds = Config.getConnectionTimeout();
     Loggers.ConnectionLogger.info(
         "Trying to connect with a host on %s:%d (will time-out after %d seconds)",
-        host, port, maxWaitTime / 1000);
+        host, port, maxWaitTimeSeconds);
 
     long startTime = System.nanoTime();
 
-    while (!socketReady() && millisElapsed(startTime) < maxWaitTime) {
+    while (!socketReady() && millisElapsed(startTime) < maxWaitTimeSeconds * 1000) {
       try {
         socket = new Socket(host, port);
         reader = new DataInputStream(socket.getInputStream());
@@ -44,10 +55,6 @@ public class SocketClient {
       } catch (IOException ignored) {
       }
     }
-
-    assert socketReady()
-        : String.format("Could NOT establish a connection with the host %s:%s.", host, port);
-    Loggers.ConnectionLogger.info("CONNECTED with %s:%d", host, port);
   }
 
   /**

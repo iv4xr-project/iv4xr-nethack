@@ -1,16 +1,22 @@
 package nethack;
 
+import static nethack.enums.CommandEnum.*;
+
+import agent.navigation.hpastar.smoother.Direction;
 import connection.SocketClient;
 import connection.messageencoder.Encoder;
 import java.util.*;
 import java.util.stream.Collectors;
 import nethack.enums.CommandEnum;
+import nethack.enums.Condition;
 import nethack.enums.GameMode;
 import nethack.object.*;
+import nethack.object.items.Item;
 import nethack.world.Level;
 import org.apache.commons.lang3.SerializationUtils;
 import util.CustomVec2D;
 import util.Loggers;
+import util.MutationError;
 
 public class NetHack {
   public GameState previousGameState = null;
@@ -279,6 +285,61 @@ public class NetHack {
     gameState.player.location.lvl = gameState.getLevelNr();
     gameState.done = stepState.done;
     gameState.info = stepState.info;
+  }
+
+  public StepType move(Direction direction) {
+    return step(List.of(Direction.getCommand(direction)));
+  }
+
+  public StepType kick(Direction direction) {
+    return step(List.of(new Command(COMMAND_KICK), Direction.getCommand(direction)));
+  }
+
+  public StepType open(Direction direction) {
+    return step(List.of(new Command(COMMAND_OPEN), Direction.getCommand(direction)));
+  }
+
+  public StepType fight(Direction direction) {
+    return step(List.of(new Command(COMMAND_FIGHT), Direction.getCommand(direction)));
+  }
+
+  public StepType fire(Direction direction) {
+    return step(List.of(new Command(COMMAND_FIRE), Direction.getCommand(direction)));
+  }
+
+  public StepType throwDagger(Item item, Direction direction) {
+    return step(
+        List.of(
+            new Command(COMMAND_THROW), new Command(item.symbol), Direction.getCommand(direction)));
+  }
+
+  public StepType eat(Item item) {
+    return step(
+        List.of(new Command(COMMAND_EAT), new Command(item.symbol), new Command(MISC_MORE)));
+  }
+
+  public StepType search() {
+    return step(List.of(new Command(COMMAND_SEARCH)));
+  }
+
+  public StepType quaff(Item item) {
+    StepType stepType =
+        step(List.of(new Command(COMMAND_QUAFF), new Command(item.symbol), new Command(MISC_MORE)));
+    if (item.entityInfo.name.equalsIgnoreCase("hallucination")) {
+      if (!gameState.player.conditions.hasCondition(Condition.HALLUCINATING)) {
+        throw new MutationError("Hallucination quaffed, however not hallucinating afterwards");
+      }
+    }
+    return stepType;
+  }
+
+  public StepType wield(Item item) {
+    return step(List.of(new Command(COMMAND_WIELD), new Command(item.symbol)));
+  }
+
+  public StepType pray() {
+    gameState.player.lastPrayerTurn = gameState.stats.turn.time;
+    return step(List.of(new Command(COMMAND_PRAY), new Command('y'), new Command(MISC_MORE)));
   }
 
   public enum StepType {

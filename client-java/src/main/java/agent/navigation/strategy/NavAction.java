@@ -8,7 +8,6 @@ import agent.selector.EntitySelector;
 import agent.selector.Selector;
 import nethack.object.Entity;
 import nl.uu.cs.aplib.mainConcepts.Action;
-import nl.uu.cs.aplib.utils.Pair;
 import util.CustomVec3D;
 import util.Loggers;
 import util.Sounds;
@@ -16,12 +15,13 @@ import util.Sounds;
 public class NavAction {
   /** Construct an action that would guide the agent to the given location. */
   public static Action navigateTo(CustomVec3D target) {
-    return action("move-to")
+    return action("move")
         .do2(
             (AgentState S) ->
                 (CustomVec3D nextLoc) -> {
                   Loggers.NavLogger.info("navigateTo %s via %s", target, nextLoc);
-                  return new Pair<>(S, NavUtils.moveTo(S, nextLoc));
+                  S.app().move(NavUtils.toDirection(S, nextLoc));
+                  return S.getNewWOM();
                 })
         .on((AgentState S) -> NavUtils.nextLoc(NavUtils.adjustedFindPath(S, S.loc(), target)));
   }
@@ -33,7 +33,8 @@ public class NavAction {
             (AgentState S) ->
                 (CustomVec3D nextLoc) -> {
                   Loggers.NavLogger.info("navigateTo %s via %s", targetId, nextLoc);
-                  return new Pair<>(S, NavUtils.moveTo(S, nextLoc));
+                  S.app().move(NavUtils.toDirection(S, nextLoc));
+                  return S.getNewWOM();
                 })
         .on(
             (AgentState S) -> {
@@ -52,7 +53,8 @@ public class NavAction {
             (AgentState S) ->
                 (CustomVec3D nextLoc) -> {
                   Loggers.NavLogger.info("navigateTo ? via %s", nextLoc);
-                  return new Pair<>(S, NavUtils.moveTo(S, nextLoc));
+                  S.app().move(NavUtils.toDirection(S, nextLoc));
+                  return S.getNewWOM();
                 });
   }
 
@@ -63,7 +65,8 @@ public class NavAction {
             (AgentState S) ->
                 (CustomVec3D nextLoc) -> {
                   Loggers.NavLogger.info("navigateNextTo %s via %s", targetId, nextLoc);
-                  return new Pair<>(S, NavUtils.moveTo(S, nextLoc));
+                  S.app().move(NavUtils.toDirection(S, nextLoc));
+                  return S.getNewWOM();
                 })
         .on(
             (AgentState S) -> {
@@ -92,7 +95,8 @@ public class NavAction {
             (AgentState S) ->
                 (CustomVec3D nextLoc) -> {
                   Sounds.explore();
-                  return new Pair<>(S, NavUtils.moveTo(S, nextLoc));
+                  S.app().move(NavUtils.toDirection(S, nextLoc));
+                  return S.getNewWOM();
                 })
         .on(
             (AgentState S) -> {

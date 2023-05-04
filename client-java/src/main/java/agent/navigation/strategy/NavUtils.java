@@ -9,17 +9,14 @@ import agent.navigation.hpastar.smoother.Direction;
 import agent.navigation.surface.Climbable;
 import agent.navigation.surface.Tile;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
-import eu.iv4xr.framework.mainConcepts.WorldModel;
-import eu.iv4xr.framework.spatial.Vec3;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import nethack.NetHack;
 import nethack.enums.CommandEnum;
 import nethack.object.Command;
-import nethack.object.Entity;
-import nethack.object.Player;
 import nethack.world.tiles.Stair;
 import util.CustomVec2D;
 import util.CustomVec3D;
@@ -51,11 +48,6 @@ public class NavUtils {
    * is an occupied tile).
    */
   public static Path<CustomVec3D> adjustedFindPath(
-      AgentState state, int level0, CustomVec2D pos0, int level1, CustomVec2D pos1) {
-    return adjustedFindPath(state, new CustomVec3D(level0, pos0), new CustomVec3D(level1, pos1));
-  }
-
-  public static Path<CustomVec3D> adjustedFindPath(
       AgentState state, CustomVec3D oldLocation, CustomVec3D newLocation) {
     HierarchicalNavigation nav = state.hierarchicalNav();
     return nav.findPath(oldLocation, newLocation);
@@ -72,10 +64,6 @@ public class NavUtils {
       case SouthEast -> new CustomVec2D(pos.x + 1, pos.y + 1);
       case SouthWest -> new CustomVec2D(pos.x - 1, pos.y + 1);
     };
-  }
-
-  public static CustomVec2D loc2(Vec3 pos) {
-    return new CustomVec2D((int) pos.x, (int) pos.y);
   }
 
   public static List<CustomVec3D> adjacentPositions(List<CustomVec3D> locations, AgentState S) {
@@ -109,11 +97,7 @@ public class NavUtils {
         .collect(Collectors.toList());
   }
 
-  public static int levelNr(Vec3 loc) {
-    return (int) loc.z;
-  }
-
-  public static WorldModel<Player, Entity> moveTo(AgentState S, CustomVec3D targetTile) {
+  public static NetHack.StepType moveTo(AgentState S, CustomVec3D targetTile) {
     Command command;
     if (S.loc().lvl == targetTile.lvl) {
       command = Direction.getCommand(toDirection(S, targetTile));
@@ -128,11 +112,7 @@ public class NavUtils {
       }
     }
 
-    return S.env().commands(List.of(command));
-  }
-
-  public static WorldModel<Player, Entity> moveTo(AgentState state, Vec3 targetPosition) {
-    return moveTo(state, new CustomVec3D(targetPosition));
+    return S.app().step(List.of(command));
   }
 
   public static Direction toDirection(AgentState state, CustomVec3D target) {

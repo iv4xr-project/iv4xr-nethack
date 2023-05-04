@@ -32,6 +32,10 @@ public class Command {
     return fromStroke("-" + stroke);
   }
 
+  public static Command fromLiteralStroke(char character) {
+    return fromLiteralStroke(String.valueOf(character));
+  }
+
   public String toString() {
     String result = commandEnum.toString();
     if (commandEnum == CommandEnum.ADDITIONAL_ASCII) {

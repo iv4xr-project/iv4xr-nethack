@@ -29,6 +29,14 @@ public class Config {
     return new Pair<>(ip, port);
   }
 
+  public static boolean getAutoRestart() {
+    return config.getBoolean("AUTO_RESTART", false);
+  }
+
+  public static int getConnectionTimeout() {
+    return config.getInt("CONNECTION_TIMEOUT", 60);
+  }
+
   public static String getLogConfig() {
     return config.getString("LOG_CONFIG", "src/main/resources/log4j2.xml");
   }

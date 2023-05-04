@@ -3,6 +3,7 @@ package agent.iv4xr;
 import agent.navigation.HierarchicalNavigation;
 import eu.iv4xr.framework.extensions.pathfinding.Navigatable;
 import eu.iv4xr.framework.mainConcepts.Iv4xrAgentState;
+import eu.iv4xr.framework.mainConcepts.WorldModel;
 import java.util.*;
 import nethack.NetHack;
 import nethack.object.Entity;
@@ -11,8 +12,8 @@ import nethack.object.Turn;
 import nethack.world.Level;
 import nethack.world.Surface;
 import nl.uu.cs.aplib.mainConcepts.Environment;
+import nl.uu.cs.aplib.utils.Pair;
 import util.ColoredStringBuilder;
-import util.CustomVec2D;
 import util.CustomVec3D;
 import util.Loggers;
 
@@ -88,10 +89,6 @@ public class AgentState extends Iv4xrAgentState<Void, Player, Entity> {
   }
 
   private void updateEntities() {
-    // Update visibility cone
-    CustomVec2D playerPos = loc().pos;
-    Level level = env().app.gameState.getLevel();
-
     // Remove all entities that are in vision range but can't be seen.
     List<String> idsToRemove = new ArrayList<>();
     Loggers.WOMLogger.info("WOM contains %d elements", worldmodel.elements.size());
@@ -111,6 +108,12 @@ public class AgentState extends Iv4xrAgentState<Void, Player, Entity> {
     for (String id : idsToRemove) {
       worldmodel.removeElement(id);
     }
+  }
+
+  public Pair<AgentState, WorldModel<Player, Entity>> getNewWOM() {
+    WorldModel<Player, Entity> wom = env().observe(Player.ID);
+    worldmodel.mergeNewObservation(wom);
+    return new Pair<>(this, worldmodel);
   }
 
   public void render() {

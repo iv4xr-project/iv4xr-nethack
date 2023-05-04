@@ -2,9 +2,7 @@ package agent.iv4xr;
 
 import eu.iv4xr.framework.mainConcepts.Iv4xrEnvironment;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
-import java.util.List;
 import nethack.NetHack;
-import nethack.object.Command;
 import nethack.object.Entity;
 import nethack.object.Player;
 import nethack.world.Level;
@@ -33,7 +31,6 @@ public class AgentEnv extends Iv4xrEnvironment<Player, Entity> {
     // Add changed coordinates
     Level level = app.level();
     for (Entity entity : level.entities) {
-      int levelNr = app.gameState.getLevelNr();
       String id = entity.getId();
       Loggers.WOMLogger.debug("%s %s Added", id, entity.pos);
       wom.putElement(id, wom.new WorldEntityRecord(entity));
@@ -45,10 +42,5 @@ public class AgentEnv extends Iv4xrEnvironment<Player, Entity> {
     }
 
     return wom;
-  }
-
-  public WorldModel<Player, Entity> commands(List<Command> commands) {
-    app.step(commands);
-    return observe(Player.ID);
   }
 }

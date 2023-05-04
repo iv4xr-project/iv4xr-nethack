@@ -44,7 +44,7 @@ public class ObservationMessageDecoder extends Decoder {
 
       return observationMessage;
     } catch (IOException e) {
-      throw new RuntimeException(e);
+      throw new RuntimeException("Unable to read out observation message", e);
     }
   }
 }
