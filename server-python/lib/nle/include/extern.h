@@ -2163,6 +2163,21 @@ E int FDECL(d, (int, int));
 E int FDECL(rne, (int));
 E int FDECL(rnz, (int));
 
+// GERARD: random
+/* ### rnd_lvl.c ### */
+
+#ifdef USE_ISAAC64
+E void FDECL(init_isaac64_lvl, (unsigned long, int FDECL((*fn), (int))));
+E long NDECL(nhrand);
+#endif
+E int FDECL(rn2_lvl, (int));
+E int FDECL(rn2_on_display_rng_lvl, (int));
+E int FDECL(rnl_lvl, (int));
+E int FDECL(rnd_lvl, (int));
+E int FDECL(d_lvl, (int, int));
+E int FDECL(rne_lvl, (int));
+E int FDECL(rnz_lvl, (int));
+
 /* ### role.c ### */
 
 E boolean FDECL(validrole, (int));

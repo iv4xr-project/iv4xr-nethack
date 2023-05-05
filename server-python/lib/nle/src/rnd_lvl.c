@@ -167,12 +167,12 @@ register int x;
 
 /* 1 <= RND_lvl(x) <= x */
 int
-RND_lvl(x)
+rnd_lvl(x)
 register int x;
 {
 #if (NH_DEVEL_STATUS != NH_STATUS_RELEASED)
     if (x <= 0) {
-        impossible("RND_lvl(%d_lvl) attempted", x);
+        impossible("rnd_lvl(%d_lvl) attempted", x);
         return 1;
     }
 #endif
