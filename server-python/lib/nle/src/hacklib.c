@@ -865,6 +865,7 @@ int FDECL((*fn), (int));
 {
     nle_seeds[whichrng(fn)] = seed;
     init_isaac64(seed, fn);
+    init_isaac64_lvl(seed, fn);
 }
 
 #else /* USE_ISAAC64 */
