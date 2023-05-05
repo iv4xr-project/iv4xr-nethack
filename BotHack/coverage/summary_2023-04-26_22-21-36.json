@@ -1,0 +1,966 @@
+{
+    "branch_covered": 12097,
+    "branch_percent": 13.2,
+    "branch_total": 91496,
+    "files": [
+        {
+            "branch_covered": 156,
+            "branch_percent": 0.37200000000000005,
+            "branch_total": 419,
+            "filename": "allmain.c",
+            "line_covered": 212,
+            "line_percent": 0.601,
+            "line_total": 353
+        },
+        {
+            "branch_covered": 1,
+            "branch_percent": 0.5,
+            "branch_total": 2,
+            "filename": "alloc.c",
+            "line_covered": 5,
+            "line_percent": 0.625,
+            "line_total": 8
+        },
+        {
+            "branch_covered": 38,
+            "branch_percent": 0.013999999999999999,
+            "branch_total": 2655,
+            "filename": "apply.c",
+            "line_covered": 70,
+            "line_percent": 0.038,
+            "line_total": 1846
+        },
+        {
+            "branch_covered": 39,
+            "branch_percent": 0.038,
+            "branch_total": 1031,
+            "filename": "artifact.c",
+            "line_covered": 64,
+            "line_percent": 0.08800000000000001,
+            "line_total": 724
+        },
+        {
+            "branch_covered": 155,
+            "branch_percent": 0.38799999999999996,
+            "branch_total": 400,
+            "filename": "attrib.c",
+            "line_covered": 171,
+            "line_percent": 0.58,
+            "line_total": 295
+        },
+        {
+            "branch_covered": 0,
+            "branch_percent": 0.0,
+            "branch_total": 445,
+            "filename": "ball.c",
+            "line_covered": 0,
+            "line_percent": 0.0,
+            "line_total": 368
+        },
+        {
+            "branch_covered": 81,
+            "branch_percent": 0.389,
+            "branch_total": 208,
+            "filename": "bones.c",
+            "line_covered": 134,
+            "line_percent": 0.573,
+            "line_total": 234
+        },
+        {
+            "branch_covered": 73,
+            "branch_percent": 0.326,
+            "branch_total": 224,
+            "filename": "botl.c",
+            "line_covered": 161,
+            "line_percent": 0.612,
+            "line_total": 263
+        },
+        {
+            "branch_covered": 343,
+            "branch_percent": 0.166,
+            "branch_total": 2072,
+            "filename": "cmd.c",
+            "line_covered": 519,
+            "line_percent": 0.293,
+            "line_total": 1769
+        },
+        {
+            "branch_covered": 15,
+            "branch_percent": 0.021,
+            "branch_total": 698,
+            "filename": "dbridge.c",
+            "line_covered": 26,
+            "line_percent": 0.062,
+            "line_total": 421
+        },
+        {
+            "branch_covered": 0,
+            "branch_percent": null,
+            "branch_total": 0,
+            "filename": "decl.c",
+            "line_covered": 2,
+            "line_percent": 1.0,
+            "line_total": 2
+        },
+        {
+            "branch_covered": 50,
+            "branch_percent": 0.039,
+            "branch_total": 1288,
+            "filename": "detect.c",
+            "line_covered": 45,
+            "line_percent": 0.06,
+            "line_total": 752
+        },
+        {
+            "branch_covered": 127,
+            "branch_percent": 0.098,
+            "branch_total": 1299,
+            "filename": "dig.c",
+            "line_covered": 177,
+            "line_percent": 0.201,
+            "line_total": 881
+        },
+        {
+            "branch_covered": 455,
+            "branch_percent": 0.28,
+            "branch_total": 1623,
+            "filename": "display.c",
+            "line_covered": 479,
+            "line_percent": 0.5589999999999999,
+            "line_total": 857
+        },
+        {
+            "branch_covered": 173,
+            "branch_percent": 0.14,
+            "branch_total": 1234,
+            "filename": "do.c",
+            "line_covered": 244,
+            "line_percent": 0.257,
+            "line_total": 949
+        },
+        {
+            "branch_covered": 153,
+            "branch_percent": 0.17300000000000001,
+            "branch_total": 885,
+            "filename": "do_name.c",
+            "line_covered": 211,
+            "line_percent": 0.392,
+            "line_total": 538
+        },
+        {
+            "branch_covered": 120,
+            "branch_percent": 0.073,
+            "branch_total": 1651,
+            "filename": "do_wear.c",
+            "line_covered": 157,
+            "line_percent": 0.135,
+            "line_total": 1161
+        },
+        {
+            "branch_covered": 29,
+            "branch_percent": 0.038,
+            "branch_total": 755,
+            "filename": "dog.c",
+            "line_covered": 50,
+            "line_percent": 0.099,
+            "line_total": 507
+        },
+        {
+            "branch_covered": 0,
+            "branch_percent": 0.0,
+            "branch_total": 778,
+            "filename": "dogmove.c",
+            "line_covered": 0,
+            "line_percent": 0.0,
+            "line_total": 482
+        },
+        {
+            "branch_covered": 9,
+            "branch_percent": 0.005,
+            "branch_total": 1689,
+            "filename": "dokick.c",
+            "line_covered": 31,
+            "line_percent": 0.035,
+            "line_total": 893
+        },
+        {
+            "branch_covered": 156,
+            "branch_percent": 0.11699999999999999,
+            "branch_total": 1336,
+            "filename": "dothrow.c",
+            "line_covered": 171,
+            "line_percent": 0.185,
+            "line_total": 923
+        },
+        {
+            "branch_covered": 16,
+            "branch_percent": 0.35600000000000004,
+            "branch_total": 45,
+            "filename": "drawing.c",
+            "line_covered": 31,
+            "line_percent": 0.254,
+            "line_total": 122
+        },
+        {
+            "branch_covered": 208,
+            "branch_percent": 0.402,
+            "branch_total": 518,
+            "filename": "dungeon.c",
+            "line_covered": 380,
+            "line_percent": 0.552,
+            "line_total": 689
+        },
+        {
+            "branch_covered": 284,
+            "branch_percent": 0.154,
+            "branch_total": 1847,
+            "filename": "eat.c",
+            "line_covered": 338,
+            "line_percent": 0.27,
+            "line_total": 1253
+        },
+        {
+            "branch_covered": 194,
+            "branch_percent": 0.242,
+            "branch_total": 803,
+            "filename": "end.c",
+            "line_covered": 348,
+            "line_percent": 0.436,
+            "line_total": 798
+        },
+        {
+            "branch_covered": 195,
+            "branch_percent": 0.22,
+            "branch_total": 888,
+            "filename": "engrave.c",
+            "line_covered": 246,
+            "line_percent": 0.425,
+            "line_total": 579
+        },
+        {
+            "branch_covered": 43,
+            "branch_percent": 0.391,
+            "branch_total": 110,
+            "filename": "exper.c",
+            "line_covered": 66,
+            "line_percent": 0.537,
+            "line_total": 123
+        },
+        {
+            "branch_covered": 65,
+            "branch_percent": 0.14300000000000002,
+            "branch_total": 453,
+            "filename": "explode.c",
+            "line_covered": 78,
+            "line_percent": 0.23199999999999998,
+            "line_total": 336
+        },
+        {
+            "branch_covered": 0,
+            "branch_percent": 0.0,
+            "branch_total": 141,
+            "filename": "extralev.c",
+            "line_covered": 0,
+            "line_percent": 0.0,
+            "line_total": 202
+        },
+        {
+            "branch_covered": 80,
+            "branch_percent": 0.23,
+            "branch_total": 348,
+            "filename": "files.c",
+            "line_covered": 264,
+            "line_percent": 0.431,
+            "line_total": 612
+        },
+        {
+            "branch_covered": 0,
+            "branch_percent": 0.0,
+            "branch_total": 510,
+            "filename": "fountain.c",
+            "line_covered": 0,
+            "line_percent": 0.0,
+            "line_total": 365
+        },
+        {
+            "branch_covered": 552,
+            "branch_percent": 0.203,
+            "branch_total": 2716,
+            "filename": "hack.c",
+            "line_covered": 521,
+            "line_percent": 0.387,
+            "line_total": 1346
+        },
+        {
+            "branch_covered": 68,
+            "branch_percent": 0.436,
+            "branch_total": 156,
+            "filename": "hacklib.c",
+            "line_covered": 117,
+            "line_percent": 0.562,
+            "line_total": 208
+        },
+        {
+            "branch_covered": 446,
+            "branch_percent": 0.222,
+            "branch_total": 2013,
+            "filename": "invent.c",
+            "line_covered": 535,
+            "line_percent": 0.319,
+            "line_total": 1676
+        },
+        {
+            "branch_covered": 10,
+            "branch_percent": 0.055,
+            "branch_total": 183,
+            "filename": "light.c",
+            "line_covered": 42,
+            "line_percent": 0.159,
+            "line_total": 264
+        },
+        {
+            "branch_covered": 79,
+            "branch_percent": 0.10400000000000001,
+            "branch_total": 760,
+            "filename": "lock.c",
+            "line_covered": 134,
+            "line_percent": 0.24100000000000002,
+            "line_total": 555
+        },
+        {
+            "branch_covered": 13,
+            "branch_percent": 0.065,
+            "branch_total": 200,
+            "filename": "mail.c",
+            "line_covered": 19,
+            "line_percent": 0.081,
+            "line_total": 236
+        },
+        {
+            "branch_covered": 322,
+            "branch_percent": 0.26,
+            "branch_total": 1240,
+            "filename": "makemon.c",
+            "line_covered": 404,
+            "line_percent": 0.42700000000000005,
+            "line_total": 946
+        },
+        {
+            "branch_covered": 56,
+            "branch_percent": 0.56,
+            "branch_total": 100,
+            "filename": "mapglyph.c",
+            "line_covered": 58,
+            "line_percent": 0.8059999999999999,
+            "line_total": 72
+        },
+        {
+            "branch_covered": 114,
+            "branch_percent": 0.11199999999999999,
+            "branch_total": 1019,
+            "filename": "mcastu.c",
+            "line_covered": 85,
+            "line_percent": 0.20600000000000002,
+            "line_total": 412
+        },
+        {
+            "branch_covered": 2,
+            "branch_percent": 0.001,
+            "branch_total": 2417,
+            "filename": "mhitm.c",
+            "line_covered": 4,
+            "line_percent": 0.005,
+            "line_total": 790
+        },
+        {
+            "branch_covered": 262,
+            "branch_percent": 0.094,
+            "branch_total": 2781,
+            "filename": "mhitu.c",
+            "line_covered": 286,
+            "line_percent": 0.184,
+            "line_total": 1555
+        },
+        {
+            "branch_covered": 0,
+            "branch_percent": 0.0,
+            "branch_total": 203,
+            "filename": "minion.c",
+            "line_covered": 0,
+            "line_percent": 0.0,
+            "line_total": 175
+        },
+        {
+            "branch_covered": 423,
+            "branch_percent": 0.547,
+            "branch_total": 773,
+            "filename": "mklev.c",
+            "line_covered": 608,
+            "line_percent": 0.727,
+            "line_total": 836
+        },
+        {
+            "branch_covered": 178,
+            "branch_percent": 0.672,
+            "branch_total": 265,
+            "filename": "mkmap.c",
+            "line_covered": 197,
+            "line_percent": 0.821,
+            "line_total": 240
+        },
+        {
+            "branch_covered": 141,
+            "branch_percent": 0.23399999999999999,
+            "branch_total": 602,
+            "filename": "mkmaze.c",
+            "line_covered": 164,
+            "line_percent": 0.243,
+            "line_total": 674
+        },
+        {
+            "branch_covered": 266,
+            "branch_percent": 0.42,
+            "branch_total": 634,
+            "filename": "mkobj.c",
+            "line_covered": 435,
+            "line_percent": 0.5529999999999999,
+            "line_total": 787
+        },
+        {
+            "branch_covered": 41,
+            "branch_percent": 0.106,
+            "branch_total": 388,
+            "filename": "mkroom.c",
+            "line_covered": 87,
+            "line_percent": 0.217,
+            "line_total": 401
+        },
+        {
+            "branch_covered": 479,
+            "branch_percent": 0.18899999999999997,
+            "branch_total": 2537,
+            "filename": "mon.c",
+            "line_covered": 526,
+            "line_percent": 0.38,
+            "line_total": 1384
+        },
+        {
+            "branch_covered": 82,
+            "branch_percent": 0.165,
+            "branch_total": 498,
+            "filename": "mondata.c",
+            "line_covered": 78,
+            "line_percent": 0.32799999999999996,
+            "line_total": 238
+        },
+        {
+            "branch_covered": 679,
+            "branch_percent": 0.373,
+            "branch_total": 1818,
+            "filename": "monmove.c",
+            "line_covered": 444,
+            "line_percent": 0.632,
+            "line_total": 703
+        },
+        {
+            "branch_covered": 0,
+            "branch_percent": null,
+            "branch_total": 0,
+            "filename": "monstr.c",
+            "line_covered": 2,
+            "line_percent": 1.0,
+            "line_total": 2
+        },
+        {
+            "branch_covered": 0,
+            "branch_percent": 0.0,
+            "branch_total": 194,
+            "filename": "mplayer.c",
+            "line_covered": 0,
+            "line_percent": 0.0,
+            "line_total": 172
+        },
+        {
+            "branch_covered": 158,
+            "branch_percent": 0.16699999999999998,
+            "branch_total": 945,
+            "filename": "mthrowu.c",
+            "line_covered": 170,
+            "line_percent": 0.379,
+            "line_total": 449
+        },
+        {
+            "branch_covered": 208,
+            "branch_percent": 0.07400000000000001,
+            "branch_total": 2806,
+            "filename": "muse.c",
+            "line_covered": 209,
+            "line_percent": 0.158,
+            "line_total": 1320
+        },
+        {
+            "branch_covered": 0,
+            "branch_percent": 0.0,
+            "branch_total": 462,
+            "filename": "music.c",
+            "line_covered": 0,
+            "line_percent": 0.0,
+            "line_total": 307
+        },
+        {
+            "branch_covered": 107,
+            "branch_percent": 0.677,
+            "branch_total": 158,
+            "filename": "o_init.c",
+            "line_covered": 167,
+            "line_percent": 0.7559999999999999,
+            "line_total": 221
+        },
+        {
+            "branch_covered": 383,
+            "branch_percent": 0.2,
+            "branch_total": 1915,
+            "filename": "objnam.c",
+            "line_covered": 456,
+            "line_percent": 0.311,
+            "line_total": 1464
+        },
+        {
+            "branch_covered": 268,
+            "branch_percent": 0.142,
+            "branch_total": 1884,
+            "filename": "options.c",
+            "line_covered": 456,
+            "line_percent": 0.207,
+            "line_total": 2204
+        },
+        {
+            "branch_covered": 171,
+            "branch_percent": 0.192,
+            "branch_total": 889,
+            "filename": "pager.c",
+            "line_covered": 157,
+            "line_percent": 0.29,
+            "line_total": 541
+        },
+        {
+            "branch_covered": 190,
+            "branch_percent": 0.141,
+            "branch_total": 1343,
+            "filename": "pickup.c",
+            "line_covered": 325,
+            "line_percent": 0.252,
+            "line_total": 1291
+        },
+        {
+            "branch_covered": 26,
+            "branch_percent": 0.10400000000000001,
+            "branch_total": 249,
+            "filename": "pline.c",
+            "line_covered": 111,
+            "line_percent": 0.401,
+            "line_total": 277
+        },
+        {
+            "branch_covered": 31,
+            "branch_percent": 0.027999999999999997,
+            "branch_total": 1125,
+            "filename": "polyself.c",
+            "line_covered": 37,
+            "line_percent": 0.048,
+            "line_total": 776
+        },
+        {
+            "branch_covered": 52,
+            "branch_percent": 0.027000000000000003,
+            "branch_total": 1931,
+            "filename": "potion.c",
+            "line_covered": 68,
+            "line_percent": 0.055,
+            "line_total": 1229
+        },
+        {
+            "branch_covered": 49,
+            "branch_percent": 0.033,
+            "branch_total": 1475,
+            "filename": "pray.c",
+            "line_covered": 86,
+            "line_percent": 0.079,
+            "line_total": 1086
+        },
+        {
+            "branch_covered": 55,
+            "branch_percent": 0.105,
+            "branch_total": 526,
+            "filename": "priest.c",
+            "line_covered": 65,
+            "line_percent": 0.177,
+            "line_total": 368
+        },
+        {
+            "branch_covered": 6,
+            "branch_percent": 0.028999999999999998,
+            "branch_total": 208,
+            "filename": "quest.c",
+            "line_covered": 9,
+            "line_percent": 0.049,
+            "line_total": 184
+        },
+        {
+            "branch_covered": 15,
+            "branch_percent": 0.11599999999999999,
+            "branch_total": 129,
+            "filename": "questpgr.c",
+            "line_covered": 42,
+            "line_percent": 0.20600000000000002,
+            "line_total": 204
+        },
+        {
+            "branch_covered": 0,
+            "branch_percent": 0.0,
+            "branch_total": 1852,
+            "filename": "read.c",
+            "line_covered": 0,
+            "line_percent": 0.0,
+            "line_total": 1078
+        },
+        {
+            "branch_covered": 56,
+            "branch_percent": 0.903,
+            "branch_total": 62,
+            "filename": "rect.c",
+            "line_covered": 70,
+            "line_percent": 0.9590000000000001,
+            "line_total": 73
+        },
+        {
+            "branch_covered": 20,
+            "branch_percent": 0.055999999999999994,
+            "branch_total": 360,
+            "filename": "region.c",
+            "line_covered": 57,
+            "line_percent": 0.133,
+            "line_total": 430
+        },
+        {
+            "branch_covered": 73,
+            "branch_percent": 0.251,
+            "branch_total": 291,
+            "filename": "restore.c",
+            "line_covered": 156,
+            "line_percent": 0.335,
+            "line_total": 466
+        },
+        {
+            "branch_covered": 0,
+            "branch_percent": 0.0,
+            "branch_total": 24,
+            "filename": "rip.c",
+            "line_covered": 0,
+            "line_percent": 0.0,
+            "line_total": 57
+        },
+        {
+            "branch_covered": 12,
+            "branch_percent": 0.462,
+            "branch_total": 26,
+            "filename": "rnd.c",
+            "line_covered": 44,
+            "line_percent": 0.9359999999999999,
+            "line_total": 47
+        },
+        {
+            "branch_covered": 135,
+            "branch_percent": 0.28600000000000003,
+            "branch_total": 472,
+            "filename": "role.c",
+            "line_covered": 209,
+            "line_percent": 0.46399999999999997,
+            "line_total": 450
+        },
+        {
+            "branch_covered": 3,
+            "branch_percent": 0.02,
+            "branch_total": 148,
+            "filename": "rumors.c",
+            "line_covered": 6,
+            "line_percent": 0.031,
+            "line_total": 194
+        },
+        {
+            "branch_covered": 81,
+            "branch_percent": 0.44,
+            "branch_total": 184,
+            "filename": "save.c",
+            "line_covered": 241,
+            "line_percent": 0.631,
+            "line_total": 382
+        },
+        {
+            "branch_covered": 214,
+            "branch_percent": 0.079,
+            "branch_total": 2709,
+            "filename": "shk.c",
+            "line_covered": 298,
+            "line_percent": 0.14300000000000002,
+            "line_total": 2081
+        },
+        {
+            "branch_covered": 43,
+            "branch_percent": 0.27899999999999997,
+            "branch_total": 154,
+            "filename": "shknam.c",
+            "line_covered": 93,
+            "line_percent": 0.604,
+            "line_total": 154
+        },
+        {
+            "branch_covered": 0,
+            "branch_percent": 0.0,
+            "branch_total": 292,
+            "filename": "sit.c",
+            "line_covered": 0,
+            "line_percent": 0.0,
+            "line_total": 283
+        },
+        {
+            "branch_covered": 28,
+            "branch_percent": 0.03,
+            "branch_total": 923,
+            "filename": "sounds.c",
+            "line_covered": 27,
+            "line_percent": 0.059000000000000004,
+            "line_total": 461
+        },
+        {
+            "branch_covered": 277,
+            "branch_percent": 0.21899999999999997,
+            "branch_total": 1264,
+            "filename": "sp_lev.c",
+            "line_covered": 428,
+            "line_percent": 0.297,
+            "line_total": 1440
+        },
+        {
+            "branch_covered": 3,
+            "branch_percent": 0.006,
+            "branch_total": 502,
+            "filename": "spell.c",
+            "line_covered": 7,
+            "line_percent": 0.011000000000000001,
+            "line_total": 658
+        },
+        {
+            "branch_covered": 110,
+            "branch_percent": 0.23800000000000002,
+            "branch_total": 463,
+            "filename": "steal.c",
+            "line_covered": 135,
+            "line_percent": 0.467,
+            "line_total": 289
+        },
+        {
+            "branch_covered": 2,
+            "branch_percent": 0.004,
+            "branch_total": 569,
+            "filename": "steed.c",
+            "line_covered": 5,
+            "line_percent": 0.015,
+            "line_total": 337
+        },
+        {
+            "branch_covered": 73,
+            "branch_percent": 0.079,
+            "branch_total": 928,
+            "filename": "teleport.c",
+            "line_covered": 104,
+            "line_percent": 0.16399999999999998,
+            "line_total": 636
+        },
+        {
+            "branch_covered": 9,
+            "branch_percent": 0.5,
+            "branch_total": 18,
+            "filename": "tile.c",
+            "line_covered": 11,
+            "line_percent": 0.647,
+            "line_total": 17
+        },
+        {
+            "branch_covered": 72,
+            "branch_percent": 0.085,
+            "branch_total": 850,
+            "filename": "timeout.c",
+            "line_covered": 154,
+            "line_percent": 0.18100000000000002,
+            "line_total": 849
+        },
+        {
+            "branch_covered": 165,
+            "branch_percent": 0.348,
+            "branch_total": 474,
+            "filename": "topten.c",
+            "line_covered": 309,
+            "line_percent": 0.542,
+            "line_total": 570
+        },
+        {
+            "branch_covered": 18,
+            "branch_percent": 1.0,
+            "branch_total": 18,
+            "filename": "track.c",
+            "line_covered": 27,
+            "line_percent": 1.0,
+            "line_total": 27
+        },
+        {
+            "branch_covered": 120,
+            "branch_percent": 0.035,
+            "branch_total": 3436,
+            "filename": "trap.c",
+            "line_covered": 211,
+            "line_percent": 0.09,
+            "line_total": 2356
+        },
+        {
+            "branch_covered": 63,
+            "branch_percent": 0.248,
+            "branch_total": 254,
+            "filename": "u_init.c",
+            "line_covered": 112,
+            "line_percent": 0.34600000000000003,
+            "line_total": 324
+        },
+        {
+            "branch_covered": 216,
+            "branch_percent": 0.065,
+            "branch_total": 3308,
+            "filename": "uhitm.c",
+            "line_covered": 190,
+            "line_percent": 0.132,
+            "line_total": 1436
+        },
+        {
+            "branch_covered": 1,
+            "branch_percent": 0.055999999999999994,
+            "branch_total": 18,
+            "filename": "unicode.c",
+            "line_covered": 4,
+            "line_percent": 0.16,
+            "line_total": 25
+        },
+        {
+            "branch_covered": 12,
+            "branch_percent": 0.019,
+            "branch_total": 634,
+            "filename": "vault.c",
+            "line_covered": 26,
+            "line_percent": 0.055,
+            "line_total": 477
+        },
+        {
+            "branch_covered": 12,
+            "branch_percent": 0.375,
+            "branch_total": 32,
+            "filename": "version.c",
+            "line_covered": 37,
+            "line_percent": 0.536,
+            "line_total": 69
+        },
+        {
+            "branch_covered": 428,
+            "branch_percent": 0.613,
+            "branch_total": 698,
+            "filename": "vision.c",
+            "line_covered": 406,
+            "line_percent": 0.736,
+            "line_total": 552
+        },
+        {
+            "branch_covered": 278,
+            "branch_percent": 0.34,
+            "branch_total": 818,
+            "filename": "weapon.c",
+            "line_covered": 339,
+            "line_percent": 0.602,
+            "line_total": 563
+        },
+        {
+            "branch_covered": 1,
+            "branch_percent": 0.004,
+            "branch_total": 232,
+            "filename": "were.c",
+            "line_covered": 2,
+            "line_percent": 0.024,
+            "line_total": 82
+        },
+        {
+            "branch_covered": 42,
+            "branch_percent": 0.065,
+            "branch_total": 644,
+            "filename": "wield.c",
+            "line_covered": 54,
+            "line_percent": 0.14300000000000002,
+            "line_total": 377
+        },
+        {
+            "branch_covered": 3,
+            "branch_percent": 0.25,
+            "branch_total": 12,
+            "filename": "windows.c",
+            "line_covered": 7,
+            "line_percent": 0.33299999999999996,
+            "line_total": 21
+        },
+        {
+            "branch_covered": 0,
+            "branch_percent": 0.0,
+            "branch_total": 302,
+            "filename": "wizard.c",
+            "line_covered": 0,
+            "line_percent": 0.0,
+            "line_total": 268
+        },
+        {
+            "branch_covered": 14,
+            "branch_percent": 0.084,
+            "branch_total": 166,
+            "filename": "worm.c",
+            "line_covered": 28,
+            "line_percent": 0.109,
+            "line_total": 257
+        },
+        {
+            "branch_covered": 242,
+            "branch_percent": 0.33,
+            "branch_total": 733,
+            "filename": "worn.c",
+            "line_covered": 167,
+            "line_percent": 0.43200000000000005,
+            "line_total": 387
+        },
+        {
+            "branch_covered": 0,
+            "branch_percent": 0.0,
+            "branch_total": 91,
+            "filename": "write.c",
+            "line_covered": 0,
+            "line_percent": 0.0,
+            "line_total": 131
+        },
+        {
+            "branch_covered": 81,
+            "branch_percent": 0.022000000000000002,
+            "branch_total": 3638,
+            "filename": "zap.c",
+            "line_covered": 89,
+            "line_percent": 0.039,
+            "line_total": 2309
+        }
+    ],
+    "gcovr/summary_format_version": "0.2",
+    "line_covered": 15837,
+    "line_percent": 24.2,
+    "line_total": 65511,
+    "root": "../../nh343-nao/src"
+}
