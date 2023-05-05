@@ -13,6 +13,7 @@ import nethack.enums.GameMode;
 import nethack.object.*;
 import nethack.object.items.Item;
 import nethack.world.Level;
+import nl.uu.cs.aplib.utils.Pair;
 import org.apache.commons.lang3.SerializationUtils;
 import util.CustomVec2D;
 import util.Loggers;
@@ -68,6 +69,8 @@ public class NetHack {
     }
     Loggers.NetHackLogger.info("GameState indicates it is done, loop stopped");
   }
+
+  public void playActions(List<Pair<Turn, List<Command>>> actions, Turn turn) {}
 
   public void close() {
     Loggers.NetHackLogger.info("Close game");

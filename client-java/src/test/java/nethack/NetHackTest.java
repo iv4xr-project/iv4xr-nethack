@@ -25,9 +25,10 @@ public class NetHackTest extends TestCase {
   }
 
   /** Rigorous Test :-) */
-  public void testQuaff() {
+  public void testQuaff(NetHack netHack) {
     TestConfig.setConfigFile("testConfig.properties");
     System.out.println(Config.getLogConfig());
+    //    NetHack Replay.getActions("testHallucination");
 
     assertTrue(true);
     assertFalse(true);

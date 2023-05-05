@@ -137,7 +137,7 @@ public class AgentState extends Iv4xrAgentState<Void, Player, Entity> {
 
     csb.appendf(doubleFormatString, game[n + 1], hierarchicalMap[n + 1]);
     csb.appendf(
-        String.format("%%-%ds %%-%ds%n", Level.SIZE.width * 2 + 40, Level.SIZE.width),
+        String.format("%%-%ds  %%-%ds%n", Level.SIZE.width * 2 + 40, Level.SIZE.width),
         game[n + 2],
         hierarchicalMap[n + 2]);
     csb.appendf(tripleFormatString, "", "", hierarchicalMap[n + 3]);

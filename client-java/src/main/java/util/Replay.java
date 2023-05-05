@@ -69,13 +69,17 @@ public class Replay {
     }
   }
 
+  public static List<Pair<Turn, List<Command>>> getActions(String fileName) {
+    Replay replay = new Replay(fileName);
+    return replay.actions;
+  }
+
   public static void main(String[] args) {
     String fileName = Config.getReplayFile();
     Replay replay = new Replay(fileName);
-
     SocketClient client = new SocketClient();
     NetHack nethack = new NetHack(client, replay.character, replay.seed);
-    for (Pair<Turn, List<Command>> action : replay.actions) {
+    for (Pair<Turn, List<Command>> action : getActions(fileName)) {
       assert nethack.gameState.stats.turn.equals(action.fst) : "TURN WAS DIFFERENT";
       nethack.step(action.snd);
     }
