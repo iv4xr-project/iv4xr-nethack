@@ -182,7 +182,7 @@ gottype:
         register int j;
 
         /* pick a shop type at random */
-        for (j = rnd(100), i = 0; (j -= shtypes[i].prob) > 0; i++)
+        for (j = rnd_lvl(100), i = 0; (j -= shtypes[i].prob) > 0; i++)
             continue;
 
         /* big rooms cannot be wand or book shops,
@@ -213,7 +213,7 @@ register boolean strict;
     register struct mkroom *sroom;
     register int i = nroom;
 
-    for (sroom = &rooms[rn2(nroom)]; i--; sroom++) {
+    for (sroom = &rooms[rn2_lvl(nroom)]; i--; sroom++) {
         if (sroom == &rooms[nroom])
             sroom = &rooms[0];
         if (sroom->hx < 0)
@@ -247,7 +247,7 @@ void
 mk_zoo_thronemon(x,y)
 int x,y;
 {
-    int i = rnd(level_difficulty());
+    int i = rnd_lvl(level_difficulty());
     int pm = (i > 9) ? PM_OGRE_KING
         : (i > 5) ? PM_ELVENKING
         : (i > 2) ? PM_DWARF_KING
@@ -363,33 +363,33 @@ struct mkroom *sroom;
                 if (i >= goldlim)
                     i = 5 * level_difficulty();
                 goldlim -= i;
-                (void) mkgold((long) rn1(i, 10), sx, sy);
+                (void) mkgold((long) rn1_lvl(i, 10), sx, sy);
                 break;
             case MORGUE:
-                if (!rn2(5))
+                if (!rn2_lvl(5))
                     (void) mk_tt_object(CORPSE, sx, sy);
-                if (!rn2(10)) /* lots of treasure buried with dead */
-                    (void) mksobj_at((rn2(3)) ? LARGE_BOX : CHEST, sx, sy,
+                if (!rn2_lvl(10)) /* lots of treasure buried with dead */
+                    (void) mksobj_at((rn2_lvl(3)) ? LARGE_BOX : CHEST, sx, sy,
                                      TRUE, FALSE);
-                if (!rn2(5))
+                if (!rn2_lvl(5))
                     make_grave(sx, sy, (char *) 0);
                 break;
             case BEEHIVE:
-                if (!rn2(3))
+                if (!rn2_lvl(3))
                     (void) mksobj_at(LUMP_OF_ROYAL_JELLY, sx, sy, TRUE,
                                      FALSE);
                 break;
             case BARRACKS:
-                if (!rn2(20)) /* the payroll and some loot */
+                if (!rn2_lvl(20)) /* the payroll and some loot */
                     (void) mksobj_at((rn2(3)) ? LARGE_BOX : CHEST, sx, sy,
                                      TRUE, FALSE);
                 break;
             case COCKNEST:
-                if (!rn2(3)) {
+                if (!rn2_lvl(3)) {
                     struct obj *sobj = mk_tt_object(STATUE, sx, sy);
 
                     if (sobj) {
-                        for (i = rn2(5); i; i--)
+                        for (i = rn2_lvl(5); i; i--)
                             (void) add_to_container(
                                 sobj, mkobj(RANDOM_CLASS, FALSE));
                         sobj->owt = weight(sobj);
@@ -397,7 +397,7 @@ struct mkroom *sroom;
                 }
                 break;
             case ANTHOLE:
-                if (!rn2(3))
+                if (!rn2_lvl(3))
                     (void) mkobj_at(FOOD_CLASS, sx, sy, FALSE);
                 break;
             }
@@ -408,7 +408,7 @@ struct mkroom *sroom;
         levl[tx][ty].typ = THRONE;
         (void) somexy(sroom, &mm);
         gold = mksobj(GOLD_PIECE, TRUE, FALSE);
-        gold->quan = (long) rn1(50 * level_difficulty(), 10);
+        gold->quan = (long) rn1_lvl(50 * level_difficulty(), 10);
         gold->owt = weight(gold);
         /* the royal coffers */
         chest = mksobj_at(CHEST, mm.x, mm.y, TRUE, FALSE);
@@ -443,7 +443,7 @@ coord *mm;
 boolean revive_corpses;
 int mm_flags;
 {
-    int cnt = (level_difficulty() + 1) / 10 + rnd(5);
+    int cnt = (level_difficulty() + 1) / 10 + rnd_lvl(5);
     struct permonst *mdat;
     struct obj *otmp;
     coord cc;
@@ -462,7 +462,7 @@ int mm_flags;
 STATIC_OVL struct permonst *
 morguemon()
 {
-    register int i = rn2(100), hd = rn2(level_difficulty());
+    register int i = rn2_lvl(100), hd = rn2_lvl(level_difficulty());
 
     if (hd > 10 && i < 10) {
         if (Inhell || In_endgame(&u.uz)) {
@@ -518,7 +518,7 @@ mkswamp() /* Michiel Huisjes & Fred de Wilde */
     register int sx, sy, i, eelct = 0;
 
     for (i = 0; i < 5; i++) { /* turn up to 5 rooms swampy */
-        sroom = &rooms[rn2(nroom)];
+        sroom = &rooms[rn2_lvl(nroom)];
         if (sroom->hx < 0 || sroom->rtype != OROOM || has_upstairs(sroom)
             || has_dnstairs(sroom))
             continue;
@@ -531,17 +531,17 @@ mkswamp() /* Michiel Huisjes & Fred de Wilde */
                     && !nexttodoor(sx, sy)) {
                     if ((sx + sy) % 2) {
                         levl[sx][sy].typ = POOL;
-                        if (!eelct || !rn2(4)) {
+                        if (!eelct || !rn2_lvl(4)) {
                             /* mkclass() won't do, as we might get kraken */
-                            (void) makemon(rn2(5)
+                            (void) makemon(rn2_lvl(5)
                                               ? &mons[PM_GIANT_EEL]
-                                              : rn2(2)
+                                              : rn2_lvl(2)
                                                  ? &mons[PM_PIRANHA]
                                                  : &mons[PM_ELECTRIC_EEL],
                                            sx, sy, NO_MM_FLAGS);
                             eelct++;
                         }
-                    } else if (!rn2(4)) /* swamps tend to be moldy */
+                    } else if (!rn2_lvl(4)) /* swamps tend to be moldy */
                         (void) makemon(mkclass(S_FUNGUS, 0), sx, sy,
                                        NO_MM_FLAGS);
                 }
@@ -562,11 +562,11 @@ int roomno;
        between map locations and placement will be adjacent to that */
     delta = troom->hx - troom->lx;
     buf.x = troom->lx + delta / 2;
-    if ((delta % 2) && rn2(2))
+    if ((delta % 2) && rn2_lvl(2))
         buf.x++;
     delta = troom->hy - troom->ly;
     buf.y = troom->ly + delta / 2;
-    if ((delta % 2) && rn2(2))
+    if ((delta % 2) && rn2_lvl(2))
         buf.y++;
     return &buf;
 }
@@ -640,14 +640,14 @@ int
 somex(croom)
 register struct mkroom *croom;
 {
-    return rn1(croom->hx - croom->lx + 1, croom->lx);
+    return rn1_lvl(croom->hx - croom->lx + 1, croom->lx);
 }
 
 int
 somey(croom)
 register struct mkroom *croom;
 {
-    return rn1(croom->hy - croom->ly + 1, croom->ly);
+    return rn1_lvl(croom->hy - croom->ly + 1, croom->ly);
 }
 
 boolean
@@ -738,7 +738,7 @@ schar type;
 struct permonst *
 courtmon()
 {
-    int i = rn2(60) + rn2(3 * level_difficulty());
+    int i = rn2_lvl(60) + rn2_lvl(3 * level_difficulty());
 
     if (i > 100)
         return mkclass(S_DRAGON, 0);
@@ -776,7 +776,7 @@ squadmon()
 {
     int sel_prob, i, cpro, mndx;
 
-    sel_prob = rnd(80 + level_difficulty());
+    sel_prob = rnd_lvl(80 + level_difficulty());
 
     cpro = 0;
     for (i = 0; i < NSTYPES; i++) {
@@ -786,7 +786,7 @@ squadmon()
             goto gotone;
         }
     }
-    mndx = squadprob[rn2(NSTYPES)].pm;
+    mndx = squadprob[rn2_lvl(NSTYPES)].pm;
 gotone:
     if (!(mvitals[mndx].mvflags & G_GONE))
         return &mons[mndx];

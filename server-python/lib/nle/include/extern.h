@@ -2168,7 +2168,7 @@ E int FDECL(rnz, (int));
 
 #ifdef USE_ISAAC64
 E void FDECL(init_isaac64_lvl, (unsigned long, int FDECL((*fn), (int))));
-E long NDECL(nhrand);
+E long NDECL(nhrand_lvl);
 #endif
 E int FDECL(rn2_lvl, (int));
 E int FDECL(rn2_on_display_rng_lvl, (int));
