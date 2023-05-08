@@ -59,7 +59,8 @@ int FDECL((*fn), (int));
 static int
 RND(int x)
 {
-    return (isaac64_next_uint64(&rnglist[CORE].rng_state) % x);
+    return 0;
+    // return (isaac64_next_uint64(&rnglist[CORE].rng_state) % x);
 }
 
 /* 0 <= rn2(x) < x, but on a different sequence from the "main" rn2;
@@ -69,7 +70,8 @@ int
 rn2_on_display_rng(x)
 register int x;
 {
-    return (isaac64_next_uint64(&rnglist[DISP].rng_state) % x);
+    return 0;
+    // return (isaac64_next_uint64(&rnglist[DISP].rng_state) % x);
 }
 
 #else   /* USE_ISAAC64 */
