@@ -69,7 +69,7 @@ def write_obs(sock, env, obs):
     """
     Encode and send an observation.
     """
-    # obs, monster_descriptions = monster.id_monsters(env, obs)
+    logging.info("WRITE Observation")
     obs, msg = message.concat_all_messages(env, obs)
 
     sock.write(OBS_BYTE)
@@ -96,7 +96,6 @@ def write_seed(sock, seed):
     logging.info("WRITE Seed")
     sock.write(SEED_BYTE)
     write_str(sock, str(seed[0]))
-    write_str(sock, str(seed[1]))
     sock.write(to_bool(seed[2]))
     sock.flush()
 
@@ -105,6 +104,7 @@ def write_inv(sock, inv_letters, inv_glyphs, inv_strs):
     """
     Inventory is first a byte with number of items, then byte for
     """
+    logging.debug("WRITE Inv")
     nr_items = np.trim_zeros(inv_letters).shape[0]
     sock.write(util.to_byte(nr_items))
 
@@ -118,6 +118,7 @@ def write_tiles(sock, tiles, flags, visible):
     Encode the entire map in bytes
     """
     # Write tiles
+    logging.debug("WRITE Tiles")
     nr_tiles = np.sum(np.sign(tiles))
     sock.write(struct.pack(">H", nr_tiles))
     sock.flush()
@@ -136,6 +137,7 @@ def write_map(sock, chars, colors, glyphs):
     Encode the entire map in bytes
     """
     # Write tiles
+    logging.debug("WRITE Map")
     nr_entities = np.count_nonzero(glyphs != 2359)
     sock.write(struct.pack(">H", nr_entities))
     sock.flush()
@@ -150,6 +152,7 @@ def write_map(sock, chars, colors, glyphs):
     sock.flush()
 
 def write_monsters(sock, ids, perm_ids, peaceful):
+    logging.debug("WRITE Monsters")
     nr_monsters = np.sum(np.sign(ids))
     sock.write(struct.pack(">B", nr_monsters))
     sock.flush()
@@ -165,6 +168,7 @@ def write_monsters(sock, ids, perm_ids, peaceful):
 
 
 def write_entities(sock, ids, types, ages, quantities):
+    logging.debug("WRITE Entities")
     nr_entities = np.sum(np.sign(ids))
     sock.write(struct.pack(">B", nr_entities))
     sock.flush()

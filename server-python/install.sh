@@ -37,7 +37,6 @@ fi
 
 if [ ! -f "package_installed.flag" ]; then
   echo "Installing package..."
-  pip install -r requirements.txt
   pip install -e ./lib/nle
   touch "package_installed.flag"
 else

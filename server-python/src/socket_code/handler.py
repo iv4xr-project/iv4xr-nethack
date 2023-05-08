@@ -135,7 +135,8 @@ def handle_reset(sock):
     env.seed(int(core), 0, reseed)
 
     # Write the observation
-    write.write_obs(sock, env, env.reset())
+    obs = env.reset()
+    write.write_obs(sock, env, obs)
     write.write_step(sock, False, None)
     return env
 
