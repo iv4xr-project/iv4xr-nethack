@@ -36,9 +36,7 @@ public class Replay {
   private void replaySeed(String line) {
     String[] splitLine = line.split(":");
     assert Objects.equals(splitLine[0], "SEED") : "First line must be seed";
-    String[] items = splitLine[1].split(" ");
-    assert items.length == 2;
-    seed = new Seed(items[0], items[1], false);
+    seed = new Seed(splitLine[1], false);
   }
 
   private void replayCharacter(String line) {

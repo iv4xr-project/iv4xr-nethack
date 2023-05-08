@@ -131,9 +131,8 @@ def handle_reset(sock):
 
     # Set the seed
     core = read.read_string(sock)
-    disp = read.read_string(sock)
     reseed = read.read_bool(sock)
-    env.seed(int(core), int(disp), reseed)
+    env.seed(int(core), 0, reseed)
 
     # Write the observation
     write.write_obs(sock, env, env.reset())

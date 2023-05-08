@@ -18,30 +18,26 @@ import java.util.Random;
 
 public class Seed implements Serializable {
   public final boolean reseed;
-  public final String disp;
   public final String core;
 
-  public Seed(String core, String disp, boolean reseed) {
-    this.reseed = reseed;
-    this.disp = disp;
+  public Seed(String core, boolean reseed) {
     this.core = core;
+    this.reseed = reseed;
   }
 
   // Generate a random seed
   public static Seed randomSeed() {
     Random random = new Random();
     String coreSeed = Long.toUnsignedString(random.nextLong());
-    String dspSeed = Long.toUnsignedString(random.nextLong());
-
-    return new Seed(coreSeed, dspSeed, false);
+    return new Seed(coreSeed, false);
   }
 
   public String shortString() {
-    return String.format("%s %s", core, disp);
+    return String.format("%s", core);
   }
 
   @Override
   public String toString() {
-    return String.format("%s %s %b [SEED=%s, %s]", core, disp, reseed, core, disp);
+    return String.format("%s %b [SEED=%s]", core, reseed, core);
   }
 }

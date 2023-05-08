@@ -12,10 +12,6 @@ public class SeedEncoder {
         output.writeShort(seed.core.length());
         output.writeChars(seed.core);
       }
-      if (!Objects.equals(seed.disp, "")) {
-        output.writeShort(seed.disp.length());
-        output.writeChars(seed.disp);
-      }
       output.writeBoolean(seed.reseed);
     } catch (IOException e) {
       throw new RuntimeException(e);

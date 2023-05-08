@@ -47,13 +47,12 @@ public class Config {
       return Seed.randomSeed();
     }
 
-    assert seed.length == 2
-        : String.format("There must be 0 or 2 strings as seed, but was of length %d", seed.length);
+    assert seed.length == 1
+        : String.format("There must be 1 string as seed, but was of length %d", seed.length);
 
     // Create seed from the two strings
     String core = seed[0];
-    String disp = seed[1];
-    return new Seed(core, disp, false);
+    return new Seed(core, false);
   }
 
   public static String getCharacter() {
