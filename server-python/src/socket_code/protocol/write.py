@@ -69,7 +69,7 @@ def write_obs(sock, env, obs):
     """
     Encode and send an observation.
     """
-    logging.info("WRITE Observation")
+    logging.debug("WRITE Observation")
     obs, msg = message.concat_all_messages(env, obs)
 
     sock.write(OBS_BYTE)
@@ -86,14 +86,14 @@ def write_obs(sock, env, obs):
 
 def write_step(sock, done, info):
     # 'info': info,
-    logging.info("WRITE Step")
+    logging.debug("WRITE Step")
     sock.write(STEP_BYTE)
     sock.write(to_bool(done))
     sock.flush()
 
 
 def write_seed(sock, seed):
-    logging.info("WRITE Seed")
+    logging.debug("WRITE Seed")
     sock.write(SEED_BYTE)
     write_str(sock, str(seed[0]))
     sock.write(to_bool(seed[2]))

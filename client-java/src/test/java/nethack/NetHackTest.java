@@ -1,9 +1,11 @@
 package nethack;
 
+import connection.SocketClient;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import util.Config;
+import nethack.enums.Condition;
+import util.Replay;
 import util.TestConfig;
 
 /** Unit test for simple nethack.App. */
@@ -24,13 +26,17 @@ public class NetHackTest extends TestCase {
     return new TestSuite(nethack.NetHackTest.class);
   }
 
-  /** Rigorous Test :-) */
-  public void testQuaff(NetHack netHack) {
+  /** Test for hallucination potion */
+  public void testQuaff() {
     TestConfig.setConfigFile("testConfig.properties");
-    System.out.println(Config.getLogConfig());
-    //    NetHack Replay.getActions("testHallucination");
-
-    assertTrue(true);
-    assertFalse(true);
+    Replay replay = new Replay("src/test/resources/nethack/quaffHallucinationPotion.log");
+    NetHack nethack = new NetHack(new SocketClient(), replay.character, replay.seed);
+    nethack.replay(replay);
+    assertFalse(
+        "Player is not hallucinating before drinking the potion",
+        nethack.previousGameState.player.conditions.hasCondition(Condition.HALLUCINATING));
+    assertTrue(
+        "Player is hallucinating after drinking the potion",
+        nethack.gameState.player.conditions.hasCondition(Condition.HALLUCINATING));
   }
 }

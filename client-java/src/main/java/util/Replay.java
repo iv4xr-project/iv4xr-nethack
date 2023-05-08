@@ -4,6 +4,8 @@ import connection.SocketClient;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -24,7 +26,10 @@ public class Replay {
   static final Pattern pattern = Pattern.compile("(\\d+)\\((\\d+)\\):\\[(.*)\\]");
 
   public Replay(String fileName) {
-    try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+    Path replayFilepath = Path.of(fileName);
+    assert Files.exists(replayFilepath)
+        : String.format("Path not found (%s)", replayFilepath.toAbsolutePath());
+    try (BufferedReader br = new BufferedReader(new FileReader(replayFilepath.toString()))) {
       replaySeed(br.readLine());
       replayCharacter(br.readLine());
       replayActions(br);
@@ -67,23 +72,11 @@ public class Replay {
     }
   }
 
-  public static List<Pair<Turn, List<Command>>> getActions(String fileName) {
-    Replay replay = new Replay(fileName);
-    return replay.actions;
-  }
-
   public static void main(String[] args) {
     String fileName = Config.getReplayFile();
     Replay replay = new Replay(fileName);
-    SocketClient client = new SocketClient();
-    NetHack nethack = new NetHack(client, replay.character, replay.seed);
-    for (Pair<Turn, List<Command>> action : getActions(fileName)) {
-      assert nethack.gameState.stats.turn.equals(action.fst) : "TURN WAS DIFFERENT";
-      nethack.step(action.snd);
-    }
-
-    // Render and then loop
-    nethack.render();
+    NetHack nethack = new NetHack(new SocketClient(), replay.character, replay.seed);
+    nethack.replay(replay);
     nethack.loop();
   }
 }

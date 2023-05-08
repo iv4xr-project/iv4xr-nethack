@@ -7,7 +7,7 @@ import nethack.enums.Condition;
 import util.ColoredStringBuilder;
 
 public class Conditions implements Serializable {
-  private Set<Condition> conditions = new HashSet<>();
+  private final Set<Condition> conditions;
 
   public Conditions(Set<Condition> conditions) {
     this.conditions = conditions;
@@ -34,9 +34,16 @@ public class Conditions implements Serializable {
   public String toString() {
     ColoredStringBuilder sb = new ColoredStringBuilder();
     sb.append('[');
+
+    boolean isFirst = true;
     for (Condition condition : conditions) {
-      sb.appendf("%s ", condition);
+      if (!isFirst) {
+        sb.append(", ");
+      }
+      sb.append(condition.toString());
+      isFirst = false;
     }
+
     sb.append(']');
     return sb.toString();
   }

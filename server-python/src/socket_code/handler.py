@@ -68,9 +68,9 @@ def handle(sock):
         acc_rcv = 0
         acc_done = 0
         while True:
-            if iterations == 50:
-                print(f"RCV in: {acc_rcv / 50} DONE in: {acc_done / 50}")
-                # sys.exit()
+            # if iterations == 50:
+            #     print(f"RCV in: {acc_rcv / 50} DONE in: {acc_done / 50}")
+            #     sys.exit()
             iterations += 1
             message_bit = int(read.read_byte(sock))
             current_time = time.time()

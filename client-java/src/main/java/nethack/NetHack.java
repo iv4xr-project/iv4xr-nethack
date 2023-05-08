@@ -8,7 +8,6 @@ import connection.messageencoder.Encoder;
 import java.util.*;
 import java.util.stream.Collectors;
 import nethack.enums.CommandEnum;
-import nethack.enums.Condition;
 import nethack.enums.GameMode;
 import nethack.object.*;
 import nethack.object.items.Item;
@@ -17,7 +16,7 @@ import nl.uu.cs.aplib.utils.Pair;
 import org.apache.commons.lang3.SerializationUtils;
 import util.CustomVec2D;
 import util.Loggers;
-import util.MutationError;
+import util.Replay;
 
 public class NetHack {
   public GameState previousGameState = null;
@@ -70,7 +69,16 @@ public class NetHack {
     Loggers.NetHackLogger.info("GameState indicates it is done, loop stopped");
   }
 
-  public void playActions(List<Pair<Turn, List<Command>>> actions, Turn turn) {}
+  public void replay(Replay replay) {
+    for (Pair<Turn, List<Command>> action : replay.actions) {
+      assert gameState.stats.turn.equals(action.fst)
+          : String.format(
+              "Turn was different. Expected %s but found %s", action.fst, gameState.stats.turn);
+      step(action.snd);
+    }
+
+    render();
+  }
 
   public void close() {
     Loggers.NetHackLogger.info("Close game");
@@ -326,14 +334,8 @@ public class NetHack {
   }
 
   public StepType quaff(Item item) {
-    StepType stepType =
-        step(List.of(new Command(COMMAND_QUAFF), new Command(item.symbol), new Command(MISC_MORE)));
-    if (item.entityInfo.name.equalsIgnoreCase("hallucination")) {
-      if (!gameState.player.conditions.hasCondition(Condition.HALLUCINATING)) {
-        throw new MutationError("Hallucination quaffed, however not hallucinating afterwards");
-      }
-    }
-    return stepType;
+    return step(
+        List.of(new Command(COMMAND_QUAFF), new Command(item.symbol), new Command(MISC_MORE)));
   }
 
   public StepType wield(Item item) {
