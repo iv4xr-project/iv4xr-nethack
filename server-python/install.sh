@@ -35,7 +35,14 @@ if [ ! -f "requirements_installed.flag" ]; then
   touch "requirements_installed.flag"
 fi
 
-pip install -e ./lib/nle
+if [ ! -f "package_installed.flag" ]; then
+  echo "Installing package..."
+  pip install -r requirements.txt
+  pip install -e ./lib/nle
+  touch "package_installed.flag"
+else
+  pip install --no-deps -e ./lib/nle
+fi
 
 # Remove trap
 trap - EXIT

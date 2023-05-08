@@ -33,6 +33,7 @@ from setuptools.command import build_ext
 class CMakeBuild(build_ext.build_ext):
     def run(self):  # Necessary for pip install -e.
         for ext in self.extensions:
+            self.inplace = 1
             self.build_extension(ext)
 
     def build_extension(self, ext):
