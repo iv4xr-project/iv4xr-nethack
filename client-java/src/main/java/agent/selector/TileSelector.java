@@ -3,17 +3,13 @@ package agent.selector;
 import agent.iv4xr.AgentState;
 import agent.navigation.surface.Climbable;
 import agent.navigation.surface.Tile;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import nethack.world.Surface;
-import nethack.world.tiles.Door;
-import nethack.world.tiles.Stair;
+import nethack.world.tiles.*;
 import util.CustomVec2D;
 import util.CustomVec3D;
 
@@ -33,16 +29,27 @@ public class TileSelector extends Selector<Tile> {
               });
   public static final TileSelector stairDown =
       new TileSelector()
-          .selectionType(SelectionType.FIRST)
+          .selectionType(SelectionType.SHORTEST)
           .ofClass(Stair.class)
           .predicate((tile, S) -> ((Stair) tile).getClimbType() == Climbable.ClimbType.Down);
 
-  Class tileClass;
+  public static final TileSelector water =
+      new TileSelector()
+          .selectionType(SelectionType.SHORTEST)
+          .ofClass(Set.of(Pool.class, Water.class, Moat.class));
+
+  Set<Class> tileClasses;
 
   public TileSelector() {}
 
   public TileSelector ofClass(Class tileClass) {
-    this.tileClass = tileClass;
+    this.tileClasses = new HashSet<>();
+    tileClasses.add(tileClass);
+    return this;
+  }
+
+  public TileSelector ofClass(Set<Class> tileClasses) {
+    this.tileClasses = tileClasses;
     return this;
   }
 
@@ -69,9 +76,15 @@ public class TileSelector extends Selector<Tile> {
   public Tile apply(AgentState S) {
     List<Tile> coordinates = new ArrayList<>();
     Surface surface = S.area();
-    assert tileClass != null : "Tile must be of a certain class";
-    HashSet<CustomVec2D> tilesOfType = surface.getCoordinatesOfTileType(tileClass);
-    if (tilesOfType == null) {
+    assert tileClasses != null : "Tile must be of a certain class";
+    HashSet<CustomVec2D> tilesOfType = new HashSet<>();
+    for (Class tileClass : tileClasses) {
+      Set<CustomVec2D> coords = surface.getCoordinatesOfTileType(tileClass);
+      if (coords != null) {
+        tilesOfType.addAll(coords);
+      }
+    }
+    if (tilesOfType.isEmpty()) {
       return null;
     }
     for (CustomVec2D pos : tilesOfType) {
@@ -113,8 +126,8 @@ public class TileSelector extends Selector<Tile> {
     }
 
     Stream<Tile> stream = tiles.stream();
-    if (tileClass != null) {
-      stream = tiles.stream().filter(tile -> Objects.equals(tileClass, tile.getClass()));
+    if (tileClasses != null) {
+      stream = tiles.stream().filter(tile -> tileClasses.contains(tile.getClass()));
     }
     if (predicate != null) {
       stream = tiles.stream().filter(tile -> predicate.test(tile, S));
@@ -125,6 +138,6 @@ public class TileSelector extends Selector<Tile> {
   @Override
   public String toString() {
     return String.format(
-        "TileSelector: %s %s (hasPredicate=%b)", selectionType, tileClass, predicate != null);
+        "TileSelector: %s %s (hasPredicate=%b)", selectionType, tileClasses, predicate != null);
   }
 }

@@ -11,11 +11,10 @@ BASEDIR=$(cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P)
 cd "$BASEDIR"
 
 # Create mutants
-bash "$BASEDIR"/nethack/hallucination-potion.sh
+# bash "$BASEDIR"/nethack/hallucination-potion.sh
+bash "$BASEDIR"/nethack/camera.sh
 
 SERVER_DIR=$(dirname "$BASEDIR")/server-python
-echo "$ROOTDIR"
-
 NETHACK_DIR=$(realpath "$SERVER_DIR/lib/nle")
 find "$NETHACK_DIR" -name "*.mut.c" | while IFS= read -r file
 do
@@ -26,9 +25,8 @@ do
   # Combine extracted name and extension
   new_file_name="${name}.${extension}"
 
-  echo "TEST: $file"
-  mv "$file" "$new_file_name"
-  echo "server: install.sh"
+  echo "Install: $file"
+  cp "$file" "$new_file_name"
   bash "$SERVER_DIR"/install.sh
   echo "server: start.sh --exit_on_done"
   bash "$SERVER_DIR"/start.sh --exit_on_done

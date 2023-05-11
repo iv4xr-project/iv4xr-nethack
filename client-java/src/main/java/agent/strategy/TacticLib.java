@@ -303,7 +303,9 @@ public class TacticLib {
                   // Picks the food item with the lowest nutrition per weight
                   List<Item> items =
                       Arrays.stream(player.inventory.items)
-                          .filter(item -> item instanceof FoodItem)
+                          .filter(
+                              item ->
+                                  item instanceof FoodItem && ((FoodItem) item).foodInfo != null)
                           .sorted(
                               Comparator.comparingDouble(
                                   item -> ((FoodItem) item).foodInfo.nutritionPerWeight))

@@ -265,7 +265,7 @@ void Mutate(Replacements& repl, std::string NamePrefix, std::string tool, std::s
           out_file.open(outFileName);
           out_file << std::string(RewriteBuf->begin(), RewriteBuf->end());
           out_file.close();
-          printf("Created: %s\n", (tool + "." + NamePrefix + "." + std::to_string(lineNumber) + "." + std::to_string(x) + "-" + std::to_string(r.getOffset()) + ".mut" + ext).c_str());    // Outputting where mutants are
+          // printf("Created: %s\n", (tool + "." + NamePrefix + "." + std::to_string(lineNumber) + "." + std::to_string(x) + "-" + std::to_string(r.getOffset()) + ".mut" + ext).c_str());    // Outputting where mutants are
         }
         else {
           printf("ERROR IN GENERATING MUTANTS: we have a name overlap for %s\n", outFileName.c_str());

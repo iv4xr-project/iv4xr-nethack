@@ -14,6 +14,7 @@ import nethack.object.items.Item;
 import nethack.world.Level;
 import nl.uu.cs.aplib.utils.Pair;
 import org.apache.commons.lang3.SerializationUtils;
+import util.Config;
 import util.CustomVec2D;
 import util.Loggers;
 import util.Replay;
@@ -28,11 +29,17 @@ public class NetHack {
 
   public NetHack(SocketClient client, String character, Seed seed) {
     Loggers.NetHackLogger.info("Initialize game");
-    assert seed != null : "Must create game with a seed";
     this.client = client;
     this.character = character;
-    System.out.printf("Init game with seed: %s%n", seed);
     setSeed(seed);
+  }
+
+  public NetHack(SocketClient client, Replay replay) {
+    Loggers.NetHackLogger.info("Initialize game with replay");
+    this.client = client;
+    this.character = replay.character;
+    setSeed(replay.seed);
+    replay(replay);
   }
 
   public Seed getSeed() {
@@ -42,6 +49,8 @@ public class NetHack {
   }
 
   public void setSeed(Seed seed) {
+    assert seed != null : "Must create game with a seed";
+    System.out.printf("Init game with seed: %s%n", seed);
     this.seed = seed;
     reset();
   }
@@ -70,7 +79,12 @@ public class NetHack {
   }
 
   public void replay(Replay replay) {
+    Turn startTurn = Config.getStartTurn();
     for (Pair<Turn, List<Command>> action : replay.actions) {
+      if (gameState.stats.turn.compareTo(startTurn) >= 0) {
+        break;
+      }
+
       assert gameState.stats.turn.equals(action.fst)
           : String.format(
               "Turn was different. Expected %s but found %s", action.fst, gameState.stats.turn);
@@ -177,16 +191,18 @@ public class NetHack {
       assert command != null : "Command cannot be null";
 
       // Quaff and read doesn't work in NLE, use direct command instead
-      if (command.commandEnum == CommandEnum.COMMAND_QUAFF) {
+      if (command.commandEnum == COMMAND_QUAFF) {
         command = Command.fromStroke("-q");
-      } else if (command.commandEnum == CommandEnum.COMMAND_READ) {
+      } else if (command.commandEnum == COMMAND_READ) {
         command = Command.fromStroke("-r");
-      } else if (command.commandEnum == CommandEnum.COMMAND_WIELD) {
+      } else if (command.commandEnum == COMMAND_WIELD) {
         command = Command.fromStroke("-w");
-      } else if (command.commandEnum == CommandEnum.COMMAND_DROP) {
+      } else if (command.commandEnum == COMMAND_DROP) {
         command = Command.fromStroke("-d");
-      } else if (command.commandEnum == CommandEnum.COMMAND_THROW) {
+      } else if (command.commandEnum == COMMAND_THROW) {
         command = Command.fromStroke("-t");
+      } else if (command.commandEnum == COMMAND_APPLY) {
+        command = Command.fromStroke("-a");
       }
 
       assert command != null : "Command cannot be null";
@@ -296,6 +312,16 @@ public class NetHack {
     gameState.player.location.lvl = gameState.getLevelNr();
     gameState.done = stepState.done;
     gameState.info = stepState.info;
+  }
+
+  public StepType apply(Item item) {
+    return step(List.of(new Command(COMMAND_APPLY), new Command(item.symbol)));
+  }
+
+  public StepType apply(Item item, Direction direction) {
+    return step(
+        List.of(
+            new Command(COMMAND_APPLY), new Command(item.symbol), Direction.getCommand(direction)));
   }
 
   public StepType move(Direction direction) {

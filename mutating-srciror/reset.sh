@@ -14,7 +14,7 @@ NLE_DIR=$(dirname "$BASEDIR")/server-python/lib/nle
 find "$NLE_DIR" -name "*.mut.*" -delete
 find "$NLE_DIR" -name "*.orig.c" | while IFS= read -r file
 do
-  echo "restored: ${file%.orig.c}.c"
+  echo "Restored: ${file%.orig.c}.c"
   mv "$file" "${file%.orig.c}.c"
 done
 

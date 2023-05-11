@@ -84,12 +84,16 @@ public class Config {
     return config.getBoolean("AUTO_PLAY", false);
   }
 
+  public static boolean getBreakOnStuck() {
+    return config.getBoolean("BREAK_ON_STUCK", false);
+  }
+
   public static boolean getSoundState() {
     return config.getBoolean("SOUND", true);
   }
 
   public static String getReplayFile() {
-    return config.getString("REPLAY_FILE", "logs/replay.log");
+    return config.getString("REPLAY_FILE");
   }
 
   public static boolean getCollectCoverage() {

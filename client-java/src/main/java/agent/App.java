@@ -8,12 +8,16 @@ import agent.strategy.GoalLib;
 import connection.SocketClient;
 import eu.iv4xr.framework.mainConcepts.TestAgent;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import nethack.NetHack;
 import nethack.object.Command;
 import nethack.object.GameState;
 import nethack.object.Player;
 import nethack.object.Turn;
+import nethack.world.tiles.Moat;
+import nethack.world.tiles.Pool;
+import nethack.world.tiles.Water;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
 import util.*;
 
@@ -21,8 +25,10 @@ public class App {
   public static void main(String[] args) throws Exception {
     // Initialize socket connection
     SocketClient client = new SocketClient();
-    runAgent(client);
-    client.close();
+    while (true) {
+      runAgent(client);
+    }
+    //    client.close();
   }
 
   private static void runAgent(SocketClient commander) {
@@ -31,7 +37,15 @@ public class App {
     if (collectCoverage) {
       commander.sendResetCoverage();
     }
-    NetHack nethack = new NetHack(commander, Config.getCharacter(), Config.getSeed());
+
+    NetHack nethack;
+    String fileName = Config.getReplayFile();
+    if (fileName != null) {
+      nethack = new NetHack(commander, new Replay(fileName));
+    } else {
+      nethack = new NetHack(commander, Config.getCharacter(), Config.getSeed());
+    }
+
     AgentEnv env = new AgentEnv(nethack);
     AgentState state = new AgentState();
     GoalStructure G = GoalLib.explore();
@@ -92,6 +106,20 @@ public class App {
     // Now we run the agent:
     while (G.getStatus().inProgress()) {
       List<Command> commands = netHack.waitCommands(true);
+
+      Set<CustomVec2D> waterCoords = netHack.level().surface.getCoordinatesOfTileType(Water.class);
+      Set<CustomVec2D> moatCoords = netHack.level().surface.getCoordinatesOfTileType(Moat.class);
+      Set<CustomVec2D> poolCoords = netHack.level().surface.getCoordinatesOfTileType(Pool.class);
+      if (waterCoords != null && !waterCoords.isEmpty()) {
+        System.out.println(waterCoords);
+      }
+      if (moatCoords != null && !moatCoords.isEmpty()) {
+        System.out.println(moatCoords);
+      }
+      if (poolCoords != null && !poolCoords.isEmpty()) {
+        System.out.println(poolCoords);
+      }
+
       if (commands != null) {
         NetHack.StepType stepType = netHack.step(commands);
         if (stepType == NetHack.StepType.Terminated) {
