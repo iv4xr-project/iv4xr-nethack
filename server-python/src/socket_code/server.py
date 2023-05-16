@@ -15,7 +15,7 @@ def serve(port=5001, setup_code='', exit_on_done=False):
     Run a server on the given port.
     """
     logging.info(f"Starting server (port={port})")
-    server = Server(('127.0.0.1', port), Handler)
+    server = Server(('0.0.0.0', port), Handler)
     server.setup_code = setup_code
     server.exit_on_done = exit_on_done
     logging.info(f"Listening on port {port}...")
