@@ -4,9 +4,10 @@ import static nl.uu.cs.aplib.AplibEDSL.*;
 
 import agent.iv4xr.AgentState;
 import agent.navigation.strategy.NavTactic;
+import agent.selector.EntitySelector;
 import agent.selector.TileSelector;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
-import java.util.Set;
+import java.util.List;
 import nethack.enums.CommandEnum;
 import nethack.object.Command;
 import nethack.object.Entity;
@@ -38,6 +39,7 @@ public class GoalLib {
                     Actions.searchWalls().on_(Predicates.hidden_tile()).lift(),
                     Actions.openDoor().on(Predicates.get_closedDoor()).lift(),
 
+                    /*
                     // Collect money and potions
                     action("HIHI")
                         .do1(
@@ -52,19 +54,28 @@ public class GoalLib {
                                         S.app().level().surface.getTile(S.loc().pos).getClass()))
                         .lift(),
                     NavTactic.navigateToTile(TileSelector.water),
+                    */
+
                     //                    Actions.quaffItem()
                     //                        .on(
                     //                            (AgentState S) ->
                     //                                ItemSelector.hallucinationPotion.apply(
                     //
+                    //
                     // Arrays.asList(S.worldmodel.player.current.inventory.items), S))
-                    //                        .lift(),
-                    //                    NavTactic.interactWorldEntity(
-                    //                        EntitySelector.hallucinationPotion,
-                    //                        List.of(new Command(CommandEnum.COMMAND_PICKUP))),
-                    //                    NavTactic.interactWorldEntity(
-                    //                        EntitySelector.money, List.of(new
+                    //                                            .lift(),
+                    //                                        NavTactic.interactWorldEntity(
+                    //
+                    // EntitySelector.hallucinationPotion,
+                    //                                            List.of(new
                     // Command(CommandEnum.COMMAND_PICKUP))),
+                    //                                        NavTactic.interactWorldEntity(
+                    //                                            EntitySelector.money, List.of(new
+                    //                     Command(CommandEnum.COMMAND_PICKUP))),
+
+                    NavTactic.interactWorldEntity(
+                        EntitySelector.strangulationAmulet,
+                        List.of(new Command(CommandEnum.COMMAND_PICKUP))),
 
                     // Navigation
                     NavTactic.explore(),

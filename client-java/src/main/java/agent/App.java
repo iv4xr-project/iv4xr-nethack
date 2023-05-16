@@ -8,16 +8,12 @@ import agent.strategy.GoalLib;
 import connection.SocketClient;
 import eu.iv4xr.framework.mainConcepts.TestAgent;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import nethack.NetHack;
 import nethack.object.Command;
 import nethack.object.GameState;
 import nethack.object.Player;
 import nethack.object.Turn;
-import nethack.world.tiles.Moat;
-import nethack.world.tiles.Pool;
-import nethack.world.tiles.Water;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
 import util.*;
 
@@ -55,9 +51,9 @@ public class App {
         new TestAgent(Player.ID, "player").attachState(state).attachEnvironment(env).setGoal(G);
     state.updateState(Player.ID);
 
-    fastForwardToTurn(Config.getStartTurn(), agent, state, G);
+    boolean successful = fastForwardToTurn(Config.getStartTurn(), agent, state, G);
     // Only enter if the goal structure is still in progress
-    if (G.getStatus().inProgress()) {
+    if (successful && G.getStatus().inProgress()) {
       mainAgentLoop(commander, agent, state, G, nethack);
     }
 
@@ -68,11 +64,11 @@ public class App {
     }
   }
 
-  private static void fastForwardToTurn(
+  private static boolean fastForwardToTurn(
       Turn desiredTurn, TestAgent agent, AgentState state, GoalStructure G) {
     GameState gameState = state.app().gameState;
     if (gameState.stats.turn.equals(desiredTurn)) {
-      return;
+      return true;
     }
 
     Loggers.AgentLogger.info("Start automatic agent loop...");
@@ -85,7 +81,7 @@ public class App {
       // Game terminated or probably stuck
       if (gameState.done || gameState.stats.turn.step > 20) {
         Loggers.AgentLogger.info("Game done or stuck");
-        break;
+        return false;
       }
 
       bar.updateTurn(gameState.stats.turn, desiredTurn);
@@ -98,6 +94,7 @@ public class App {
     Sounds.setSound(Config.getSoundState());
     state.updateState(Player.ID);
     state.render();
+    return true;
   }
 
   private static void mainAgentLoop(
@@ -106,20 +103,6 @@ public class App {
     // Now we run the agent:
     while (G.getStatus().inProgress()) {
       List<Command> commands = netHack.waitCommands(true);
-
-      Set<CustomVec2D> waterCoords = netHack.level().surface.getCoordinatesOfTileType(Water.class);
-      Set<CustomVec2D> moatCoords = netHack.level().surface.getCoordinatesOfTileType(Moat.class);
-      Set<CustomVec2D> poolCoords = netHack.level().surface.getCoordinatesOfTileType(Pool.class);
-      if (waterCoords != null && !waterCoords.isEmpty()) {
-        System.out.println(waterCoords);
-      }
-      if (moatCoords != null && !moatCoords.isEmpty()) {
-        System.out.println(moatCoords);
-      }
-      if (poolCoords != null && !poolCoords.isEmpty()) {
-        System.out.println(poolCoords);
-      }
-
       if (commands != null) {
         NetHack.StepType stepType = netHack.step(commands);
         if (stepType == NetHack.StepType.Terminated) {

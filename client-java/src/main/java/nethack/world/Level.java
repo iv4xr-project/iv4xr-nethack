@@ -28,21 +28,12 @@ public class Level implements Serializable {
 
   public Surface surface = new Surface();
 
-  public Level(
-      CustomVec2D playerPos,
-      Symbol[][] symbols,
-      Tile[][] tiles,
-      List<Monster> monsters,
-      List<Entity> entities) {
-    updateLevel(playerPos, symbols, tiles, monsters, entities);
+  public Level(Symbol[][] symbols, Tile[][] tiles, List<Monster> monsters, List<Entity> entities) {
+    updateLevel(symbols, tiles, monsters, entities);
   }
 
   public void updateLevel(
-      CustomVec2D playerPos,
-      Symbol[][] newSymbols,
-      Tile[][] newTiles,
-      List<Monster> monsters,
-      List<Entity> entities) {
+      Symbol[][] newSymbols, Tile[][] newTiles, List<Monster> monsters, List<Entity> entities) {
     this.monsters = monsters;
     this.entities = entities;
     updateSymbols(newSymbols);
@@ -99,10 +90,9 @@ public class Level implements Serializable {
     for (int x = 0; x < SIZE.width; x++) {
       for (int y = 0; y < SIZE.height; y++) {
         CustomVec2D pos = new CustomVec2D(x, y);
-        Symbol symbol = getSymbol(pos);
         boolean hasBoulder = bouldersPositions.contains(pos);
+        Tile tile = surface.getTile(pos);
         if (hasBoulder) {
-          Tile tile = surface.getTile(pos);
           if (!(tile instanceof Boulder)) {
             Boulder boulder = new Boulder(tiles[y][x].loc);
             changedTiles.add(boulder);
@@ -111,7 +101,7 @@ public class Level implements Serializable {
           if (tile != null) {
             ((Viewable) tile).setVisibility(((Viewable) tiles[y][x]).getVisibility());
           }
-        } else if (!Objects.equals(surface.getTile(pos), tiles[y][x])) {
+        } else if (!Objects.equals(tile, tiles[y][x])) {
           changedTiles.add(tiles[y][x]);
         }
       }

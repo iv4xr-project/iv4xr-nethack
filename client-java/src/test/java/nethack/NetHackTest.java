@@ -72,7 +72,13 @@ public class NetHackTest {
         "Player should be blinded when photographing self");
   }
 
-  //  public void testChoke() {
-  //
-  //  }
+  @Test
+  public void testChoke() {}
+
+  public void testChokeEat() {}
+
+  public void testChokeAmulet() {
+    Replay replay = new Replay("src/test/resources/nethack/amuletOfStrangulation.log");
+    NetHack nethack = new NetHack(new SocketClient(), replay.character, replay.seed);
+  }
 }

@@ -25,6 +25,10 @@ public class EntitySelector extends Selector<Entity> {
 
   public static final EntitySelector hallucinationPotion =
       potion.predicate((entity, S) -> entity.entityInfo.name.equalsIgnoreCase("hallucination"));
+  public static final EntitySelector strangulationAmulet =
+      new EntitySelector()
+          .ofClass(EntityClass.AMULET)
+          .predicate((e, S) -> e.entityInfo.name.equalsIgnoreCase("amulet of strangulation"));
 
   EntityClass entityClass;
 

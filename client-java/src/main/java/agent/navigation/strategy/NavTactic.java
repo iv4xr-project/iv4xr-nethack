@@ -9,6 +9,7 @@ import agent.selector.EntitySelector;
 import agent.selector.TileSelector;
 import java.util.List;
 import java.util.function.Predicate;
+import nethack.enums.EntityClass;
 import nethack.object.Command;
 import nethack.object.Entity;
 import nethack.world.Level;
@@ -75,7 +76,11 @@ public class NavTactic {
               if (e == null) {
                 return null;
               }
-              return NavUtils.adjustedFindPath(S, S.loc(), e.loc);
+              if (e.entityInfo.entityClass.equals(EntityClass.AMULET)) {
+                //                System.exit(100);
+              }
+              Path<CustomVec3D> path = NavUtils.adjustedFindPath(S, S.loc(), e.loc);
+              return path;
             })
         .lift();
   }
