@@ -75,7 +75,7 @@ mapfile -t sorted_values < <(echo "${!unique_values[@]}" | tr ' ' '\n' | sort -n
 # Join the sorted values with commas
 sorted_values_string=$(IFS=,; echo "${sorted_values[*]}")
 
-# ############ Settings for SCRIROR ############
+############ Settings for SCRIROR ############
 sh reset.sh
 rm -rf ~/.srciror
 mkdir ~/.srciror
@@ -109,9 +109,61 @@ for path in "${paths[@]}"; do
     fi
 done
 
-# Command which mutates the source files
+############ PERFORM MUTATION ############
 cp "$FILE_PATH" "${FILE_PATH%.c}.orig.c"
 python3 "$BASEDIR"/PythonWrappers/mutationClang "$FILE_PATH" "${include_opts}"
+
+############ CREATE FILE WITH MUTATION INFORMATION ############
+declare -A line_numbers
+
+# Use the find command to locate the files and iterate over them
+while IFS= read -r -d '' file; do
+  # Extract the line number
+  line_number=$(echo "$file" | grep -oP '(?<=\.)(\d+)(?=\.)')
+
+  # Check if the line number is already in the array
+  if [[ -z ${line_numbers[$line_number]} ]]; then
+    # Add the line number to the array if it's unique
+    line_numbers[$line_number]=1
+  fi
+done < <(find "$NETHACK_DIR/src" -name "*.mut.c" -print0 | sort -z)
+
+# Sort the keys in ascending order
+line_numbers=("$(printf '%s\n' "${!line_numbers[@]}" | sort -n)")
+
+# Iterate over the line numbers
+json_original=$(
+  while IFS= read -r number; do
+    line_content=$(sed -n "${number}p" "$FILE_PATH")
+    jq -n --arg number "$number" --arg content "$line_content" '{line_number: $number, content: $content}'
+  done <<< "$(echo -e "${!line_numbers[@]}")" | jq -n '.original |= [inputs]'
+)
+
+# Use the find command to locate the files and iterate over them
+json_mutants=$(
+  find "$NETHACK_DIR/src" -name "*.mut.c" -print0 | sort -z | while IFS= read -r -d '' file; do
+    relative_path=$(realpath --relative-to="$NETHACK_DIR" "$file")
+    # Extract the line number
+    line_number=$(echo "$file" | grep -oP '(?<=\.)(\d+)(?=\.)')
+    # Extract the line content
+    content=$(sed -n "${line_number}p" "$file")
+    # Print the formatted output
+    jq -n --arg number "$line_number" --arg path "$relative_path" --arg content "$content" '{path: $path, line_number: $number, content: $content}'
+  done | jq -n '.mutants |= [inputs]'
+)
+
+relative_file_path=$(realpath --relative-to="$NETHACK_DIR" "$FILE_PATH")
+
+json_lines=$(printf '%s\n' "${sorted_values[@]}" | jq -R '. | tonumber' | jq -s .)
+
+combined_object=$(jq -n \
+  --arg file "$relative_file_path" \
+  --argjson lines "$json_lines" \
+  --argjson original "$json_original" \
+  --argjson mutants "$json_mutants" \
+  '{file: $file} + {lines: $lines} + $original + $mutants')
+
+echo "$combined_object" > mutation_info.json
 
 # Remove trap
 trap - EXIT

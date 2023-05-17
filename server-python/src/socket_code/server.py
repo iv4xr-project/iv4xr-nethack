@@ -19,7 +19,10 @@ def serve(port=5001, setup_code='', exit_on_done=False):
     server.setup_code = setup_code
     server.exit_on_done = exit_on_done
     logging.info(f"Listening on port {port}...")
-    server.serve_forever()
+    try:
+      server.serve_forever()
+    except KeyboardInterrupt:
+      pass
     logging.info(f"Closing server...")
     server.server_close()
 
