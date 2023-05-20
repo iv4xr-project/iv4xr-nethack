@@ -12,7 +12,7 @@ cd "$BASEDIR"
 
 # Create mutants
 # bash "$BASEDIR"/nethack/hallucination-potion.sh
-bash "$BASEDIR"/nethack/camera.sh
+# bash "$BASEDIR"/nethack/camera.sh
 
 SERVER_DIR=$(dirname "$BASEDIR")/server-python
 NETHACK_DIR=$(realpath "$SERVER_DIR/lib/nle")
@@ -26,6 +26,8 @@ do
   # Combine extracted name and extension
   new_file_name="${name}.${extension}"
 
+  relative_path=$(realpath --relative-to="$NETHACK_DIR/src" "$file")
+  echo "Using file: $relative_path"
   cp "$file" "$new_file_name"
   bash "$SERVER_DIR"/install.sh
   echo "server: start.sh #--exit_on_done"

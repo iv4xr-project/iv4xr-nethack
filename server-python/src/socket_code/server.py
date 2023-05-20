@@ -76,6 +76,6 @@ class Handler(socketserver.BaseRequestHandler):
         finally:
             logging.info(f"Disconnected from {self.client_address}")
 
-            if self.server.exit_on_done:
-                logging.info(f"Init closing server due to flag")
+            if self.server.exit_on_done or proc.returncode == 100:
+                logging.info(f"Init closing server due to flag or exit code")
                 self.server.shutdown()
