@@ -142,8 +142,7 @@ def handle_reset(sock):
 
     # Set the seed
     core = read.read_string(sock)
-    reseed = read.read_bool(sock)
-    env.seed(int(core), 0, reseed)
+    env.seed(int(core), 0, False)
 
     # Write the observation
     obs = env.reset()

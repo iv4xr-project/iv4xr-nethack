@@ -1,5 +1,5 @@
 {
-  "file": "src/apply.c",
+  "file": "apply.c",
   "lines": [
     53,
     54,
@@ -99,257 +99,257 @@
   ],
   "mutants": [
     {
-      "path": "src/apply.bool_expr.72.47-2858.mut.c",
+      "path": "apply.bool_expr.72.47-2858.mut.c",
       "line_number": "72",
       "content": "    if (obj->cursed || !rn2(2)) {"
     },
     {
-      "path": "src/apply.bool_expr.80.48-3206.mut.c",
+      "path": "apply.bool_expr.80.48-3206.mut.c",
       "line_number": "80",
       "content": "    } else if (!u.dx || !u.dy) {"
     },
     {
-      "path": "src/apply.bool_guard_while_if.63.2-2680.mut.c",
+      "path": "apply.bool_guard_while_if.63.2-2680.mut.c",
       "line_number": "63",
       "content": "    if (!(!getdir((char *) 0)))"
     },
     {
-      "path": "src/apply.bool_guard_while_if.66.3-2728.mut.c",
+      "path": "apply.bool_guard_while_if.66.3-2728.mut.c",
       "line_number": "66",
       "content": "    if (!(obj->spe <= 0)) {"
     },
     {
-      "path": "src/apply.bool_guard_while_if.72.4-2846.mut.c",
+      "path": "apply.bool_guard_while_if.72.4-2846.mut.c",
       "line_number": "72",
       "content": "    if (!(obj->cursed && !rn2(2))) {"
     },
     {
-      "path": "src/apply.bool_guard_while_if.74.5-2926.mut.c",
+      "path": "apply.bool_guard_while_if.74.5-2926.mut.c",
       "line_number": "74",
       "content": "    } else if (!(u.uswallow)) {"
     },
     {
-      "path": "src/apply.bool_guard_while_if.77.6-3067.mut.c",
+      "path": "apply.bool_guard_while_if.77.6-3067.mut.c",
       "line_number": "77",
       "content": "    } else if (!(u.dz)) {"
     },
     {
-      "path": "src/apply.bool_guard_while_if.80.7-3200.mut.c",
+      "path": "apply.bool_guard_while_if.80.7-3200.mut.c",
       "line_number": "80",
       "content": "    } else if (!(!u.dx && !u.dy)) {"
     },
     {
-      "path": "src/apply.bool_guard_while_if.82.8-3272.mut.c",
+      "path": "apply.bool_guard_while_if.82.8-3272.mut.c",
       "line_number": "82",
       "content": "    } else if (!((mtmp = bhit(u.dx, u.dy, COLNO, FLASHED_LIGHT,"
     },
     {
-      "path": "src/apply.num_const.61.951-2663.mut.c",
+      "path": "apply.num_const.61.951-2663.mut.c",
       "line_number": "61",
       "content": "        return -1;"
     },
     {
-      "path": "src/apply.num_const.61.952-2663.mut.c",
+      "path": "apply.num_const.61.952-2663.mut.c",
       "line_number": "61",
       "content": "        return 1;"
     },
     {
-      "path": "src/apply.num_const.63.977-2697.mut.c",
+      "path": "apply.num_const.63.977-2697.mut.c",
       "line_number": "63",
       "content": "    if (!getdir((char *) -1))"
     },
     {
-      "path": "src/apply.num_const.63.978-2697.mut.c",
+      "path": "apply.num_const.63.978-2697.mut.c",
       "line_number": "63",
       "content": "    if (!getdir((char *) 1))"
     },
     {
-      "path": "src/apply.num_const.64.979-2716.mut.c",
+      "path": "apply.num_const.64.979-2716.mut.c",
       "line_number": "64",
       "content": "        return -1;"
     },
     {
-      "path": "src/apply.num_const.64.980-2716.mut.c",
+      "path": "apply.num_const.64.980-2716.mut.c",
       "line_number": "64",
       "content": "        return 1;"
     },
     {
-      "path": "src/apply.num_const.66.993-2740.mut.c",
+      "path": "apply.num_const.66.993-2740.mut.c",
       "line_number": "66",
       "content": "    if (obj->spe <= -1) {"
     },
     {
-      "path": "src/apply.num_const.66.994-2740.mut.c",
+      "path": "apply.num_const.66.994-2740.mut.c",
       "line_number": "66",
       "content": "    if (obj->spe <= 1) {"
     },
     {
-      "path": "src/apply.num_const.68.995-2793.mut.c",
+      "path": "apply.num_const.68.995-2793.mut.c",
       "line_number": "68",
       "content": "        return -1;"
     },
     {
-      "path": "src/apply.num_const.68.996-2793.mut.c",
+      "path": "apply.num_const.68.996-2793.mut.c",
       "line_number": "68",
       "content": "        return 0;"
     },
     {
-      "path": "src/apply.num_const.68.997-2793.mut.c",
+      "path": "apply.num_const.68.997-2793.mut.c",
       "line_number": "68",
       "content": "        return 2;"
     },
     {
-      "path": "src/apply.num_const.72.1010-2866.mut.c",
+      "path": "apply.num_const.72.1010-2866.mut.c",
       "line_number": "72",
       "content": "    if (obj->cursed && !rn2(-1)) {"
     },
     {
-      "path": "src/apply.num_const.72.1011-2866.mut.c",
+      "path": "apply.num_const.72.1011-2866.mut.c",
       "line_number": "72",
       "content": "    if (obj->cursed && !rn2(-2)) {"
     },
     {
-      "path": "src/apply.num_const.72.1012-2866.mut.c",
+      "path": "apply.num_const.72.1012-2866.mut.c",
       "line_number": "72",
       "content": "    if (obj->cursed && !rn2(0)) {"
     },
     {
-      "path": "src/apply.num_const.72.1013-2866.mut.c",
+      "path": "apply.num_const.72.1013-2866.mut.c",
       "line_number": "72",
       "content": "    if (obj->cursed && !rn2(1)) {"
     },
     {
-      "path": "src/apply.num_const.72.1014-2866.mut.c",
+      "path": "apply.num_const.72.1014-2866.mut.c",
       "line_number": "72",
       "content": "    if (obj->cursed && !rn2(3)) {"
     },
     {
-      "path": "src/apply.num_const.79.1042-3136.mut.c",
+      "path": "apply.num_const.79.1042-3136.mut.c",
       "line_number": "79",
       "content": "            (u.dz > -1) ? surface(u.ux, u.uy) : ceiling(u.ux, u.uy));"
     },
     {
-      "path": "src/apply.num_const.79.1043-3136.mut.c",
+      "path": "apply.num_const.79.1043-3136.mut.c",
       "line_number": "79",
       "content": "            (u.dz > 1) ? surface(u.ux, u.uy) : ceiling(u.ux, u.uy));"
     },
     {
-      "path": "src/apply.num_const.83.1098-3382.mut.c",
+      "path": "apply.num_const.83.1098-3382.mut.c",
       "line_number": "83",
       "content": "                            (int FDECL((*), (MONST_P, OBJ_P))) -1,"
     },
     {
-      "path": "src/apply.num_const.83.1099-3382.mut.c",
+      "path": "apply.num_const.83.1099-3382.mut.c",
       "line_number": "83",
       "content": "                            (int FDECL((*), (MONST_P, OBJ_P))) 1,"
     },
     {
-      "path": "src/apply.num_const.84.1112-3446.mut.c",
+      "path": "apply.num_const.84.1112-3446.mut.c",
       "line_number": "84",
       "content": "                            (int FDECL((*), (OBJ_P, OBJ_P))) -1, &obj)) != 0) {"
     },
     {
-      "path": "src/apply.num_const.84.1113-3446.mut.c",
+      "path": "apply.num_const.84.1113-3446.mut.c",
       "line_number": "84",
       "content": "                            (int FDECL((*), (OBJ_P, OBJ_P))) 1, &obj)) != 0) {"
     },
     {
-      "path": "src/apply.num_const.84.1114-3459.mut.c",
+      "path": "apply.num_const.84.1114-3459.mut.c",
       "line_number": "84",
       "content": "                            (int FDECL((*), (OBJ_P, OBJ_P))) 0, &obj)) != -1) {"
     },
     {
-      "path": "src/apply.num_const.84.1115-3459.mut.c",
+      "path": "apply.num_const.84.1115-3459.mut.c",
       "line_number": "84",
       "content": "                            (int FDECL((*), (OBJ_P, OBJ_P))) 0, &obj)) != 1) {"
     },
     {
-      "path": "src/apply.num_const.88.1116-3563.mut.c",
+      "path": "apply.num_const.88.1116-3563.mut.c",
       "line_number": "88",
       "content": "    return -1;"
     },
     {
-      "path": "src/apply.num_const.88.1117-3563.mut.c",
+      "path": "apply.num_const.88.1117-3563.mut.c",
       "line_number": "88",
       "content": "    return 0;"
     },
     {
-      "path": "src/apply.num_const.88.1118-3563.mut.c",
+      "path": "apply.num_const.88.1118-3563.mut.c",
       "line_number": "88",
       "content": "    return 2;"
     },
     {
-      "path": "src/apply.num_expr_compare.66.54-2737.mut.c",
+      "path": "apply.num_expr_compare.66.54-2737.mut.c",
       "line_number": "66",
       "content": "    if (obj->spe != 0) {"
     },
     {
-      "path": "src/apply.num_expr_compare.66.55-2737.mut.c",
+      "path": "apply.num_expr_compare.66.55-2737.mut.c",
       "line_number": "66",
       "content": "    if (obj->spe < 0) {"
     },
     {
-      "path": "src/apply.num_expr_compare.66.56-2737.mut.c",
+      "path": "apply.num_expr_compare.66.56-2737.mut.c",
       "line_number": "66",
       "content": "    if (obj->spe == 0) {"
     },
     {
-      "path": "src/apply.num_expr_compare.66.57-2737.mut.c",
+      "path": "apply.num_expr_compare.66.57-2737.mut.c",
       "line_number": "66",
       "content": "    if (obj->spe > 0) {"
     },
     {
-      "path": "src/apply.num_expr_compare.66.58-2737.mut.c",
+      "path": "apply.num_expr_compare.66.58-2737.mut.c",
       "line_number": "66",
       "content": "    if (obj->spe >= 0) {"
     },
     {
-      "path": "src/apply.num_expr_compare.79.59-3134.mut.c",
+      "path": "apply.num_expr_compare.79.59-3134.mut.c",
       "line_number": "79",
       "content": "            (u.dz != 0) ? surface(u.ux, u.uy) : ceiling(u.ux, u.uy));"
     },
     {
-      "path": "src/apply.num_expr_compare.79.60-3134.mut.c",
+      "path": "apply.num_expr_compare.79.60-3134.mut.c",
       "line_number": "79",
       "content": "            (u.dz < 0) ? surface(u.ux, u.uy) : ceiling(u.ux, u.uy));"
     },
     {
-      "path": "src/apply.num_expr_compare.79.61-3134.mut.c",
+      "path": "apply.num_expr_compare.79.61-3134.mut.c",
       "line_number": "79",
       "content": "            (u.dz <= 0) ? surface(u.ux, u.uy) : ceiling(u.ux, u.uy));"
     },
     {
-      "path": "src/apply.num_expr_compare.79.62-3134.mut.c",
+      "path": "apply.num_expr_compare.79.62-3134.mut.c",
       "line_number": "79",
       "content": "            (u.dz == 0) ? surface(u.ux, u.uy) : ceiling(u.ux, u.uy));"
     },
     {
-      "path": "src/apply.num_expr_compare.79.63-3134.mut.c",
+      "path": "apply.num_expr_compare.79.63-3134.mut.c",
       "line_number": "79",
       "content": "            (u.dz >= 0) ? surface(u.ux, u.uy) : ceiling(u.ux, u.uy));"
     },
     {
-      "path": "src/apply.num_expr_compare.84.64-3456.mut.c",
+      "path": "apply.num_expr_compare.84.64-3456.mut.c",
       "line_number": "84",
       "content": "                            (int FDECL((*), (OBJ_P, OBJ_P))) 0, &obj)) < 0) {"
     },
     {
-      "path": "src/apply.num_expr_compare.84.65-3456.mut.c",
+      "path": "apply.num_expr_compare.84.65-3456.mut.c",
       "line_number": "84",
       "content": "                            (int FDECL((*), (OBJ_P, OBJ_P))) 0, &obj)) <= 0) {"
     },
     {
-      "path": "src/apply.num_expr_compare.84.66-3456.mut.c",
+      "path": "apply.num_expr_compare.84.66-3456.mut.c",
       "line_number": "84",
       "content": "                            (int FDECL((*), (OBJ_P, OBJ_P))) 0, &obj)) == 0) {"
     },
     {
-      "path": "src/apply.num_expr_compare.84.67-3456.mut.c",
+      "path": "apply.num_expr_compare.84.67-3456.mut.c",
       "line_number": "84",
       "content": "                            (int FDECL((*), (OBJ_P, OBJ_P))) 0, &obj)) > 0) {"
     },
     {
-      "path": "src/apply.num_expr_compare.84.68-3456.mut.c",
+      "path": "apply.num_expr_compare.84.68-3456.mut.c",
       "line_number": "84",
       "content": "                            (int FDECL((*), (OBJ_P, OBJ_P))) 0, &obj)) >= 0) {"
     }

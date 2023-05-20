@@ -12,7 +12,7 @@ cd "$BASEDIR"
 
 # Create mutants
 # bash "$BASEDIR"/nethack/hallucination-potion.sh
-# bash "$BASEDIR"/nethack/camera.sh
+bash "$BASEDIR"/nethack/camera.sh
 
 SERVER_DIR=$(dirname "$BASEDIR")/server-python
 NETHACK_DIR=$(realpath "$SERVER_DIR/lib/nle")

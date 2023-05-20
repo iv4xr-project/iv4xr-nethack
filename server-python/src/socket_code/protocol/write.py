@@ -96,7 +96,6 @@ def write_seed(sock, seed):
     logging.debug("WRITE Seed")
     sock.write(SEED_BYTE)
     write_str(sock, str(seed[0]))
-    sock.write(to_bool(seed[2]))
     sock.flush()
 
 

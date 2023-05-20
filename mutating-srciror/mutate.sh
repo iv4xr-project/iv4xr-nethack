@@ -142,7 +142,7 @@ json_original=$(
 # Use the find command to locate the files and iterate over them
 json_mutants=$(
   find "$NETHACK_DIR/src" -name "*.mut.c" -print0 | sort -z | while IFS= read -r -d '' file; do
-    relative_path=$(realpath --relative-to="$NETHACK_DIR" "$file")
+    relative_path=$(realpath --relative-to="$NETHACK_DIR/src" "$file")
     # Extract the line number
     line_number=$(echo "$file" | grep -oP '(?<=\.)(\d+)(?=\.)')
     # Extract the line content
@@ -152,8 +152,7 @@ json_mutants=$(
   done | jq -n '.mutants |= [inputs]'
 )
 
-relative_file_path=$(realpath --relative-to="$NETHACK_DIR" "$FILE_PATH")
-
+relative_file_path=$(realpath --relative-to="$NETHACK_DIR/src" "$FILE_PATH")
 json_lines=$(printf '%s\n' "${sorted_values[@]}" | jq -R '. | tonumber' | jq -s .)
 
 combined_object=$(jq -n \
