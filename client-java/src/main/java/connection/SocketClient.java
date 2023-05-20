@@ -110,6 +110,17 @@ public class SocketClient {
     readNullByte();
   }
 
+  public void sendExitServer() {
+    writeBit(Encoder.EncoderBit.ExitServerBit);
+    flush();
+
+    try {
+      close();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
   private void readNullByte() {
     try {
       byte nullByte = reader.readByte();

@@ -2,7 +2,9 @@ package connection.messagedecoder;
 
 import connection.ObservationMessage;
 import java.io.DataInputStream;
+import java.io.EOFException;
 import java.io.IOException;
+import java.util.Arrays;
 import nethack.object.*;
 import nl.uu.cs.aplib.utils.Pair;
 import util.Loggers;
@@ -43,7 +45,11 @@ public class ObservationMessageDecoder extends Decoder {
       Loggers.ProfilerLogger.trace("READ ITEMS TOOK: %f", stopwatch.split());
 
       return observationMessage;
+    } catch (EOFException e) {
+      System.out.println(Arrays.toString(e.getStackTrace()));
+      throw new RuntimeException("EOF reached", e);
     } catch (IOException e) {
+      System.out.println(Arrays.toString(e.getStackTrace()));
       throw new RuntimeException("Unable to read out observation message", e);
     }
   }

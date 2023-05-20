@@ -23,7 +23,7 @@ public class Replay {
   public String character;
   public List<Pair<Turn, List<Command>>> actions = new ArrayList<>();
 
-  static final Pattern pattern = Pattern.compile("(\\d+)\\((\\d+)\\):\\[(.*)\\]");
+  static final Pattern pattern = Pattern.compile("(\\d+)\\((\\d+)\\)=\\[(.*)\\]");
 
   public Replay(String fileName) {
     Path replayFilepath = Path.of(fileName);
@@ -39,13 +39,13 @@ public class Replay {
   }
 
   private void replaySeed(String line) {
-    String[] splitLine = line.split(":");
+    String[] splitLine = line.split("=");
     assert Objects.equals(splitLine[0], "SEED") : "First line must be seed";
     seed = new Seed(splitLine[1], false);
   }
 
   private void replayCharacter(String line) {
-    String[] splitLine = line.split(":");
+    String[] splitLine = line.split("=");
     assert Objects.equals(splitLine[0], "CHARACTER") : "Second line must be character";
     character = splitLine[1];
   }

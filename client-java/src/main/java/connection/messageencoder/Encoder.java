@@ -53,8 +53,9 @@ public abstract class Encoder {
     CloseBit(5),
     StepBit(6),
     SaveCoverage(7),
-    ResetCoverage(8);
-    public byte value = 0;
+    ResetCoverage(8),
+    ExitServerBit(9);
+    public final byte value;
 
     EncoderBit(int bitValue) {
       this.value = (byte) bitValue;

@@ -57,8 +57,8 @@ public class NetHack {
 
   public void reset() {
     Loggers.SeedLogger.info("New seed is:" + seed);
-    Loggers.ReplayLogger.info("SEED:%s", seed.shortString());
-    Loggers.ReplayLogger.info("CHARACTER:%s", character);
+    Loggers.ReplayLogger.info("SEED=%s", seed.shortString());
+    Loggers.ReplayLogger.info("CHARACTER=%s", character);
     client.sendReset(gameMode.toString(), character, seed);
     StepState stepState = client.readStepState();
     updateGameState(stepState);
@@ -91,7 +91,9 @@ public class NetHack {
       step(action.snd);
     }
 
-    render();
+    if (!gameState.stats.turn.equals(Turn.startTurn)) {
+      render();
+    }
   }
 
   public void close() {
@@ -179,7 +181,7 @@ public class NetHack {
     if (commands.isEmpty()) {
       return null;
     }
-    Loggers.ReplayLogger.info("%s:%s", gameState.stats.turn, commands);
+    Loggers.ReplayLogger.info("%s=%s", gameState.stats.turn, commands);
     Loggers.NetHackLogger.info(commands);
     int n = commands.size();
     assert n <= 256 : "No more than 256 commands can be chained at once";
