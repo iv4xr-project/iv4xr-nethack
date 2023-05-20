@@ -2,6 +2,7 @@ package nethack.enums;
 
 import java.util.HashMap;
 import java.util.Map;
+import util.Config;
 
 public enum Color {
   // Reference file: server-python/lib/nle/src/decl.c
@@ -60,10 +61,14 @@ public enum Color {
     }
 
     System.out.printf("\033[103;32m W.O %s W.O", Color.GREEN);
-    //    System.out.printf("%s %s", Color.GREEN, "W.O");
   }
 
   public String toString() {
-    return String.format("\033[%sm", colorCode);
+    // Ability to turn colors off for test exporting
+    if (Config.getColorState()) {
+      return String.format("\033[%sm", colorCode);
+    } else {
+      return "";
+    }
   }
 }

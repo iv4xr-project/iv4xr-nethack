@@ -17,19 +17,17 @@ import java.util.Random;
 // won't be reproducible.
 
 public class Seed implements Serializable {
-  public final boolean reseed;
   public final String core;
 
-  public Seed(String core, boolean reseed) {
+  public Seed(String core) {
     this.core = core;
-    this.reseed = reseed;
   }
 
   // Generate a random seed
   public static Seed randomSeed() {
     Random random = new Random();
     String coreSeed = Long.toUnsignedString(random.nextLong());
-    return new Seed(coreSeed, false);
+    return new Seed(coreSeed);
   }
 
   public String shortString() {
@@ -38,6 +36,6 @@ public class Seed implements Serializable {
 
   @Override
   public String toString() {
-    return String.format("%s %b [SEED=%s]", core, reseed, core);
+    return String.format("[SEED=%s]", core);
   }
 }

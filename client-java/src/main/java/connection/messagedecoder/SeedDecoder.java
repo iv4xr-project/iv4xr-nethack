@@ -11,8 +11,7 @@ public class SeedDecoder extends Decoder {
       assert inputByte == DecoderBit.SeedBit.value;
 
       String core = readString(input);
-      boolean reseed = input.readBoolean();
-      return new Seed(core, reseed);
+      return new Seed(core);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }

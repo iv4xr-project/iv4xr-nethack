@@ -12,7 +12,6 @@ public class SeedEncoder {
         output.writeShort(seed.core.length());
         output.writeChars(seed.core);
       }
-      output.writeBoolean(seed.reseed);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }

@@ -17,7 +17,7 @@ import util.*;
 public class SocketClient {
   final String host;
   final int port;
-  Socket socket;
+  public Socket socket;
   DataInputStream reader;
   DataOutputStream writer;
 

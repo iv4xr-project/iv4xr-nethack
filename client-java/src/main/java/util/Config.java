@@ -52,7 +52,7 @@ public class Config {
 
     // Create seed from the two strings
     String core = seed[0];
-    return new Seed(core, false);
+    return new Seed(core);
   }
 
   public static String getCharacter() {
@@ -84,12 +84,12 @@ public class Config {
     return config.getBoolean("AUTO_PLAY", false);
   }
 
-  public static boolean getBreakOnStuck() {
-    return config.getBoolean("BREAK_ON_STUCK", false);
-  }
-
   public static boolean getSoundState() {
     return config.getBoolean("SOUND", true);
+  }
+
+  public static boolean getColorState() {
+    return config.getBoolean("COLOR", true);
   }
 
   public static String getReplayFile() {

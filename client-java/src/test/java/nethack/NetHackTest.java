@@ -16,6 +16,8 @@ import nethack.object.items.Item;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import util.MutationData;
 import util.Replay;
 import util.TestConfig;
@@ -31,15 +33,15 @@ public class NetHackTest {
   }
 
   @AfterEach
-  public void teardown() throws IOException {
+  public void teardown() throws InterruptedException, IOException {
     client.close();
 
-    // Init new connection to perform exit
-    // The reason the original client cannot do that since we don't know whether the handler has
-    // stopped
     client = new SocketClient();
     client.sendExitServer();
     client = null;
+
+    // Sleeping for 4 seconds guarantees the server has closed by then
+    Thread.sleep(4000);
   }
 
   /** Test for hallucination potion */
@@ -55,11 +57,9 @@ public class NetHackTest {
         "Player is hallucinating after drinking the potion");
   }
 
-  //  @ParameterizedTest
-  //  @MethodSource("cameraMutants")
-  //  public void testCamera(MutationData.Mutant mutant) {
-  @Test
-  public void testCamera() {
+  @ParameterizedTest
+  @MethodSource("cameraMutants")
+  public void testCamera(MutationData.Mutant mutant) {
     Replay replay = new Replay("src/test/resources/nethack/camera.log");
     NetHack nethack = new NetHack(client, replay);
 
