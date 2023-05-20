@@ -101,6 +101,13 @@ def handle(sock):
                 case read.RESET_COVERAGE_BYTE:
                     logging.debug("Reset coverage")
                     handle_reset_coverage(sock)
+                case read.EXIT_SERVER_BYTE:
+                    logging.debug("Exit server")
+                    if env:
+                      env.close()
+
+                    # Return code 100 indicates for us that the entire server should be stopped
+                    sys.exit(100)
                 case unknown:
                     logging.warning(f'Action "{unknown}" not known')
 
@@ -108,13 +115,17 @@ def handle(sock):
             # print("DONE in:", current_time - last_point)
             acc_done += current_time - last_point
             last_point = current_time
-
-    except Exception:
+    except util.ProtoException:
+        logging.info('Socket connection closed')
+    except KeyboardInterrupt:
+        logging.info('Socket connection closed due to keyboardInterrupt')
+    except Exception as exception:
+        print(exception)
+        print(type(exception))
         traceback.print_exc()
-        if env:
-            env.render()
     finally:
         if env:
+            env.render()
             env.close()
 
 
@@ -165,7 +176,8 @@ def handle_steps(sock, env):
         if is_nle_command:
             obs, done = step.step_action(env, command)
         else:
-            obs, done = step.step_stroke(env, chr(command))
+            character = chr(command)
+            obs, done = step.step_stroke(env, character)
 
     write.write_obs(sock, env, obs)
     write.write_step(sock, done, None)
