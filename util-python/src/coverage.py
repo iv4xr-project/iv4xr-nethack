@@ -68,7 +68,7 @@ def create_coverage_matrix(coverage_results_paths: [str], metric: str) -> (np.ar
     return file_names, metric_totals, mat
 
 
-def create_coverage_plot(coverage_results_paths: [str], method: str, metric: str, show_file_names=False):
+def create_coverage_plot(coverage_results_paths: [str], method: str, metric: str, percentage: bool, show_file_names=False):
     # Coverage data in numpy array
     file_names, metric_total, mat = create_coverage_matrix(coverage_results_paths, metric)
 
@@ -79,11 +79,18 @@ def create_coverage_plot(coverage_results_paths: [str], method: str, metric: str
         fig, ax = plt.subplots(figsize=(7, 4))
 
     index = np.arange(len(file_names))
-    ax.set_ylim(0, metric_total[0] + 200)
+    if percentage:
+        ax.set_ylim(0, 100)
+    else:
+        ax.set_ylim(0, metric_total[0] + 200)
 
     if mat.shape[0] == 1:
         # Plot bar for single result
-        ax.bar(index, mat[0, :], label=f'Nr. {get_plural(metric)} covered')
+        if percentage:
+            ax.bar(index, mat[0, :], label=f'{get_plural(metric)} covered (%)')
+        else:
+            ax.bar(index, mat[0, :], label=f'Nr. {get_plural(metric)} covered')
+
     else:
         # Average the coverage results over the number of runs and add error bars
         metric_mean = np.mean(mat, axis=0)
@@ -93,17 +100,33 @@ def create_coverage_plot(coverage_results_paths: [str], method: str, metric: str
         upper_std = np.min(np.array([metric_mean + metric_std, metric_total]), axis=0) - metric_mean
         y_error_directional = np.array([metric_std, upper_std])
 
+        print("total metric is:", np.sum(metric_total))
+        print("measured metric is:", np.sum(metric_mean))
+        print("percentage is:", np.sum(metric_mean) / np.sum(metric_total))
+
         # Plot the bar and the error-bars
-        ax.bar(index, metric_mean, label=f'Avg. {get_plural(metric)} covered')
-        ax.errorbar(index, metric_mean, yerr=y_error_directional, fmt=',k')
+        if percentage:
+            metric_percentage = metric_mean / metric_total * 100
+            ax.bar(index, metric_percentage, label=f'% {get_plural(metric)} covered')
+            ax.errorbar(index, metric_percentage, yerr=(y_error_directional / metric_total) * 100, fmt=',k')
+        else:
+            ax.bar(index, metric_mean, label=f'Avg. {get_plural(metric)} covered')
+            ax.errorbar(index, metric_mean, yerr=y_error_directional, fmt=',k')
 
     # Plot the maximum that can be reached
-    ax.plot(index, metric_total, label=f'Total nr. {get_plural(metric)}', color='black')
+    if not percentage:
+        ax.plot(index, metric_total, label=f'Total nr. {get_plural(metric)}', color='black')
 
     # Add the labels and legends
-    ax.set_ylabel(f'Nr. {get_plural(metric)}')
-    ax.set_xlabel('File')
-    ax.set_title(f'Per-file {metric} coverage using {method} (over {mat.shape[0]} report(s))')
+    label_font_size = 20
+    title_font_size = 30
+
+    if percentage:
+        ax.set_ylabel(f'% {get_plural(metric)}', fontsize=label_font_size)
+    else:
+        ax.set_ylabel(f'Nr. {get_plural(metric)}', fontsize=label_font_size)
+    ax.set_xlabel('File', fontsize=label_font_size)
+    ax.set_title(f'Per-file {metric} coverage using {method} ({mat.shape[0]} reports)', fontsize=title_font_size)
 
     # Ticks along the x-axis, can be empty
     ax.set_xticks(index)
@@ -113,13 +136,22 @@ def create_coverage_plot(coverage_results_paths: [str], method: str, metric: str
     else:
         ax.set_xticklabels([])
 
-    ax.legend()
+    ax.legend(fontsize=label_font_size)
     fig.tight_layout()
     fig.align_labels()
 
     # Save the plot in the plots directory
     os.makedirs("plots", exist_ok=True)
-    fig.savefig(f"plots/{metric}_coverage_{method}.png")
+
+    if percentage:
+        fig.savefig(f"plots/{metric}_coverage_{method}_percentage.png")
+    else:
+        fig.savefig(f"plots/{metric}_coverage_{method}.png")
+
+
+def create_coverage_plots(coverage_results_paths: [str], method: str, metric: str, show_file_names=False):
+    create_coverage_plot(coverage_results_paths, method, metric, True, show_file_names)
+    create_coverage_plot(coverage_results_paths, method, metric, False, show_file_names)
 
 
 def get_coverage_file_names(directory_path: str) -> [str]:
@@ -145,13 +177,16 @@ def main():
     show_file_names = True
 
     iv4xr_coverage_names = get_coverage_file_names('../server-python/coverage')
-    create_coverage_plot(iv4xr_coverage_names, 'iv4XR', 'line', show_file_names)
+    create_coverage_plots(iv4xr_coverage_names, 'iv4XR', 'line', show_file_names)
 
     iv4xr_coverage_names = get_coverage_file_names('../server-python/coverage')
-    create_coverage_plot(iv4xr_coverage_names, 'iv4XR', 'branch', show_file_names)
+    create_coverage_plots(iv4xr_coverage_names, 'iv4XR', 'branch', show_file_names)
 
     bothack_coverage_names = get_coverage_file_names('../BotHack/coverage')
-    create_coverage_plot([bothack_coverage_names[2]], 'BotHack', 'line', show_file_names)
+    create_coverage_plots(bothack_coverage_names, 'BotHack', 'line', show_file_names)
+
+    bothack_coverage_names = get_coverage_file_names('../BotHack/coverage')
+    create_coverage_plots(bothack_coverage_names, 'BotHack', 'branch', show_file_names)
 
 
 if __name__ == '__main__':

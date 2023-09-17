@@ -92,6 +92,7 @@ public class Actions {
                 (Item item) -> {
                   Loggers.GoalLogger.info(">>> Quaff: %s", item);
                   S.app().quaff(item);
+                  System.exit(101);
                   return S.getNewWOM();
                 });
   }

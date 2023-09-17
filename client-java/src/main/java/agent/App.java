@@ -1,30 +1,114 @@
 package agent;
 
 import agent.iv4xr.AgentEnv;
+import agent.iv4xr.AgentLTL;
 import agent.iv4xr.AgentState;
 import agent.navigation.GridSurface;
 import agent.navigation.hpastar.Cluster;
+import agent.navigation.hpastar.smoother.Direction;
 import agent.strategy.GoalLib;
 import connection.SocketClient;
 import eu.iv4xr.framework.mainConcepts.TestAgent;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import nethack.NetHack;
+import nethack.enums.CommandEnum;
+import nethack.enums.Condition;
 import nethack.object.Command;
 import nethack.object.GameState;
 import nethack.object.Player;
 import nethack.object.Turn;
+import nethack.object.items.Item;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
 import util.*;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class App {
+//  public static void main(String[] args) throws Exception {
+//    // Initialize socket connection
+//    SocketClient client = new SocketClient();
+////    for (int i = 0; i < 1; i++) {
+////      runAgent(client);
+////    }
+//
+//    do {
+//      runAgent(client);
+//    } while (Config.getAutoRestart());
+//
+//    client.close();
+//  }
+
   public static void main(String[] args) throws Exception {
-    // Initialize socket connection
     SocketClient client = new SocketClient();
-    while (true) {
-      runAgent(client);
-    }
-    //    client.close();
+
+    Replay replay = new Replay("src/test/resources/nethack/camera.log");
+    NetHack nethack = new NetHack(client, replay);
+
+    Item cameraItem = nethack.gameState.player.inventory.items[12];
+    assert "expensive camera".equals(cameraItem.entityInfo.name);
+
+    nethack.apply(cameraItem, Direction.West);
+    nethack.render();
+    assert "The kitten is blinded by the flash!".equals(nethack.gameState.message);
+    assert !(
+            nethack.gameState.player.conditions.hasCondition(Condition.BLIND));
+
+    nethack.step(
+            List.of(
+                    new Command(CommandEnum.COMMAND_APPLY),
+                    new Command(cameraItem.symbol),
+                    new Command('<')));
+    nethack.render();
+    assert "You take a picture of the ceiling.".equals(nethack.gameState.message);
+    assert !(
+            nethack.gameState.player.conditions.hasCondition(Condition.BLIND));
+//            "Player took photograph of ceiling");
+
+    nethack.step(
+            List.of(
+                    new Command(CommandEnum.COMMAND_APPLY),
+                    new Command(cameraItem.symbol),
+                    new Command('>')));
+    nethack.render();
+    assert "You take a picture of the floor.".equals(nethack.gameState.message);
+    assert !(
+            nethack.gameState.player.conditions.hasCondition(Condition.BLIND));
+//            "Player took photograph of floor");
+
+    nethack.step(
+            List.of(
+                    new Command(CommandEnum.COMMAND_APPLY),
+                    new Command(cameraItem.symbol),
+                    new Command('.')));
+    nethack.render();
+    assert "You are blinded by the flash!".equals(nethack.gameState.message);
+    assert (
+            nethack.gameState.player.conditions.hasCondition(Condition.BLIND));
+//            "Player should be blinded when photographing self");
+
+    Pattern pattern = Pattern.compile("\\(0:(\\d+)\\)");
+    int number;
+
+    do {
+      cameraItem = nethack.gameState.player.inventory.items[12];
+      Matcher matcher = pattern.matcher(cameraItem.description);
+      boolean found = matcher.find();
+      assert found;
+      number = Integer.parseInt(matcher.group(1));
+
+      nethack.apply(cameraItem, Direction.South);
+    } while (number > 0);
+
+    nethack.render();
+    assert "Nothing happens.".equals(nethack.gameState.message);
+    nethack.close();
+    client.close();
+
+    assert false;
   }
 
   private static void runAgent(SocketClient commander) {
@@ -48,7 +132,7 @@ public class App {
 
     // Update state after init to initialize NavGraph correctly
     TestAgent agent =
-        new TestAgent(Player.ID, "player").attachState(state).attachEnvironment(env).setGoal(G);
+        new TestAgent(Player.ID, "player").attachState(state).attachEnvironment(env).setGoal(G).addLTL(AgentLTL.scoreIncreasing(), AgentLTL.hp(), AgentLTL.energy(), AgentLTL.lvlIncreasing(), AgentLTL.hungerState(), AgentLTL.experienceIncreasing(), AgentLTL.turnIncreasing(), AgentLTL.walkable(), AgentLTL.adjacent());
     state.updateState(Player.ID);
 
     boolean successful = fastForwardToTurn(Config.getStartTurn(), agent, state, G);
@@ -56,6 +140,11 @@ public class App {
     if (successful && G.getStatus().inProgress()) {
       mainAgentLoop(commander, agent, state, G, nethack);
     }
+
+    // If the LTLs do not hold
+    agent.evaluateLTLs();
+//    assert !agent.evaluateLTLs() : "Not all LTLs are holding";
+
 
     Loggers.AgentLogger.info("Closing NetHack since the loop in agent has terminated");
     nethack.close();

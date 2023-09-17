@@ -8,6 +8,8 @@ import connection.SocketClient;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import nethack.enums.CommandEnum;
 import nethack.enums.Condition;
@@ -21,6 +23,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import util.MutationData;
 import util.Replay;
 import util.TestConfig;
+
 
 /** Unit test for simple nethack.App. */
 public class NetHackTest {
@@ -105,6 +108,22 @@ public class NetHackTest {
     assertTrue(
         nethack.gameState.player.conditions.hasCondition(Condition.BLIND),
         "Player should be blinded when photographing self");
+
+    Pattern pattern = Pattern.compile("\\(0:(\\d+)\\)");
+    int number;
+
+    do {
+      cameraItem = nethack.gameState.player.inventory.items[12];
+      Matcher matcher = pattern.matcher(cameraItem.description);
+      boolean found = matcher.find();
+      assert found;
+      number = Integer.parseInt(matcher.group(1));
+
+      nethack.apply(cameraItem, Direction.South);
+    } while (number > 0);
+
+    nethack.render();
+    assertEquals("Nothing happens.", nethack.gameState.message);
 
     nethack.close();
   }

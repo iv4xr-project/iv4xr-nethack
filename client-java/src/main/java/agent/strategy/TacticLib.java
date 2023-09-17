@@ -268,8 +268,11 @@ public class TacticLib {
             .lift());
   }
 
-  public static Tactic resolveHungerState(int prayerTimeOut) {
+  public static Tactic resolveHungerState(int prayerTimeout) {
+    // Tactic to resolve the hunger state. Consists out of 3 different methods.
+    // Each method checks first whether the player is in a state where it wants food.
     return FIRSTof(
+        // Prayer can resolve the hungers state by chance, since the gods can grant the player saturation.
         Actions.pray()
             .on(
                 (AgentState S) -> {
@@ -277,21 +280,26 @@ public class TacticLib {
                   if (!player.hungerState.wantsFood()) {
                     return null;
                   }
+                  // Logic to prevent praying again before the prayer timeout has passed.
+                  // If the player prays too frequently the gods will become angry
                   Integer lastPrayerTurn = player.lastPrayerTurn;
                   if (lastPrayerTurn == null
-                      || lastPrayerTurn - S.app().gameState.stats.turn.time > prayerTimeOut) {
+                      || lastPrayerTurn - S.app().gameState.stats.turn.time > prayerTimeout) {
                     return true;
                   }
                   return null;
                 })
             .lift(),
+        // If a corpse is still fresh, navigate to the corpse using the navigation tactic and eat it.
         NavTactic.interactWorldEntity(
             EntitySelector.freshCorpse.globalPredicate(
                 S -> S.app().gameState.player.hungerState.wantsFood()),
+            // 'y' and MORE command are used to confirm eating the corpse and to spend only one turn eating
             List.of(
                 new Command(CommandEnum.COMMAND_EAT),
                 new Command('y'),
                 new Command(CommandEnum.MISC_MORE))),
+        // Lastly an item from the inventory can be eaten in order to solve a state where the player is hungry
         Actions.eatItem()
             .on(
                 (AgentState S) -> {
@@ -300,16 +308,18 @@ public class TacticLib {
                   if (!player.hungerState.wantsFood()) {
                     return null;
                   }
-                  // Picks the food item with the lowest nutrition per weight
+                  // Filter and sort the food items in the inventory
                   List<Item> items =
                       Arrays.stream(player.inventory.items)
                           .filter(
                               item ->
                                   item instanceof FoodItem && ((FoodItem) item).foodInfo != null)
+                          // Sort on nutrition per weight
                           .sorted(
                               Comparator.comparingDouble(
                                   item -> ((FoodItem) item).foodInfo.nutritionPerWeight))
                           .toList();
+                  // No food items present in the inventory
                   if (items.isEmpty()) {
                     return null;
                   }
