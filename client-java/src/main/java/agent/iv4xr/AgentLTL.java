@@ -9,11 +9,13 @@ import nl.uu.cs.aplib.mainConcepts.SimpleState;
 import util.CustomVec2D;
 import util.CustomVec3D;
 
+import java.util.function.Predicate;
+
 import static eu.iv4xr.framework.extensions.ltl.LTL.always;
 
 public class AgentLTL {
-  public static LTL<SimpleState> scoreIncreasing() {
-    return always((SimpleState S) -> {
+  public static Predicate<SimpleState> scoreIncreasing() {
+    return ((SimpleState S) -> {
       NetHack netHack = ((AgentState)S).app();
 
       // Score may not be negative
@@ -30,8 +32,8 @@ public class AgentLTL {
     });
   }
 
-  public static LTL<SimpleState> hp() {
-    return always((SimpleState S) -> {
+  public static Predicate<SimpleState> hp() {
+    return ((SimpleState S) -> {
       NetHack netHack = ((AgentState)S).app();
 
       if (netHack.gameState.player.hp < 0) {
@@ -42,8 +44,8 @@ public class AgentLTL {
     });
   }
 
-  public static LTL<SimpleState> energy() {
-    return always((SimpleState S) -> {
+  public static Predicate<SimpleState> energy() {
+    return ((SimpleState S) -> {
       NetHack netHack = ((AgentState)S).app();
 
       if (netHack.gameState.player.energy < 0) {
@@ -54,8 +56,8 @@ public class AgentLTL {
     });
   }
 
-  public static LTL<SimpleState> lvlIncreasing() {
-    return always((SimpleState S) -> {
+  public static Predicate<SimpleState> lvlIncreasing() {
+    return ((SimpleState S) -> {
       NetHack netHack = ((AgentState)S).app();
 
       // Score may not be negative
@@ -72,8 +74,8 @@ public class AgentLTL {
     });
   }
 
-  public static LTL<SimpleState> hungerState() {
-    return always((SimpleState S) -> {
+  public static Predicate<SimpleState> hungerState() {
+    return ((SimpleState S) -> {
       NetHack netHack = ((AgentState)S).app();
 
       if (netHack.previousGameState == null) {
@@ -94,8 +96,8 @@ public class AgentLTL {
     });
   }
 
-  public static LTL<SimpleState> experienceIncreasing() {
-    return always((SimpleState S) -> {
+  public static Predicate<SimpleState> experienceIncreasing() {
+    return ((SimpleState S) -> {
       NetHack netHack = ((AgentState)S).app();
 
       if (netHack.gameState.player.experienceLevel < 1 || netHack.gameState.player.experiencePoints < 0) {
@@ -113,8 +115,8 @@ public class AgentLTL {
     });
   }
 
-  public static LTL<SimpleState> turnIncreasing() {
-    return always((SimpleState S) -> {
+  public static Predicate<SimpleState> turnIncreasing() {
+    return ((SimpleState S) -> {
       NetHack netHack = ((AgentState)S).app();
 
       if (netHack.gameState.stats.turn.time < 0) {
@@ -128,8 +130,8 @@ public class AgentLTL {
     });
   }
 
-  public static LTL<SimpleState> walkable() {
-    return always((SimpleState S) -> {
+  public static Predicate<SimpleState> walkable() {
+    return ((SimpleState S) -> {
       NetHack netHack = ((AgentState)S).app();
       Tile tile = netHack.gameState.getLevel().surface.getTile(netHack.gameState.player.location.pos);
       if (!(tile instanceof Walkable)) {
@@ -140,8 +142,8 @@ public class AgentLTL {
     });
   }
 
-  public static LTL<SimpleState> adjacent() {
-    return always((SimpleState S) -> {
+  public static Predicate<SimpleState> adjacent() {
+    return ((SimpleState S) -> {
       NetHack netHack = ((AgentState)S).app();
 
       if (netHack.previousGameState == null) {

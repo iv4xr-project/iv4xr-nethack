@@ -26,6 +26,7 @@ public class NetHack {
   public Seed seed;
   public String character;
   SocketClient client;
+  public List<LTLState> stateTrace = new ArrayList<>();
 
   public NetHack(SocketClient client, String character, Seed seed) {
     Loggers.NetHackLogger.info("Initialize game");

@@ -40,6 +40,11 @@ public class ItemSelector extends Selector<Item> {
           .ofClass(EntityClass.POTION)
           .predicate((item, S) -> item.entityInfo.name.equalsIgnoreCase("hallucination"));
 
+  public static final ItemSelector healthPotion =
+          new ItemSelector()
+                  .ofClass(EntityClass.POTION)
+                  .predicate((item, S) -> item.entityInfo.name.contains("healing"));
+
   EntityClass entityClass;
 
   public ItemSelector() {

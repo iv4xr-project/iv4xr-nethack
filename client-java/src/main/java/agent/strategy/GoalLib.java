@@ -25,10 +25,7 @@ public class GoalLib {
     Goal G =
         goal("Main agent explore goal")
             .toSolve(
-                (Pair<AgentState, WorldModel<Player, Entity>> proposal) -> {
-                  return proposal.fst.app().gameState.done;
-                  //                  return tacticLib.explorationExhausted(proposal.fst);
-                })
+                (Pair<AgentState, WorldModel<Player, Entity>> proposal) -> proposal.fst.app().gameState.done)
             .withTactic(
                 FIRSTof(
                     // Survival
@@ -70,9 +67,20 @@ public class GoalLib {
 //                    NavTactic.interactWorldEntity(
 //                        EntitySelector.money, List.of(new Command(CommandEnum.COMMAND_PICKUP))),
 
+                    // Drink a potion when the agent is low hp
+//                    Actions.quaffItem()
+//                        .on(
+//                            (AgentState S) -> {
+//                                if (S.app().gameState.player.hp >= 8 || (double) S.app().gameState.player.hpMax / S.app().gameState.player.hp > 0.3) {
+//                                  return null;
+//                                }
+//                                return ItemSelector.healthPotion.apply(Arrays.asList(S.worldmodel.player.current.inventory.items), S); })
+//                                                                .lift(),
 //                    NavTactic.interactWorldEntity(
-//                        EntitySelector.strangulationAmulet,
-//                        List.of(new Command(CommandEnum.COMMAND_PICKUP))),
+//                        EntitySelector.healthPotion, List.of(new Command(CommandEnum.COMMAND_PICKUP))),
+
+                    // Grab ammo for a ranged weapon
+//                    NavTactic.interactWorldEntity(EntitySelector.rangedWeaponAmmo, List.of(new Command(CommandEnum.COMMAND_PICKUP))),
 
                     // Navigation
                     NavTactic.explore(),
@@ -84,6 +92,6 @@ public class GoalLib {
                         .lift(),
                     ABORT()));
 
-    return G.lift(); // REPEAT(G.lift());
+    return G.lift();
   }
 }

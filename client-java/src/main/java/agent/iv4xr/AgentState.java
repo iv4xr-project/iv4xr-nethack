@@ -6,9 +6,7 @@ import eu.iv4xr.framework.mainConcepts.Iv4xrAgentState;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import java.util.*;
 import nethack.NetHack;
-import nethack.object.Entity;
-import nethack.object.Player;
-import nethack.object.Turn;
+import nethack.object.*;
 import nethack.world.Level;
 import nethack.world.Surface;
 import nl.uu.cs.aplib.mainConcepts.Environment;
@@ -85,7 +83,26 @@ public class AgentState extends Iv4xrAgentState<Void, Player, Entity> {
 
     super.updateState(agentId);
     updateEntities();
+    updateTrace();
     previousTurn = currentTurn;
+  }
+
+  private void updateTrace() {
+    LTLState currentState = new LTLState();
+    GameState gameState = app().gameState;
+    currentState.score = gameState.stats.score;
+    currentState.hp = gameState.player.hp;
+    currentState.hpMax = gameState.player.hpMax;
+    currentState.energy = gameState.player.energy;
+    currentState.energyMax = gameState.player.energyMax;
+    currentState.lvl = gameState.stats.levelNumber;
+    currentState.hungerState = gameState.player.hungerState;
+    currentState.experienceLevel = gameState.player.experienceLevel;
+    currentState.experiencePoints = gameState.player.experiencePoints;
+    currentState.turn = gameState.stats.turn;
+    currentState.tile = app().level().surface.getTile(gameState.player.location.pos);
+    currentState.loc = gameState.player.location;
+    app().stateTrace.add(currentState);
   }
 
   private void updateEntities() {
